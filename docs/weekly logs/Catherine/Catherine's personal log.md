@@ -1,19 +1,46 @@
-# Week 2: May 20 - 26
-### May 22, 2024 
-- Attended team meeting
-- Worked on drafring project plan and coming up with questions
+# Week 2: May 19 - 25
+## Date: May 22, 2024
 
-### May 24, 2024 
-- Attended team meeting
-- Worked on project plan
+#### 1. Tasks
+- **Completed Tasks:**
+  - drafted project plan
+  - came up with questions for client 
 
-### May 25, 2024 
-- Did some react tutorials
+- **In-progress Tasks:**
+    - Project Plan
 
-### May 26, 2024 
-- Attended team meeting
-- Worked on finalizing project plan
-- Worked on video slides
+#### 2. Meetings and Interactions
+- **Meetings Attended:**
+  - Team Meeting - 1:30pm - 5pm  - All Members Present - Discussed ideas for project plan 
+
+## Date: May 24, 2024
+
+#### 1. Tasks
+
+- **In-progress Tasks:**
+    - Project Plan
+
+#### 2. Meetings and Interactions
+- **Meetings Attended:**
+  - Team Meeting - 11:00am - 4pm  - All Members Present - Discussed ideas for project plan 
+
+## Date: May 25, 2024
+
+#### 1. Tasks
+- **Completed Tasks:**
+  - none
+
+- **In-progress Tasks:**
+    - Project Plan
+
+#### 2. Meetings and Interactions
+- **Meetings Attended:**
+  - none 
+
+#### 3. Personal Development
+- **Skills Worked On:**
+  - React 
 
 
-
+## Weekly Recap
+I mainly worked on creating the project plan and starting learning React on my own
