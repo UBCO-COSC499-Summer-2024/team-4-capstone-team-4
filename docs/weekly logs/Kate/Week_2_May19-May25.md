@@ -1,4 +1,6 @@
-Date: Wednesday, May 29th, 2024
+# Week 2: May 19 - 25
+
+## Date: Wednesday, May 29th, 2024
 
 ## 1. Tasks
 
