@@ -2,7 +2,7 @@
 
 **Team Number:** 4
 
-**Team Members:** Angelina Dubrule, Catherine Magoke, Sumer Mann, Kate Naychuk
+**Team Members:** Angelina Dubrule, Catherine Magoke, Sumer Mann, Kate Naychuk, Clement Abel-Nwachukwu
 
 ## Overview
 
@@ -429,7 +429,7 @@ Identify the major milestones in your solution and align them to the course time
 | :-------------: | ------------- |
 |  May 29th  | A markdown file with our project plan for the Department Management System (DMS)|
 | May 29th  | A short video presentation describing the user groups and requirements for the DMS |
-| June 5th  | Design Submission: This will be a document that contains the design of the DMS and the system architecture plan. It will include at least 10 use cases, DFD diagrams (levels 0 and 1), and the general user interface design with mock-ups showing how the user will interact with the system. Initial tests should pass |
+| June 5th  | Design Submission: This will be a document that contains the design of the DMS and the system architecture plan. It will include at least 10 use cases, DFD diagrams (levels 0 and 1), and the general user interface design with mock-ups showing how the user will interact with the system.|
 | June 5th  |  A short video presentation describing the design for our DMS |
 | June 14th  | Mini-Presentations: This presentation will show the envisioned usage of our system. We will demonstrate at least 3 features for this milestone including user log-in with credentials and permissions, at least one feature for the instructor dashboard, one feature for the department head dashboard and one feature for the administrator dashboard.|
 | July 5th  | MVP Mini-Presentations: Proper authentication system to allow specific users to log in, log out, and register. A dashboard, which changes based on the user, that displays the performance of instructors in various visualizations. The ability to assign service roles and display the relevant hours associated.|
