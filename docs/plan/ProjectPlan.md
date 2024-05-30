@@ -25,6 +25,17 @@ A web application that will enable the CMPS department to efficiently manage and
 5. Implement a robust system capable of efficiently handling increasing data volumes by the project deadline. Design a well-structured database containing all necessary entities for generating visuals and other data and conduct testing to ensure efficient data processing and visualizations within reasonable time frames.
 6. Integrate a system for visualizing benchmarks and facilitating feedback between department heads and instructors by the project deadline. The system will subtly motivate instructors to set higher goals via gamified responses and constructive feedback mechanisms. Evaluate system effectiveness through user testing to gauge impact on goal-setting and feedback processes.
 
+## Success Criteria
+
+| Objective Number | Objective Name | Success Criteria |
+| :-------------: | :-------------: | :-------------: |
+| 1 | Secure Login | Role-based access controls are integrated, the user can log into the system with a username and password |
+| 2 | User-Friendly Interface | Use of charts and graphs to accurately display data that is easy to understand, supporting uploads of instructor data and downloads of reports, max of 3 clicks for navigation, a tutorial for new users, be able to gain an understanding of performance from a glance|
+| 3 | Comprehensive Dashboard for Department Head | Dashboard has visualizations of key performance metrics for each instructor and comparison for all instructors |
+| 4 | Administrative Interface | The ability for adding, editing and removing accounts, supporting file uploads for creating service roles, the ability to edit instructor information |
+| 5 | Sufficient Database | Database has capacity for all existing department data, data is stored in appropriate table/schema, database is connected to web application |
+| 6 | Motivational Visualizations | Visualizations are available for all performance categories (SEI survey results, service hours, course sections taught, and enrollment), a minimum of one gamification has been implemented, the system has passed the acceptance test (meets requirements specified by the client for intended use) |
+
 ## Users, Usage Scenarios and High-Level Requirements
 
 ### Users Groups
@@ -85,7 +96,7 @@ TIME/AVAILABILITY
 GOALS/NEEDS
 
 - Creating and Assigning Service Roles
-  - The user requires ability to assign and remove service roles, which will consist of a title, description, sub-area, and monthly hours of service.
+  - The user requires the ability to assign and remove service roles, which will consist of a title, description, sub-area, and monthly hours of service.
   - These service roles must have the ability to be assigned to any user of the “Instructor” ranking.
 
 - Assigning Additional Service Hours
@@ -134,7 +145,7 @@ GOALS/NEEDS
 
 #### Instructor
 
-Professor Samuel Chen wants to improve their performance as an instructor, so they log into the system using their provided username and set password. They are greeted by a dashboard including visualizations and general data, which allows them to immediately understand their current performance quality in comparison to the rest of their department. Professor Chen requires more detailed feedback to gain a real understanding of his strengths and weaknesses, so he uses single-click navigation from the dashboard to check the hours associated with his current service roles and assigned teaching assistants, as well as enrollment, grade averages, and general feedback from SEI surveys from his recently taught courses. Satisfied with the information they obtained, Professor Chen signs out of the system. Next month, the professor logs into the system to check on their progress. They are pleased to see a fun popup with a positive message on the increase in their overall performance.
+Professor Samuel Chen wants to improve their performance as an instructor, so they log into the system using their provided username and set password. They are greeted by a dashboard including visualizations and general data, which allows them to immediately understand their current performance quality compared to the rest of their department. Professor Chen requires more detailed feedback to gain a real understanding of his strengths and weaknesses, so he uses single-click navigation from the dashboard to check the hours associated with his current service roles and assigned teaching assistants, as well as enrollment, grade averages, and general feedback from SEI surveys from his recently taught courses. Satisfied with the information they obtained, Professor Chen signs out of the system. Next month, the professor logs into the system to check on their progress. They are pleased to see a fun popup with a positive message on the increase in their overall performance.
 
 #### Department Head
 
@@ -142,7 +153,7 @@ Dr. Jennifer Rodriguez wants to check the performance of a particular instructor
 
 #### Administrator
 
-David Johnson is an administrator for the system and must ensure all data is up to date. They log in using their admin username and password and instantly see a homepage where they can import and modify data, create a service role, or manage existing accounts. They import the performance data for the previous month by uploading a file (CSV, JSON, XML), but are also given the option to enter it manually. They then create a service role by completing a form requesting the associated name, description, sub-area and expected monthly hours. Next, they increase the monthly hours associated with an existing service role from 20 to 30 and remove a service role that is no longer in practice. An instructor requires David to update his account information, so using another form, they update the instructor’s username and password. Finally, David adds a new account for a recently hired instructor and removes two accounts that belonged to instructors who will not be returning for the upcoming semester. David logs out of the system and is happy they were able to complete their daily tasks efficiently and without roadblocks.
+David Johnson is an administrator for the system and must ensure all data is up to date. They log in using their admin username and password and instantly see a homepage where they can import and modify data, create a service role, or manage existing accounts. They import the performance data for the previous month by uploading a file (CSV), but are also given the option to enter it manually. They then create a service role by completing a form requesting the associated name, description, sub-area and expected monthly hours. Next, they increase the monthly hours associated with an existing service role from 20 to 30 and remove a service role that is no longer in practice. An instructor requires David to update his account information, so using another form, they update the instructor’s username and password. Finally, David adds a new account for a recently hired instructor and removes two accounts that belonged to instructors who will not be returning for the upcoming semester. David logs out of the system and is happy they were able to complete their daily tasks efficiently and without roadblocks.
 
 ## Requirements
 
@@ -192,7 +203,7 @@ David Johnson is an administrator for the system and must ensure all data is up 
   - Ensure that the system is easy to maintain and that regular updates can be released without any hassle.
   - Creating documentation for future developers and administrators.
 
--Time
+- Time
    - Each key milestone will be completed by the milestone date
    - This project will be completed by the end of the summer semester
 
@@ -234,7 +245,7 @@ David Johnson is an administrator for the system and must ensure all data is up 
 - Technological Stack
   - Develop front end using web technologies like React.
   - Develop the back end using Laravel, and PHP for better server-side logic and API development.
-  - Implement the Relational Database using MongoDB and PostgreSQL for data storage.
+  - Implement the Relational Database using MySQL for data storage.
 
 - Deployment and Hosting
   - Using docker to containerize the system for consistent and reliable deployment means.
@@ -272,13 +283,13 @@ David Johnson is an administrator for the system and must ensure all data is up 
 
 ### Database
 
-- Technology: MongoDB (Primary), PostgreSQL, Firebase (Secondary)
-- Justification: MongoDB is a NoSQL database that provides flexibility in handling unstructured data, which is essential for accommodating changing service roles and metrics. Its document-oriented storage model allows for easy updates and scalability. However, a database adapter will be implemented to ensure the system can switch to PostgreSQL or Firebase if needed, offering flexibility and risk mitigation against potential issues with a single database technology.
+- Technology: MySQL
+- Justification: MySQL, while a relational database, provides the necessary flexibility for accommodating changing service roles and metrics. Due to its widespread usage and reputation for stability and reliability, it will act as a strong foundation for storing data. However, a database adapter will be implemented to ensure the system can switch to PostgreSQL if needed, offering flexibility and risk mitigation against potential issues with a single database technology.
 
 ### Database Adapter
 
 - Technology: Custom Database Adapter
-- Justification: The database adapter pattern allows the application to switch between different database technologies with minimal code changes. This ensures that if the primary database (MongoDB) becomes unsuitable or another database (PostgreSQL, Firebase) offers better features, the switch can be made seamlessly.
+- Justification: The database adapter pattern allows the application to switch between different database technologies with minimal code changes. This ensures that if the primary database (MySQL) becomes unsuitable or another database (PostgreSQL) offers better features, the switch can be made seamlessly.
 
 ### Visualization and Reporting
 
@@ -315,8 +326,8 @@ David Johnson is an administrator for the system and must ensure all data is up 
 | User Interface | Web Browser| Ensures broad accessibility and platform independence. |
 | Frontend | React | Component-based architecture, strong ecosystem, and performance optimizations. |
 | Backend | Laravel | Elegant syntax, built-in ORM, extensive ecosystem, and strong community support. |
-| Database | MongoDB (Primary), PostgreSQL, Firebase (Secondary) | Flexibility in handling unstructured data, scalability, and risk mitigation through database adapter pattern. |
-| Database Adapter | Custom Adapter | Allows seamless potential switching between MongoDB, PostgreSQL, and Firebase. |
+| Database | MySQL (Primary), PostgreSQL (Secondary) | Flexibility in handling relational data and risk mitigation through database adapter pattern. |
+| Database Adapter | Custom Adapter | Allows seamless potential switching between MySQL, PostgreSQL. |
 | Visualization | Tableau | Leading data visualization tool providing interactive and shareable dashboards. |
 | Infrastructure | Docker | Packages applications and dependencies into lightweight containers for consistency and simplified deployment. |
 | Architecture | MVC |Separation of concerns facilitates maintainability, scalability, and testability. |
@@ -326,7 +337,7 @@ David Johnson is an administrator for the system and must ensure all data is up 
 ### Justification for Choices
 
 - React and Laravel: Both technologies are current industry standards with large communities, ensuring long-term support and availability of resources.
-- MongoDB with Adapter: Chosen for its flexibility and scalability. The adapter ensures that switching to PostgreSQL or Firebase is straightforward, reducing the risk associated with database technology choices.
+- MySQL with Adapter: Chosen for its flexibility and scalability. The adapter ensures that switching to PostgreSQL is straightforward, reducing the risk associated with database technology choices.
 - Tableau: Provides robust visualization and reporting capabilities, essential for tracking performance metrics and making data-driven decisions.
 - MVC Architecture: Ensures separation of concerns, facilitating maintainability, scalability, and testability.
 - Docker: Simplifies deployment and ensures consistency across different environments, reducing deployment-related risks.
@@ -429,7 +440,7 @@ Identify the major milestones in your solution and align them to the course time
 | :-------------: | ------------- |
 |  May 29th  | A markdown file with our project plan for the Department Management System (DMS)|
 | May 29th  | A short video presentation describing the user groups and requirements for the DMS |
-| June 5th  | Design Submission: This will be a document that contains the design of the DMS and the system architecture plan. It will include at least 10 use cases, DFD diagrams (levels 0 and 1), and the general user interface design with mock-ups showing how the user will interact with the system.|
+| June 5th  | Design Submission: This will be a document that contains the design of the DMS and the system architecture plan. It will include at least 10 use cases, DFD diagrams (levels 0 and 1), and the general user interface design with mock-ups showing how the user will interact with the system. Initial tests should pass |
 | June 5th  |  A short video presentation describing the design for our DMS |
 | June 14th  | Mini-Presentations: This presentation will show the envisioned usage of our system. We will demonstrate at least 3 features for this milestone including user log-in with credentials and permissions, at least one feature for the instructor dashboard, one feature for the department head dashboard and one feature for the administrator dashboard.|
 | July 5th  | MVP Mini-Presentations: Proper authentication system to allow specific users to log in, log out, and register. A dashboard, which changes based on the user, that displays the performance of instructors in various visualizations. The ability to assign service roles and display the relevant hours associated.|
