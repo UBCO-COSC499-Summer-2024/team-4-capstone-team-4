@@ -135,8 +135,8 @@ GOALS/NEEDS
   - They need the ability to edit information associated with these user accounts and remove users if necessary.
 
 - Performance and Service Hour Data Management
-  - The user requires the ability to manage service role data, including editing service role titles, hours, descriptions, and sub-areas.
-  - They must be able to modify, delete, and add performance data and extra hours to ensure all data is accurate and up-to-date.
+  - The user requires the ability to manage service role and extra hours data, including editing titles, hours, descriptions, and sub-areas.
+  - They must be able to delete and add performance data, to ensure all data is accurate and up-to-date.
 
 - Overall Benefits
   - The system must provide administrative managers with robust tools for managing user accounts and ensuring the accuracy of performance and service hour data, thus maintaining the integrity and reliability of departmental records.
