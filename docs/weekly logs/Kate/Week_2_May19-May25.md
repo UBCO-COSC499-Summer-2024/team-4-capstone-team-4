@@ -1,6 +1,6 @@
-# Week 2 : May 19 - May 25
+# Week 2 : May 19 - May 25, 2024
 
-## May 22, 2024
+## Wednesday, May 22, 2024
 
 ### Tasks
 - **Completed Tasks:**
@@ -15,7 +15,7 @@
 | :-------------: | ------------- |------------- |------------- |
 | Team Meeting | 1:30pm - 5:00pm | All Members | Discussed team skills, drafted project plan doc and list of questions for client meeting |
 
-## May 24, 2024
+## Friday, May 24, 2024
 
 ### Tasks
 - **In-progress Tasks:**
@@ -27,7 +27,7 @@
 | Client Meeting | 9:00am - 9:35am | All Members | Discussed system design, functionality, and purpose |
 | Team Meeting | 11:00am - 5:00pm | All Members | Worked on project plan |
 
-## May 25, 2024
+## Saturday, May 25, 2024
 
 ### Personal Development
 - **Worked On:**
