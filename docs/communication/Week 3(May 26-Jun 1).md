@@ -1,0 +1,3 @@
+
+
+|May 26, 2024 |Team Meeting|Angelina Dubrule,	Catherine Magoke,	Clement Abel-Nwachukwu,	Sumer Mann,	Kate Naychuk| 01:00 pm - 5:45 pm | The team went through the final project proposal - made some final necessary additions and changes - prepared a presentation based on the project proposal for the video presentation - did a demo presentation run for the video - the team decided to send the voiceovers of their respective parts to Angelina for final compilation |No design decisions made until now| May 29, 2024 - The team will do a final review of the project proposal and video presentation before the submission deadline - go through the design choices and user interface |
