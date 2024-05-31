@@ -1,4 +1,4 @@
-# Week 3 : May 26 - June 1, 2024
+# Week 3: May 26 - June 1, 2024
 
 ## Sunday, May 26
 
