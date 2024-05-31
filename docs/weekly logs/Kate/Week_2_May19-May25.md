@@ -1,4 +1,4 @@
-# Week 2 : May 19 - May 25, 2024
+# Week 2: May 19 - May 25, 2024
 
 ## Wednesday, May 22, 2024
 
