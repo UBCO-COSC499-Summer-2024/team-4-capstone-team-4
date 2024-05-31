@@ -1,7 +1,7 @@
-#Clement's Personal Log
+# Clement's Personal Log
 Week 2: May 19 - 25
 
-##Date: May 22, 2024
+## Date: May 22, 2024
 1. Tasks
 In-progress Tasks:
 Project Plan:
@@ -14,7 +14,7 @@ Skills Worked On:
 Collaboration
 Communication
 
-##Date: May 24, 2024
+## Date: May 24, 2024
 1. Tasks
 In-progress Tasks:
 Project Plan:
@@ -32,7 +32,7 @@ Collaboration
 Communication
 Design
 
-##May 26, 2024
+## May 26, 2024
 Attended team meeting (5 hours)
 Worked on finalizing project plan
 Worked on video slides
@@ -51,4 +51,24 @@ Collaboration
 Communication
 Markdown
 Documentation
+Design
+
+## Date: May 29, 2024
+1. Tasks
+Completed Tasks:
+Project Plan:
+Final edit of project plan
+Final edit of presentation slide
+Refilming Lines
+In-progress Tasks:
+Design
+2. Meetings and Interactions
+Meetings Attended:
+Project Meeting - 1:40pm to 7:00pm - Whole Team - Finished project plan and started design documentation
+Design - Started Actual Mockups for the design document
+3. Personal Development
+Skills Worked On:
+Communication
+Collaboration
+GitHub Projects
 Design
