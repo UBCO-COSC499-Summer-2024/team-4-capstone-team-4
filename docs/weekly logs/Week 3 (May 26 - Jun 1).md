@@ -22,13 +22,16 @@ We met to discuss and work on the projet plan. After everyone listed their exper
 
 ### Tasks
 - **Completed Tasks:**
-  - Worked on design document
+  - For design document:
+    - Use case + diagrams
+    - System architecture diagram
   - Created System Architecture Diagram
-  - Helped with making Use Case Diagram ~ 1hr
   - Updated project plan
     
 - **In-progress Tasks:**
   - Compile dashboard
+  - Design document
+  - UI mock ups
 
 |  Meeting Date | Times | Milestone | Actions |
 | :-------------: | ------------- |------------- |------------- |
@@ -37,6 +40,29 @@ We met to discuss and work on the projet plan. After everyone listed their exper
 ### Summary
 During our meeting we worked on the design document and began creating Use Cases and the associated diagram. We also started on the System Architecture Diagram. We spent some time attemping to configure the burn up chart and clockify for the dashboard.
 
+## Friday, May 31
+
+### Tasks
+- **Completed Tasks:**
+  - For design document:
+    - Update use cases
+    - Created ER diagram
+    - Created DFD
+    - Created Intro
+  - Update system architecture diagram
+    
+- **In-progress Tasks:**
+  - Navigation flow diagram
+  - Design presentation
+  - UI mock ups
+
+|  Meeting Date | Times | Milestone | Actions |
+| :-------------: | ------------- |------------- |------------- |
+| May 31, 2024 | 10:30 am - 6:00 pm| Design Document | Continued adding diagrams and their descriptions to the design document, worked on some pages of the UI design |
+
+### Summary
+During our meeting we worked on the design document. Updated the use cases and created the ER diagram + DFD. Some members also worked on the UI mock ups. Our design document is almost ready, just needing some minor adjustments and converting to markdown. We also unified our clockify naming so our report categorizes better.
+
 ## Weekly Recap
 - Updated project plan to reflect technology changes
 - Created slideshow for client presentation
@@ -44,3 +70,9 @@ During our meeting we worked on the design document and began creating Use Cases
   - Use Cases + Diagram
   - System Architecture Diagram
   - Mock Ups
+- Changed tech stack from React to just Laravel
+- Added to the design document
+  - Intro
+  - ER diagram
+  - DFD
+
