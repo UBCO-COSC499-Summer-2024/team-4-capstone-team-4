@@ -58,6 +58,7 @@ During our meeting we worked on the design document and began creating Use Cases
 
 |  Meeting Date | Times | Milestone | Actions |
 | :-------------: | ------------- |------------- |------------- |
+| May 31, 2024 | 10:00 am - 10:30 am| ----- | Met with the client to discuss presentation feedback |
 | May 31, 2024 | 10:30 am - 6:00 pm| Design Document | Continued adding diagrams and their descriptions to the design document, worked on some pages of the UI design |
 
 ### Summary
