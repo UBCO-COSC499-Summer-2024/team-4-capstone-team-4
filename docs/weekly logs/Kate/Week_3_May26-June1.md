@@ -50,10 +50,36 @@
  
 ## Friday, May 31, 2024
 
+### Tasks
+- **Completed Tasks:**
+  - Reformatted and updated weekly logs ~ 1hr
+  - Clarify information with instructor (burn up chart, clockify, architecture) ~ 2hr
+  - Updated system architecture design to reflect technology changes ~ 0.5hr
+  - Created DFD + description ~ 3hr
+  
+- **In-progress Tasks:**
+  - Work on UI mock ups
+
+### Meetings and Interactions
+| Type | Time | Attendees | Tasks |
+| :-------------: | ------------- |------------- |------------- |
+| Client Meeting | 10:00 am - 10:30 am | All Members | Met with the client over zoom to discuss presentation feedback and answer questions |
+| Team Meeting | 1:30pm - 9:15pm | All Members | Updated weekly log format, worked on design document, created DFD |
+
+### Personal Development
+- **Worked On:**
+  - Github Projects Configuration
+
 ## Weekly Recap
 - Updated project plan to reflect technology changes
 - Created video presentation for plan
 - Recorded sections for presentation
 - Created System Architecture Diagram
 - Worked on react, mongo, docker skills
-- Continued...
+- Met with client for feedback
+  - Switch from MySQL to PostgreSQL
+  - No Tableau
+  - Admin to Department Staff
+- Updated weekly log format
+- Clarified information with instructor
+- Created DFD + description
