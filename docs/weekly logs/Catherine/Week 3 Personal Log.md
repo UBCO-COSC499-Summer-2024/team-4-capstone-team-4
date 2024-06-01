@@ -59,6 +59,23 @@
 
 #### 1. Tasks
 - **Completed Tasks:**
+  - sent email to set up client meeting - 10 mins
+
+- **In-progress Tasks:**
+  - Design Document
+
+#### 2. Meetings and Interactions
+- **Meetings Attended:**
+  - none
+
+#### 3. Personal Development
+- **Skills Worked On:**
+  - Laravel - 1hr 
+ 
+## May 31, 2024
+
+#### 1. Tasks
+- **Completed Tasks:**
   - design doc intro - 30 mins
   - ER diagram - 3 hours
   - set up slides - 15 mins
@@ -71,17 +88,16 @@
 #### 2. Meetings and Interactions
 - **Meetings Attended:**
   - Client Meeting - 10:00am - 10:30am - All Members - Discussed with client about the project plan proposal video
-  - Team Meeting - 1:30pm - 9:15pm - All Members - Worked more on design document
+  - Team Meeting - 10:30am - 5:40pm - All Members - Worked more on design document
 
 #### 3. Personal Development
 - **Skills Worked On:**
   - creating different diagrams
 
- ## June 1, 2024
+## June 1, 2024
 
 #### 1. Tasks
 - **Completed Tasks:**
-  - 
 
 - **In-progress Tasks:**
   - Design Document
@@ -93,7 +109,6 @@
 
 #### 3. Personal Development
 - **Skills Worked On:**
-  - 
  
 ## Weekly Recap
 We finished the project plan document and video and got feedback from the client. We started working on the design document, where I helped with the intro, some diagrams and use cases.
