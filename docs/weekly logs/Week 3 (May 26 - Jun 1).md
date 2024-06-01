@@ -71,6 +71,11 @@ During our meeting we worked on the design document. Updated the use cases and c
   - Use Cases + Diagram
   - System Architecture Diagram
   - Mock Ups
+- Met with client for feedback
+  - Switch from MySQL to PostgreSQL
+  - Switch Tableau to open source library
+  - Change admin user group responsibility to department staff
+  - Add admin user group as account manager responsibility
 - Changed tech stack from React to just Laravel
 - Added to the design document
   - Intro
