@@ -98,7 +98,8 @@
 
 #### 1. Tasks
 - **Completed Tasks:**
-
+  - navigation flow diagram - 2 hrs
+    
 - **In-progress Tasks:**
   - Design Document
   - Design video
@@ -109,6 +110,7 @@
 
 #### 3. Personal Development
 - **Skills Worked On:**
- 
+  - laravel - 2 hrs
+    
 ## Weekly Recap
 We finished the project plan document and video and got feedback from the client. We started working on the design document, where I helped with the intro, some diagrams and use cases.
