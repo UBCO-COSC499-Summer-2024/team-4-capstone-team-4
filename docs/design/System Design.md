@@ -10,13 +10,13 @@ Insight is a Department Management System web application that will enhance the 
 
 ## System Architecture Design
 
-![Image of architecture diagram](https://)
+![Image of architecture diagram](./images/SystemArchitecture.png)
 
 For our system architecture, we have adopted the Model-View-Controller (MVC) pattern due to its modularity, scalability, and maintainability. Since this is a web-based application, the user will interact with the system via a browser. The Model represents the data layer where we use the built-in Laravel ORM to communicate with our MySQL database through a customer database adapter. This adapter will allow a seamless transition, if necessary, to another database. The View corresponds to the React components responsible for the user interface and presentation logic. React's component-based architecture simplifies UI development and enables reusability. The Controller encompasses the server-side logic implemented in Laravel, handling tasks such as HTTP requests and routing. Additionally, both the front-end and back-end will communicate with Tableau to display various data visualizations. Finally, all these separate components of the system will be containerized using docker to simplify the deployment process.
 
 ## Use Case Models
 
-![Image of use case diagram](https://)
+![Image of use case diagram](./images/usecase.png)
 
 | ID | 1 |
 |---|---|
@@ -200,23 +200,62 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 
 ## Database Design 
 
-![Image of ER diagram](https://)
+![Image of ER diagram](./images/ERdiagram.png)
 
 Our system consists of five main entities: Users, Course Sections, Assignments, SEI Survey Data, and Teaching Assistants. The User entity includes attributes for email (unique identifier), first name, last name, and password, with four sub-entities (Instructor, Department Head, Department Staff, and Administrator) to represent different user groups. Department Head and Department Staff include an additional department attribute. The Administrator is defined separately for role-based access control but has no unique attributes or relationships beyond user account data.
+
 The Assignment entity includes attributes for a unique ID, name, description, hours, and subject area, and is divided into service roles and extra hours. The Department Head has a one-to-many relationship with Assignments, as they can assign multiple assignments. Instructors have a many-to-many relationship with Assignments, as they can be assigned multiple service roles or extra hours, and each role or hour can be assigned to multiple instructors.
+
 Instructors have a one-to-many relationship with the Course Section entity, requiring each instructor to have at least one course section. Course Sections include a unique identifier, performance metrics (enrollment, dropouts, capacity), meeting times, and course duration to calculate total teaching hours. Each Course Section has a one-to-one relationship with the SEI Survey Data entity, which includes attributes for the Interpolated Median of six survey questions.
+
 Finally, Course Sections have a many-to-many relationship with Teaching Assistants, where multiple teaching assistants can work on multiple courses, but each assistant must be assigned to at least one course. This diagram accurately represents the data managed within our system.
 
 ## Data Flow Diagram (Level 0/Level 1)
 
-![Image of Level 0 DFD diagram](https://)
+![Image of Level 0 and Level 1 DFD diagram](./images/DFDdiagram.png)
 
 Our level 0 data flow diagram displays the four user groups (instructors, department heads, administrators, and department staff) which interact with the system. Both the instructors and department heads can receive information, however the department staff and administrators can only input or change data via an interface. The department heads and staff can add performance data while the administrators can only access account management functionality.
-
-![Image of Level 1 DFD diagram](https://)
 
 Like the level 0, our level 1 data flow diagram displays how the four user groups interact with the system. This diagram however, gives a deeper look into the actions done by the users and the process in which these requests are handled by the system. Each user needs to interact with the authentication page to verify who they are and the type of user. Certain users (instructors and department heads) can view data from the dashboard and certain users (department heads and department staff) can insert data that will be visible on the dashboard. In this diagram, these interactions are grouped together within Data Form as that will be the main way of inserting info. The administrator can perform various account interactions in Manage Accounts as seen on the diagram. These interaction requests are sent to the server to verify and if necessary, check with the database. If all is successful, the data gets updated in the database and is sent back to the user.
 
 ## User Interface (UI) Design
 
-![Image of UI Mock Up](https://)
+### UI Mockups
+
+**User Authentication: Registration and Login**
+
+![Image of Register Page](./images/register.png)
+![Image of Login Page](./images/login.png)
+
+**User Authentication: Forgot Password**
+
+![Image of Forgot Password Page](./images/forgotpassword.png)
+
+**User Settings**
+
+Settings interface for the basic general user (Instructors). All users will see this but department heads and above will see additional data
+
+![Image of Settings Page](./images/settings.png)
+
+**Admin Dashboard**
+
+On successful login, each user will be redirected to their dashboard which looks like this. For instructors, they will see just a preview of their performance data. Department heads and admins will see additional data based on their roles.
+
+![Image of Dashboard Page](./images/dashboard.png)
+
+**Admins Instructor list page**
+
+Edit Mode
+
+![Image of Edit mode Page](./images/editmode.png)
+
+View Mode
+
+![Image of view mode Page](./images/viewmode.png)
+
+### Navigation Flow Diagrams
+
+![Image of navigation diagram](./images/navprof.png)
+![Image of navigation diagram](./images/navhead.png)
+![Image of navigation diagram](./images/navstaff.png)
+![Image of navigation diagram](./images/navadmin.png)
