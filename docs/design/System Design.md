@@ -22,17 +22,17 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Register Account |
 | Actor(s): | Instructor, Department Head, Department Staff, and Administrator |
-| Flow of Events: | Navigates to the website and clicks on the sign-up button. The user is redirected to sign-up form  Users enter their information and choose their role as instructor, department head, department staff, or administrator User chooses a password and clicks ‘Register’ Upon creation of the account, redirects to the sign-in page  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-up button</li><li>The user is redirected to sign-up form</li><li>Enters their information and chooses their role as instructor, department head, department staff, or administrator</li><li>Chooses a password and clicks ‘Register’ Upon creation of the account, redirects to the sign-in page</li></ul> |
 | Pre-Conditions: | Users must not have an existing account  |
-| Post-Conditions: | Account is created for the user to access  User information is stored in the database  |
+| Post-Conditions: | <ul><li>Account is created for the user to access</li><li>User information is stored in the database</li></ul>  |
 | Description: | A registration process for the user to access the website  |
 
 | ID | 2.a |
 |---|---|
 | Name: | Successful Login |
 | Actor(s): | Instructor, Department Head, Department Staff, and Administrator |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button. Enters the correct credentials  Redirects to the dashboard after successful login  |
-| Pre-Conditions: | The user should be logged out The credentials entered by the user are correct  The credentials stored in the database are correct to the respective user  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials</li><li>Redirects to the dashboard after successful login</li></ul>  |
+| Pre-Conditions: | <ul><li>The user should be logged out The credentials entered by the user are correct</li><li>The credentials stored in the database are correct to the respective user</li></ul>  |
 | Post-Conditions: | The user can log in |
 | Description: | The login process for all users to the website  |
 
@@ -40,8 +40,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Failed Login |
 | Actor(s): | Instructor, Department Head, Department Staff, and Administrator |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters the correct credentials  Toast requests user to retry form submission |
-| Pre-Conditions: | The user should be logged out  The credentials entered by the user are incorrect  The credentials stored in the database are incorrect to the respective user  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials</li><li>Toast requests user to retry form submission</li></ul> |
+| Pre-Conditions: | <ul><li>The user should be logged out</li><li>The credentials entered by the user are incorrect</li><li>The credentials stored in the database are incorrect to the respective user</li></ul>  |
 | Post-Conditions: | The user must reattempt log in |
 | Description: | The login process for all users to the website  |
 
@@ -49,8 +49,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Access Account Settings |
 | Actor(s): | Instructor, Department Head, Department Staff, and Administrator |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters the correct credentials  Redirects to the dashboard after a successful login Clicks “Settings” icon Redirects to “Settings” page  |
-| Pre-Conditions: | The user should have an existing account.  The credentials entered by the user are correct. |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials </li><li>Redirects to the dashboard after a successful login</li><li>Clicks “Settings” icon Redirects to “Settings” page</li></ul>  |
+| Pre-Conditions: | <ul><li>The user should have an existing account</li><li>The credentials entered by the user are correct</li></ul> |
 | Post-Conditions: | The user can see their settings page,  |
 | Description: | The user can access the account settings. |
 
@@ -58,34 +58,34 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | View Visualizations  |
 | Actor(s): | Instructor, Department Head |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters correct credentials Redirects to the dashboard after successful login The visualization will be displayed on the main dashboard |
-| Pre-Conditions: | The credentials should be correct Data must be uploaded and synched for visualizations to appear |
-| Post-Conditions: | The user’s login attempt is stored in the database  Users are able to see their current performance in the form of visualization and graphs  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters correct credentials</li><li>Redirects to the dashboard after successful login</li><li>The visualization will be displayed on the main dashboard</li></ul> |
+| Pre-Conditions: | <ul><li>The credentials should be correct</li><li>Data must be uploaded and synched for visualizations to appear</li></ul> |
+| Post-Conditions: | <ul><li>The user’s login attempt is stored in the database</li><li>Users are able to see their current performance in the form of visualization and graphs</li></ul>  |
 | Description: | Viewing the visualizations of progress and work in a given time period  |
 
 | ID: | 5 |
 |---|---|
 | Name: | Track Performance |
 | Actor(s): | Instructor, Department Head |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters the correct credentials  Redirects to the dashboard after a successful login Scrolls down the dashboard The user is able to view performance metrics, service roles, and scheduled hours |
-| Pre-Conditions: | The login credentials should be correct Data must be uploaded and synched for performance to appear |
-| Post-Conditions: | The user’s login attempt is stored in the database Users can track their performance and set up future goals accordingly  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials </li><li>Redirects to the dashboard after a successful login</li><li>Scrolls down the dashboard</li><li>The user is able to view performance metrics, service roles, and scheduled hours</li></ul> |
+| Pre-Conditions: | <ul><li>The login credentials should be correct</li><li>Data must be uploaded and synched for performance to appear</li></ul> |
+| Post-Conditions: | <ul><li>The user’s login attempt is stored in the database</li><li>Users can track their performance and set up future goals accordingly</li></ul>  |
 | Description: | Users will be able to keep track of their service roles, scheduled hours, and other metrics |
 
 | ID: | 6 |
 |---|---|
 | Name: | View Assigned TAs |
 | Actor(s): | Instructor |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters the correct credentials  Redirects to the dashboard after a successful login Scrolls down the dashboard The user can view their assigned TAs and hours associated with them |
-| Pre-Conditions: | The login credentials should be correct The instructor must be assigned at least one TA  |
-| Post-Conditions: | The user’s login attempt is stored in the database User is able to view their assigned TAs and their associated hours  |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials </li><li>Redirects to the dashboard after a successful login</li><li>Scrolls down the dashboard</li><li>The user can view their assigned TAs and hours associated with them</li></ul> |
+| Pre-Conditions: | <ul><li>The login credentials should be correct</li><li>The instructor must be assigned at least one TA</li></ul>  |
+| Post-Conditions: | <ul><li>The user’s login attempt is stored in the database</li><li>User is able to view their assigned TAs and their associated hours</li></ul>  |
 | Description: | The user is able to view assigned TAs and the hours associated with them.  |
 
 | ID: | 7.a |
 |---|---|
 | Name: | Assign Service Role |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to Assign Service Role page User chooses a service role and assigns it to the instructor(s) Submits request |
+| Flow of Events: | <ul><li>Navigates to Assign Service Role page</li><li>Chooses a service role and assigns it to the instructor(s)</li><li>Submits request</li></ul> |
 | Pre-Conditions: | Must be logged in |
 | Post-Conditions: | Service role is assigned to the instructor(s) |
 | Description: | The user will be able to assign service roles to one or more instructors  |
@@ -94,16 +94,16 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Assign Extra Hours  |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to assign service role page  Selects “Add Extra Hours” button Inputs title, description,  and hours Selects instructors who attended Submits request |
+| Flow of Events: | <ul><li>Navigates to assign service role page </li><li>Selects “Add Extra Hours” button</li><li>Inputs title, description,  and hours</li><li>Selects instructors who attended Submits request</li></ul> |
 | Pre-Conditions: | Must be logged in |
 | Post-Conditions: | Meeting hours will be added for the instructors that attended the meeting |
-| Description: | The Department Head or Department Staff will be able to add hours for instructor who attended a meeting |
+| Description: | The Department Head or Department Staff will be able to add extra hours to Instructor performance |
 
 | ID | 8.a |
 |---|---|
 | Name: | Create Service Role/Extra Hours |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to Service Roles page Selects Create New Service Role or Add Extra Hours Fills out a form with new service role or extra hours information (name, hours, description, etc.) and selects instructors they apply to Submits request|
+| Flow of Events: | <ul><li>Navigates to Service Roles page</li><li>Selects "Create New Service Role" or "Add Extra Hours"</li><li>Fills out a form with new service role or extra hours information (name, hours, description, etc.) and selects instructors they apply to</li><li>Submits request</li></ul>|
 | Pre-Conditions: | Must be logged in |
 | Post-Conditions: | New service role(s) or extra hours is added to the database |
 | Description: | Creates new service role or extra hours |
@@ -112,8 +112,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Edit Service Role/Extra Hours |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to Service Roles page Selects “Manage Service Roles” Searches for and selects the Service Roles or Extra Hours they want to edit Fills out a form to edit the information for the selected service role (name, hours, description, etc.) Submits request |
-| Pre-Conditions: | Must be logged in Database must contain existing service role/extra hours data |
+| Flow of Events: | <ul><li>Navigates to Service Roles page</li><li>Selects “Manage Service Roles”</li><li>Searches for and selects the Service Roles or Extra Hours they want to edit</li><li>Fills out a form to edit the information for the selected service role (name, hours, description, etc.)</li><li>Submits request</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Database must contain existing service role/extra hours data</li></ul> |
 | Post-Conditions: | Service role information is modified in the database |
 | Description: | Edits information for an existing service role |
 
@@ -121,8 +121,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Remove Service Role/Extra Hours |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to Service Role page  Selects “Manage Service Roles” Searches for and selects “Delete” on the Service Roles or Extra Hours they want to remove User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes” If password is correct, submits request |
-| Pre-Conditions: | Must be logged in Database must contain existing service role/extra hours data |
+| Flow of Events: | <ul><li>Navigates to Service Role page</li><li>Selects “Manage Service Roles”</li><li>Searches for and selects “Delete” on the Service Roles or Extra Hours they want to remove</li><li>User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes”</li><li>If password is correct, submits request</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Database must contain existing service role/extra hours data</li></ul> |
 | Post-Conditions: | Service role/extra hours information is removed from the database |
 | Description: | Deletes existing service role or extra hours |
 
@@ -130,7 +130,7 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Add Performance Data |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to Performance Data page Selects “Add Performance Data”, and selects performance data type (SEI Survey, course section, etc) Fills out a form or submits a CSV file containing new performance data information (including the instructor it applies to) Submits request|
+| Flow of Events: | <ul><li>Navigates to Performance Data page</li><li>Selects “Add Performance Data”, and selects performance data type (SEI Survey, course section, etc)</li><li>Fills out a form or submits a CSV file containing new performance data information (including the instructor it applies to)</li><li>Submits request</li></ul>|
 | Pre-Conditions: | Must be logged in |
 | Post-Conditions: | Performance data is added to the database |
 | Description: | Adds performance data to an existing instructor |
@@ -139,8 +139,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Remove Performance Data |
 | Actor(s): | Department Head and Department Staff |
-| Flow of Events: | Navigates to the “Performance Data” page Searches for and selects “Delete” on performance data they want to remove   User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes” If password is correct, submits request |
-| Pre-Conditions: | Must be logged in Database must contain existing performance data |
+| Flow of Events: | <ul><li>Navigates to the “Performance Data” page</li><li>Searches for and selects “Delete” on performance data they want to remove</li><li>User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes”</li><li>If password is correct, submits request</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Database must contain existing performance data</li></ul> |
 | Post-Conditions: | Performance data is removed from the database |
 | Description: | Deletes performance data for an existing instructor |
 
@@ -148,8 +148,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | View Instructor’s Visualizations |
 | Actor(s): | Department Head |
-| Flow of Events: | Navigates to “Performance by Instructor” page Searches for and selects instructor name Redirects to individual performance dashboard |
-| Pre-Conditions: | Must be logged in Data must be uploaded and synched for visualizations to appear. |
+| Flow of Events: | <ul><li>Navigates to “Performance by Instructor” page</li><li>Searches for and selects instructor name</li><li>Redirects to individual performance dashboard</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Data must be uploaded and synched for visualizations to appear</li></ul> |
 | Post-Conditions: | Dashboard will be displayed with performance visualizations for the instructors |
 | Description: | The Department Head will be able to see a dashboard with visualizations of an individual instructor’s performance |
 
@@ -157,8 +157,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Export Instructor Report |
 | Actor(s): | Department Head |
-| Flow of Events: | Navigates to “Performance by Instructor” page Searches for and selects instructor name Redirects to individual performance dashboard Click download button to download the report |
-| Pre-Conditions: | Must be logged in Performance data must exist |
+| Flow of Events: | <ul><li>Navigates to “Performance by Instructor” page</li><li>Searches for and selects instructor name</li><li>Redirects to individual performance dashboard</li><li>Click download button to download the report</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Performance data must exist</li></ul> |
 | Post-Conditions: | Report will be downloaded to the device |
 | Description: | The Department Head will be able to download the individual report for an instructor |
 
@@ -166,7 +166,7 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Export Department Report |
 | Actor(s): | Department Head |
-| Flow of Events: | Navigates to the website and clicks on the sign-in button Enters the correct credentials Redirects to the dashboard after a successful login to view the department performance dashboard Click download button to download the report |
+| Flow of Events: | <ul><li>Navigates to the website and clicks on the sign-in button</li><li>Enters the correct credentials</li><li>Redirects to the dashboard after a successful login to view the department performance dashboard</li><li>Click download button to download the report</li></ul> |
 | Pre-Conditions: | Performance data must exist |
 | Post-Conditions: | Report will be downloaded to the device |
 | Description: | The Department Head will be able to download the report to view the performance overview of all instructors |
@@ -175,7 +175,7 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Create User Account |
 | Actor(s): | Administrator |
-| Flow of Events: | Navigates to “User Accounts” page Selects “Create New User” Selects user type (admin, dept. head, instructor) Fills out a form with new user information (email ID, password etc.) Submits request |
+| Flow of Events: | <ul><li>Navigates to “User Accounts” page</li><li>Selects “Create New User”</li><li>Selects user type (admin, dept. head, instructor)</li><li>Fills out a form with new user information (email ID, password etc.)</li><li>Submits request</li></ul> |
 | Pre-Conditions: | Must be logged in |
 | Post-Conditions: | New user account(s) is added to database |
 | Description: | Creates a new user account |
@@ -184,8 +184,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Edit User Account Information |
 | Actor(s): | Administrator |
-| Flow of Events: | Navigates to “User Accounts” page Searches for and selects the user account they want to edit User fills out a form to edit account information of the selected user account (email ID, password, etc.) Submits request|
-| Pre-Conditions: | Must be logged in Database must contain existing user account |
+| Flow of Events: | <ul><li>Navigates to “User Accounts” page</li><li>Searches for and selects the user account they want to edit</li><li>Fills out a form to edit account information of the selected user account (email ID, password, etc.)</li><li>Submits request</li></ul>|
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Database must contain existing user account</li></ul> |
 | Post-Conditions: | User account information is modified in the database |
 | Description: | Edits account information for an existing user account |
 
@@ -193,8 +193,8 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 |---|---|
 | Name: | Remove user account |
 | Actor(s): | Administrator |
-| Flow of Events: | Navigates to the “User Accounts” page Searches for and selects “Delete” on the user account(s) they want to remove User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes” If password is correct, submits request |
-| Pre-Conditions: | Must be logged in Database must contain existing user account |
+| Flow of Events: | <ul><li>Navigates to the “User Accounts” page</li><li>Searches for and selects “Delete” on the user account(s) they want to remove</li><li>User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes”</li><li>If password is correct, submits request</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in Database must contain existing user account</li></ul> |
 | Post-Conditions: | User account(s) information is removed from the database |
 | Description: | Deletes account of an existing user |
 
