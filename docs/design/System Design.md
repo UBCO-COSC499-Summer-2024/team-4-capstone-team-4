@@ -255,6 +255,20 @@ View Mode
 
 ![Image of view mode Page](./images/viewmode.png)
 
+**Admin Import Data**
+
+Upload or Create New
+
+![Image of upload UI](./images/merged-upload.png)
+
+Manual Entry
+
+![Image of data entry form](./images/merged-form.png)
+
+Visual Feedback
+
+![Image of validation](./images/merged-accept.png)
+
 ### Navigation Flow Diagrams
 
 ![Image of navigation diagram](./images/navprof.png)
