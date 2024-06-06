@@ -271,8 +271,6 @@ Manage Services Roles/Requests and View Logs
 
 ![Image of view mode Page](./images/servicesrolesmanager.png)
 
-[add image]
-
 Upload Performance Data (i.e., SEI Survey)
 
 ![Image of upload UI](./images/performance-upload.png)
