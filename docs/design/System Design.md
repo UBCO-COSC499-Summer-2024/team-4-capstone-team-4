@@ -259,7 +259,7 @@ View Mode
 
 Create New Service Role or Extra Hours
 
-![Image of upload UI](./images/merged-upload.png)
+[add image]
 
 Upload Performance Data (i.e., SEI Survey)
 
