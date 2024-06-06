@@ -263,6 +263,14 @@ View Mode
 
 Create New Service Role or Extra Hours
 
+![Image of view mode Page](./images/newservicerole.png)
+
+**Service Roles Manager**
+
+Manage Services Roles/Requests and View Logs
+
+![Image of view mode Page](./images/servicesrolesmanager.png)
+
 [add image]
 
 Upload Performance Data (i.e., SEI Survey)
