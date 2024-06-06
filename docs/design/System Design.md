@@ -257,9 +257,13 @@ View Mode
 
 **Admin Import Data**
 
-Upload or Create New
+Create New Service Role or Extra Hours
 
 ![Image of upload UI](./images/merged-upload.png)
+
+Upload Performance Data (i.e., SEI Survey)
+
+![Image of upload UI](./images/performance-upload.png)
 
 Manual Entry
 
