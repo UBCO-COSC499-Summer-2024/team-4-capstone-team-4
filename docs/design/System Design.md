@@ -204,13 +204,17 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 
 ![Image of ER diagram](./images/ERdiagram.png)
 
-Our system consists of five main entities: Users, Course Sections, Assignments, SEI Survey Data, and Teaching Assistants. The User entity includes attributes for email (unique identifier), first name, last name, and password, with four sub-entities (Instructor, Department Head, Department Staff, and Administrator) to represent different user groups. Department Head and Department Staff include an additional department attribute. The Administrator is defined separately for role-based access control but has no unique attributes or relationships beyond user account data.
+Our system consists of nine main entities: User, Department, Area, Performance, Course Performance, SEI Survey Data, Service Role, Extra Hours, and Teaching Assistant. The User entity includes attributes for email (unique identifier), first name, last name, and password, with four sub-entities (Instructor, Department Head, Department Staff, and Administrator) to represent different user groups.
 
-The Assignment entity includes attributes for a unique ID, name, description, hours, and subject area, and is divided into service roles and extra hours. The Department Head has a one-to-many relationship with Assignments, as they can assign multiple assignments. Instructors have a many-to-many relationship with Assignments, as they can be assigned multiple service roles or extra hours, and each role or hour can be assigned to multiple instructors.
+The Department entity has attributes of unique ID and name which is has one-to-many relationship with the Area entity. The Area entity also has a unique ID and name and has one-to-many relationship with performance. 
 
-Instructors have a one-to-many relationship with the Course Section entity, requiring each instructor to have at least one course section. Course Sections include a unique identifier, performance metrics (enrollment, dropouts, capacity), meeting times, and course duration to calculate total teaching hours. Each Course Section has a one-to-one relationship with the SEI Survey Data entity, which includes attributes for the Interpolated Median of six survey questions.
+The Performance enitity includes attributes for score, total hours, target hours, and year. Performance is associated with one instructor, an area or a department.
 
-Finally, Course Sections have a many-to-many relationship with Teaching Assistants, where multiple teaching assistants can work on multiple courses, but each assistant must be assigned to at least one course. This diagram accurately represents the data managed within our system.
+The Service Role entity includes attributes for a unique ID, name, description, year and hours for each month. The Department Head may assign zero or more service roles. Instructors may be assigned to multiple service roles, and each role can be assigned to multiple instructors. The Extra Hours entity has attributes of name and hours. Instructors may be assigned to zero or more extra hours, and each extra hour can be assigned to multiple instructors.
+
+Instructors have a one-to-many relationship with the Course Performance entity, requiring each instructor to have at least one course they are teaching. Course Performance include a unique identifier, performance metrics (enrollment, dropouts, capacity), and course duration to calculate total teaching hours. Each Course Performance has a one-to-one relationship with the SEI Survey Data entity, which includes attributes for the Interpolated Median of six survey questions.
+
+Finally, Course Peformance have a one-to-many relationship with Teaching Assistants, where multiple teaching assistants can work on multiple courses, but each assistant must be assigned to at least one course. This diagram accurately represents the data managed within our system.
 
 ## Data Flow Diagram (Level 0/Level 1)
 
