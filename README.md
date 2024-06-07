@@ -14,8 +14,8 @@
 
 # Branch Workflow
 
-- To view project plan: [Project-Plan Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/Project-Plan/docs/plan/ProjectPlan.md)
-- To view design document: [Design Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/Design/docs/design/System%20Design.md)
-- To view weekly logs and dashboard: [weekly-logs Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/weekly-logs/docs/weekly%20logs)
-- To view personal logs: [personal-logs Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/Personal-logs/docs/weekly%20logs)
-- To view communication log: [Communication-updates Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/Communication-updates/docs/communication)
+- To view features in production: [master Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/master)
+- To view features in development: [development Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/development)
+- To view documentation (Plan, Design, etc.): [documentation Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/documentation/docs)
+- To view logs (Personal, Weekly, Commuincation, Dashboard): [logs Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/logs/docs)
+
