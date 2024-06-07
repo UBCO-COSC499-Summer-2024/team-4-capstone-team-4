@@ -193,9 +193,36 @@ For our system architecture, we have adopted the Model-View-Controller (MVC) pat
 
 | ID | 13.c |
 |---|---|
-| Name: | Remove user account |
+| Name: | Remove User Account |
 | Actor(s): | Administrator |
 | Flow of Events: | <ul><li>Navigates to the “User Accounts” page</li><li>Searches for and selects “Delete” on the user account(s) they want to remove</li><li>User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes”</li><li>If password is correct, submits request</li></ul> |
+| Pre-Conditions: | <ul><li>Must be logged in Database must contain existing user account</li></ul> |
+| Post-Conditions: | User account(s) information is removed from the database |
+| Description: | Deletes account of an existing user |
+
+| ID: | 14.a |
+|---|---|
+| Name: | Create Hours Target |
+| Actor(s): | Department Head, Department Staff |
+| Flow of Events: | <ul><li>Navigates to “Set Target” page</li><li>Selects “Create New Target”</li><li>Inputs number of hours for the target</li><li>Selects instructors te target applies to</li><li>Submits request</li></ul> |
+| Pre-Conditions: | Must be logged in |
+| Post-Conditions: | New user account(s) is added to database |
+| Description: | Creates a new user account |
+
+| ID: | 14.b |
+|---|---|
+| Name: | Edit Hours Target |
+| Actor(s): | Department Head, Department Staff |
+| Flow of Events: | <ul><li>Navigates to “Set Target” page</li><li>Searches for and selects the instructor(s) whose target they want to edit</li><li>Selects "Adjust Target(s)"</li><li>Appropriately adjusts target hours</li><li>Submits request</li></ul>|
+| Pre-Conditions: | <ul><li>Must be logged in</li><li>Database must contain existing instructor accounts</li></ul> |
+| Post-Conditions: | User account information is modified in the database |
+| Description: | Edits account information for an existing user account |
+
+| ID | 14.c |
+|---|---|
+| Name: | Remove Hours Target |
+| Actor(s): | Department Head, Department Staff |
+| Flow of Events: | <ul><li>Navigates to “Set Target” page</li><li>Searches for and selects the instructor(s) whose target they want to edit</li><li>Selects "Delete"</li><li>User is prompted with an “Are you sure you want to delete this Service Role/Extra Hours?”, and must enter and submit password to select “Yes”</li><li>If password is correct, submits request</li></ul> |
 | Pre-Conditions: | <ul><li>Must be logged in Database must contain existing user account</li></ul> |
 | Post-Conditions: | User account(s) information is removed from the database |
 | Description: | Deletes account of an existing user |
