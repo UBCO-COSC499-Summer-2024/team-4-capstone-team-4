@@ -1,0 +1,50 @@
+version: "3.8"
+
+networks:
+  InsightNet:
+
+services:
+  app:
+    build: .
+    container_name: Insight
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - InsightNet
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./fastcgi-php.conf:/etc/nginx/snippets/fastcgi-php.conf
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - InsightNet
+
+  postgres:
+    image: postgres:16
+    container_name: InsightBE
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - InsightNet
+
+volumes:
+  pgdata:
