@@ -1,3 +1,7 @@
+# Angelina's Personal Log
+
+## Week 3: June 6 - June 12
+
 **Date:** June 6, 2024
 
 #### 1. Tasks
