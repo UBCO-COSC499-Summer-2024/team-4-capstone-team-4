@@ -79,3 +79,24 @@
 #### 3. Personal Development
 - **Skills Worked On:**
   - Markdown
+
+**Date:** June 5, 2024
+
+#### 1. Tasks
+- **In-progress Tasks:**
+<br>Design: 
+  - Design Presentation
+
+- **Completed Tasks:**
+<br>Design: 
+  - Design Document
+    
+#### 2. Meetings and Interactions
+- **Meetings Attended:**
+- Project Meeting -  9:30am - 12:30pm - Whole Team - Continued work on Design
+- Project Meeting -  1:30pm - 8:00pm - Whole Team - Continued work on Design & Setup Laravel
+
+#### 3. Personal Development
+- **Skills Worked On:**
+  - Laravel
+  - Google Slides
