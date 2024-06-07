@@ -1,6 +1,6 @@
 # Angelina's Personal Log
 
-## Week 3: June 6 - June 12
+## Week 4: June 6 - June 12
 
 **Date:** June 6, 2024
 
