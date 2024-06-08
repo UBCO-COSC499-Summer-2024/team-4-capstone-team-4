@@ -50,4 +50,3 @@
 
 #### 3. Personal Development
 - **Skills Worked On:**
-  - 
