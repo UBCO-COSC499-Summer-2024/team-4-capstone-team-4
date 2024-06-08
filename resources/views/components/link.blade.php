@@ -5,5 +5,8 @@
     @if(isset($clickAction))
         onclick="{{ $clickAction }}"
     @endif>
+    @if(isset($icon))
+        <span class="material-symbols-outlined">{{ $icon }}</span>
+    @endif
     {{ $slot }}
 </a>

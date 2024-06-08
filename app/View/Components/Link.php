@@ -14,11 +14,13 @@ class Link extends Component {
     public $class;
     public $type;
     public $pg;
-    public function __construct($href='#', $class='', $type, $pg) {
+    public $icon;
+    public function __construct($href='#', $class='', $type, $pg, $icon) {
         $this->href = $href;
         $this->class = $class;
         $this->type = $type;
         $this->pg = $pg;
+        $this->icon = $icon;
     }
 
     /**
