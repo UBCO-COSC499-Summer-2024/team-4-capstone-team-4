@@ -15,3 +15,22 @@
 - **Skills Worked On:**
   - Google Slides
   - Video Editing
+
+ **Date:** June 7, 2024
+
+#### 1. Tasks
+- **Completed Tasks:**
+- <br>Design: 
+  - Design Presentation
+  - Docker setup
+  
+- **In-progress Tasks:**
+<br>Database: 
+  - Table setup
+    
+#### 2. Meetings and Interactions
+
+#### 3. Personal Development
+- **Skills Worked On:**
+  - Google Slides
+  - Video Editing
