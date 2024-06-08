@@ -20,7 +20,7 @@
 
 #### 1. Tasks
 - **Completed Tasks:**
-- <br>Design: 
+  <br>Design: 
   - Design Presentation
   - Docker setup
   
@@ -29,8 +29,25 @@
   - Table setup
     
 #### 2. Meetings and Interactions
+- Project Meeting - 9:15am-5:45PM - Whole Team - Environment setup, discussed next tasks, finished design presentation
 
 #### 3. Personal Development
 - **Skills Worked On:**
   - Google Slides
   - Video Editing
+  - Docker
+  - Laravel
+  - Postgres
+
+  **Date:** June 8, 2024
+  
+#### 1. Tasks 
+- **In-progress Tasks:**
+<br>Database: 
+  - Table setup
+    
+#### 2. Meetings and Interactions
+
+#### 3. Personal Development
+- **Skills Worked On:**
+  - 
