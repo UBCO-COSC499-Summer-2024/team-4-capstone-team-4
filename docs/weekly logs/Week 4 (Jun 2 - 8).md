@@ -54,7 +54,28 @@ We are working on getting the enivronment set up and working for everyone and fi
 ### Next Steps
 We will have our video completed and plan to meet on Friday June 7 to start planning for next milestone.
 
+## Friday, June 7
+
+### Tasks
+- **Completed Tasks:**
+  - Design video
+
+- **In-progress Tasks:**
+  - features for mini-presentation
+
+### Meetings and Interactions
+|  Meeting Date | Times | Milestone | Actions |
+| :-------------: | ------------- |------------- |------------- |
+| June 7, 2024 | 9:20am - 5:45pm | Design Video, Mini-presenation| We completed our design video, troubleshooted laravel and docker issues, came up with features for mini-presentations and divided amongst ourselves |
+
+### Summary
+We submitted our video and troubleshoototed some environment setup issues for our team members. We discussed what features we wanted to implement for mini-presentations and divided tasks (about 2-3) between each team member.
+
+### Next Steps
+We plan to have front end for login, register, settings, and instructor dashboard ready by Friday.
+
 ## Weekly Recap
 - Finished design document
-- Set up Laravel and Docker environment
-- ...
+- Set up Laravel and Docker environment alonside lots of troubleshooting
+- Finished design video
+- Turned uses cases into features and divided 2-3 issues for each member to work on for mini-presentation
