@@ -28,7 +28,7 @@ The environment setup on my device took very long time to solve. I have complete
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_05_2024-06_07_2024.pdf)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_05_2024-06_07_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Audio recording for design video
@@ -54,7 +54,7 @@ We finished our slides and I sent it my audio recording to a team member to make
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_31_2024-06_05_2024.pdf)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_31_2024-06_05_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document intro
@@ -84,7 +84,7 @@ We completed our design document, where I specifically completed the intro, ER d
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_29_2024-05_31_2024.pdf))
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_29_2024-05_31_2024.pdf))
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Use cases for department head
@@ -109,7 +109,7 @@ We worked on the design document, where I helped with use cases and the diagram.
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_24_2024-05_29_2024.pdf)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_24_2024-05_29_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan
@@ -133,7 +133,7 @@ We finished the project plan document and video and got feedback from the client
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/new/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_22_2024-05_24_2024.pdf)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_05_22_2024-05_24_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan
