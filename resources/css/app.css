@@ -233,3 +233,54 @@ a {
     align-items: center;
     gap: 8px;
 }
+
+/* less than 1000 */
+@media screen and (max-width: 1000px) {
+    /* main {
+        grid-template-areas: "container";
+    } */
+
+    .action-section {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* smaller screens */
+@media screen and (max-width: 768px) {
+    header {
+        grid-template-columns: 1fr;
+    }
+
+    header:not(:has(#header-misc)) {
+        grid-template-columns: 1fr;
+    }
+
+    #header-brand {
+        justify-content: center;
+    }
+
+    #header-user {
+        display: none;
+    }
+
+    #header-misc {
+        display: none;
+    }
+
+    #header-auth {
+        display: none;
+    }
+
+    #header-menu {
+        display: none;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-areas: "container";
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
