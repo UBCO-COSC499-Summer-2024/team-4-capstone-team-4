@@ -20,7 +20,7 @@
             <x-validation-errors/>
             
             <x-form-item>
-                <span class="input-label"><a href="/forgot-password" data-type="tab" data-pg="forgot-password">Forgot Password</a></span>
+                <span class="input-label"><x-link href="/forgot-password" title="{{ __('Forgot Password') }}" /></span>
             </x-form-item>
             <x-form-item>
                 <x-form-input type="checkbox" name="rememberme" value="Remember Me"/><span class="input-label">Remember Me</span>
@@ -29,7 +29,7 @@
                 <x-form-input type="submit" name="submit" value="Login" />
             </x-form-item>
             <x-form-item>
-                <span class="input-label">Don't have an account? <a href="/register" data-type="tab" data-pg="register">Register</a></span>
+                <span class="input-label">Don't have an account? <x-link href="{{ route('register') }}" title="Register" /></span>
             </x-form-item>
         </form>
     </section>

@@ -8,25 +8,7 @@
         <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
     </head>
     <body>
-        <header class="auth">
-            <section id="header-brand">
-                <div id="header-img">
-                    <img src="https://iconape.com/wp-content/files/sf/192229/svg/192229.svg" alt="UBC Logo">
-                </div>
-                <h1 class="nos">Insighttt</h1>
-            </section>
-            <section id="header-auth">
-                <nav class="menu nos">
-                    <div class="menu-item" data-type="tab" data-pg="login">
-                        <span class="menu-item-title">Login</span>
-                        <span class="material-symbols-outlined">login</span>
-                    </div>
-                    <div class="menu-item" data-type="tab" data-pg="register">
-                        <span class="menu-item-title">Register</span>
-                        <span class="material-symbols-outlined">person_add</span>
-                    </div>
-            </section>
-        </header>
+        <x-header-auth />
         <main>
             <div class="auth-container">
                 <section id="auth-login" class="auth-section active glass">
@@ -89,7 +71,9 @@
                             <input class="form-input" type="submit" name="submit" value="Register" />
                         </div>
                         <div class="form-item">
-                            <span class="input-label">Already have an account? <a href="#login" data-type="tab" data-pg="login">Login</a></span>
+                            <span class="input-label">Already have an account?
+                                <x-link href="/login" title=""></x-link>
+                            </span>
                         </div>
                     </form>
                 </section>

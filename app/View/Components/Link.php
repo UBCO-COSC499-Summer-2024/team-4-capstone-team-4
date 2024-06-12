@@ -14,7 +14,7 @@ class Link extends Component {
     public $class;
     public $title;
     public $icon;
-    public function __construct($title = "", $icon = "link", $href = '#', $class='') {
+    public function __construct($title = "", $icon = "", $href = '#', $class='') {
         $this->href = $href;
         $this->title = $title;
         $this->icon = $icon;
