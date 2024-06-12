@@ -1,10 +1,8 @@
 @php
 $sidebarItems = [
     ['icon' => 'dashboard', 'route' => 'dashboard', 'title' => 'Dashboard'],
-    ['icon' => 'person', 'route' => 'profile', 'title' => 'Profile'],
-    ['icon' => 'groups', 'route' => 'staff', 'title' => 'Staff'],
-    ['icon' => 'bar_chart', 'route' => 'performance', 'title' => 'Performance'],
     ['icon' => 'notifications', 'route' => 'notifications', 'title' => 'Notifications'],
+    ['icon' => 'leaderboard', 'route' => 'leaderboard', 'title' => 'Leaderboard'],
     ['icon' => 'settings', 'route' => 'settings', 'title' => 'Settings'],
     ['icon' => 'logout', 'route' => 'logout', 'title' => 'Logout'],
 ];

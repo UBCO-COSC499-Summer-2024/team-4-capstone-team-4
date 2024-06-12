@@ -17,7 +17,7 @@
 
         <!-- Styles -->
         @livewireStyles
-        {{-- <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet"> --}}
+        <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     </head>
     <body class="font-sans antialiased">
         <x-banner />

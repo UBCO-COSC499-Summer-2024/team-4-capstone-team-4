@@ -1,4 +1,4 @@
-<div class="sidebar-item flex items-center">
+<div class="sidebar-item">
     {{-- link component --}}
 
     {{-- *note: changed $type to $title --}}
@@ -10,5 +10,5 @@
         >
     </x-link>
     {{-- add name beside icon --}}
-    <a href="#" class="text-xl mx-4 my-4">{{$title}}</a>
+    <a href="#">{{$title}}</a>
 </div>
