@@ -2,11 +2,12 @@
 
 ### Timesheet
 Clockify report
-[Report]()
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_07_2024-06_12_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: basic resigistration feature - being able to create an account
   * #2: basic login feature - being able to login into our website
+  * #3: Changing logs template
 
 ### Progress Update (since 6/7/2024) 
 |TASK/ISSUE |STATUS|
@@ -15,9 +16,10 @@ Clockify report
 | Environment setup | Complete |
 | Basic Registration Feature - issue #83 | In-progress |
 | Basic Login Feature - issue #84 | In-progress |
+| Changing logs template | Complete |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The environment setup on my device took very long time to solve. I have completed implementing the basic registration and login feature but they still need to be tested and reviewed.
+The environment setup on my device took very long time to solve. I have completed implementing the basic registration and login feature but they still need to be tested and reviewed. I also chnaged the logs to match the provided template.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Create and pass test for registration feature
