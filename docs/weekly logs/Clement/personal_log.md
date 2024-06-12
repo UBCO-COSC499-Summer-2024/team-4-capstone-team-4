@@ -1,3 +1,204 @@
+## Friday (6/7)
+
+### Timesheet
+Clockify report
+![alt text](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Laravel Docker setup with Laravel Sail
+  * #2: Environment setup for team members
+  * #3: Implementation strategies discussion and UI breakdown into components
+  * #4: Recorded audio for design presentation
+  * #5: Feature breakdown and assignment to team members
+
+### Progress Update (since 6/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Laravel Docker setup</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Environment setup for team members</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implementation strategies discussion</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Recorded audio for design presentation</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Feature breakdown and assignment</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The Laravel Docker setup and environment setup for team members were completed successfully. The team had a productive meeting discussing implementation strategies and breaking down UI into components. Audio recording for the design presentation went well.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Finalize environment setup
+  * Begin implementing UI components
+
+---
+
+## Saturday (6/8)
+
+### Timesheet
+Clockify report
+![alt text](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Environment setup on home machine
+  * #2: Planning assigned features and tasks
+  * #3: Implemented link-component, header/auth header components and sub-components
+
+### Progress Update (since 6/8/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Environment setup on home machine</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Planning assigned features and tasks</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Implemented link-component</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implemented header/auth header components</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The environment setup on the home machine was successful. Implementation of the link-component and header/auth header components went smoothly. Planning of assigned features and tasks is still ongoing.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete planning of assigned features and tasks
+  * Continue implementing UI components
+
+---
+
+## Sunday (6/9)
+
+### Timesheet
+Clockify report
+![alt text](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implemented sidebar component
+
+### Progress Update (since 6/9/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Sidebar component</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The implementation of the sidebar component was completed as planned.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Implement toolbar component
+  * Implement pagination component
+
+---
+
+## Monday (6/10)
+
+### Timesheet
+Clockify report
+![alt text](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implemented toolbar component
+  * #2: Implemented pagination component
+
+### Progress Update (since 6/10/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Toolbar component</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Pagination component</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The implementation of the toolbar and pagination components was completed successfully.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Optimize Docker setup
+  * Update personal logs format
+  * Generate Clockify reports
+
+---
+
+## Tuesday (6/11)
+
+### Timesheet
+Clockify report
+![alt text](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Updated personal logs format
+  * #2: Attempted Docker optimization
+  * #3: Generated Clockify Reports for all personal logs (past and current)
+
+### Progress Update (since 6/11/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Updated personal logs format</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Attempted Docker optimization</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Generated Clockify Reports</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Updating the personal logs format and generating Clockify reports were successful. Docker optimization is still in progress.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Finalize Docker optimization
+  * Continue refining UI components
+  * Address any remaining tasks from team meeting
+
+---
+
 ## Friday (6/5- 6/7)
 
 ### Timesheet
@@ -312,3 +513,5 @@ Initial discussions and planning sessions were productive. The project plan docu
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Continue working on the project plan document
   * Start the project plan presentation
+
+Fix the order, latest at the top. Also, a cycle is considered Friday Morning to Wed Morning and Wednesday Morning to Friday Morning. There's two cycles basically. ANything down from Friday to before Wednesday is cycle 1 and anything from Wednesday to before Friday is cycle 2. That's the date range. And its from May 2024 to now
