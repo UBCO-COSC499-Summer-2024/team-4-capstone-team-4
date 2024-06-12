@@ -1,8 +1,8 @@
 ## Wednesday (6/7- 6/12)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_06_07_2024-06_12_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Video
@@ -72,8 +72,8 @@ We spent a lot of time working on environment setup, but we eventually got the s
 ## Friday (6/5- 6/7)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_06_05_2024-06_07_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Record Audio for Presentation
@@ -123,8 +123,8 @@ I recorded my audio presentation and sent it over to my team member for editing.
 ## Wednesday (5/31 - 6/5)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_05_31_2024-06_05_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Finish Design Document
@@ -175,8 +175,8 @@ We have a good routine of meeting often to discuss progress and ensure we are al
 ## Friday (5/29- 5/31)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_05_29_2024-05_31_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document
@@ -235,8 +235,8 @@ I worked on my assigned components for the design document. I completed the syst
 ## Wednesday (5/24 - 5/29)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_05_24_2024-05_29_2024.pdf)
 
 ### Current Tasks
   * #1: Project Plan
@@ -287,8 +287,8 @@ We continued to work on the project plan and discuss feature assignment. We also
 ## Friday (5/22 - 5/24)
 
 ### Timesheet
-Clockify report
-![alt text](image_url_here)
+
+![Clockify report](./clockify/Clockify_Time_Report_Summary_05_22_2024-05_24_2024.pdf)
 
 ### Current Tasks
   * #1: Project Plan
