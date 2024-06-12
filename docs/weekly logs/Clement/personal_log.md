@@ -513,5 +513,3 @@ Initial discussions and planning sessions were productive. The project plan docu
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Continue working on the project plan document
   * Start the project plan presentation
-
-Fix the order, latest at the top. Also, a cycle is considered Friday Morning to Wed Morning and Wednesday Morning to Friday Morning. There's two cycles basically. ANything down from Friday to before Wednesday is cycle 1 and anything from Wednesday to before Friday is cycle 2. That's the date range. And its from May 2024 to now
