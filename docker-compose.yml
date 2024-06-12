@@ -50,7 +50,7 @@ services:
             timeout: 5s
 networks:
     InsightNet:
-        driver: bridge
+#        driver: bridge
 volumes:
     sail-pgsql:
         driver: local
