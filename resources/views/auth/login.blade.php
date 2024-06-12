@@ -16,7 +16,9 @@
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
             </x-form-item>
-            <x-validation-errors name="password" />
+
+            <x-validation-errors/>
+            
             <x-form-item>
                 <span class="input-label"><a href="/forgot-password" data-type="tab" data-pg="forgot-password">Forgot Password</a></span>
             </x-form-item>
