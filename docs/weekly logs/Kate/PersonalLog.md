@@ -22,7 +22,7 @@
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Design Video /
+        <td>Design Video / #41
         </td>
         <!-- Status -->
         <td>Complete
@@ -30,7 +30,7 @@
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Environment Setup /
+        <td>Environment Setup / #60
         </td>
         <!-- Status -->
         <td>In Progress
@@ -38,7 +38,7 @@
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Sidebar / 
+        <td>Sidebar / #79
         </td>
         <!-- Status -->
         <td>In Progress
@@ -46,7 +46,7 @@
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Header / 
+        <td>Header / #85
         </td>
         <!-- Status -->
         <td>In Progress
@@ -54,7 +54,7 @@
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Visualizations / 
+        <td>Visualizations / #86
         </td>
         <!-- Status -->
         <td>In Progress
@@ -90,7 +90,7 @@ We spent a lot of time working on environment setup, but we eventually got the s
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Record Audio for Presentation / 
+        <td>Record Audio for Presentation / #31
         </td>
         <!-- Status -->
         <td>Complete
@@ -98,7 +98,7 @@ We spent a lot of time working on environment setup, but we eventually got the s
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Design Presentation
+        <td>Design Presentation /#43
         </td>
         <!-- Status -->
         <td>In Progress
@@ -106,7 +106,7 @@ We spent a lot of time working on environment setup, but we eventually got the s
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Environment Setup
+        <td>Environment Setup / #60
         </td>
         <!-- Status -->
         <td>In Progress
@@ -141,7 +141,7 @@ I recorded my audio presentation and sent it over to my team member for editing.
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Design Document / 
+        <td>Design Document / #41
         </td>
         <!-- Status -->
         <td>Complete
@@ -149,7 +149,7 @@ I recorded my audio presentation and sent it over to my team member for editing.
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Data Flow Diagram
+        <td>Data Flow Diagram / #40
         </td>
         <!-- Status -->
         <td>Complete
@@ -193,7 +193,7 @@ We have a good routine of meeting often to discuss progress and ensure we are al
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Design Document / 
+        <td>Design Document / #41
         </td>
         <!-- Status -->
         <td>In Progress
@@ -201,7 +201,7 @@ We have a good routine of meeting often to discuss progress and ensure we are al
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>System Architecture Diagram /
+        <td>System Architecture Diagram / #37
         </td>
         <!-- Status -->
         <td>Complete
@@ -209,7 +209,7 @@ We have a good routine of meeting often to discuss progress and ensure we are al
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Data Flow Diagram /
+        <td>Data Flow Diagram / #40
         </td>
         <!-- Status -->
         <td>In Progress
@@ -217,7 +217,7 @@ We have a good routine of meeting often to discuss progress and ensure we are al
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Helped to finish the Use Case Diagram / 
+        <td>Helped to finish the Use Case Diagram / #38
         </td>
         <!-- Status -->
         <td>In Progress
@@ -268,7 +268,7 @@ I worked on my assigned components for the design document. I completed the syst
     </tr>
    <tr>
         <!-- Task/Issue # -->
-        <td>Record Voiceovers for Presentation / #23
+        <td>Record Voiceovers for Presentation / #31
         </td>
         <!-- Status -->
         <td>Complete
