@@ -127,10 +127,11 @@ The team focused on completing the design document and working on the presenatat
 
 ## Completed Tasks:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc2.png)
 
 ## In Progress Tasks/ To do:
 
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc3.png)
 ![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
 
 ## Test Report / Testing Status:
