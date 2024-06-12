@@ -12,10 +12,11 @@
 - Login Feature
 - Settings Feature
 - General Dashboard Front End
+- Database setup
 
 ## Associated Tasks from Project Board:
 
-![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/current.png)
 
 ## Tasks for Next Cycle:
 
@@ -32,10 +33,8 @@
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| #1  | Design Video | All Members  |
-| #2   | Environment Set up | All Members  |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/envsetup.png)
 
 ## In Progress Tasks/ To do:
 
@@ -62,10 +61,14 @@ The team focused on implementing the account registration and login for user, th
 
 ## Associated Tasks from Project Board:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/envsetup.png)
 
 ## Tasks for Next Cycle:
 
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/envsetup.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -79,17 +82,13 @@ The team focused on implementing the account registration and login for user, th
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| #1   | Design Document | All Members  |
-| [#ID]   | [Task Description] | [Assignee]   |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| #1  | Design Video | All Members  |
-| #2  | Environment Setup | All Members |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/envsetup.png)
+
 
 ## Test Report / Testing Status:
 
@@ -97,7 +96,7 @@ N/A
 
 ## Overview:
 
-The team focused on review design document, working on the presenatation slides. The Kanban Board has been populated with user stories and tasks, milestones have been added, and the dashboard visuals creation has been completed. The next cycle will focus on [Tasks for the next cycle].
+The team focused on completing the design document and working on the presenatation slides. The next cycle will focus on completing the design video and setting up our laravel and docker environment.
 
 ## Date Range:
 
@@ -109,11 +108,12 @@ The team focused on review design document, working on the presenatation slides.
 
 ## Associated Tasks from Project Board:
 
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 
 ## Tasks for Next Cycle:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -127,17 +127,11 @@ The team focused on review design document, working on the presenatation slides.
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
-| [#ID]   | [Task Description] | [Assignee]   |
+
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designvideo.png)
 
 ## Test Report / Testing Status:
 
@@ -145,7 +139,7 @@ N/A
 
 ## Overview:
 
-The team focused on [Summary of work done]. The Kanban Board has been populated with user stories and tasks, milestones have been added, and the dashboard visuals creation has been completed. The next cycle will focus on [Tasks for the next cycle].
+The team focused on finalizing the design doc. The next cycle will focus on creating the presenations and the design video.
 
 ## Date Range:
 
@@ -157,11 +151,11 @@ The team focused on [Summary of work done]. The Kanban Board has been populated 
 
 ## Associated Tasks from Project Board:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## Tasks for Next Cycle:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -175,17 +169,11 @@ The team focused on [Summary of work done]. The Kanban Board has been populated 
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
-| [#ID]   | [Task Description] | [Assignee]   |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## Test Report / Testing Status:
 
@@ -193,7 +181,7 @@ N/A
 
 ## Overview:
 
-The team focused on [Summary of work done]. The Kanban Board has been populated with user stories and tasks, milestones have been added, and the dashboard visuals creation has been completed. The next cycle will focus on [Tasks for the next cycle].
+The team focused on working on the design document. We added use cases and its diagram and the system architecture diagram. The next cycle will focus on finishing off the design document.
 
 ## Date Range:
 
@@ -207,11 +195,12 @@ The team focused on [Summary of work done]. The Kanban Board has been populated 
 
 ## Associated Tasks from Project Board:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/planvideo.png)
 
 ## Tasks for Next Cycle:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -225,17 +214,12 @@ N/A
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
-| [#ID]   | [Task Description] | [Assignee]   |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/planvideo.png)
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/designdoc.png)
 
 ## Test Report / Testing Status:
 
@@ -255,11 +239,11 @@ The team focused on completing the project plan document and video. The Kanban B
 
 ## Associated Tasks from Project Board:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
 
 ## Tasks for Next Cycle:
 
-
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -277,9 +261,7 @@ N/A
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| #1   | Project Plan | All Members |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/projectplan.png)
 
 ## Test Report / Testing Status:
 
