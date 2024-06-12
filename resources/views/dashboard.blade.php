@@ -8,13 +8,13 @@
                 <div class="flex justify-between">
                     <div class="flex m-5">
                         <div class="m-1">
-                            <span class="material-symbols-outlined">notifications</span>
+                            <a href=""><span class="material-symbols-outlined">notifications</span></a>
                         </div>
                         <div class="m-1">
-                            <span class="material-symbols-outlined">brightness_4</span>
+                            <a href=""><span class="material-symbols-outlined">brightness_4</span></a>
                         </div>
                         <div class="m-1">
-                            <span class="material-symbols-outlined">settings</span>
+                            <a href=""><span class="material-symbols-outlined">settings</span></a>
                         </div>
                         <div class="">
                             <!-- Settings Dropdown -->
@@ -69,11 +69,12 @@
             </div>
         <div class="flex mx-5">
                 {{-- sidebar component --}}
-            <div class="">
+            <div class="h-[85vh]">
                 <x-sidebar :items="[]" />
             </div>
             {{-- future visualizations component --}}
             <div class="mx-2">
+                <h1 class="text-2xl mx-2 mb-4 font-bold">Dashboard</h1>
                 <x-visualizations />
             </div>
         </div>
