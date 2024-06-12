@@ -2,7 +2,7 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log69-612.png)
+![Clockify report](./clockifylogs/log69-611.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Model Setup
@@ -87,7 +87,7 @@ I made significant progress on the Design Document and Presentation. Both are st
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log530-61.png)
+![Clockify report](./clockifylogs/log53061.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document
@@ -113,7 +113,7 @@ I started working on the Design Document and Design Presentation.
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log526-529.png)
+![Clockify report](./clockifylogs/log526529.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan Document
