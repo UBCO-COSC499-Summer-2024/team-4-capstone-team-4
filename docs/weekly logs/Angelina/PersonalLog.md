@@ -2,7 +2,7 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](image_url_here)
+![Clockify report](./clockifylogs/log69-612.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Model Setup
@@ -31,7 +31,7 @@ Created a foundation for the database tables in the migrations folder. Began add
 
 ### Timesheet
 Clockify report
-![Clockify report](image_url_here)
+![Clockify report](./clockifylogs/log66-68.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Presentation
@@ -59,7 +59,7 @@ I completed the Design Presentation and Docker setup successfully. The Database 
 
 ### Timesheet
 Clockify report
-![Clockify report](image_url_here)
+![Clockify report](./clockifylogs/log62-65.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document
@@ -87,7 +87,7 @@ I made significant progress on the Design Document and Presentation. Both are st
 
 ### Timesheet
 Clockify report
-![Clockify report](image_url_here)
+![Clockify report](./clockifylogs/log530-61.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document
@@ -113,7 +113,7 @@ I started working on the Design Document and Design Presentation.
 
 ### Timesheet
 Clockify report
-![Clockify report](image_url_here)
+![Clockify report](./clockifylogs/log526-529.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan Document
