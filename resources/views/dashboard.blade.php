@@ -67,7 +67,7 @@
             </div>
         <div class="flex m-5">
                 {{-- sidebar component --}}
-            <div class="bg-gray-200 rounded-lg p-10 min-w-[300px] min-h-screen">
+            <div class="bg-gray-200 rounded-lg p-3 min-w-[300px] min-h-screen">
                 <x-sidebar :items="[]" />
             </div>
             {{-- future visualizations component --}}
