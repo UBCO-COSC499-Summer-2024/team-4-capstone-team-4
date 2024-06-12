@@ -15,49 +15,31 @@
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-
-### Alternatively, include image of the project board with tasks and status:
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/)
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-
-### Alternatively, include image of the project board with tasks and status:
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/inprogress-4.png)
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/burnup/4.png)
 
 ## Times for Team/Individual:
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-6.png)
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-6.png)
 
 ## Completed Tasks:
 
 | Task ID | Description        | Completed By |
 | ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
-| [#ID]   | [Task Description] | [Assignee]   |
+| #1  | Design Video | All Members  |
+| #2   | Environment Set up | All Members  |
 
 ## In Progress Tasks/ To do:
 
-| Task ID | Description        | Assigned To |
-| ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+![image of tasks](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/tasks/inprogress-4.png)
 
 ## Test Report / Testing Status:
 
@@ -80,49 +62,34 @@ The team focused on implementing the account registration and login for user, th
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-
-### Alternatively, include image of the project board with tasks and status:
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/burnup/3.png)
 
 ## Times for Team/Individual:
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-5.png)
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-5.png)
 
 ## Completed Tasks:
 
 | Task ID | Description        | Completed By |
 | ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
+| #1   | Design Document | All Members  |
 | [#ID]   | [Task Description] | [Assignee]   |
 
 ## In Progress Tasks/ To do:
 
 | Task ID | Description        | Assigned To |
 | ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+| #1  | Design Video | All Members  |
+| #2  | Environment Setup | All Members |
 
 ## Test Report / Testing Status:
 
@@ -142,35 +109,21 @@ The team focused on review design document, working on the presenatation slides.
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/burnup/2.png)
 
 ## Times for Team/Individual:
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-4.png)
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-4.png)
 
 ## Completed Tasks:
 
@@ -204,35 +157,21 @@ The team focused on [Summary of work done]. The Kanban Board has been populated 
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/burnup/1.png)
 
 ## Times for Team/Individual:
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-3.png)
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-3.png)
 
 ## Completed Tasks:
 
@@ -268,35 +207,21 @@ The team focused on [Summary of work done]. The Kanban Board has been populated 
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+N/A
 
 ## Times for Team/Individual:
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-2.png)
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-2.png)
 
 ## Completed Tasks:
 
@@ -330,49 +255,31 @@ The team focused on completing the project plan document and video. The Kanban B
 
 ## Associated Tasks from Project Board:
 
-| Task ID | Description        | Feature   | Assigned To | Status   |
-| ------- | ------------------ | --------- | ----------- | -------- |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
-| [#ID]   | [Task Description] | [Feature] | [Assignee]  | [Status] |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Tasks for Next Cycle:
 
-| Task ID | Description        | Estimated Time (hrs) | Assigned To |
-| ------- | ------------------ | -------------------- | ----------- |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
-| [#ID]   | [Task Description] | [Estimated Time]     | [Assignee]  |
 
-### Alternatively, include image of the project board with tasks and status:
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](path/to/burnupchart.png)
+N/A
 
 ## Times for Team/Individual:
 
-| Team Member | Logged Hours |
-| ----------- | ------------ |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
-| [Name]      | [Hours]      |
+![everyone's hours](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/hours-1.png)
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+![docs/weekly logs/Clockify/[Time Tracking Image]](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-teamlogs/docs/weekly%20logs/clockify/summary-1.png)
 
 ## Completed Tasks:
 
-| Task ID | Description        | Completed By |
-| ------- | ------------------ | ------------ |
-| [#ID]   | [Task Description] | [Assignee]   |
-| [#ID]   | [Task Description] | [Assignee]   |
+N/A
 
 ## In Progress Tasks/ To do:
 
 | Task ID | Description        | Assigned To |
 | ------- | ------------------ | ----------- |
-| [#ID]   | [Task Description] | [Assignee]  |
-| [#ID]   | [Task Description] | [Assignee]  |
+| #1   | Project Plan | All Members |
 
 ## Test Report / Testing Status:
 
