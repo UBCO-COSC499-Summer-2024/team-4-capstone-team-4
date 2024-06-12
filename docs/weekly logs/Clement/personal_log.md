@@ -2,7 +2,8 @@
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_07_2024-06_11_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_06_07_2024-06_11_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Redo Laravel Docker setup with Laravel Sail
@@ -103,7 +104,8 @@ The cycle was productive with significant progress made on various tasks includi
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_05_2024-06_07_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_06_05_2024-06_07_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Laravel Setup
@@ -155,7 +157,8 @@ I completed the design documentation and mockups as planned. However, the enviro
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_03_2024-06_05_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_06_03_2024-06_05_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design UI Mockup
@@ -190,7 +193,8 @@ The design document was completed successfully. The UI mockup is progressing wel
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_02_2024-06_03_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_06_02_2024-06_03_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Design Document
@@ -225,7 +229,8 @@ Progress on the design document and UI mockups is steady. Additional effort is n
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_05_29_2024-06_01_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_05_29_2024-06_01_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Create storyboard
@@ -276,7 +281,8 @@ The design documentation and mockups were successfully completed. The video segm
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_05_24_2024-05_26_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_05_24_2024-05_26_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Continue Project Plan document
@@ -311,7 +317,8 @@ Progress on the project plan document and presentation is steady. Additional eff
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_05_22_2024-05_24_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_05_22_2024-05_24_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan Document
@@ -346,7 +353,8 @@ The project plan document and presentation are progressing as planned. Collabora
 
 ### Timesheet
 Clockify report
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_05_19_2024-05_22_2024.pdf)
+
+[Report](./Reports/Clockify_Time_Report_Summary_05_19_2024-05_22_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Project Plan Document
