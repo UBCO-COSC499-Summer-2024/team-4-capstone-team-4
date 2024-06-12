@@ -1,60 +1,39 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('register') }}">
+<x-auth-layout>
+    <section id="auth-register" class="auth-section active glass">
+        <h1>Secure Register</h1>
+        <form id="register-form" class="form" method="POST" action="{{ route('register') }}">
             @csrf
-
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </x-label>
+            
+            <x-form-item>
+                <x-form-icon icon="Email"/>
+                <x-form-input type="text" id="email" name="email" placeholder="Email..."/>
+            </x-form-item>
+            <div class="form-group">
+                <x-form-icon icon="id_card"/>
+                <div class="grouped">
+                    <x-form-item>
+                        <x-form-input type="text" id="firstname" name="firstname" placeholder="Firstname..."/>
+                    </x-form-item>
+                    <x-form-item>
+                        <x-form-input type="text" id="lastname" name="lastname" placeholder="Lastname..."/>
+                    </x-form-item>
                 </div>
-            @endif
-
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
             </div>
+            <x-form-item>
+                <x-form-icon icon="Password"/>
+                <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
+            </x-form-item>
+            <x-form-item>
+                <x-form-icon icon="Password"/>
+                <x-form-input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password..."/>
+            </x-form-item>
+            <x-validation-errors name="password" />
+            <x-form-item>
+                <x-form-input type="submit" name="submit" value="Register" />
+            </x-form-item>
+            <x-form-item>
+                <span class="input-label">Already have an account? <a href="/login" data-type="tab" data-pg="login">Login</a></span>
+            </x-form-item>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </section>
+</x-auth-layout>

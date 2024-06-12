@@ -1,34 +1,18 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
-
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
+<x-auth-layout>
+    <!-- <x-validation-errors class="mb-4" /> -->
+    <section id="auth-forgot-password" class="auth-section active glass">
+        <h1>Forgot Password</h1>
+        <form id="forgot-password-form" class="form" method="POST" action="{{ route('password.email') }}">
+            <div class="form-item">
+                <span class="material-symbols-outlined icon">Email</span>
+                <input class="form-input" type="text" id="email" name="email" placeholder="Email...">
             </div>
-        @endsession
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div class="form-item">
+                <input class="form-input" type="submit" name="submit" value="Send Reset Link" />
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
+            <div class="form-item">
+                <span class="input-label">Remember your password? <a href="/login" data-type="tab" data-pg="login">Login</a></span>
             </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </section>
+</x-auth-layout>
