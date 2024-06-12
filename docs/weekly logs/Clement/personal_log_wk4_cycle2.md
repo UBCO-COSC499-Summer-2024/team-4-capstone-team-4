@@ -1,6 +1,17 @@
 # Clement's Personal Log
 Week 2: June 5 - June 6
 
+## Date: June 6, 2024
+1. Tasks
+In-progress Tasks:
+- Environment Setup:
+  - Laravel Setup
+  - Docker Setup
+2. Personal Development
+Skills Worked On:
+- Design
+- Backend
+
 ## Date: June 5, 2024
 1. Tasks
 Completed Tasks:
@@ -25,14 +36,3 @@ Skills Worked On:
 - Collaboration
 - Design
 - Documentation
-
-## Date: June 6, 2024
-1. Tasks
-In-progress Tasks:
-- Environment Setup:
-  - Laravel Setup
-  - Docker Setup
-2. Personal Development
-Skills Worked On:
-- Design
-- Backend
