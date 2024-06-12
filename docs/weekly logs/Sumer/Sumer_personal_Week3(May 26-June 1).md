@@ -1,110 +1,180 @@
 # Week 3 May 26th - June 1st Sumer Personal Log
 
+## Cycle 3
 
-### Date: 26th, May 2024
-
-#### 1. Meetings and Interactions
-Meetings Attended:
-| Type | Time | Attendees | Tasks |
-| :-------------: | ------------- |------------- |------------- |
-| Team Meeting | 1:00 pm - 6:00 pm | All Members | Worked on the project proposal, proofread, and made the PPT for the video presentation |
+### Sunday (5/26/2024)
 
 
-#### 2. Tasks
-#### Completed Tasks:
+Clockify report [Click Here](https://app.clockify.me/reports/summary?start=2024-05-25T00:00:00.000Z&end=2024-05-29T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userGroups%22:%5B%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
 
-<br>Project Proposal: 
-  
-- Completed the project proposal
-	- Completed the final draft of Functional, Non-functional, User, and Technical Requirements
-   
-<br> Video Presentation
+
+#### Current Tasks
+
+Project Proposal:
+
+- Completed the final draft of Functional, Non-functional, User, and Technical Requirements
+- Video Presentation:
 - Created a PPT for the video presentation
-	- Created the slides for user and technical requirements
- 	- Beautification of the slides worked on
+- Created slides for user and technical requirements
+- Worked on the beautification of the slides
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Final Draft)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Video Presentation (PPT Creation)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Video Presentation (Voice-over for User Requirements)</td>
+        <td>In Progress</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review
+
+Completed the final draft of the project proposal and the PPT for the video presentation. Still working on the voice-over for user requirements.
+
+#### Next Cycle Goals
+
+- Complete the voice-over for user requirements for the video presentation
+
+
+## Sunday (5/26/2024)
+
+#### Current Tasks
+
+- Video Presentation:
+- Recorded the voice-over for the user requirements for the video presentation
+
+#### Progress Update (since 5/26/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Video Presentation (Voice-over for User Requirements)</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review 
+
+Successfully recorded the voice-over for the user requirements for the video presentation.
+
+#### Next Cycle Goals 
+- Continue working on the video presentation
+
+### Wednesday (5/29/2024)
+
+#### Current Tasks 
+
+- Project Design Document:
+- Completed the use cases for the instructor and global use cases
+- Made the use case diagram for the design document
   
-#### In-progress Tasks:
-<br> Video Presentation
-- Voice-over for user requirements for the video presentation.
+Video Presentation:
+- Made some changes in the project proposal and video before submission
+
+#### Progress Update (since 5/29/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Design Document (Use Cases)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Design Document (Use Case Diagram)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Video Presentation (Changes)</td>
+        <td>In Progress</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review 
+
+Completed the use cases and use case diagram for the project design document. Made necessary changes to the project proposal and video before submission.
+
+#### Next Cycle Goals 
+
+- Continue working on the project design document
+- Finalize the video presentation
+
+## Cycle 4
+
+### Friday (5/31/2024)
 
 
+Clockify report [Click Here](https://app.clockify.me/reports/summary?start=2024-05-30T00:00:00.000Z&end=2024-05-31T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userGroups%22:%5B%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
 
-### Date: 26th, May 2024
-
-#### 1. Meetings and Interactions
-Meetings Attended:
-No meetings attended. 
-By myself 6:15 pm  - 7:00 pm
-
-#### 2. Tasks
-
-#### Completed Tasks:
-
-<br>Video Presentation: 
-- Recorded the voice-over for the user requirements for video presentation.
-
-
-
-### Date: 29th, May 2024
-
-
-#### 1. Meetings and Interactions
-Meetings Attended:
-| Type | Time | Attendees | Tasks |
-| :-------------: | ------------- |------------- |------------- |
-| Team Meeting | 1:30 pm - 9:15 pm | All Members | Worked on the Project Design Document, made some changes in the project proposal, and video before submission |
-
-
-#### 2. Tasks
-#### Completed Tasks:
-
-<br>Project Design: 
+#### Current Tasks 
+Project Proposal:
+- Updated the functional and user requirements in the project proposal
+- Project Design Document:
+- Updated the use cases for the instructor and global use cases
+- Made updates to the use case diagram for the design document
   
-- Completed the Use cases for the Instructor and global use cases
-- Made the use case diagram for the Design Document
-- Setup the Clockify for timekeeping purposes.
-   
-
-  
-#### In-progress Tasks:
-<br> Video Presentation
-- The work on completion of Project design document, Video presentation
+Mock-up UI:
+- Started working on the instructor performance webpage
 
 
-### Date: 31th, May 2024
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Update Requirements)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Design Document (Update Use Cases)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Design Document (Update Use Case Diagram)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Mock-up UI (Instructor Performance Webpage)</td>
+        <td>In Progress</td>
+    </tr>
+</table>
 
+#### Cycle Goal Review 
 
-#### 1. Meetings and Interactions
-Meetings Attended:
-| Type | Time | Attendees | Tasks |
-| :-------------: | ------------- |------------- |------------- |
-| Client-Team Meeting | 10:00 am - 10:30 am | All Members, Ramon Lawrance | Received client feedback|
-| Team Meeting | 10:30 am - 6:00 pm | All Members | Worked on the design document based on client feedback |
+Successfully updated the functional and user requirements in the project proposal and the use cases in the project design document. Started working on the instructor performance webpage.
 
+#### Next Cycle Goals 
 
+- Complete the UI for the instructor performance webpage
 
-#### 2. Tasks
-#### Completed Tasks:
+#### Personal Development
 
-<br>Project Proposal: 
-  
--Updated the functional and user requirements in the project proposal
+Skills Worked On:
 
-<br>Project Design Document: 
-  
-- Updated the Use cases for the Instructor and global use cases
-- Made updated in the use case diagram for the Design Document
+- Learning React
+- Revising COSC 310 concepts
 
-<br>Mock-up UI
+Courses or Training:
 
-- Started working on the Instructor performance webpage. 
-   
-   
+- Professor Scott Fazackerley’s COSC 310 notes
+= YouTube tutorials
 
-  
-#### In-progress Tasks:
-<br> Mock-up UI
-- UI for instructor performance webpage
 
 
 
