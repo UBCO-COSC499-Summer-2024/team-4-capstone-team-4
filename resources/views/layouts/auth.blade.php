@@ -8,7 +8,7 @@
         <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
     </head>
     <body>
-       <x-auth-header />
+        <x-auth-header />
         <main>
             <div class="auth-container">
                {{ $slot }}
