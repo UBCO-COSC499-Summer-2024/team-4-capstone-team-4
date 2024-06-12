@@ -1,72 +1,143 @@
-# Week 2 May 19th - May 25th Sumer Personal Log
+## Week 2 (May 19th - May 25th)
 
-## Wednesday
+## cycle 1
 
-### Date: 22th, May 2024
+### Wednesday, May 22nd
 
-#### 1. Meetings and Interactions
-Meetings Attended:
-| Type | Time | Attendees | Tasks |
-| :-------------: | ------------- |------------- |------------- |
-| Team Meeting | 1:30pm - 5:00pm | All Members | Discussed team skills, brainstormed, drafted project plan doc and made a list of questions for client meeting |
+### Timesheet
+Clockify report
+[Click here](https://app.clockify.me/reports/summary?start=2024-05-19T00:00:00.000Z&end=2024-05-22T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
 
+### Current Tasks
+* Project Proposal: 
+  * Brainstorming about the project proposal
+  * Drafting initial/first draft of project proposal
+  * Worked on drafting major deliverables
 
-#### 2. Tasks
-Completed Tasks:
-<br>Project Proposal: 
-  
-- Brainstorming about the project proposal
-- Drafting initial/first draft of project proposal
-	- worked on drafting major deliverables
+### Progress Update (since 5/19/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Brainstorming)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Initial Draft)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Drafting Major Deliverables)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Completion)</td>
+        <td>In Progress</td>
+    </tr>
+</table>
 
-In-progress Tasks:
-<br>Project Proposal: 
-  
-- Completion of the project proposal
+### Cycle Goal Review 
+Completed the brainstorming and initial drafting of the project proposal successfully. The drafting of major deliverables also went well. However, the completion of the project proposal is still in progress.
 
+### Next Cycle Goals 
+* Complete the project proposal
+* Proof-read the project proposal
+* Create PPT for the proposal video
+* Create the project proposal video
 
+## cycle 2
+### Friday 24th, May
 
-### Date: 24th, May 2024
+### Timesheet
+Clockify report
+[Click Here](https://app.clockify.me/reports/summary?start=2024-05-23T00:00:00.000Z&end=2024-05-28T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
 
-#### 1. Meetings and Interactions
-Meetings Attended:
-| Type | Time | Attendees | Tasks |
-| :-------------: | ------------- |------------- |------------- |
-| Client-Team Meeting | 9:00 am - 9:35 am | All Members, Professor Scott Fazackerley and Client Dr. Ramon Lawrance)| Client discussed their vision for the system, discussed system design, functionality, and purpose |
-| Team Meeting | 11:00 am - 5:00 pm | All Members | Brainstormed on ideas given by the client, worked on the project proposal |
+### Current Tasks 
+* Project Proposal:
+  * Completion of the Functional, Non-functional, User, and Technical Requirements
+  * Proof-reading
+  * Creating PPT for the proposal video
+  * Creating the project proposal video
 
+### Progress Update (since 5/22/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Functional Requirements)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Non-functional Requirements)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (User Requirements)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Technical Requirements)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Proof-reading)</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (PPT for proposal video)</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Project Proposal (Proposal video)</td>
+        <td>In Progress</td>
+    </tr>
+</table>
 
-#### 2. Tasks
-Completed Tasks:
-<br>Project Proposal: 
-  
-- Worked on the project proposal
-	- Completed the Functional, Non-functional, User, and Technical Requirements(
+### Cycle Goal Review
+Completed the Functional, Non-functional, User, and Technical Requirements of the project proposal. The proof-reading, creation of the PPT for the proposal video, and the project proposal video are still in progress.
 
-In-progress Tasks:
-<br>Project Proposal: 
-  
-- Completion of the project proposal, proof-reading
-- Creating PPT for the proposal video
-- Creating the project proposal video
+### Next Cycle Goals
+* Complete proof-reading of the project proposal
+* Create and finalize PPT for the proposal video
+* Complete the project proposal video
 
+### Saturday, 25th, May
 
-### Date: 25th, May 2024
+### Timesheet
+Clockify report
+[Click Here](image_url_here)
 
-#### 1. Meetings and Interactions
-Meetings Attended:
-No meetings Attended.
+### Current Tasks 
+* No team tasks were assigned for the day
 
-#### 2. Tasks
+### Progress Update (since 5/24/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>No tasks assigned</td>
+        <td>N/A</td>
+    </tr>
+</table>
 
-No team tasks were assigned for the day
+### Cycle Goal Review 
+No team tasks were assigned for the day.
 
+### Next Cycle Goals 
+* Continue personal development
 
-#### 3. Personal Development
+### Personal Development
+
 Skills Worked On:
-- Learning React
-- Revising COSC 310 concepts
+* Learning React
+* Revising COSC 310 concepts
 
 Courses or Training:
-- Professor Scott Fazackerley's COSC 310 notes
-- Youtube
+* Professor Scott Fazackerley's COSC 310 notes
+* YouTube tutorials
