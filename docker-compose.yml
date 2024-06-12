@@ -18,13 +18,18 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
-            - '.:/var/www/html'
+            - '.:/var/www/html:cached'
         networks:
             - InsightNet
         depends_on:
             - InsightDB
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
     InsightDB:
-        image: 'postgres:16'
+        image: 'postgres:16-alpine'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -38,16 +43,26 @@ services:
         networks:
             - InsightNet
         healthcheck:
-            test:
-                - CMD
-                - pg_isready
-                - '-q'
-                - '-d'
-                - '${DB_DATABASE}'
-                - '-U'
-                - '${DB_USERNAME}'
+            test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+            # test:
+                # - CMD
+                # - pg_isready
+                # - '-q'
+                # - '-d'
+                # - '${DB_DATABASE}'
+                # - '-U'
+                # - '${DB_USERNAME}'
+            interval: 10s
             retries: 3
             timeout: 5s
+    # This is for testing
+    InsightMailUI:
+        image: mailhog/mailhog
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+        networks:
+            - InsightNet
 networks:
     InsightNet:
 #        driver: bridge
