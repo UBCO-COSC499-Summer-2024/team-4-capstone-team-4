@@ -27,8 +27,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName(),
+            'firstname' => fake()->firstName(),
+            'lastname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -69,5 +69,14 @@ class UserFactory extends Factory
                 ->when(is_callable($callback), $callback),
             'ownedTeams'
         );
+    }
+     /**
+     * Indicate that the user is department head
+     */
+    public function head(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'acces_code' => 'head',
+        ]);
     }
 }
