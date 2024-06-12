@@ -9,6 +9,6 @@
             <span class="link-title">{{ $title }}</span>
         @endif
     @else
-        <span class="link-title">Link Title</span>
+        <span class="link-title"></span>
     @endif
 </a>

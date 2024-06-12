@@ -10,15 +10,15 @@ class SidebarItem extends Component
 {
     public $title;
     public $icon;
-    public $route;
+    public $href;
     /**
      * Create a new component instance.
      */
-    public function __construct($title, $route, $icon)
+    public function __construct($title, $href, $icon)
     {
         //
         $this->title = $title;
-        $this->route = $route;
+        $this->href = $href;
         $this->icon = $icon;
     }
 

@@ -1,4 +1,4 @@
-<section id="header-brand" class="flex items-center m-5 ">
+<section id="header-brand">
     <div id="header-img">
         <img src="{{ $brandImg }}" alt="{{ $brandAlt }}" width="40" height="40">
     </div>
