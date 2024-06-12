@@ -24,134 +24,121 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('isinstructor', function (Blueprint $table) {
-            $table->foreignId('uid');
-            $table->foreignId('did');
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('area_id')->nullable()->constrained('areas')->cascadeOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
+            $table->timestamps();
         });
-
-        Schema::create('isdepthead', function (Blueprint $table) {
-            $table->foreignId('uid');
-            $table->foreignId('did');
-        });
-
-        Schema::create('isdeptstaff', function (Blueprint $table) {
-            $table->foreignId('uid');
-            $table->foreignId('did');
-        });
-
-        Schema::create('isadmin', function (Blueprint $table) {
-            $table->foreignId('uid');
-            $table->foreignId('did');
-        });
-
-        Schema::create('dept', function (Blueprint $table) {
+    
+        Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->timestamps();
         });
-
-        Schema::create('area', function (Blueprint $table) {
+    
+        Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('did');
+            $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('extrahours', function (Blueprint $table) {
+    
+        Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('desc');
+            $table->text('description');
             $table->integer('hours');
-            $table->foreignId('assigner');
-            $table->foreignId('iid');
+            $table->foreignId('assigner_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('instructor_id')->constrained('users')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('servicerole', function (Blueprint $table) {
+    
+        Schema::create('service_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('desc');
-            $table->date('year');
-            $table->integer('janhrs');
-            $table->integer('febhrs');
-            $table->integer('marhrs');
-            $table->integer('aprhrs');
-            $table->integer('mayhrs');
-            $table->integer('junhrs');
-            $table->integer('julhrs');
-            $table->integer('aughrs');
-            $table->integer('sephrs');
-            $table->integer('octhrs');
-            $table->integer('novnhrs');
-            $table->integer('dechrs');
-            $table->foreignId('aid');
+            $table->text('description');
+            $table->year('year');
+            $table->json('monthly_hours');
+            $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('hasrole', function (Blueprint $table) {
-            $table->foreignId('rid');
-            $table->foreignId('assigner');
-            $table->foreignId('iid');
+    
+        Schema::create('role_assignments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('service_role_id')->constrained('service_roles')->cascadeOnDelete();
+            $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('teaches', function (Blueprint $table) {
-            $table->foreignId('cid');
-            $table->foreignId('iid');
-        });
-
-        Schema::create('coursesection', function (Blueprint $table) {
+    
+        Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('area');
+            $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->string('duration');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
+            $table->timestamps();
+        });
+    
+        Schema::create('sei_data', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
+            $table->json('questions');
+            $table->timestamps();
         });
 
-        Schema::create('seidata', function (Blueprint $table) {
-            $table->foreignId('cid')->unique();
-            $table->float('q1im');
-            $table->float('q2im');
-            $table->float('q3im');
-            $table->float('q4im');
-            $table->float('q5im');
-            $table->float('q6im');
+        Schema::create('teaches', function (Blueprint $table) {
+            $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
+            $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('teachingassistant', function (Blueprint $table) {
+    
+        Schema::create('teaching_assistants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->float('rating');
+            $table->timestamps();
         });
-
+    
         Schema::create('assists', function (Blueprint $table) {
-            $table->foreignId('cid');
-            $table->foreignId('taid');
+            $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
+            $table->foreignId('ta_id')->constrained('teaching_assistants')->cascadeOnDelete();
             $table->float('rating');
+            $table->timestamps();
         });
-
-        Schema::create('instructorperformance', function (Blueprint $table) {
+    
+        Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('totalhours');
-            $table->float('seiavg');
-            $table->date('year');
-            $table->foreignId('iid');
+            $table->integer('total_hours');
+            $table->float('sei_avg');
+            $table->year('year');
+            $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('areaperformance', function (Blueprint $table) {
+    
+        Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('totalhours');
-            $table->float('seiavg');
-            $table->date('year');
-            $table->foreignId('aid');
+            $table->integer('total_hours');
+            $table->float('sei_avg');
+            $table->year('year');
+            $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+            $table->timestamps();
         });
-
-        Schema::create('deptperformance', function (Blueprint $table) {
+    
+        Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('totalhours');
-            $table->float('seiavg');
-            $table->date('year');
-            $table->foreignId('did');
+            $table->integer('total_hours');
+            $table->float('sei_avg');
+            $table->year('year');
+            $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+            $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -178,23 +165,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('isinstructor');
-        Schema::dropIfExists('isdepthead');
-        Schema::dropIfExists('isdeptstaff');
-        Schema::dropIfExists('isadmin');
-        Schema::dropIfExists('dept');
-        Schema::dropIfExists('area');
-        Schema::dropIfExists('extrahours');
-        Schema::dropIfExists('servicerole');
-        Schema::dropIfExists('hasrole');
+        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('departments');
+        Schema::dropIfExists('areas');
+        Schema::dropIfExists('extra_hours');
+        Schema::dropIfExists('service_roles');
+        Schema::dropIfExists('role_assignments');
+        Schema::dropIfExists('course_sections');
+        Schema::dropIfExists('sei_data');
         Schema::dropIfExists('teaches');
-        Schema::dropIfExists('coursesection');
-        Schema::dropIfExists('seidata');
-        Schema::dropIfExists('teachingassistant');
+        Schema::dropIfExists('teaching_assistants');
         Schema::dropIfExists('assists');
-        Schema::dropIfExists('instructorperformance');
-        Schema::dropIfExists('areaperformance');
-        Schema::dropIfExists('deptperformance');
+        Schema::dropIfExists('instructor_performance');
+        Schema::dropIfExists('area_performance');
+        Schema::dropIfExists('department_performance');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
