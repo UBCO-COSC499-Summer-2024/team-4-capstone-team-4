@@ -1,15 +1,24 @@
-## Friday (6/7)
+## Friday (6/7- 6/11)
 
 ### Timesheet
 Clockify report
 ![alt text](image_url_here)
 
 ### Current Tasks (Provide sufficient detail)
-  * #1: Laravel Docker setup with Laravel Sail
-  * #2: Environment setup for team members
-  * #3: Implementation strategies discussion and UI breakdown into components
-  * #4: Recorded audio for design presentation
+  * #1: Redo Laravel Docker setup with Laravel Sail
+  * #2: Help with environment setup for team members
+  * #3: Discussion on implementation strategies and UI breakdown into components
+  * #4: Audio recording for design presentation
   * #5: Feature breakdown and assignment to team members
+  * #6: Environment setup on home machine
+  * #7: Planning assigned features and tasks
+  * #8: Implementation of link-component, header/auth header components, and sub-components
+  * #9: Implementation of sidebar component
+  * #10: Implementation of toolbar component
+  * #11: Implementation of pagination component
+  * #12: Update personal logs format
+  * #13: Docker optimization attempt
+  * #14: Generate Clockify Reports for personal logs
 
 ### Progress Update (since 6/7/2024) 
 <table>
@@ -18,7 +27,7 @@ Clockify report
         <td><strong>STATUS</strong></td>
     </tr>
     <tr>
-        <td>Laravel Docker setup</td>
+        <td>Redo Laravel Docker setup</td>
         <td>Complete</td>
     </tr>
     <tr>
@@ -26,44 +35,16 @@ Clockify report
         <td>Complete</td>
     </tr>
     <tr>
-        <td>Implementation strategies discussion</td>
+        <td>Discussion on implementation strategies and UI breakdown</td>
         <td>Complete</td>
     </tr>
     <tr>
-        <td>Recorded audio for design presentation</td>
+        <td>Audio recording for design presentation</td>
         <td>Complete</td>
     </tr>
     <tr>
         <td>Feature breakdown and assignment</td>
         <td>Complete</td>
-    </tr>
-</table>
-
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The Laravel Docker setup and environment setup for team members were completed successfully. The team had a productive meeting discussing implementation strategies and breaking down UI into components. Audio recording for the design presentation went well.
-
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Finalize environment setup
-  * Begin implementing UI components
-
----
-
-## Saturday (6/8)
-
-### Timesheet
-Clockify report
-![alt text](image_url_here)
-
-### Current Tasks (Provide sufficient detail)
-  * #1: Environment setup on home machine
-  * #2: Planning assigned features and tasks
-  * #3: Implemented link-component, header/auth header components and sub-components
-
-### Progress Update (since 6/8/2024) 
-<table>
-    <tr>
-        <td><strong>TASK/ISSUE #</strong></td>
-        <td><strong>STATUS</strong></td>
     </tr>
     <tr>
         <td>Environment setup on home machine</td>
@@ -74,128 +55,47 @@ Clockify report
         <td>In Progress</td>
     </tr>
     <tr>
-        <td>Implemented link-component</td>
+        <td>Implementation of link-component</td>
         <td>Complete</td>
     </tr>
     <tr>
-        <td>Implemented header/auth header components</td>
-        <td>Complete</td>
-    </tr>
-</table>
-
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The environment setup on the home machine was successful. Implementation of the link-component and header/auth header components went smoothly. Planning of assigned features and tasks is still ongoing.
-
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Complete planning of assigned features and tasks
-  * Continue implementing UI components
-
----
-
-## Sunday (6/9)
-
-### Timesheet
-Clockify report
-![alt text](image_url_here)
-
-### Current Tasks (Provide sufficient detail)
-  * #1: Implemented sidebar component
-
-### Progress Update (since 6/9/2024) 
-<table>
-    <tr>
-        <td><strong>TASK/ISSUE #</strong></td>
-        <td><strong>STATUS</strong></td>
-    </tr>
-    <tr>
-        <td>Sidebar component</td>
-        <td>Complete</td>
-    </tr>
-</table>
-
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The implementation of the sidebar component was completed as planned.
-
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Implement toolbar component
-  * Implement pagination component
-
----
-
-## Monday (6/10)
-
-### Timesheet
-Clockify report
-![alt text](image_url_here)
-
-### Current Tasks (Provide sufficient detail)
-  * #1: Implemented toolbar component
-  * #2: Implemented pagination component
-
-### Progress Update (since 6/10/2024) 
-<table>
-    <tr>
-        <td><strong>TASK/ISSUE #</strong></td>
-        <td><strong>STATUS</strong></td>
-    </tr>
-    <tr>
-        <td>Toolbar component</td>
+        <td>Implementation of header/auth header components and sub-components</td>
         <td>Complete</td>
     </tr>
     <tr>
-        <td>Pagination component</td>
-        <td>Complete</td>
-    </tr>
-</table>
-
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The implementation of the toolbar and pagination components was completed successfully.
-
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Optimize Docker setup
-  * Update personal logs format
-  * Generate Clockify reports
-
----
-
-## Tuesday (6/11)
-
-### Timesheet
-Clockify report
-![alt text](image_url_here)
-
-### Current Tasks (Provide sufficient detail)
-  * #1: Updated personal logs format
-  * #2: Attempted Docker optimization
-  * #3: Generated Clockify Reports for all personal logs (past and current)
-
-### Progress Update (since 6/11/2024) 
-<table>
-    <tr>
-        <td><strong>TASK/ISSUE #</strong></td>
-        <td><strong>STATUS</strong></td>
-    </tr>
-    <tr>
-        <td>Updated personal logs format</td>
+        <td>Implementation of sidebar component</td>
         <td>Complete</td>
     </tr>
     <tr>
-        <td>Attempted Docker optimization</td>
+        <td>Implementation of toolbar component</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implementation of pagination component</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Update personal logs format</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Docker optimization attempt</td>
         <td>In Progress</td>
     </tr>
     <tr>
-        <td>Generated Clockify Reports</td>
+        <td>Generate Clockify Reports for personal logs</td>
         <td>Complete</td>
     </tr>
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Updating the personal logs format and generating Clockify reports were successful. Docker optimization is still in progress.
+The cycle was productive with significant progress made on various tasks including environment setup, component implementations, and personal logs update. However, some tasks like planning assigned features and Docker optimization are still ongoing.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete planning of assigned features and tasks
   * Finalize Docker optimization
   * Continue refining UI components
-  * Address any remaining tasks from team meeting
+  * Address any remaining tasks from the team meeting
 
 ---
 
@@ -321,7 +221,7 @@ Progress on the design document and UI mockups is steady. Additional effort is n
 
 ---
 
-## Saturday (5/29- 6/1)
+## Friday (5/29- 6/1)
 
 ### Timesheet
 Clockify report
@@ -369,50 +269,6 @@ The design documentation and mockups were successfully completed. The video segm
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Finalize the storyboard
   * Complete the recording of video segments
-
----
-
-## Friday (5/26- 5/29)
-
-### Timesheet
-Clockify report
-![alt text](image_url_here)
-
-### Current Tasks (Provide sufficient detail)
-  * #1: Final edit of project plan
-  * #2: Final edit of presentation slide
-  * #3: Refilming Lines
-
-### Progress Update (since 5/26/2024) 
-<table>
-    <tr>
-        <td><strong>TASK/ISSUE #</strong></td>
-        <td><strong>STATUS</strong></td>
-    </tr>
-    <tr>
-        <td>Project Plan</td>
-        <td>Complete</td>
-    </tr>
-    <tr>
-        <td>Presentation Slide</td>
-        <td>Complete</td>
-    </tr>
-    <tr>
-        <td>Refilming Lines</td>
-        <td>Complete</td>
-    </tr>
-    <tr>
-        <td>Design</td>
-        <td>In Progress</td>
-    </tr>
-</table>
-
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The project plan and presentation slides were successfully completed. Design work is ongoing and progressing well.
-
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Complete the design documentation
-  * Begin the mockup implementation
 
 ---
 
