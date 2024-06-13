@@ -198,6 +198,7 @@ main {
 
 .sidebar-item a {
     color: inherit;
+    width: 100%;
 }
 
 /* Container Styles */
