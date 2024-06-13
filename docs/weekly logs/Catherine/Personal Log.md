@@ -1,3 +1,37 @@
+## Friday (6/12- 6/14)
+
+### Timesheet
+Clockify report
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Register Password Function
+  * #2: Login Password Function
+  * #3: Forgot Password Function
+  * #4: Reset Password Function
+  * #5: Testing Email Server
+  * #6: Factories for area, area perfomance, department and department performance
+  * #7: Test for area, area perfomance, department and department performance
+  * #8: Presentation slides
+
+### Progress Update (since 6/12/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Register Password Function | Complete |
+| Login Password Function | Complete |
+| Forgot Password Function| Complete |
+| Reset Password Function | Complete |
+| Testing Email Server | Complete |
+| Factories for area, area perfomance, department and department performance | Complete |
+| Test for area, area perfomance, department and department performance | In-progress |
+|Presentation slides | Complete |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I completed the login, register, forgot-password and reset-password features. I helped check to see if email server was working. I helped write factories for the database and I'm working on writing the test.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * To work on more features ...
+
 ## Wednesday (6/7- 6/12)
 
 ### Timesheet
