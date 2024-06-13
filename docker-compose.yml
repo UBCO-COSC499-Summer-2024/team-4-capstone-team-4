@@ -55,14 +55,6 @@ services:
             interval: 10s
             retries: 3
             timeout: 5s
-    # This is for testing
-    InsightMailUI:
-        image: mailhog/mailhog
-        ports:
-            - "1025:1025"
-            - "8025:8025"
-        networks:
-            - InsightNet
 networks:
     InsightNet:
         driver: bridge
