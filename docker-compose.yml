@@ -18,7 +18,7 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
-            - '.:/var/www/html:cached'
+            - '/Users/catherinemagoke/Desktop/UBC classes 2023-24/Summer/COSC 499/team-4-capstone-team-4:/var/www/html:cached'
         networks:
             - InsightNet
         depends_on:
@@ -39,7 +39,7 @@ services:
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
             - 'sail-pgsql:/var/lib/postgresql/data'
-            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+            - '/Users/catherinemagoke/Desktop/UBC classes 2023-24/Summer/COSC 499/team-4-capstone-team-4/vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
             - InsightNet
         healthcheck:
