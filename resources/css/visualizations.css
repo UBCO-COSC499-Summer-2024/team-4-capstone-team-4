@@ -40,5 +40,7 @@ div[id*="chart"] > div > div {
 @media (max-width: 1000px) {
     .dash-graph-preview {
         grid-template-columns: 1fr;
+        grid-auto-flow: row;
+        height: fit-content;
     }
 }
