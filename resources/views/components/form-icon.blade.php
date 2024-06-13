@@ -1,3 +1,2 @@
 @props(['icon'])
-
-<span class="material-symbols-outlined icon">{{ $icon }}</span>
+<span {{$attributes->merge(['class' => 'material-symbols-outlined icon'])}}>{{ $icon }}</span>
