@@ -211,7 +211,7 @@ main {
 }
 
 /* Main Content Styles */
-.container > div {
+.content {
     display: grid;
     grid-template-rows: 20px 1fr 1fr;
     gap: 1rem;
@@ -243,6 +243,25 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.5rem;
     font-weight: 600;
     text-transform: uppercase;
+}
+
+.coming-soon {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    flex-direction: column;
+    text-transform: uppercase;
+    gap: 1rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.coming-soon h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #555;
+    width: fit-content !important;
 }
 
 /* less than 1000 */
