@@ -1,7 +1,7 @@
 ## Friday (6/12- 6/14)
 
 ### Timesheet
-![Clockify Report](image_url_here)
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_12_2024-06_14_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Integrate Dashboard with Authentication
