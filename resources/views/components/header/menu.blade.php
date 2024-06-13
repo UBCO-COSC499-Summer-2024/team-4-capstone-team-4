@@ -4,7 +4,7 @@
         <x-link icon="brightness_4" type="toggle" page="dark-mode" />
         <x-link icon="settings" type="page" page="settings" />
     </nav>
-    <div class="">
+    <div id="header-user">
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
