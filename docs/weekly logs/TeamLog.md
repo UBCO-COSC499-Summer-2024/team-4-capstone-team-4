@@ -22,15 +22,29 @@
 
 ## Tasks for Next Cycle:
 
+![image of tasks](./tasks/inprogress_june12_june14.png)
+
 ## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june12_june14.png)
 
 ## Times for Team/Individual
 
 ## Completed Tasks
 
+![image of tasks](./tasks/done_june12_june14.png)
+
 ## In Progress Tasks / To do:
 
+![image of tasks](./tasks/inprogress_june12_june14.png)
+
 ## Test Report / Testing Status:
+
+![image of test report](./tasks/testing_june12_june14.png)
+
+## Overview:
+
+Write here
 
 ## Date Range:
 
