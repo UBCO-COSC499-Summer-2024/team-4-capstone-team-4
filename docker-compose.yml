@@ -23,11 +23,11 @@ services:
             - InsightNet
         depends_on:
             - InsightDB
-        # healthcheck:
-        #     test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-        #     interval: 10s
-        #     timeout: 5s
-        #     retries: 5
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
     InsightDB:
         image: 'postgres:16-alpine'
         ports:
@@ -44,14 +44,6 @@ services:
             - InsightNet
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -q -d ${DB_DATABASE} -U ${DB_USERNAME}"]
-            # test:
-                # - CMD
-                # - pg_isready
-                # - '-q'
-                # - '-d'
-                # - '${DB_DATABASE}'
-                # - '-U'
-                # - '${DB_USERNAME}'
             interval: 10s
             retries: 3
             timeout: 5s

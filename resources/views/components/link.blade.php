@@ -9,5 +9,4 @@
             <span class="link-title">{{ $title }}</span>
         @endif
     @endif
-    
 </a>

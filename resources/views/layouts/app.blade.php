@@ -21,13 +21,12 @@
     </head>
     <body class="font-sans antialiased">
         <x-header />
-            <main>
-                <x-sidebar :items="[]" />
-                <section class="container">
-                    {{ $slot }}
-                </section>
-            </main>
-
+        <main>
+            <x-sidebar :items="[]" />
+            <section class="container">
+                {{ $slot }}
+            </section>
+        </main>
         @stack('modals')
 
         @livewireScripts
