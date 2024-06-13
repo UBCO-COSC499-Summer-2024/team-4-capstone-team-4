@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+#header-brand {
+  /* Add branding/logo styles here */
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: start;
+  align-items: center;
+}
+
+#header-img {
+  padding: 10px;
+}
+
+.sidebar {
+  background-color: rgba(240, 240, 240, 0.8);
+  padding: 0.5rem;
+  border-radius: 8px;
+  height: 100%;
+  min-width: 300px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 8px;
+  transition: background-color 0.3s ease;
+  color: #222;
+  font-weight: bold;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.glass {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border: 1px solid rgba(185, 154, 212, 0.24);
+}
+
+.noselect,
+.no-select,
+.nos {
+    -webkit-user-select: none; /* Chrome, Safari, Opera */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version, currently supported by all modern browsers */
+}

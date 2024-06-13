@@ -17,10 +17,10 @@
 
         <!-- Styles -->
         @livewireStyles
+        <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     </head>
     <body class="font-sans antialiased">
         <x-header />
-
         <main>
             <x-sidebar :items="[]" />
             <section class="container">
