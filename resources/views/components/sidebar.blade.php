@@ -1,14 +1,14 @@
 @php
 $sidebarItems = [
-    ['icon' => 'dashboard', 'href' => 'dashboard', 'title' => 'Dashboard'],
+    ['icon' => 'dashboard', 'href' => '/dashboard', 'title' => 'Dashboard'],
     ['icon' => 'notifications', 'href' => 'notifications', 'title' => 'Notifications'],
     ['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
-    ['icon' => 'person', 'href' => 'profile', 'title' => 'Profile'],
+    ['icon' => 'person', 'href' => '/user/profile', 'title' => 'Profile'],
     ['icon' => 'groups', 'href' => 'staff', 'title' => 'Staff'],
     ['icon' => 'bar_chart', 'href' => 'performance', 'title' => 'Performance'],
     ['icon' => 'notifications', 'href' => 'notifications', 'title' => 'Notifications'],
-    ['icon' => 'settings', 'href' => 'settings', 'title' => 'Settings'],
-    ['icon' => 'logout', 'href' => 'logout', 'title' => 'Logout'],
+    ['icon' => 'settings', 'href' => '/user/profile', 'title' => 'Settings'],
+    ['icon' => 'logout', 'href' => '/logout', 'title' => 'Logout'],
 ];
 
 // add to $items
