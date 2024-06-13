@@ -20,6 +20,18 @@
 ![image of tasks](./tasks/current.png)
 ![image of tasks](./tasks/forgotpassword.png)
 
+## Tasks for Next Cycle:
+
+## Burn-up Chart (Velocity):
+
+## Times for Team/Individual
+
+## Completed Tasks
+
+## In Progress Tasks / To do:
+
+## Test Report / Testing Status:
+
 ## Date Range:
 
 - June 7 - June 11
