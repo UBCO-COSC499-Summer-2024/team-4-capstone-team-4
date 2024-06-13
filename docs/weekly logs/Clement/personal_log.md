@@ -1,3 +1,45 @@
+## Wednesday-Thursday (6/12-6/13)
+
+### Timesheet
+- [Clockify Report (6/12-6/13)](./Reports/Clockify_Time_Report_Summary_06_12_2024-06_13_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Troubleshooting
+  * #2: Updated Components
+  * #3: Mail Server Setup and Testing
+  * #4: Enabled Profile Picture Upload
+  * #5: Dev Integration
+  * #6: Component Fixes
+  * #7: Dashboard Graphs (dummy data)
+  * #8: Front End Styling
+  * #9: Sidebar Enhancement (done for now)
+  * #10: Two Factor Authentication (complete)
+
+### Progress Update (since 6/12/2024) 
+| TASK/ISSUE #              | STATUS       |
+|---------------------------|--------------|
+| Troubleshooting           | Ongoing      |
+| Updated Components        | Complete     |
+| Mail Server Setup         | Complete     |
+| Enabled Profile Picture   | Complete     |
+| Dev Integration           | Complete     |
+| Component Fixes           | In Progress  |
+| Dashboard Graphs          | In Progress  |
+| Front End Styling         | In Progress  |
+| Sidebar Enhancement       | Complete     |
+| Two Factor Authentication | Complete     |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Components were successfully updated, profile picture upload feature enabled, mail server setup completed, and two-factor authentication implemented. Dev integration and troubleshooting are progressing steadily. Dashboard graphs were implemented with dummy data; focus will be on improving them with actual data next cycle.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Focus on more pages and break down individually
+  * Continue troubleshooting as necessary
+  * Improve dashboard graphs with actual data
+  * Complete front-end styling and component fixes
+
+---
+
 ## Friday (6/7- 6/11)
 
 ### Timesheet
