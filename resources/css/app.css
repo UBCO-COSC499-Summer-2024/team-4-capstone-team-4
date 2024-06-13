@@ -192,13 +192,20 @@ main {
 }
 
 .sidebar-item:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 1);
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-item a {
     color: inherit;
     width: 100%;
+}
+
+.sidebar-item-group hr {
+    margin: 0.5rem auto;
+    width: 80%;
+    border: 0;
+    border-top: 2px solid rgba(59, 71, 121);
 }
 
 .sidebar-item-group {
@@ -212,10 +219,23 @@ main {
     margin-top: auto;
 }
 
+.sidebar-item-group a {
+    font-size: 1rem;
+    color: rgb(59, 71, 121);
+}
+
+.sidebar-item-group .sidebar-item:hover {
+    background: rgb(59, 71, 121);
+}
+
+.sidebar-item-group .sidebar-item:hover a {
+    color: #fff;
+}
+
 /* Container Styles */
 .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     gap: 1rem;
     height: 100%;
     padding-bottom: 0.1rem;
