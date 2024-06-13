@@ -18,7 +18,7 @@ div[id*="chart"] {
     padding: 12px;
     /* height: 100%;
     width: 100%; */
-    display: block;
+    display: flex;
 }
 
 div[id*="chart"] > div {
@@ -41,6 +41,14 @@ div[id*="chart"] > div > div {
     .dash-graph-preview {
         grid-template-columns: 1fr;
         grid-auto-flow: row;
+        overflow-y: auto;
         height: fit-content;
+    }
+
+    div[id*="chart"] {
+        width: 100%;
+        min-height: 275px;
+        align-items: center;
+        justify-content: center;
     }
 }
