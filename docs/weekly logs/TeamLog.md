@@ -2,6 +2,24 @@
 
 ## Date Range:
 
+- June 12 - June 14
+
+## Features in the Project Plan Cycle:
+
+- Environment Setup
+- Registration Feature
+- Login Feature
+- Forgot Password Feature
+- Settings Feature
+- General Dashboard Front End
+- Database setup
+- Database Unit Testing
+
+## Associated Tasks from Project Board:
+
+
+## Date Range:
+
 - June 7 - June 11
 
 ## Features in the Project Plan Cycle:
