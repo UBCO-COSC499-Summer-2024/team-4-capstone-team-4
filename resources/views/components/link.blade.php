@@ -1,11 +1,13 @@
-<a class="material-symbols-outlined {{ $class }}"
-    data-type="{{ $type }}"
-    data-pg="{{ $page }}"
-    @if(isset($clickAction))
-        onclick="{{ $clickAction }}"
-    @endif>
+<a class="{{ $class }}" href="{{ $href }}">
     @if(isset($icon))
         <span class="material-symbols-outlined">{{ $icon }}</span>
     @endif
-    {{ $slot }}
+    @if(isset($title))
+        @if(isset($class))
+            <span class="{{ $class }}-title">{{ $title }}</span>
+        @else
+            <span class="link-title">{{ $title }}</span>
+        @endif
+    @endif
+    
 </a>
