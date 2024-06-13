@@ -24,14 +24,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('area_id')->nullable()->constrained('areas')->cascadeOnDelete();
-            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
-            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
-            $table->timestamps();
-        });
-    
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -44,14 +36,23 @@ return new class extends Migration
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();
         });
+
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('area_id')->nullable()->constrained('areas')->cascadeOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
+            $table->timestamps();
+        });
     
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description');
             $table->integer('hours');
-            $table->foreignId('assigner_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('instructor_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
     
