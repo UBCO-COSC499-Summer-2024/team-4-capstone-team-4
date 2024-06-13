@@ -17,7 +17,8 @@ class TeachingAssistantFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name'=>fake()->name(),
+            'rating'=>fake()->randomFloat(1,2,3,4,5),
         ];
     }
 }
