@@ -17,6 +17,8 @@
 
 ## Associated Tasks from Project Board:
 
+![image of tasks](./tasks/current.png)
+![image of tasks](./tasks/forgotpassword.png)
 
 ## Date Range:
 
