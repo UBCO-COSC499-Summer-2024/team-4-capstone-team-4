@@ -2,27 +2,33 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log69-611.png)
+![Clockify report](./clockifylogs/log69-612.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Model Setup
   * #2: Database Table Setup
   * #3: Fix Personal Log
+  * #4: Database Model Factory Setup
+  * #5: Datbase Model Testing
 
 ### Progress Update (since 6/5/2024)
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
-| Database Table Setup      | In Progress |
-| Database Model Setup      | In Progess  |
-| Fix Personal Log          | Complete    |
+| Database Table Setup      | Completed   |
+| Database Model Testing    | In Progess  |
+| Model Factory Setup       | In Progess  |
+| Database Model Setup      | Completed   |
+| Fix Personal Log          | Completed   |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Created a foundation for the database tables in the migrations folder. Began adding models for the completed tables. Completed the requested restructuring of the personal log.
+Created the database tables in the migrations folder. reated models for the completed tables. Completed the requested restructuring of the personal log. Began creating Factories for the models and created the first of the unit tests for each model. Discussed progress wit the group and prepared for the presentation.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Complete Database Table setup
+  * Complete Database Model Factory 
   * Prepare for client review
-  * Continue improving Docker environment
+  * Complete Database Model Testing
+  * Complete and continue preparing for presentation
+  * Divide tasks for next cycle
 
 ---
 
