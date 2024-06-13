@@ -16,8 +16,9 @@ class DepartmentFactory extends Factory
      */
     public function definition(): array
     {
+        $departments =['CMPS','Education','Engineering','Management'];
         return [
-            //
+            'name' => fake()->randomElement($departments)
         ];
     }
 }
