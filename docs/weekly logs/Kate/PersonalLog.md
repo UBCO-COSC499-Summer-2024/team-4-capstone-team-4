@@ -1,3 +1,79 @@
+## Friday (6/12- 6/14)
+
+### Timesheet
+![Clockify Report](image_url_here)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Integrate Dashboard with Authentication
+  * #2: Presentation Slides for Demo
+  * #3: Write Presentation Talking Points
+
+### Progress Update (since 6/12/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Environment Setup / #60
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Sidebar / #79
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Header / #85
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Visualizations / #86
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Integrate Authentication with Dashboard / #145
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Create Mini Presentation / #150
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I completed all my componenets and integrated them with other team member's componenets. I fixed many of my environment issues and completed the presentation for Friday's demo. Most of the work was completed during project meetings, which is when we are most productive.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Breaking down features into tasks
+  * Continue integrating componenets
+  * Debugging
+
 ## Wednesday (6/7- 6/12)
 
 ### Timesheet
