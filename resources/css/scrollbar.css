@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
     /* --accent-color: #3f51b5; */
     --accent-color: #444cf755;

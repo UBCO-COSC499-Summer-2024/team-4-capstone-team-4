@@ -1,0 +1,44 @@
+.dash-graph-preview {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    overflow: hidden;
+    padding: 12px;
+    height: 400px;
+    color: #111;
+}
+
+div[id*="chart"] {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    padding: 12px;
+    /* height: 100%;
+    width: 100%; */
+    display: block;
+}
+
+div[id*="chart"] > div {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; */
+    border-radius: 12px;
+    transition: all 0.3s;
+    /* height: 100%; */
+}
+
+div[id*="chart"] > div > div {
+    /* flex: 1; */
+    /* height: 100% !important;
+    width: 100% !important; */
+}
+
+@media (max-width: 1000px) {
+    .dash-graph-preview {
+        grid-template-columns: 1fr;
+    }
+}

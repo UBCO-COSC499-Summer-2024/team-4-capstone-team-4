@@ -43,15 +43,7 @@ services:
         networks:
             - InsightNet
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
-            # test:
-                # - CMD
-                # - pg_isready
-                # - '-q'
-                # - '-d'
-                # - '${DB_DATABASE}'
-                # - '-U'
-                # - '${DB_USERNAME}'
+            test: ["CMD-SHELL", "pg_isready -q -d ${DB_DATABASE} -U ${DB_USERNAME}"]
             interval: 10s
             retries: 3
             timeout: 5s
@@ -65,7 +57,7 @@ services:
             - InsightNet
 networks:
     InsightNet:
-#        driver: bridge
+        driver: bridge
 volumes:
     sail-pgsql:
         driver: local
