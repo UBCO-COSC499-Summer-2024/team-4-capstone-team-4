@@ -2,6 +2,55 @@
 
 ## Date Range:
 
+- June 12 - June 14
+
+## Features in the Project Plan Cycle:
+
+- Environment Setup
+- Registration Feature
+- Login Feature
+- Forgot Password Feature
+- Settings Feature
+- General Dashboard Front End
+- Database setup
+- Database Unit Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/current.png)
+![image of tasks](./tasks/forgotpassword.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/inprogress_june12_june14.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june12_june14.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_june12_june14.png)
+![image of clockify report](./clockify/individual_june12_june14.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_june12_june14.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/inprogress_june12_june14.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/testing_june12_june14.png)
+
+## Overview:
+
+Write here
+
+## Date Range:
+
 - June 7 - June 11
 
 ## Features in the Project Plan Cycle:
