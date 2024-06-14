@@ -2,7 +2,9 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Department;
+use Illuminate\Support\Facades\Schema;
 
 class DepartmentTest extends TestCase
 {

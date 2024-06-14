@@ -26,7 +26,7 @@ class AreaPerformanceTest extends TestCase
     public function test_area_performance_can_be_created()
     {
         $area_performance = AreaPerformance::factory()->create();
-        $this->assertModelExists($area_performace);
+        $this->assertModelExists($area_performance);
 
     }
 

@@ -2,7 +2,10 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Department;
+use App\Models\DepartmentPerformance;
+use Illuminate\Support\Facades\Schema;
 
 class DepartmentPerformanceTest extends TestCase
 {
@@ -17,7 +20,7 @@ class DepartmentPerformanceTest extends TestCase
     public function test_department_performance_can_be_created()
     {
         $department_performance = DepartmentPerformance::factory()->create();
-        $this->assertModelExists($department_performace);
+        $this->assertModelExists($department_performance);
         
     }
 
