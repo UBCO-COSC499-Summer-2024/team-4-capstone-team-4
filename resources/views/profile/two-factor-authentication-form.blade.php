@@ -1,4 +1,4 @@
-<x-action-section>
+<x-action-section class="settings-section">
     <x-slot name="title">
         {{ __('Two Factor Authentication') }}
     </x-slot>

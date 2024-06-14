@@ -1,34 +1,29 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
-
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
-        @endsession
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.email') }}">
+<x-auth-layout>
+    <section id="auth-forgot-password" class="auth-section active glass">
+        <h1>Forgot Password</h1>
+        <form id="forgot-password-form" class="form" method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
+            <x-form-item>
+                <x-form-icon icon="Email" />
+                <input class="form-input" type="email" id="email" name="email" placeholder="Email...">
+            </x-form-item>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
-            </div>
+            <x-validation-errors />
+
+            <!-- to show success message -->
+            @if (session('status'))
+                <div>
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <x-form-item>
+                <input class="form-input" type="submit" name="submit" value="Send Reset Link" />
+            </x-form-item>
+            <x-form-item>
+                <span class="input-label">Remember your password? <a href="/login" data-type="tab" data-pg="login">Login</a></span>
+            </x-form-item>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </section>
+</x-auth-layout>
