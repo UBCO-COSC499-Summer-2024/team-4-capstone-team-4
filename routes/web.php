@@ -56,3 +56,24 @@ Route::middleware([
         return view('help');
     })->name('help');
 });
+
+// leaderboard and /performance routes
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/leaderboard', function () {
+        return view('leaderboard');
+    })->name('leaderboard');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/performance', function () {
+        return view('performance');
+    })->name('performance');
+});
