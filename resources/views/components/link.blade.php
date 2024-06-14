@@ -1,4 +1,4 @@
-<a class="{{ $class }}" href="{{ $href }}">
+<a class="{{ $class }}" href="{{ $href }}" {{$attributes}}>
     @if(isset($icon))
         <span class="material-symbols-outlined">{{ $icon }}</span>
     @endif

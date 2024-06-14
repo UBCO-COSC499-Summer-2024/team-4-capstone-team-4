@@ -19,6 +19,7 @@ if (isset($items)) {
 
     <!-- bottom -->
     <div class="sidebar-item-group bottom">
+        <hr>
         <x-sidebar-item icon="notifications" href="{{ route('notifications') }}" title="{{ __('Notifications') }}" />
         <x-sidebar-item icon="help" href="{{ route('help') }}" title="{{ __('Help') }}" />
         <x-sidebar-item icon="settings" href="{{ route('profile.show') }}" title="{{ __('Settings') }}" />

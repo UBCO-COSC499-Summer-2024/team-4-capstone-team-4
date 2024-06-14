@@ -171,104 +171,14 @@ main:has(.auth-container) {
     place-items: center;
 }
 
+.auth-container {
+    min-width: min(100%, 500px);
+    max-width: min(100%, 500px);
+}
+
 a {
     text-decoration: none;
     font-weight: 600;
-}
-
-.auth-section {
-    display: none;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.active {
-    display: flex;
-}
-
-.form {
-    min-width: min(100%, 300px);
-    max-width: max(100%, 500px);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 10px;
-}
-
-.auth-section h1,
-.auth-section .title {
-    text-transform: uppercase;
-    color: #222;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-group {
-    display: flex;
-    gap: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    width: 100%;
-    justify-content: center;
-}
-
-.form-group .grouped {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.form-group:has(.icon) .icon {
-    margin-top: 8px;
-}
-
-.form .icon {
-    cursor: default;
-}
-
-.form-item {
-    display: flex;
-    gap: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-input {
-    padding: 8px;
-    background-color: rgba(0, 0, 0, 0.1);
-    font-weight: 600;
-    border-radius: 16px !important;
-    min-height: 40px;
-}
-
-.form-input[type=text],
-.form-input[type=email],
-.form-input[type=password] {
-    min-width: 300px;
-}
-
-.form-input[type=submit],
-.form-input[type=reset] {
-    border-radius: 12px !important;
-    font-weight: 1.2rem;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-    background: rgba(220, 250, 250, 0.6);
-    cursor: pointer;
-}
-
-.form-input[type=submit]:hover,
-.form-input[type=reset]:hover {
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-    background: rgba(220, 250, 250, 0.8);
 }
 
 /* Sidebar Styles */
@@ -377,17 +287,6 @@ hr {
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-input {
-    border-radius: 16px;
-    outline: none;
-    border: none;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-
-input:active {
-    border: 1px solid rgba(250, 250, 250, 0.1);
 }
 
 /* Responsive Styles */
@@ -566,20 +465,4 @@ h1, h2, h3, h4, h5, h6 {
     .glass {
         border-radius: 8px;
     }
-}
-
-.noselect,
-.no-select,
-.nos {
-    -webkit-user-select: none; /* Chrome, Safari, Opera */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* Internet Explorer/Edge */
-    user-select: none;         /* Non-prefixed version, currently supported by all modern browsers */
-}
-
-.select {
-    -webkit-user-select: text; /* Chrome, Safari, Opera */
-    -moz-user-select: text;    /* Firefox */
-    -ms-user-select: text;     /* Internet Explorer/Edge */
-    user-select: text;         /* Non-prefixed version, currently supported by all modern browsers */
 }
