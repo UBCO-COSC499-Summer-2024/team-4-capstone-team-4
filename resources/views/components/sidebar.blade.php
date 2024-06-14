@@ -3,7 +3,8 @@ $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
     ['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
-    ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance']
+    ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
+    ['icon' => 'list', 'href' => '/courses', 'title' => 'Courses']
 ];
 
 // add to $items
