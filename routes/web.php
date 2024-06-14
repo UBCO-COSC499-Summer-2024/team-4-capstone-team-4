@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
+
+Route::get('login/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
+Route::get('login/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([

@@ -33,4 +33,12 @@
             </x-form-item>
         </form>
     </section>
+    <section id="auth-provider">
+        <h1>Or Login With</h1>
+        <div class="provider">
+            <x-link href="{{ route('login.provider', 'google') }}" title="Google" class="google"/>
+            <!-- ubc cwl -->
+            <x-link href="{{ route('login.provider', 'ubc') }}" title="UBC" class="ubc"/>
+        </div>
+    </section>
 </x-auth-layout>
