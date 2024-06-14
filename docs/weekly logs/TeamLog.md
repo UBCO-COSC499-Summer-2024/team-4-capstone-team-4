@@ -30,6 +30,9 @@
 
 ## Times for Team/Individual
 
+![image of clockify report](./clockify/team_june12_june14.png)
+![image of clockify report](./clockify/individual_june12_june14.png)
+
 ## Completed Tasks
 
 ![image of tasks](./tasks/done_june12_june14.png)
