@@ -2,7 +2,7 @@
 
 ## Date Range:
 
-- June 12 - June 14
+- June 12 - June 13
 
 ## Features in the Project Plan Cycle:
 
