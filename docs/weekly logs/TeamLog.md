@@ -40,7 +40,7 @@
 
 ## Test Report / Testing Status:
 
-![image of test report](./tasks/testing_june12_june14.png)
+![image of test report](./testing/testing_june12_june14.png)
 
 ## Overview:
 
