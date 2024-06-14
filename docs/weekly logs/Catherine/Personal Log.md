@@ -32,7 +32,7 @@ Clockify report
 I completed the login, register, forgot-password and reset-password features. I helped check to see if email server was working. I helped write factories for the database and I'm working on writing the test.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * To work on more features ...
+  * To finishing tests for database schema and to work on new features(to be decided as a group).
 
 ## Wednesday (6/7- 6/12)
 
