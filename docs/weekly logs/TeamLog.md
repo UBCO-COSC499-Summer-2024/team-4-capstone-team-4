@@ -47,7 +47,7 @@
 
 ## Overview:
 
-Write here
+This cycle the team focused on completing the components for the mini project. We have our demo features working and continued to add more.  We have created our presentation slides and are prepared to present. Next cycle we will continue to set up database testing and assign more tasks/features to members.
 
 ## Date Range:
 
