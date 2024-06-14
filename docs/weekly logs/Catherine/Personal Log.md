@@ -2,7 +2,7 @@
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_12_2024-06_13_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Register Password Function
@@ -13,6 +13,7 @@ Clockify report
   * #6: Factories for area, area perfomance, department and department performance
   * #7: Test for area, area perfomance, department and department performance
   * #8: Presentation slides
+  * #9: Fix profile pic upload
 
 ### Progress Update (since 6/12/2024) 
 |TASK/ISSUE |STATUS|
@@ -24,7 +25,8 @@ Clockify report
 | Testing Email Server | Complete |
 | Factories for area, area perfomance, department and department performance | Complete |
 | Test for area, area perfomance, department and department performance | In-progress |
-|Presentation slides | Complete |
+| Presentation slides | Complete |
+| Fix profile pic upload | Complete |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
 I completed the login, register, forgot-password and reset-password features. I helped check to see if email server was working. I helped write factories for the database and I'm working on writing the test.
