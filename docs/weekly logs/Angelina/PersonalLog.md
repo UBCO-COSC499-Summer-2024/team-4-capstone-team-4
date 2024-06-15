@@ -1,6 +1,6 @@
 # Angelina's Personal Log 
 
-## Wednesday (6/13 - 6/15)
+## Friday (6/13 - 6/15)
 
 ### Timesheet
 Clockify report
