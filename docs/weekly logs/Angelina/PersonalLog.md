@@ -8,7 +8,7 @@ Clockify report
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Model Factory Setup
-  * #2: Datbase Model Testing
+  * #2: Database Model Testing
   * #3: Discuss priorities for next Milestone
   * #3: Assigned next issues to group members
   * #4: Finalized and presented Mini-Presentaion 1
@@ -56,7 +56,7 @@ Clockify report
 | Fix Personal Log          | Completed   |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Created the database tables in the migrations folder. reated models for the completed tables. Completed the requested restructuring of the personal log. Began creating Factories for the models and created the first of the unit tests for each model. Discussed progress wit the group and prepared for the presentation.
+Created the database tables in the migrations folder. Created models for the completed tables. Completed the requested restructuring of the personal log. Began creating Factories for the models and created the first of the unit tests for each model. Discussed progress with the group and prepared for the presentation.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Complete Database Model Factory 
