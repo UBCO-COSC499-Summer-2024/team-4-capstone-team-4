@@ -1,3 +1,38 @@
+# Angelina's Personal Log 
+
+## Wednesday (6/13 - 6/15)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log613-615.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Database Model Factory Setup
+  * #2: Datbase Model Testing
+  * #3: Discuss priorities for next Milestone
+  * #3: Assigned next issues to group members
+  * #4: Finalized and presented Mini-Presentaion 1
+
+### Progress Update (since 6/5/2024)
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Assign next issues        | Completed   |
+| Discuss priorities        | Completed   |
+| Database Model Testing    | In Progess  |
+| Model Factory Setup       | In Progess  |
+| Mini-Presentation 1       | Completed   |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Comtinued creating Factories for the models and creating unit tests for each model. Discussed progress with the group and delivered presentation.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Database Model Factory 
+  * Complete Database Model Testing
+  * Begin dashboard visualization research
+  * Begin dashboard visualization implementation
+
+---
+
 ## Wednesday (6/9 - 6/12)
 
 ### Timesheet
