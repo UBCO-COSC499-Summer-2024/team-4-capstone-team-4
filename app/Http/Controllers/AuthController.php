@@ -30,6 +30,13 @@ class AuthController extends Controller
         try {
             $socialiteUser = Socialite::driver($provider)->user();
             if (auth()->check() && AuthMethod::where('provider', $provider)->where('provider_id', $socialiteUser->getId())->exists()) {
+                AuthMethod::where('user_id', auth()->id())
+                          ->where('provider', $provider)
+                          ->update([
+                              'token' => $socialiteUser->token,
+                              'avatar' => $socialiteUser->getAvatar() ?? null, // Set to null if avatar is not present
+                          ]);
+
                 return redirect()->route('dashboard');
             }
             $user = User::where('email', $socialiteUser->getEmail())->first();
@@ -46,29 +53,24 @@ class AuthController extends Controller
                     'password' => bcrypt(Config::get('app.default_password')),
                     'email_verified_at' => now(),
                 ]);
-        
+
                 AuthMethod::create([
                     'user_id' => $user->id,
                     'provider' => $provider,
                     'provider_id' => $socialiteUser->getId(),
                     'token' => $socialiteUser->token,
+                    'avatar' => $socialiteUser->getAvatar() ?? null,
                 ]);
                 
             } else {
-                // If a user is found, update or create the authentication method
                 AuthMethod::updateOrCreate([
                     'user_id' => $user->id,
                     'provider' => $provider,
                 ], [
                     'provider_id' => $socialiteUser->getId(),
                     'token' => $socialiteUser->token,
+                    'avatar' => $socialiteUser->getAvatar() ?? null,
                 ]);
-            }
-            
-            if ($socialiteUser->getAvatar()) {
-                AuthMethod::where('user_id', $user->id)
-                          ->where('provider', $provider)
-                          ->update(['avatar' => $socialiteUser->getAvatar()]);
             }
         
             Auth::login($user, true);
