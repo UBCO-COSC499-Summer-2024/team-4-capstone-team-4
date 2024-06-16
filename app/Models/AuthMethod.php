@@ -9,9 +9,25 @@ class AuthMethod extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
         'provider',
         'provider_id',
-        'access_token',
-        'user_id',
-        '',
+        'avatar',
+        'token',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getProvider($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function setProvider($value)
+    {
+        $this->attributes['provider'] = strtolower($value);
+    }
 }

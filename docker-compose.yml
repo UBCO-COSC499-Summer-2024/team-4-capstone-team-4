@@ -47,7 +47,6 @@ services:
             interval: 10s
             retries: 3
             timeout: 5s
-    # This is for testing
     InsightMailUI:
         image: mailhog/mailhog
         ports:
@@ -55,9 +54,28 @@ services:
             - "8025:8025"
         networks:
             - InsightNet
+    insight-pgadmin:
+        build:
+            context: ./
+            dockerfile: dockerfile.pgadmin
+        ports:
+            - "5050:80"
+        environment:
+            PGADMIN_DEFAULT_EMAIL: '${PGADMIN_EMAIL}'
+            PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-secret}'
+        volumes:
+            - 'pgadmin:/var/lib/pgadmin'
+            - './pgadmin-config:/var/lib/pgadmin/pgadmin4.conf'
+        depends_on:
+            - InsightDB
+        networks:
+            - InsightNet
+        
 networks:
     InsightNet:
         driver: bridge
 volumes:
     sail-pgsql:
+        driver: local
+    pgadmin:
         driver: local

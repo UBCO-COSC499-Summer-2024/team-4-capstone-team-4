@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->boolean('approved')->default(false);
             $table->string('acces_code')->nullable();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
@@ -158,7 +159,23 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
+        Schema::create('settings', function (Blueprint $table) {
+            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
+            $table->string('auth_method');
+            $table->string('theme');
+            $table->string('language');
+            $table->timestamps();
+        });
 
+        Schema::create('auth_methods', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('provider');
+            $table->string('provider_id');
+            $table->string('token')->nullable();
+            $table->string('avatar')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -183,5 +200,7 @@ return new class extends Migration
         Schema::dropIfExists('department_performance');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('settings');
+        Schema::dropIfExists('auth_methods');
     }
 };

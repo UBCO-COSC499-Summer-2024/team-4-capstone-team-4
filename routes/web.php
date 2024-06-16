@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
 
-Route::get('login/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
-Route::get('login/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
+Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([
@@ -81,3 +81,11 @@ Route::middleware([
         return view('performance');
     })->name('performance');
 });
+
+Route::get('/privacy-policy', function () {
+    return view('policy');
+})->name('privacy-policy');
+
+Route::get('/tos', function () {
+    return view('terms');
+})->name('tos');

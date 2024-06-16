@@ -174,6 +174,9 @@ main:has(.auth-container) {
 .auth-container {
     min-width: min(100%, 500px);
     max-width: min(100%, 500px);
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 a {
@@ -465,4 +468,25 @@ h1, h2, h3, h4, h5, h6 {
     .glass {
         border-radius: 8px;
     }
+}
+
+.provider-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+}
+
+.provider-list a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 20px;
+    background-color: rgba(220, 250, 250, 0.6);
+    color: #555;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
 }
