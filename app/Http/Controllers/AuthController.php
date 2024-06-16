@@ -15,9 +15,6 @@ class AuthController extends Controller
     public function redirectToProvider($provider)
     {
         try {
-            // Log::info("Socialite Authentication Initiated: Provider: " . $provider);
-            // Log::info("Socialite Authentication Initiated: Client ID: " . Config::get('services.' . $provider . '.client_id'));
-            // Log::info("Socialite Authentication Initiated: Redirect URL: " . Config::get('services.' . $provider . '.redirect'));
             $validProviders = ['google'];
 
             if (!in_array($provider, $validProviders)) {
@@ -25,21 +22,19 @@ class AuthController extends Controller
             }
             return Socialite::driver($provider)->redirect();
         } catch (\Exception $e) {
-            // Log::error("Socialite Authentication Error: " . $e->getMessage());
             return redirect()->route('login')->with('provider-error', 'An error occurred while authenticating with ' . ucfirst($provider) . '.');
         }
     }
 
-    public function handleProviderCallback($provider)
-    {
+    public function handleProviderCallback($provider) {
         try {
             $socialiteUser = Socialite::driver($provider)->user();
-            // Log::info("Socialite Authentication Callback: " . $socialiteUser);
-            $user = User::where('user_id', $socialiteUser->getId())->first();
-            // Log::info("Socialite Authentication Callback: User: " . $user);
+            if (auth()->check() && AuthMethod::where('provider', $provider)->where('provider_id', $socialiteUser->getId())->exists()) {
+                return redirect()->route('dashboard');
+            }
+            $user = User::where('email', $socialiteUser->getEmail())->first();
 
             $name = explode(' ', $socialiteUser->getName() ?? '');
-
             $firstname = $name[0] ?? '';
             $lastname = $name[1] ?? '';
         
@@ -48,6 +43,7 @@ class AuthController extends Controller
                     'firstname' => $firstname,
                     'lastname' => $lastname,
                     'email' => $socialiteUser->getEmail(),
+                    'password' => bcrypt(Config::get('app.default_password')),
                     'email_verified_at' => now(),
                 ]);
         
@@ -59,6 +55,7 @@ class AuthController extends Controller
                 ]);
                 
             } else {
+                // If a user is found, update or create the authentication method
                 AuthMethod::updateOrCreate([
                     'user_id' => $user->id,
                     'provider' => $provider,
@@ -69,14 +66,15 @@ class AuthController extends Controller
             }
             
             if ($socialiteUser->getAvatar()) {
-                AuthMethod::where('user_id', $user->id)->update(['avatar' => $socialiteUser->getAvatar()]);
+                AuthMethod::where('user_id', $user->id)
+                          ->where('provider', $provider)
+                          ->update(['avatar' => $socialiteUser->getAvatar()]);
             }
         
-            auth()->login($user, true);
-            return redirect()->intended('/');
+            Auth::login($user, true);
+            return redirect()->intended('/dashboard');
         } catch(\Exception $e) {
-            // Log::error("Socialite Authentication Error: " . $e->getMessage());
-            return redirect()->route('login')->with('provider-error', 'An error occurred while authenticating with ' . ucfirst($provider) . '.');
+            return redirect()->route('login')->with('provider-error', 'An error occurred while authenticating with ' . ucfirst($provider) . '.  '. $e->getMessage());
         }
     }
 }

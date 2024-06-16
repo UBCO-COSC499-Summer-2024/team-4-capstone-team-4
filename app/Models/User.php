@@ -79,4 +79,8 @@ class User extends Authenticatable {
     public function getLastname() {
         return $this->lastname;
     }
+
+    public function authMethods() {
+        return $this->hasMany(AuthMethod::class,'user_id');
+    }
 }
