@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+use App\Http\Controllers\StaffController;
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([
@@ -32,9 +29,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/staff', function () {
-        return view('staff');
-    })->name('staff');
+    Route::get('/staff', [StaffController::class, 'index'])->name('staff');
 });
 
 Route::middleware([
