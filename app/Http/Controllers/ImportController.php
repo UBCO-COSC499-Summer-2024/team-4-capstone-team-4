@@ -24,6 +24,6 @@ class ImportController extends Controller
         // Handle file upload and data processing here
 
         // For now, let's just return to the dashboard with a success message
-        return redirect()->route('dashboard')->with('success', 'File uploaded successfully!');
+        return back()->with('success', 'File uploaded successfully!');
     }
 }
