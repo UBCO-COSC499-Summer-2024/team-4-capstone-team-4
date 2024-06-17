@@ -99,6 +99,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/import', [ImportController::class, 'showImportForm'])->name('import.form');
+    Route::get('/import', [ImportController::class, 'showImportForm'])->name('import');
     Route::post('/import', [ImportController::class, 'importData'])->name('import.data');
 });
