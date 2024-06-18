@@ -13,10 +13,13 @@
             </div>
 
             <div class="import-file">
-                <div>Choose file to upload</div>
-                <div class="import-file-input">
-                    <input type="file" name="file" id="file">
-                    <label for="file">label</label>
+                <div>Upload a File:</div>
+                <div class="import-file-area">
+                    <h3>Choose a file or drag & drop it here</h3>
+                    <label class="import-file-input"> Browse Files
+                    <input type="file" name="file" id="file" onchange="updateFileName()" />
+                    </label>
+                    <span id="file-name"></span>
                 </div>
             </div>
 
@@ -29,10 +32,10 @@
     <x-import-modal />
 </div>
 
-{{-- <script>
+<script>
     function updateFileName() {
         var input = document.getElementById('file');
         var fileName = input.files[0].name;
         document.getElementById('file-name').textContent = fileName;
     }
-</script> --}}
+</script>

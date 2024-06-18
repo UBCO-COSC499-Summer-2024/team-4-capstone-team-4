@@ -21,7 +21,7 @@
   margin-top: 20px;
 }
 
-.import-file-input {
+.import-file-area {
   border: 3px dashed black;
   padding: 100px;
   display: flex;
@@ -33,10 +33,12 @@
   flex-direction: column;
 }
 
-.import-file input {
-
-}
-
-#file {
+input[type="file"] {
   display: none;
+}
+.import-file-input {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
 }

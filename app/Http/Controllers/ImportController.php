@@ -18,7 +18,7 @@ class ImportController extends Controller
     {
         // Validate the uploaded file
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt',
+            'file' => 'required|file|mimes:csv',
         ]);
 
         // Handle file upload and data processing here
