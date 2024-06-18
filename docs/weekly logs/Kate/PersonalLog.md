@@ -1,3 +1,63 @@
+## Wednesday (6/14- 6/19)
+
+### Timesheet
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Convert CSV Data to JSON Function
+  * #3: Form / File Type Validation
+  * #4: Drag & Drop Functionality
+
+### Progress Update (since 6/14/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Create Import Page Component / #178
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page Drag and Drop / #187
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page Convert CSV to JSON / #183
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I am working on completing my assigned page features (Import). I have broken down the page into smaller tasks / issues and working through them step by step. Sometimes looking at a big feature can be intimidating or I am not sure where to start. I have found that making a personal todo list of really small tasks helps alot with the process.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Refining current functionality
+  * Adding data to database
+  * Debugging
+
 ## Friday (6/12- 6/14)
 
 ### Timesheet
