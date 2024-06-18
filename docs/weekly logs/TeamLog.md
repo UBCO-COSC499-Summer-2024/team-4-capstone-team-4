@@ -2,6 +2,53 @@
 
 ## Date Range:
 
+- June 14 - June 18
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Database Unit Testing
+- Database Factories
+- Course Details Page
+- Role Based Access
+- Service Role Management
+
+## Associated Tasks from Project Board:
+
+
+
+## Tasks for Next Cycle:
+
+
+
+## Burn-up Chart (Velocity):
+
+
+
+## Times for Team/Individual
+
+
+
+## Completed Tasks
+
+
+
+## In Progress Tasks / To do:
+
+
+
+## Test Report / Testing Status:
+
+
+
+## Overview:
+
+This cycle the team focused on the assigned tasks and features given to specific members. This is in preperation for the next big milestone (MVP). In the coming cycles, we aim to have at least 50% functionality completed, with all our core features working.
+
+
+## Date Range:
+
 - June 12 - June 13
 
 ## Features in the Project Plan Cycle:
