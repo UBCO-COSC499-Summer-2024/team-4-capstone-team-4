@@ -5,13 +5,14 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\CourseSection;
 use App\Models\UserRole;
+use App\Models\Teach;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Teach>
  */
 class TeachFactory extends Factory
 {
-    protected $model=\App\Model\Teach::class;
+    protected $model=Teach::class;
 
     /**
      * Define the model's default state.
