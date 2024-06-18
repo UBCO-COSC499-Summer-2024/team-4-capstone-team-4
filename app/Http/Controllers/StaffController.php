@@ -7,7 +7,7 @@ use App\Models\User;
 
 class StaffController extends Controller
 {
-    public function index(Request $request){
+   /*  public function index(Request $request){
 
         //make default firstname ascending
         $sortField = $request->input('sort', 'firstname'); 
@@ -16,17 +16,25 @@ class StaffController extends Controller
         $users = User::orderBy($sortField, $sortDirection)->get();
 
         return view('staff', compact('users', 'sortField', 'sortDirection'));
-    }
+    } */
 
-    public function search(Request $request){
-        $query = $request->input('search-staff');
+    public function index_search(Request $request){
+
+        $sortField = $request->input('sort', 'firstname'); 
+        $sortDirection = $request->input('direction', 'asc'); 
+        $query = $request->input('search-staff','');
         //dd($query);
+
+        if(empty($query)){
+            $users = User::orderBy($sortField, $sortDirection)->get();
+        }else{
+            $users = User::where('firstname', 'like', "%{$query}%")
+            ->orWhere('lastname', 'like', "%{$query}%")
+            ->orWhere('email', 'like', "%{$query}%")
+            ->orderBy($sortField, $sortDirection)
+            ->get();
+        }
         
-        $users = User::where('firstname', 'like', "%{$query}%")
-                     ->orWhere('lastname', 'like', "%{$query}%")
-                     ->orWhere('email', 'like', "%{$query}%")
-                     ->get();
-        
-        return view('staff', compact('users'));
+        return view('staff', compact('users', 'query', 'sortField', 'sortDirection'));
     }
 }

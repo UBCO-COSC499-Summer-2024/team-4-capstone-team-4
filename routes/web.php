@@ -29,15 +29,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/staff', [StaffController::class, 'index'])->name('staff');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::post('/staff', [StaffController::class, 'search'])->name('staff');
+    Route::get('/staff', [StaffController::class, 'index_search'])->name('staff');
 });
 
 Route::middleware([

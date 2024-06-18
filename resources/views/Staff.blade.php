@@ -5,7 +5,7 @@
             <x-staff-dropdown/>
         </div>        
         <x-staff-table>
-            <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection"/>
+            <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" />
             <tbody>
                 @if(isset($users))
                     @if($users->isEmpty())
