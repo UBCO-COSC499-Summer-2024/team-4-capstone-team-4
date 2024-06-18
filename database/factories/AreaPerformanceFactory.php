@@ -20,6 +20,7 @@ class AreaPerformanceFactory extends Factory
         return [
             'score' => fake()->numberBetween(0, 100),
             'total_hours' => fake()->numberBetween(0, 100),
+            'target_hours' => fake()->numberBetween(0, 100),
             'sei_avg' => fake()->numberBetween(1, 5),
             'year' => fake()->year(),
             'area_id' => Area::pluck('id')->random()

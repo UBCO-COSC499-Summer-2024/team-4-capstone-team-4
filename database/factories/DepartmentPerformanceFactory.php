@@ -20,6 +20,7 @@ class DepartmentPerformanceFactory extends Factory
         return [
             'score' => fake()->numberBetween(0, 100),
             'total_hours' => fake()->numberBetween(0, 100),
+            'target_hours' => fake()->numberBetween(0, 100),
             'sei_avg' => fake()->numberBetween(1, 5),
             'year' => fake()->year(),
             'dept_id' => Department::pluck('id')->random()

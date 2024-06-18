@@ -2,26 +2,19 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Area;
 use App\Models\Department;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Area>
- */
 class AreaFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
-    {
-        $areas = ['Mathematics', 'Statistics', 'Computer Science', 'Physics'];
+    protected $model = Area::class;
 
+    public function definition()
+    {
         return [
-            'name' => fake()->randomElement($areas),
-            'dept_id' => Department::pluck('id')->random()
+            'name' => $this->faker->word,
+            'dept_id' => Department::factory(), 
         ];
     }
 }
