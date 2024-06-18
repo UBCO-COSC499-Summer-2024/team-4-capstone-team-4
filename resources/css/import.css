@@ -1,0 +1,42 @@
+.import-container {
+  margin: auto;
+}
+
+.import-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(240, 240, 240, 0.8);
+  padding: 100px;
+  max-width: fit-content;
+}
+
+.import-select {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.import-file {
+  margin-top: 20px;
+}
+
+.import-file-input {
+  border: 3px dashed black;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-file label {
+  display: flex;
+  flex-direction: column;
+}
+
+.import-file input {
+
+}
+
+#file {
+  display: none;
+}
