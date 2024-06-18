@@ -1,5 +1,31 @@
 # Angelina's Personal Log 
 
+## Wednesday (6/16 - 6/19)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log616-619.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Database Model Factory Setup
+  * #2: Database Model Testing
+
+### Progress Update (since 6/5/2024)
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Database Model Testing    | In Progess  |
+| Model Factory Setup       | Completed   |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Finished creating Factories for the models and continued creating unit tests for each model.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Database Model Testing
+  * Begin dashboard visualization research
+  * Begin dashboard visualization implementation
+
+---
+
 ## Friday (6/13 - 6/15)
 
 ### Timesheet
