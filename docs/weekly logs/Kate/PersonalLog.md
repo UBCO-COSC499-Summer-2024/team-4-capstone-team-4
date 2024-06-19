@@ -1,6 +1,7 @@
 ## Wednesday (6/14- 6/19)
 
 ### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_14_2024-06_19_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Front End Import Page
