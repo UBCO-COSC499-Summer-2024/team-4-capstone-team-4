@@ -2,14 +2,13 @@
     <div class="content">
         <h1>{{ __('Department Details') }}</h1>
         <section class="dash-bottom">
-            <br><br>
-          <a href="#">Earnest Bell</a>
-          <br>
-          <a href="#">Andrea Christiansen</a>
-          <br>
-          <a href="#">Naomi Evans</a>
-          <br>
-          <a href="#">Xavier Oquendo</a>
+            <ol class="instructor-list">
+                @foreach ($users as $user)
+                    <li class="instructor-item">
+                        <a href="#" class="instructor-link" data-id="{{ $user->id }}">{{ $user->firstname }} {{$user->lastname}}</a>
+                    </li>
+                @endforeach
+            </ol>
         </section>
         <section class="coursedetails-table">
             <table class="min-w-full divide-y divide-gray-200">
