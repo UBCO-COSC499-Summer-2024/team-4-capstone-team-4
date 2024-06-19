@@ -1,7 +1,8 @@
-<?php
+ <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseDetailsController;
 
 // Route::get('/', function () {
 //     return view('auth.login');
@@ -80,6 +81,14 @@ Route::middleware([
     Route::get('/performance', function () {
         return view('performance');
     })->name('performance');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function(){
+    Route::get('{instructor_id}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
 
 Route::get('/privacy-policy', function () {
