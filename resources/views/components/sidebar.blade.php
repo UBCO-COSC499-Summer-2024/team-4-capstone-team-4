@@ -4,7 +4,8 @@ $sidebarItems = [
     ['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
     ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => '/courses', 'title' => 'Courses']
+    ['icon' => 'list', 'href' => '/courses', 'title' => 'Courses'],
+    ['icon' => 'group', 'href' => '/svcroles', 'title' => 'Service Roles']
 ];
 
 // add to $items

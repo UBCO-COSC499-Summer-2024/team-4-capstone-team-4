@@ -142,7 +142,7 @@
     </div>
 
     {{-- View (based on toolbar settings, card/table) --}}
-    <div class="view">
+    <section class="view">
         @if ($viewMode == 'card')
             {{-- @include('templates.audit-log-card', ['auditLogs' => $auditLogs]) --}}
             <x-templates.audit-log-card :auditLogs="$auditLogs" />
@@ -150,5 +150,13 @@
             {{-- @include('templates.audit-log-list-item', ['auditLogs' => $auditLogs]) --}}
             <x-templates.audit-log-list-item :auditLogs="$auditLogs" />
         @endif
-    </div>
+    </section>
+    
+    <section class="link-bar">
+        <x-link href="{{ route('svcroles') }}" title="{{ __('Dashboard') }}" :active="request()->is('svcroles')" />
+        <x-link href="{{ route('svcroles.add') }}" title="{{ __('Add Service Role') }}" :active="request()->is('svcroles/add')" />
+        <x-link href="{{ route('svcroles.manage') }}" title="{{ __('Manage Service Roles') }}" :active="request()->is('svcroles/manage')" />
+        <x-link href="{{ route('svcroles.requests') }}" title="{{ __('Requests') }}" :active="request()->is('svcroles/requests')" />
+        <x-link href="{{ route('svcroles.logs') }}" title="{{ __('Audit Logs') }}" :active="request()->is('svcroles/audit-logs')" />
+    </section>
 </div>
