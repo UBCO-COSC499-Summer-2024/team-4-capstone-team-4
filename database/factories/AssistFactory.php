@@ -22,7 +22,7 @@ class AssistFactory extends Factory
     {
         return [
             'course_section_id'=>CourseSection::pluck('id')->random(),
-            'ta_rating'=>TeachingAssistant::pluck('id')->random(),
+            'ta_id'=>TeachingAssistant::pluck('id')->random(),
             'rating'=>fake()->randomFloat(1,2,3,4,5),
         ];
     }

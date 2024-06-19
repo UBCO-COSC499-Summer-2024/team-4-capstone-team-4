@@ -29,7 +29,7 @@ class UserRoleFactory extends Factory
         $role = $this->faker->randomElement($roles);
 
         // Default user_id
-        $user_id = User::factory();
+        $user_id = User::factory()->create()->id;
 
         // Default area_id and department_id
         $area_id = null;
@@ -37,14 +37,15 @@ class UserRoleFactory extends Factory
 
         // Depending on the role, we might need to assign an area_id or department_id
         if ($role === 'instructor') {
-            $area_id = Area::factory();
+            $area_id = Area::factory()->create()->id;
         } else if (in_array($role, ['dept_head', 'dept_staff'])) {
-            $department_id = Department::factory();
+            $department_id = Department::factory()->create()->id;
         }
 
         return [
             'user_id' => $user_id,
             'area_id' => $area_id,
+            'department_id' => $department_id,
             'role' => $role,
         ];
     }

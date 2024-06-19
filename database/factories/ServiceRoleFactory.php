@@ -27,7 +27,7 @@ class ServiceRoleFactory extends Factory
 
         return [
             'name' => $this->faker->jobTitle(),
-            'desc' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraph(),
             'year' => $this->faker->year(),
             'monthly_hours' => [
                 'January' => $this->faker->numberBetween(0, 100),
