@@ -95,6 +95,7 @@ return new class extends Migration
         });
 
         Schema::create('teaches', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -103,14 +104,15 @@ return new class extends Migration
         Schema::create('teaching_assistants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('rating');
+            $table->float('rating')->nullable();
             $table->timestamps();
         });
     
         Schema::create('assists', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
             $table->foreignId('ta_id')->constrained('teaching_assistants')->cascadeOnDelete();
-            $table->float('rating');
+            $table->float('rating')->nullable();
             $table->timestamps();
         });
     
@@ -118,6 +120,7 @@ return new class extends Migration
             $table->id();
             $table->integer('score');
             $table->integer('total_hours');
+            $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
@@ -128,6 +131,7 @@ return new class extends Migration
             $table->id();
             $table->integer('score');
             $table->integer('total_hours');
+            $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
@@ -138,6 +142,7 @@ return new class extends Migration
             $table->id();
             $table->integer('score');
             $table->integer('total_hours');
+            $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();

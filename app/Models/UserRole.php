@@ -71,7 +71,7 @@ class UserRole extends Model {
             return $this->belongsTo(Department::class);
         }
         
-        return null; // Return null if the user is not an instructor
+        return null; // Return null if the user is not a dept head or staff
     }
 
     /**
@@ -84,7 +84,7 @@ class UserRole extends Model {
             return $this->hasMany(RoleAssignment::class, 'assigner_id');
         }
         
-        return null; // Return null if the user is not an instructor
+        return null; // Return null if the user is not a dept head or staff
     }
 
     /**

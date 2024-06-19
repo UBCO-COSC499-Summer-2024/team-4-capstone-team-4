@@ -2,20 +2,29 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Department;
+use Illuminate\Support\Facades\Schema;
 
-class DepartmentTest extends TestCase
-{
-    public function test_departments_table_exists()
-    {
+class DepartmentTest extends TestCase {
+    /**
+     * Test if departments table exists.
+     *
+     * @return void
+     */
+    public function test_departments_table_exists() {
         $this->assertTrue(
             Schema::hasTable('departments'),
             'departments table does not exist'
         );
     }
 
-    public function test_department_can_be_created(): void
-    {
+    /**
+     * Test creating a department.
+     *
+     * @return void
+     */
+    public function test_department_can_be_created(): void {
         $department = Department::factory()->create();
 
         // Assert that the department model exists
