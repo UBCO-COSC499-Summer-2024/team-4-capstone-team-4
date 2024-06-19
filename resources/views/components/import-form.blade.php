@@ -23,7 +23,15 @@
             <span id="file-name" class="drop-zone-file-name"></span>
             <button type="submit" class="btn btn-primary mt-3">Upload</button>
         </form>
+
+        @if ($errors->any())
+        <div>
+            <x-validation-errors />
+        </div>  
+        @endif
     </div> 
+
+
 </div>
 
 <script>
@@ -42,12 +50,12 @@
 
         dropZoneElement.addEventListener("dragover", (e) => {
             e.preventDefault();
-            dropZoneElement.classList.add("drop-zone-over");
+            dropZoneElement.classList.add("drop-zone-hover");
         });
 
         ["dragleave", "dragend"].forEach((type) => {
             dropZoneElement.addEventListener(type, (e) => {
-                dropZoneElement.classList.remove("drop-zone-over");
+                dropZoneElement.classList.remove("drop-zone-hover");
             });
         });
 
@@ -59,7 +67,7 @@
                 updateFileName(dropZoneElement, e.dataTransfer.files[0]);
             }
 
-            dropZoneElement.classList.remove("drop-zone-over");
+            dropZoneElement.classList.remove("drop-zone-hover");
         });
     });
 

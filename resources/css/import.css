@@ -9,6 +9,7 @@
 
 .import-form-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgba(240, 240, 240, 0.8);
@@ -59,7 +60,7 @@ input[type="file"] {
   text-align: center;
 }
 
-.drop-zone-over {
+.drop-zone-hover {
   background-color: lightgrey;
   border: 5px solid slategray
 }
