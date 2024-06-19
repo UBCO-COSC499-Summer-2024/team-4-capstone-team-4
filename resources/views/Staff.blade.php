@@ -1,11 +1,14 @@
 <x-app-layout>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-            <x-staff-search/>
-            <x-staff-dropdown/>
-        </div>        
+            <x-staff-search />
+            <div class="flex items-center space-x-4">
+                <x-staff-filter />
+                <x-staff-dropdown />
+            </div>
+        </div>              
         <x-staff-table>
-            <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" />
+            <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
             <tbody>
                 @if(isset($users))
                     @if($users->isEmpty())
