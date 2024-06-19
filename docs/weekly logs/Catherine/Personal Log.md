@@ -2,7 +2,7 @@
 
 ### Timesheet
 Clockify report
-[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/)
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_14_2024-06_19_2024)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Staff list component
