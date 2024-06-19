@@ -17,18 +17,18 @@
                         @foreach ($users as $user)
                             @php
                                 $areas = [];
-                                foreach ($user->roles as $role) {
+                               /*  foreach ($user->roles as $role) {
                                     if ($role->area) {
                                         $areas[] = $role->area->name;
                                     }
-                                }
+                                } */
                             @endphp
                             <x-staff-table-row 
                                 name="{{ $user->firstname }} {{ $user->lastname }}" 
                                 email="{{ $user->email }}" 
                                 subarea="{{ empty($areas) ? '-' : implode(', ', $areas) }}" 
                                 completedHours="50" 
-                                targetHours="80" 
+                                targetHours="{{ App\Model\InstructorPeformance::where('instructor_id', $user->id)->get()->target_hours}}" 
                                 rating="4.2" 
                                 src="{{ $user->profile_photo_url }}" 
                             />
