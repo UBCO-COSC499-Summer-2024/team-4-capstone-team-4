@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\User;
+use App\Models\Area;
+use App\Models\UserRole;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,19 +16,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::factory(10)->create();
+        $users = User::factory(10)->create();
+        foreach($users as $user) {
+            UserRole::create([
+                'user_id' => $user->id,
+                'area_id' => Area::pluck('id')->random(),
+                'department_id' => 1,
+                'role' => 'instructor',
+            ]);
+        }
 
-/*         User::factory()->create([
-            'firstname' => 'Test',
-            'firstname' => 'User',
-            'email' => 'test@example.com',
+        Department::factory()->create([
+            'name' => 'CMPS',
         ]);
 
-        User::factory()->create([
-            'firstname' => 'Admin',
-            'firstname' => 'User',
-            'email' => 'admin@example.com',
-            'acces_code' => 'admin'
-        ]); */
+        Area::factory()->create([
+            'name' => 'Computer Science',
+            'dept_id' => 1,
+        ]);
+
+        Area::factory()->create([
+            'name' => 'Mathematics',
+            'dept_id' => 1,
+        ]);
+
+        Area::factory()->create([
+            'name' => 'Physics',
+            'dept_id' => 1,
+        ]);
+
+        Area::factory()->create([
+            'name' => 'Statistics',
+            'dept_id' => 1,
+        ]);
     }
 }

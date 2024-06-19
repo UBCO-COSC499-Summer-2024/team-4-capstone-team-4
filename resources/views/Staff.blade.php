@@ -12,7 +12,23 @@
                         <p>No users found.</p>
                     @else
                         @foreach ($users as $user)
-                            <x-staff-table-row name="{{ $user->firstname }} {{ $user->lastname}}" email="{{ $user->email}}" subarea="physics" completedHours="50" targetHours="80" rating="4.2" src="{{ $user->profile_photo_url}}" />
+                            @php
+                                $areas = [];
+                                foreach ($user->roles as $role) {
+                                    if ($role->area) {
+                                        $areas[] = $role->area->name;
+                                    }
+                                }
+                            @endphp
+                            <x-staff-table-row 
+                                name="{{ $user->firstname }} {{ $user->lastname }}" 
+                                email="{{ $user->email }}" 
+                                subarea="{{ empty($areas) ? '-' : implode(', ', $areas) }}" 
+                                completedHours="50" 
+                                targetHours="80" 
+                                rating="4.2" 
+                                src="{{ $user->profile_photo_url }}" 
+                            />
                         @endforeach
                     @endif
                 @endif
