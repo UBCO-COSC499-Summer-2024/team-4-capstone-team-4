@@ -1,9 +1,7 @@
 ## Cycle (Friday - Tuesday): June 14th - June 18th
 
 ### Timesheet
-- **Friday, June 14th:**
-  Clockify report
-  ![Clockify Report](./Reports/Clockify_Time_Report_Summary_06_14_2024-06_18_2024.pdf)
+- [Clockify Report](./Reports/Clockify_Time_Report_Summary_06_14_2024-06_18_2024.pdf)
 
 ### Friday, June 14th:
 - Debrief for mini-presentation.
