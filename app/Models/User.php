@@ -62,7 +62,7 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
-    
+
     /**
      * Define a one-to-many relationship with UserRole model.
      *
@@ -70,6 +70,14 @@ class User extends Authenticatable {
      */
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
+    }
+
+    public function getName() {
+        try {
+            return $this->firstname . ' ' . $this->lastname;
+        } catch (\Exception $e) {
+            return 'Unknown';
+        }
     }
 
     public function getFirstname() {

@@ -1,5 +1,13 @@
 <x-app-layout>
-    <div class="content">
-        <livewire:tabbed-component :group-id="'svcrole'" :wire:key="'svcrole-' . now()->timestamp" />
-    </div>
+    @if(request()->is('svcroles/add'))
+        @include('components.svcrole.add-svcrole')
+    @elseif(request()->is('svcroles/manage'))
+        @include('components.svcrole.manage-svcroles')
+    @elseif(request()->is('svcroles/requests'))
+        @include('components.svcrole.requests')
+    @elseif(request()->is('svcroles/audit-logs'))
+        @include('components.svcrole.logs')
+    @else
+        @include('components.svcrole.dashboard')
+    @endif
 </x-app-layout>

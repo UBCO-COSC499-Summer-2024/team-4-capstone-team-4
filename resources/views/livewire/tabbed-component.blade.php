@@ -1,7 +1,11 @@
 <div>
     <x-tabs for="{{ $groupId }}">
         @foreach($tabs as $tab)
-            <x-tab :tab="$tab" wire:click="selectTab('{{ $tab['id'] }}')" />
+            <x-tab :tab="$tab" :active="$selectedTab === $tab['id']"
+                wire:click="selectTab('{{ $tab['id'] }}')"
+                wire:key="{{ $tab['id'] }}"
+                wire:loading.attr="disabled"
+                />
         @endforeach
     </x-tabs>
 

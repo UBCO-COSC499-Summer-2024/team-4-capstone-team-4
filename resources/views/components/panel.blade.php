@@ -1,6 +1,6 @@
 @php
     $classes = 'panel' . ($active ? ' active' : '');
 @endphp
-<div class="{{ $classes }}" id="{{ $panel['id'] }}">
+<div class="{{ $classes }}" for="{{ $panel['for'] }}" id="{{ $panel['id'] }}">
     {{ $slot }}
 </div>

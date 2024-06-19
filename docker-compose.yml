@@ -22,14 +22,14 @@ services:
         networks:
             - InsightNet
         depends_on:
-            - InsightDB
+            - insightdb
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
-    InsightDB:
-        image: 'postgres:16-alpine'
+    insightdb:
+        image: postgres:16-alpine
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -56,7 +56,7 @@ services:
             - InsightNet
     insight-pgadmin:
         build:
-            context: ./
+            context: ./dockerfiles
             dockerfile: dockerfile.pgadmin
         ports:
             - "5050:80"
@@ -67,10 +67,10 @@ services:
             - 'pgadmin:/var/lib/pgadmin'
             - './pgadmin-config:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
-            - InsightDB
+            - insightdb
         networks:
             - InsightNet
-        
+
 networks:
     InsightNet:
         driver: bridge

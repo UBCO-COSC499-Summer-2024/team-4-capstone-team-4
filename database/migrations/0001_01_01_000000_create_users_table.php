@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -31,7 +32,7 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
         });
-    
+
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -47,7 +48,7 @@ return new class extends Migration
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
         });
-    
+
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -57,7 +58,7 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('service_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -67,7 +68,7 @@ return new class extends Migration
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('role_assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_role_id')->constrained('service_roles')->cascadeOnDelete();
@@ -75,7 +76,7 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -86,7 +87,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->timestamps();
         });
-    
+
         Schema::create('sei_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
@@ -99,21 +100,21 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('teaching_assistants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->float('rating');
             $table->timestamps();
         });
-    
+
         Schema::create('assists', function (Blueprint $table) {
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
             $table->foreignId('ta_id')->constrained('teaching_assistants')->cascadeOnDelete();
             $table->float('rating');
             $table->timestamps();
         });
-    
+
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
@@ -123,7 +124,7 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
@@ -133,7 +134,7 @@ return new class extends Migration
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
@@ -176,6 +177,19 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('audit_logs', function (Blueprint $table) {
+            $table->id('log_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('user_alt');
+            $table->string('action');
+            $table->text('description')->nullable();
+            $table->string('table_name');
+            $table->string('operation_type');
+            $table->jsonb('old_value')->nullable();
+            $table->jsonb('new_value')->nullable();
+            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
     }
 
     /**
@@ -183,6 +197,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('audit_logs');
         Schema::dropIfExists('users');
         Schema::dropIfExists('user_roles');
         Schema::dropIfExists('departments');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -90,6 +91,30 @@ Route::middleware([
     Route::get('/svcroles', function () {
         return view('svcroles');
     })->name('svcroles');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->prefix('/svcroles')->group(function () {
+    // Add-Svcrole (for testing purposes, will be changed to modal later)
+    Route::get('/add', function () {
+        return view('svcroles');
+    })->name('svcroles.add');
+
+    // Manage-Svcroles
+    Route::get('/manage', function () {
+        return view('svcroles');
+    })->name('svcroles.manage');
+
+    // Requests
+    Route::get('/requests', function () {
+        return view('svcroles');
+    })->name('svcroles.requests');
+
+    // Logs
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
 });
 
 Route::get('/privacy-policy', function () {

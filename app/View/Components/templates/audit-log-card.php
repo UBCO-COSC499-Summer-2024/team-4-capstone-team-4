@@ -1,22 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\templates;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class panel extends Component
+class audit-log-card extends Component
 {
-    public $panel;
-    public $active;
     /**
      * Create a new component instance.
      */
-    public function __construct($panel, $active)
+    public function __construct()
     {
-        $this->panel = $panel;
-        $this->active = $active;
+        //
     }
 
     /**
@@ -24,6 +21,6 @@ class panel extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.panel');
+        return view('components.templates.audit-log-card');
     }
 }

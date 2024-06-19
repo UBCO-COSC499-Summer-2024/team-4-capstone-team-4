@@ -1,0 +1,62 @@
+# Stage 1: Build pgaudit from source
+FROM alpine:latest AS builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    gcc \
+    make \
+    libc-dev \
+    postgresql-dev \
+    git \
+    curl \
+    tar
+
+# Set PostgreSQL version
+ENV PG_MAJOR=16
+
+# Download PostgreSQL source code
+RUN curl -O https://ftp.postgresql.org/pub/source/v${PG_MAJOR}.0/postgresql-${PG_MAJOR}.0.tar.gz && \
+    tar -xzf postgresql-${PG_MAJOR}.0.tar.gz && \
+    rm postgresql-${PG_MAJOR}.0.tar.gz
+
+# Clone the PGAudit repository
+RUN git clone https://github.com/pgaudit/pgaudit.git /pgaudit
+
+# Build and install the PGAudit extension
+WORKDIR /pgaudit
+RUN make USE_PGXS=1 PG_CONFIG=/usr/bin/pg_config && \
+    make USE_PGXS=1 PG_CONFIG=/usr/bin/pg_config install
+
+# Inspect the installation directories
+RUN echo "Contents of /usr/local/lib/postgresql:" && ls /usr/local/lib/postgresql
+RUN echo "Contents of /usr/local/share/postgresql/extension:" && ls /usr/local/share/postgresql/extension
+
+# Stage 2: Create the final image
+FROM postgres:16-alpine
+
+# Copy the built extension from the builder
+COPY --from=builder /usr/local/lib/postgresql /usr/local/lib/postgresql
+COPY --from=builder /usr/local/share/postgresql/extension /usr/local/share/postgresql/extension
+
+# Ensure the extension is available in the PostgreSQL instance
+RUN mkdir -p /usr/share/postgresql/extension && \
+    cp /usr/local/share/postgresql/extension/pgaudit* /usr/share/postgresql/extension/ && \
+    cp /usr/local/lib/postgresql/pgaudit.so /usr/lib/postgresql/
+
+# Clean up unneeded files
+RUN apk del --no-cache --purge .build-deps
+
+# Enable the extension at runtime
+# Add to postgresql.conf
+RUN echo "shared_preload_libraries = 'pgaudit'" >> /usr/local/share/postgresql/postgresql.conf.sample
+
+# Set default environment variables
+ENV POSTGRES_DB=postgres \
+    POSTGRES_USER=postgres \
+    POSTGRES_PASSWORD=postgres
+
+# Expose the PostgreSQL port
+EXPOSE 5432
+
+# Command to run PostgreSQL
+CMD ["postgres"]

@@ -1,35 +1,36 @@
 <?php
 
 namespace App\Livewire;
-
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 
 class TabbedComponent extends Component
 {
     public $groupId = 'default';
     public $selectedTab = 'tab1';
+    protected $listeners = ['selectTab'];
     public $tabs = [
         'tab1' => [
             'id' => 'tab1',
-            't  itle' => 'Tab 1',
+            'title' => 'Tab 1',
             'icon' => 'home',
-            'active' => true,
         ],
         'tab2' => [
             'id' => 'tab2',
             'title' => 'Tab 2',
             'icon' => 'settings',
-            'active' => false,
         ],
     ];
 
     public $panels = [
         'tab1' => [
             'id' => 'panel1',
+            'for' => 'tab1',
             'content' => 'Content for Tab 1',
         ],
         'tab2' => [
             'id' => 'panel2',
+            'for' => 'tab2',
             'content' => 'Content for Tab 2',
         ],
     ];
@@ -41,9 +42,8 @@ class TabbedComponent extends Component
 
     public function selectTab($tabId)
     {
-        foreach ($this->tabs as $key => &$tab) {
-            $tab['active'] = ($key === $tabId);
-        }
+        dd($tabId);
+        Log::info('Tab selected: ' . $tabId);
         $this->selectedTab = $tabId;
     }
     public function render()

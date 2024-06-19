@@ -8,17 +8,13 @@ use Illuminate\View\Component;
 
 class tab extends Component
 {
-    public $title;
-    public $active;
-    public $id;
+    public $tab;
     /**
      * Create a new component instance.
      */
-    public function __construct($title, $id, $active = false)
+    public function __construct($tab)
     {
-        $this->title = $title;
-        $this->active = $active;
-        $this->id = $id;
+        $this->tab = $tab;
     }
 
     /**

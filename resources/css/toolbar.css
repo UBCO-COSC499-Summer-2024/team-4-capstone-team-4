@@ -1,0 +1,157 @@
+.toolbar {
+    padding: 8px;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    margin: 4px;
+    max-height: 50px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    background: rgba(50, 50, 50, 0.9);
+    color: #999;
+    flex-wrap: nowrap;
+}
+
+.mini-toolbar {
+    padding: 6px;
+    border-radius: 16px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    margin: 4px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    background: rgba(50, 50, 50, 0.9);
+    color: #999;
+}
+
+.mini-toolbar.right {
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+.toolbar-section {
+    display: inline-flex;
+    gap: 6px;
+    width: fit-content;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    /* padding: 0 6px; */
+}
+
+.toolbar-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #999;
+    text-transform: normal;
+}
+
+.toolbar-section-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.toolbar input {
+    padding: 4px;
+    border-radius: 16px;
+    border: none !important;
+    outline: none !important;
+    background: #fff;
+    font-size: 14px;
+    width: fit-content;
+    /* box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.9); */
+    max-height: 40px;
+}
+
+.toolbar input[type=text] {
+    padding: 4px 8px;
+}
+
+.toolbar select {
+    cursor: pointer;
+}
+
+.toolbar button {
+    padding: 4px;
+    border-radius: 16px;
+    border: none;
+    outline: none !important;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbar button[disabled] {
+    background: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.toolbar button icon {
+    font-size: 20px;
+    color: #999;
+}
+
+.toolbar button .button-title {
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+}
+
+.toolbar button:hover {
+    background: rgba(30, 75, 250, 1);
+    color: #fff;
+}
+
+
+@media (max-width: 768px) { /* Adjust max-width as needed */
+    .toolbar {
+        display: none;
+        flex-direction: column; /* Display items vertically */
+        max-height: none; /* Remove max-height to allow content to expand */
+        padding: 12px; /* Increase padding for better touch targets */
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar.active {
+        display: flex;
+    }
+
+    .mini-toolbar {
+        flex-direction: column; /* Display items vertically */
+        max-height: none; /* Remove max-height to allow content to expand */
+        padding: 10px; /* Increase padding for better touch targets */
+        display: none;
+    }
+
+    .toolbar-section {
+        width: 100%; /* Full width for sections in mobile view */
+        margin-bottom: 8px; /* Add space between sections */
+        flex-wrap: wrap;
+        /* justify-content: start; */
+    }
+
+    .toolbar-section-title {
+        display: none;
+    }
+
+    .toolbar-section-item {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start */
+        gap: 4px; /* Reduce gap between items */
+    }
+
+    .toolbar input,
+    .toolbar select {
+        width: 100%; /* Full width for inputs, selects, and buttons */
+    }
+}
