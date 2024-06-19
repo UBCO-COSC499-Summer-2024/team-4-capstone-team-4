@@ -16,7 +16,7 @@
                 <div>Upload a File:</div>
                 <div class="drop-zone">
                     <span class="drop-zone-prompt">Drop file here or click to upload</span>
-                    <input type="file" name="myFile" class="drop-zone-input">
+                    <input type="file" name="file" class="drop-zone-input">
                   </div>
                   <span id="file-name" class="drop-zone-file-name"></span>
             </div>
