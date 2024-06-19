@@ -42,7 +42,6 @@ return new class extends Migration
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('area_id')->nullable()->constrained('areas')->cascadeOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
@@ -53,8 +52,11 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('hours');
+            $table->year('year');
+            $table->integer('month');
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
     
