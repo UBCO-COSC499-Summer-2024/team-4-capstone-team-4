@@ -66,4 +66,13 @@ class UserFactory extends Factory {
             'ownedTeams'
         );
     }
+     /**
+     * Indicate that the user is department head
+     */
+    public function head(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'acces_code' => 'head',
+        ]);
+    }
 }
