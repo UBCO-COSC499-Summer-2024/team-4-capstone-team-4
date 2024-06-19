@@ -1,0 +1,22 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: laravel-test
+  image: sail-8.3/app
+  commands:
+  - cp .env.example .env
+  - composer install
+  - npm install
+  - ./vendor/bin/sail artisan migrate
+  - ./vendor/bin/sail artisan test
+
+services:
+- name: insight-db
+pull: if-not-exists
+image: postgres:16-alpine
+environment:
+  POSTGRES_DB: insight
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
