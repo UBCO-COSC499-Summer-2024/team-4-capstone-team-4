@@ -2,6 +2,58 @@
 
 ## Date Range:
 
+- June 14 - June 18
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Database Unit Testing
+- Database Factories
+- Course Details Page
+- Role Based Access
+- Service Role Management
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_june14_june19.png)
+![image of tasks](./tasks/inprogress_june14_june19.png)
+![image of tasks](./tasks/done_june14_june19.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_june14_june19.png)
+![image of tasks](./tasks/inprogress_june14_june19.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june14_june19.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_june14_june19.png)
+![image of clockify report](./clockify/individual_june14_june19.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_june14_june19.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_june14_june19.png)
+![image of tasks](./tasks/inprogress_june14_june19.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/testing_june12_june14.png)
+
+## Overview:
+
+This cycle the team focused on the assigned tasks and features given to specific members. This is in preperation for the next big milestone (MVP). In the coming cycles, we aim to have at least 50% functionality completed, with all our core features working.
+
+
+## Date Range:
+
 - June 12 - June 13
 
 ## Features in the Project Plan Cycle:
