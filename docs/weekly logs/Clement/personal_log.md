@@ -1,3 +1,71 @@
+## Cycle (Friday - Tuesday): June 14th - June 18th
+
+### Timesheet
+- **Friday, June 14th:**
+  Clockify report
+  ![Clockify Report](./Reports/Clockify_Time_Report_Summary_06_14_2024-06_18_2024.pdf)
+
+### Friday, June 14th:
+- Debrief for mini-presentation.
+- Detailed breakdown of next tasks.
+- Environment optimization completed (site now loads instantly).
+- Changes made to feature-dev-integration for the presentation and merged with development.
+- Team Meeting: 11:30 AM to 6:30 PM.
+- Created a new artisan make command for services.
+
+### Saturday, June 15th:
+- Worked on adding 3rd party authentication.
+- Fixed merge issues.
+- Created a new GCP for the project and set up OAuth Screen and credentials.
+
+### Sunday, June 16th:
+- Focused on completing the 3rd party authentication implementation.
+- Removed unnecessary scripts.
+- Added a new Docker image to our container for pgadmin4 UI.
+- Fixed issues in the AuthController.
+
+### Monday, June 17th:
+- Started work on the service role management page.
+
+### Tuesday, June 18th:
+- Created an Audit Log table for the service roles.
+- Attempted to install pgaudit for automatic logging but encountered issues.
+- Implemented manual code addition for each user action in the audit log.
+- Created new routes for service roles management pages.
+- Developed initial views for the audit log.
+- Updated my personal log format.
+
+### Progress Update (since June 14th)
+| TASK/ISSUE                            | STATUS          |
+|----------------------------------------|-----------------|
+| Mini-presentation debrief              | Complete        |
+| Detailed task breakdown                | Complete        |
+| Environment optimization               | Complete        |
+| Feature integration for presentation   | Complete        |
+| 3rd party authentication              | Complete        |
+| GCP setup and OAuth credentials        | Complete        |
+| Docker image for pgadmin4 UI           | Complete        |
+| AuthController fixes                   | Complete        |
+| Service role management page           | In Progress     |
+| Audit Log table                        | Complete        |
+| pgaudit installation                   | Not Successful  |
+| Manual audit logging implementation    | Complete        |
+| Routes for service roles management    | Complete        |
+| Audit log views                        | In Progress     |
+| Personal log update                    | Complete        |
+
+### Cycle Goal Review
+The cycle started with successful optimizations and integration updates. Third-party authentication and GCP setup were completed. Challenges were faced with pgaudit installation, leading to manual logging implementation for audit trails. Progress was made on service role management and audit log views.
+
+### Next Cycle Goals
+- Complete service role management functionality.
+- Enhance audit log views and functionality.
+- Address any pending issues with third-party authentication.
+- Refine Docker setup and image configurations.
+- Prepare for upcoming presentations and meetings.
+
+---
+
 ## Wednesday-Thursday (6/12-6/13)
 
 ### Timesheet
