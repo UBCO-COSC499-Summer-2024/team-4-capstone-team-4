@@ -22,7 +22,7 @@ class ExtraHours extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'desc', 'hours', 'assigner', 'iid',
+        'name', 'description', 'hours', 'year', 'month',  'assigner', 'iid', 'area',
     ];
 
     /**
@@ -54,5 +54,15 @@ class ExtraHours extends Model {
     public function instructor()
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
+    }
+
+    /**
+     * Get the area associated with the extra hours.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 }

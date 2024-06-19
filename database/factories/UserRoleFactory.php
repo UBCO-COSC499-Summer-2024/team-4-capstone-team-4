@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Area;
 use App\Models\Department;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,20 +28,16 @@ class UserRoleFactory extends Factory {
         // Default user_id
         $user_id = User::factory()->create()->id;
 
-        // Default area_id and department_id
-        $area_id = null;
+        // Default department_id
         $department_id = null;
 
-        // Depending on the role, we might need to assign an area_id or department_id
-        if ($role === 'instructor') {
-            $area_id = Area::factory()->create()->id;
-        } else if (in_array($role, ['dept_head', 'dept_staff'])) {
+        // Depending on the role, we might need to assign a department_id
+        if (in_array($role, ['dept_head', 'dept_staff', 'instructor'])) {
             $department_id = Department::factory()->create()->id;
         }
 
         return [
             'user_id' => $user_id,
-            'area_id' => $area_id,
             'department_id' => $department_id,
             'role' => $role,
         ];
