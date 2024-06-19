@@ -1,3 +1,37 @@
+## Wednesday (6/14- 6/19)
+
+### Timesheet
+Clockify report
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/Clockify_Time_Report_Summary_06_14_2024-06_19_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Staff list component
+  * #2: Sorting for staff list
+  * #3: Filtering for staff list
+  * #4: Linking staff list to database
+  * #5: Create add target hours
+  * #6: Edit/remove target hours
+  * #7: Search for staff list
+
+### Progress Update (since 6/14/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Staff list component | Complete |
+| Sorting for staff list | In-progress |
+| Linking staff list to database | In-progress |
+| Filtering for staff list | To-do |
+| Create add target hours | To-do |
+| Edit/remove target hours | To-do |
+| Search for staff list | Complete |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I worked on creating the staff page where I completed the staff list component and search function by first name as well sorting for name column. I have partially pulled data from the database. The front end took longer than I thought due to styles not displaying the way I wanted but it got solved.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * To have the staff list fully linked to database
+  * Filter by sub-area for staff list
+  * Started on add/edit/remove target hours
+
 ## Friday (6/12- 6/14)
 
 ### Timesheet
