@@ -22,7 +22,7 @@ class ExtraHours extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'hours', 'year', 'month',  'assigner', 'iid', 'area',
+        'name', 'description', 'hours', 'year', 'month',  'assigner', 'instructor_id', 'area',
     ];
 
     /**
