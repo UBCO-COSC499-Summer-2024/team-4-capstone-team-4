@@ -211,4 +211,47 @@ Worked and finished on the features assigned. Helped the team make slides for th
 
 #### Next Cycle Goals 
 
-- presentation for Friday, the 14th, and start with testing for the database. 
+- presentation for Friday, the 14th, and start with testing for the database.
+
+
+#### Friday(6/14/2024)
+
+#### Current Tasks
+
+Features:
+- Divided work for the next work cycles
+- added a few containers in association with the settings page
+
+Communications/Logs: 
+- Updated Communications and Logs
+
+System Setup/troubleshooting: 
+- Troubleshooted the docker and Laravel during the coding
+
+#### Progress Update (till 6/14/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+        <td>Communication and Daily Update (Logs Update)</td>
+        <td>Completed</td>
+    </tr>
+	 <tr>
+        <td>Division of work for the next cycles</td>
+        <td>Completed</td>
+	<tr>
+    <tr>
+        <td>System troubleshooting(Laravel,docker setup)</td>
+        <td>In progress</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review 
+
+Brainstormed ideas about the main dashboard. Assigned the work of the course details page for the instructor and department head. 
+
+#### Next Cycle Goals 
+
+- Working on the coding part for the assigned task.
+
