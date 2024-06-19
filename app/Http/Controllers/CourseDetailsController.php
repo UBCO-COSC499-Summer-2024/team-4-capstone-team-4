@@ -31,6 +31,16 @@ class CourseDetailsController extends Controller{
             ->get();
         }
 
-        return view('Course-details', compact('courses', 'query', 'sortField', 'sortDirection'));
+        $tableData = $courses->map(function($course) {
+            return [
+                'Column 1' => $course->name,
+                'Column 2' => $course->duration,
+                'Column 3' => $course->enrolled,
+                'Column 4'=>  $course->dropped,
+                'Column 5'=>  $course->capacity
+            ];
+        });
+
+        return view('Course-details', compact('courses', 'tableData', 'query', 'sortField', 'sortDirection'));
     }
 }
