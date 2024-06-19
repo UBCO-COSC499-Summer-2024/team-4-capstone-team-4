@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
+use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Area;
 use App\Models\UserRole;
@@ -16,16 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(10)->create();
-        foreach($users as $user) {
-            UserRole::create([
-                'user_id' => $user->id,
-                'area_id' => Area::pluck('id')->random(),
-                'department_id' => 1,
-                'role' => 'instructor',
-            ]);
-        }
-
         Department::factory()->create([
             'name' => 'CMPS',
         ]);
@@ -49,5 +40,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Statistics',
             'dept_id' => 1,
         ]);
+        
+        $users = User::factory(10)->create();
+        foreach($users as $user) {
+            UserRole::create([
+                'user_id' => $user->id,
+                'area_id' => Area::pluck('id')->random(),
+                'department_id' => 1,
+                'role' => 'instructor',
+            ]);
+        }
+        //CourseSection::factory(10)->create();
     }
 }
