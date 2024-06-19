@@ -7,8 +7,7 @@ use App\Models\ServiceRole;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RoleAssignmentFactory extends Factory
-{
+class RoleAssignmentFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
@@ -21,8 +20,7 @@ class RoleAssignmentFactory extends Factory
      *
      * @return array
      */
-    public function definition()
-    {
+    public function definition() {
         // Ensure we have at least one ServiceRole and UserRoles for assigner and instructor
         $serviceRole = ServiceRole::inRandomOrder()->first();
         $assigner = UserRole::whereIn('role', ['dept_head', 'dept_staff'])->inRandomOrder()->first();

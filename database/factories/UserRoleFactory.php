@@ -8,8 +8,7 @@ use App\Models\Department;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserRoleFactory extends Factory
-{
+class UserRoleFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
@@ -22,10 +21,9 @@ class UserRoleFactory extends Factory
      *
      * @return array
      */
-    public function definition()
-    {
+    public function definition() {
         // Define a random role from the allowed roles
-        $roles = ['instructor', 'dept_head', 'dept_staff'];
+        $roles = ['instructor', 'dept_head', 'dept_staff', 'admin'];
         $role = $this->faker->randomElement($roles);
 
         // Default user_id

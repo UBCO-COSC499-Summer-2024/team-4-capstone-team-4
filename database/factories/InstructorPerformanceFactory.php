@@ -6,8 +6,7 @@ use App\Models\InstructorPerformance;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class InstructorPerformanceFactory extends Factory
-{
+class InstructorPerformanceFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
@@ -20,8 +19,7 @@ class InstructorPerformanceFactory extends Factory
      *
      * @return array
      */
-    public function definition()
-    {
+    public function definition() {
         // Ensure we have at least one UserRole with the role 'instructor'
         $instructor = UserRole::where('role', 'instructor')->inRandomOrder()->first();
 

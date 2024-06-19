@@ -8,15 +8,13 @@ use App\Models\Area;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AreaPerformance>
  */
-class AreaPerformanceFactory extends Factory
-{
+class AreaPerformanceFactory extends Factory {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'score' => fake()->numberBetween(0, 100),
             'total_hours' => fake()->numberBetween(0, 100),

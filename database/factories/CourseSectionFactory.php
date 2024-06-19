@@ -9,8 +9,7 @@ use App\Models\Area;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CourseSection>
  */
-class CourseSectionFactory extends Factory
-{
+class CourseSectionFactory extends Factory {
     /**
      * Define the model's default state.
      *
@@ -18,8 +17,7 @@ class CourseSectionFactory extends Factory
      */
     protected $model=CourseSection::class;
 
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'name'=>fake()->name(),
             'area_id'=>Area::pluck('id')->random(),

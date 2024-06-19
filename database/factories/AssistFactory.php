@@ -9,8 +9,7 @@ use App\Models\TeachingAssistant;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Assist>
  */
-class AssistFactory extends Factory
-{
+class AssistFactory extends Factory {
     protected $model=\App\Models\Assist::class;
 
     /**
@@ -18,8 +17,7 @@ class AssistFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'course_section_id'=>CourseSection::pluck('id')->random(),
             'ta_id'=>TeachingAssistant::pluck('id')->random(),

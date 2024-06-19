@@ -10,8 +10,7 @@ use App\Models\Teach;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Teach>
  */
-class TeachFactory extends Factory
-{
+class TeachFactory extends Factory {
     protected $model=Teach::class;
 
     /**
@@ -19,8 +18,7 @@ class TeachFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'course_section_id'=>CourseSection::pluck('id')->random(),
             'instructor_id'=>UserRole::pluck('id')->random(),

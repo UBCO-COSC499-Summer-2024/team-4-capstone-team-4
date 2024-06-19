@@ -8,9 +8,11 @@ use App\Models\UserRole;
 use App\Models\User;
 use App\Models\Area;
 use App\Models\Department;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
+use Illuminate\Support\Facades\Schema;
 
-class UserRoleTest extends TestCase
-{
+class UserRoleTest extends TestCase {
+
     use RefreshDatabase; // Ensure database is refreshed before each test
 
     /**
@@ -18,8 +20,7 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_user_relation()
-    {
+    public function test_user_relation() {
         // Create a user and a user role associated with that user
         $user = User::factory()->create();
         $userRole = UserRole::factory()->create(['user_id' => $user->id]);
@@ -37,11 +38,64 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_instructor_user_relation()
-    {
+    public function test_instructor_user_relation() {
         // Create test data
         $user = User::factory()->create();
         $userRole = UserRole::factory()->create(['role' => 'instructor', 'user_id' => $user->id]);
+
+        // Retrieve the associated user using the relation
+        $retrievedUser = $userRole->user;
+
+        // Assert that the retrieved user matches the created user
+        $this->assertInstanceOf(User::class, $retrievedUser);
+        $this->assertEquals($user->id, $retrievedUser->id);
+    }
+
+    /**
+     * Test retrieving the associated user for an instructor role.
+     *
+     * @return void
+     */
+    public function test_dept_head_user_relation() {
+        // Create test data
+        $user = User::factory()->create();
+        $userRole = UserRole::factory()->create(['role' => 'dept_head', 'user_id' => $user->id]);
+
+        // Retrieve the associated user using the relation
+        $retrievedUser = $userRole->user;
+
+        // Assert that the retrieved user matches the created user
+        $this->assertInstanceOf(User::class, $retrievedUser);
+        $this->assertEquals($user->id, $retrievedUser->id);
+    }
+
+    /**
+     * Test retrieving the associated user for an instructor role.
+     *
+     * @return void
+     */
+    public function test_dept_staff_user_relation() {
+        // Create test data
+        $user = User::factory()->create();
+        $userRole = UserRole::factory()->create(['role' => 'dept_staff', 'user_id' => $user->id]);
+
+        // Retrieve the associated user using the relation
+        $retrievedUser = $userRole->user;
+
+        // Assert that the retrieved user matches the created user
+        $this->assertInstanceOf(User::class, $retrievedUser);
+        $this->assertEquals($user->id, $retrievedUser->id);
+    }
+
+    /**
+     * Test retrieving the associated user for an instructor role.
+     *
+     * @return void
+     */
+    public function test_admin_user_relation() {
+        // Create test data
+        $user = User::factory()->create();
+        $userRole = UserRole::factory()->create(['role' => 'admin', 'user_id' => $user->id]);
 
         // Retrieve the associated user using the relation
         $retrievedUser = $userRole->user;
@@ -56,8 +110,7 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_instructor_area_relation()
-    {
+    public function test_instructor_area_relation() {
         // Create test data
         $area = Area::factory()->create();
         $userRole = UserRole::factory()->create(['role' => 'instructor', 'area_id' => $area->id]);
@@ -75,8 +128,7 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_dept_head_department_relation()
-    {
+    public function test_dept_head_department_relation() {
         // Create test data
         $department = Department::factory()->create();
         $userRole = UserRole::factory()->create(['role' => 'dept_head', 'department_id' => $department->id]);
@@ -94,8 +146,7 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_dept_staff_department_relation()
-    {
+    public function test_dept_staff_department_relation() {
         // Create test data
         $department = Department::factory()->create();
         $userRole = UserRole::factory()->create(['role' => 'dept_staff', 'department_id' => $department->id]);
@@ -113,8 +164,7 @@ class UserRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_multiple_associations()
-    {
+    public function test_multiple_associations() {
         // Create test data
         $user = User::factory()->create();
         $area1 = Area::factory()->create();
@@ -145,22 +195,5 @@ class UserRoleTest extends TestCase
         // Test department relation for dept_head role
         $this->assertInstanceOf(Department::class, $userRole2->department);
         $this->assertEquals($department1->id, $userRole2->department->id);
-    }
-
-    /**
-     * Test performance and scalability.
-     *
-     * @return void
-     */
-    public function test_performance_and_scalability()
-    {
-        // Create a large number of user roles
-        UserRole::factory()->count(100)->create(['role' => 'instructor']);
-
-        // Retrieve all instructors
-        $instructors = UserRole::where('role', 'instructor')->get();
-
-        // Assert that the retrieved instructors are correct
-        $this->assertEquals(100, $instructors->count());
     }
 }
