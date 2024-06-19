@@ -4,7 +4,7 @@
        
         @csrf
             <div class="import-select">
-                <label for="data">Choose a type:</label>
+                <label class="import-label" for="data">Choose a type:</label>
 
                 <select name="data" id="data">
                     <option value="sei">SEI Data</option>
@@ -13,15 +13,15 @@
             </div>
 
             <div class="import-file">
-                <div>Upload a File:</div>
+                <label class="import-label">Upload a File:</label>
                 <div class="drop-zone">
-                    <span class="drop-zone-prompt">Drop file here or click to upload</span>
-                    <input type="file" name="file" class="drop-zone-input">
+                    <span class="drop-zone-prompt">Drop file here or <div class="drop-zone-button">Browse</div></span>
+                    <input type="file" name="file" class="drop-zone-input outline outline-blue-500">
                   </div>
-                  <span id="file-name" class="drop-zone-file-name"></span>
+                 
             </div>
-
-            <button   button type="submit" class="btn btn-primary mt-3">Upload</button>
+            <span id="file-name" class="drop-zone-file-name"></span>
+            <button type="submit" class="btn btn-primary mt-3">Upload</button>
         </form>
     </div> 
 </div>
