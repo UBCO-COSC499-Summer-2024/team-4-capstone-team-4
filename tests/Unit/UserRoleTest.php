@@ -8,8 +8,7 @@ use App\Models\UserRole;
 use App\Models\User;
 use App\Models\Area;
 use App\Models\Department;
-use Illuminate\Foundation\Testing\RefreshDatabaseState;
-use Illuminate\Support\Facades\Schema;
+
 
 class UserRoleTest extends TestCase {
 

@@ -1,14 +1,14 @@
 <x-app-layout>
     <div class="content">
         <h1>{{ __('Department Details') }}</h1>
-        <section class="dash-bottom">
-            <ol class="instructor-list">
-                @foreach ($users as $user)
-                    <li class="instructor-item">
-                        <a href="#" class="instructor-link" data-id="{{ $user->id }}">{{ $user->firstname }} {{$user->lastname}}</a>
-                    </li>
-                @endforeach
-            </ol>
+        <section class="container">
+            <section class="dash-bottom">
+                <ol class="instructor-list">
+                    @foreach ($users as $user)
+                            <a href="#" class="instructor-link" >{{ $user->firstname }} {{$user->lastname}}</a>
+                    @endforeach
+                </ol>
+            </section>
         </section>
         <section class="coursedetails-table">
             <table class="min-w-full divide-y divide-gray-200">
@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="course-details-table-body">
-                    <!-- Javascript-->
+                    @vite('resources/js/course-details.js')
                 </tbody>
             </table>
         </section>

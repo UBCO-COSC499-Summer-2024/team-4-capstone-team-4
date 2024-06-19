@@ -23,19 +23,19 @@
         @foreach ($data as $item)
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {{$item['Column 1']}}
+                    {{$item['Course Name']}}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {{$item['Column 2']}}
+                    {{$item['Course Duration']}}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {{$item['Column 3']}}
+                    {{$item['Enrolled Students']}}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {{$item['Column 4']}}
+                    {{$item['Dropped Students']}}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    {{$item['Column 5']}}
+                    {{$item['Course Capacity']}}
                 </td>
             </tr>
         @endforeach

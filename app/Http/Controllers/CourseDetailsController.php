@@ -3,20 +3,19 @@
 
 namespace App\Http\Controllers;
 use App\Models\CourseSection;
-use App\Models\Teach;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class CourseDetailsController extends Controller{
 
-    public function show($instructor_id=null){
+    public function show(Request $request, $user_id = null){
     
         $courses=[];
         $tableData=[];
         
-        if ($instructor_id) {
-            $courses = CourseSection::whereHas('teaches', function($query) use ($instructor_id) {
-                $query->where('instructor_id', $instructor_id);
+        if ($user_id) {
+            $courses = CourseSection::whereHas('teaches', function($query) use ($user_id) {
+                $query->where('instructor_id', $user_id);
             })
             ->get();
         } 
