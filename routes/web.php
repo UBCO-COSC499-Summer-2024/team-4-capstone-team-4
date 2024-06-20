@@ -88,6 +88,16 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::get('/courses', function () {
+        return view('courses');
+    })->name('courses');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
     Route::get('/svcroles', function () {
         return view('svcroles');
     })->name('svcroles');

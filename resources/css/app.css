@@ -227,7 +227,7 @@ main {
     gap: 0.15rem;
 }
 
-.sidebar-item-group.bottom {
+.bottom {
     margin-bottom: 0;
     margin-top: auto;
 }
@@ -434,7 +434,7 @@ a,
     cursor: pointer;
     transition: background-color 0.3s ease;
     color: #222;
-    position: absolute;
+    position: fixed;
     z-index: 100;
     bottom: 0;
     left: 0;

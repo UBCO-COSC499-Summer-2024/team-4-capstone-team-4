@@ -1,6 +1,6 @@
 .toolbar {
     padding: 8px;
-    border-radius: 20px;
+    border-radius: 50px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
     margin: 4px;
     max-height: 50px;
@@ -11,11 +11,12 @@
     background: rgba(50, 50, 50, 0.9);
     color: #999;
     flex-wrap: nowrap;
+    width: fit-content;
 }
 
 .mini-toolbar {
     padding: 6px;
-    border-radius: 16px;
+    border-radius: 50px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
     margin: 4px;
     display: inline-flex;
@@ -26,7 +27,8 @@
     color: #999;
 }
 
-.mini-toolbar.right {
+.mini-toolbar.right,
+.right {
     margin-left: auto;
     margin-right: 4px;
 }
@@ -37,7 +39,7 @@
     width: fit-content;
     position: relative;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     /* padding: 0 6px; */
 }
 
@@ -45,7 +47,10 @@
     font-size: 14px;
     font-weight: 600;
     color: #999;
-    text-transform: normal;
+    text-transform: math-auto;
+    padding: 6px 8px;
+    border-radius: 16px;
+    background: #fff;
 }
 
 .toolbar-section-item {
@@ -54,6 +59,12 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
+}
+
+.switch-label-icon {
+    padding: 4px;
+    border-radius: 16px;
+    background: #fff;
 }
 
 .toolbar input {
@@ -76,7 +87,14 @@
     cursor: pointer;
 }
 
-.toolbar button {
+button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar button,
+h1 button {
     padding: 4px;
     border-radius: 16px;
     border: none;
@@ -90,13 +108,15 @@
     justify-content: center;
 }
 
-.toolbar button[disabled] {
+.toolbar button[disabled],
+h1 button[disabled] {
     background: #f0f0f0;
     color: #999;
     cursor: not-allowed;
 }
 
-.toolbar button icon {
+.toolbar button icon,
+h1 button icon {
     font-size: 20px;
     color: #999;
 }
@@ -107,9 +127,14 @@
     display: none;
 }
 
-.toolbar button:hover {
+.toolbar button:hover,
+h1 button:hover {
     background: rgba(30, 75, 250, 1);
     color: #fff;
+}
+
+h1 button {
+    padding: 8px;
 }
 
 

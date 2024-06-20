@@ -5,14 +5,14 @@
                 {{-- View switcher (card/list) --}}
                 <span class="toolbar-section-title">View Mode:</span>
                 <div class="toolbar-section-item">
-                    <span for="viewSwitch" class="material-symbols-outlined">
+                    <span for="viewSwitch" class="material-symbols-outlined switch-label-icon">
                         view_module
                     </span>
                     <label class="switch" cv="card" ucv="list", title="Item View Mode">
                         <input type="checkbox" id="viewSwitch" name="viewSwitch">
                         <span class="slider round"></span>
                     </label>
-                    <span for="viewSwitch" class="material-symbols-outlined">
+                    <span for="viewSwitch" class="material-symbols-outlined switch-label-icon">
                         view_list
                     </span>
                 </div>
@@ -23,12 +23,12 @@
                 {{-- Mode switcher (pagination/infinite scroll) --}}
                 <span class="toolbar-section-title">Page Mode:</span>
                 <div class="toolbar-section-item">
-                    <span class="material-symbols-outlined">first_page</span>
+                    <span class="material-symbols-outlined switch-label-icon">first_page</span>
                     <label class="switch" cv="pagination" ucv="infinite" title="Page Mode">
                         <input type="checkbox" id="modeSwitch" name="modeSwitch">
                         <span class="slider round"></span>
                     </label>
-                    <span class="material-symbols-outlined">refresh</span>
+                    <span class="material-symbols-outlined switch-label-icon">refresh</span>
                 </div>
             </section>
         </div>
@@ -92,10 +92,7 @@
                     <dropdown-item>Filter 3</dropdown-item>
                 </dropdown-content>
             </dropdown-element>
-        </section>
-
-        <section class="toolbar-section">
-            {{-- Group --}}
+            
             <dropdown-element id="groupDropdown" class="toolbar-dropdown" title="Group">
                 <span class="material-symbols-outlined dropdown-pre-icon">group</span>
                 <span class="dropdown-title">Group</span>
@@ -109,10 +106,14 @@
         </section>
 
         <section class="toolbar-section">
+            {{-- Group --}}
+        </section>
+
+        <section class="toolbar-section">
             {{-- Bulk actions dropdown (rollback, etc) --}}
-            <dropdown-element id="bulkActionsDropdown" class="toolbar-dropdown" title="Bulk Actions">
+            <dropdown-element id="bulkActionsDropdown" class="toolbar-dropdown" title="Actions">
                 <span class="material-symbols-outlined dropdown-pre-icon">list_alt</span>
-                <span class="dropdown-title">Bulk Actions</span>
+                <span class="dropdown-title">Actions</span>
                 <span class="material-symbols-outlined dropdown-button">arrow_drop_down</span>
                 <dropdown-content class="dropdown-content">
                     <dropdown-item>Rollback 1</dropdown-item>
