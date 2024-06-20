@@ -8,17 +8,11 @@ use Illuminate\Http\Request;
 
 class CourseDetailsController extends Controller{
 
-    public function show(Request $request, $user_id = null){
-    
-        $courses=[];
-        $tableData=[];
-        
-        if ($user_id) {
-            $courses = CourseSection::whereHas('teaches', function($query) use ($user_id) {
-                $query->where('instructor_id', $user_id);
-            })
-            ->get();
-        } 
+    public function show($id, Request $request){
+
+            $courses = CourseSection::whereHas('teaches', function($query) use ($id) {
+                $query->where('instructor_id', $id);
+            })->get(); 
 
         $tableData = $courses->map(function($course) {
             return [
@@ -29,8 +23,12 @@ class CourseDetailsController extends Controller{
                 'Course Capacity'=>  $course->capacity
             ];
         })->toArray();
-        $users=User::all();
+        
+        if($request->ajax()){
+            return response()->ajax($tableData);
+    }
 
+        $users=User::all();
         return view('Course-details', compact('courses', 'tableData', 'users'));
     }
 }

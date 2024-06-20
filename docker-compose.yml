@@ -73,7 +73,7 @@ services:
         
 networks:
     InsightNet:
-        driver: bridge
+      #  driver: bridge
 volumes:
     sail-pgsql:
         driver: local

@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const links = document.querySelectorAll('.CourseDetailsController');
-    links.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const user_id = this.getAttribute('data-id');
-
-            fetch(`/users/${user_id}`)
+    document.querySelectorAll('.instructor-link').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            let instructorId = this.dataset.id;
+            fetch(`/courses/${instructorId}`)
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.querySelector('.coursedetails-table tbody');
-                    tableBody.innerHTML = '';
+                    // Clear existing table data
+                    let tbody = document.querySelector('.coursedetails-table tbody');
+                    tbody.innerHTML = '';
 
-                    data.forEach(course => {
-                        const row = document.createElement('tr');
+                    // Populate table with new data
+                    data.forEach(item => {
+                        let row = document.createElement('tr');
                         row.innerHTML = `
-                        <td>${course['Course Name']}</td>
-                        <td>${course['Course Duration']}</td>
-                        <td>${course['Enrolled Students']}</td>
-                        <td>${course['Dropped Students']}</td>
-                        <td>${course['Course Capacity']}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item['Course Name']}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item['Course Duration']}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item['Enrolled Students']}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item['Dropped Students']}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item['Course Capacity']}</td>
                         `;
-                        tableBody.appendChild(row);
+                        tbody.appendChild(row);
                     });
                 });
         });
