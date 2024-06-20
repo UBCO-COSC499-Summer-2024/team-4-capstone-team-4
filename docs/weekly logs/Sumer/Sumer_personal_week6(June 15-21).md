@@ -120,5 +120,44 @@ Continued working on the course details page and udpated logs. Created tables on
 
 - Continue working on the coding part for the assigned task.
 
+#### Wednesday (6/19/2024)
+
+#### Current Tasks
+
+Features:
+- Continued working on Course details page 
+
+Communication Update:
+- Updated the communication/logs for the week up to date on GitHub
+
+
+#### Progress Update (till 6/19/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+        <td>Communication and Daily Update (Logs Update)</td>
+        <td>Completed</td>
+    </tr>
+	 <tr>
+        <td>Features: Course details</td>
+        <td>In progress</td>
+	<tr>
+    <tr>
+        <td>System troubleshooting(Laravel,docker setup)</td>
+        <td>In progress</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review 
+
+Continued working on the course details page and udpated logs. Created tables on the course details page. 
+
+#### Next Cycle Goals 
+
+- Continue working on the coding part for the assigned task.
+
   
 
