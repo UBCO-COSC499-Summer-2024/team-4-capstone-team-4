@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChartController;
+
 
 // Route::get('/', function () {
 //     return view('auth.login');
@@ -77,3 +79,5 @@ Route::middleware([
         return view('performance');
     })->name('performance');
 });
+
+Route::get('/visualizations', [ChartController::class, 'visualizations'])->name('visualizations');
