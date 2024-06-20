@@ -4,12 +4,14 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log16-19.png)
+![Clockify report](./clockifylogs/log616-619.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Model Factory Setup
   * #2: Database Model Basic Testing
   * #3: Database Model Detailed Testing
+  * #4: Research Chart Library
+  * #5: Create Chart Controller
 
 ### Progress Update (since 6/5/2024)
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -17,15 +19,16 @@ Clockify report
 | Basic Model Testing       | Completed   |
 | Detailed Model Testing    | In Progess  |
 | Model Factory Setup       | Completed   |
+| Research Chart Library    | Completed   |
+| Create Chart Controller   | Completed   |
 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Finished creating Factories for the models and continued creating unit tests for each model.
+Finished creating Factories for the models and completed basic unit tests for each model. Continued detailed testing for database relations. Researched open source libraries for charts/visualizations and selected Laravel ChartJS. Created a chart controller file and began configuration.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Complete Database Model Testing
-  * Begin dashboard visualization research
-  * Begin dashboard visualization implementation
+  * Contiune adding relation tests to database models
+  * Continue creating dashboard visualizations
 
 ---
 
