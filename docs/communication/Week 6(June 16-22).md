@@ -1,1 +1,6 @@
 
+|  Meeting Date |Meeting Type| Attendees | Times | Minutes        | Design Decision | Next meeting Details |
+| :-------------: | ------------- | ------------- |------------- |------------- | ------------- | ---|
+|June 19, 2024 |Team Meeting with TA|Angelina Dubrule,	Catherine Magoke,	Clement Abel-Nwachukwu,	Sumer Mann,	Kate Naychuk, Mohamad Khajezade | 10:00 am  - 10:30 am| The team discussed the progress so far with the TA -  TA suggested to have branch management and database protection|  No design decision were made in the meeting | June 19, 2024 - The team working on the code, database for July 5th | 
+|June 19, 2024 |Team Meeting|Angelina Dubrule,	Catherine Magoke,	Clement Abel-Nwachukwu,	Sumer Mann,	Kate Naychuk| 10:30 am - 7:00 pm | The team discussed the feedback by TA and worked on the assigned features for the MVP presentation, Kate and Catherine worked on Setting Drone CI on GitHub.  | No design decisions were made in the meeting | June 21, 2024 - The team would be working on the code, and database, testing for the MVP presentation | 
+
