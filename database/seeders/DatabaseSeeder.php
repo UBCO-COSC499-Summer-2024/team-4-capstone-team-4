@@ -7,6 +7,11 @@ use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Area;
 use App\Models\UserRole;
+use App\Models\ServiceRole;
+use App\Models\AreaPerformance;
+use App\Models\InstructorPerformance;
+use App\Models\Teach;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -48,8 +53,18 @@ class DatabaseSeeder extends Seeder
                 'department_id' => 1,
                 'role' => 'instructor',
             ]);
+            InstructorPerformance::create([
+                'score' => '500',
+                'total_hours' => '20',
+                'target_hours' => '200',
+                'sei_avg' => '3.5',
+                'year' => '2024',
+                'instructor_id' => $user->id,
+            ]);
         }
 
-        //CourseSection::factory(10)->create();
+        CourseSection::factory(10)->create();
+
+        Teach::factory(5)->create();
     }
 }

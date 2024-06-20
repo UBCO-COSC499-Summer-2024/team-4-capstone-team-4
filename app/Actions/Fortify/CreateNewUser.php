@@ -38,7 +38,6 @@ class CreateNewUser implements CreatesNewUsers
         // Create the user role
         UserRole::create([
             'user_id' => $user->id,
-            'area_id' => null,
             'department_id' => null,
             'role' => 'instructor',
         ]);

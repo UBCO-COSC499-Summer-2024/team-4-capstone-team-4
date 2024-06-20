@@ -39,7 +39,12 @@ class StaffController extends Controller
                 $queryy->whereIn('area_id', $areas);
             })->get();
         } */
+
+        //get all users with instructor role 
         $usersQuery = User::query();
+        $usersQuery->whereHas('roles', function ($queryBuilder) {
+            $queryBuilder->where('role', 'instructor');
+        });
 
         // Apply search query if it's not empty
         if (!empty($query)) {
@@ -51,11 +56,11 @@ class StaffController extends Controller
         }
     
         // Apply area filters if areas are selected
-        if (!empty($areas)) {
+        /* if (!empty($areas)) {
             $usersQuery->whereHas('roles', function ($queryBuilder) use ($areas) {
                 $queryBuilder->whereIn('area_id', $areas);
             });
-        }
+        } */
     
         // Order the results based on sort field and direction
         $usersQuery->orderBy($sortField, $sortDirection);

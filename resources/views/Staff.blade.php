@@ -16,20 +16,21 @@
                     @else
                         @foreach ($users as $user)
                             @php
-                                $areas = [];
-                               /*  foreach ($user->roles as $role) {
-                                    if ($role->area) {
-                                        $areas[] = $role->area->name;
-                                    }
-                                } */
+                                $instructor = $user->roles->where('role', 'instructor')->first();
+                                $performance = App\Models\InstructorPerformance::where('instructor_id',  $instructor->id )->first();
+                                $areas = $instructor->areas;
+                                $area_names=[];
+                                foreach ($areas as $area){
+                                    $area_names[] = $area->name;
+                                }
                             @endphp
                             <x-staff-table-row 
                                 name="{{ $user->firstname }} {{ $user->lastname }}" 
                                 email="{{ $user->email }}" 
-                                subarea="{{ empty($areas) ? '-' : implode(', ', $areas) }}" 
-                                completedHours="50" 
-                                targetHours="{{ App\Model\InstructorPeformance::where('instructor_id', $user->id)->get()->target_hours}}" 
-                                rating="4.2" 
+                                subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
+                                completedHours="{{ $performance ? ($performance->completed_hours ?? '-') : '-' }}" 
+                                targetHours="{{ $performance ? ($performance->target_hours ?? '-') : '-' }}" 
+                                rating="{{ $performance ? ($performance->score ?? '-') : '-' }}" 
                                 src="{{ $user->profile_photo_url }}" 
                             />
                         @endforeach
