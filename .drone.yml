@@ -34,7 +34,7 @@ steps:
     commands:
       - composer update --lock
       - composer install --prefer-dist
-      - php artisan migrate:fresh
+      - php artisan migrate --force
       - php artisan test --stop-on-failure --coverage
       #   - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
