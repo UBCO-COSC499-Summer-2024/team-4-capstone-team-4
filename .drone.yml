@@ -35,6 +35,7 @@ steps:
       - cp .env.example .env
       - composer install --prefer-dist
       - php artisan clear-compiled
+      - php artisan config:clear
       - php artisan config:cache
       - php artisan migrate:fresh --env=testing
 #       - php artisan test --stop-on-failure --coverage
