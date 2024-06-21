@@ -406,7 +406,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-user-select: none; /* Chrome, Safari, Opera */
     -moz-user-select: none;    /* Firefox */
     -ms-user-select: none;     /* Internet Explorer/Edge */
-    user-select: none;         /* Non-prefixed version, currently supported by all modern browsers */
+    user-select: none;         /* Non-paefixed version, currently supported by all modern browsers */
 }
 
 .select {
@@ -420,3 +420,52 @@ a,
 .material-symbols-outlined {
     outline: none !important;
 }
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table th {
+    background-color: #f8f8f8;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    position: relative; 
+    cursor: pointer; 
+}
+
+th.sortable:after {
+    content: '\25B2'; 
+    position: absolute;
+    right: 8px;
+    visibility: hidden;
+    opacity: 0.4;
+    transform: rotate(180deg);
+}
+
+th.sortable.th-sort-asc:after {
+    visibility: visible;
+    content: '\25B2'; 
+}
+
+th.sortable.th-sort-desc:after {
+    visibility: visible;
+    content: '\25BC'; 
+    transform: rotate(0deg);
+}
+
+th.sortable:hover:after {
+    visibility: visible;
+    opacity: 1;
+}
+
