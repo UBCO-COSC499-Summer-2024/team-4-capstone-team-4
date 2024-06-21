@@ -34,11 +34,11 @@ steps:
       - composer update --lock
       - cp .env.example .env
       - composer install --prefer-dist
-      - ./vendor/bin/sail php artisan clear-compiled
-      - ./vendor/bin/sail php artisan config:cache
-      - ./vendor/bin/sail php artisan migrate:fresh --env=testing
+      - php artisan clear-compiled
+      - php artisan config:cache
+      - php artisan migrate:fresh --env=testing
 #       - php artisan test --stop-on-failure --coverage
-      - ./vendor/bin/sail php artisan test --testsuite=Feature
+      - php artisan test --testsuite=Feature
 
 trigger:
     branch:
