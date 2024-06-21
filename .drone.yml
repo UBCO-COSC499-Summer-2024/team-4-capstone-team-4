@@ -13,7 +13,7 @@ services:
   - name: InsightDB
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: testing  # you may change this, must reflect in .env.testing
+      POSTGRES_DB: Insight  # you may change this, must reflect in .env.testing
       POSTGRES_USER: postgres 
       POSTGRES_PASSWORD: password
 
@@ -35,7 +35,8 @@ steps:
       - composer update --lock
       - cp .env.example .env
       - composer install --prefer-dist
-      - php artisan config:clear
+      - php artisan clear-compiled
+      - php artisan config:cache
       - php artisan migrate:fresh --env=testing
 #      - php artisan test --stop-on-failure --coverage
       - php artisan test --testsuite=Feature --stop-on-failure --coverage
