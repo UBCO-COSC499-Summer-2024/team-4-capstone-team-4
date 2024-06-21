@@ -43,7 +43,7 @@ steps:
 
 trigger:
     branch:
-    - configure-drone # you may change this
+    - pre-dev-integration # you may change this
     event:
     - push
     - pull_request
