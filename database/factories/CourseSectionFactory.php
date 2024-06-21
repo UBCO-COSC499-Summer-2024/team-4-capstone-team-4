@@ -9,8 +9,7 @@ use App\Models\Area;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CourseSection>
  */
-class CourseSectionFactory extends Factory
-{
+class CourseSectionFactory extends Factory {
     /**
      * Define the model's default state.
      *
@@ -18,14 +17,13 @@ class CourseSectionFactory extends Factory
      */
     protected $model=CourseSection::class;
 
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'name'=>fake()->name(),
             'area_id'=>Area::pluck('id')->random(),
-            'duration'=>fake()->duration(),
-            'enrolled'=>fake()->numerBetween(10,100),
-            'dropper'=>fake()->numberBetween(0,20),
+            'duration'=>$this->faker->sentence,
+            'enrolled'=>fake()->numberBetween(10,100),
+            'dropped'=>fake()->numberBetween(0,20),
             'capacity'=>fake()->numberBetween(10,200),
         ];
     }

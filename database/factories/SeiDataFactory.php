@@ -9,18 +9,16 @@ use App\Models\CourseSection;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SeiData>
  */
-class SeiDataFactory extends Factory
-{
-    protected $model=\App\Models\SeiDate::class;
+class SeiDataFactory extends Factory {
+    protected $model=\App\Models\SeiData::class;
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
-            'course_section_id'=>CourseSection('id')->random(),
+            'course_section_id'=>CourseSection::pluck('id')->random(),
             'questions'=>json_encode(fake()->randomElements(['Q1', 'Q2', 'Q3', 'Q4', 'Q5'],3)),
         ];
     }

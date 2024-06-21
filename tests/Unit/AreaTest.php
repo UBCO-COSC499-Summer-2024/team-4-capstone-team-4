@@ -2,26 +2,30 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use App\Models\Area;
 use App\Models\Department;
 use Illuminate\Support\Facades\Schema;
 
-class AreaTest extends TestCase
-{
+class AreaTest extends TestCase {
     /**
-     * Test that the areas table exists.
+     * Test if areas table exists.
+     *
+     * @return void
      */
-    public function test_areas_table_exists()
-    {
+    public function test_areas_table_exists() {
         $this->assertTrue(
             Schema::hasTable('areas'),
             'Areas table does not exist'
         );
     }
 
-    public function test_area_can_be_created(): void
-    {
+    /**
+     * Test creating an area.
+     *
+     * @return void
+     */
+    public function test_area_can_be_created(): void {
         $area = Area::factory()->create();
 
         // Assert that the area model exists
@@ -36,8 +40,7 @@ class AreaTest extends TestCase
 
     }
 
-    public function test_area_has_valid_dept_id(): void
-    {
+    public function test_area_has_valid_dept_id(): void {
         // Create a department instance
         $department = Department::factory()->create();
 

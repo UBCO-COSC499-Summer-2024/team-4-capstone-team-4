@@ -49,29 +49,16 @@ class UserRole extends Model {
     }
 
     /**
-     * Get the area associated with the instructor role.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|null
-     */
-    public function area() {
-        if ($this->role === 'instructor') {
-            return $this->belongsTo(Area::class);
-        }
-        
-        return null; // Return null if the user is not an instructor
-    }
-
-    /**
-     * Get the department associated with the dept_head or dept_staff role.
+     * Get the department associated with the dept_head or dept_staff or instructor role.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|null
      */
     public function department() {
-        if ($this->role === 'dept_head' || $this->role === 'dept_staff') {
+        if ($this->role === 'dept_head' || $this->role === 'dept_staff' || $this->role === 'instructor') {
             return $this->belongsTo(Department::class);
         }
         
-        return null; // Return null if the user is not an instructor
+        return null; // Return null if the user is not an instructor or dept head or staff
     }
 
     /**
@@ -84,7 +71,7 @@ class UserRole extends Model {
             return $this->hasMany(RoleAssignment::class, 'assigner_id');
         }
         
-        return null; // Return null if the user is not an instructor
+        return null; // Return null if the user is not a dept head or staff
     }
 
     /**

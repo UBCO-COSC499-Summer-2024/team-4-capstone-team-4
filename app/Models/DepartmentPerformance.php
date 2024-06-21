@@ -22,7 +22,7 @@ class DepartmentPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'sei_avg', 'year', 'department_id',
+        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'department_id',
     ];
 
     /**
