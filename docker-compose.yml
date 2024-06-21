@@ -29,10 +29,10 @@ services:
             timeout: 5s
             retries: 5
     insightdb:
-        image: postgres:16-alpine
-        # build:
-        #     context: ./
-        #     dockerfile: dockerfile.insightdb
+        # image: postgres:16-alpine
+        build:
+            context: ./dockerfiles
+            dockerfile: dockerfile.insightdb
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -45,6 +45,7 @@ services:
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
             - InsightNet
+        command: ["-c", "shared_preload_libraries=pgaudit"]
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -q -d ${DB_DATABASE} -U ${DB_USERNAME}"]
             interval: 10s

@@ -462,3 +462,29 @@ a,
     background: rgba(220, 250, 250, 0.8);
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
+
+/* smaller screens hide the link bar text but save the icons */
+@media screen and (max-width: 768px) {
+    .link-bar a span[class*=title] {
+        display: none;
+    }
+
+    /* hover for the icon */
+    .link-bar a:hover::after {
+        content: attr(data-title);
+        position: absolute;
+        bottom: 110%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background: rgba(50, 50, 50, 1);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+        padding: 8px;
+        font-size: 0.8rem;
+        width: fit-content;
+    }
+}

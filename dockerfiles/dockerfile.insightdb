@@ -1,0 +1,33 @@
+FROM postgres:16
+
+ENV PGDATA /var/lib/postgresql/data
+
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    build-essential \
+    postgresql-server-dev-${PG_MAJOR} \
+    libssl-dev \
+    libkrb5-dev
+
+# Download and install pgaudit
+RUN mkdir -p /tmp/pgaudit && cd /tmp/pgaudit && \
+    curl -L https://github.com/pgaudit/pgaudit/archive/refs/tags/16.0.tar.gz | tar xz --strip 1 && \
+    make -C /tmp/pgaudit/ clean install USE_PGXS=1
+
+# Copy entrypoint script and initialization file
+COPY insight-entrypoint.sh /usr/local/bin/
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Make entrypoint script executable
+RUN chmod +x /usr/local/bin/insight-entrypoint.sh
+
+# Set environment variables for pgaudit configuration (use these in your script)
+ENV PGAUDIT_LOG_RELATION 'audit_logs' 
+ENV PGAUDIT_ROLES '*' 
+ENV PGAUDIT_ACTIONS 'all' 
+
+# Entrypoint to configure and start PostgreSQL
+ENTRYPOINT ["insight-entrypoint.sh"]
+CMD ["postgres"]

@@ -92,7 +92,7 @@
                     <dropdown-item>Filter 3</dropdown-item>
                 </dropdown-content>
             </dropdown-element>
-            
+
             <dropdown-element id="groupDropdown" class="toolbar-dropdown" title="Group">
                 <span class="material-symbols-outlined dropdown-pre-icon">group</span>
                 <span class="dropdown-title">Group</span>
@@ -154,10 +154,10 @@
     </section>
     
     <section class="link-bar">
-        <x-link href="{{ route('svcroles') }}" title="{{ __('Dashboard') }}" :active="request()->is('svcroles')" />
-        <x-link href="{{ route('svcroles.add') }}" title="{{ __('Add Service Role') }}" :active="request()->is('svcroles/add')" />
-        <x-link href="{{ route('svcroles.manage') }}" title="{{ __('Manage Service Roles') }}" :active="request()->is('svcroles/manage')" />
-        <x-link href="{{ route('svcroles.requests') }}" title="{{ __('Requests') }}" :active="request()->is('svcroles/requests')" />
-        <x-link href="{{ route('svcroles.logs') }}" title="{{ __('Audit Logs') }}" :active="request()->is('svcroles/audit-logs')" />
+        <x-link href="{{ route('svcroles') }}" title="{{ __('Dashboard') }}" :active="request()->is('svcroles')" icon="{{ __('group') }}"/>
+        <x-link href="{{ route('svcroles.add') }}" title="{{ __('Add Service Role') }}" :active="request()->is('svcroles/add')" icon="{{ __('add') }}"/>
+        <x-link href="{{ route('svcroles.manage') }}" title="{{ __('Manage Service Roles') }}" :active="request()->is('svcroles/manage')" icon="{{ __('visibility') }}"/>
+        <x-link href="{{ route('svcroles.requests') }}" title="{{ __('Requests') }}" :active="request()->is('svcroles/requests')" icon="{{ __('request_page') }}"/>
+        <x-link href="{{ route('svcroles.logs') }}" title="{{ __('Audit Logs') }}" :active="request()->is('svcroles/audit-logs')" icon="{{ __('description') }}"/>
     </section>
 </div>
