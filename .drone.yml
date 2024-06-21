@@ -32,8 +32,8 @@ steps:
       - postgresdb
       - frontend
     commands:
-      - composer install --prefer-dist
       - composer update --lock
+      - composer install --prefer-dist
       - php artisan test --stop-on-failure --coverage
       #  - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
