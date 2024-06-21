@@ -1,3 +1,37 @@
+## Cycle: June 19th - June 20th
+
+### Timesheet
+- [Clockify Report](./Reports/Clockify_Time_Report_Summary_06_19_2024-06_20_2024.pdf)
+
+### Wednesday, June 19th:
+- Continued working on pgaudit installation tests. Still failed.
+- Continued working on service role pages (and sub-pages).
+- Team Meeting and code session.
+- Audit Log Backend Progress.
+
+### Thursday, June 20th:
+- Service Roles Pages.
+
+### Progress Update (since June 19th)
+| TASK/ISSUE                            | STATUS          |
+|----------------------------------------|-----------------|
+| pgaudit installation tests             | In Progress     |
+| Service role pages and sub-pages       | In Progress     |
+| Team Meeting and code session          | Complete        |
+| Audit Log Backend                      | In Progress     |
+
+### Cycle Goal Review
+This cycle focused on resolving the pgaudit installation, which remains a challenge. Significant progress was made on service role pages and the audit log backend. Team collaboration was effective during meetings and code sessions.
+
+### Next Cycle Goals
+- Successfully install and configure pgaudit.
+- Complete the service role management and sub-pages.
+- Finalize the audit log backend.
+- Continue improving the audit log views.
+- Prepare for upcoming presentations and meetings.
+
+---
+
 ## Cycle (Friday - Tuesday): June 14th - June 18th
 
 ### Timesheet
