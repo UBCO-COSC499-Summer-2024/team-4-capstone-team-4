@@ -2,6 +2,59 @@
 
 ## Date Range:
 
+- June 19 - June 20
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Database Unit Testing
+- Database Factories
+- Course Details Page
+- Role Based Access
+- Service Role Management
+- Drone CI
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_june19_june21.png)
+![image of tasks](./tasks/inprogress_june19_june21.png)
+![image of tasks](./tasks/done_june19_june21.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_june19_june21.png)
+![image of tasks](./tasks/inprogress_june19_june21.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june19_june21.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_june19_june21.png)
+![image of clockify report](./clockify/individual_june19_june21.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_june19_june21.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_june19_june21.png)
+![image of tasks](./tasks/inprogress_june19_june21.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_june19_june21.png)
+![image of test report](./testing/feature_test_june19_june21.png)
+
+## Overview:
+
+We continued to work on our assigned tasks and had a project meeting where we dicussed progress and other design/development choices. Most of our tasks are in progress or todo as we work through our features. Everyone has their issues to implement and we will come together next cycle to review the, hopefully, functional features.
+
+## Date Range:
+
 - June 14 - June 18
 
 ## Features in the Project Plan Cycle:
