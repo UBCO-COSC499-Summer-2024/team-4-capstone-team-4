@@ -38,6 +38,7 @@ steps:
       - php artisan config:clear
       - php artisan config:cache
       - php artisan migrate:fresh --env=testing
+      - php artisan serve
       - php artisan test  #--stop-on-failure --coverage
  #      - php artisan test --testsuite=Feature
 
