@@ -39,7 +39,7 @@ steps:
       - php artisan migrate:fresh --env=testing
       - php artisan config:clear
       - php artisan test  #--stop-on-failure --coverage
- #     - php artisan test --testsuite=Feature
+ #      - php artisan test --testsuite=Feature
 
 trigger:
     branch:
