@@ -3,6 +3,8 @@
         {{ session('success') }}
     @endif
 
+    <h1>SEI</h1>
+
     <form wire:submit="handleClick" action="">
         <input wire:model="id" type="number" placeholder="ID">
         

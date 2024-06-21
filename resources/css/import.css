@@ -85,3 +85,21 @@ input[type="file"] {
   padding: 10px;
   
 } */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+.import-nav-item {
+  @apply mx-1;
+}
+
+.import-nav-link{
+  @apply bg-blue-500 px-5 py-2;
+}
+
+
+}

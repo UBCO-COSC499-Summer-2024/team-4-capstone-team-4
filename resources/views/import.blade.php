@@ -4,6 +4,6 @@
     {{-- <x-import-form />
     <x-import-modal /> --}}
 
-    @livewire('import-form')
+    @livewire('import-tabs')
   </div>
 </x-app-layout>

@@ -8,7 +8,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class ImportForm extends Component
+class ImportSeiForm extends Component
 {
 
     use WithPagination;
@@ -47,7 +47,7 @@ class ImportForm extends Component
     {
         $users = TestModel::paginate(5);
 
-        return view('livewire.import-form',[
+        return view('livewire.import-sei-form',[
             'users' => $users,
         ]);
     }
