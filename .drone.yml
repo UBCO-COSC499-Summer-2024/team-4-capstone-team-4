@@ -27,7 +27,7 @@ steps:
 
   - name: backend
     pull: if-not-exists
-    image: laradock/workspace:latest-8.1 # you may change version, see Laradock
+    image: laradock/workspace:latest-8.3 # you may change version, see Laradock
     depends_on:
       - postgresdb
       - frontend
