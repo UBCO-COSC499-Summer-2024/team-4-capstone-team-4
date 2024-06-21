@@ -1,6 +1,59 @@
 ## Wednesday (6/14- 6/19)
 
 ### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_19_2024-06_21_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Convert CSV Data to JSON Function
+  * #3: Convert Current Functionality to Livewire Component
+
+### Progress Update (since 6/14/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page Drag and Drop / #187
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page Convert CSV to JSON / #183
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I am still working the import page feature. I have decided to make the switch to livewire components which will help with rendering dynamic UI elements. Most of the functionality is working with the traditional controller, I just need to make the conversion. We had a long meeting on Wednesday which was really helpful to understand how our features work together.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Refining current functionality
+  * Adding data to database
+  * Add manual import functionlity
+  * Configure CSV file structure for import to work
+
+## Wednesday (6/14- 6/19)
+
+### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_14_2024-06_19_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
