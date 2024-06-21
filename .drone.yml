@@ -20,7 +20,7 @@ services:
 steps:
   - name: frontend
     pull: if-not-exists
-    image: node:16.18-bullseye-slim
+    image: sail-8.3/app
     commands:
     - npm install
     - npm run build
