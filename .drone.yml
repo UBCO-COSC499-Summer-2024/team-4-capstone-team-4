@@ -16,11 +16,6 @@ services:
       POSTGRES_DB: Insight  # you may change this, must reflect in .env.testing
       POSTGRES_USER: postgres 
       POSTGRES_PASSWORD: password
-  - name: Testing
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: testing
-
 steps:
   - name: frontend
     pull: if-not-exists
@@ -40,7 +35,7 @@ steps:
       - cp .env.example .env
       - composer install --prefer-dist
       - php artisan clear-compiled
-      - php artisan config:clear
+      - php artisan config:cache
       - php artisan migrate:fresh --env=testing
 #       - php artisan test --stop-on-failure --coverage
       - php artisan test --testsuite=Feature --stop-on-failure --coverage
