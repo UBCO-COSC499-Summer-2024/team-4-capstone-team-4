@@ -33,7 +33,7 @@ steps:
       - frontend
     commands:
       - composer install --prefer-dist
-      - composer update
+      - composer self-update
       - php artisan test --stop-on-failure --coverage
       #  - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
