@@ -1,3 +1,36 @@
+## Friday (6/19- 6/21)
+
+### Timesheet
+Clockify report
+[Report](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/update-catherines-personal-log/docs/weekly%20logs/Catherine/reports/pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Sorting for staff list
+  * #2: Filtering for staff list
+  * #3: Linking staff list to database
+  * #4: Create add target hours
+  * #5: Edit/remove target hours
+  * #6: Set up DronceCi
+
+### Progress Update (since 6/14/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Sorting for staff list | In-progress |
+| Linking staff list to database | Complete|
+| Filtering for staff list | In-progress |
+| Create add target hours | In-progress |
+| Edit/remove target hours | To-do |
+| Set up DroneCi | In-progress |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I have pulled data from the database for all the columns in staff list. We changed the way we get the subarea from the database so I've been finding it hard to correctly pull the data, especailly for filtering and that been taking longer than expected. Me and Kate are working to get DronceCi set up.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * To have filter by sub-area working properly
+  * To have completed add/edit/remove target hours
+  * To write test for the staff page
+  * To have DroneCi set up
+
 ## Wednesday (6/14- 6/19)
 
 ### Timesheet
