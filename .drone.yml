@@ -35,7 +35,7 @@ steps:
       - composer update --lock
       - cp .env.example .env
       - composer install --prefer-dist
-      - php artisan migrate
+      - php artisan migrate --env=testing
       - php artisan test --stop-on-failure --coverage
       #   - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
