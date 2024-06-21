@@ -23,7 +23,7 @@ steps:
     image: node:16.18-bullseye-slim
     commands:
     - npm install
-    - npm run dev
+    - npm run build
 
   - name: backend
     pull: if-not-exists
