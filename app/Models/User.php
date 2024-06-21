@@ -72,4 +72,10 @@ class User extends Authenticatable {
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
     }
+
+    public function teaches()
+    {
+        return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
+                    ->where('user_roles.role', 'instructor');
+    }
 }

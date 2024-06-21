@@ -4,70 +4,73 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller
 {
-   /*  public function index(Request $request){
 
-        //make default firstname ascending
-        $sortField = $request->input('sort', 'firstname'); 
-        $sortDirection = $request->input('direction', 'asc'); 
-
-        $users = User::orderBy($sortField, $sortDirection)->get();
-
-        return view('staff', compact('users', 'sortField', 'sortDirection'));
-    } */
-
-    public function index_search(Request $request){
-
-        $sortField = $request->input('sort', 'firstname'); 
-        $sortDirection = $request->input('direction', 'asc'); 
-        $query = $request->input('search-staff','');
-        $areas = $request->input('areas', []);
-        //dd($query);
-
-      /*   if(empty($query) || empty($areas)){
-            $users = User::orderBy($sortField, $sortDirection)->get();
-        }elseif(!empty($query) && empty($areas)){
-            $users = User::where('firstname', 'like', "%{$query}%")
-            ->orWhere('lastname', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
-            ->orderBy($sortField, $sortDirection)
-            ->get();
-        }elseif(empty($query) && !empty($areas)){
-            $users = User::whereHas('roles', function($queryy) use ($areas) {
-                $queryy->whereIn('area_id', $areas);
-            })->get();
-        } */
-
-        //get all users with instructor role 
-        $usersQuery = User::query();
-        $usersQuery->whereHas('roles', function ($queryBuilder) {
-            $queryBuilder->where('role', 'instructor');
-        });
-
-        // Apply search query if it's not empty
-        if (!empty($query)) {
-            $usersQuery->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('firstname', 'like', "%{$query}%")
-                             ->orWhere('lastname', 'like', "%{$query}%")
-                             ->orWhere('email', 'like', "%{$query}%");
-            });
-        }
-    
-        // Apply area filters if areas are selected
-        /* if (!empty($areas)) {
-            $usersQuery->whereHas('roles', function ($queryBuilder) use ($areas) {
-                $queryBuilder->whereIn('area_id', $areas);
-            });
-        } */
-    
-        // Order the results based on sort field and direction
-        $usersQuery->orderBy($sortField, $sortDirection);
-    
-        // Retrieve the users
-        $users = $usersQuery->get();
+    public function index_search(Request $request)
+    {
+        // Extract sort parameters
+        $sortField = $request->input('sort', 'firstname');
+        $sortDirection = $request->input('direction', 'asc');
         
+        // Extract search and areas parameters
+        $query = $request->input('search-staff', '');
+        $areas = $request->input('areas', []);
+        //dd($areas);
+
+        // Start building the query to fetch instructors
+        $usersQuery = User::query();
+
+        // Apply conditions based on whether search query and areas are provided
+        if (empty($query) && !empty($areas)) {
+            $usersQuery->whereHas('roles', function ($queryBuilder) {
+                    $queryBuilder->where('role', 'instructor');
+                })
+                ->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas) {
+                    $queryBuilder->whereIn('name', $areas);
+                })
+                ->distinct()
+                ->orderBy($sortField, $sortDirection);
+        } elseif (!empty($query) && empty($areas)) {
+            $usersQuery->whereHas('roles', function ($queryBuilder) {
+                    $queryBuilder->where('role', 'instructor');
+                })
+                ->where(function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('firstname', 'like', "%{$query}%")
+                                ->orWhere('lastname', 'like', "%{$query}%")
+                                ->orWhere('email', 'like', "%{$query}%");
+                })
+                ->orderBy($sortField, $sortDirection);
+        } elseif (!empty($query) && !empty($areas)) {
+            $usersQuery->whereHas('roles', function ($queryBuilder) {
+                    $queryBuilder->where('role', 'instructor');
+                })
+                ->where(function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('firstname', 'like', "%{$query}%")
+                                ->orWhere('lastname', 'like', "%{$query}%")
+                                ->orWhere('email', 'like', "%{$query}%");
+                })
+                ->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas) {
+                    $queryBuilder->whereIn('name', $areas);
+                })
+                ->distinct()
+                ->orderBy($sortField, $sortDirection);
+        } else {
+            // Default case: when both $query and $areas are empty
+            $usersQuery->whereHas('roles', function ($queryBuilder) {
+                    $queryBuilder->where('role', 'instructor');
+                })
+                ->orderBy($sortField, $sortDirection);
+        }
+
+        // Retrieve the users (instructors)
+        $users = $usersQuery->get();
+        //dd($users);
+
         return view('staff', compact('users', 'query', 'areas', 'sortField', 'sortDirection'));
     }
+   
 }

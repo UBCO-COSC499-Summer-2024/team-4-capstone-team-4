@@ -15,11 +15,11 @@
         <form id="filterForm" action="{{ route('staff') }}" method="GET">
             <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
                 @php
-                    $areas = App\Models\Area::all();
+                    $allAreas = App\Models\Area::all();
                 @endphp
-                @foreach ($areas as $area)
+                @foreach ($allAreas as $area)
                     <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                        <x-checkbox class="filter-checkbox" name="areas[]" value="{{ $area->id }}" />
+                        <x-checkbox class="filter-checkbox" name="areas[]" value="{{ $area->name }}" />
                         {{ $area->name }}
                     </li>
                 @endforeach

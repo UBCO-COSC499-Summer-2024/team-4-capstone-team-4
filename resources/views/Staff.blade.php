@@ -11,18 +11,20 @@
             <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
             <tbody>
                 @if(isset($users))
-                    @if($users->isEmpty())
+                    @if(empty($users))
                         <p>No users found.</p>
                     @else
                         @foreach ($users as $user)
                             @php
+                                $area_names=[];
                                 $instructor = $user->roles->where('role', 'instructor')->first();
                                 $performance = App\Models\InstructorPerformance::where('instructor_id',  $instructor->id )->first();
-                                $areas = $instructor->areas;
-                                $area_names=[];
-                                foreach ($areas as $area){
-                                    $area_names[] = $area->name;
+                                $course_ids = $instructor->teaches->pluck('course_section_id')->all();
+                                foreach ($course_ids as $course_id){
+                                    $course = App\Models\CourseSection::find($course_id);
+                                    $area_names[] = $course->area->name;
                                 }
+                                //$user = App\Models\User::find($instructor->user_id);
                             @endphp
                             <x-staff-table-row 
                                 name="{{ $user->firstname }} {{ $user->lastname }}" 

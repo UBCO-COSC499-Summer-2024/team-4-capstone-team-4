@@ -119,9 +119,10 @@ class UserRole extends Model {
     {
         return $this->belongsToMany(Area::class, 'teaches', 'instructor_id', 'course_section_id')
                     ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
-                    ->join('areas', 'areas.id', '=', 'course_sections.area_id')
-                    ->select('areas.*')
+                    ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
+                    ->select('a.*')
                     ->distinct();
-    }    
+    }
+
     
 }
