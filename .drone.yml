@@ -16,6 +16,10 @@ services:
       POSTGRES_DB: Insight  # you may change this, must reflect in .env.testing
       POSTGRES_USER: postgres 
       POSTGRES_PASSWORD: password
+  - name: Testing
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: testing
 
 steps:
   - name: frontend
