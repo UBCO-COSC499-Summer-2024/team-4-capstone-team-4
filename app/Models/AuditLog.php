@@ -9,6 +9,31 @@ use Illuminate\Database\Eloquent\Model;
 class AuditLog extends Model
 {
     use HasFactory;
+    // $table->id('log_id');
+    // $table->unsignedBigInteger('user_id')->nullable();
+    // $table->string('user_alt');
+    // $table->string('action');
+    // $table->text('description')->nullable();
+    // $table->string('table_name');
+    // $table->string('operation_type');
+    // $table->jsonb('old_value')->nullable();
+    // $table->jsonb('new_value')->nullable();
+    // $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
+    // $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+    // $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+
+    protected $table = "audit_logs";
+    protected $fillable = [
+        'user_id',
+        'user_alt',
+        'action',
+        'description',
+        'table_name',
+        'operation_type',
+        'old_value',
+        'new_value',
+        'timestamp',
+    ];
 
     public function audit($action, $description, $userId = null, $table = null, $op = null, $oldData = [], $newData = [])
     {

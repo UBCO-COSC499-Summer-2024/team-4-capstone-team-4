@@ -186,7 +186,7 @@ return new class extends Migration
         });
 
         Schema::create('audit_logs', function (Blueprint $table) {
-            $table->id('log_id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('user_alt');
             $table->string('action');
@@ -196,6 +196,8 @@ return new class extends Migration
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
             $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
         Schema::create('super_audits', function (Blueprint $table) {

@@ -17,15 +17,15 @@ class AuditLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->optional()->randomNumber(),
+            'user_id' => $this->faker->numberBetween(1, 10),
             'user_alt' => $this->faker->userName,
-            'action' => $this->faker->word,
-            'description' => $this->faker->optional()->paragraph,
+            'action' => $this->faker->randomElement(['create', 'update', 'delete']),
+            'description' => $this->faker->sentence,
             'table_name' => $this->faker->word,
             'operation_type' => $this->faker->randomElement(['insert', 'update', 'delete']),
-            'old_value' => $this->faker->optional()->json,
-            'new_value' => $this->faker->optional()->json,
-            'timestamp' => $this->faker->dateTime,
+            'old_value' => json_encode(['name' => 'Old Name']),
+            'new_value' => json_encode(['name' => 'New Name']),
+            'timestamp' => $this->faker->dateTimeThisYear,
         ];
     }
 }

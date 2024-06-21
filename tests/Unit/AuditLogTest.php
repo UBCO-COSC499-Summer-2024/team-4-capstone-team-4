@@ -18,7 +18,7 @@ class AuditLogTest extends TestCase
         $auditLog = AuditLog::factory()->create();
 
         $this->assertDatabaseHas('audit_logs', [
-            'log_id' => $auditLog->log_id,
+            'id' => $auditLog->id,
         ]);
     }
 
