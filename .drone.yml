@@ -1,0 +1,49 @@
+kind: pipeline
+type: docker
+name: testing
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  path: /drone/src
+
+services:
+  - name: InsightDB
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: Insight  # you may change this, must reflect in .env.testing
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: password
+steps:
+  - name: frontend
+    pull: if-not-exists
+    image: node:16.18-bullseye-slim
+    commands:
+    - npm install
+    - npm run build
+
+  - name: backend
+    pull: if-not-exists
+    image: laradock/workspace:latest-8.3 # you may change version, see Laradock
+    depends_on:
+      - InsightDB
+      - frontend
+    commands:
+      - composer update --lock
+      - cp .env.example .env
+      - composer install --prefer-dist
+      - php artisan clear-compiled
+      - php artisan config:clear
+      - php artisan config:cache
+      - php artisan migrate:fresh --env=testing
+#        - php artisan test --stop-on-failure --coverage
+      - php artisan test --testsuite=Feature
+
+trigger:
+    branch:
+    - configure-drone # you may change this
+    event:
+    - push
+    - pull_request
