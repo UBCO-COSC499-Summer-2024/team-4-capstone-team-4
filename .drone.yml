@@ -31,7 +31,7 @@ steps:
       - InsightDB
       - frontend
     commands:
-      - composer update --lock
+      - composer update
       - cp .env.example .env
       - composer install --prefer-dist
       - php artisan clear-compiled
