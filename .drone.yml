@@ -1,150 +1,44 @@
 kind: pipeline
 type: docker
-name: default
+name: testing
 
-steps:
-  - name: build
-    image: plugins/docker
-    settings:
-      context: ./vendor/laravel/sail/runtimes/8.3
-      dockerfile: Dockerfile
-      tags:
-        - sail-8.3/app
-    environment:
-      WWWGROUP:
-        from_secret: WWWGROUP
+platform:
+  os: linux
+  arch: amd64
 
-  - name: laravel.test
-    image: sail-8.3/app
-    commands:
-      - docker-compose up -d laravel.test
-    environment:
-      WWWUSER:
-        from_secret: WWWUSER
-      LARAVEL_SAIL: 1
-      XDEBUG_MODE:
-        from_secret: SAIL_XDEBUG_MODE
-      XDEBUG_CONFIG:
-        from_secret: SAIL_XDEBUG_CONFIG
-      IGNITION_LOCAL_SITES_PATH: ${PWD}
-
-  - name: InsightDB
-    image: postgres:16-alpine
-    environment:
-      PGPASSWORD:
-        from_secret: DB_PASSWORD
-      POSTGRES_DB:
-        from_secret: DB_DATABASE
-      POSTGRES_USER:
-        from_secret: DB_USERNAME
-      POSTGRES_PASSWORD:
-        from_secret: DB_PASSWORD
-
-  - name: InsightMailUI
-    image: mailhog/mailhog
-
-  - name: insight-pgadmin
-    image: pgadmin
-    settings:
-      context: ./
-      dockerfile: dockerfile.pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL:
-        from_secret: PGADMIN_EMAIL
-      PGADMIN_DEFAULT_PASSWORD:
-        from_secret: PGADMIN_PASSWORD
-
-volumes:
-  - name: sail-pgsql
-    driver: local
-
-  - name: pgadmin
-    driver: local
+workspace:
+  path: /drone/src
 
 services:
-  laravel.test:
-    image: sail-8.3/app
-    ports:
-      - ${APP_PORT}:80
-      - ${VITE_PORT}:${VITE_PORT}
-    environment:
-      WWWUSER: ${WWWUSER}
-      LARAVEL_SAIL: 1
-      XDEBUG_MODE: ${SAIL_XDEBUG_MODE:-off}
-      XDEBUG_CONFIG: ${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}
-      IGNITION_LOCAL_SITES_PATH: ${PWD}
-    volumes:
-      - .:/var/www/html:cached
-    networks:
-      - InsightNet
-    depends_on:
-      - InsightDB
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  InsightDB:
+  - name: postgresdb
     image: postgres:16-alpine
-    ports:
-      - ${FORWARD_DB_PORT:-5432}:5432
     environment:
-      PGPASSWORD: ${DB_PASSWORD:-secret}
-      POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
-    volumes:
-      - sail-pgsql:/var/lib/postgresql/data
-      - .:/docker-entrypoint-initdb.d/10-create-testing-database.sql
-    networks:
-      - InsightNet
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -q -d ${DB_DATABASE} -U ${DB_USERNAME}"]
-      interval: 10s
-      retries: 3
-      timeout: 5s
+      POSTGRES_DB: Insight  # you may change this, must reflect in .env.testing
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: password
 
-  InsightMailUI:
-    image: mailhog/mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-    networks:
-      - InsightNet
+steps:
+  - name: frontend
+    pull: if-not-exists
+    image: node:16.18-bullseye-slim
+    commands:
+    - npm install
+    - npm run dev
 
-  insight-pgadmin:
-    image: pgadmin
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-secret}
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-      - ./pgadmin-config:/var/lib/pgadmin/pgadmin4.conf
+  - name: backend
+    pull: if-not-exists
+    image: laradock/workspace:latest-8.1 # you may change version, see Laradock
     depends_on:
-      - InsightDB
-    networks:
-      - InsightNet
+      - postgresdb
+      - frontend
+    commands:
+      - composer install --prefer-dist
+      - php artisan test --stop-on-failure --coverage
+      #  - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
-networks:
-  InsightNet:
-    driver: bridge
-
-volumes:
-  sail-pgsql:
-    driver: local
-  pgadmin:
-    driver: local
-
-secrets:
-  - WWWGROUP
-  - WWWUSER
-  - SAIL_XDEBUG_MODE
-  - SAIL_XDEBUG_CONFIG
-  - DB_PASSWORD
-  - DB_DATABASE
-  - DB_USERNAME
-  - PGADMIN_EMAIL
-  - PGADMIN_PASSWORD
+trigger:
+    branch:
+    - configure-drone # you may change this
+    event:
+    - push
+    - pull_request
