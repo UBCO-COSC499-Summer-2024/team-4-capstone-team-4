@@ -36,7 +36,7 @@ steps:
       - composer install --prefer-dist
       - php artisan migrate
       - php artisan test --stop-on-failure --coverage
-      #  - php artisan test --testsuite=Feature --stop-on-failure --coverage
+      #   - php artisan test --testsuite=Feature --stop-on-failure --coverage
 
 trigger:
     branch:
