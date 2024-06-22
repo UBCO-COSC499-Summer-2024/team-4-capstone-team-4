@@ -13,7 +13,7 @@
         <x-dropdown-link href="#" id="add-target-hours" >
             {{ __('Add Target Hours') }}
         </x-dropdown-link>
-        <x-dropdown-link href="#" id="edit-target-hours" >
+        <x-dropdown-link href="{{ route('staff-edit-mode') }}" id="edit-target-hours" >
             {{ __('Edit mode') }}
         </x-dropdown-link>
     </x-slot>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffEditModeController;
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([
@@ -38,6 +39,22 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::post('/staff', [StaffController::class, 'add_target_hours'])->name('staff');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/staff-edit-mode', [StaffEditModeController::class, 'index_search'])->name('staff-edit-mode');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::post('/staff-edit-mode', [StaffEditModeController::class, 'update_target_hours'])->name('staff-edit-mode');
 });
 
 Route::middleware([
