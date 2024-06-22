@@ -1,3 +1,29 @@
+## Wednesday (6/21- 6/26)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_06_21_2024-06_26_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Sorting for staff list
+  * #2: Create add target hours
+  * #3: Edit/remove target hours
+  * #4: Set up DronceCi
+
+### Progress Update (since 6/21/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Sorting for staff list |  |
+| Create add target hours | |
+| Edit/remove target hours |  |
+| Set up DroneCi |  |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * 
+
 ## Friday (6/19- 6/21)
 
 ### Timesheet
@@ -12,7 +38,7 @@ Clockify report
   * #5: Edit/remove target hours
   * #6: Set up DronceCi
 
-### Progress Update (since 6/14/2024) 
+### Progress Update (since 6/19/2024) 
 |TASK/ISSUE |STATUS|
 | --------| -------|
 | Sorting for staff list | In-progress |
