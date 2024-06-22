@@ -81,7 +81,7 @@ class UserRole extends Model {
      */
     public function instructorPerformance() {
         if ($this->role === 'instructor') {
-            return $this->hasOne(InstructorPerformance::class, 'user_id');
+            return $this->hasOne(InstructorPerformance::class, 'instructor_id', 'id');
         }
         
         return null; // Return null if the user is not an instructor

@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use App\Models\UserRole;
+use App\Models\InstructorPerformance;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -36,10 +37,19 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Create the user role
-        UserRole::create([
+        $user_role = UserRole::create([
             'user_id' => $user->id,
             'department_id' => null,
             'role' => 'instructor',
+        ]);
+
+        InstructorPerformance::create([
+            'instructor_id'=> $user_role->id,
+            'score' => 0,
+            'total_hours' => 0,
+            'target_hours' => null,
+            'sei_avg' => 0,
+            'year' => date("Y"),
         ]);
 
         return $user;

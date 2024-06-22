@@ -37,6 +37,14 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::post('/staff', [StaffController::class, 'add_target_hours'])->name('staff');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
     Route::get('/notifications', function () {
         return view('notifications');
     })->name('notifications');

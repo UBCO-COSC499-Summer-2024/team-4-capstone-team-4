@@ -6,7 +6,10 @@
                 <x-staff-filter />
                 <x-staff-dropdown />
             </div>
-        </div>              
+        </div> 
+        <form method="POST" action="{{ route('staff')}}">
+            @csrf
+        <x-staff-targethours/>           
         <x-staff-table>
             <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
             <tbody>
@@ -30,7 +33,7 @@
                                 name="{{ $user->firstname }} {{ $user->lastname }}" 
                                 email="{{ $user->email }}" 
                                 subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
-                                completedHours="{{ $performance ? ($performance->completed_hours ?? '-') : '-' }}" 
+                                completedHours="{{ $performance ? ($performance->total_hours ?? '-') : '-' }}" 
                                 targetHours="{{ $performance ? ($performance->target_hours ?? '-') : '-' }}" 
                                 rating="{{ $performance ? ($performance->score ?? '-') : '-' }}" 
                                 src="{{ $user->profile_photo_url }}" 
@@ -40,5 +43,6 @@
                 @endif
             </tbody>
         </x-staff-table>
-    </div>   
+        </form>  
+    </div> 
 </x-app-layout>

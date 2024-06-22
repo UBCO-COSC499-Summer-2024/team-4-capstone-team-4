@@ -48,12 +48,12 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory(10)->create();
         foreach($users as $user) {
-            UserRole::create([
+            UserRole::factory()->create([
                 'user_id' => $user->id,
                 'department_id' => 1,
                 'role' => 'instructor',
             ]);
-            InstructorPerformance::create([
+            InstructorPerformance::factory()->create([
                 'score' => '500',
                 'total_hours' => '20',
                 'target_hours' => '200',

@@ -10,8 +10,11 @@
     </x-slot>
 
     <x-slot name="content">
-        <x-dropdown-link href="">
+        <x-dropdown-link href="#" id="add-target-hours" >
             {{ __('Add Target Hours') }}
+        </x-dropdown-link>
+        <x-dropdown-link href="#" id="edit-target-hours" >
+            {{ __('Edit mode') }}
         </x-dropdown-link>
     </x-slot>
 </x-dropdown>
