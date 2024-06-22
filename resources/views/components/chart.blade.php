@@ -1,6 +1,6 @@
 @props(['chart'])
 
-<div style="width:75%;">
+<div style="width:60%;">
     {!! $chart->render() !!}
 </div>
 
