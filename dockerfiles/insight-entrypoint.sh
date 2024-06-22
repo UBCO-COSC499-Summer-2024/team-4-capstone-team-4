@@ -9,13 +9,13 @@ if [ "${IS_AUDIT_LOG_ENABLED}" = "true" ] ; then
   # --- Use psql to configure pgaudit dynamically ---
 
   # Connect to PostgreSQL 
-  psql -U postgres -d postgres <<EOF
+  psql -U postgres -d Insight <<EOF
 
   # Create the pgaudit extension if it doesn't exist
   CREATE EXTENSION IF NOT EXISTS pgaudit;
 
   # Set pgaudit configuration using environment variables
-  ALTER SYSTEM SET pgaudit.log_relation = '${PGAUDIT_LOG_RELATION:-audit_logs}';
+  ALTER SYSTEM SET pgaudit.log_relation = '${PGAUDIT_LOG_RELATION:-super_audits}';
   ALTER SYSTEM SET pgaudit.role = '${PGAUDIT_ROLES:-*}';
   ALTER SYSTEM SET pgaudit.log = '${PGAUDIT_ACTIONS:-all}';
 

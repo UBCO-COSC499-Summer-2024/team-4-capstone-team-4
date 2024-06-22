@@ -28,5 +28,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'acces_code' => 'admin'
         ]);
+
+        $this->call([
+            DepartmentSeeder::class,
+            AreaSeeder::class,
+            ServiceRoleSeeder::class
+        ]);
     }
 }

@@ -124,8 +124,7 @@
 .panels {
     display: flex;
     gap: 20px;
-    height: fit-content;
-    width: 100%;
+    flex: 1;
 }
 
 .panel {
@@ -135,7 +134,7 @@
     padding: 20px;
     background: #fafafa;
     width: 100%;
-    min-height: 500px;
+    flex: 1;
 }
 
 .panel.active {

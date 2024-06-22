@@ -58,4 +58,13 @@ class ServiceRole extends Model {
                     ->withPivot('assigner_id')
                     ->withTimestamps();
     }
+
+    public function roleAssignments()
+    {
+        return $this->hasMany(RoleAssignment::class, 'service_role_id');
+    }
+
+    public function users() {
+        return $this->hasManyThrough(User::class, RoleAssignment::class,'service_role_id','id','id', 'instructor_id');
+    }
 }

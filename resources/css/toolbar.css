@@ -1,5 +1,5 @@
 .toolbar {
-    padding: 8px;
+    padding: 4px;
     border-radius: 50px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
     margin: 4px;
@@ -11,7 +11,6 @@
     background: rgba(50, 50, 50, 0.9);
     color: #999;
     flex-wrap: nowrap;
-    width: fit-content;
 }
 
 .mini-toolbar {
@@ -143,8 +142,9 @@ h1 button {
         display: none;
         flex-direction: column; /* Display items vertically */
         max-height: none; /* Remove max-height to allow content to expand */
-        padding: 12px; /* Increase padding for better touch targets */
-        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+        padding: 8px; /* Increase padding for better touch targets */
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
     }
 
     .toolbar.active {
@@ -177,6 +177,6 @@ h1 button {
 
     .toolbar input,
     .toolbar select {
-        width: 100%; /* Full width for inputs, selects, and buttons */
+        flex: 1;
     }
 }

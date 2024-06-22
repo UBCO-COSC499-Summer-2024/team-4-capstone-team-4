@@ -9,16 +9,15 @@
 ])
 
 <dropdown-element
-    class="dropdown-element" 
     title="{{ $title }}" 
     role="listbox" 
-    tabindex="0" 
+    tabindex="0"
+    {{ $attributes->merge(['class' => 'dropdown-element']) }}
     @if($multiple) multiple @endif 
     @if($searchable) searchable @endif 
     @if($externalSource) external="{{ $externalSource }}" @endif 
     @if($regex) regex="{{ $regex }}" @endif 
-    values="{{ json_encode($values) }}"
->
+    values="{{ json_encode($values) }}">
     <span class="material-symbols-outlined dropdown-pre-icon noselect">
         {{ $preIcon }}
     </span>

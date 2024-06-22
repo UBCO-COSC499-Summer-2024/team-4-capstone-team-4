@@ -200,6 +200,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
+        // for pgaudit
         Schema::create('super_audits', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('audit_user')->nullable();

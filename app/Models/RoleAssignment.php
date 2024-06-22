@@ -64,4 +64,9 @@ class RoleAssignment extends Model {
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
     }
+
+    public function userRole()
+    {
+        return $this->belongsTo(UserRole::class, 'instructor_id');
+    }
 }

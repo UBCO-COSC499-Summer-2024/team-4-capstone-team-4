@@ -1,14 +1,10 @@
 <div class="content">
     <h1 class="nos flex">
-        Add Service Roles
+        <span class="content-title-text">Add Service Role</span>
         {{-- <section class="mini-toolbar">
             <div class="toolbar-section-item">
             </div>
         </section> --}}
-        <button class="right">
-            <span class="button-title">Create New</span>
-            <span class="material-symbols-outlined">add</span>
-        </button>
         <button>
             <span class="button-title">See All</span>
             <span class="material-symbols-outlined">visibility</span>
@@ -27,14 +23,20 @@
                             <label class="form-label">Area:
                             </label>
                             {{-- use the dropdown --}}
+                            @php
+                                $areas = App\Models\Area::all();
+                                $areaValues = [];
+                                foreach ($areas as $area) {
+                                    $areaValues[$area->name] = $area->name;
+                                }
+                            @endphp
                             <x-dropdown-element 
                                 id="areaDropdown" 
                                 class="toolbar-dropdown" 
                                 title="Area"
-                                :values="['Area 1' => 'Area 1', 'Area 2' => 'Area 2', 'Area 3' => 'Area 3']"
+                                :values="$areaValues"
                                 preIcon="category"
-                                searchable="true">
-                            </x-dropdown-element>
+                                searchable="true" />
                         </div>
                         <div class="form-item">
                             <label class="input-label">Description:</label>
@@ -42,7 +44,7 @@
                         </div>
                         <div class="form-item">
                             <label class="input-label">Add Extra Hours:</label>
-                            <button class="button">
+                            <button type="button" class="button" wire:click="$emit('openModal', 'openModal')">
                                 <span class="button-title">Add</span>
                                 <span class="material-symbols-outlined">add</span>
                             </button>
@@ -53,18 +55,25 @@
                         </div>
                     </div>
                 </div>
-                <x-calendar style="display: none" />
+                {{-- <x-dialog-modal id="{{ __('addExtraHrs') }}">
+                    <x-slot name="title">
+                        {{ __('Add Extra Hours') }}
+                    </x-slot>
+                    <x-slot name="content">
+                        <x-calendar />
+                    </x-slot>
+                    <x-slot name="footer">
+                        <x-secondary-button >{{ __('Cancel') }}</x-secondary-button>
+                        <x-danger-button wire.model>{{ __('Save') }}</x-danger-button>
+                    </x-slot>
+                </x-dialog-modal> --}}
             </div>
         </form>
     </section>
-    <section class="link-bar">
-        <x-link href="{{ route('svcroles') }}" title="{{ __('Dashboard') }}" :active="request()->is('svcroles')" />
-        <x-link href="{{ route('svcroles.add') }}" title="{{ __('Add Service Role') }}" :active="request()->is('svcroles/add')" />
-        <x-link href="{{ route('svcroles.manage') }}" title="{{ __('Manage Service Roles') }}" :active="request()->is('svcroles/manage')" />
-        <x-link href="{{ route('svcroles.requests') }}" title="{{ __('Requests') }}" :active="request()->is('svcroles/requests')" />
-        <x-link href="{{ route('svcroles.logs') }}" title="{{ __('Audit Logs') }}" :active="request()->is('svcroles/audit-logs')" />
-    </section>
+    <x-link-bar :links="$links" />
 </div>
+@livewire('add-extra-hours-modal')
+@livewireScripts
 
 {{-- add extra hours button toggles the calendar --}}
 <script>

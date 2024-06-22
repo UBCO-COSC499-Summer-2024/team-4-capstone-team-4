@@ -1,0 +1,8 @@
+.svcr-list {
+    display: grid;
+    flex-wrap: wrap;
+    /* grid auto columns with widths of 300px */
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    padding: 6px;
+    gap: 12px;
+}

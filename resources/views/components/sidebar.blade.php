@@ -14,7 +14,7 @@ if (isset($items)) {
 }
 @endphp
 
-<aside class="sidebar glass">
+<aside class="sidebar glass" id="sidebar">
     @foreach($sidebarItems as $item)
         <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" />
     @endforeach

@@ -2,46 +2,38 @@
     $serviceroles = App\Models\ServiceRole::all();
 @endphp
 <div class="content">
-    <livewire:tabbed-component :group-id="'svcrole'" :wire:key="'svcrole-' . now()->timestamp" />
-    @foreach ($serviceroles as $svcrole)
-        <div class="card">
-            <div class="card-header">
-                <h2>{{ $svcrole->role }}</h2>
-                <span class="material-symbols-outlined icon">more_vert</span>
-            </div>
-            <div class="card-content">
-                <div class="card-section">
-                    <div class="card-section-item">
-                        <span class="material-symbols-outlined icon">category</span>
-                        <span>{{ $svcrole->area }}</span>
-                    </div>
-                    <div class="card-section-item">
-                        <span class="material-symbols-outlined icon">description</span>
-                        <span>{{ $svcrole->description }}</span>
-                    </div>
-                    <div class="card-section-item">
-                        <span class="material-symbols-outlined icon">schedule</span>
-                        <span>{{ $svcrole->created_at }}</span>
-                    </div>
-                </div>
-                <div class="card-section">
-                    <button>
-                        <span class="material-symbols-outlined icon">edit</span>
-                        <span>Edit</span>
-                    </button>
-                    <button>
-                        <span class="material-symbols-outlined icon">delete</span>
-                        <span>Delete</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endforeach
-    <section class="link-bar">
-        <x-link href="{{ route('svcroles') }}" title="{{ __('Dashboard') }}" :active="request()->is('svcroles')" />
-        <x-link href="{{ route('svcroles.add') }}" title="{{ __('Add Service Role') }}" :active="request()->is('svcroles/add')" />
-        <x-link href="{{ route('svcroles.manage') }}" title="{{ __('Manage Service Roles') }}" :active="request()->is('svcroles/manage')" />
-        <x-link href="{{ route('svcroles.requests') }}" title="{{ __('Requests') }}" :active="request()->is('svcroles/requests')" />
-        <x-link href="{{ route('svcroles.logs') }}" title="{{ __('Audit Logs') }}" :active="request()->is('svcroles/audit-logs')" />
+    {{-- <livewire:tabbed-component :group-id="'svcrole'" :wire:key="'svcrole-' . now()->timestamp" /> --}}
+    <h1 class="nos content-title">
+        <span class="content-title-text">Service Roles</span>
+        <button class="right">
+            <span class="button-title">Create New</span>
+            <span class="material-symbols-outlined">add</span>
+        </button>
+    </h1>
+    <div class="toolbar">
+        <section class="toolbar-section right">
+            <x-dropdown-element 
+                id="viewModeDropdown"
+                class="right"
+                title="View Mode"
+                :values="['Card View' => 'card', 'List View' => 'list']"
+                preIcon="view_module"/>
+            <x-dropdown-element 
+                id="pageModeDropdown"
+                title="Display As"
+                :values="['Pagination' => 'pagination', 'Infinite Scroll' => 'infinite']"
+                preIcon="first_page"/>
+            {{-- get selected mode and store in variable --}}
+            @php
+                $viewMode = 'list';
+                $pageMode = 'pagination';
+            @endphp
+        </section>
+    </div>
+    <section class="svcr-list">
+        @foreach ($serviceroles as $svcrole)
+             <x-templates.svcrole-card :svcrole="$svcrole" />
+        @endforeach
     </section>
+    <x-link-bar :links="$links" />
 </div>
