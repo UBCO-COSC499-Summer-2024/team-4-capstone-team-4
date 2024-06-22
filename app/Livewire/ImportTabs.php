@@ -6,10 +6,10 @@ use Livewire\Component;
 
 class ImportTabs extends Component
 {
-    public $activeTab = 'file';
-
+    public $activeTab = 'workday';
+    
     public function setActiveTab($tab) {
-        $this->activeTab = $tab;
+        $this->activeTab = $tab;      
     }
 
     public function render()

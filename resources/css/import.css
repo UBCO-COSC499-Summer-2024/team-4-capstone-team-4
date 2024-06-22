@@ -94,12 +94,31 @@ input[type="file"] {
 @layer components {
 
 .import-nav-item {
-  @apply mx-1;
+  
 }
 
 .import-nav-link{
-  @apply bg-blue-500 px-5 py-2;
+  @apply px-3 py-2;
 }
 
+.import-form {
+
+}
+
+.import-form-row {
+  @apply  flex flex-row items-center px-3 py-2 border border-b-gray-300 border-solid shadow-none;
+}
+
+.import-form-row label {
+  @apply mx-1;
+}
+
+.import-form-row input {
+  @apply border-none w-48;
+}
+
+.import-button {
+  @apply p-2 mt-2 rounded-sm text-sm hover:cursor-pointer;
+}
 
 }
