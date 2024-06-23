@@ -11,7 +11,7 @@
         </li>
     </nav>
 
-    <div class=" bg-gray-50">
+    <div class="bg-gray-50 mt-5">
         @if ($activeTab === 'file')
             @livewire('import-file')
         @elseif ($activeTab === 'sei')
