@@ -2,53 +2,90 @@
 
 namespace App\Livewire;
 
-use App\Models\TestModel;
+use App\Models\CourseSection;
+use App\Models\SeiData;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
 
 class ImportSeiForm extends Component
 {
+    public $testCid = 123456;
+    public $rows = [];
 
-    use WithPagination;
-    use WithFileUploads;
+    public function mount() {
 
-    #[Rule('required|min:2|max:5|unique:test_table,customer_id')]
-    public $id = 0;
+        $this->rows = [
+            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+        ];
+    }
 
-    #[Rule('required')]
-    public $firstname = '';
+    public function rules() {
+        $rules = [];
 
-    #[Rule('required')]
-    public $lastname = '';
+     
+        foreach ($this->rows as $index => $row) {
+            $rules["rows.{$index}.cid"] = 'required|integer';
+            $rules["rows.{$index}.q1"] = 'required';
+            $rules["rows.{$index}.q2"] = 'required';
+            $rules["rows.{$index}.q3"] = 'required';
+            $rules["rows.{$index}.q4"] = 'required';
+            $rules["rows.{$index}.q5"] = 'required';
+            $rules["rows.{$index}.q6"] = 'required';
+        }
 
-    #[Rule('required|file|mimes:csv')]
-    public $file;
+        return $rules;
+    }
 
+    public function addRow() {
+        $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
+    }
 
+    public function deleteRow($row) {
+        unset($this->rows[$row]);
+        $this->rows = array_values($this->rows); // Reindex array
+    }
 
     public function handleClick() {
 
-        $validated = $this->validate();
+        // dd($this->rows);
+        $this->validate();
+    
+        
+        foreach ($this->rows as $row) {
+            // dd($row['cid']);
+            // dd($this->rows);
 
-        TestModel::create([
-            'customer_id' => $validated['id'],
-            'firstname' => $validated['firstname'],
-            'lastname' => $validated['lastname'],
-        ]);
+            $cid = (int) $row['cid'];
 
-        $this->reset(['id','firstname','lastname']);
+            SeiData::create([
+                'course_section_id' => '2',
+                'questions' => json_encode([
+                    'q1' => $row['q1'],
+                    'q2' => $row['q2'],
+                    'q3' => $row['q3'],
+                    'q4' => $row['q4'],
+                    'q5' => $row['q5'],
+                    'q6' => $row['q6'],
+                ]),
+            ]);
+
+        }
+
+        $this->rows = [
+            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+        ];
 
         session()->flash('success', 'Successfully Created!');
+
     }
+
 
     public function render()
     {
-        $users = TestModel::paginate(5);
+        $courses = CourseSection::all();
 
-        return view('livewire.import-sei-form',[
-            'users' => $users,
+        return view('livewire.import-sei-form', [
+            "courses" => $courses,
         ]);
     }
 }

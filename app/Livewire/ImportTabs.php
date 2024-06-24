@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class ImportTabs extends Component
 {
-    public $activeTab = 'workday';
+    public $activeTab = 'sei';
     
     public function setActiveTab($tab) {
         $this->activeTab = $tab;      

@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\SeiData;
+use App\Models\CourseSection;;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -13,7 +13,7 @@ class ImportWorkdayForm extends Component
 
     public function mount() {
         $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+            ['course_name' => '', 'area_id' => '', 'duration' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => ''],
         ];
     }
 
@@ -22,20 +22,19 @@ class ImportWorkdayForm extends Component
 
      
         foreach ($this->rows as $index => $row) {
-            $rules["rows.{$index}.cid"] = 'required|min:1';
-            $rules["rows.{$index}.q1"] = '';
-            $rules["rows.{$index}.q2"] = '';
-            $rules["rows.{$index}.q3"] = '';
-            $rules["rows.{$index}.q4"] = '';
-            $rules["rows.{$index}.q5"] = '';
-            $rules["rows.{$index}.q6"] = '';
+            $rules["rows.{$index}.course_name"] = 'required|min:1';
+            $rules["rows.{$index}.area_id"] = '';
+            $rules["rows.{$index}.duration"] = '';
+            $rules["rows.{$index}.enrolled"] = '';
+            $rules["rows.{$index}.dropped"] = '';
+            $rules["rows.{$index}.capacity"] = '';
         }
 
         return $rules;
     }
 
     public function addRow() {
-        $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
+        $this->rows[] =  ['course_name' => '', 'area_id' => '', 'duration' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => ''];
     }
 
     public function deleteRow($row) {
@@ -52,22 +51,19 @@ class ImportWorkdayForm extends Component
         foreach ($this->rows as $row) {
             // dd($row);
 
-            SeiData::create([
-                'course_section_id' => $row['cid'],
-                // 'questions' => json_encode([
-                //     'q1' => $row['q1'],
-                //     'q2' => $row['q2'],
-                //     'q3' => $row['q3'],
-                //     'q4' => $row['q4'],
-                //     'q5' => $row['q5'],
-                //     'q6' => $row['q6'],
-                // ]),
+            CourseSection::create([
+                'name' => $row['course_name'], 
+                'area_id' => $row['area_id'], 
+                'duration' => $row['duration'], 
+                'enrolled' => $row['enrolled'], 
+                'dropped' => $row['dropped'], 
+                'capacity' => $row['capacity'],        
             ]);
 
         }
 
         $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+            ['course_name' => '', 'area_id' => '', 'duration' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => ''],
         ];
 
         session()->flash('success', 'Successfully Created!');

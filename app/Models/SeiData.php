@@ -31,7 +31,7 @@ class SeiData extends Model {
     //  ------ new -------
 
     protected $fillable = [
-        'cid', 'questions',
+        'course_section_id', 'questions',
     ];
 
     /**
