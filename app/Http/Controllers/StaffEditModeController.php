@@ -74,15 +74,16 @@ class StaffEditModeController extends Controller
     }
 
     public function update_target_hours(Request $request){
-        $request->validate([
-           'hours' =>['required', 'numeric'],
-           'staff-checkboxes'=>['required']
-        ]);
-        $hours = $request->input('hours');
-        $staff_checkboxes = $request->input('staff-checkboxes');
-        //dd($staff_checkboxes);
-        foreach($staff_checkboxes as $email){
-            $user = User::where('email', $email)->first();
+       /*  $request->validate([
+           'hours' =>['required', 'numeric']
+        ]); */
+        $hours = $request->input('changedInputs');
+       // $length = count($hours);
+        $email = $request->input('emails');
+       
+        dd($hours);
+        /* for($i = 0; $i< $length; $i++){
+            $user = User::where('email', $email[$i])->first();
             $instructor = $user->roles->where('role', 'instructor')->first();
             $performance = $instructor->instructorPerformance;
             if($performance){
@@ -90,7 +91,7 @@ class StaffEditModeController extends Controller
             }else{
                 return response()->json(['message' => 'Instructor performance not found.'], 404);
             }
-        }
+        } */
 
         return redirect('staff');
 

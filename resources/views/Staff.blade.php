@@ -14,26 +14,27 @@
             <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
             <tbody>
                 @if(isset($users))
-                    @if(empty($users))
+                    @if(empty($users) || $users == null)
                         <p>No users found.</p>
                     @else
                         @foreach ($users as $user)
                             @php
                                 $area_names=[];
-                                $instructor = $user->roles->where('role', 'instructor')->first();
-                                $performance = App\Models\InstructorPerformance::where('instructor_id',  $instructor->id )->first();
+                                $instructor = App\Models\UserRole::find($user->instructor_id);
+                                $performance = App\Models\InstructorPerformance::where('instructor_id',  $user->instructor_id)->first();
                                 $course_ids = $instructor->teaches->pluck('course_section_id')->all();
-                                foreach ($course_ids as $course_id){
-                                    $course = App\Models\CourseSection::find($course_id);
-                                    $area_names[] = $course->area->name;
+                                if($course_ids !== null){
+                                    foreach ($course_ids as $course_id){
+                                        $course = App\Models\CourseSection::find($course_id);
+                                        $area_names[] = $course->area->name;
+                                    }
                                 }
-                                //$user = App\Models\User::find($instructor->user_id);
                             @endphp
                             <x-staff-table-row 
-                                name="{{ $user->firstname }} {{ $user->lastname }}" 
+                                fullname="{{ $user->firstname }} {{ $user->lastname }}" 
                                 email="{{ $user->email }}" 
                                 subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
-                                completedHours="{{ $performance ? ($performance->total_hours ?? '-') : '-' }}" 
+                                completedHours="{{ $user->total_hours }}" 
                                 targetHours="{{ $performance ? ($performance->target_hours ?? '-') : '-' }}" 
                                 rating="{{ $performance ? ($performance->score ?? '-') : '-' }}" 
                                 src="{{ $user->profile_photo_url }}" 

@@ -31,9 +31,7 @@ class StaffController extends Controller
                 })
                 ->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas) {
                     $queryBuilder->whereIn('name', $areas);
-                })
-                ->distinct()
-                ->orderBy($sortField, $sortDirection);
+                });
         } elseif (!empty($query) && empty($areas)) {
             $usersQuery->whereHas('roles', function ($queryBuilder) {
                     $queryBuilder->where('role', 'instructor');
@@ -42,8 +40,7 @@ class StaffController extends Controller
                     $queryBuilder->where('firstname', 'like', "%{$query}%")
                                 ->orWhere('lastname', 'like', "%{$query}%")
                                 ->orWhere('email', 'like', "%{$query}%");
-                })
-                ->orderBy($sortField, $sortDirection);
+                });
         } elseif (!empty($query) && !empty($areas)) {
             $usersQuery->whereHas('roles', function ($queryBuilder) {
                     $queryBuilder->where('role', 'instructor');
@@ -55,19 +52,34 @@ class StaffController extends Controller
                 })
                 ->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas) {
                     $queryBuilder->whereIn('name', $areas);
-                })
-                ->distinct()
-                ->orderBy($sortField, $sortDirection);
+                });
         } else {
             // Default case: when both $query and $areas are empty
             $usersQuery->whereHas('roles', function ($queryBuilder) {
                     $queryBuilder->where('role', 'instructor');
-                })
-                ->orderBy($sortField, $sortDirection);
+                });
         }
+        //join all the tables
+        $usersQuery = $usersQuery->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+        ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+        ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+        ->leftJoin('instructor_performance', 'user_roles.id', '=', 'instructor_performance.instructor_id');
 
-        // Retrieve the users (instructors)
-        $users = $usersQuery->get();
+        // Retrieve the users (instructors) and sort according to sort fields
+        if ($sortField === 'firstname') {
+            $usersQuery = $usersQuery->orderBy('firstname', $sortDirection);
+        } elseif ($sortField === 'area') {
+            $usersQuery = $usersQuery->orderBy('areas.name', $sortDirection);
+        } elseif ($sortField === 'total_hours') {
+            $usersQuery = $usersQuery->orderBy('instructor_performance.total_hours', $sortDirection);
+        } elseif ($sortField === 'target_hours') {
+            $usersQuery = $usersQuery->orderBy('instructor_performance.target_hours', $sortDirection);
+        } else {
+            $usersQuery = $usersQuery->orderBy('instructor_performance.score', $sortDirection);
+        }
+        
+        $users = $usersQuery->distinct()->get();
         //dd($users);
 
         return view('staff', compact('users', 'query', 'areas', 'sortField', 'sortDirection'));

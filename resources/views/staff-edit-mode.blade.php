@@ -4,10 +4,10 @@
             <x-staff-search-edit />
             <div class="flex items-center space-x-4">
                 <x-staff-filter-edit />
-                <x-button id="staff-save" name="staff-save">Save</x-button>
+                <x-button form="editForm" id="staff-save" name="staff-save">Save</x-button>
             </div>
         </div> 
-        <form method="POST" action="{{ route('staff-edit-mode')}}">
+        <form id=editForm method="POST" action="{{ route('staff-edit-mode')}}">
             @csrf          
         <x-staff-table>
             <x-staff-table-header-edit :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
@@ -29,7 +29,7 @@
                                 //$user = App\Models\User::find($instructor->user_id);
                             @endphp
                             <x-staff-table-row-edit 
-                                name="{{ $user->firstname }} {{ $user->lastname }}" 
+                                fullname="{{ $user->firstname }} {{ $user->lastname }}" 
                                 email="{{ $user->email }}" 
                                 subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
                                 completedHours="{{ $performance ? ($performance->total_hours ?? '-') : '-' }}" 
@@ -37,6 +37,7 @@
                                 rating="{{ $performance ? ($performance->score ?? '-') : '-' }}" 
                                 src="{{ $user->profile_photo_url }}" 
                             />
+                            <input type="hidden" name="email[]" value="{{ $user->email }}" />
                         @endforeach
                     @endif
                 @endif
