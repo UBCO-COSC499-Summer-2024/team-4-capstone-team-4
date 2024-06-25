@@ -2,6 +2,52 @@
 
 ## Date Range:
 
+- June 21 - June 25
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Course Details Page
+- Role Based Access
+- Service Role Management
+- Drone CI
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/to_do)
+![image of tasks](./tasks/inprogress)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/)
+
+## Overview:
+
+We have continued to work on our assigned tasks....
+
+## Date Range:
+
 - June 19 - June 20
 
 ## Features in the Project Plan Cycle:
