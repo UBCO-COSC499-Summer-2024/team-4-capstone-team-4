@@ -1,7 +1,4 @@
-<div>
-    @if(session('success'))
-        {{ session('success') }}
-    @endif
+<div class="relative">
 
     <form wire:submit.prevent="handleClick" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
@@ -57,4 +54,12 @@
             <button type="submit" class="bg-green-500 text-black p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
+
+    @if(session('success'))
+        @if($showModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-import-modal />
+        </div>
+        @endif
+    @endif
 </div>

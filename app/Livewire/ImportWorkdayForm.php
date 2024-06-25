@@ -4,23 +4,29 @@ namespace App\Livewire;
 
 use App\Models\CourseSection;;
 use Livewire\Attributes\Rule;
+use Livewire\Attributes\Session;
 use Livewire\Component;
 
 class ImportWorkdayForm extends Component
 {
     public $testCid = 123456;
+
+    #[Session]
     public $rows = [];
+
+    public $showModal = false;
 
     public function mount() {
         $this->rows = [
             ['course_name' => '', 'area_id' => '', 'duration' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => ''],
         ];
+
     }
 
     public function rules() {
         $rules = [];
 
-     
+
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.course_name"] = 'required|min:1';
             $rules["rows.{$index}.area_id"] = '';
@@ -66,13 +72,23 @@ class ImportWorkdayForm extends Component
             ['course_name' => '', 'area_id' => '', 'duration' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => ''],
         ];
 
-        session()->flash('success', 'Successfully Created!');
+        session()->flash('success', 'Successfully Saved!');
 
+        if (session()->has('success')) {
+            $this->showModal = true;
+        }
+
+    }
+
+    public function closeModal() {
+        $this->showModal = false;
     }
 
 
     public function render()
     {
         return view('livewire.import-workday-form');
+
+        
     }
 }

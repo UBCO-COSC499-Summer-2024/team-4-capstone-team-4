@@ -1,11 +1,23 @@
-<div>
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-        <div class="mt-3">
-            <a href="{{ route('dashboard') }}" class="btn btn-success">{{ __('Go to Dashboard') }}</a>
-            <a href="{{ route('import') }}" class="btn btn-primary">{{ __('Upload Another File') }}</a>
+    <div class="relative bg-white rounded-lg shadow-lg w-11/12 max-w-lg">
+        <div class="relative p-2 bg-green-500 rounded-t-lg">
+            <button class="absolute text-white text-4xl font-bold right-3 top-1">
+                <span wire:click="closeModal" class="material-symbols-outlined">close</span>
+            </button>
+            <div class="flex justify-center my-6">
+                <span class="material-symbols-outlined text-white text-5xl">check_circle</span>
+            </div>
+        </div>
+        <div class="p-6 mt-2 mb-10 text-center">   
+            <p class="text-lg font-light mb-6">Successfully Saved!</p>
+            <div class="flex justify-center mt-6">
+                <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 rounded-sm hover:bg-green-500 hover:text-white" 
+                        href={{ route('dashboard') }}>
+                Go to Dashboard
+                </button>
+                <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 rounded-sm hover:bg-green-500 hover:text-white" 
+                        wire:click="closeModal">
+                Insert More
+                </button>
+            </div>
         </div>
     </div>
-    @endif
-</div>
