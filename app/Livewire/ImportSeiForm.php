@@ -28,15 +28,51 @@ class ImportSeiForm extends Component
      
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.cid"] = 'required|integer';
-            $rules["rows.{$index}.q1"] = 'required';
-            $rules["rows.{$index}.q2"] = 'required';
-            $rules["rows.{$index}.q3"] = 'required';
-            $rules["rows.{$index}.q4"] = 'required';
-            $rules["rows.{$index}.q5"] = 'required';
-            $rules["rows.{$index}.q6"] = 'required';
+            $rules["rows.{$index}.q1"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q2"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q3"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q4"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q5"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q6"] = 'required|integer|min:1|max:5';
         }
 
         return $rules;
+    }
+
+    public function messages() {
+        $messages = [];
+
+        foreach ($this->rows as $index => $row) {
+                $messages["rows.{$index}.cid.required"] = 'Please select a course';
+                $messages["rows.{$index}.q1.required"] = 'Missing entry for q1';
+                $messages["rows.{$index}.q2.required"] = 'Missing entry for q2';
+                $messages["rows.{$index}.q3.required"] = 'Missing entry for q3';
+                $messages["rows.{$index}.q4.required"] = 'Missing entry for q4';
+                $messages["rows.{$index}.q5.required"] = 'Missing entry for q5';
+                $messages["rows.{$index}.q6.required"] = 'Missing entry for q6';
+        
+                $messages["rows.{$index}.q1.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q2.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q3.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q4.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q5.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q6.integer"] = 'Must be a number';
+        
+                $messages["rows.{$index}.q1.min"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q2.min"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q3.min"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q4.min"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q5.min"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q6.min"] = 'Enter a number 1-5';
+    
+                $messages["rows.{$index}.q1.max"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q2.max"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q3.max"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q4.max"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q5.max"] = 'Enter a number 1-5';
+                $messages["rows.{$index}.q6.max"] = 'Enter a number 1-5';
+        }
+        return $messages;
     }
 
     public function addRow() {
@@ -48,16 +84,14 @@ class ImportSeiForm extends Component
         $this->rows = array_values($this->rows); // Reindex array
     }
 
-    public function handleClick() {
+    public function handleSubmit() {
 
         // dd($this->rows);
         $this->validate();
     
         
         foreach ($this->rows as $row) {
-            // dd($row['cid']);
-            // dd($this->rows);
-
+    
             SeiData::create([
                 'course_section_id' => $row['cid'],
                 'questions' => json_encode([

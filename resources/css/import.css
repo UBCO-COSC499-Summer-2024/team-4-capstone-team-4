@@ -94,16 +94,8 @@ input[type="file"] {
 @layer components {
 
 
-.import-nav-item {
-  
-}
-
 .import-nav-link{
   @apply font-light px-3 py-2;
-}
-
-.import-form {
-
 }
 
 .import-form-row {
@@ -114,26 +106,13 @@ input[type="file"] {
   @apply px-2 border-l border-gray-300;
 }
 
-
-
 .import-form-row input:focus {
   @apply border-none outline-none;
 }
 
-.import-table-header th {
-  
+.import-error {
+  @apply text-red-500;
 }
-
-
-.import-table td {
-  @apply  outline-red-400 outline;
-}
-
-.import-table input {
-  @apply border-none w-12;
-}
-
-
 
 .import-button {
   @apply p-2 mt-2 rounded-sm text-sm hover:cursor-pointer;
