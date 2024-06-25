@@ -57,15 +57,18 @@
         </div>    
 
         @endforeach
-
-        @foreach ($courses as $course)
-            <div>{{ $course->name }}</div>
-        @endforeach
-
-       
+    
         <div class="mt-4 flex justify-end space-x-2">
             <button type="button" wire:click="addRow" class="bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Add Row</button>
             <button type="submit" class="bg-green-500 text-black p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
+
+    @if(session('success'))
+        @if($showModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-import-modal />
+        </div>
+        @endif
+    @endif
 </div>

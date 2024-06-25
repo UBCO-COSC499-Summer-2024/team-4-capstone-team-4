@@ -13,6 +13,8 @@ class ImportSeiForm extends Component
     public $testCid = 123456;
     public $rows = [];
 
+    public $showModal = false;
+
     public function mount() {
 
         $this->rows = [
@@ -56,10 +58,8 @@ class ImportSeiForm extends Component
             // dd($row['cid']);
             // dd($this->rows);
 
-            $cid = (int) $row['cid'];
-
             SeiData::create([
-                'course_section_id' => '2',
+                'course_section_id' => $row['cid'],
                 'questions' => json_encode([
                     'q1' => $row['q1'],
                     'q2' => $row['q2'],
@@ -78,6 +78,15 @@ class ImportSeiForm extends Component
 
         session()->flash('success', 'Successfully Created!');
 
+        if(session()->has('success')) {
+            $this->showModal = true;
+        }
+
+    }
+
+    
+    public function closeModal() {
+        $this->showModal = false;
     }
 
 
