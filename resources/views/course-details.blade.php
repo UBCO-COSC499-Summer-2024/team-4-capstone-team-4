@@ -20,7 +20,6 @@
                                 enrolledStudents="{{ $section->enrolled }}" 
                                 droppedStudents="{{ $section->dropped }}" 
                                 courseCapacity="{{ $section->capacity }}" 
-                                studyActivities="Placeholder for Study Activities" 
                             />
                         @endforeach
                     @else
