@@ -5,8 +5,9 @@ namespace App\Livewire;
 use App\Models\CourseSection;
 use App\Models\SeiData;
 use Livewire\Attributes\Rule;
-use Livewire\Attributes\Session;
+use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
+use Illuminate\Support\Facades\Session;
 
 class ImportSeiForm extends Component
 {
@@ -17,9 +18,13 @@ class ImportSeiForm extends Component
 
     public function mount() {
 
-        $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
-        ];
+        if(Session::has('seiFormData')) {
+            $this->rows = Session::get('seiFormData');
+        } else {
+            $this->rows = [
+                ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+            ];
+        }
     }
 
     public function rules() {
@@ -75,13 +80,21 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
+    public function updated($propertyName)
+    {
+        // Save form data to session
+        Session::put('seiFormData', $this->rows);
+    }
+
     public function addRow() {
         $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
+        Session::put('seiFormData', $this->rows);
     }
 
     public function deleteRow($row) {
         unset($this->rows[$row]);
-        $this->rows = array_values($this->rows); // Reindex array
+        $this->rows = array_values($this->rows);
+        Session::put('seiFormData', $this->rows);
     }
 
     public function handleSubmit() {
@@ -109,6 +122,8 @@ class ImportSeiForm extends Component
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
         ];
+        
+        Session::forget('seiFormData');
 
         session()->flash('success', 'Successfully Created!');
 
