@@ -89,7 +89,7 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
-    public function handleClick() {
+    public function handleSubmit() {
 
         // dd($this->rows);
         $this->validate();
