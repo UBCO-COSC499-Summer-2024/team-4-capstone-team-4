@@ -13,7 +13,7 @@ Clockify report
 ### Progress Update (since 6/21/2024) 
 |TASK/ISSUE |STATUS|
 | --------| -------|
-| Sorting for staff list | In Review |
+| Sorting for staff list | Complete |
 | Create add target hours | In Progress |
 | Edit/remove target hours | In Progress |
 | Set up DroneCi | In Progress |
