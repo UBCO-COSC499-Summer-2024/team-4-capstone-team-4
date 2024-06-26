@@ -46,7 +46,7 @@ Clockify report
 ### Progress Update (since 6/5/2024)
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
-| Modify Chart Conroller    | Completed   |
+| Modify Chart Controller    | Completed   |
 | Dashboard Containers      | In Progess  |
 | Add Chart Controller      | In Progress |
 | Dashboard Instructor List | Completed   |
@@ -54,7 +54,7 @@ Clockify report
 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Finished updating the chart conroller to display a chart relevant to our data and began formatting the dashboard containers. Began adding a second chart to display the progress bar, and started to create a plugin for said chart. Added lists for service roles, course sections, and extra hours, to the dashboard, and formatted them appropriately for the project vision. Creating the progress bar plugin proved more difficult than expected, and setting up Chart.JS proved to be a bit of a learning curve. I have not done much front end design for web pages either, so I am working to become more familiar with the container structue. More research was necessary this week than in other parts of the project, but progress is still evident.
+Finished updating the chart controller to display a chart relevant to our data and began formatting the dashboard containers. Began adding a second chart to display the progress bar, and started to create a plugin for said chart. Added lists for service roles, course sections, and extra hours to the dashboard, and formatted them appropriately for the project vision. Creating the progress bar plugin proved more difficult than expected, and setting up Chart.JS proved to be a bit of a learning curve. I have not done much front end design for web pages either, so I am working to become more familiar with the container structue. More research was necessary this week than in other parts of the project, but progress is still evident.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Contiune configuring progress bar plugin
