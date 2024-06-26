@@ -1,4 +1,59 @@
-## Wednesday (6/14- 6/19)
+## Wednesday (6/21- 6/26)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_21_2024-06_26_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Create Successul Modal
+  * #3: Loading State
+  * #4: Session Data
+  * #5: Workday Data Form
+  * #6: SEI Data Form
+    
+
+### Progress Update (since 6/14/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Insert SEI Data Form / #214
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Insert Workday Data Form / #215
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Working to polish up the import page. The main functionality is complete for MVP and am looking to integrate it with the existing system. Will also want to discuss UI for a more permanent design. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Test functionality / feature
+  * Integrate features with rest of system
+
+## Friday (6/19- 6/21)
 
 ### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_19_2024-06_21_2024.pdf)
