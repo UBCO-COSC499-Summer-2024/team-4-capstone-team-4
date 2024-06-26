@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\UserRole;
 use App\Models\ExtraHours;
+use App\Models\Area;
 
 class ExtraHoursTest extends TestCase {
     /**
@@ -26,14 +27,16 @@ class ExtraHoursTest extends TestCase {
      * @return void
      */
     public function test_extra_hours_can_be_created() {
-        // Create an assigner & an instructor
+        // Create an assigner & an instructor & an area
         $assigner = UserRole::factory()->create();
         $instructor = UserRole::factory()->create();
+        $area = Area::factory()->create();
 
         // Create an extra hours
         $extraHours = ExtraHours::factory()->create();([
             'assigner_id' => $assigner->id,
             'instructor_id'=> $instructor->id,
+            'area_id' => $area->id,
 
         ]);
 
@@ -52,10 +55,19 @@ class ExtraHoursTest extends TestCase {
         // Assert that the course section has hours
         $this->assertNotEmpty($extraHours->hours);  
 
+        // Assert that the course section has a year
+        $this->assertNotEmpty($extraHours->year); 
+        
+        // Assert that the course section has a month
+        $this->assertNotEmpty($extraHours->month);  
+
         // Assert that the course section has an assigner
         $this->assertNotEmpty($extraHours->assigner_id);  
 
         // Assert that the course section has an instructor
         $this->assertNotEmpty($extraHours->instructor_id); 
+
+        // Assert that the course section has an area
+        $this->assertNotEmpty($extraHours->area_id);  
     }
 }

@@ -2,7 +2,7 @@
     <div class="content">
         <h1>{{ __('Dashboard') }}</h1>
         <section class="dash-top">
-            <x-visualizations />
+            <x-chart :chart="$chart"/>
         </section>
         <section class="dash-bottom">
             <x-staff-preview />

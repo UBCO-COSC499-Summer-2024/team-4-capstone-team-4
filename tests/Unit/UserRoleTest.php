@@ -6,14 +6,48 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\UserRole;
 use App\Models\User;
-use App\Models\Area;
 use App\Models\Department;
-use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Illuminate\Support\Facades\Schema;
 
 class UserRoleTest extends TestCase {
 
     use RefreshDatabase; // Ensure database is refreshed before each test
+
+    /**
+     * Test if user_roles table exists.
+     *
+     * @return void
+     */
+    public function test_user_roles_table_exists() {
+        $this->assertTrue(
+            Schema::hasTable('user_roles'),
+            'user_roles table does not exist'
+        );
+    }
+
+    /**
+     * Test creating a user role.
+     *
+     * @return void
+     */
+    public function test_user_role_can_be_created(): void {
+        $userRole = UserRole::factory()->create();
+
+        // Assert that the user role model exists
+        $this->assertModelExists($userRole);
+
+        // Assert that the user role was created successfully 
+        $this->assertInstanceOf(UserRole::class, $userRole);
+
+        // Assert that the department has a role
+        $this->assertNotEmpty($userRole->role);  
+
+        // Assert that the department has a user
+        $this->assertNotEmpty($userRole->user_id); 
+
+        // Assert that the department has a department
+        $this->assertNotEmpty($userRole->department_id); 
+    }
 
     /**
      * Test retrieving the associated user for any role.
@@ -110,17 +144,17 @@ class UserRoleTest extends TestCase {
      *
      * @return void
      */
-    public function test_instructor_area_relation() {
+    public function test_instructor_department_relation() {
         // Create test data
-        $area = Area::factory()->create();
-        $userRole = UserRole::factory()->create(['role' => 'instructor', 'area_id' => $area->id]);
+        $department = Department::factory()->create();
+        $userRole = UserRole::factory()->create(['role' => 'instructor', 'department_id' => $department->id]);
 
         // Retrieve the associated area using the relation
-        $retrievedArea = $userRole->area;
+        $retrievedDepartment = $userRole->department;
 
         // Assert that the retrieved area matches the created area
-        $this->assertInstanceOf(Area::class, $retrievedArea);
-        $this->assertEquals($area->id, $retrievedArea->id);
+        $this->assertInstanceOf(Department::class, $retrievedDepartment);
+        $this->assertEquals($department->id, $retrievedDepartment->id);
     }
 
     /**
@@ -167,20 +201,18 @@ class UserRoleTest extends TestCase {
     public function test_multiple_associations() {
         // Create test data
         $user = User::factory()->create();
-        $area1 = Area::factory()->create();
-        $area2 = Area::factory()->create();
         $department1 = Department::factory()->create();
         $department2 = Department::factory()->create();
 
         // Create user roles with multiple associations
         $userRole1 = UserRole::factory()->create([
             'user_id' => $user->id,
-            'area_id' => $area1->id,
+            'department_id' => $department1->id,
             'role' => 'instructor',
         ]);
         $userRole2 = UserRole::factory()->create([
             'user_id' => $user->id,
-            'department_id' => $department1->id,
+            'department_id' => $department2->id,
             'role' => 'dept_head',
         ]);
 
@@ -188,12 +220,12 @@ class UserRoleTest extends TestCase {
         $this->assertInstanceOf(User::class, $userRole1->user);
         $this->assertEquals($user->id, $userRole1->user->id);
 
-        // Test area relation for instructor role
-        $this->assertInstanceOf(Area::class, $userRole1->area);
-        $this->assertEquals($area1->id, $userRole1->area->id);
+        // Test department relation for instructor role
+        $this->assertInstanceOf(Department::class, $userRole1->department);
+        $this->assertEquals($department1->id, $userRole1->department->id);
 
         // Test department relation for dept_head role
         $this->assertInstanceOf(Department::class, $userRole2->department);
-        $this->assertEquals($department1->id, $userRole2->department->id);
+        $this->assertEquals($department2->id, $userRole2->department->id);
     }
 }
