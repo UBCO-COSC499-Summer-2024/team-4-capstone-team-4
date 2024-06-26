@@ -4,7 +4,7 @@
         <div class="header flex justify-between p-2 bg-gray-200">
             <div class="w-1/12 text-center">#</div>
             <div class="w-4/12 text-center">Course Name</div>
-            <div class="w-3/12 text-center">Area</div>
+            <div class="w-5/12 text-center">Area</div>
             <div class="w-3/12 text-center">Duration</div>
             <div class="w-3/12 text-center">Enrolled</div>
             <div class="w-3/12 text-center">Dropped</div>
@@ -19,8 +19,13 @@
                 <input type="text" placeholder="COSC-123" wire:model="rows.{{$index}}.course_name" class="p-1 w-full">
                 @error('rows.'.$index.'.course_name')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-3/12">
-                <input type="text" placeholder="#" wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
+            <div class="import-input w-5/12">
+                <select type="text" placeholder="" wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
+                    <option value="">Select Area</option>
+                    @foreach ($areas as $area)
+                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                    @endforeach
+                </select>
                 @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">

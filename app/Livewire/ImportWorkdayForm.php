@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Area;
 use App\Models\CourseSection;;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
@@ -34,7 +35,7 @@ class ImportWorkdayForm extends Component
 
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.course_name"] = 'required|min:1|max:999';
-            $rules["rows.{$index}.area_id"] = 'required|min:1|max:999';
+            $rules["rows.{$index}.area_id"] = 'required|integer';
             $rules["rows.{$index}.duration"] = 'required|min:1|max:999';
             $rules["rows.{$index}.enrolled"] = 'required|min:1|max:999';
             $rules["rows.{$index}.dropped"] = 'required|min:1|max:999';
@@ -56,14 +57,12 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
         
                 $messages["rows.{$index}.course_name.min"] = 'enter a number 1-999';
-                $messages["rows.{$index}.area.min"] = 'enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'enter a number 1-999';
                 $messages["rows.{$index}.enrolled.min"] = 'enter a number 1-999';
                 $messages["rows.{$index}.dropped.min"] = 'enter a number 1-999';
                 $messages["rows.{$index}.capacity.min"] = 'enter a number 1-999';
     
                 $messages["rows.{$index}.course_name.max"] = 'enter a number 1-999';
-                $messages["rows.{$index}.area.max"] = 'enter a number 1-999';
                 $messages["rows.{$index}.duration.max"] = 'enter a number 1-999';
                 $messages["rows.{$index}.enrolled.max"] = 'enter a number 1-999';
                 $messages["rows.{$index}.dropped.max"] = 'enter a number 1-999';
@@ -130,7 +129,11 @@ class ImportWorkdayForm extends Component
 
     public function render()
     {
-        return view('livewire.import-workday-form');
+        $areas = Area::all();
+
+        return view('livewire.import-workday-form', [
+            'areas' => $areas,
+        ]);
 
         
     }
