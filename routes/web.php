@@ -14,9 +14,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [ChartController::class, 'showChart'])->name('dashboard');
 });
 
 Route::middleware([
