@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ImportController;
-use App\LiveWire\ImportForm;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -79,30 +77,6 @@ Route::middleware([
         return view('performance');
     })->name('performance');
 });
-
-// import page routes
-
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-//     Route::get('/import', function () {
-//         return view('import');
-//     })->name('import');
-//     Route::post('/import', function () {
-//         return view('dashboard');
-//     })->name('import');
-// });
-
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-//     Route::get('/import', [ImportController::class, 'showImportForm'])->name('import');
-//     Route::post('/import', [ImportController::class, 'importData'])->name('import.data');
-// });
 
 Route::middleware([
     'auth:sanctum',
