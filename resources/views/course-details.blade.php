@@ -4,10 +4,8 @@
             <div class="flex items-center space-x-4">
                 <h1 class=" justify-between text-2xl font-bold text-gray-1000">{{ __('Department Details') }}</h1>
             </div>
-            <div class="flex items-center space-x-4">
-                <a href="{{ route('edit-route-name') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Edit
-                </a>
+            <div class="flex items-center space-x-4 ml-auto">
+                <x-edit-button />
             </div>
         </div> 
         <form method="POST" action="{{ route('course-details') }}">

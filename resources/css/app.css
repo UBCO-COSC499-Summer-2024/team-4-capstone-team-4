@@ -465,3 +465,14 @@ th.sortable{
 
 
 }
+
+.editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+}
+
+.editable:focus {
+    border: 1px solid #007bff;
+    background-color: #e9f7fe;
+}
