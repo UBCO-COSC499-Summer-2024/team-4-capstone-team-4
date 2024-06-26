@@ -83,5 +83,15 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::get('/import', function () {
+        return view('import');
+    })->name('import');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });

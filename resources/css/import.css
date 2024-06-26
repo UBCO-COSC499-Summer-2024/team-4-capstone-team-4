@@ -1,0 +1,121 @@
+/* .import-container {
+  margin: auto;
+}
+
+.import-container button{
+  background-color: lightblue;
+  padding: 5px 10px;
+}
+
+.import-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(240, 240, 240, 0.8);
+  padding: 100px;
+  max-width: fit-content;
+}
+
+.import-select {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.import-label {
+  margin-bottom: 5px;
+}
+
+.import-file {
+  margin-top: 20px;
+}
+
+.import-file-area {
+  border: 3px dashed black;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-file label {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="file"] {
+  display: none;
+}
+.import-file-input {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.drop-zone {
+  background-color: white;
+  padding: 100px;
+  border: 3px dashed slategrey;
+  text-align: center;
+}
+
+.drop-zone-hover {
+  background-color: lightgrey;
+  border: 5px solid slategray
+}
+
+
+.drop-zone-button {
+  background-color: lightgray;
+  text-align: center;
+  padding: 2px;
+}
+
+
+.drop-zone-button:hover {
+  background-color: grey;
+  text-align: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.drop-zone-file-name {
+  background-color: lightgray;
+  padding: 10px;
+  
+} */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+
+.import-nav-link{
+  @apply font-light px-3 py-2;
+}
+
+.import-form-row {
+  @apply  flex flex-row items-center bg-gray-50 px-3 py-2 border-b-2 border-gray-300 border-solid  shadow-none;
+}
+
+.import-input {
+  @apply px-2 border-l border-gray-300;
+}
+
+.import-form-row input:focus {
+  @apply border-none outline-none;
+}
+
+.import-error {
+  @apply text-red-500;
+}
+
+.import-button {
+  @apply p-2 mt-2 rounded-sm text-sm hover:cursor-pointer;
+}
+
+}
