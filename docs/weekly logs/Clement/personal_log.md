@@ -1,3 +1,51 @@
+## Cycle: June 21st - June 25th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_21_2024-06_25_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Service Role Database
+  * #2: Service Role Front End Design
+  * #3: Bulk Functionality on Front End
+
+### Progress Update (since 06/21/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Meeting</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Service Role Database</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Service Role Front End Design</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Bulk Functionality on Front End</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>pgaudit Installation</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The project meeting helped clarify the next steps. Made significant progress on both the database and front-end design for the service roles. Successfully installed pgaudit. Bulk functionality addition is underway.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete the service role database
+  * Finalize the service role front end design
+  * Implement and test bulk functionality on the front end
+
+---
+
 ## Cycle: June 19th - June 20th
 
 ### Timesheet
