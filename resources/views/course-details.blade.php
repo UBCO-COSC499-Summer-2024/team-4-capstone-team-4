@@ -1,31 +1,33 @@
 <x-app-layout>
-    <div class="content">
-        <h1>{{ __('Department Details') }}</h1>
-        <section class="container">
-                <ol class="instructor-list">
-                    @foreach ($users as $user)
-                    <li>
-                            <a href="#" class="instructor-link" data-id="{{$user->id}}">{{ $user->firstname }} {{$user->lastname}}</a>
-                    </li>
-                    @endforeach
-                </ol>
-        </section>
-        <section class="coursedetails-table">
-          <table class="table">
-            <thead>
-                <tr>
-                    <th class="sortable">Course Name</th>
-                    <th class="sortable">Course Duration</th>
-                    <th class="sortable">Enrolled Students</th>
-                    <th class="sortable">Dropped Students</th>
-                    <th class="sortable">Course Capacity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!--Table details here-->
-            </tbody>
-          </table>
-        </section>
-    </div>
-    @vite('resources/js/course-details.js')
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+            <div class="flex items-center space-x-4">
+                <h1>{{ __('Department Details') }}</h1>
+            </div>
+        </div> 
+        <form method="POST" action="{{ route('course-details') }}">
+            @csrf         
+            <x-coursedetails-table>
+                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+                <tbody>
+                    @if(isset($courseSections) && !empty($courseSections))
+                        @foreach ($courseSections as $section)
+                            <x-coursedetails-table-row 
+                                serialNumber="{{$section->serialNumber}}"
+                                courseName="{{ $section->name }}" 
+                                departmentName="{{$section->department}}"
+                                courseDuration="{{ $section->duration }}" 
+                                enrolledStudents="{{ $section->enrolled }}" 
+                                droppedStudents="{{ $section->dropped }}" 
+                                courseCapacity="{{ $section->capacity }}" 
+                                studyActivities="Placeholder for Study Activities" 
+                            />
+                        @endforeach
+                    @else
+                        <p>No course sections found.</p>
+                    @endif
+                </tbody>
+            </x-coursedetails-table>
+        </form>  
+    </div> 
 </x-app-layout>

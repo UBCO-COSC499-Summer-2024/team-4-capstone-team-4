@@ -444,28 +444,30 @@ a,
     cursor: pointer; 
 }
 
-th.sortable:after {
-    content: '\25B2'; 
+th.sortable {
+    position: relative;
+    cursor: pointer;
+}
+
+th.sortable.th-sort-asc:hover:after {
+    content: ‘▲’;
+    visibility: visible;
     position: absolute;
-    right: 8px;
-    visibility: hidden;
-    opacity: 0.4;
-    transform: rotate(180deg);
-}
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: rgb(108, 108, 108);
+    }
 
-th.sortable.th-sort-asc:after {
+th.sortable.th-sort-desc:hover:after {
+    content: ‘▼’;
     visibility: visible;
-    content: '\25B2'; 
-}
-
-th.sortable.th-sort-desc:after {
-    visibility: visible;
-    content: '\25BC'; 
-    transform: rotate(0deg);
-}
-
-th.sortable:hover:after {
-    visibility: visible;
-    opacity: 1;
-}
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: rgb(118, 117, 117);
+    }
 
