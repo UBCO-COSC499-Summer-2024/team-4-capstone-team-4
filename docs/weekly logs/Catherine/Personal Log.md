@@ -13,16 +13,18 @@ Clockify report
 ### Progress Update (since 6/21/2024) 
 |TASK/ISSUE |STATUS|
 | --------| -------|
-| Sorting for staff list |  |
-| Create add target hours | |
-| Edit/remove target hours |  |
-| Set up DroneCi |  |
+| Sorting for staff list | In Review |
+| Create add target hours | In Progress |
+| Edit/remove target hours | In Progress |
+| Set up DroneCi | In Progress |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-
+I have finished sorting for all the columns in the staff table and I am working on adding, editing and removing target hours. I'm having some issues with ajax. Setting up DroneCI also isn't done as expected so hopefully it will be completed by next cycle. I haven't written test yet but have done manual testing.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * 
+  * Finishing setting up DroneCI
+  * Finish adding, editing and removing
+  * Write tests
 
 ## Friday (6/19- 6/21)
 
