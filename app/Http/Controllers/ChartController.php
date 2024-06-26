@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class ChartController extends Controller {
     public function showChart() {
         // Chart 1 data
@@ -39,9 +41,9 @@ class ChartController extends Controller {
             ->datasets([
                 [
                     "label" => "Data Set",
-                    "backgroundColor" => "rgba(54, 162, 235, 0.2)",
-                    "borderColor" => "rgba(54, 162, 235, 1)",
-                    "borderWidth" => 1,
+                    "borderColor" => "rgba(54, 162, 235, 0.2)",
+                    "backgroundColor" => "rgba(54, 162, 235, 1)",
+                    "borderWidth" => 0,
                     "borderSkipped" => false,
                     "borderRadius" => 5,
                     "barPercentage" => 0.8,
@@ -55,7 +57,7 @@ class ChartController extends Controller {
                     'legend' => [
                         'display' => false
                     ],
-                    'customLabels' => [
+                    'progressBar' => [
                         // Custom options for your plugin, if any
                     ]
                 ],
