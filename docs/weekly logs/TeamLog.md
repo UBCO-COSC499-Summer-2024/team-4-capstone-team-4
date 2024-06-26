@@ -15,28 +15,32 @@
 
 ## Associated Tasks from Project Board:
 
-![image of tasks](./tasks/)
+![image of tasks](./tasks/todo_june21_june25.png)
+![image of tasks](./tasks/inprogress_june21_june25.png)
+![image of tasks](./tasks/inreview_june21_june25.png)
 
 ## Tasks for Next Cycle:
 
-![image of tasks](./tasks/)
+![image of tasks](./tasks/todo_june21_june25.png)
+![image of tasks](./tasks/inprogress_june21_june25.png)
 
 ## Burn-up Chart (Velocity):
 
-![image of burnup chart](./burnup/)
+![image of burnup chart](./burnup/burnup_june21_june25.png)
 
 ## Times for Team/Individual
 
-![image of clockify report](./clockify/)
+![image of clockify report](./clockify/team_june21_june25.png)
+![image of clockify report](./clockify/individual_june21_june25.png)
 
 ## Completed Tasks
 
-![image of tasks](./tasks/done)
+![image of tasks](./tasks/inreview_june21_june25.png)
 
 ## In Progress Tasks / To do:
 
-![image of tasks](./tasks/to_do)
-![image of tasks](./tasks/inprogress)
+![image of tasks](./tasks/todo_june21_june25.png)
+![image of tasks](./tasks/inprogress_june21_june25.png)
 
 ## Test Report / Testing Status:
 
@@ -44,7 +48,7 @@
 
 ## Overview:
 
-We have continued to work on our assigned tasks....
+We have continued to work on our assigned tasks for the next milestone (MVP) which include the staff page, import page, course details page, role based access and service role management. We are still having some challenges with DroneCI and hope to get it done by next cycle.
 
 ## Date Range:
 
