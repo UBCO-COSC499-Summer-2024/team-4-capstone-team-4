@@ -2,7 +2,12 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
             <div class="flex items-center space-x-4">
-                <h1>{{ __('Department Details') }}</h1>
+                <h1 class=" justify-between text-2xl font-bold text-gray-1000">{{ __('Department Details') }}</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('edit-route-name') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Edit
+                </a>
             </div>
         </div> 
         <form method="POST" action="{{ route('course-details') }}">

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8545be25cb6380bf13204312c51a091",
+    "content-hash": "37fbbd26933263babc240d72eaa3eb0b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1216,6 +1216,68 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "icehouse-ventures/laravel-chartjs",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/icehouse-ventures/laravel-chartjs.git",
+                "reference": "6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/icehouse-ventures/laravel-chartjs/zipball/6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3",
+                "reference": "6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.1|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^8.19",
+                "pestphp/pest": "^2.30",
+                "pestphp/pest-plugin-laravel": "^2.2",
+                "phpstan/phpstan": "^1.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "IcehouseVentures\\LaravelChartjs\\Providers\\ChartjsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "IcehouseVentures\\LaravelChartjs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Icehouse Ventures",
+                    "email": "tech@icehouseventures.co.nz"
+                }
+            ],
+            "description": "Simple package to facilitate and automate the use of charts in Laravel using the Chart.js library",
+            "keywords": [
+                "chartjs",
+                "charts",
+                "graphs",
+                "icehouseventures",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/icehouse-ventures/laravel-chartjs/issues",
+                "source": "https://github.com/icehouse-ventures/laravel-chartjs/tree/v1.2.2"
+            },
+            "time": "2024-06-04T22:13:24+00:00"
         },
         {
             "name": "laravel/fortify",
