@@ -140,11 +140,10 @@ h1 button {
 @media (max-width: 768px) { /* Adjust max-width as needed */
     .toolbar {
         display: none;
-        flex-direction: column; /* Display items vertically */
-        max-height: none; /* Remove max-height to allow content to expand */
-        padding: 8px; /* Increase padding for better touch targets */
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
+        flex-direction: column;
+        align-items: end;
+        padding: 8px;
+        /* box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1); */
     }
 
     .toolbar.active {

@@ -1,3 +1,9 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border: none;
+}
+
 .svcr-list {
     display: grid;
     flex-wrap: wrap;
@@ -5,4 +11,76 @@
     grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
     padding: 6px;
     gap: 12px;
+}
+
+.card-view .svcrole-card {
+    display: inline-block;
+    width: 30%;
+    margin: 1%;
+}
+
+.list-view .svcrole-list-item {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.list-header-title {
+    width: fit-content;
+}
+
+.svcr-list-header-item {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-header-actions {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+}
+
+.list-header-action .icon {
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+}
+
+thead {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+/* .svcr-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+} */
+
+.svcr-list-header th {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    padding: 8px;
+}
+
+tbody {
+    width: 100%;
+}
+
+.svcr-list-item {
+    border-radius: 12px;
+    padding: 6px;
+    border-spacing: 6px;
+}
+
+.svcr-list-item td {
+    padding: 8px;
+    border-radius: 12px;
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
+    margin: 4px;
 }

@@ -18,10 +18,14 @@ const Dropdown = (function() {
             this.useExternal = false;
             this.useCustomRegex = false;
             this.regex = 'i';
+            this.debugMode = debugging;
             this.searchValue = ""; // Initialize searchValue property
             this.addEventListener("click", this.toggleDropdown);
             this.addEventListener("keydown", this.handleKeyboardNavigation);
             this.addEventListener("dropdown-selected", this.handleDropdownSelected);
+            this.addEventListener("change", this.handleDropdownChange.bind(this));
+            this.addEventListener("dropdown-item-selected", this.handleDropdownItemSelected.bind(this));
+            this.addEventListener("input", this.handleSearchInput.bind(this));
             document.addEventListener('click', this.handleOutsideClick);
         }
 
@@ -39,18 +43,21 @@ const Dropdown = (function() {
             this.addEventListener("mouseout", this.handleMouseOut.bind(this));
             this.addEventListener("mouseover", this.handleMouseOver.bind(this));
             this.addEventListener("dropdown-selected", this.handleDropdownSelected.bind(this));
+            this.addEventListener("change", this.handleDropdownChange.bind(this));
+            this.addEventListener("dropdown-item-selected", this.handleDropdownItemSelected.bind(this));
+            this.addEventListener("input", this.handleSearchInput.bind(this));
             this.log("addDropdownContentListener executed");
             this.multiple = this.hasAttribute("multiple");
-            console.log(this.multiple)
+            this.log(this.multiple)
             this.searchable = this.hasAttribute("searchable") ||
             this.hasAttribute("search") ||
             this.hasAttribute("searcheable") ||
             this.hasAttribute("search-box");
-            console.log(this.searchable)
+            this.log(this.searchable)
             this.useExternal = this.hasAttribute("external") ||
             this.hasAttribute("source") ||
             this.hasAttribute("src");
-            console.log(this.useExternal)
+            this.log(this.useExternal)
             if (this.searchable) {
                 this.addSearchFunctionality();
             }
@@ -67,6 +74,10 @@ const Dropdown = (function() {
                 this.useCustomRegex = false;
                 this.regex = 'i';
             }
+            // this.debugMode based on attribute debug, if attribute set with no value then debug mode is true else whatever value is set
+            this.debugMode = this.hasAttribute("debug") ? true : this.getAttribute("debug") || false;
+            this.log("Debug mode:", this.debugMode);
+            this.toggleDebugging(this.debugMode);
 
             const dropdownContent = this.querySelector("dropdown-content");
             if (dropdownContent && !dropdownContent.hasChildNodes()) {
@@ -75,6 +86,14 @@ const Dropdown = (function() {
                     this.appendValue(name, value);
                 }
             }
+        }
+
+        handleDropdownChange(event) {
+            this.log("Dropdown value changed:", event.target.value);
+        }
+        
+        handleDropdownItemSelected(event) {
+            this.log("Dropdown item selected:", event.detail.value);
         }
 
         disconnectedCallback() {
@@ -88,13 +107,19 @@ const Dropdown = (function() {
             document.removeEventListener('click', this.handleOutsideClick);
         }
 
-        toggleDebugging() {
-            debugging = !debugging;
+        toggleDebugging(value) {
+            console.log("toggleDebugging invoked with value:", value);
+            if (value === undefined) {
+                debugging = !debugging;
+            } else {
+                debugging = value;
+            }
+            console.log("Debugging set to:", debugging);
             return debugging;
         }
 
         log(...args) {
-            if (debugging) {
+            if (this.debugMode) {
                 console.log(...args);
             }
         }
@@ -297,11 +322,11 @@ const Dropdown = (function() {
             // Pre-icon
             if (this.hasAttribute("data-pre-icon") || this.hasAttribute("pre-icon") || this.hasAttribute("preIcon") || this.hasAttribute("data-preIcon")) {
                 if (!this.querySelector('.dropdown-pre-icon')) {
-                    const dropdownPreIcon = document.createElement("i");
-                    dropdownPreIcon.className = "material-symbols-outlined dropdown-pre-icon noselect";
+                    const dropdownPreIcon = document.createElement("span");
+                    dropdownPreIcon.className = "material-symbols-outlined dropdown-pre-icon icon noselect";
                     const preIcon = this.getAttribute("data-pre-icon") ?? this.getAttribute("pre-icon") ?? this.getAttribute("data-preIcon") ?? this.getAttribute("preIcon")
                     dropdownPreIcon.textContent = preIcon ?? "list";
-                    this.appendChild(dropdownPreIcon);
+                    this.insertBefore(dropdownPreIcon, this.firstChild);
                 } else {
                     if (!this.querySelector('.dropdown-pre-icon').textContent) {
                         this.querySelector(".dropdown-pre-icon").textContent = this.getAttribute("data-pre-icon") ?? this.getAttribute("pre-icon") ?? this.getAttribute("data-preIcon") ?? this.getAttribute("preIcon") ?? "list";
@@ -314,7 +339,7 @@ const Dropdown = (function() {
                 const dropdownTitle = document.createElement("span");
                 dropdownTitle.className = "dropdown-title noselect";
                 dropdownTitle.textContent = this.getAttribute("title");
-                this.appendChild(dropdownTitle);
+                this.insertBefore(dropdownTitle, this.querySelector('.dropdown-pre-icon')?.nextSibling);
             } else {
                 this.querySelector(".dropdown-title").innerHTML= this.getAttribute("title")?? "";
             }
@@ -322,9 +347,9 @@ const Dropdown = (function() {
             // Button
             if (!this.querySelector(".dropdown-button")) {
                 const dropdownButton = document.createElement("i");
-                dropdownButton.className = "material-icons dropdown-button noselect";
+                dropdownButton.className = "material-symbols-outlined dropdown-button noselect";
                 dropdownButton.textContent = "arrow_drop_down";
-                this.appendChild(dropdownButton);
+                this.insertBefore(dropdownButton, this.querySelector('.dropdown-title')?.nextSibling);
             } else {
                 this.querySelector(".dropdown-button").textContent = "arrow_drop_down";
             }
@@ -473,9 +498,10 @@ const Dropdown = (function() {
             this.closeDropdown();
 
             this.dispatchEvent(new Event("change"));
-            const selectedValue = item.getAttribute("value");
+            const val = item.getAttribute("value");
             const dropdownSelectedEvent = new CustomEvent("dropdown-item-selected", {
-                detail: { value: selectedValue }
+                detail: { value: val },
+                bubbles: true
             });
             this.dispatchEvent(dropdownSelectedEvent);
             return true;
@@ -637,7 +663,7 @@ const Dropdown = (function() {
                 letter-spacing: 1px;
                 cursor: pointer;
                 white-space: pre;
-                padding: 8px;
+                padding: 2px 8px;
                 text-decoration: none;
                 -webkit-user-select: none;
                 -moz-user-select: none;

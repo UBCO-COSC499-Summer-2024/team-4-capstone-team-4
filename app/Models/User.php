@@ -72,6 +72,14 @@ class User extends Authenticatable {
         return $this->hasMany(UserRole::class, 'user_id');
     }
 
+    public function hasRole($role) {
+        return $this->roles->contains('role', $role);
+    }
+
+    public function hasRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
+
     public function getName() {
         try {
             return $this->firstname . ' ' . $this->lastname;

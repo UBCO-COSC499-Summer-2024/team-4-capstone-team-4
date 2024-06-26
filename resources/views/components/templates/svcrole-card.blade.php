@@ -1,25 +1,4 @@
 @props(['svcrole'])
-{{-- <div class="card svcr-card">
-    <div class="card-header">
-        <h3>{{ $svcrole->name }}</h3>
-    </div>
-    <div class="card-body">
-        <section>
-            <p>{{ $svcrole->description }}</p>
-        </section>
-        <section class="svcr-card-instructors">
-            <h4>Instructors</h4>
-            <ul>
-                @foreach ($svcrole->instructors as $instructor)
-                    <li>{{ $instructor->name }}</li>
-                @endforeach
-            </ul>
-        </section>
-    </div>
-    <div class="card-footer">
-        <a href="{{ route('svcroles.show', $svcrole) }}" class="btn btn-primary">View</a>
-    </div>
-</div> --}}
 <div class="card">
     <div class="card-header">
         <h2>{{ $svcrole->name }}</h2>
