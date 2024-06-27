@@ -1,3 +1,28 @@
+## Friday (6/26- 6/28)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_06_26_2024-06_28_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Add target hours - add validation 
+  * #2: Edit/remove target hours
+  * #3: Set up DronceCi
+  * #4: Change components to use livewire
+
+### Progress Update (since 6/26/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Add target hours | |
+| Edit/remove target hours | |
+| Set up DroneCi |  |
+| Change components to use livewire | |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * 
+
 ## Wednesday (6/21- 6/26)
 
 ### Timesheet
