@@ -107,5 +107,10 @@ class StaffController extends Controller
         return redirect('staff');
 
     }
+
+    public function update_target_hours(Request $request){
+        $email = $request->input('emails'); 
+        dd($email);
+    }
    
 }

@@ -57,21 +57,26 @@ window.onload = function() {
     document.getElementById('staff-save').addEventListener('click', function(event){
         event.preventDefault();
 
+        $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') } 
+        });
+
         $.ajax({
-            url: '/staff-edit-mode',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
+            url: "/staff",
+            type: "PATCH",
+            dataType: "JSON", 
             data: {
-                emails: emails,
-                changedInputs: changedInputs
+                info: JSON.stringify(emails)
             },
-            success: function(response) {
-                console.log(response);
+            contentType: 'application/json; charset=utf-8',
+            cache: false,
+            success: function(data) {
+                console.log(data);
+                console.log("success");
             },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
+            error: function(data) {
+                console.log(data);
+                console.log("error");
             }
         });
     });
@@ -83,3 +88,29 @@ function getEmail(input) {
     var email = row.querySelector('p[name="email"]');
     return email ? email.value : null;
 }
+
+/* document.addEventListener('DOMContentLoaded', function () {
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+        v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+    document.querySelectorAll('th.sortable').forEach(th => th.addEventListener('click', (() => {
+        const table = th.closest('table');
+        Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+            .forEach(tr => table.appendChild(tr));
+        
+        // Update sort direction class
+        th.classList.toggle('th-sort-asc', this.asc);
+        th.classList.toggle('th-sort-desc', !this.asc);
+
+        // Remove sort direction class from other headers
+        Array.from(th.parentNode.children).forEach(header => {
+            if (header !== th) {
+                header.classList.remove('th-sort-asc', 'th-sort-desc');
+            }
+        });
+    })));
+}); */

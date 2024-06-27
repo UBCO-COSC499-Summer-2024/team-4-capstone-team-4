@@ -12,19 +12,17 @@
         <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
             Subareas
         </h6>
-        <form id="filterForm" action="{{ route('staff') }}" method="GET">
-            <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-                @php
-                    $allAreas = App\Models\Area::all();
-                @endphp
-                @foreach ($allAreas as $area)
-                    <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                        <x-checkbox class="filter-checkbox" name="areas[]" value="{{ $area->name }}" />
-                        {{ $area->name }}
-                    </li>
-                @endforeach
-            </ul>
-            <button type="submit" class="mt-3 bg-blue-700 text-white text-sm px-3 py-2 rounded-lg">Submit</button>
-        </form>
+        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+            @php
+                $allAreas = App\Models\Area::all();
+            @endphp
+            @foreach ($allAreas as $area)
+                <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                    <x-checkbox wire:model="selectedAreas" class="filter-checkbox" name="areas[]" value="{{ $area->name }}" />
+                    {{ $area->name }}
+                </li>
+            @endforeach
+            <x-button wire:click="filter">Filter</x-button>
+        </ul>
     </div>
 </div>

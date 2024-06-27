@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+   {{--  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
             <x-staff-search />
             <div class="flex items-center space-x-4">
@@ -21,7 +21,7 @@
                             @php
                                 $area_names=[];
                                 $instructor = App\Models\UserRole::find($user->instructor_id);
-                                $performance = App\Models\InstructorPerformance::where('instructor_id',  $user->instructor_id)->first();
+                                //$performance = App\Models\InstructorPerformance::where('instructor_id',  $user->instructor_id)->first();
                                 $course_ids = $instructor->teaches->pluck('course_section_id')->all();
                                 if($course_ids !== null){
                                     foreach ($course_ids as $course_id){
@@ -35,8 +35,8 @@
                                 email="{{ $user->email }}" 
                                 subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
                                 completedHours="{{ $user->total_hours }}" 
-                                targetHours="{{ $performance ? ($performance->target_hours ?? '-') : '-' }}" 
-                                rating="{{ $performance ? ($performance->score ?? '-') : '-' }}" 
+                                targetHours="{{$user->target_hours ?? '-' }}" 
+                                rating="{{ $user->score }}"
                                 src="{{ $user->profile_photo_url }}" 
                             />
                         @endforeach
@@ -45,5 +45,6 @@
             </tbody>
         </x-staff-table>
         </form>  
-    </div> 
+    </div>  --}}
+    @livewire('staff-list')
 </x-app-layout>

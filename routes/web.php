@@ -25,13 +25,24 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::middleware([
+/* Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     Route::get('/staff', [StaffController::class, 'index_search'])->name('staff');
+}); */
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/staff', function(){
+        return view('staff');
+    })->name('staff');
 });
+
 
 Route::middleware([
     'auth:sanctum',
@@ -55,6 +66,14 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::post('/staff-edit-mode', [StaffEditModeController::class, 'update_target_hours'])->name('staff-edit-mode');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::patch('/staff', [StaffController::class, 'update_target_hours'])->name('staff');
 });
 
 Route::middleware([

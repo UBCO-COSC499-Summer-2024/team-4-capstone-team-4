@@ -77,11 +77,11 @@ class StaffEditModeController extends Controller
        /*  $request->validate([
            'hours' =>['required', 'numeric']
         ]); */
-        $hours = $request->input('changedInputs');
+        //$hours = $request->input('changedInputs');
        // $length = count($hours);
-        $email = $request->input('emails');
+       // $email = $request->input('emails');
        
-        dd($hours);
+        //dd($hours);
         /* for($i = 0; $i< $length; $i++){
             $user = User::where('email', $email[$i])->first();
             $instructor = $user->roles->where('role', 'instructor')->first();
@@ -93,7 +93,8 @@ class StaffEditModeController extends Controller
             }
         } */
 
-        return redirect('staff');
+        //return redirect('staff');
+        dd("hello");
 
     }
    

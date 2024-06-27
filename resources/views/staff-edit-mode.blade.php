@@ -7,7 +7,8 @@
                 <x-button form="editForm" id="staff-save" name="staff-save">Save</x-button>
             </div>
         </div> 
-        <form id=editForm method="POST" action="{{ route('staff-edit-mode')}}">
+        <form id=editForm method="POST" action="{{ route('staff') }}">
+            @method('PATCH')
             @csrf          
         <x-staff-table>
             <x-staff-table-header-edit :sortField="$sortField" :sortDirection="$sortDirection" :query="$query" :areas="$areas" />
