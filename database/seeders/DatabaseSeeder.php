@@ -1,11 +1,11 @@
 <?php
-
 namespace Database\Seeders;
 
-use App\Models\CourseSection;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\CourseSection;
+use App\Models\UserRole;
+use App\Models\Teach;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,19 +14,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //CourseSection::factory(10)->create();
+        // Create users with roles and course sections
+        User::factory(10)->create()->each(function ($user) {
+            $role = UserRole::create([
+                'user_id' => $user->id,
+                'role' => 'instructor',
+                'department_id' => 1 // Assuming department_id 1 exists
+            ]);
 
-        User::factory()->create([
-            'firstname' => 'Test',
-            'firstname' => 'User',
-            'email' => 'test@example.com',
-        ]);
-
-        User::factory()->create([
-            'firstname' => 'Admin',
-            'firstname' => 'User',
-            'email' => 'admin@example.com',
-            'acces_code' => 'admin'
-        ]);
+            $courseSections = CourseSection::factory(2)->create();
+            foreach ($courseSections as $section) {
+                Teach::create([
+                    'instructor_id' => $role->id,
+                    'course_section_id' => $section->id
+                ]);
+            }
+        });
     }
 }

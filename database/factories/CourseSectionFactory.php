@@ -17,7 +17,7 @@ class CourseSectionFactory extends Factory {
      */
     protected $model=CourseSection::class;
 
-    public function definition(): array {
+    public function definition() {
         return [
             'name'=>fake()->name(),
             'area_id'=>Area::pluck('id')->random(),

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChartController;
@@ -7,6 +7,9 @@ use App\Http\Controllers\ChartController;
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
+
+Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
+Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([
@@ -82,6 +85,19 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+<<<<<<< HEAD
+])->group(function(){
+    Route::get('{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+});
+
+Route::get('/privacy-policy', function () {
+    return view('policy');
+})->name('privacy-policy');
+
+Route::get('/tos', function () {
+    return view('terms');
+})->name('tos');
+=======
 ])->group(function () {
     Route::get('/import', function () {
         return view('import');
@@ -95,3 +111,4 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });
+>>>>>>> pre-dev-integration

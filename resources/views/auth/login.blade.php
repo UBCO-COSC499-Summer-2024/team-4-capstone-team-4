@@ -33,4 +33,17 @@
             </x-form-item>
         </form>
     </section>
+    <section id="auth-provider" class="auth-section active glass">
+        <h1>Or Login With</h1>
+        @if (session('provider-error'))
+            <div class="alert alert-danger">
+                {{ session('provider-error') }}
+            </div>
+        @endif
+        <div class="provider-list">
+            <x-link href="{{ route('auth.provider', 'google') }}" title="Google" class="auth-provider-link">
+                <x-logos.google/>
+            </x-link>
+        </div>
+    </section>
 </x-auth-layout>
