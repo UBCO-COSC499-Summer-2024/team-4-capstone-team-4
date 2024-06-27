@@ -1,3 +1,5 @@
+@props(['targetHours', 'email', 'subarea', 'completedHours','rating', 'fullname', 'src'])
+
 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
     <td class="w-3 px-6 py-4">
         <div class="flex items-center justify-center">
@@ -23,8 +25,14 @@
     </td>
     <td class="px-6 py-4">
         <div class="flex items-center justify-center">
-            <input type="text" name="hours" class="border border-gray-700 bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-            value="{{ $targetHours }}" data-original-value="{{ $targetHours }}"/>
+            @if($targetHours === '-')
+            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-gray-700 bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            value="" />
+        @else
+            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-gray-700 bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            value="{{ $targetHours }}" /> 
+        @endif
+        
         </div>
     </td>
     <td class="px-6 py-4">

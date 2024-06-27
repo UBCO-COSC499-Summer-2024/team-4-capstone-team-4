@@ -41,7 +41,7 @@ window.onload = function() {
     }
   
     //find all changed inputs in edit mode
-    var changedInputs = [];
+  /*   var changedInputs = [];
     var emails = [];
 
     document.querySelectorAll('input[name="hours"]').forEach(input => {
@@ -79,7 +79,7 @@ window.onload = function() {
                 console.log("error");
             }
         });
-    });
+    }); */
 }
 
 function getEmail(input) {
@@ -87,7 +87,7 @@ function getEmail(input) {
     // Find the email within this row
     var email = row.querySelector('p[name="email"]');
     return email ? email.value : null;
-}
+} 
 
 /* document.addEventListener('DOMContentLoaded', function () {
     const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;

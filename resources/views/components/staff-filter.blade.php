@@ -22,7 +22,7 @@
                     {{ $area->name }}
                 </li>
             @endforeach
-            <x-button wire:click="filter">Filter</x-button>
+            <x-staff-button wire:click="filter">Filter</x-staff-button>
         </ul>
     </div>
 </div>
