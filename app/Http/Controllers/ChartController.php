@@ -19,14 +19,14 @@ class ChartController extends Controller {
             ->datasets([
                 [
                     "label" => "Total Hours",
-                    "backgroundColor" => "rgba(38, 185, 154, 0.31)",
-                    "borderColor" => "rgba(38, 185, 154, 0.7)",
+                    "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                    "borderColor" => "rgba(37, 41, 150, 0.7)",
                     "data" => $totalHours
                 ],
                 [
                     "label" => "Target Hours",
-                    'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
-                    'borderColor' => 'rgba(255, 99, 132, 1)',
+                    'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
+                    'borderColor' => 'rgba(0, 0, 0, 0.25)',
                     "data" => $targetHours
                 ]
             ]);
