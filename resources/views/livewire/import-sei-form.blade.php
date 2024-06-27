@@ -16,7 +16,7 @@
         <div class="import-form-row flex justify-between items-center p-2 border-b">
             <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
             <div class="import-input w-6/12">
-                <select type="text" placeholder="123456" wire:model="rows.{{$index}}.cid" class="p-1 w-full">
+                <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
                         <option value="{{ $course->id }}">{{ $course->name }}</option>

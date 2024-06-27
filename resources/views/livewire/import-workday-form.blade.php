@@ -20,7 +20,7 @@
                 @error('rows.'.$index.'.course_name')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-5/12">
-                <select type="text" placeholder="" wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
+                <select wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
                     <option value="">Select Area</option>
                     @foreach ($areas as $area)
                         <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -29,19 +29,19 @@
                 @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="text" placeholder="#" wire:model="rows.{{$index}}.duration" class="p-1 w-full">
+                <input type="number" placeholder="#" wire:model="rows.{{$index}}.duration" class="p-1 w-full">
                 @error('rows.'.$index.'.duration')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="text" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="p-1 w-full">
+                <input type="number" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="p-1 w-full">
                 @error('rows.'.$index.'.enrolled')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="text" placeholder="#" wire:model="rows.{{$index}}.dropped" class="p-1 w-full">
+                <input type="number" placeholder="#" wire:model="rows.{{$index}}.dropped" class="p-1 w-full">
                 @error('rows.'.$index.'.dropped')<span class="import-error"> {{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="text" placeholder="#" wire:model="rows.{{$index}}.capacity" class="p-1 w-full">
+                <input type="number" placeholder="#" wire:model="rows.{{$index}}.capacity" class="p-1 w-full">
                 @error('rows.'.$index.'.capacity')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="w-3/12 flex justify-center border-l border-gray-300">
