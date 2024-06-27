@@ -9,7 +9,7 @@ class ImportTabs extends Component
 {
 
     #[Session]
-    public $activeTab;
+    public $activeTab = 'workday';
     
     public function setActiveTab($tab) {
         $this->activeTab = $tab;      
