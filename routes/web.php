@@ -87,7 +87,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function(){
-    Route::get('{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+    Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
 
 Route::get('/privacy-policy', function () {
