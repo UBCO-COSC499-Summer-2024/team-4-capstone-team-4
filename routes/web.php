@@ -85,7 +85,6 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-<<<<<<< HEAD
 ])->group(function(){
     Route::get('{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
@@ -97,7 +96,11 @@ Route::get('/privacy-policy', function () {
 Route::get('/tos', function () {
     return view('terms');
 })->name('tos');
-=======
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
 ])->group(function () {
     Route::get('/import', function () {
         return view('import');
@@ -111,4 +114,3 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });
->>>>>>> pre-dev-integration
