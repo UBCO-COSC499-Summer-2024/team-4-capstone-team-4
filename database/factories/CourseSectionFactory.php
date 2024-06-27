@@ -18,10 +18,12 @@ class CourseSectionFactory extends Factory {
     protected $model=CourseSection::class;
 
     public function definition() {
+        $prefixes=['COSC', 'MATH','PHYS','STAT'];
         return [
-            'name'=>fake()->name(),
+
+            'name'=>fake()->randomElement($prefixes).' '.fake()->numberBetween(100,500),
             'area_id'=>Area::pluck('id')->random(),
-            'duration'=>$this->faker->sentence,
+            'duration'=>fake()->numberBetween(4,12),
             'enrolled'=>fake()->numberBetween(10,100),
             'dropped'=>fake()->numberBetween(0,20),
             'capacity'=>fake()->numberBetween(10,200),
