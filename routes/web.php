@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChartController;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseDetailsController;
 
 // Route::get('/', function () {
 //     return view('auth.login');
