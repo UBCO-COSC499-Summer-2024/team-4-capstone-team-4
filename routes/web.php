@@ -1,9 +1,8 @@
  <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CourseDetailsController;
-use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
+use App\Http\Controllers\ChartController;
+
 
 // Route::get('/', function () {
 //     return view('auth.login');
@@ -18,9 +17,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [ChartController::class, 'showChart'])->name('dashboard');
 });
 
 Route::middleware([
@@ -88,6 +85,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+<<<<<<< HEAD
 ])->group(function(){
     Route::get('{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
@@ -99,3 +97,18 @@ Route::get('/privacy-policy', function () {
 Route::get('/tos', function () {
     return view('terms');
 })->name('tos');
+=======
+])->group(function () {
+    Route::get('/import', function () {
+        return view('import');
+    })->name('import');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
+});
+>>>>>>> pre-dev-integration

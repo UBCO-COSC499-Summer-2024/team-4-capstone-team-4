@@ -21,8 +21,17 @@ class SeiData extends Model {
      *
      * @var array
      */
+    
+    //  ------ old -------
+
+    // protected $fillable = [
+    //     'cid', 'q1im', 'q2im', 'q3im', 'q4im', 'q5im', 'q6im',
+    // ];
+
+    //  ------ new -------
+
     protected $fillable = [
-        'cid', 'q1im', 'q2im', 'q3im', 'q4im', 'q5im', 'q6im',
+        'course_section_id', 'questions',
     ];
 
     /**
@@ -31,6 +40,7 @@ class SeiData extends Model {
      * @var array
      */
     protected $casts = [
+        'questions' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
