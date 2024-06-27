@@ -11,7 +11,7 @@ class ChartController extends Controller {
         $targetHours = [100, 110, 100, 90, 110, 100, 90, 80, 90, 80, 100, 110];
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        $chart1 = app()
+        $chart = app()
             ->chartjs->name("AnnualHoursChart")
             ->type("line")
             ->size(["width" => 600, "height" => 200])
@@ -31,6 +31,6 @@ class ChartController extends Controller {
                 ]
             ]);
 
-        return view('dashboard', ['chart1' => $chart1]);
+        return view('dashboard', compact('chart'));
     }
 }
