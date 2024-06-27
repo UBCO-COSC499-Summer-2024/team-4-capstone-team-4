@@ -36,10 +36,10 @@ class ImportWorkdayForm extends Component
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.course_name"] = 'required|min:1|max:999';
             $rules["rows.{$index}.area_id"] = 'required|integer';
-            $rules["rows.{$index}.duration"] = 'required|min:1|max:999';
-            $rules["rows.{$index}.enrolled"] = 'required|min:1|max:999';
-            $rules["rows.{$index}.dropped"] = 'required|min:1|max:999';
-            $rules["rows.{$index}.capacity"] = 'required|min:1|max:999';
+            $rules["rows.{$index}.duration"] = 'required|integer|min:1|max:999';
+            $rules["rows.{$index}.enrolled"] = 'required|integer|min:1|max:999';
+            $rules["rows.{$index}.dropped"] = 'required|integer|min:1|max:999';
+            $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
         }
 
         return $rules;
@@ -55,6 +55,12 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.enrolled.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.dropped.required"] = 'Please enter # of dropped';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
+
+                $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
+                $messages["rows.{$index}.duration.integer"] = 'Must be a number';
+                $messages["rows.{$index}.enrolled.integer"] = 'Must be a number';
+                $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
+                $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
         
                 $messages["rows.{$index}.course_name.min"] = 'enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'enter a number 1-999';
