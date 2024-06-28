@@ -11,8 +11,8 @@ class StaffController extends Controller
 {
     public function add_target_hours(Request $request){
         $request->validate([
-           'hours' =>['required', 'numeric'],
-           'staff-checkboxes'=>['required']
+            'hours' => ['required', 'numeric', 'min:0'],
+            'staff-checkboxes' => ['required', 'array', 'min:1']
         ]);
         $hours = $request->input('hours');
         $staff_checkboxes = $request->input('staff-checkboxes');

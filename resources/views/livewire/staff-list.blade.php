@@ -6,9 +6,14 @@
             <x-staff-dropdown />
         </div>
     </div> 
-    <form method="POST" action="{{ route('staff')}}">
+    @if (session()->has('message'))
+        <div class="text-sm text-green-600">
+            {{ session('message') }}
+        </div>
+    @endif
+    <form wire:submit.prevent="submit">
         @csrf
-    <x-staff-targethours/>           
+    <x-staff-targethours :showModal="$showModal"/>           
     <x-staff-table>
         <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
         <tbody> 

@@ -24,7 +24,7 @@ window.onload = function() {
     });
 
     // add target hours 
-    var add_target_hours =  document.getElementById('add-target-hours');
+   /*  var add_target_hours =  document.getElementById('add-target-hours');
     if(add_target_hours ){
         add_target_hours.addEventListener('click', function(event) {
             event.preventDefault();
@@ -38,7 +38,7 @@ window.onload = function() {
         close_modal.addEventListener('click', function(event) {
             document.getElementById('target-hours-modal').classList.add('hidden');
         }); 
-    }
+    } */
   
     //find all changed inputs in edit mode
   /*   var changedInputs = [];

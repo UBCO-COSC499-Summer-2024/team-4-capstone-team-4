@@ -11,6 +11,13 @@ class StaffList extends Component
     public $sortField = 'firstname'; // default 
     public $sortDirection = 'asc'; //default
     public $selectedAreas = [];
+    public $hours;
+    public $staffCheckboxes = [];
+    public $showModal = false;
+    protected $rules = [
+        'hours' => 'required|numeric|min:0',
+        'staffCheckboxes' => 'required|array|min:1',
+    ];
 
     public function render()
     {
@@ -64,7 +71,7 @@ class StaffList extends Component
        
         $users = $usersQuery->distinct()->get();
         //dd($users);
-        return view('livewire.staff-list', ['users'=> $users]);
+        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal]);
     }
 
     public function sort($field){
@@ -79,4 +86,28 @@ class StaffList extends Component
     public function filter(){
         $this->selectedAreas = $this->selectedAreas;
     }
+
+    public function submit()
+    {
+        $this->validate();
+
+        $hours = $this->hours;
+        $staff_checkboxes = $this->staffCheckboxes;
+
+        foreach($staff_checkboxes as $email){
+            $user = User::where('email', $email)->first();
+            $instructor = $user->roles->where('role', 'instructor')->first();
+            $performance = $instructor->instructorPerformance;
+            if($performance){
+                $performance->update(['target_hours' => $hours]);
+            }else{
+                return response()->json(['message' => 'Instructor performance not found.'], 404);
+            }
+        }
+
+        session()->flash('message', 'Target hours added successfully.');
+
+        $this->showModal = false;
+    }
+
 }

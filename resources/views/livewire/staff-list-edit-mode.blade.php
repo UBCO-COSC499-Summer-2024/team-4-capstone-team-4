@@ -6,7 +6,13 @@
             <x-staff-button wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button>
             <x-staff-button wire:click="exit" id="staff-exit" name="staff-exit">Exit</x-staff-button>
         </div>
-    </div>          
+    </div> 
+    @if(session()->has('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+         
     <x-staff-table>
         <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
         <tbody> 

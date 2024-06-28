@@ -10,7 +10,7 @@
     </x-slot>
 
     <x-slot name="content">
-        <x-dropdown-link href="#" id="add-target-hours" >
+        <x-dropdown-link id="add-target-hours" wire:click="$set('showModal', true)" >
             {{ __('Add Target Hours') }}
         </x-dropdown-link>
         <x-dropdown-link href="{{ route('staff-edit-mode') }}" id="edit-target-hours" >
