@@ -2,38 +2,57 @@
 
     <form wire:submit.prevent="handleSubmit" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
-            <div class="w-1/12 text-center">#</div>
-            <div class="w-4/12 text-center">Course Name</div>
-            <div class="w-4/12 text-center">Area</div>
-            <div class="w-3/12 text-center">Year</div>
-            <div class="w-3/12 text-center">Duration</div>
-            <div class="w-2/12 text-center">Enrolled</div>
-            <div class="w-2/12 text-center">Dropped</div>
-            <div class="w-2/12 text-center">Capacity</div>
-            <div class="w-1/12 text-center"></div>
+            <div class="w-1/12 text-center px-1">#</div>
+            <div class="w-4/12 text-center px-1">Course Name</div>
+            <div class="w-4/12 text-center px-1">Area</div>
+            <div class="w-2/12 text-center px-1">Session</div>
+            <div class="w-2/12 text-center px-1">Term</div>
+            <div class="w-3/12 text-center px-1">Year</div>
+            <div class="w-2/12 text-center px-1">Duration</div>
+            <div class="w-2/12 text-center px-1">Enrolled</div>
+            <div class="w-2/12 text-center px-1">Dropped</div>
+            <div class="w-2/12 text-center px-1">Capacity</div>
+            <div class="w-1/12 text-center px-1"></div>
         </div>
 
         @foreach ($rows as $index => $row)
         <div class="import-form-row flex justify-between items-center p-2 border-b">
             <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
             <div class="import-input w-4/12">
-                <input type="text" placeholder="COSC-123" wire:model="rows.{{$index}}.course_name" class="p-1 w-full">
+                <input type="text" placeholder="COSC123" wire:model="rows.{{$index}}.course_name" class="p-1 w-full">
                 @error('rows.'.$index.'.course_name')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-4/12">
                 <select wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
-                    <option value="">Select Area</option>
+                    <option value="">Select</option>
                     @foreach ($areas as $area)
                         <option value="{{ $area->id }}">{{ $area->name }}</option>
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
             </div>
+            <div class="import-input w-2/12">
+                <select wire:model="rows.{{$index}}.session" class="p-1 w-full">
+                    <option value="">Select</option>
+                    <option value="W">W</option>
+                    <option value="S">S</option>
+                </select>
+                @error('rows.'.$index.'.session')<span class="import-error">{{ $message }}</span>@enderror
+            </div>
+            <div class="import-input w-2/12">
+                <select wire:model="rows.{{$index}}.term" class="p-1 w-full">
+                    <option value="">Select</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=1/2>1 & 2</option>
+                </select>                
+                @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
+            </div>
             <div class="import-input w-3/12">
                 <input type="number" placeholder="2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="p-1 w-full">
                 @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-3/12">
+            <div class="import-input w-2/12">
                 <input type="number" placeholder="#" wire:model="rows.{{$index}}.duration" class="p-1 w-full">
                 @error('rows.'.$index.'.duration')<span class="import-error">{{ $message }}</span>@enderror
             </div>

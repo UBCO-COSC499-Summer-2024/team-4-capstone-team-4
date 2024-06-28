@@ -86,6 +86,8 @@ return new class extends Migration
             $table->integer('dropped');
             $table->integer('capacity');
             $table->year('year');
+            $table->integer('term');
+            $table->string('session');
             $table->timestamps();
         });
     
