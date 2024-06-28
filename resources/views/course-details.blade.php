@@ -35,10 +35,10 @@
             </x-coursedetails-table>
             <div class="flex items-center space-x-4 ml-auto">
                 <x-save-button />
+                <x-cancel-button />
             </div>
         </form>
     </div> 
     <x-save-details-message />
-    <script src="{{ asset('resources/js/editButton.js') }}"></script>
-    <script src="{{asset('resources/js/saveButton.js')}}"></script>
 </x-app-layout>
+ 

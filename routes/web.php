@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use Illuminate\Support\Facades\File;
 
 
 Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
@@ -75,6 +76,24 @@ Route::middleware([
     'verified',
 ])->group(function(){
     Route::get('/courses', [CourseDetailsController::class, 'show'])->name('course-details');
+});
+
+Route::middleware([
+    'auth.sanctum',config('jetstream.auth_session'),
+    'verified',
+])->group(function(){
+    Route::get('/js/{filename}', function ($filename){
+        $path = resource_path('js/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    return response($file, 200)->header("Content-Type", $type);
+    });
 });
 
 Route::get('/privacy-policy', function () {

@@ -490,22 +490,3 @@ th.editable:focus {
     border: 1px solid #007bff;
     background-color: #e9f7fe;
 }
-
-#saveButton {
-    display: none; 
-    background-color: #4CAF50; 
-    border: none; 
-    color: white; 
-    padding: 10px 24px; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
-    margin: 4px 2px; 
-    cursor: pointer; 
-    border-radius: 4px;
-}
-
-#saveButton:hover {
-    background-color: #45a049; 
-}
