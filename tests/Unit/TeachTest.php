@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Teach;
 use App\Models\CourseSection;
 use App\Models\UserRole;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TeachTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if teaches table exists.
      *

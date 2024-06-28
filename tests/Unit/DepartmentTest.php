@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Department;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DepartmentTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if departments table exists.
      *

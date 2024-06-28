@@ -8,7 +8,7 @@
         </div>
     </div> 
     @if(session()->has('error'))
-        <div class="alert alert-danger">
+        <div class="text-sm text-red-600">
             {{ session('error') }}
         </div>
     @endif

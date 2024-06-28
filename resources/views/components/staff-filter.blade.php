@@ -8,7 +8,7 @@
     </button>
   
     <!-- Dropdown menu -->
-    <div id="filterDropdown" class="z-10 hidden w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700 absolute top-full mt-2">
+    <div id="filterDropdown" class="hidden z-50 w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700 absolute top-full mt-2">
         <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
             Subareas
         </h6>
