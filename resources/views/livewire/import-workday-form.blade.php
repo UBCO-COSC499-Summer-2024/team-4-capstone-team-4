@@ -4,12 +4,13 @@
         <div class="header flex justify-between p-2 bg-gray-200">
             <div class="w-1/12 text-center">#</div>
             <div class="w-4/12 text-center">Course Name</div>
-            <div class="w-5/12 text-center">Area</div>
+            <div class="w-4/12 text-center">Area</div>
+            <div class="w-3/12 text-center">Year</div>
             <div class="w-3/12 text-center">Duration</div>
-            <div class="w-3/12 text-center">Enrolled</div>
-            <div class="w-3/12 text-center">Dropped</div>
-            <div class="w-3/12 text-center">Capacity</div>
-            <div class="w-3/12 text-center"></div>
+            <div class="w-2/12 text-center">Enrolled</div>
+            <div class="w-2/12 text-center">Dropped</div>
+            <div class="w-2/12 text-center">Capacity</div>
+            <div class="w-1/12 text-center"></div>
         </div>
 
         @foreach ($rows as $index => $row)
@@ -19,7 +20,7 @@
                 <input type="text" placeholder="COSC-123" wire:model="rows.{{$index}}.course_name" class="p-1 w-full">
                 @error('rows.'.$index.'.course_name')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-5/12">
+            <div class="import-input w-4/12">
                 <select wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
                     <option value="">Select Area</option>
                     @foreach ($areas as $area)
@@ -29,22 +30,26 @@
                 @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
+                <input type="number" placeholder="2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="p-1 w-full">
+                @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
+            </div>
+            <div class="import-input w-3/12">
                 <input type="number" placeholder="#" wire:model="rows.{{$index}}.duration" class="p-1 w-full">
                 @error('rows.'.$index.'.duration')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-3/12">
+            <div class="import-input w-2/12">
                 <input type="number" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="p-1 w-full">
                 @error('rows.'.$index.'.enrolled')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-3/12">
+            <div class="import-input w-2/12">
                 <input type="number" placeholder="#" wire:model="rows.{{$index}}.dropped" class="p-1 w-full">
                 @error('rows.'.$index.'.dropped')<span class="import-error"> {{ $message }}</span>@enderror
             </div>
-            <div class="import-input w-3/12">
+            <div class="import-input w-2/12">
                 <input type="number" placeholder="#" wire:model="rows.{{$index}}.capacity" class="p-1 w-full">
                 @error('rows.'.$index.'.capacity')<span class="import-error">{{ $message }}</span>@enderror
             </div>
-            <div class="w-3/12 flex justify-center border-l border-gray-300">
+            <div class="w-1/12 flex justify-center border-l border-gray-300">
                 <button type="button" wire:click.prevent="deleteRow({{ $index }})" class="flex items-center bg-red-500 text-black p-1 rounded hover:bg-red-600">
                     <span class="material-symbols-outlined">delete</span>
                 </button>

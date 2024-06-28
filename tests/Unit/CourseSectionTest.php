@@ -57,5 +57,8 @@ class CourseSectionTest extends TestCase {
 
         // Assert that the course section has a capacity
         $this->assertNotEmpty($courseSection->capacity); 
+
+        // Assert that the course section has a year
+        $this->assertNotEmpty($courseSection->year); 
     }
 }

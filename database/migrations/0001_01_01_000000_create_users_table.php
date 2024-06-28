@@ -85,6 +85,7 @@ return new class extends Migration
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
+            $table->year('year');
             $table->timestamps();
         });
     

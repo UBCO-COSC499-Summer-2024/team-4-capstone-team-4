@@ -1,14 +1,16 @@
 <div>
+
+    <div class="italic">*IM = Interpolated Medium</div>
     <form wire:submit="handleSubmit" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
             <div class="w-1/12 text-center">#</div>
             <div class="w-6/12 text-center">ID</div>
-            <div class="w-3/12 text-center">Q1</div>
-            <div class="w-3/12 text-center">Q2</div>
-            <div class="w-3/12 text-center">Q3</div>
-            <div class="w-3/12 text-center">Q4</div>
-            <div class="w-3/12 text-center">Q5</div>
-            <div class="w-3/12 text-center">Q6</div>
+            <div class="w-3/12 text-center">Q1 (IM)</div>
+            <div class="w-3/12 text-center">Q2 (IM)</div>
+            <div class="w-3/12 text-center">Q3 (IM)</div>
+            <div class="w-3/12 text-center">Q4 (IM)</div>
+            <div class="w-3/12 text-center">Q5 (IM)</div>
+            <div class="w-3/12 text-center">Q6 (IM)</div>
             <div class="w-3/12 text-center"></div>
         </div>
 
@@ -25,27 +27,27 @@
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q1" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q1" class="p-1 w-full">
                 @error('rows.'.$index.'.q1')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q2" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q2" class="p-1 w-full">
                 @error('rows.'.$index.'.q2')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q3" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q3" class="p-1 w-full">
                 @error('rows.'.$index.'.q3')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q4" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q4" class="p-1 w-full">
                 @error('rows.'.$index.'.q4')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q5" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q5" class="p-1 w-full">
                 @error('rows.'.$index.'.q5')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-3/12">
-                <input type="number" placeholder="#" wire:model="rows.{{$index}}.q6" class="p-1 w-full">
+                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q6" class="p-1 w-full">
                 @error('rows.'.$index.'.q6')<span class="import-error">{{ $message }}</span>@enderror
             </div>
 
