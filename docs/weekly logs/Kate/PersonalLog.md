@@ -1,3 +1,57 @@
+## Friday (6/26- 6/28)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_26_2024-06_28_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Add year column
+  * #3: Alter UI
+  * #4: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Update UI / #232
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Testing / #233
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The core functionality of the import page is complete. The UI needs updating to match rest of system which I will work on next cycle. We began to integrate the import page with the course details page and both features are running on the same branch which is a great step. The rest of the items for this features are smaller, polishing, tasks.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Converse with team about UI
+  * Add column for year to distinguish unique courses
+  * Testing
+
 ## Wednesday (6/21- 6/26)
 
 ### Timesheet
@@ -12,7 +66,7 @@
   * #6: SEI Data Form
     
 
-### Progress Update (since 6/14/2024) 
+### Progress Update (since 6/21/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -63,7 +117,7 @@ Working to polish up the import page. The main functionality is complete for MVP
   * #2: Convert CSV Data to JSON Function
   * #3: Convert Current Functionality to Livewire Component
 
-### Progress Update (since 6/14/2024) 
+### Progress Update (since 6/19/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
