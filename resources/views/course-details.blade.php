@@ -8,28 +8,31 @@
                 <x-edit-button />
             </div>
         </div> 
-        <form method="POST" action="{{ route('course-details') }}">
-            @csrf         
-            <x-coursedetails-table>
-                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
-                <tbody>
-                    @if(isset($courseSections) && $courseSections->isNotEmpty())
-                        @foreach ($courseSections as $section)
-                            <x-coursedetails-table-row 
-                                serialNumber="{{ $loop->iteration }}"
-                                courseName="{{ $section->name }}" 
-                                departmentName="{{ $section->area ? $section->area->name : 'Unknown' }}"
-                                courseDuration="{{ $section->duration }}" 
-                                enrolledStudents="{{ $section->enrolled }}" 
-                                droppedStudents="{{ $section->dropped }}" 
-                                courseCapacity="{{ $section->capacity }}" 
-                            />
-                        @endforeach
-                    @else
+        <x-coursedetails-table>
+            <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+            <tbody>
+                @if(isset($courseSections) && !empty($courseSections))
+                    @foreach ($courseSections as $section)
+                        <x-coursedetails-table-row 
+                            serialNumber="{{ $section->serialNumber }}"
+                            courseName="{{ $section->name }}" 
+                            departmentName="{{ $section->departmentName }}"
+                            courseDuration="{{ $section->duration }} weeks" 
+                            enrolledStudents="{{ $section->enrolled }}" 
+                            droppedStudents="{{ $section->dropped }}" 
+                            courseCapacity="{{ $section->capacity }}" 
+                        />
+                    @endforeach
+                @else
+                    <tr>
                         <td colspan="7" class="text-center text-gray-500 py-4">No course sections found.</td>
-                    @endif
-                </tbody>
-            </x-coursedetails-table>
-        </form>  
+                    </tr>
+                @endif
+            </tbody>
+        </x-coursedetails-table>
     </div> 
+    <div class="flex items-center space-x-4 ml-auto">
+        <x-save-button />
+    </div>
 </x-app-layout>
+<script src="{{ asset('js/editButton.js') }}"></script>

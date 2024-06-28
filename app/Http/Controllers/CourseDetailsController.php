@@ -10,16 +10,21 @@ class CourseDetailsController extends Controller{
 
     public function show(Request $request)
     {
-        $courseSection=CourseSection::all();
-        
+        $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
+            return (object) [
+                'serialNumber' => $index + 1,
+                'name' => $section->name,
+                'departmentName' => $section->area ? $section->area->name : 'Unknown',
+                'duration' => $section->duration,
+                'enrolled' => $section->enrolled,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+            ];
+        });
+
         $sortField = 'courseName';
         $sortDirection = 'asc';
-
-        \Log::info($courseSection);
-
-
-
-        return view('course-details', compact('courseSection','sortField','sortDirection'));
+        return view('course-details', compact('courseSections', 'sortField', 'sortDirection'));
         
 
     } 
