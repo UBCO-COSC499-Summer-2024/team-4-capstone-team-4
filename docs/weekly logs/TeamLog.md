@@ -50,7 +50,7 @@
 
 ## Overview:
 
-We are making progress with our features. We started integrating the course details page and import page together. We also decided to use livewire for our pages functionaliies to improve performance. We plan to continuing integrating all of our current features to make usre they work well together.
+We are making progress with our features. We started integrating the course details page and import page together. We also decided to use livewire for our pages to improve performance. We plan to continuing integrating all of our current features to make sure they work well together.
 
 ## Date Range:
 
