@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 
 class CourseDetailsController extends Controller{
 
-    public function show(Request $request)
-    {
+    public function show(Request $request){
         $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
             return (object) [
                 'serialNumber' => $index + 1,
@@ -27,5 +26,24 @@ class CourseDetailsController extends Controller{
         return view('course-details', compact('courseSections', 'sortField', 'sortDirection'));
         
 
-    } 
+    }
+    
+    public function update(Request $request){
+    $data = $request->input('data');
+
+    foreach ($data as $item) {
+        $section = CourseSection::find($item['id']);
+        if ($section) {
+            $section->update([
+                'name' => $item['courseName'],
+                'duration' => $item['courseDuration'],
+                'enrolled' => $item['enrolledStudents'],
+                'dropped' => $item['droppedStudents'],
+                'capacity' => $item['courseCapacity']
+            ]);
+        }
+    }
+
+    return response()->json(['success' => true]);
+}
 }

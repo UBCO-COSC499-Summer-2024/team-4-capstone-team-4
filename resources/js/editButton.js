@@ -1,30 +1,15 @@
-document.addEventListener('DOMContentLoaded',function(){
-    const editButton=document.getElementById('editButton');
-    const tableBody=document.getElementById('courseTable');
+document.addEventListener('DOMContentLoaded', function () {
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
 
-    console.log(editButton);
-    console.log(tableBody);
+    editButton.addEventListener('click', function () {
+        // Enable contenteditable on all table cells
+        document.querySelectorAll('td[contenteditable="false"]').forEach(td => {
+            td.setAttribute('contenteditable', 'true');
+        });
 
-    if(editButton && tableBody){
-    editButton.addEventListener('click',()=>{
-        const rows=tableBody.querySelectorAll('tr');
-        rows.forEach(row=>{
-            const cellData=row.querySelectorAll('td');
-            cellData.forEach((cellData,index)=>{
-                if(index!==0){
-                    cellData.setAttribute('contenteditable','true');
-                    cellData.classList.add('editable');
-                }
-            });
-        });
+        // Show the save button
+        saveButton.style.display = 'block';
+        cancelButton.style.display='block';
     });
-    tableBody.addEventListener('input',()=>{
-        const rows=tableBody.querySelectorAll('tr');
-        rows.forEach(row=>{
-            const cellData=row.querySelectorAll('td');
-        });
-    });
-}else{
-    console.error("Edit table or body is not working.");
-}
 });

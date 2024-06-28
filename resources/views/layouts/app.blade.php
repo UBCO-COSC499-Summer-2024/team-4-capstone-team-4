@@ -14,7 +14,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/import.css', 'resources/js/app.js'
-        ,'resources/js/sortTable.js'])
+        ,'resources/js/sortTable.js','resources/js/editButton.js']);
 
         <!-- Chart.js Library -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

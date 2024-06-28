@@ -22,7 +22,7 @@
             </div>
         </th>
         <th scope="col" class="sortable {{$sortField==='courseDuration'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Course Duration
+            Course Duration (weeks)
             <div class="sort-icons">
                 <span class="material-symbols-outlined sort-icon {{$sortField === 'courseDuration' && $sortDirection === 'asc' ? 'active' : ''}}" data-field="courseDuration" data-direction="asc">arrow_upward</span>
                 <span class="material-symbols-outlined sort-icon {{$sortField === 'courseDuration' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="courseDuration" data-direction="desc">arrow_downward</span>

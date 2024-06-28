@@ -1,4 +1,4 @@
-<tr>
+<tr data-id="{{ $sectionId }}">
     <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $serialNumber }}</td>
     <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $courseName }}</td>
     <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $departmentName }}</td>

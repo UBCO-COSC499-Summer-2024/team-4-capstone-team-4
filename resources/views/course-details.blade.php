@@ -8,31 +8,37 @@
                 <x-edit-button />
             </div>
         </div> 
-        <x-coursedetails-table>
-            <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
-            <tbody>
-                @if(isset($courseSections) && !empty($courseSections))
-                    @foreach ($courseSections as $section)
-                        <x-coursedetails-table-row 
-                            serialNumber="{{ $section->serialNumber }}"
-                            courseName="{{ $section->name }}" 
-                            departmentName="{{ $section->departmentName }}"
-                            courseDuration="{{ $section->duration }} weeks" 
-                            enrolledStudents="{{ $section->enrolled }}" 
-                            droppedStudents="{{ $section->dropped }}" 
-                            courseCapacity="{{ $section->capacity }}" 
-                        />
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="7" class="text-center text-gray-500 py-4">No course sections found.</td>
-                    </tr>
-                @endif
-            </tbody>
-        </x-coursedetails-table>
+        <form method="POST" action="{{route('course-details')}}" id="editForm">
+            @csrf
+            <x-coursedetails-table>
+                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+                <tbody>
+                    @if(isset($courseSections) && !empty($courseSections))
+                        @foreach ($courseSections as $section)
+                            <x-coursedetails-table-row 
+                            :serialNumber="$section->serialNumber"
+                            :courseName="$section->name" 
+                            :departmentName="$section->departmentName"
+                            :courseDuration="$section->duration" 
+                            :enrolledStudents="$section->enrolled" 
+                            :droppedStudents="$section->dropped" 
+                            :courseCapacity="$section->capacity"
+                            :sectionId="$section->id ?? $loop->index"
+                            />
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="7" class="text-center text-gray-500 py-4">No course sections found.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </x-coursedetails-table>
+            <div class="flex items-center space-x-4 ml-auto">
+                <x-save-button />
+            </div>
+        </form>
     </div> 
-    <div class="flex items-center space-x-4 ml-auto">
-        <x-save-button />
-    </div>
+    <x-save-details-message />
+    <script src="{{ asset('resources/js/editButton.js') }}"></script>
+    <script src="{{asset('resources/js/saveButton.js')}}"></script>
 </x-app-layout>
-<script src="{{ asset('js/editButton.js') }}"></script>
