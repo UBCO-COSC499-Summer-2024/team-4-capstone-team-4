@@ -2,6 +2,58 @@
 
 ## Date Range:
 
+- June 26 - June 27
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Course Details Page
+- Role Based Access
+- Dashboard Visualizations
+- Service Role Management
+- Drone CI
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_june26_june27.png)
+![image of tasks](./tasks/inprogress_june26_june27.png)
+![image of tasks](./tasks/done_june26_june27.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_june26_june27.png)
+![image of tasks](./tasks/inprogress_june26_june27.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june26_june27.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_june26_june27.png)
+![image of clockify report](./clockify/individual_june26_june27.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_june26_june27.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_june26_june27.png)
+![image of tasks](./tasks/inprogress_june26_june27.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_june21_june25.png)
+![image of test report](./testing/feature_june21_june25.png)
+
+## Overview:
+
+We are making progress with our features. We started integrating the course details page and import page together. We also decided to use livewire for our pages to improve performance. We plan to continuing integrating all of our current features to make sure they work well together.
+
+## Date Range:
+
 - June 21 - June 25
 
 ## Features in the Project Plan Cycle:
