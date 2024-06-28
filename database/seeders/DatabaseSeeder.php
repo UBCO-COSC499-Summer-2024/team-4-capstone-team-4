@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Department;
@@ -12,8 +11,6 @@ use App\Models\AreaPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\Teach;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
