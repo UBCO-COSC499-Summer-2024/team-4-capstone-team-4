@@ -1,3 +1,58 @@
+## Cycle: June 26th - June 27th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_26_2024-06_27_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Service Role Pages Front End Work
+  * #2: Edit Mode Implementation
+  * #3: Check All Feature Implementation
+  * #4: Conversion to Livewire Components
+  * #5: Troubleshooting and Environment Setup
+
+### Progress Update (since 06/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Project Meeting</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Service Role Pages Front End Work</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Edit Mode Implementation</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Check All Feature Implementation</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Conversion to Livewire Components</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Troubleshooting and Environment Setup</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The project meeting on the 26th was productive, providing clear direction for the front end work. Significant progress was made on the service role pages, including implementing edit mode and the check all feature. Successfully converted components to Livewire and resolved environment setup issues.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Finalize front end work for service role pages
+  * Complete the edit mode implementation
+  * Ensure the check all feature is fully functional
+  * Optimize and test Livewire components
+
+---
+
 ## Cycle: June 21st - June 25th
 
 ### Timesheet
