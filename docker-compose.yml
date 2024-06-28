@@ -77,5 +77,3 @@ networks:
 volumes:
     sail-pgsql:
         driver: local
-    pgadmin:
-        driver: local

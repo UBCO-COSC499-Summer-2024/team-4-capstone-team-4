@@ -82,7 +82,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->string('duration');
+            $table->integer('duration');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');

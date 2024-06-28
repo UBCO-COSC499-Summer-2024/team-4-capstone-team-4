@@ -1,6 +1,8 @@
  <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
@@ -36,9 +38,28 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/staff', function () {
+    Route::get('/staff', function(){
         return view('staff');
     })->name('staff');
+});
+
+
+/* Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::post('/staff', [StaffController::class, 'add_target_hours'])->name('staff');
+}); */
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/staff-edit-mode', function(){
+        return view('staff-edit-mode');
+    })->name('staff-edit-mode');
 });
 
 Route::middleware([

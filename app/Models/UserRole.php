@@ -81,7 +81,7 @@ class UserRole extends Model {
      */
     public function instructorPerformance() {
         if ($this->role === 'instructor') {
-            return $this->hasOne(InstructorPerformance::class, 'user_id');
+            return $this->hasOne(InstructorPerformance::class, 'instructor_id', 'id');
         }
         
         return null; // Return null if the user is not an instructor
@@ -109,9 +109,20 @@ class UserRole extends Model {
      */
     public function teaches() {
         if ($this->role === 'instructor') {
-            return $this->hasMany(Teach::class, 'user_role_id');
+            return $this->hasMany(Teach::class, 'instructor_id');
         }
 
         return null; // Return null if the user is not an instructor
     }
+
+    public function areas()
+    {
+        return $this->belongsToMany(Area::class, 'teaches', 'instructor_id', 'course_section_id')
+                    ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
+                    ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
+                    ->select('a.*')
+                    ->distinct();
+    }
+
+    
 }

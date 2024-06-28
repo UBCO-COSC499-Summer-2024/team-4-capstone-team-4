@@ -1,6 +1,3 @@
 <x-app-layout>
-    <div class="content coming-soon">
-        <h1>{{ __('Staff') }}</h1>
-        <p>{{ __('Coming Soon!') }}</p>
-    </div>
+    @livewire('staff-list')
 </x-app-layout>
