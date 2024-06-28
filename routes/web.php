@@ -77,25 +77,6 @@ Route::middleware([
 ])->group(function(){
     Route::get('/courses', [CourseDetailsController::class, 'show'])->name('course-details');
 });
-
-Route::middleware([
-    'auth.sanctum',config('jetstream.auth_session'),
-    'verified',
-])->group(function(){
-    Route::get('/js/{filename}', function ($filename){
-        $path = resource_path('js/' . $filename);
-
-    if (!File::exists($path)) {
-        abort(404);
-    }
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    return response($file, 200)->header("Content-Type", $type);
-    });
-});
-
 Route::get('/privacy-policy', function () {
     return view('policy');
 })->name('privacy-policy');

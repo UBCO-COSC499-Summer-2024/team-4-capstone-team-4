@@ -9,7 +9,6 @@
             </div>
         </div> 
         <form method="POST" action="{{route('course-details')}}" id="editForm">
-            @csrf
             <x-coursedetails-table>
                 <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                 <tbody>
