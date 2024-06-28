@@ -5,9 +5,6 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
 
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
 
 Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
 Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
@@ -19,16 +16,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/', [ChartController::class, 'showChart'])->name('dashboard');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 });
 
 Route::middleware([
@@ -87,7 +74,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function(){
-    Route::get('{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+    Route::get('/courses', [CourseDetailsController::class, 'show'])->name('course-details');
 });
 
 Route::get('/privacy-policy', function () {
@@ -107,12 +94,4 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });

@@ -452,18 +452,32 @@ th.sortable{
     padding-right: 10px;
 }
 
-.sort-icons:hover{
+th.sort-icons:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 5px;
+    justify-content: center;
 }
 
-.sort-icon:hover{
+th.sort-icon:hover {
     cursor: pointer;
-    font-size: 1cm;
+    font-size: 1rem;
+    margin: 0;
+}
 
+.sort-icon.active {
+    color: blue;
+}
 
+th.editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+}
+
+th.editable:focus {
+    border: 1px solid #007bff;
+    background-color: #e9f7fe;
 }
 
 .editable {
