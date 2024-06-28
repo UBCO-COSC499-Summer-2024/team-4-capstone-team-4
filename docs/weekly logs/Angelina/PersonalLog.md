@@ -17,9 +17,9 @@ Clockify report
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Department Visualizations | In Progess  |
-| Connect Database to Charts| Completed   |
-| Remove Progress Bar Plugin| Completed   |
-| Dashboard Leaderboard     | Completed   |
+| Connect Database to Charts| In Progess  |
+| Remove Progress Bar Plugin| In Progess  |
+| Dashboard Leaderboard     | In Progess  |
 | Improve Containers        | In Progress |
 
 
