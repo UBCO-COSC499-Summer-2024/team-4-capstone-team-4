@@ -6,8 +6,10 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\InstructorPerformance;
 use App\Models\UserRole;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class InstructorPerformanceTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if instructor_performance table exists.
      *

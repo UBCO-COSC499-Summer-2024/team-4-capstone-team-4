@@ -6,8 +6,10 @@ use Tests\TestCase;
 use App\Models\Area;
 use App\Models\Department;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AreaTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if areas table exists.
      *
