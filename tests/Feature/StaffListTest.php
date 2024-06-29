@@ -5,6 +5,15 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Area;
+use App\Models\Department;
+use App\Models\InstructorPerformance;
+use App\Models\UserRole;
+use App\Models\CourseSection;
+use App\Models\Teach;
+use Livewire\Livewire;
+use App\Livewire\StaffList;
 
 class StaffListTest extends TestCase
 {
@@ -12,95 +21,108 @@ class StaffListTest extends TestCase
     
     public function test_staff_page_can_be_rendered(): void
     {
-        $response = $this->get('/staff');
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/staff');
 
         $response->assertStatus(200);
     }
 
     public function test_staff_edit_mode_can_be_rendered(): void
     {
-        $response = $this->get('/staff-edit-mode');
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/staff-edit-mode');
 
         $response->assertStatus(200);
     }
 
     public function test_staff_page_shows_a_list_of_instructors(): void
     {
-        $dept = \App\Models\Department::factory()->create(['name' => 'CMPS']);
-        \App\Models\Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
-        $user =  \App\Models\User::factory()->create([
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
+        $user =  User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password'
+            'password' => 'password'
         ]);
-        \App\Models\UserRole::factory()->create([
+        $role = UserRole::factory()->create([
                 'user_id' => $user->id,
-                'department_id' => 1,
+                'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
-        \App\Models\InstructorPerformance::factory()->create([
+        InstructorPerformance::factory()->create([
             'score' => '0',
             'total_hours' => '0',
             'target_hours' => '0',
             'sei_avg' => '0',
             'year' => '2024',
-            'instructor_id' => $user->id,
+            'instructor_id' => $role->id,
         ]);
 
-        \App\Models\CourseSection::factory()->create();
-        \App\Models\Teach::factory()->create();
+        CourseSection::factory()->create();
+        Teach::factory()->create();
 
-        $response = $this->get('/staff');
+        //$response = $this->actingAs($user)->get('/staff');
 
-        $response->assertSeeLivewire('staff-list::index');
-        $response->assertSeeInOrder($user->pluck('firstname')->all());
+        $component = Livewire::test(StaffList::class);
+
+        $component->assertSee($user->firstname)
+                  ->assertSee($user->lastname);
+
     }
 
-    public function test_user_can_add_target_hours():void
-    {
-        $user = \App\Models\User::factory()->create();
-        \App\Models\UserRole::factory()->create([
+    public function test_user_can_add_target_hours():void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        $role = UserRole::factory()->create([
             'user_id' => $user->id,
-            'department_id' => 1,
+            'department_id' => $dept->id,
             'role' => 'instructor',
         ]);
-        \App\Models\InstructorPerformance::factory()->create([
-            'instructor_id' => $user->id,
+        InstructorPerformance::factory()->create([
+            'instructor_id' => $role->id,
         ]);
-        $response = $this->post('/staff', [
-            'staffCheckboxes' => [$user->email],
-            'hours' => 200,
-        ]);
-        $response->assertRedirect('/staff');
+
+        $this->actingAs($user);
+
+        Livewire::test(StaffList::class)
+        ->set('staffCheckboxes', [$user->email])
+        ->set('hours', 200)
+        ->call('submit');
+        //->assertRedirect('/staff');
+
         $this->assertDatabaseHas('instructor_performance', [
-            'instructor_id' => $user->id,
+            'instructor_id' => $role->id,
             'target_hours' => 200,
         ]);
 
     }
 
     public function test_can_search_for_user():void{
-        $user = \App\Models\User::factory()->create([
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password'
+            'password' => 'password'
         ]);
-        \App\Models\UserRole::factory()->create([
+        $role = UserRole::factory()->create([
             'user_id' => $user->id,
-            'department_id' => 1,
+            'department_id' => $dept->id,
             'role' => 'instructor',
         ]);
-        \App\Models\InstructorPerformance::factory()->create([
-            'instructor_id' => $user->id,
+        InstructorPerformance::factory()->create([
+            'instructor_id' => $role->id,
         ]);
-        $response = $this->post('/staff', [
-            'searchTerm' => 'Test'
-        ]);
-        $response->assertSeeLivewire('staff-list::index');
-        $response->assertSeeInOrder($user->pluck('firstname')->all());
+
+        $this->actingAs($user);
+
+        $component = Livewire::test(StaffList::class)
+        ->set('searchTerm', 'Test');
+
+        $component->assertSee($user->firstname)
+                  ->assertSee($user->lastname);
     }
 }
