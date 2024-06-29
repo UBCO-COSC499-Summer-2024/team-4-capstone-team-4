@@ -55,6 +55,7 @@ class DatabaseSeeder extends Seeder
                 'total_hours' => '20',
                 'target_hours' => '200',
                 'sei_avg' => '3.5',
+                'month' => date('F'),
                 'year' => '2024',
                 'instructor_id' => $user->id,
             ]);
