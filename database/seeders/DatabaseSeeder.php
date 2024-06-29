@@ -10,7 +10,7 @@ use App\Models\ServiceRole;
 use App\Models\AreaPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\Teach;
-
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
