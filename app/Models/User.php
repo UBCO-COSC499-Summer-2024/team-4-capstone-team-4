@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\UserRole;
+use App\Models\Area;
+use App\Models\InstructorPerformance;
 
 class User extends Authenticatable {
     use HasApiTokens;
@@ -70,5 +72,27 @@ class User extends Authenticatable {
      */
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
+    }
+    
+    public function teaches(){
+        return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
+                    ->where('user_roles.role', 'instructor');
+    }
+
+    public function getFirstname() {
+        return $this->firstname;
+    }
+
+    public function getLastname() {
+        return $this->lastname;
+    }
+
+    public function authMethods() {
+        return $this->hasMany(AuthMethod::class,'user_id');
+    }
+
+    public function instructorPerformance(){
+        return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
+                    ->where('user_roles.role', 'instructor');
     }
 }

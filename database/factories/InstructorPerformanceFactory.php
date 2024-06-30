@@ -28,6 +28,7 @@ class InstructorPerformanceFactory extends Factory {
             'total_hours' => $this->faker->numberBetween(0, 200),
             'target_hours' => $this->faker->numberBetween(0, 200),
             'sei_avg' => $this->faker->randomFloat(2, 0, 5),
+            'month' => $this->faker->monthName, 
             'year' => $this->faker->year,
             'instructor_id' => $instructor ? $instructor->id : UserRole::factory()->create(['role' => 'instructor'])->id,
         ];

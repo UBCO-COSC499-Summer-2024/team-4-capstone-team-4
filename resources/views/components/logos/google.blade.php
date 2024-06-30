@@ -1,0 +1,2 @@
+{{-- svg https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg --}}
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" class="auth-provider-logo"/>

@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\RoleAssignment;
 use App\Models\UserRole;
 use App\Models\ServiceRole;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoleAssignmentTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if role_assignments table exists.
      *

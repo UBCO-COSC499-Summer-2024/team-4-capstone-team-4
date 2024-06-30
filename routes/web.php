@@ -1,12 +1,18 @@
-<?php
+ <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseDetailsController;
 
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
+
+Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
+Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
 
 // for / if user is not logged in, redirect to auth.login else /dashboard
 Route::middleware([
@@ -32,9 +38,28 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/staff', function () {
+    Route::get('/staff', function(){
         return view('staff');
     })->name('staff');
+});
+
+
+/* Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::post('/staff', [StaffController::class, 'add_target_hours'])->name('staff');
+}); */
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/staff-edit-mode', function(){
+        return view('staff-edit-mode');
+    })->name('staff-edit-mode');
 });
 
 Route::middleware([
@@ -77,6 +102,22 @@ Route::middleware([
         return view('performance');
     })->name('performance');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function(){
+    Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+});
+
+Route::get('/privacy-policy', function () {
+    return view('policy');
+})->name('privacy-policy');
+
+Route::get('/tos', function () {
+    return view('terms');
+})->name('tos');
 
 Route::middleware([
     'auth:sanctum',

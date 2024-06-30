@@ -6,8 +6,10 @@ use Tests\TestCase;
 use App\Models\CourseSection;
 use App\Models\Area;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CourseSectionTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if course section table exists.
      *
