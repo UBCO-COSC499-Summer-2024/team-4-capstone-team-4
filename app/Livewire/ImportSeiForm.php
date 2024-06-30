@@ -33,12 +33,12 @@ class ImportSeiForm extends Component
      
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.cid"] = 'required|integer';
-            $rules["rows.{$index}.q1"] = 'required|integer|min:1|max:5';
-            $rules["rows.{$index}.q2"] = 'required|integer|min:1|max:5';
-            $rules["rows.{$index}.q3"] = 'required|integer|min:1|max:5';
-            $rules["rows.{$index}.q4"] = 'required|integer|min:1|max:5';
-            $rules["rows.{$index}.q5"] = 'required|integer|min:1|max:5';
-            $rules["rows.{$index}.q6"] = 'required|integer|min:1|max:5';
+            $rules["rows.{$index}.q1"] = 'required|numeric|min:1|max:5';
+            $rules["rows.{$index}.q2"] = 'required|numeric|min:1|max:5';
+            $rules["rows.{$index}.q3"] = 'required|numeric|min:1|max:5';
+            $rules["rows.{$index}.q4"] = 'required|numeric|min:1|max:5';
+            $rules["rows.{$index}.q5"] = 'required|numeric|min:1|max:5';
+            $rules["rows.{$index}.q6"] = 'required|numeric|min:1|max:5';
         }
 
         return $rules;
@@ -56,12 +56,12 @@ class ImportSeiForm extends Component
                 $messages["rows.{$index}.q5.required"] = 'Missing entry for q5';
                 $messages["rows.{$index}.q6.required"] = 'Missing entry for q6';
         
-                $messages["rows.{$index}.q1.integer"] = 'Must be a number';
-                $messages["rows.{$index}.q2.integer"] = 'Must be a number';
-                $messages["rows.{$index}.q3.integer"] = 'Must be a number';
-                $messages["rows.{$index}.q4.integer"] = 'Must be a number';
-                $messages["rows.{$index}.q5.integer"] = 'Must be a number';
-                $messages["rows.{$index}.q6.integer"] = 'Must be a number';
+                $messages["rows.{$index}.q1.numeric"] = 'Must be a number';
+                $messages["rows.{$index}.q2.numeric"] = 'Must be a number';
+                $messages["rows.{$index}.q3.numeric"] = 'Must be a number';
+                $messages["rows.{$index}.q4.numeric"] = 'Must be a number';
+                $messages["rows.{$index}.q5.numeric"] = 'Must be a number';
+                $messages["rows.{$index}.q6.numeric"] = 'Must be a number';
         
                 $messages["rows.{$index}.q1.min"] = 'Enter a number 1-5';
                 $messages["rows.{$index}.q2.min"] = 'Enter a number 1-5';

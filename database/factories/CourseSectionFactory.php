@@ -26,6 +26,7 @@ class CourseSectionFactory extends Factory {
             'enrolled'=>fake()->numberBetween(10,100),
             'dropped'=>fake()->numberBetween(0,20),
             'capacity'=>fake()->numberBetween(10,200),
+            'year'=>fake()->year(),
         ];
     }
 }
