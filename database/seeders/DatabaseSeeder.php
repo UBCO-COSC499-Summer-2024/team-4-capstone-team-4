@@ -20,35 +20,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Department::factory()->create([
+        $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
 
         Area::factory()->create([
             'name' => 'Computer Science',
-            'dept_id' => 1,
+            'dept_id' => $dept->id,
         ]);
 
         Area::factory()->create([
             'name' => 'Mathematics',
-            'dept_id' => 1,
+            'dept_id' => $dept->id,
         ]);
 
         Area::factory()->create([
             'name' => 'Physics',
-            'dept_id' => 1,
+            'dept_id' => $dept->id,
         ]);
 
         Area::factory()->create([
             'name' => 'Statistics',
-            'dept_id' => 1,
+            'dept_id' => $dept->id,
         ]);
 
         $users = User::factory(10)->create();
         foreach($users as $user) {
             UserRole::factory()->create([
                 'user_id' => $user->id,
-                'department_id' => 1,
+                'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
             InstructorPerformance::factory()->create([
@@ -65,5 +65,53 @@ class DatabaseSeeder extends Seeder
         CourseSection::factory(10)->create();
 
         Teach::factory(5)->create();
+
+        $instructor = User::factory()->create([
+            'firstname' => 'Dr',
+            'lastname' => 'Prof',
+            'email' => 'instructor@example.com',
+            'password' => 'password'
+        ]);
+        UserRole::factory()->create([
+            'user_id' => $instructor->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+
+        $head = User::factory()->create([
+            'firstname' => 'Dept',
+            'lastname' => 'Head',
+            'email' => 'head@example.com',
+            'password' => 'password'
+        ]);
+        UserRole::factory()->create([
+            'user_id' => $head->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+
+        $staff = User::factory()->create([
+            'firstname' => 'Dept',
+            'lastname' => 'Staff',
+            'email' => 'staff@example.com',
+            'password' => 'password'
+        ]);
+        UserRole::factory()->create([
+            'user_id' => $staff->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_staff',
+        ]);
+
+        $admin = User::factory()->create([
+            'firstname' => 'Dept',
+            'lastname' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => 'password'
+        ]);
+        UserRole::factory()->create([
+            'user_id' => $admin->id,
+            'department_id' => $dept->id,
+            'role' => 'admin',
+        ]);
     }
 }
