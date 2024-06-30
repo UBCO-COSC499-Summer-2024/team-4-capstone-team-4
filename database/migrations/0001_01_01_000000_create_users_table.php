@@ -124,6 +124,7 @@ return new class extends Migration
             $table->integer('total_hours');
             $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
+            $table->string('month');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();

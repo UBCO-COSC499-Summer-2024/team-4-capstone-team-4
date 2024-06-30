@@ -11,8 +11,6 @@ use App\Models\ServiceRole;
 use App\Models\AreaPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\Teach;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -58,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'total_hours' => '20',
                 'target_hours' => '200',
                 'sei_avg' => '3.5',
+                'month' => date('F'),
                 'year' => '2024',
                 'instructor_id' => $user->id,
             ]);

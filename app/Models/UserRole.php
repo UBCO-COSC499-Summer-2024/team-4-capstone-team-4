@@ -77,11 +77,11 @@ class UserRole extends Model {
     /**
      * Get the performance associated with the instructor role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne|null
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|null
      */
     public function instructorPerformance() {
         if ($this->role === 'instructor') {
-            return $this->hasOne(InstructorPerformance::class, 'instructor_id', 'id');
+            return $this->hasMany(InstructorPerformance::class, 'instructor_id', 'id');
         }
         
         return null; // Return null if the user is not an instructor
