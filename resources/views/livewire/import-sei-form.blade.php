@@ -21,7 +21,7 @@
                 <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->name }}</option>
+                        <option value="{{ $course->id }}">{{ $course->name }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror

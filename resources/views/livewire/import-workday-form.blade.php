@@ -1,14 +1,14 @@
 <div class="relative">
 
     <form wire:submit.prevent="handleSubmit" class="import-form relative">
-        <div class="header flex justify-between p-2 bg-gray-200">
+        <div class="header flex justify-between py-2 bg-gray-200">
             <div class="w-1/12 text-center px-1">#</div>
             <div class="w-4/12 text-center px-1">Course Name</div>
             <div class="w-4/12 text-center px-1">Area</div>
             <div class="w-2/12 text-center px-1">Session</div>
             <div class="w-2/12 text-center px-1">Term</div>
             <div class="w-3/12 text-center px-1">Year</div>
-            <div class="w-2/12 text-center px-1">Duration</div>
+            <div class="w-2/12 text-center px-1">Duration (Months)</div>
             <div class="w-2/12 text-center px-1">Enrolled</div>
             <div class="w-2/12 text-center px-1">Dropped</div>
             <div class="w-2/12 text-center px-1">Capacity</div>
@@ -42,9 +42,9 @@
             <div class="import-input w-2/12">
                 <select wire:model="rows.{{$index}}.term" class="p-1 w-full">
                     <option value="">Select</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=1/2>1 & 2</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="1-2">1 & 2</option>
                 </select>                
                 @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
             </div>
