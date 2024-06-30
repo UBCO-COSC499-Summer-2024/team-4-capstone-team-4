@@ -99,7 +99,7 @@ class User extends Authenticatable {
         return $this->hasMany(AuthMethod::class,'user_id');
     }
 
-    public function instructorPerformance(){
+    public function instructorPerformances(){
         return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
                     ->where('user_roles.role', 'instructor');
     }

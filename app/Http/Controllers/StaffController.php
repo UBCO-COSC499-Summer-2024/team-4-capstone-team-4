@@ -20,7 +20,7 @@ class StaffController extends Controller
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
             $instructor = $user->roles->where('role', 'instructor')->first();
-            $performance = $instructor->instructorPerformance;
+            $performance = $instructor->instructorPerformances->where('month', date('F'))->first();
             if($performance){
                 $performance->update(['target_hours' => $hours]);
             }else{

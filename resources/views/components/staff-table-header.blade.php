@@ -29,7 +29,7 @@
         </th>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
-                Sub-Area
+                Sub-Area(s)
                 <button wire:click="sort('area')">
                     @if($sortField === 'area' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
@@ -49,7 +49,7 @@
         </th>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
-                Completed Hours
+                Completed Hours - {{ date('F') }}
                 <button wire:click="sort('total_hours')">
                     @if($sortField === 'total_hours' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
@@ -69,7 +69,7 @@
         </th>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
-                Target Hours
+                Target Hours - {{ date('Y') }}
                 <button wire:click="sort('target_hours')">
                     @if($sortField === 'target_hours' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">

@@ -103,9 +103,14 @@ class StaffListEditMode extends Component
         foreach ($this->changedInput as $email => $hours) {
             $user = User::where('email', $email)->first();
             if ($user) {
-                $instructorPerformance = $user->roles()->where('role', 'instructor')->first()->instructorPerformance;
-                if ($instructorPerformance) {
-                    $instructorPerformance->update(['target_hours' => $hours]);
+                $instructor = $user->roles->where('role', 'instructor')->first();
+                $performances = $instructor->instructorPerformances()->where('year', date('Y'))->get();
+                if ($performances->isNotEmpty()) {
+                    foreach ($performances as $performance) {
+                        $performance->update(['target_hours' => $hours]);
+                    }
+                } else {
+                    return response()->json(['message' => 'Instructor performance not found.'], 404);
                 }
             }
         }

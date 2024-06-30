@@ -97,10 +97,12 @@ class StaffList extends Component
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
             $instructor = $user->roles->where('role', 'instructor')->first();
-            $performance = $instructor->instructorPerformance;
-            if($performance){
-                $performance->update(['target_hours' => $hours]);
-            }else{
+            $performances = $instructor->instructorPerformances()->where('year', date('Y'))->get();
+            if ($performances->isNotEmpty()) {
+                foreach ($performances as $performance) {
+                    $performance->update(['target_hours' => $hours]);
+                }
+            } else {
                 return response()->json(['message' => 'Instructor performance not found.'], 404);
             }
         }

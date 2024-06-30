@@ -21,8 +21,10 @@
                     @php
                         $area_names = [];
                         $instructor = App\Models\UserRole::find($user->instructor_id);
-                        $performance = App\Models\InstructorPerformance::where('instructor_id', $user->instructor_id)->first();
-            
+                        $performance = App\Models\InstructorPerformance::where('instructor_id', $user->instructor_id)
+                                                                        ->where('month', date('F'))
+                                                                        ->where('year', date('Y'))
+                                                                        ->first();
                         if ($instructor && $instructor->teaches) {
                             $course_ids = $instructor->teaches->pluck('course_section_id')->all();
                             
