@@ -1,5 +1,5 @@
 <div x-data="{show: false}">
-    <x-dialog-modal wire:model="showModal">
+    <x-dialog-modal wire:model.live="showModal">
         <x-slot name="title">
             {{ __('Add Extra Hours') }}
         </x-slot>

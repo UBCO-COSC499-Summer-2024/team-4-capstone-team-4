@@ -1,747 +1,614 @@
-const Dropdown = (function() {
+const Dropdown = (function () {
     let debugging = true;
+
+    const DEFAULT_OPTIONS = {
+        title: 'Dropdown',
+        preIcon: 'list',
+        searchable: false,
+        multiple: false,
+        external: null,
+        regex: 'i',
+        debug: false
+    };
+
     class Dropdown extends HTMLElement {
         constructor() {
             super();
+
             this._value = null;
+            this._options = { ...DEFAULT_OPTIONS };
+            this._selectedItems = new Set();
+            this._searchValue = "";
+
             this.toggleDropdown = this.toggleDropdown.bind(this);
             this.handleKeyboardNavigation = this.handleKeyboardNavigation.bind(this);
-            this.selectItem = this.selectItem.bind(this);
             this.handleOutsideClick = this.handleOutsideClick.bind(this);
-            this.addEventListener("mouseout", this.handleMouseOut.bind(this));
-            this.addEventListener("mouseover", this.handleMouseOver.bind(this));
-            document.addEventListener("click", this.handleOutsideClick.bind(this));
-            this.searchInput = null;
-            this.multiple = false;
-            this.selectedItems = new Set();
-            this.searchable = false;
-            this.useExternal = false;
-            this.useCustomRegex = false;
-            this.regex = 'i';
-            this.debugMode = debugging;
-            this.searchValue = ""; // Initialize searchValue property
-            this.addEventListener("click", this.toggleDropdown);
-            this.addEventListener("keydown", this.handleKeyboardNavigation);
-            this.addEventListener("dropdown-selected", this.handleDropdownSelected);
-            this.addEventListener("change", this.handleDropdownChange.bind(this));
-            this.addEventListener("dropdown-item-selected", this.handleDropdownItemSelected.bind(this));
-            this.addEventListener("input", this.handleSearchInput.bind(this));
-            document.addEventListener('click', this.handleOutsideClick);
+            this.handleSearchInput = this.handleSearchInput.bind(this);
+            this.handleDropdownItemSelected = this.handleDropdownItemSelected.bind(this);
         }
 
         connectedCallback() {
-            if (!this.hasAttribute("title")) {
-                this.setAttribute("title", "Dropdown");
-            }
-            this.setAttribute("role", "listbox"); // ARIA role
-            this.setAttribute("tabindex", "0"); // Make it focusable
+            this._getOptionsFromAttributes();
+
+            this.setAttribute('role', 'listbox');
+            this.setAttribute('tabindex', '0');
             this.render();
-            this.applyDefaultStyles();
-            this.setActiveItem();
-            this.addDropdownContentListener();
-            this.addEventListener("click", this.handleClick.bind(this));
-            this.addEventListener("mouseout", this.handleMouseOut.bind(this));
-            this.addEventListener("mouseover", this.handleMouseOver.bind(this));
-            this.addEventListener("dropdown-selected", this.handleDropdownSelected.bind(this));
-            this.addEventListener("change", this.handleDropdownChange.bind(this));
-            this.addEventListener("dropdown-item-selected", this.handleDropdownItemSelected.bind(this));
-            this.addEventListener("input", this.handleSearchInput.bind(this));
-            this.log("addDropdownContentListener executed");
-            this.multiple = this.hasAttribute("multiple");
-            this.log(this.multiple)
-            this.searchable = this.hasAttribute("searchable") ||
-            this.hasAttribute("search") ||
-            this.hasAttribute("searcheable") ||
-            this.hasAttribute("search-box");
-            this.log(this.searchable)
-            this.useExternal = this.hasAttribute("external") ||
-            this.hasAttribute("source") ||
-            this.hasAttribute("src");
-            this.log(this.useExternal)
-            if (this.searchable) {
+
+            this.addEventListener('click', this.toggleDropdown);
+            this.addEventListener('keydown', this.handleKeyboardNavigation);
+            this.addEventListener('dropdown-item-selected', this.handleDropdownItemSelected);
+            document.addEventListener('click', this.handleOutsideClick);
+
+            if (this._options.searchable) {
                 this.addSearchFunctionality();
             }
-            if (this.multiple) {
+            if (this._options.multiple) {
                 this.addMultiSelectFunctionality();
             }
-            if (this.useExternal) {
-                this.loadExternalData();
+            if (this._options.external) {
+                this.loadExternalData(this._options.external);
             }
-            if (this.hasAttribute('regex')) {
-                this.useCustomRegex = true;
-                this.regex = this.getAttribute('regex');
-            } else {
-                this.useCustomRegex = false;
-                this.regex = 'i';
-            }
-            // this.debugMode based on attribute debug, if attribute set with no value then debug mode is true else whatever value is set
-            this.debugMode = this.hasAttribute("debug") ? true : this.getAttribute("debug") || false;
-            this.log("Debug mode:", this.debugMode);
-            this.toggleDebugging(this.debugMode);
 
-            const dropdownContent = this.querySelector("dropdown-content");
-            if (dropdownContent && !dropdownContent.hasChildNodes()) {
-                const values = JSON.parse(this.getAttribute("values") || "{}");
-                for (const [name, value] of Object.entries(values)) {
-                    this.appendValue(name, value);
-                }
-            }
-        }
+            this.setActiveItem();
+            this.toggleDebugging(this._options.debug);
 
-        handleDropdownChange(event) {
-            this.log("Dropdown value changed:", event.target.value);
-        }
-        
-        handleDropdownItemSelected(event) {
-            this.log("Dropdown item selected:", event.detail.value);
+            this.initializeDropdownContent();
         }
 
         disconnectedCallback() {
-            this.removeEventListener("click", this.handleClick.bind(this));
-            this.removeEventListener("mouseout", this.handleMouseOut.bind(this));
-            this.removeEventListener("mouseover", this.handleMouseOver.bind(this));
-            this.removeEventListener("dropdown-selected", this.handleDropdownSelected.bind(this));
-            this.removeEventListener("click", this.toggleDropdown);
-            this.removeEventListener("keydown", this.handleKeyboardNavigation);
-            this.removeEventListener("dropdown-selected", this.handleDropdownSelected);
+            this.removeEventListener('click', this.toggleDropdown);
+            this.removeEventListener('keydown', this.handleKeyboardNavigation);
+            this.removeEventListener('dropdown-item-selected', this.handleDropdownItemSelected);
             document.removeEventListener('click', this.handleOutsideClick);
         }
 
-        toggleDebugging(value) {
-            console.log("toggleDebugging invoked with value:", value);
-            if (value === undefined) {
-                debugging = !debugging;
-            } else {
-                debugging = value;
-            }
-            console.log("Debugging set to:", debugging);
-            return debugging;
+        handleDropdownItemSelected(e) {
+            this.dispatchEvent(new CustomEvent('change', { detail: e.detail }));
         }
 
-        log(...args) {
-            if (this.debugMode) {
-                console.log(...args);
+        _getOptionsFromAttributes() {
+            for (const [key, defaultValue] of Object.entries(DEFAULT_OPTIONS)) {
+                this._options[key] = this.hasAttribute(key)
+                    ? this._convertAttributeValue(this.getAttribute(key), typeof defaultValue)
+                    : defaultValue;
             }
         }
 
-        loadExternalData() {
-            const source = this.getAttribute("external") ||
-            this.getAttribute("source") ||
-            this.getAttribute("src");
-            if (!source) return;
-            if (source) {
-                fetch(source)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    // if response type xml, response .text()
-                    // if response type json, response .json()
-                    const contentType = response.headers.get("content-type");
-                    if (contentType && contentType.indexOf("application/json") !== -1) {
-                        return response.json();
-                    } else {
-                        return response.text();
-                    }
-                })
-                .then((data) => {
-                    const dataLoadedEvent = new CustomEvent('dropdown-source-loaded', { detail: data });
-                    this.dispatchEvent(dataLoadedEvent);
-                    this.log("Data:", data);
-                    for (const [name, value] of Object.entries(data)) {
-                        this.appendValue(name, value);
-                    }
-                })
-                .catch((error) => {
-                    const errorEvent = new CustomEvent('dropdown-source-error', { detail: error });
-                    this.dispatchEvent(errorEvent);
-                    console.warn(`Error loading external data from ${source}`, error);
-                });
+        _convertAttributeValue(value, targetType) {
+            switch (targetType) {
+                case 'boolean':
+                    return value !== 'false';
+                case 'number':
+                    return Number(value);
+                default:
+                    return value;
             }
         }
 
-        formDisabledCallback(disabled) {
-            // Handle form disabled state
+        render() {
+            this.className = 'dropdown-element';
 
+            if (this._options.preIcon) {
+                // if no pre Icon element
+                if (!this.querySelector('.dropdown-pre-icon')) {
+                    this.renderPreIcon();
+                }
+            }
+
+            if (!this.querySelector('.dropdown-title')) {
+                this.renderTitle();
+            }
+
+            if (!this.querySelector('.dropdown-button')) {
+                const dropdownButton = document.createElement('i');
+                dropdownButton.className = 'material-symbols-outlined dropdown-button noselect';
+                dropdownButton.textContent = 'arrow_drop_down';
+                this.appendChild(dropdownButton);
+            }
+
+            let dropdownContent = this.querySelector('dropdown-content');
+            if (!dropdownContent) {
+                dropdownContent = document.createElement('dropdown-content');
+                this.appendChild(dropdownContent);
+            }
         }
 
-        formReset() {
-            // Reset the element's state when the form is reset
+        renderPreIcon() {
+            const dropdownPreIcon = document.createElement('span');
+            dropdownPreIcon.className = 'material-symbols-outlined dropdown-pre-icon icon noselect';
+            dropdownPreIcon.textContent = this._options.preIcon;
+            this.appendChild(dropdownPreIcon);
+        }
+
+        renderTitle() {
+            const dropdownTitle = document.createElement('span');
+            dropdownTitle.className = 'dropdown-title noselect';
+            dropdownTitle.textContent = this._options.title;
+            this.appendChild(dropdownTitle);
         }
 
         addSearchFunctionality() {
-            const searchInput = document.createElement("input");
-            searchInput.setAttribute("type", "text");
-            searchInput.setAttribute("placeholder", "Search...");
-            searchInput.setAttribute("autocomplete", "off");
-            searchInput.setAttribute("autocorrect", "off");
-            searchInput.setAttribute("autocapitalize", "off");
-            searchInput.setAttribute("spellcheck", "false");
-            searchInput.setAttribute("tabindex", "-1");
-            searchInput.className = "dropdown-search";
-            // put the searchInput in content
-            const dropdownContent = this.querySelector("dropdown-content");
+            const searchInput = document.createElement('input');
+            searchInput.setAttribute('type', 'text');
+            searchInput.setAttribute('placeholder', 'Search...');
+            searchInput.setAttribute('autocomplete', 'off');
+            searchInput.setAttribute('autocorrect', 'off');
+            searchInput.setAttribute('autocapitalize', 'off');
+            searchInput.setAttribute('spellcheck', 'false');
+            searchInput.setAttribute('tabindex', '-1');
+            searchInput.className = 'dropdown-search';
+
+            const dropdownContent = this.querySelector('dropdown-content');
             dropdownContent.insertBefore(searchInput, dropdownContent.firstChild);
 
-            this.searchInput = searchInput;
-            searchInput.addEventListener("input", this.handleSearchInput.bind(this));
-            searchInput.addEventListener("keydown", this.handleSearchInput.bind(this));
-            searchInput.addEventListener("keyup", this.handleSearchInput.bind(this));
+            searchInput.addEventListener('input', this.handleSearchInput);
         }
 
         handleSearchInput(e) {
-            this.log("handleSearchInput invoked with event:", e);
-            const searchValue = this.searchInput.value.trim();
-            this.log("Search value:", searchValue);
-            const dropdownItems = this.querySelectorAll("dropdown-item");
-            this.log("Dropdown items:", dropdownItems);
-            this.searchValue = searchValue;
+            this._searchValue = e.target.value.trim();
 
-            if (searchValue.length > 0) {
-                if (this.useCustomRegex) {
-                    const regex = new RegExp(searchValue, this.regex);
-                    dropdownItems.forEach((item) => {
-                        const itemText = item.textContent;
-                        if (regex.test(itemText)) {
-                            item.style.display = "block";
-                        } else {
-                            item.style.display = "none";
-                        }
-                    });
-                } else {
-                    const escapedSearchValue = searchValue.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                    const regexPattern = escapedSearchValue.split(/\s+/).join('.*');
-                    const regex = new RegExp(regexPattern, 'i');
-                    dropdownItems.forEach((item) => {
-                        const itemText = item.textContent;
-                        if (itemText.match(regex)) {
-                            item.style.display = "block";
-                        } else {
-                            item.style.display = "none";
-                        }
-                    });
-                }
-                const searchPerformedEvent = new CustomEvent("dropdown-searched", {
-                    detail: { searchValue }
-                });
-                this.dispatchEvent(searchPerformedEvent);
-            } else {
-                dropdownItems.forEach((item) => {
-                    item.style.display = "block";
-                });
-            }
+            const regex = this._options.useCustomRegex
+                ? new RegExp(this._searchValue, this._options.regex)
+                : new RegExp(this._searchValue.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&').split(/\s+/).join('.*'), 'i');
+
+            this.querySelectorAll('dropdown-item').forEach((item) => {
+                item.style.display = regex.test(item.textContent) ? 'block' : 'none';
+            });
 
             this.updateBorderRadius();
 
-            if (this.multiple) {
+            if (this._options.multiple) {
                 this.updateDropdownTitle();
             }
         }
 
         updateBorderRadius() {
-            const visibleItems = Array.from(this.querySelectorAll("dropdown-item:not([style*='display: none'])"));
-            // const firstVisibleItem = visibleItems[0];
-            // const lastVisibleItem = visibleItems[visibleItems.length - 1];
+            // ... (Implementation for rounded corners if needed)
+        }
 
-            // if (lastVisibleItem) {
-            //     lastVisibleItem.style.borderBottomLeftRadius = "var(--dd-content-last-radius)";
-            //     lastVisibleItem.style.borderBottomRightRadius = "var(--dd-content-last-radius)";
-            // }
+        setSelected(value) {
+            if (this._options.multiple) {
+                this._selectedItems = new Set(value);
+                this.updateSelectedItemsDOM();
+            } else {
+                this._value = value;
+                this.updateSelectedItemDOM();
+            }
+
+            this.updateDropdownTitle();
+        }
+
+        getSelected() {
+            return this._options.multiple ? [...this._selectedItems] : this._value ? [this._value] : [];
+        }
+
+        clearSelected() {
+            if (this._options.multiple) {
+                this._selectedItems.clear();
+                this.updateSelectedItemsDOM();
+            } else {
+                this._value = null;
+                this.updateSelectedItemDOM();
+            }
+
+            this.updateDropdownTitle();
         }
 
         updateDropdownTitle() {
-            const selectedItems = this.querySelectorAll("dropdown-item[active]");
-            const selectedItemsCount = selectedItems.length;
-            const dropdownTitle = this.querySelector(".dropdown-title");
-            if (selectedItemsCount === 0) {
-                dropdownTitle.textContent = this.getAttribute("title");
-            } else if (selectedItemsCount === 1) {
-                dropdownTitle.textContent = selectedItems[0].textContent;
+            const dropdownTitle = this.querySelector('.dropdown-title');
+
+            if (this._options.multiple) {
+                const selectedItemsCount = this._selectedItems.size;
+                dropdownTitle.textContent = selectedItemsCount === 0
+                    ? this._options.title
+                    : `${selectedItemsCount} item${selectedItemsCount > 1 ? 's' : ''} selected`;
             } else {
-                dropdownTitle.textContent = `${selectedItemsCount} item${selectedItemsCount > 1 ? "s" : ""} selected`;
+                const selectedItem = this.querySelector(`dropdown-item[value="${this._value}"]`);
+                dropdownTitle.textContent = selectedItem ? selectedItem.textContent : this._options.title;
             }
         }
 
         addMultiSelectFunctionality() {
-            this.addEventListener("keydown", this.handleMultiSelect.bind(this));
+            this.addEventListener('keydown', this.handleMultiSelect);
         }
 
         handleMultiSelect(e) {
-            this.log("handleMultiSelect invoked with event:", e);
-            const target = e.target;
-            if (target.tagName.toLowerCase() === "dropdown-item") {
-                let selectedValue;
-                if(target.hasAttribute("active")) {
-                    target.removeAttribute("active");
-                    selectedValue = null;
+            if (e.key === 'Enter' && e.target.tagName.toLowerCase() === 'dropdown-item') {
+                const selectedValue = e.target.getAttribute('value');
+                if (this._selectedItems.has(selectedValue)) {
+                    this._selectedItems.delete(selectedValue);
                 } else {
-                    target.setAttribute("active", "");
-                    selectedValue = target.getAttribute("value") || target.textContent;
+                    this._selectedItems.add(selectedValue);
                 }
-                // Trigger custom event for item selection
-                const itemSelectedEvent = new CustomEvent("dropdown-item-selected", {
-                    detail: { value: selectedValue, selected: target.hasAttribute("active") }
-                });
-                this.dispatchEvent(itemSelectedEvent);
-            }
 
-            this.updateSelectedItems();
-            this.updateDropdownTitle();
+                this.updateSelectedItemsDOM();
+                this.updateDropdownTitle();
+
+                this.dispatchEvent(new CustomEvent('dropdown-item-selected', {
+                    detail: { value: selectedValue, selected: this._selectedItems.has(selectedValue) },
+                }));
+            }
         }
 
-        updateSelectedItems() {
-            const selectedItems = this.querySelectorAll("dropdown-item[active]");
-            this.selectedItems.clear();
-            selectedItems.forEach((item) => {
-                this.selectedItems.add(item.getAttribute("value"));
-                this.log("Added item to selectedItems:", item.getAttribute("value"))
+        updateSelectedItemsDOM() {
+            this.querySelectorAll('dropdown-item').forEach((item) => {
+                if (this._selectedItems.has(item.getAttribute('value'))) {
+                    item.setAttribute('active', '');
+                } else {
+                    item.removeAttribute('active');
+                }
             });
         }
 
-        handleDropdownSelected(e) {
-            this.log("handleDropdownSelected invoked with event:", e);
-            const selectedValue = event.detail.value;
-            this.log("Selected value:", selectedValue);
-        }
-
         get value() {
-            return this._value;
+            return this.getSelected();
         }
 
         set value(val) {
-            const oldValue = this._value;
-            this._value = val;
-            if (oldValue !== this._value) {
-                this.dispatchEvent(new Event('change'));
+            if (this._options.multiple && Array.isArray(val)) {
+                this._selectedItems = new Set(val);
+                this.updateSelectedItemsDOM();
+            } else if (!this._options.multiple) {
+                this._value = val ? val[0] : null;
+                this.updateSelectedItemDOM();
             }
+
+            this.updateDropdownTitle();
+            this.dispatchEvent(new Event('change'));
         }
 
-        render() {
-            this.className = "dropdown-element";
-
-            // Pre-icon
-            if (this.hasAttribute("data-pre-icon") || this.hasAttribute("pre-icon") || this.hasAttribute("preIcon") || this.hasAttribute("data-preIcon")) {
-                if (!this.querySelector('.dropdown-pre-icon')) {
-                    const dropdownPreIcon = document.createElement("span");
-                    dropdownPreIcon.className = "material-symbols-outlined dropdown-pre-icon icon noselect";
-                    const preIcon = this.getAttribute("data-pre-icon") ?? this.getAttribute("pre-icon") ?? this.getAttribute("data-preIcon") ?? this.getAttribute("preIcon")
-                    dropdownPreIcon.textContent = preIcon ?? "list";
-                    this.insertBefore(dropdownPreIcon, this.firstChild);
+        updateSelectedItemDOM() {
+            this.querySelectorAll('dropdown-item').forEach((item) => {
+                if (item.getAttribute('value') === this._value) {
+                    item.setAttribute('active', '');
                 } else {
-                    if (!this.querySelector('.dropdown-pre-icon').textContent) {
-                        this.querySelector(".dropdown-pre-icon").textContent = this.getAttribute("data-pre-icon") ?? this.getAttribute("pre-icon") ?? this.getAttribute("data-preIcon") ?? this.getAttribute("preIcon") ?? "list";
-                    }
+                    item.removeAttribute('active');
                 }
-            }
+            });
+        }
 
-            // Title
-            if(!this.querySelector('.dropdown-title')) {
-                const dropdownTitle = document.createElement("span");
-                dropdownTitle.className = "dropdown-title noselect";
-                dropdownTitle.textContent = this.getAttribute("title");
-                this.insertBefore(dropdownTitle, this.querySelector('.dropdown-pre-icon')?.nextSibling);
-            } else {
-                this.querySelector(".dropdown-title").innerHTML= this.getAttribute("title")?? "";
-            }
-
-            // Button
-            if (!this.querySelector(".dropdown-button")) {
-                const dropdownButton = document.createElement("i");
-                dropdownButton.className = "material-symbols-outlined dropdown-button noselect";
-                dropdownButton.textContent = "arrow_drop_down";
-                this.insertBefore(dropdownButton, this.querySelector('.dropdown-title')?.nextSibling);
-            } else {
-                this.querySelector(".dropdown-button").textContent = "arrow_drop_down";
-            }
-
-            // Search
-            if (this.searchable) {
-                this.addSearchFunctionality();
-            }
-
-            let dropdownContent = this.querySelector("dropdown-content");
-            if (!dropdownContent) {
-                dropdownContent = document.createElement("dropdown-content");
-                this.appendChild(dropdownContent);
-            } else {
-                this.appendChild(dropdownContent);
-            }
-
-            if (this.searchable) {
-                this.insertBefore(this.searchInput, this.firstChild);
+        async loadExternalData(source) {
+            try {
+                let data = await this.fetchData(source);
+                this.processData(data);
+            } catch (error) {
+                this.dispatchEvent(new CustomEvent('dropdown-source-error', { detail: error }));
+                console.warn(`Error loading external data from ${source}`, error);
             }
         }
 
-        appendValue(name, value) {
-            const dropdownContent = this.querySelector("dropdown-content");
-            const dropdownItem = document.createElement("dropdown-item");
-            dropdownItem.className = "dropdown-item";
-            dropdownItem.textContent = name;
-            dropdownItem.setAttribute("value", name); // Add value attribute
+        async fetchData(source) {
+            try {
+                if (typeof source === 'function') {
+                    let data = await source(); // Assuming asynchronous function
+                    if (!data || typeof data !== 'object') {
+                        throw new Error("Dropdown data must be an object");
+                    }
+                    return data;
+                } else if (this.isValidURL(source)) {
+                    let response = await fetch(source);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json(); // Assuming JSON response
+                } else {
+                    throw new Error("Invalid data source provided");
+                }
+            } catch (error) {
+                throw error; // Re-throw to handle at a higher level
+            }
+        }
 
-            if (value?.hasOwnProperty("data")) {
+        isValidURL(str) {
+            try {
+                new URL(str);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        processData(data) {
+            this.dispatchEvent(new CustomEvent('dropdown-source-loaded', { detail: data }));
+
+            for (const [name, value] of Object.entries(data)) {
+                this.appendValue(name, value);
+            }
+        }
+
+        async appendValue(name, value) {
+            let dropdownContent = this.querySelector('dropdown-content');
+            if (!dropdownContent) {
+                dropdownContent = document.createElement('dropdown-content');
+                this.appendChild(dropdownContent);
+            }
+            const existingItem = dropdownContent.querySelector(`dropdown-item[value='${value}']`);
+            console.log(existingItem !== null);
+            if (existingItem) {
+                return;
+            }
+            const dropdownItem = document.createElement('dropdown-item');
+            dropdownItem.className = 'dropdown-item';
+            dropdownItem.textContent = name;
+            dropdownItem.setAttribute('value', value);
+
+            if (value?.hasOwnProperty('data')) {
                 for (const [dataName, dataValue] of Object.entries(value.data)) {
                     dropdownItem.dataset[dataName] = dataValue;
                 }
             }
 
             dropdownContent.appendChild(dropdownItem);
+            // remove duplicates
+            const values = new Set();
+            dropdownContent.querySelectorAll('dropdown-item').forEach((item) => { values.add(item.textContent); });
+            await new Promise(resolve => setTimeout(() => resolve(), 0));
         }
 
         toggleDropdown(e) {
-            this.log("toggleDropdown invoked with event:", e, "and this:", this);
-            const dropdownContent = this.querySelector("dropdown-content"); // Changed from .dropdown-content to dropdown-content
+            const dropdownContent = this.querySelector('dropdown-content');
             if (dropdownContent) {
-                if (dropdownContent.classList.contains("show")) {
-                    dropdownContent.classList.remove("show");
-                    this.querySelector(".dropdown-button").textContent = "arrow_drop_down";
-                } else {
-                    dropdownContent.classList.add("show");
-                    this.querySelector(".dropdown-button").textContent = "arrow_drop_up";
-                }
-                e.stopPropagation();  // Prevent the event from reaching the document click handler
+                dropdownContent.classList.toggle('show');
+                this.querySelector('.dropdown-button').textContent = dropdownContent.classList.contains('show')
+                    ? 'arrow_drop_up'
+                    : 'arrow_drop_down';
+                e.stopPropagation();
             }
         }
 
         handleOutsideClick(e) {
-            // If the click is outside the dropdown, close the dropdown content
             if (!this.contains(e.target)) {
-                const dropdownContent = this.querySelector("dropdown-content");
-                if (dropdownContent?.classList.contains("show")) {
-                    dropdownContent.classList.remove("show");
-                    let dropdownButton = this.querySelector(".dropdown-button");
-                    if (dropdownButton) {
-                        dropdownButton.textContent = "arrow_drop_down";
-                        this.log("Dropdown button text changed to:", dropdownButton.textContent);
-                    }
+                const dropdownContent = this.querySelector('dropdown-content');
+                if (dropdownContent?.classList.contains('show')) {
+                    dropdownContent.classList.remove('show');
+                    this.querySelector('.dropdown-button').textContent = 'arrow_drop_down';
                 }
             }
         }
 
         setActiveItem() {
-            const settingValue = this.getAttribute("value");
-            const activeItem = this.querySelector(`[value="${settingValue}"]`);
-            if (this.activeItem) {
-                activeItem.classList.add("active");
-                activeItem.setAttribute("active", "");
-                this.querySelect(".dropdown-title").textContent = activeItem.textContent;
-                this.value = activeItem.dataset.value; // Set the value attribute
-                this.value = activeItem.getAttribute("value");
+            if (this._options.multiple) {
+                this.updateSelectedItemsDOM();
+            } else {
+                this.updateSelectedItemDOM();
             }
         }
 
         handleKeyboardNavigation(e) {
-            const items = Array.from(this.querySelectorAll("dropdown-item"));
-            const activeItem = this.querySelector("dropdown-item[active]");
+            const items = Array.from(this.querySelectorAll('dropdown-item:not([style*="display: none"])'));
+            const activeItem = this.querySelector('dropdown-item[active]');
+
+            if (!items.length) return;
+
             const currentIndex = items.indexOf(activeItem);
 
+            let newIndex;
             switch (e.key) {
-                case "ArrowUp":
-                    const prevItem = items[currentIndex - 1] || items[items.length - 1];
-                    if (prevItem) prevItem.focus();
+                case 'ArrowUp':
+                    newIndex = (currentIndex - 1 + items.length) % items.length;
                     break;
-                case "ArrowDown":
-                    const nextItem = items[currentIndex + 1] || items[0];
-                    if (nextItem) nextItem.focus();
+                case 'ArrowDown':
+                    newIndex = (currentIndex + 1) % items.length;
                     break;
-                case "Enter":
-                    if (document.activeElement.classList.contains("dropdown-item")) {
-                        this.selectItem(document.activeElement);
+                case 'Enter':
+                    if (activeItem) {
+                        this.selectItem(activeItem);
                     }
                     break;
+                default:
+                    return;
+            }
+
+            if (newIndex !== undefined) {
+                items[newIndex].focus();
             }
         }
 
         selectItem(item) {
-            this.log("selectItem invoked with item:", item);
-
-            const previouslyActiveItem = this.querySelector("dropdown-item[active]");
-            this.log("Previously active item:", previouslyActiveItem);
-
-            // If the clicked item is already active, deselect it and revert the title
-            if (previouslyActiveItem === item) {
-                item.removeAttribute("active");
-                this.querySelector(".dropdown-title").textContent = this.getAttribute("title");
-                this.value = null;
+            if (this._options.multiple) {
+                this.handleMultiSelect({ target: item, key: "Enter" }); // Simulate Enter key press
             } else {
-                // Deselect any previously active item
-                if (previouslyActiveItem) {
-                    previouslyActiveItem.removeAttribute("active");
-                }
+                this.value = item.getAttribute('value');
 
-                // Select the clicked item
-                item.setAttribute("active", "");
-                this.log("Active attribute set on item:", item);
-
-                this.value = item.getAttribute("value");
-                this.log("Value set as:", this.value);
-
-                const groupName = item.closest("dropdown-contentgroup")?.getAttribute("category");
-                if (groupName) {
-                    this.dataset.group = groupName;
-                    this.log("Group name set as:", groupName);
-                } else {
-                    delete this.dataset.group;
-                    this.log("Group name deleted");
-                }
-
-                const titleElement = this.querySelector(".dropdown-title");
-                this.log("Title element:", titleElement);
-
-                if (titleElement) {
-                    this.log("Before:", titleElement.textContent);
-                    titleElement.textContent = item.textContent;
-                    this.log("After:", titleElement.textContent);
+                if (this.querySelector('dropdown-content.show')) {
+                    this.toggleDropdown({ stopPropagation: () => { } }); // Close dropdown
                 }
             }
-            // close the dropdown-content
-            this.closeDropdown();
 
-            this.dispatchEvent(new Event("change"));
-            const val = item.getAttribute("value");
-            const dropdownSelectedEvent = new CustomEvent("dropdown-item-selected", {
-                detail: { value: val },
-                bubbles: true
-            });
-            this.dispatchEvent(dropdownSelectedEvent);
-            return true;
+            this.dispatchEvent(new CustomEvent('dropdown-item-selected', {
+                detail: { value: item.getAttribute('value') },
+                bubbles: true // Optional: Allow event to bubble up
+            }));
         }
 
-        addDropdownContentListener() {
-            this.querySelector("dropdown-content").addEventListener("click", (e) => {
-                this.log("Dropdown content clicked. Target:", e.target);
+        initializeDropdownContent() {
+            const dropdownContent = this.querySelector('dropdown-content');
+            if (!dropdownContent) return;
 
-                if (e.target.tagName.toLowerCase() === "dropdown-item") {
-                    this.log("Dropdown item clicked:", e.target);
-                    // if not multiple, this.selectItem, else
-                    if (this.multiple) {
-                        this.handleMultiSelect(e);
-                    } else {
-                        this.selectItem(e.target);
-                        this.toggleDropdown(e);
-                    }
-                } else {
-                    this.log("Clicked inside dropdown content but not on a dropdown item");
+            dropdownContent.addEventListener('click', (e) => {
+                if (e.target.tagName.toLowerCase() === 'dropdown-item') {
+                    this.selectItem(e.target);
                 }
             });
-        }
 
-        handleMouseOut(e) {
-            // this.log("Mouse out event triggered");
-            if (!this.contains(e.relatedTarget)) {
-                this.closeDropdown();
-            }
-        }
-
-        handleMouseOver(e) {
-            // this.log("Mouse over event triggered");
-            if (!this.contains(e.relatedTarget)) {
-                this.openDropdown();
-            }
-        }
-
-        handleClick(e) {
-            this.log("Click event triggered");
-            if (this.contains(e.target)) {
-                if (this.querySelector(".dropdown-content.show")) {
-                    this.closeDropdown();
-                } else {
-                    this.openDropdown();
+            const values = this.getAttribute('values') || "{}";
+            try {
+                const parsedValues = JSON.parse(values);
+                for (const [name, value] of Object.entries(parsedValues)) {
+                    this.appendValue(name, value);
                 }
+            } catch (error) {
+                console.error("Error parsing 'values' attribute:", error);
             }
         }
 
-        openDropdown() {
-            this.log("openDropdown invoked");
-            const dropdownContent = this.querySelector("dropdown-content");
-            if (dropdownContent) {
-                dropdownContent.classList.add("show");
-                this.querySelector(".dropdown-button").textContent = "arrow_drop_up";
+        toggleDebugging(value) {
+            debugging = value !== undefined ? value : !debugging;
+            return debugging;
+        }
+
+        log(...args) {
+            if (this._options.debug) {
+                console.log(...args);
             }
         }
 
-        closeDropdown() {
-            this.log("closeDropdown invoked");
-            const dropdownContent = this.querySelector("dropdown-content");
-            if (dropdownContent) {
-                dropdownContent.classList.remove("show");
-                this.querySelector(".dropdown-button").textContent = "arrow_drop_down";
-            }
-        }
-
+        // ... applyDefaultStyles() method remains mostly unchanged ...
         applyDefaultStyles() {
             const style = document.createElement('style');
             const styleContent = `
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                --dd-radius: 20px;
-                --dd-content-radius: 10px;
-                --dd-content-first-radius: 10px;
-                --dd-content-last-radius: 10px;
-            }
-
-            dropdown-element {
-                position: relative;
-                display: inline-flex;
-                align-items: center;
-                /* justify-content: center; */
-                justify-content: space-between;
-                padding: 4px 8px;
-                gap: 4px;
-                border-radius: var(--dd-radius);
-                background: #fafafa;
-                box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
-                cursor: pointer;
-                min-width: fit-content;
-                max-width: 100%;
-                min-height: auto;
-                font-family: Arial;
-            }
-
-            .dropdown-pre-icon {
-                color: #777;
-                font-size: 16px;
-                font-weight: bold;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            .dropdown-title {
-                font-size: 14px;
-                font-weight: bold;
-                color: #333;
-                margin: 0;
-                padding: 0;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                width: 100%;
-                text-align: center;
-                height: fit-content;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            .dropdown-button {
-                /* font-size: 14px; */
-                display: inline-flex;
-                font-weight: bold;
-                color: #333;
-                margin: 0;
-                padding: 0;
-                /* text-transform: uppercase; */
-                /* letter-spacing: 1px; */
-            }
-
-            dropdown-content {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 110%;
-                left: 0;
-                right: 0;
-                background: #fafafa;
-                box-shadow: 3px 3px 16px 0 rgba(0,0,0,0.1);
-                border-radius: var(--dd-content-radius);
-                gap: 4px;
-                width: 100%;
-                padding: 0.5em 0;
-                z-index: 1;
-            }
-
-            dropdown-item {
-                font-size: 14px;
-                font-weight: normal;
-                color: #333;
-                margin: 0;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                cursor: pointer;
-                white-space: pre;
-                padding: 2px 8px;
-                text-decoration: none;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            /*dropdown-item:first-child {
-                border-top-left-radius: var(--dd-content-first-radius);
-                border-top-right-radius: var(--dd-content-first-radius);
-            }
-
-            dropdown-item:last-child {
-                border-bottom-left-radius: var(--dd-content-last-radius);
-                border-bottom-right-radius: var(--dd-content-last-radius);
-                padding-bottom: 1em;
-            }*/
-
-            dropdown-element:focus-within dropdown-content {
-                display: flex;
-            }
-
-            dropdown-item:hover {
-                color: #333;
-                background: #efefef;
-                box-shadow: 0 0 3px 0 #ccc;
-                font-weight: 600;
-            }
-
-            dropdown-item[active] {
-                /* background-color: ; */
-                color: #007bff !important;
-            }
-
-            :host .dropdown-button {
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            .dropdown-search {
-                margin: 8px;
-                border-radius: 8px;
-                padding: 8px;
-                outline: none;
-                border: none;
-                background: #efefef;
-                color: #333;
-                box-shadow: inset 0 0 3px 0 rgb(0 0 0 / 11%);
-            }
-
-            .noselect,
-            .no-select {
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            .show {
-                display: flex;
-            }
-
-            `;
-            style.textContent = styleContent;
-            this.appendChild(style);
-
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    --dd-radius: 20px;
+    --dd-content-radius: 10px;
+    --dd-content-first-radius: 10px;
+    --dd-content-last-radius: 10px;
+    }
+    dropdown-element {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /* justify-content: center; */
+    justify-content: space-between;
+    padding: 4px 8px;
+    gap: 4px;
+    border-radius: var(--dd-radius);
+    background: #fafafa;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+    cursor: pointer;
+    min-width: fit-content;
+    max-width: 100%;
+    min-height: auto;
+    font-family: Arial;
+    }
+    .dropdown-pre-icon {
+    color: #777;
+    font-size: 16px;
+    font-weight: bold;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    .dropdown-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+    text-align: center;
+    height: fit-content;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    .dropdown-button {
+    /* font-size: 14px; */
+    display: inline-flex;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    /* text-transform: uppercase; */
+    /* letter-spacing: 1px; */
+    }
+    dropdown-content {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background: #fafafa;
+    box-shadow: 3px 3px 16px 0 rgba(0,0,0,0.1);
+    border-radius: var(--dd-content-radius);
+    gap: 4px;
+    width: 100%;
+    padding: 0.5em 0;
+    z-index: 1;
+    }
+    dropdown-item {
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    white-space: pre;
+    padding: 2px 8px;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    /*dropdown-item:first-child {
+    border-top-left-radius: var(--dd-content-first-radius);
+    border-top-right-radius: var(--dd-content-first-radius);
+    }
+    dropdown-item:last-child {
+    border-bottom-left-radius: var(--dd-content-last-radius);
+    border-bottom-right-radius: var(--dd-content-last-radius);
+    padding-bottom: 1em;
+    }*/
+    dropdown-element:focus-within dropdown-content {
+    display: flex;
+    }
+    dropdown-item:hover {
+    color: #333;
+    background: #efefef;
+    box-shadow: 0 0 3px 0 #ccc;
+    font-weight: 600;
+    }
+    dropdown-item[active] {
+    /* background-color: ; */
+    color: #007bff !important;
+    }
+    :host .dropdown-button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    .dropdown-search {
+    margin: 8px;
+    border-radius: 8px;
+    padding: 8px;
+    outline: none;
+    border: none;
+    background: #efefef;
+    color: #333;
+    box-shadow: inset 0 0 3px 0 rgb(0 0 0 / 11%);
+    }
+    .noselect,
+    .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    .show {
+    display: flex;
+    }
+    `;
+            // style.textContent = styleContent;
+            // this.appendChild(style);
             const sheet = new CSSStyleSheet();
             sheet.replaceSync(styleContent);
-
             this.adoptedStyleSheets = [sheet];
         }
     }
 
     return Dropdown;
-
 })();
+
 customElements.define("dropdown-element", Dropdown);
 
 class DropdownContent extends HTMLElement {}
@@ -753,187 +620,94 @@ customElements.define("dropdown-item", DropdownItem);
 class DropdownContentGroup extends HTMLElement {}
 customElements.define("dropdown-contentgroup", DropdownContentGroup);
 
-function convertOldDropdowns(target = document) {
-	const oldDropdowns = target.querySelectorAll(".dropdown:not(input)");
-	oldDropdowns.forEach((oldDropdown) => {
-		const newDropdown = document.createElement("dropdown-element");
-		// newDropdown.setAttribute("is", "dropdown-element");
-		newDropdown.setAttribute("id", oldDropdown.id);
-		newDropdown.setAttribute("title", oldDropdown.getAttribute("title"));
-        // add all the other attributes that exist on the dropdown
-        for (const { name, value } of oldDropdown.attributes) {
-            console.log(`name: ${name}\nvalue: ${value}\n`)
-            if (name !== "title") {
-                newDropdown.setAttribute(name, value);
-            }
-        }
+// function convertOldDropdowns(target = document) {
+//     const oldDropdowns = target.querySelectorAll(".dropdown:not(input)");
+//     oldDropdowns.forEach((oldDropdown) => {
+//         const newDropdown = document.createElement("dropdown-element");
+//         for (const { name, value } of oldDropdown.attributes) {
+//             newDropdown.setAttribute(name, value);
+//         }
+//         newDropdown.setAttribute("title", oldDropdown.getAttribute("title"));
+//         for (const { name, value } of oldDropdown.attributes) {
+//             console.log(`name: ${name}\nvalue: ${value}\n`)
+//             if (name !== "title") {
+//                 newDropdown.setAttribute(name, value);
+//             }
+//         }
+//         const preIcon = oldDropdown.querySelector(".dropdown-pre-icon");
+//         if (preIcon) {
+//             newDropdown.setAttribute("pre-icon", preIcon.textContent);
+//         }
+//         const newDropdownContent = document.createElement("dropdown-content");
 
-		const preIcon = oldDropdown.querySelector(".dropdown-pre-icon");
-		if (preIcon) {
-			newDropdown.setAttribute("data-pre-icon", preIcon.textContent);
-		}
+//         const oldItems = oldDropdown.querySelectorAll(".dropdown-item");
 
-		const newDropdownContent = document.createElement("dropdown-content");
-		const oldItems = oldDropdown.querySelectorAll(".dropdown-item");
-		oldItems.forEach((oldItem) => {
-			const newItem = document.createElement("dropdown-item");
-			newItem.textContent = oldItem.textContent;
-            newItem.setAttribute("value", oldItem.textContent); // Set value attribute
-            // If there's extra data for the item, add it as dataset attributes
-            if (oldItem.dataset) {
-                for (const [dataName, dataValue] of Object.entries(oldItem.dataset)) {
-                    newItem.dataset[dataName] = dataValue;
-                }
-            }
-            // other attributes
-            for (const { name, value } of oldItem.attributes) {
-                console.log(`name: ${name}\nvalue: ${value}\n`)
-                if (name !== "value" && name !== "class") {
-                    newItem.setAttribute(name, value);
-                }
-            }
-			newDropdownContent.appendChild(newItem);
-		});
+//         oldItems.forEach((oldItem) => {
+//             const newItem = document.createElement("dropdown-item");
+//             newItem.textContent = oldItem.textContent;
+//             newItem.setAttribute('value', oldItem.getAttribute('value') || oldItem.textContent);
 
-		newDropdown.appendChild(newDropdownContent);
-		oldDropdown.replaceWith(newDropdown);
-
-        // Debugging: Print the dropdown title before and after updating
-        // console.log("Before title update:", newDropdown.querySelector(".dropdown-title").textContent);
-        // console.log(newDropdown)
-        // console.log(oldDropdown)
-
-        // const oldActiveItems = oldDropdown.querySelectorAll(".dropdown-item.active");
-
-        // // Update the dropdown title if there's an active item
-        // if (oldActiveItems.length > 0) {
-        //     if (newDropdown.hasAttribute("multiple")) {
-        //         const dropdownTitle = newDropdown.querySelector(".dropdown-title");
-        //         dropdownTitle.textContent = `${oldActiveItems.length} item${oldActiveItems.length > 1 ? "s" : ""} selected`;
-        //     } else {
-        //         const dropdownTitle = newDropdown.querySelector(".dropdown-title");
-        //         dropdownTitle.textContent = oldActiveItems[0].textContent;
-        //     }
-        // } else {
-        //     const dropdownTitle = newDropdown.querySelector(".dropdown-title");
-        //     dropdownTitle.textContent = newDropdown.getAttribute("title");
-        // }
-
-        // // Debugging: Print the dropdown title after updating
-        // console.log("After title update:", newDropdown.querySelector(".dropdown-title").textContent);
-        // set properties for the newDropdown
-        // newDropdown.multiple = newDropdown.hasAttribute("multiple");
-        // newDropdown.searchable = newDropdown.hasAttribute("searchable") ||
-        // newDropdown.hasAttribute("search") ||
-        // newDropdown.hasAttribute("searcheable") ||
-        // newDropdown.hasAttribute("search-box");
-        // newDropdown.useExternal = newDropdown.hasAttribute("external") ||
-        // newDropdown.hasAttribute("source") ||
-        // newDropdown.hasAttribute("src");
-        // if (newDropdown.hasAttribute('regex')) {
-        //     newDropdown.useCustomRegex = true;
-        //     newDropdown.regex = newDropdown.getAttribute('regex');
-        // }
-        // // add event listeners
-        // newDropdown.addEventListener("click", newDropdown.toggleDropdown);
-        // newDropdown.addEventListener("keydown", newDropdown.handleKeyboardNavigation);
-        // newDropdown.addEventListener("dropdown-selected", newDropdown.handleDropdownSelected);
-        // document.addEventListener('click', newDropdown.handleOutsideClick);
-        // // selected item(s)
-        // newDropdown.selectedItems = new Set();
-        // newDropdown.updateSelectedItems();
-
-	});
-}
+//             for (const [dataName, dataValue] of Object.entries(oldItem.dataset)) {
+//                 newItem.dataset[dataName] = dataValue;
+//             }
+//             // other attributes
+//             for (const { name, value } of oldItem.attributes) {
+//                 console.log(`name: ${name}\nvalue: ${value}\n`)
+//                 if (name !== "value" && name !== "class") {
+//                     newItem.setAttribute(name, value);
+//                 }
+//             }
+//             newDropdownContent.appendChild(newItem);
+//         });
+//         newDropdown.appendChild(newDropdownContent);
+//         oldDropdown.replaceWith(newDropdown);
+//     });
+// }
 
 const initializeDropdown = (dropdown) => {
-	if (!dropdown.__initialized) {
-		dropdown.__initialized = true;
-	}
+    if (!dropdown.__initialized && dropdown instanceof Dropdown) {
+        dropdown.__initialized = true;
+    }
 };
 
-function handleMutations(mutationsList, observer) {
-	for (let mutation of mutationsList) {
-		if (mutation.type === "childList") {
-			mutation.addedNodes.forEach((node) => {
-				if (node.nodeType === Node.ELEMENT_NODE) {
-					// Convert old-style dropdowns if any
-					if (node.classList.contains("dropdown-element")) {
-						convertOldDropdowns(node);
-					}
-
-					// Also, check for any old-style dropdowns among the descendants of the added node
-					const oldDropdowns = node.querySelectorAll(".dropdown:not(input)");
-					oldDropdowns.forEach(convertOldDropdowns);
-
-					// Initialize new-style dropdowns
-					if (node.matches('dropdown-element')) {
-						initializeDropdown(node);
-					}
-
-					// Also, check for any new-style dropdowns among the descendants of the added node
-					const dropdowns = node.querySelectorAll('dropdown-element');
-					dropdowns.forEach(initializeDropdown);
-				}
-			});
-		}
-	}
-}
-
 const observer = new MutationObserver(handleMutations);
-
 observer.observe(document.body, { childList: true, subtree: true });
 
-document.addEventListener("DOMContentLoaded", function () {
-	convertOldDropdowns(); // Convert old dropdowns after document is loaded
-	const dropdowns = document.querySelectorAll('dropdown-element');
-	dropdowns.forEach(initializeDropdown);
-});
-
-function createDropdown(options) {
-	// Create the main dropdown element
-	const dropdown = document.createElement("dropdown-element");
-	dropdown.setAttribute("title", options.title);
-
-	if (options.preIcon) {
-		dropdown.setAttribute("data-pre-icon", options.preIcon);
-	}
-
-	// If values are provided, populate the dropdown content
-	if (options.values) {
-		const dropdownContent = document.createElement("dropdown-content");
-
-		for (const [name, value] of Object.entries(options.values)) {
-			const dropdownItem = document.createElement("dropdown-item");
-			dropdownItem.textContent = name;
-            dropdownItem.setAttribute("value", name); // Set value attribute
-
-			// If there's extra data for the item, add it as dataset attributes
-			if (value.data) {
-				for (const [dataName, dataValue] of Object.entries(value.data)) {
-					dropdownItem.dataset[dataName] = dataValue;
-				}
-			}
-
-			dropdownContent.appendChild(dropdownItem);
-		}
-
-		dropdown.appendChild(dropdownContent);
-	}
-
-	return dropdown;
+function handleMutations(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+        if (mutation.type === "childList") {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Convert any added old-style dropdowns
+                    // if (node.matches('.dropdown:not(input)')) {
+                    //     convertOldDropdowns(node);
+                    // }
+                    // Initialize new dropdowns
+                    // if (node.matches('dropdown-element')) {
+                    //     initializeDropdown(node);
+                    // }
+                }
+            });
+        }
+    }
 }
 
-// const dropdownOptions = {
-// 	title: "Select an item",
-// 	preIcon: "lists",
-// 	values: {
-// 		"Item 1": {},
-// 		"Item 2": { data: { customAttribute: "value2" } },
-// 		"Item 3": {}
-// 	}
-// };
+function createDropdown(options) {
+    const dropdown = document.createElement("dropdown-element");
+    // If values are provided, populate the dropdown content
+    for (const [name, value] of Object.entries(options.values)) {
+        if (key === 'values' && typeof value === 'object') {
+            dropdown.setAttribute(key, JSON.stringify(value));
+        } else {
+            dropdown.setAttribute(key, value);
+        }
+    }
+    return dropdown;
+}
 
-// const dropdownInstance = createDropdown(dropdownOptions);
-// const main = document.querySelector('main');
-// main.appendChild(dropdownInstance);
+
+document.addEventListener("DOMContentLoaded", function () {
+    // convertOldDropdowns();
+    const dropdowns = document.querySelectorAll('dropdown-element');
+    dropdowns.forEach(initializeDropdown);
+});

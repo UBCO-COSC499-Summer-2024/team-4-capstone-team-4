@@ -6,7 +6,8 @@
     'regex' => 'i',
     'values' => [],
     'value' => null,
-    'preIcon' => 'list'
+    'preIcon' => 'list',
+    'name' => null,
 ])
 <dropdown-element
     title="{{ $title }}" 
@@ -14,6 +15,7 @@
     tabindex="0"
     {{ $attributes->merge(['class' => 'dropdown-element']) }}
     @if($multiple) multiple @endif 
+    @if ($name) name="{{ $name }}" @endif
     @if($searchable) searchable @endif 
     @if($externalSource) external="{{ $externalSource }}" @endif 
     @if($regex) regex="{{ $regex }}" @endif 
@@ -21,8 +23,8 @@
     @if($preIcon) pre-icon="{{ $preIcon }}" @endif
     @if($value) value="{{ $value }}" @endif>
     <dropdown-content>
-        @foreach ($values as $name => $value)
-            <dropdown-item class="dropdown-item" value="{{ $name }}">{{ $value }}</dropdown-item>
+        @foreach ($values as $vname => $value)
+            <dropdown-item class="dropdown-item" value="{{ $vname }}">{{ $value }}</dropdown-item>
         @endforeach
     </dropdown-content>
 </dropdown-element>

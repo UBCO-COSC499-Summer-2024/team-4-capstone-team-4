@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\templates;
+namespace App\View\Components\svcrole;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AuditogListItem extends Component
+class ManageSvcroles extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class AuditogListItem extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.templates.audit-log-list-item');
+        return view('components.svcrole.manage-svcroles');
     }
 }

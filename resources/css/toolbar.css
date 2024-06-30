@@ -3,7 +3,7 @@
     border-radius: 50px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
     margin: 4px;
-    max-height: 50px;
+    /* max-height: 40px; */
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -11,6 +11,7 @@
     background: rgba(50, 50, 50, 0.9);
     color: #999;
     flex-wrap: nowrap;
+    /* overflow-x: auto; */
 }
 
 .mini-toolbar {
@@ -58,6 +59,32 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
+}
+
+.toolbar select {
+    appearance: none;
+    /* padding: 4px 12px; */
+    padding-left: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 16px;
+    border: none !important;
+    outline: none !important;
+    /* background: #fff; */
+    width: fit-content;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* edit options */
+.toolbar select option {
+    appearance: none;
+    padding: 4px 8px;
+    border-radius: 16px;
+    border: none !important;
+    outline: none !important;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .switch-label-icon {
@@ -136,13 +163,53 @@ h1 button {
     padding: 8px;
 }
 
+.toolbar-search {
+    text-indent: 24px;
+}
+
+.toolbar-search-container {
+    display: flex;
+    position: relative;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.toolbar-search-icon {
+    position:absolute;
+    left: 8px;
+    font-size: 1rem;
+}
+
+.toolbar-clear-search {
+    position: absolute;
+    right: 8px;
+    font-size: 0.8rem;
+    padding: 2px !important;
+    cursor: pointer;
+}
+
+.toolbar-clear-search:hover {
+    background: none !important;
+    color: rgba(30, 75, 250, 1) !important;
+    font-weight: 600;
+}
 
 @media (max-width: 768px) { /* Adjust max-width as needed */
     .toolbar {
         display: none;
-        flex-direction: column;
+        /* flex-direction: column; */
         align-items: end;
         padding: 8px;
+        border-radius: 50px;
+        max-height: unset;
+        overflow: unset;
+        /* overflow-x: auto; */
+        width: fit-content;
+        box-sizing: border-box;
         /* box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1); */
     }
 
@@ -158,10 +225,9 @@ h1 button {
     }
 
     .toolbar-section {
-        width: 100%; /* Full width for sections in mobile view */
-        margin-bottom: 8px; /* Add space between sections */
-        flex-wrap: wrap;
-        /* justify-content: start; */
+        width: fit-content;
+        flex: none;
+        flex-wrap: nowrap;
     }
 
     .toolbar-section-title {

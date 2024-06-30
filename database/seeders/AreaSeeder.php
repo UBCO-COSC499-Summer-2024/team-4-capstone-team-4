@@ -17,12 +17,15 @@ class AreaSeeder extends Seeder
         
         // $table->string('name');
         // $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
-        for ($i = 1; $i <= 10; $i++) {
-            Area::create([
-                "name" => "Area $i",
-                // random dept id
-                "dept_id" => Department::inRandomOrder()->first()->id
-            ]);
-        }
+        // for ($i = 1; $i <= 10; $i++) {
+        //     Area::create([
+        //         "name" => "Area $i",
+        //         // random dept id
+        //         "dept_id" => Department::inRandomOrder()->first()->id
+        //     ]);
+        // }
+        Area::factory(10)->create([
+            'dept_id' => Department::factory()
+        ]);
     }
 }

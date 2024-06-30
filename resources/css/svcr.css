@@ -13,6 +13,10 @@ table {
     gap: 12px;
 }
 
+.svcr-list-header {
+    background: #f5f5f5;
+}
+
 .card-view .svcrole-card {
     display: inline-block;
     width: 30%;
@@ -47,6 +51,14 @@ table {
     cursor: pointer;
 }
 
+.svcr-list-item:hover {
+    background: #f5f5f5;
+}
+
+.svcr-list-item:has(.svcr-list-item-cell > input[type="checkbox"]:checked) {
+    background: #f0f0f0;
+}
+
 thead {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
@@ -68,19 +80,82 @@ thead {
     padding: 8px;
 }
 
+.bg-editing {
+    background-color: #f0f0f0;
+}
+
+.svcr-list-item input[type="text"],
+.svcr-list-item input[type="number"],
+.svcr-list-item select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    border-radius: 12px;
+}
+
+.svcr-list-item input[type="text"],
+.svcr-list-item input[type="number"] {
+    padding: 4px 8px;
+}
+
+.svcr-list-item select {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+}
+
 tbody {
     width: 100%;
 }
 
 .svcr-list-item {
     border-radius: 12px;
-    padding: 6px;
+    /* padding: 6px; */
     border-spacing: 6px;
+    border-collapse: separate;
 }
 
-.svcr-list-item td {
+.svcr-list-item-cell {
     padding: 8px;
-    border-radius: 12px;
+    border-radius: 4px;
     /* border: 1px solid rgba(0, 0, 0, 0.1); */
-    margin: 4px;
+}
+
+.icon-cancel-edit {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.svcr-list-item-actions {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+#svcr-select-all::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    /* border: 1px solid #ccc; */
+    border: none;
+    background-color: transparent;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#svcr-select-all:checked::before {
+    content: "✓";
+    background-color: #007bff;
+    opacity: 0;
+    color: white;
+}
+
+#svcr-select-all[indeterminate]::before {
+    content: "-";
+    text-align: center;
+    line-height: 10px; /* Vertically center the "-" */
 }

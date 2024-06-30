@@ -44,7 +44,7 @@
                         </div>
                         <div class="form-item">
                             <label class="input-label">Add Extra Hours:</label>
-                            <button type="button" class="button" wire:click="$emit('openModal', 'openModal')">
+                            <button type="button" class="button" wire:click="$dispatch('openModal', 'openModal')">
                                 <span class="button-title">Add</span>
                                 <span class="material-symbols-outlined">add</span>
                             </button>

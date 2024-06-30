@@ -94,7 +94,7 @@
                         @case('searchCategory')
                             <x-dropdown-element 
                                 id="searchCategoryDropdown"
-                                title="Search Category" 
+                                title="Category" 
                                 :values="$filterBy" 
                                 preIcon="category" />
                             @break
@@ -106,7 +106,7 @@
                         @case('filter')
                             <x-dropdown-element 
                                 id="filterDropdown"
-                                title="Filter By" 
+                                title="Filter" 
                                 :values="$filterBy" 
                                 preIcon="filter_list" />
                             @break
@@ -118,7 +118,7 @@
                         @case('sort')
                             <x-dropdown-element 
                                 id="sortByDropdown"
-                                title="Sort By" 
+                                title="Sort" 
                                 :values="$sortBy" 
                                 preIcon="sort" />
                             <x-dropdown-element 
@@ -131,7 +131,7 @@
                         @case('group')
                             <x-dropdown-element 
                                 id="groupByDropdown"
-                                title="Group By" 
+                                title="Group" 
                                 :values="$groupBy" 
                                 preIcon="group" />
                             @break

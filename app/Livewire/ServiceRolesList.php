@@ -11,9 +11,9 @@ class ServiceRolesList extends Component
 {
     use WithPagination;
     public $links = [];
-    public $columns = [];
+    // public $columns = [];
     public $viewMode = 'table';
-    public $pageMode = 'view';
+    public $pageMode = 'pagination';
     public $searchQuery = '';
     public $searchCategory = ''; // column to search
     public $selectedFilter = '';
@@ -22,16 +22,17 @@ class ServiceRolesList extends Component
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
     public $pageSize = 20;
+    public $selectedItems = [];
     protected $queryString = [
-        'viewMode',
-        'pageMode',
-        'searchQuery',
-        'selectedFilter',
-        'filterValue',
-        'selectedSort',
-        'selectedSortOrder',
-        'selectedGroup',
-        'pageSize' => ['except' => 20] // Only update query string if not default
+        'viewMode' => ['except' => 'table'],
+        'pageMode' => ['except' => 'pagination'],
+        'searchQuery' => ['except' => ''],
+        'selectedFilter' => ['except' => ''],
+        'filterValue' => ['except' => ''],
+        'selectedSort' => ['except' => ''],
+        'selectedSortOrder' => ['except' => 'asc'],
+        'selectedGroup' => ['except' => ''],
+        'pageSize' => ['except' => 20]
     ];
 
     protected $rules = [
@@ -63,41 +64,109 @@ class ServiceRolesList extends Component
         'clearGroup' => 'clearGroup',
         'clearAll' => 'clearAll',
         'resetFilters' => 'resetFilters',
+        'performAction' => 'performAction',
+        'deleteSelected' => 'deleteSelected',
+        'saveSelected' => 'saveSelected',
+        'exportSelected' => 'exportSelected',
+        'selectItem' => 'handleItemSelected',
+        'toolbarUpdated' => 'handleToolbarUpdate',
+        'applyActions' => 'handleApplyActions',
+        'filtersReset' => 'resetFilters', // For resetting filters
     ];
 
-    public function mount($links) {
+    public function mount($links = []) {
         $this->links = $links;
+    }
+
+    public function handleToolbarUpdate($data)
+    {
+        // Log or debug if needed
+        // logger('Toolbar Updated:', $data);
+
+        // Update component properties (if needed)
+        // and re-fetch data based on the toolbar changes
+        $this->resetPage(); // Reset pagination when filters change
+    }
+
+    public function resetPage() {
+        $this->render();
+    }
+
+    public function handleApplyActions($selectedActions)
+    {
+        // // Log or debug if needed
+        // logger('Applying Actions:', $selectedActions, 'to items:', $this->selectedItems);
+
+        // Implement your logic to handle the selected actions here
+        // For example:
+        if (in_array('delete', $selectedActions)) {
+            $this->deleteSelected();
+        }
+
+        if (in_array('export', $selectedActions)) {
+            $this->exportSelected();
+        }
+
+        if (in_array('save', $selectedActions)) {
+            $this->saveSelected();
+        }
+
+        if (in_array('edit', $selectedActions)) {
+            // enable editable for selected items
+            $this->toggleEdit();
+        }
+    }
+
+    public function handleItemSelected($itemId, $checked) {
+        if ($checked) {
+            $this->selectedItems[] = $itemId;
+        } else {
+            $this->selectedItems = array_diff($this->selectedItems, [$itemId]);
+        }
+    }
+
+    public function handleCheckAll($checked) {
+        if ($checked) {
+            $this->selectedItems = $this->allItemIds();
+        } else {
+            $this->selectedItems = [];
+        }
+    }
+
+    private function allItemIds() {
+        // Replace with your logic to fetch all item IDs
+        // For example, if you have a collection of items
+        return $this->items->pluck('id')->toArray();
     }
 
     public function getColumns($modelOrTable) {
         if (is_string($modelOrTable) && str_contains($modelOrTable, '.')) {
-            // Assume it's a table name (e.g., 'users') or 'table.column'
-            [$table] = explode('.', $modelOrTable, 2); // Get table from potential 'table.column'
+            [$table] = explode('.', $modelOrTable, 2);
             return DB::getSchemaBuilder()->getColumnListing($table);
         } elseif (is_object($modelOrTable) && $modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
-            // It's an Eloquent model instance
             return $modelOrTable->getConnection()->getSchemaBuilder()->getColumnListing($modelOrTable->getTable());
         } elseif (is_string($modelOrTable) && class_exists($modelOrTable)) {
-            // Assume it's a model class name (e.g., 'App\Models\User')
             $model = new $modelOrTable;
             return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
         } else {
             throw new \InvalidArgumentException('Invalid argument passed to getColumns. Must be a model instance, model class name, or table name.');
         }
     }
+
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
+
         if (!empty($this->searchQuery)) {
-            $searchableColumns = $this->getColumns(ServiceRole::class); 
-    
-            $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
-                foreach ($searchableColumns as $column) {
-                    // Optionally, exclude specific columns from search:
-                    // if (!in_array($column, ['password', 'remember_token', /* other columns */])) {
+            $searchableColumns = $this->getColumns(ServiceRole::class);
+            if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
+                $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+            } else {
+                $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
+                    foreach ($searchableColumns as $column) {
                         $query->orWhere($column, 'like', '%' . $this->searchQuery . '%');
-                    // } 
-                }
-            });
+                    }
+                });
+            }
         }
 
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
@@ -114,49 +183,46 @@ class ServiceRolesList extends Component
 
         $serviceRoles = $this->pageMode === 'pagination' ? $serviceRolesQuery->paginate($this->pageSize) : $serviceRolesQuery->get();
 
-        return view('livewire.service-roles-list', ['serviceRoles' => $serviceRoles, 'links' => $this->links]);
+        return view('livewire.service-roles-list', [
+            'serviceRoles' => $serviceRoles,
+            'links' => $this->links,
+            'viewMode' => $this->viewMode,
+            'pageMode' => $this->pageMode,
+        ]);
     }
 
     public function changeViewMode($mode) {
         $this->viewMode = $mode;
-        $this->render();
     }
 
     public function changePageMode($mode) {
         $this->pageMode = $mode;
-        $this->render();
     }
 
     public function changePageSize($size) {
         $this->pageSize = $size;
-        $this->render();
     }
 
     public function changeSearchQuery($query) {
         $this->searchQuery = $query;
-        $this->render();
     }
 
     public function changeSearchCategory($category) {
         $this->searchCategory = $category;
-        $this->render();
     }
 
     public function changeFilter($filter, $value) {
         $this->selectedFilter = $filter;
         $this->filterValue = $value;
-        $this->render();
     }
 
     public function changeSort($sort, $order) {
         $this->selectedSort = $sort;
         $this->selectedSortOrder = $order;
-        $this->render();
     }
 
     public function changeGroup($group) {
         $this->selectedGroup = $group;
-        $this->render();
     }
 
     public function clearFilters() {
@@ -166,30 +232,25 @@ class ServiceRolesList extends Component
         $this->selectedSort = '';
         $this->selectedSortOrder = 'asc';
         $this->selectedGroup = '';
-        $this->render();
     }
 
     public function clearSearch() {
         $this->searchQuery = '';
         $this->searchCategory = '';
-        $this->render();
     }
 
     public function clearFilter() {
         $this->selectedFilter = '';
         $this->filterValue = '';
-        $this->render();
     }
 
     public function clearSort() {
         $this->selectedSort = '';
         $this->selectedSortOrder = 'asc';
-        $this->render();
     }
 
     public function clearGroup() {
         $this->selectedGroup = '';
-        $this->render();
     }
 
     public function clearAll() {
@@ -198,11 +259,66 @@ class ServiceRolesList extends Component
         $this->clearFilter();
         $this->clearSort();
         $this->clearGroup();
-        $this->render();
     }
 
     public function resetFilters() {
         $this->reset(['searchQuery', 'searchCategory', 'selectedFilter', 'filterValue', 'selectedSort', 'selectedSortOrder', 'selectedGroup', 'pageSize']);
-        $this->render();
+    }
+
+    public function performAction($action, $items) {
+        $this->selectedItems = $items;
+
+        switch ($action) {
+            case 'delete':
+                $this->deleteSelected();
+                break;
+            case 'export':
+                $this->exportSelected();
+                break;
+            case 'save':
+                $this->saveSelected();
+                break;
+            case 'edit':
+                $this->toggleEdit();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public function toggleEdit() {
+        // Implement your logic to enable editing for selected items
+        // so each item has a livewire in SvcroleCardItem or SvcroleListItem and have a property called isEditing and a method called editServiceRole and saveServiceRole
+
+        $this->dispatch('toggleEditMode', $this->selectedItems);
+        $this->toast('Editing enabled for selected items');
+    }
+
+    public function deleteSelected() {
+        ServiceRole::destroy($this->selectedItems);
+        $this->selectedItems = [];
+        $this->toast('Selected service roles deleted successfully!');
+    }
+
+    public function saveSelected() {
+        $this->dispatch('saveServiceRole', $this->selectedItems);
+        // Optionally, show a success message
+        $this->toast('Selected service roles saved successfully!');
+    }
+
+    public function exportSelected()
+    {
+        // You'll need a package like "maatwebsite/excel" for exporting
+
+        // Assuming you have the package installed and configured:
+        return response()->streamDownload(function () {
+            // echo (new \App\Exports\ServiceRolesExport($this->selectedItems))->download('service_roles.csv')->getFile()->getContent();
+        }, 'service_roles.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
+
+    public function toast($msg) {
+        $this->dispatch('showToast', ['message' => $msg]);
     }
 }

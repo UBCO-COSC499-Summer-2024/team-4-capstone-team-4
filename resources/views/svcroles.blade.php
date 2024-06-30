@@ -30,8 +30,8 @@
                 $pgnSize = request()->input('pgn_size', 10);
             @endphp
             @include('components.svcrole.dashboard', ['view_mode' => $viewMode, 'page_mode' => $pageMode, 'page' => $page, 'pgn_size' => $pgnSize]); --}}
-            {{-- <livewire:service-roles-list :links="$links"/> --}}
-            @include('components.svcrole.dashboard')
+            <livewire:service-roles-list :links="$links"/>
+            {{-- @include('components.svcrole.dashboard') --}}
         @endif
     {{-- @else
         @php

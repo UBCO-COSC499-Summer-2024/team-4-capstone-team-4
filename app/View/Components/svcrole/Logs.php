@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class manage-svcroles extends Component
+class Logs extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class manage-svcroles extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.svcrole.manage-svcroles');
+        return view('components.svcrole.logs');
     }
 }
