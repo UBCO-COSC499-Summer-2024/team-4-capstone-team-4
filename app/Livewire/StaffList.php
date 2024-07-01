@@ -48,12 +48,13 @@ class StaffList extends Component
             });
         }
         //join all the tables
+        $currentYear = date('Y');
         $usersQuery = $usersQuery->distinct()
         ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
         ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin('instructor_performance', 'user_roles.id', '=', 'instructor_performance.instructor_id');
+        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id');
 
         // Sort according to sort fields
         $currentMonth = date('F'); 
