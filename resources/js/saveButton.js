@@ -2,54 +2,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+    saveButton.addEventListener('click', function () {
+        const confirmSave = confirm('Do you really want to save the changes?');
 
-        const rows = document.querySelectorAll('tbody tr');
-        const data = [];
+        if (confirmSave) {
+            const rows = document.querySelectorAll('tbody tr');
+            const formData = new FormData(form); // Create a new FormData object
 
-        rows.forEach(row => {
-            const rowData = {
-                id: row.getAttribute('data-id'),
-                serialNumber: row.children[0].innerText.trim(),
-                courseName: row.children[1].innerText.trim(),
-                departmentName: row.children[2].innerText.trim(),
-                courseDuration: row.children[3].innerText.trim(),
-                enrolledStudents: row.children[4].innerText.trim(),
-                droppedStudents: row.children[5].innerText.trim(),
-                courseCapacity: row.children[6].innerText.trim()
-            };
-            data.push(rowData);
-        });
+            rows.forEach(row => {
+                formData.append('ids[]', row.getAttribute('data-id'));
+                formData.append('serialNumbers[]', row.children[0].innerText.trim());
+                formData.append('courseNames[]', row.children[1].innerText.trim());
+                formData.append('departmentNames[]', row.children[2].innerText.trim());
+                formData.append('courseDurations[]', row.children[3].innerText.trim());
+                formData.append('enrolledStudents[]', row.children[4].innerText.trim());
+                formData.append('droppedStudents[]', row.children[5].innerText.trim());
+                formData.append('courseCapacities[]', row.children[6].innerText.trim());
+            });
 
-        // Send the data to the server
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data })
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                // Display success message
-                alert('Successfully Saved!'); // Replace with your success message modal logic
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    alert('Successfully Saved!');
 
-                // Disable contenteditable
-                document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
-                    td.setAttribute('contenteditable', 'false');
-                });
+                    document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
+                        td.setAttribute('contenteditable', 'false');
+                    });
 
-                // Hide the save button
-                saveButton.style.display = 'none';
-            } else {
-                // Handle errors
-                console.error(result.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                    saveButton.style.display = 'none';
+                    cancelButton.style.display = 'none';
+                    editButton.style.display = 'block';
+                } else {
+                    console.error(result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     });
 });

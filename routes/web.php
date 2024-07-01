@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
-use Illuminate\Support\Facades\File;
 
 
 Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
@@ -76,7 +75,9 @@ Route::middleware([
     'verified',
 ])->group(function(){
     Route::get('/courses', [CourseDetailsController::class, 'show'])->name('course-details');
+    Route::post('/courses/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
 });
+
 Route::get('/privacy-policy', function () {
     return view('policy');
 })->name('privacy-policy');

@@ -8,7 +8,8 @@
                 <x-edit-button />
             </div>
         </div> 
-        <form method="POST" action="{{route('course-details')}}" id="editForm">
+        <form id="editForm" method="POST" action="{{ route('course-details.save') }}">
+            @csrf
             <x-coursedetails-table>
                 <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                 <tbody>
@@ -38,6 +39,6 @@
             </div>
         </form>
     </div> 
+    <x-save-confirm />
     <x-save-details-message />
 </x-app-layout>
- 
