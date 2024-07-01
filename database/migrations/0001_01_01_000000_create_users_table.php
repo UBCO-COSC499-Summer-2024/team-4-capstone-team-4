@@ -19,7 +19,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->boolean('approved')->default(false);
             $table->string('acces_code')->nullable();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
@@ -82,7 +81,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->integer('duration');
+            $table->year('year');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
@@ -121,10 +120,12 @@ return new class extends Migration
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('total_hours');
+            $table->json('total_hours');
             $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
-            $table->string('month');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -132,10 +133,11 @@ return new class extends Migration
     
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -143,10 +145,11 @@ return new class extends Migration
     
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();
@@ -165,24 +168,6 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
-        });
-
-        Schema::create('settings', function (Blueprint $table) {
-            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
-            $table->string('auth_method');
-            $table->string('theme');
-            $table->string('language');
-            $table->timestamps();
-        });
-
-        Schema::create('auth_methods', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('provider');
-            $table->string('provider_id');
-            $table->string('token')->nullable();
-            $table->string('avatar')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -208,7 +193,5 @@ return new class extends Migration
         Schema::dropIfExists('department_performance');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-        Schema::dropIfExists('settings');
-        Schema::dropIfExists('auth_methods');
     }
 };

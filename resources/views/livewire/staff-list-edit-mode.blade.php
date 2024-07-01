@@ -22,9 +22,15 @@
                         $area_names = [];
                         $instructor = App\Models\UserRole::find($user->instructor_id);
                         $performance = App\Models\InstructorPerformance::where('instructor_id', $user->instructor_id)
-                                                                        ->where('month', date('F'))
                                                                         ->where('year', date('Y'))
                                                                         ->first();
+                        if($performance){
+                            $totalHours = json_decode($performance->total_hours, true);
+                            $currentMonthHours = $totalHours[date('F')];
+                        }else{
+                            $currentMonthHours = null;
+                        }
+
                         if ($instructor && $instructor->teaches) {
                             $course_ids = $instructor->teaches->pluck('course_section_id')->all();
                             
@@ -43,7 +49,7 @@
                         fullname="{{ $user->firstname }} {{ $user->lastname }}" 
                         email="{{ $user->email }}" 
                         subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}" 
-                        completedHours="{{ $performance->total_hours ?? '-' }}" 
+                        completedHours="{{ $currentMonthHours ?? '-' }}" 
                         targetHours="{{ $performance->target_hours ?? '-' }}" 
                         rating="{{ $performance->score ?? '-' }}" 
                         src="{{ $user->profile_photo_url }}" 

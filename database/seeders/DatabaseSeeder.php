@@ -52,12 +52,7 @@ class DatabaseSeeder extends Seeder
                 'role' => 'instructor',
             ]);
             InstructorPerformance::factory()->create([
-                'score' => '500',
-                'total_hours' => '20',
-                'target_hours' => '200',
-                'sei_avg' => '3.5',
-                'month' => date('F'),
-                'year' => '2024',
+                'year' => date('Y'),
                 'instructor_id' => $user->id,
             ]);
         }
@@ -72,10 +67,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'instructor@example.com',
             'password' => 'password'
         ]);
-        UserRole::factory()->create([
+        $instructorRole = UserRole::factory()->create([
             'user_id' => $instructor->id,
             'department_id' => $dept->id,
             'role' => 'instructor',
+        ]);
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' =>  $instructorRole->id,
         ]);
 
         $head = User::factory()->create([
