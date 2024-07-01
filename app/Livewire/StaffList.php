@@ -14,6 +14,8 @@ class StaffList extends Component
     public $hours;
     public $staffCheckboxes = [];
     public $showModal = false;
+
+    public $showSuccessModal = false;
     protected $rules = [
         'hours' => 'required|numeric|min:0',
         'staffCheckboxes' => 'required|array|min:1',
@@ -103,13 +105,18 @@ class StaffList extends Component
                     $performance->update(['target_hours' => $hours]);
                 }
             } else {
-                return response()->json(['message' => 'Instructor performance not found.'], 404);
+                return session()->flash('error', 'Instructor performance not found.');
             }
         }
 
-        session()->flash('message', 'Target hours added successfully.');
-
+        //session()->flash('success', 'Target hours added successfully.');
         $this->showModal = false;
+        $this->showSuccessModal = true;
+        session()->flash('showSuccessModal', $this->showSuccessModal);
+    }
+
+    public function closeSuccessModal(){
+        $this->showSuccessModal = false;
     }
 
 }

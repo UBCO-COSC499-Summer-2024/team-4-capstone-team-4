@@ -1,14 +1,24 @@
 <div class="relative shadow-md sm:rounded-lg">
-    <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+    <div class="sticky top-0 z-10 h-20 flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
         <x-staff-search />
         <div class="flex items-center space-x-4">
             <x-staff-filter />
             <x-staff-dropdown />
         </div>
     </div> 
-    @if (session()->has('message'))
+   {{--  @if (session()->has('message'))
         <div class="text-sm text-green-600">
             {{ session('message') }}
+        </div>
+    @endif --}}
+    @if(session()->has('error'))
+        <div class="text-sm text-red-600">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if(session()->has('showSuccessModal') && session('showSuccessModal'))
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-staff-success-modal />
         </div>
     @endif
     <form wire:submit.prevent="submit">

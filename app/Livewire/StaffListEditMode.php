@@ -110,12 +110,12 @@ class StaffListEditMode extends Component
                         $performance->update(['target_hours' => $hours]);
                     }
                 } else {
-                    return response()->json(['message' => 'Instructor performance not found.'], 404);
+                    return session()->flash('error','Instructor performance not found.');
                 }
             }
         }
-        session()->flash('message', 'Changes have been saved successfully.');
-        return redirect()->to('/staff');
+        //session()->flash('success', 'Changes have been saved successfully.');
+        return redirect()->to('/staff')->with('showSuccessModal', true);
     }
 
     public function exit()
