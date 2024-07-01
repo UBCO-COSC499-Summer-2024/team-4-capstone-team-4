@@ -81,7 +81,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->string('duration');
+            $table->string('year');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
@@ -120,9 +120,12 @@ return new class extends Migration
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
+            $table->json('target_hours')->nullable();
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -130,10 +133,11 @@ return new class extends Migration
     
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -141,10 +145,11 @@ return new class extends Migration
     
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();

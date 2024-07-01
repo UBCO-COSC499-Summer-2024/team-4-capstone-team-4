@@ -21,10 +21,10 @@ class CourseSectionFactory extends Factory {
         return [
             'name'=>fake()->name(),
             'area_id'=>Area::pluck('id')->random(),
-            'duration'=>$this->faker->sentence,
-            'enrolled'=>fake()->numberBetween(10,100),
-            'dropped'=>fake()->numberBetween(0,20),
-            'capacity'=>fake()->numberBetween(10,200),
+            'year'=>fake()->year(),
+            'enrolled'=>fake()->numberBetween(0,100),
+            'dropped'=>fake()->numberBetween(0,100),
+            'capacity'=>fake()->numberBetween(0,100),
         ];
     }
 }

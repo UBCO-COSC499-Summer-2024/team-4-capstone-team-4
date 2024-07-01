@@ -46,8 +46,8 @@ class CourseSectionTest extends TestCase {
         // Assert that the course section has an area
         $this->assertNotEmpty($courseSection->area); 
 
-        // Assert that the course section has a duration
-        $this->assertNotEmpty($courseSection->duration); 
+        // Assert that the course section has a year
+        $this->assertNotEmpty($courseSection->year); 
 
         // Assert that the course section has an enrolled quantity
         $this->assertNotEmpty($courseSection->enrolled); 

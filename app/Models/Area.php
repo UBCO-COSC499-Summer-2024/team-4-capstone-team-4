@@ -62,6 +62,6 @@ class Area extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function areaPerformance() {
-        return $this->hasOne(AreaPerformance::class, 'area_id');
+        return $this->hasMany(AreaPerformance::class, 'area_id');
     }
 }

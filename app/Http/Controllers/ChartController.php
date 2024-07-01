@@ -3,163 +3,285 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ChartController extends Controller {
     public function showChart() {
+        // Extract the current month to determine the dashboard display
+        $currentMonth = Carbon::now()->format('F');
+        $currentYear = date('Y');
 
-        // Line Chart with Target Data
-        $totalHours = [90, 105, 120, 114, 135, 82, 86, 82, 95, 93, 103, 125];
-        $targetHours = [100, 110, 100, 90, 110, 100, 90, 80, 90, 80, 100, 110];
-        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // Use the user id to determine which dashboard to show
+        $userId = Auth::id();
+        $userRoles = UserRole::where('user_id', $userId)->get();
 
-        $chart1 = app()
-            ->chartjs->name("InstructorLineTarget")
-            ->type("line")
-            ->size(["width" => 600, "height" => 200])
-            ->labels($labels)
-            ->datasets([
-                [
-                    "label" => "Total Hours",
-                    "backgroundColor" => "rgba(37, 41, 150, 0.31)",
-                    "borderColor" => "rgba(37, 41, 150, 0.7)",
-                    "data" => $totalHours
-                ],
-                [
-                    "label" => "Target Hours",
-                    'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
-                    'borderColor' => 'rgba(0, 0, 0, 0.25)',
-                    "data" => $targetHours
-                ]
-            ])
-            ->options([
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Annual Hours',
-                        'font' => [
-                            'size' => 18,
-                        ]
-                    ]
-                ]
-            ]);
+        $hasNoRoles = $userRoles->isEmpty();
 
-        // Progress Bar Data
-        $hours = [50];
-        $label = ['January Hours'];
-        $hoursneed = [4];
-        $chart2 = app()
-            ->chartjs->name("ProgressBar")
-            ->type("bar")
-            ->size(["width" => 400, "height" => 75])
-            ->labels($label)
-            ->datasets([
-                [
-                    "label" => "Current Hours",
-                    "backgroundColor" => "rgba(37, 41, 150, 0.7)",
-                    "borderColor" => "rgba(37, 41, 150, 0.31)",
-                    "borderWidth" => 0,
-                    "borderSkipped" => false,
-                    "borderRadius" => 5,
-                    "barPercentage" => 3,
-                    "categoryPercentage" => 0.8,
-                    "data" => $hours
-                ],
-                [
-                    "label" => "Hours Needed to Reach Target",
-                    'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
-                    'borderColor' => 'rgba(0, 0, 0, 0.25)',
-                    "borderWidth" => 0.1,
-                    "borderSkipped" => false,
-                    "borderRadius" => 3,
-                    "barPercentage" => 2,
-                    "categoryPercentage" => 0.8,
-                    "data" => $hoursneed
-                ]
-            ])
-            ->options([
-                'indexAxis' => 'y',
-                'plugins' => [
-                    'legend' => [
-                        'display' => false
+        // Determine if the user has a 'dept_head' role and retrieve the role ID
+        $deptHeadRole = $userRoles->firstWhere('role', 'dept_head');
+
+        if ($deptHeadRole) {
+            $deptHeadRoleId = $deptHeadRole->id;
+            $dept = $deptHeadRole->dept_id;
+            $isDeptHead = true;
+        } else {
+            $deptHeadRoleId = null;
+            $dept = null;
+            $isDeptHead = false;
+        }
+
+        // Determine if the user has a 'dept_staff' role and retrieve the role ID
+        $deptStaffRole = $userRoles->firstWhere('role', 'dept_staff');
+
+        if ($deptStaffRole) {
+            $deptStaffRoleId = $deptStaffRole->id;
+            $dept = $deptStaffRole->dept_id;
+            $isDeptStaff = true;
+        } else {
+            $deptStaffRoleId = null;
+            $dept = null;
+            $isDeptStaff = false;
+        }
+
+        // Determine if the user has an 'instructor' role and retrieve the role ID
+        $instructorRole = $userRoles->firstWhere('role', 'instructor');
+
+        if ($instructorRole) {
+            $instructorRoleId = $instructorRole->id;
+            $isInstructor = true;
+        } else {
+            $instructorRoleId = null;
+            $isInstructor = false;
+        }
+
+        if ($isDeptHead || $isDeptStaff) {
+            // Fetch the dept_head performance for the current year
+            $deptPerformance = DepartmentPerformance::where('department_id', $dept)
+                ->where('year', $currentYear)
+                ->first();
+
+            // Fetch the performance for each area within the department for the current year
+            $areaPerformances = [];
+            $areas = Area::where('department_id', $dept)->get();
+        
+            foreach ($areas as $area) {
+                $performances = $area->performances()->where('year', $currentYear)->get();
+                foreach ($performances as $performance) {
+                    $areaPerformances[] = $performance;
+                }
+            }
+
+            // Department Line Chart
+            $departmentHours = [90, 105, 120, 114, 135, 82, 86, 82, 95, 93, 103, 125];
+            $area1Hours = [100, 110, 100, 90, 110, 100, 90, 80, 90, 80, 100, 110];
+            $area2Hours = [90, 121, 95, 111, 97, 101, 100, 85, 97, 82, 93, 115];
+            $area3Hours = [90, 121, 95, 111, 97, 101, 100, 85, 97, 82, 93, 115];
+            $area4Hours = [90, 121, 95, 111, 97, 101, 100, 85, 97, 82, 93, 115];
+            $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            $chart1 = app()
+                ->chartjs->name("InstructorLineTarget")
+                ->type("line")
+                ->size(["width" => 600, "height" => 200])
+                ->labels($labels)
+                ->datasets([
+                    [
+                        "label" => "Total Hours",
+                        "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                        "borderColor" => "rgba(37, 41, 150, 0.7)",
+                        "data" => $totalHours
                     ],
-                    'title' => [
-                        'display' => true,
-                        'text' => strval($label[0]) . " Target",
-                        'font' => [
-                            'size' => 18,
-                        ]
+                    [
+                        "label" => "Target Hours",
+                        'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
+                        'borderColor' => 'rgba(0, 0, 0, 0.25)',
+                        "data" => $targetHours
                     ]
-                ],
-                'scales' => [
-                    'y' => [
-                        'beginAtZero' => true,
-                        'grid' => [
-                            'display' => false,
-                            'drawBorder' => false
-                        ],
-                        'ticks' => [
-                            'display' => false
-                        ],
-                        'stacked' => true
-                    ],
-                    'x' => [
-                        'beginAtZero' => true,
-                        'grid' => [
-                            'offset' => true,
-                            'display' => true,
-                            'drawBorder' => false
-                        ],
-                        'ticks' => [
-                            'display' => true,
-                            'autoSkip' => true,
-                            'maxTicksLimit' => 2
-                        ],
+                ])
+                ->options([
+                    'plugins' => [
                         'title' => [
                             'display' => true,
-                            'text' => strval(round(($hours[0] / ($hours[0] + $hoursneed[0])) * 100)) . "% Completed"
-                        ],
-                        'stacked' => true,
-                        'max' => $hours[0] + $hoursneed[0]
-                    ]
-                ],
-                'layout' => [
-                    'padding' => [
-                        'top' => 10,
-                        'bottom' => 10
-                    ]
-                ]
-            ]);
-
-        // Line Chart without Target Data
-        $totalHours = [90, 105, 120, 114, 135, 82, 86, 82, 95, 93, 103, 125];
-        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-        $chart3 = app()
-            ->chartjs->name("InstructorLine")
-            ->type("line")
-            ->size(["width" => 600, "height" => 200])
-            ->labels($labels)
-            ->datasets([
-                [
-                    "label" => "Total Hours",
-                    "backgroundColor" => "rgba(37, 41, 150, 0.31)",
-                    "borderColor" => "rgba(37, 41, 150, 0.7)",
-                    "data" => $totalHours
-                ]
-            ])
-            ->options([
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Annual Hours',
-                        'font' => [
-                            'size' => 18,
+                            'text' => 'Annual Hours',
+                            'font' => [
+                                'size' => 18,
+                            ]
                         ]
                     ]
-                ]
-            ]);
+                ]);
+                
+            return view('dashboard', compact('chart1', 'currentMonth'));
+        }
 
+        elseif ($isInstructor) {
+            // Fetch the instructor performance for the current year
+            $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
+                ->where('year', $currentYear)
+                ->first();
 
-        return view('dashboard', compact('chart1', 'chart2', 'chart3'));
+            // Check if the target is set
+            $hasTarget = $performance && $performance->target !== null;
+
+            if ($hasTarget) {
+                // Line Chart with Target Data
+                $totalHours = [90, 105, 120, 114, 135, 82, 86, 82, 95, 93, 103, 125];
+                $targetHours = [100, 110, 100, 90, 110, 100, 90, 80, 90, 80, 100, 110];
+                $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                $chart1 = app()
+                    ->chartjs->name("InstructorLineTarget")
+                    ->type("line")
+                    ->size(["width" => 600, "height" => 200])
+                    ->labels($labels)
+                    ->datasets([
+                        [
+                            "label" => "Total Hours",
+                            "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                            "borderColor" => "rgba(37, 41, 150, 0.7)",
+                            "data" => $totalHours
+                        ],
+                        [
+                            "label" => "Target Hours",
+                            'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
+                            'borderColor' => 'rgba(0, 0, 0, 0.25)',
+                            "data" => $targetHours
+                        ]
+                    ])
+                    ->options([
+                        'plugins' => [
+                            'title' => [
+                                'display' => true,
+                                'text' => 'Annual Hours',
+                                'font' => [
+                                    'size' => 18,
+                                ]
+                            ]
+                        ]
+                    ]);
+
+                // Progress Bar Data
+                $hours = [50];
+                $label = ['January Hours'];
+                $hoursneed = [4];
+                $chart2 = app()
+                    ->chartjs->name("ProgressBar")
+                    ->type("bar")
+                    ->size(["width" => 400, "height" => 75])
+                    ->labels($label)
+                    ->datasets([
+                        [
+                            "label" => "Current Hours",
+                            "backgroundColor" => "rgba(37, 41, 150, 0.7)",
+                            "borderColor" => "rgba(37, 41, 150, 0.31)",
+                            "borderWidth" => 0,
+                            "borderSkipped" => false,
+                            "borderRadius" => 5,
+                            "barPercentage" => 3,
+                            "categoryPercentage" => 0.8,
+                            "data" => $hours
+                        ],
+                        [
+                            "label" => "Hours Needed to Reach Target",
+                            'backgroundColor' => 'rgba(0, 0, 0, 0.12)',
+                            'borderColor' => 'rgba(0, 0, 0, 0.25)',
+                            "borderWidth" => 0.1,
+                            "borderSkipped" => false,
+                            "borderRadius" => 3,
+                            "barPercentage" => 2,
+                            "categoryPercentage" => 0.8,
+                            "data" => $hoursneed
+                        ]
+                    ])
+                    ->options([
+                        'indexAxis' => 'y',
+                        'plugins' => [
+                            'legend' => [
+                                'display' => false
+                            ],
+                            'title' => [
+                                'display' => true,
+                                'text' => strval($label[0]) . " Target",
+                                'font' => [
+                                    'size' => 18,
+                                ]
+                            ]
+                        ],
+                        'scales' => [
+                            'y' => [
+                                'beginAtZero' => true,
+                                'grid' => [
+                                    'display' => false,
+                                    'drawBorder' => false
+                                ],
+                                'ticks' => [
+                                    'display' => false
+                                ],
+                                'stacked' => true
+                            ],
+                            'x' => [
+                                'beginAtZero' => true,
+                                'grid' => [
+                                    'offset' => true,
+                                    'display' => true,
+                                    'drawBorder' => false
+                                ],
+                                'ticks' => [
+                                    'display' => true,
+                                    'autoSkip' => true,
+                                    'maxTicksLimit' => 2
+                                ],
+                                'title' => [
+                                    'display' => true,
+                                    'text' => strval(round(($hours[0] / ($hours[0] + $hoursneed[0])) * 100)) . "% Completed"
+                                ],
+                                'stacked' => true,
+                                'max' => $hours[0] + $hoursneed[0]
+                            ]
+                        ],
+                        'layout' => [
+                            'padding' => [
+                                'top' => 10,
+                                'bottom' => 10
+                            ]
+                        ]
+                    ]);
+                
+                return view('dashboard', compact('chart1', 'chart2', 'currentMonth'));
+            }
+
+            else {
+                // Line Chart without Target Data
+                $totalHours = [90, 105, 120, 114, 135, 82, 86, 82, 95, 93, 103, 125];
+                $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                $chart3 = app()
+                    ->chartjs->name("InstructorLine")
+                    ->type("line")
+                    ->size(["width" => 600, "height" => 200])
+                    ->labels($labels)
+                    ->datasets([
+                        [
+                            "label" => "Total Hours",
+                            "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                            "borderColor" => "rgba(37, 41, 150, 0.7)",
+                            "data" => $totalHours
+                        ]
+                    ])
+                    ->options([
+                        'plugins' => [
+                            'title' => [
+                                'display' => true,
+                                'text' => 'Annual Hours',
+                                'font' => [
+                                    'size' => 18,
+                                ]
+                            ]
+                        ]
+                    ]);
+                
+                return view('dashboard', compact('chart1', 'currentMonth'));
+            }
+        }
     }
 }

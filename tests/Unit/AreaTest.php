@@ -26,7 +26,13 @@ class AreaTest extends TestCase {
      * @return void
      */
     public function test_area_can_be_created(): void {
-        $area = Area::factory()->create();
+        // Create a department instance
+        $department = Department::factory()->create();
+
+        // Create an area instance associated with the department
+        $area = Area::factory()->create([
+            'dept_id' => $department->id
+        ]);
 
         // Assert that the area model exists
         $this->assertModelExists($area);
