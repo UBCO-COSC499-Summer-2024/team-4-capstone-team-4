@@ -22,10 +22,12 @@ class CourseSectionFactory extends Factory {
         return [
             'name'=>fake()->randomElement($prefixes).' '.fake()->numberBetween(100,500),
             'area_id'=>Area::pluck('id')->random(),
-            'duration'=>fake()->numberBetween(4,15),
             'enrolled'=>fake()->numberBetween(10,100),
             'dropped'=>fake()->numberBetween(0,20),
             'capacity'=>fake()->numberBetween(10,200),
+            'session'=>fake()->randomElement('W', 'S'),
+            'section'=>fake()->randomElement('001', '002', '003', '004', '005', '006', '007', '008'),
+            'term'=>fake()->randomElement('1', '2', '1-2'),
             'year'=>fake()->year(),
         ];
     }
