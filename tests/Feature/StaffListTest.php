@@ -41,35 +41,47 @@ class StaffListTest extends TestCase
     {
         $dept = Department::factory()->create(['name' => 'CMPS']);
         Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
-        $user =  User::factory()->create([
+        $user1 =  User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
             'email' => 'test@example.com',
             'password' => 'password'
         ]);
-        $role = UserRole::factory()->create([
-                'user_id' => $user->id,
+        $role1 = UserRole::factory()->create([
+                'user_id' => $user1->id,
                 'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
         InstructorPerformance::factory()->create([
-            'score' => '0',
-            'total_hours' => '0',
-            'target_hours' => '0',
-            'sei_avg' => '0',
-            'year' => '2024',
-            'instructor_id' => $role->id,
+            'year' => date('Y'),
+            'instructor_id' => $role1->id,
+        ]);
+
+        $user2 =  User::factory()->create([
+            'firstname' => 'Test2',
+            'lastname' => 'User2',
+            'email' => 'test2@example.com',
+            'password' => 'password'
+        ]);
+        $role2 = UserRole::factory()->create([
+                'user_id' => $user2->id,
+                'department_id' => $dept->id,
+                'role' => 'instructor',
+            ]);
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' => $role2->id,
         ]);
 
         CourseSection::factory()->create();
         Teach::factory()->create();
 
-        //$response = $this->actingAs($user)->get('/staff');
-
         $component = Livewire::test(StaffList::class);
 
-        $component->assertSee($user->firstname)
-                  ->assertSee($user->lastname);
+        $component->assertSee($user1->firstname)
+                  ->assertSee($user1->lastname);
+        $component->assertSee($user2->firstname)
+                  ->assertSee($user2->lastname);
 
     }
 
@@ -82,6 +94,7 @@ class StaffListTest extends TestCase
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
+            'year' => date('Y'),
             'instructor_id' => $role->id,
         ]);
 
@@ -124,5 +137,67 @@ class StaffListTest extends TestCase
 
         $component->assertSee($user->firstname)
                   ->assertSee($user->lastname);
+    }
+
+    public function test_can_filter_by_subarea():void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
+        $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
+        $user1 =  User::factory()->create([
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+        $role1 = UserRole::factory()->create([
+                'user_id' => $user1->id,
+                'department_id' => $dept->id,
+                'role' => 'instructor',
+            ]);
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' => $role1->id,
+        ]);
+
+        $user2 =  User::factory()->create([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'password'
+        ]);
+        $role2 = UserRole::factory()->create([
+                'user_id' => $user2->id,
+                'department_id' => $dept->id,
+                'role' => 'instructor',
+            ]);
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' => $role2->id,
+        ]);
+
+        $course1 = CourseSection::factory()->create([
+            'area_id'=>$area1->id
+        ]);
+        $course2 = CourseSection::factory()->create([
+            'area_id'=>$area2->id
+        ]);
+        Teach::factory()->create([
+            'course_section_id'=> $course1->id,
+            'instructor_id' => $role1->id,
+        ]);
+        Teach::factory()->create([
+            'course_section_id'=> $course2->id,
+            'instructor_id' => $role2->id,
+        ]);
+
+        $this->actingAs($user1);
+
+        $component = Livewire::test(StaffList::class)
+        ->set('selectedAreas', ['Mathematics']);
+
+        $component->assertSee($user2->firstname)
+                  ->assertSee($user2->lastname)
+                  ->assertDontSee($user1->firstname)
+                  ->assertDontSee($user1->lastname);
     }
 }
