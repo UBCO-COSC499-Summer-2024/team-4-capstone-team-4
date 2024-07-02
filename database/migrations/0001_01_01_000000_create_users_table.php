@@ -102,7 +102,7 @@ return new class extends Migration
         Schema::create('teaches', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
-            $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('user_role_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
     

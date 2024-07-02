@@ -12,14 +12,30 @@ class ImportAssignCourse extends Component
 {
     public $assignments = [];
 
-    public function mount()
-    {
+    public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
                 'course_section_id' => $course->id,
                 'instructor_id' => null,
             ];
         })->toArray();
+    }
+
+    public function saveAssignments() {
+
+        foreach ($this->assignments as $assignment) {
+            if ($assignment['instructor_id'] != null) {
+                Teach::create([
+                    'course_section_id' => $assignment['course_section_id'],
+                    'instructor_id' => (int) $assignment['instructor_id'],
+                ]);
+            }
+        }
+
+        // Reset the form
+        $this->mount();
+
+        session()->flash('success', 'Instructors assigned successfully!');
     }
 
     public function getAvailableCourses() {
@@ -40,6 +56,9 @@ class ImportAssignCourse extends Component
 
     public function render()
     {
+
+        // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
+
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
             'availableCourses' => $this->getAvailableCourses(),
