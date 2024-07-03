@@ -46,14 +46,14 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory(10)->create();
         foreach($users as $user) {
-            UserRole::factory()->create([
+            $role = UserRole::factory()->create([
                 'user_id' => $user->id,
                 'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
             InstructorPerformance::factory()->create([
                 'year' => date('Y'),
-                'instructor_id' => $user->id,
+                'instructor_id' => $role->id,
             ]);
         }
 

@@ -71,6 +71,7 @@ class ImportAssignCourse extends Component
                         'capacity_avg'=> 0,
                         'year' => $assignment['year'],
                     ]);
+                   // InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
                 }
             }
         }
@@ -97,10 +98,9 @@ class ImportAssignCourse extends Component
     //        ->whereNotIn('id', $assignedInstructorIds)
     //        ->get();
 
-        $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
+        $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('user_id');
 
-        return User::whereIn('id', $instructorRoleIds)
-            ->get();
+        return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->where('role', 'instructor')->get();
     }
 
     public function render()
@@ -110,7 +110,7 @@ class ImportAssignCourse extends Component
 
         // DepartmentPerformance::updateDepartmentPerformance();
         // AreaPerformance::updateAreaPerformance();
-        InstructorPerformance::updatePerformance(1);
+        // InstructorPerformance::updatePerformance(1, 2024);
         // Teach::getInstructorsForCourses();
         // SeiData::calculateSEIAverages();
 
