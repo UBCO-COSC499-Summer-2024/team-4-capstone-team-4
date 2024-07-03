@@ -69,9 +69,9 @@ class ImportAssignCourse extends Component
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
 
-        DepartmentPerformance::updateDepartmentPerformance();
-        AreaPerformance::updateAreaPerformance();
-        InstructorPerformance::updatePerformance();
+        // DepartmentPerformance::updateDepartmentPerformance();
+        // AreaPerformance::updateAreaPerformance();
+        // InstructorPerformance::updatePerformance();
         // Teach::getInstructorsForCourses();
         // SeiData::calculateSEIAverages();
 
