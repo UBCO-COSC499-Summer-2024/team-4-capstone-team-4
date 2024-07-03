@@ -1,3 +1,65 @@
+## Wednesday (6/28- 7/3)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_06_28_2024-07_03_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Testing
+  * #3: Assign Courses to Instructors Page
+  * #4: Create functions to calculate averages
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Assign Course to Instructors / #249
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+         <!-- Task/Issue # -->
+         <td>Create Functions to Average Performance Data / #250
+         </td>
+         <!-- Status -->
+         <td>In Progress
+         </td>
+     </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Testing / #233
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Finished the import page and now working on the assigning courses to instructors page. The minimum functionality is complete and would be ready for the MVP, however I would like to polish it up a bit. I am also in the process of creating functions to average some of the performance data and store it in other tables.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Polish features
+  * Testing
+
+
 ## Friday (6/26- 6/28)
 
 ### Timesheet
