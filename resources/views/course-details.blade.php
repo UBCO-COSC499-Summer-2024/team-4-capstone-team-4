@@ -23,7 +23,7 @@
                             :enrolledStudents="$section->enrolled" 
                             :droppedStudents="$section->dropped" 
                             :courseCapacity="$section->capacity"
-                            :sectionId="$section->id ?? $loop->index"
+                            :sectionId="$section->id"
                             />
                         @endforeach
                     @else

@@ -1,16 +1,16 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 
-class CourseDetailsController extends Controller{
+class CourseDetailsController extends Controller {
 
     public function show(Request $request){
         $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
             return (object) [
+                'id' => $section->id,
                 'serialNumber' => $index + 1,
                 'name' => $section->name,
                 'departmentName' => $section->area ? $section->area->name : 'Unknown',
@@ -24,35 +24,36 @@ class CourseDetailsController extends Controller{
         $sortField = 'courseName';
         $sortDirection = 'asc';
         return view('course-details', compact('courseSections', 'sortField', 'sortDirection'));
-        
-
     }
-    
+
     public function save(Request $request)
-{
-    $ids = $request->input('ids', []);
-    $serialNumbers = $request->input('serialNumbers', []);
-    $courseNames = $request->input('courseNames', []);
-    $departmentNames = $request->input('departmentNames', []);
-    $courseDurations = $request->input('courseDurations', []);
-    $enrolledStudents = $request->input('enrolledStudents', []);
-    $droppedStudents = $request->input('droppedStudents', []);
-    $courseCapacities = $request->input('courseCapacities', []);
+    {
+        $ids = $request->input('ids', []);
+        $courseNames = $request->input('courseNames', []);
+        $courseDurations = $request->input('courseDurations', []);
+        $enrolledStudents = $request->input('enrolledStudents', []);
+        $droppedStudents = $request->input('droppedStudents', []);
+        $courseCapacities = $request->input('courseCapacities', []);
 
-    for ($i = 0; $i < count($ids); $i++) {
-        $courseSection = CourseSection::find($ids[$i]);
-        if ($courseSection) {
-            $courseSection->serialNumber = $serialNumbers[$i];
-            $courseSection->name = $courseNames[$i];
-            $courseSection->departmentName = $departmentNames[$i];
-            $courseSection->duration = $courseDurations[$i];
-            $courseSection->enrolled = $enrolledStudents[$i];
-            $courseSection->dropped = $droppedStudents[$i];
-            $courseSection->capacity = $courseCapacities[$i];
-            $courseSection->save();
+        $updatedSections = [];
+
+        for ($i = 0; $i < count($ids); $i++) {
+            $courseSection = CourseSection::find($ids[$i]);
+            if ($courseSection) {
+                $courseSection->name = $courseNames[$i];
+                $courseSection->duration = (int)$courseDurations[$i];
+                $courseSection->enrolled = (int)$enrolledStudents[$i];
+                $courseSection->dropped = (int)$droppedStudents[$i];
+                $courseSection->capacity = (int)$courseCapacities[$i];
+                $courseSection->save();
+
+                $updatedSections[] = $courseSection; // Collect updated sections for response
+            }
         }
-    }
 
-    return redirect()->route('course-details')->with('status', 'Data updated successfully!');
-}
+        return response()->json([
+            'message' => 'Courses updated successfully.',
+            'updatedSections' => $updatedSections
+        ]);
+    }
 }

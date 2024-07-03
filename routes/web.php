@@ -69,13 +69,9 @@ Route::middleware([
     })->name('performance');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function(){
-    Route::get('/courses', [CourseDetailsController::class, 'show'])->name('course-details');
-    Route::post('/courses/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function(){
+    Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
+    Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
 });
 
 Route::get('/privacy-policy', function () {
