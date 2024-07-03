@@ -2,6 +2,13 @@ const { l } = ("vite/dist/node/types.d-aGj9QkWt");
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    const assignButton = document.getElementById('assignButton');
+    if (assignButton) {
+        assignButton.addEventListener('click', function () {
+            $('#assignModal').modal('show');
+        });
+    }
+    
     fetch('/api/users')
         .then(response=>response.json())
         .then(users=>{

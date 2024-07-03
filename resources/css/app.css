@@ -496,6 +496,7 @@ th.editable:focus {
     align-items: center;
     min-height: calc(100% - 1rem);
 }
+
 .modal-dialog-centered .modal-content {
     margin: auto;
 }

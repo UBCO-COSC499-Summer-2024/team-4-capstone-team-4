@@ -43,4 +43,5 @@
     </div> 
     <x-save-confirm />
     <x-save-details-message />
+    <x-assign-modal />
 </x-app-layout>
