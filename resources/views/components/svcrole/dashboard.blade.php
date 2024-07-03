@@ -14,17 +14,17 @@
             <span class="material-symbols-outlined">add</span>
         </button>
     </h1>
-    
-    <x-toolbar 
-        id="serviceRoleToolbar" 
-        :view-modes="['list' => 'List View', 'card' => 'Card View']"  
+
+    <x-toolbar
+        id="serviceRoleToolbar"
+        :view-modes="['list' => 'List View', 'card' => 'Card View']"
         :page-modes="['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll']"
         :filter-by="['area' => 'Area', 'role' => 'Role']"
         :sort-by="['name' => 'Name', 'created_at' => 'Created At']"
         :group-by="['area' => 'Area']"
-        :features="['viewMode' => true, 'pageMode' => true, 'search' => true, 
+        :features="['viewMode' => true, 'pageMode' => true, 'search' => true,
                    'filter' => true, 'sort' => true, 'actions' => true,
-                   'searchCategory' => true]" 
+                   'searchCategory' => true]"
     />
 
     <div id="svcr-list" class="svcr-list" style="display: {{ $viewMode == 'card' ? 'grid' : 'none' }};">
@@ -40,12 +40,13 @@
                 <th class="svcr-list-header-item">Area</th>
                 <th class="svcr-list-header-item">Description</th>
                 <th class="svcr-list-header-item">Instructors</th>
+                <th class="svcr-list-header-item">Extra Hours</th>
                 <th class="svcr-list-header-item">Manage</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($serviceroles as $svcrole)
-                <x-templates.svcrole-list-item :svcrole="$svcrole" />
+                <livewire:templates.svcrole-list-item :svcrole="$svcrole" />
             @endforeach
         </tbody>
     </table>
@@ -55,7 +56,7 @@
             {!! $serviceroles->links() !!}
         </div>
     @endif
-    
+
     <x-link-bar :links="$links" />
 </div>
 
@@ -122,7 +123,7 @@
             if (options.filterValue) url.searchParams.append('filterValue', options.filterValue);
             if (options.sort) url.searchParams.append('sort', options.sort);
             if (options.group) url.searchParams.append('group', options.group);
-            
+
             fetch(url)
                 .then(response => response.json())
                 .then(_data => {

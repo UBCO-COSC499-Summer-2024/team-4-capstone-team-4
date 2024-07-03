@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
 use App\Models\UserRole;
 
@@ -35,6 +36,21 @@ class RoleAssignment extends Model {
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public static function boot() {
+        parent::boot();
+
+        static::created(function ($assignment) {
+            $serviceRole = $assignment->serviceRole;
+            $instructorPerformance = InstructorPerformance::firstOrCreate(
+                ['instructor_id' => $assignment->instructor_id, 'year' => $serviceRole->year],
+                ['total_hours' => 0, 'sei_avg' => 0]
+            );
+
+            $instructorPerformance->total_hours += array_sum($serviceRole->monthly_hours);
+            $instructorPerformance->save();
+        });
+    }
 
     /**
      * Get the service role associated with the assignment.

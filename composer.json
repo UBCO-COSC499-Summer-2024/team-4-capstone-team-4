@@ -8,10 +8,12 @@
         "php": "^8.2",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
+        "laravel/prompts": "^0.1.24",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0",
+        "wire-elements/modal": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

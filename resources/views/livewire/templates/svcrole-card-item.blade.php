@@ -8,9 +8,12 @@
                {{-- wire:model="serviceRole.name" --}}
                x-cloak>
 
-        <button>
-            <span class="material-symbols-outlined icon">more_vert</span>
-        </button>
+        {{-- checkbox --}}
+        <input type="checkbox" class="svcr-list-item-select glass"
+            id="svcr-select-{{ $serviceRole->id }}"
+            value="{{ $serviceRole->id }}"
+            {{-- wire:model.live="isSelected" --}}
+        >
     </div>
 
     <div class="card-content">
@@ -39,7 +42,7 @@
             <section class="card-section-item svcr-card-instructors">
                 <h4>Instructors</h4>
                 <ul>
-                    @foreach ($serviceRole->users as $instructor)
+                    @foreach ($serviceRole->instructors as $instructor)
                         <li>{{ $instructor->name }}</li>
                     @endforeach
                 </ul>

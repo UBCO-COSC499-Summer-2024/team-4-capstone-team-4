@@ -11,6 +11,8 @@
     background: rgba(50, 50, 50, 0.9);
     color: #999;
     flex-wrap: nowrap;
+    position: sticky;
+    flex: 1;
     /* overflow-x: auto; */
 }
 

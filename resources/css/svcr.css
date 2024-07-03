@@ -117,6 +117,22 @@ tbody {
     border-collapse: separate;
 }
 
+.svcr-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 6px;
+}
+
+.svcr-container .toolbar {
+    position: sticky;
+}
+
+.svcr-container .svcr-items {
+    position: relative;
+    height: 100% - 40px;
+}
+
 .svcr-list-item-cell {
     padding: 8px;
     border-radius: 4px;
@@ -133,6 +149,13 @@ tbody {
     justify-content: space-between;
     align-items: center;
     gap: 6px;
+}
+
+.svcr-list-item-actions {
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    display: flex;
 }
 
 #svcr-select-all::before {

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\UserRole;
 
-class ExtraHours extends Model {
+class ExtraHour extends Model {
     use HasFactory;
 
     /**

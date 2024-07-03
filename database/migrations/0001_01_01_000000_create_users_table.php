@@ -64,11 +64,12 @@ return new class extends Migration
         Schema::create('service_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->year('year');
+            $table->text('description')->nullable()->default('Default Description');
+            $table->year('year')->default(date('Y'));
             $table->json('monthly_hours');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
+            $table->unique(['name', 'area_id']);
         });
 
         Schema::create('role_assignments', function (Blueprint $table) {
@@ -121,10 +122,10 @@ return new class extends Migration
 
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
+            $table->integer('score')->nullable();
+            $table->integer('total_hours')->default(0);
             $table->integer('target_hours')->nullable();
-            $table->float('sei_avg');
+            $table->float('sei_avg')->nullable();
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -132,10 +133,10 @@ return new class extends Migration
 
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
+            $table->integer('score')->nullable();
+            $table->integer('total_hours')->default(0);
             $table->integer('target_hours')->nullable();
-            $table->float('sei_avg');
+            $table->float('sei_avg')->nullable();
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -143,10 +144,10 @@ return new class extends Migration
 
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
+            $table->integer('score')->nullable();
+            $table->integer('total_hours')->default(0);
             $table->integer('target_hours')->nullable();
-            $table->float('sei_avg');
+            $table->float('sei_avg')->nullable();
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();
@@ -207,13 +208,13 @@ return new class extends Migration
             $table->text('application_name')->nullable();
             $table->string('client_addr', 45)->nullable();
             $table->integer('client_port')->nullable();
-            $table->timestamp('occurred_at', 6)->useCurrent(); 
-            $table->text('statement_tag')->nullable(); 
+            $table->timestamp('occurred_at', 6)->useCurrent();
+            $table->text('statement_tag')->nullable();
             $table->text('transaction_id')->nullable();
             $table->text('query')->nullable();
-            $table->jsonb('params')->nullable(); 
+            $table->jsonb('params')->nullable();
 
-            // --- Additional Fields --- 
+            // --- Additional Fields ---
 
             $table->text('session_id')->nullable();
             $table->integer('pid')->nullable();
@@ -221,11 +222,11 @@ return new class extends Migration
             $table->text('schema_name')->nullable();
             $table->text('relation_name')->nullable();
             $table->string('object_type')->nullable();
-            $table->string('command_tag')->nullable(); 
+            $table->string('command_tag')->nullable();
             $table->integer('return_rows')->nullable();
-            $table->string('session_user')->nullable(); 
+            $table->string('session_user')->nullable();
             $table->text('security_label')->nullable();
-            $table->jsonb('context')->nullable(); 
+            $table->jsonb('context')->nullable();
         });
     }
 

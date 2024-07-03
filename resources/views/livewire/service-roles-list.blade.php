@@ -4,8 +4,8 @@
     $filterBy = ['area' => 'Area', 'name' => 'Name'];
     $sortBy = ['name' => 'Name', 'created_at' => 'Created'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
-    $actions = ['edit' => 'Edit', 'delete' => 'Delete', 'duplicate' => 'Duplicate', 'archive' => 'Archive', 'restore' => 'Restore'];
-    $groupBy = ['area' => 'Area', 'name' => 'Name'];
+    $actions = ['edit' => 'Edit', 'delete' => 'Delete'];
+    $groupBy = ['area_id' => 'Area', 'name' => 'Name'];
     $features = [
         'viewMode' => true,
         'pageMode' => true,
@@ -19,169 +19,189 @@
 <div class="content">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
-        <button class="right">
+        <button class="right" onClick="window.location.href='{{ route('svcroles.add') }}'">
             <span class="button-title">Create New</span>
             <span class="material-symbols-outlined">add</span>
         </button>
     </h1>
 
-    {{-- <livewire:toolbar
-        :features="$features"
-        :viewModes="$viewModes"
-        :pageModes="$pageModes"
-        :filterBy="$filterBy"
-        :sortBy="$sortBy"
-        :sortOrder="$sortOrder"
-        :actions="$actions"
-        :groupBy="$groupBy"
-        :viewMode="$viewMode"
-        :pageMode="$pageMode"
-    /> --}}
-
-    <section class="toolbar" id="svcr-toolbar" wire:key='toolbar'>
-        <section class="toolbar-section">
-            <select id="viewModeDropdown" class="toolbar-dropdown">
-                @foreach ($viewModes as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($viewMode == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-
-            <select id="pageModeDropdown" class="toolbar-dropdown">
-                @foreach ($pageModes as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($pageMode == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-        </section>
-        <section class="toolbar-section">
-            <div class="toolbar-search-container">
-                <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
-                <input type="text" id="toolbar-search" placeholder="Search..." class="toolbar-search" wire:model="searchQuery" />
-                <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
-            </div>
-
-            <select id="searchCategoryDropdown" class="toolbar-dropdown">
-                @foreach ($filterBy as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($searchCategory == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-        </section>
-
-        <section class="toolbar-section">
-            <select id="filterDropdown" class="toolbar-dropdown">
-                @foreach ($filterBy as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($selectedFilter == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-
-            <div class="toolbar-search-container">
-                <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
-                <input type="text" id="toolbar-filter-value" class="toolbar-search" placeholder="Filter Value" wire:model="filterValue" />
-                <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
-            </div>
-        </section>
-
-        <section class="toolbar-section">
-            <select id="sortDropdown" class="toolbar-dropdown">
-                @foreach ($sortBy as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($selectedSort == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-
-            <select id="sortOrderDropdown" class="toolbar-dropdown">
-                @foreach ($sortOrder as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($selectedSortOrder == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-        </section>
-
-        <section class="toolbar-section">
-            <select id="groupDropdown" class="toolbar-dropdown">
-                @foreach ($groupBy as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($selectedGroup == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
-
-            <select id="actionsDropdown" class="toolbar-dropdown">
-                <option>Actions</option>
-                <option value="edit">Edit</option>
-                <option value="delete">Delete</option>
-                <option value="duplicate">Duplicate</option>
-                <option value="archive">Archive</option>
-                <option value="restore">Restore</option>
-            </select>
-
-            <button class="toolbar-button">
-                <span class="material-symbols-outlined">more_vert</span>
-            </button>
-
-            <button class="toolbar-button">
-                <span class="material-symbols-outlined">filter_list</span>
-            </button>
-
-            <button class="toolbar-button">
-                <span class="material-symbols-outlined">refresh</span>
-            </button>
-        </section>
-    </section>
-
     <div class="svcr-container">
-        <div class="svcr-list" x-show="$wire.viewMode === 'card'">
-            @forelse ($serviceRoles as $serviceRole)
-                {{-- @livewire('templates.svcrole-card-item', ['serviceRole' => $serviceRole]) --}}
-                <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
-            @empty
-                <div class="empty-list">
-                    <span>No service roles found.</span>
+        <section class="toolbar" id="svcr-toolbar" wire:key='toolbar'>
+            <section class="toolbar-section">
+                <select id="viewModeDropdown" class="toolbar-dropdown">
+                    @foreach ($viewModes as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($viewMode == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+
+                <select id="pageModeDropdown" class="toolbar-dropdown">
+                    @foreach ($pageModes as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($pageMode == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+            </section>
+            <section class="toolbar-section">
+                <div class="toolbar-search-container">
+                    <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
+                    <input type="text" id="toolbar-search" placeholder="Search..." class="toolbar-search" wire:model="searchQuery" />
+                    <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
                 </div>
-            @endforelse
-        </div>
 
-        <table id="svcr-table" x-show="$wire.viewMode === 'table'">
-            <thead>
-                <tr class="svcr-list-header">
-                    <th class="svcr-list-header-item">
-                        <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
-                    </th>
-                    <th class="svcr-list-header-item">Service Role</th>
-                    <th class="svcr-list-header-item">Area</th>
-                    <th class="svcr-list-header-item">Description</th>
-                    <th class="svcr-list-header-item">Instructors</th>
-                    <th class="svcr-list-header-item">Manage</th>
-                </tr>
-            </thead>
-            <tbody>
+                <select id="searchCategoryDropdown" class="toolbar-dropdown">
+                    @foreach ($filterBy as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($searchCategory == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+            </section>
+
+            <section class="toolbar-section">
+                <select id="filterDropdown" class="toolbar-dropdown">
+                    @foreach ($filterBy as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($selectedFilter == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+
+                <div class="toolbar-search-container">
+                    <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
+                    <input type="text" id="toolbar-filter-value" class="toolbar-search" placeholder="Filter Value" wire:model="filterValue" />
+                    <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
+                </div>
+            </section>
+
+            <section class="toolbar-section">
+                <select id="sortDropdown" class="toolbar-dropdown">
+                    @foreach ($sortBy as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($selectedSort == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+
+                <select id="sortOrderDropdown" class="toolbar-dropdown">
+                    @foreach ($sortOrder as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($selectedSortOrder == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+            </section>
+
+            <section class="toolbar-section">
+                <select id="groupDropdown" class="toolbar-dropdown">
+                    @foreach ($groupBy as $value => $name)
+                        <option value="{{ $value }}"
+                                @if ($selectedGroup == $value) selected @endif
+                            >{{ $name }}</option>
+                    @endforeach
+                </select>
+
+                <select id="actionsDropdown" class="toolbar-dropdown">
+                    <option>Actions</option>
+                    @foreach ($actions as $value => $name)
+                        <option value="{{ $value }}">{{ $name }}</option>
+                    @endforeach
+                </select>
+
+                <button class="toolbar-button" wire:click="refresh">
+                    <span class="material-symbols-outlined">refresh</span>
+                </button>
+            </section>
+        </section>
+        <section class="svcr-items">
+            <div class="svcr-list" x-show="$wire.viewMode === 'card'">
                 @forelse ($serviceRoles as $serviceRole)
-                    <livewire:templates.svcrole-list-item :serviceRole="$serviceRole" :key="'serviceRoleListI-'.$serviceRole->id" />
+                    {{-- @livewire('templates.svcrole-card-item', ['serviceRole' => $serviceRole]) --}}
+                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
                 @empty
-                    <tr>
-                        <td colspan="5" class="empty-list">
-                            <span>No service roles found.</span>
-                        </td>
-                    </tr>
+                    <div class="empty-list">
+                        <span>No service roles found.</span>
+                    </div>
                 @endforelse
-            </tbody>
-        </table>
+            </div>
 
-        @if ($pageMode == 'pagination')
-            {!! $serviceRoles->links() !!}
-        @endif
+            <table id="svcr-table" x-show="$wire.viewMode === 'table'">
+                <thead>
+                    <tr class="svcr-list-header">
+                        <th class="svcr-list-header-item">
+                            <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
+                        </th>
+                        <th class="svcr-list-header-item">Service Role</th>
+                        <th class="svcr-list-header-item">Area</th>
+                        <th class="svcr-list-header-item">Description</th>
+                        <th class="svcr-list-header-item">Instructors</th>
+                        <th class="svcr-list-header-item">Extra Hours</th>
+                        <th class="svcr-list-header-item">Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($serviceRoles as $serviceRole)
+                        <livewire:templates.svcrole-list-item :serviceRole="$serviceRole" :key="'serviceRoleListI-'.$serviceRole->id" />
+                    @empty
+                        <tr>
+                            <td colspan="5" class="empty-list">
+                                <span>No service roles found.</span>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            @if ($pageMode == 'pagination')
+                {!! $serviceRoles->links() !!}
+            @endif
+        </section>
     </div>
 
     @include('components.link-bar', ['links' => $links])
+    <div x-data="{ showExtraHourForm: false, showExtraHourView: false }"
+        @open-extra-hour-form.window="showExtraHourForm = true"
+        @close-modal.window="showExtraHourForm = false"
+        @open-extra-hour-view.window="showExtraHourView = true"
+        @close-modal.window="showExtraHourView = false" >
+
+        <!-- Extra Hour Form Modal -->
+        <x-dialog-modal wire:model="showExtraHourForm" id="extraHourFormModal">
+            <x-slot name="title">
+                {{ __('Add Extra Hours') }}
+            </x-slot>
+
+            <x-slot name="content">
+                <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" />
+            </x-slot>
+
+            <x-slot name="footer">
+                <x-secondary-button wire:click="$dispatch('closeModal')" wire:loading.attr="disabled">
+                    {{ __('Cancel') }}
+                </x-secondary-button>
+                <!--  Your save button logic in ExtraHourForm -->
+            </x-slot>
+        </x-dialog-modal>
+
+        <!-- Extra Hour View Modal -->
+        <x-dialog-modal wire:model="showExtraHourView" id="extraHourViewModal">
+            <x-slot name="title">
+                {{ __('View Extra Hours') }}
+            </x-slot>
+
+            <x-slot name="content">
+                <livewire:extra-hour-view :serviceRoleId="$serviceRoleIdForModal" />
+            </x-slot>
+
+            <x-slot name="footer">
+                <x-secondary-button wire:click="$dispatch('closeModal')" wire:loading.attr="disabled">
+                    {{ __('Close') }}
+                </x-secondary-button>
+            </x-slot>
+        </x-dialog-modal>
+    </div>
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', initializeToolbar);
@@ -260,15 +280,14 @@
         });
 
         if (viewModeDropdown) {
-            viewModeDropdown.addEventListener('input', function(e) {
+            viewModeDropdown.addEventListener('change', function(e) {
                 console.log(`viewMode: ${this.value}${e.target}`);
                 @this.set('viewMode', this.value);
-                // @this.dispatch('changeViewMode', this.value);
             });
         }
 
         if (pageModeDropdown) {
-            pageModeDropdown.addEventListener('input', function(e) {
+            pageModeDropdown.addEventListener('change', function(e) {
                 @this.set('pageMode', this.value);
             });
         }
@@ -276,41 +295,55 @@
         if (search) {
             search.addEventListener('input', function(e) {
                 const value = this.value;
-                if (searchCategory) {
-                    searchCategory.addEventListener('input', function(e) {
-                        const value = this.value;
-                        // @this.set('searchCategory', value);
-                        @this.set('searchCategory', value);
-                        console.log(`searchCategory: ${value}`);
-                    });
-                }
                 @this.set('searchQuery', value);
-                // @this.dispatch('changeSearchQuery', value);
-                // console.log(`searchQuery: ${value}`);
+            });
+        }
+
+
+        if (searchCategory) {
+            searchCategory.addEventListener('change', function(e) {
+                const value = this.value;
+                @this.set('searchCategory', value);
             });
         }
 
         if (filter) {
-            filter.addEventListener('input', function(e) {
+            filter.addEventListener('change', function(e) {
                 @this.set('selectedFilter', this.value);
-                // You might need to adjust how you handle filterValue if it's dynamic
-                const filterValue = (filterValueElement) ? filterValueElement.value : null;
-                @this.set('filterValue', filterValue);
+            });
+        }
+
+        if (filterValueElement) {
+            filterValueElement.addEventListener('input', function(e) {
+                @this.set('filterValue', this.value);
             });
         }
 
         if (sort) {
-            sort.addEventListener('input', function(e) {
+            sort.addEventListener('change', function(e) {
                 @this.set('selectedSort', this.value);
-                // Similar to filterValue, handle sortOrder based on your implementation
-                const order = (sortOrder) ? sortOrder.value : null;
-                @this.set('selectedSortOrder', order);
             });
         }
 
+        if (sortOrder) {
+            sortOrder.addEventListener('change', function(e) {
+                const order = (sortOrder) ? sortOrder.value : null;
+                @this.set('selectedSortOrder', order);
+            })
+        }
+
         if (group) {
-            group.addEventListener('input', function(e) {
+            group.addEventListener('change', function(e) {
                 @this.set('selectedGroup', this.value);
+            });
+        }
+
+        if (actions) {
+            actions.addEventListener('change', function(e) {
+                // @this.set('selectedAction', this.value);
+                console.log(`selectedAction: ${this.value}`);
+                console.log(selectedItems);
+                @this.dispatch('performAction', this.value, selectedItems);
             });
         }
     }

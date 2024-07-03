@@ -23,10 +23,14 @@ class ServiceRolesList extends Component
     public $selectedGroup = '';
     public $pageSize = 20;
     public $selectedItems = [];
+    public $showExtraHourForm = false;
+    public $showExtraHourView = false;
+    public $serviceRoleIdForModal; // To store the serviceRoleId
     protected $queryString = [
         'viewMode' => ['except' => 'table'],
         'pageMode' => ['except' => 'pagination'],
         'searchQuery' => ['except' => ''],
+        'searchCategory' => ['except' => ''],
         'selectedFilter' => ['except' => ''],
         'filterValue' => ['except' => ''],
         'selectedSort' => ['except' => ''],
@@ -64,6 +68,8 @@ class ServiceRolesList extends Component
         'clearGroup' => 'clearGroup',
         'clearAll' => 'clearAll',
         'resetFilters' => 'resetFilters',
+        'openModal' => 'openModal',
+        'closeModal' => 'closeModal',
         'performAction' => 'performAction',
         'deleteSelected' => 'deleteSelected',
         'saveSelected' => 'saveSelected',
@@ -153,6 +159,10 @@ class ServiceRolesList extends Component
         }
     }
 
+    public function refresh() {
+        $this->render();
+    }
+
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
 
@@ -178,7 +188,7 @@ class ServiceRolesList extends Component
         }
 
         if (!empty($this->selectedGroup)) {
-            $serviceRolesQuery->groupBy($this->selectedGroup);
+            $serviceRolesQuery->groupBy($this->selectedGroup, 'id');
         }
 
         $serviceRoles = $this->pageMode === 'pagination' ? $serviceRolesQuery->paginate($this->pageSize) : $serviceRolesQuery->get();
@@ -266,11 +276,21 @@ class ServiceRolesList extends Component
     }
 
     public function performAction($action, $items) {
+        if (empty($items)) {
+            $this->toast('No items selected.', 'warning');
+            return;
+        }
+        $items = collect($items)->map(function ($item) {
+            return $item['id'];
+        })->toArray();
+        dd($action, $items);
         $this->selectedItems = $items;
 
         switch ($action) {
             case 'delete':
-                $this->deleteSelected();
+                $this->dispatch('batchDeleteServiceRoles', [
+                    'message' => 'Are you sure you want to delete the selected service roles?'
+                ]);
                 break;
             case 'export':
                 $this->exportSelected();
@@ -295,15 +315,39 @@ class ServiceRolesList extends Component
     }
 
     public function deleteSelected() {
-        ServiceRole::destroy($this->selectedItems);
-        $this->selectedItems = [];
-        $this->toast('Selected service roles deleted successfully!');
+        if (count($this->selectedItems) > 0) {
+            foreach ($this->selectedItems as $serviceRoleId) {
+                $this->dispatch('deleteServiceRole', $serviceRoleId);
+            }
+            $this->render();
+        } else {
+            $this->dispatch('show-toast', [
+                'message' => 'No items selected.',
+                'type' => 'warning'
+            ]);
+        }
+    }
+
+    public function deleteServiceRole($serviceRoleId) {
+        $count = ServiceRole::destroy($serviceRoleId);
+        if ($count > 0) {
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role deleted successfully.',
+                'type' => 'success'
+            ]);
+        } else {
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to delete Service Role.',
+                'type' => 'error'
+            ]);
+        }
+        $this->render();
     }
 
     public function saveSelected() {
         $this->dispatch('saveServiceRole', $this->selectedItems);
         // Optionally, show a success message
-        $this->toast('Selected service roles saved successfully!');
+        $this->toast('Selected service roles saved successfully!', 'success');
     }
 
     public function exportSelected()
@@ -318,7 +362,26 @@ class ServiceRolesList extends Component
         ]);
     }
 
-    public function toast($msg) {
-        $this->dispatch('showToast', ['message' => $msg]);
+    public function toast($msg, $type = 'info') {
+        $this->dispatch('show-toast', ['message' => $msg, 'type' => $type]);
+    }
+
+    public function openModal($component, $arguments)
+    {
+        // Update the modal visibility and pass data
+        if ($component === 'extra-hour-form') {
+            $this->showExtraHourForm = true;
+            $this->serviceRoleIdForModal = $arguments['serviceRoleId'];
+        } else if ($component === 'extra-hour-view') {
+            $this->showExtraHourView = true;
+            $this->serviceRoleIdForModal = $arguments['serviceRoleId'];
+        }
+    }
+
+    public function closeModal()
+    {
+        $this->showExtraHourForm = false;
+        $this->showExtraHourView = false;
+        $this->serviceRoleIdForModal = null;
     }
 }

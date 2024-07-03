@@ -26,20 +26,7 @@
         </span>
         @php
             $selectedValue = [$serviceRole->area_id => $serviceRole->area->name];
-            // dd($selectedValue);
         @endphp
-        {{-- <livewire:dropdown-element
-            title="Area"
-            id="areaDropdownList-{{ $serviceRole->id }}"
-            pre-icon="category"
-            name="serviceRole.area_id"
-            :values="$formattedAreas"
-            value="
-            {{ json_encode($selectedValue) }}
-            "
-            x-show="isEditing"
-            x-cloak
-            :key="'svcrArea-'.$serviceRole->id" /> --}}
         <select x-show="isEditing" class="svcr-list-item-edit"
                 {{-- wire:model="serviceRole.area_id" --}}
                 x-cloak>
@@ -63,6 +50,28 @@
     <td class="svcr-list-item-cell" data-column="instructors">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
             {{ $serviceRole->instructors }} </span>
+    </td>
+
+    {{-- extra hours --}}
+    <td class="svcr-list-item-cell" data-column="extra-hours">
+        {{-- <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
+            {{ $serviceRole->extra_hours }}
+        </span> --}}
+        <div class="svcr-list-item-actions">
+            {{-- modal button to view/edit extra hours --}}
+            <button class="svcr-list-item-action" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
+                    title="Add Extra Hours"
+                    wire:click="openExtraHourModal({{ $serviceRole->id }})"
+                    x-cloak>
+                <span class="material-symbols-outlined icon">add</span>
+            </button>
+            <button class="svcr-list-item-action" id="svcr-extra-hours-view-{{ $serviceRole->id }}"
+                    title="Manage Extra Hours"
+                    wire:click="openExtraHourView({{ $serviceRole->id }})"
+                    x-cloak>
+                <span class="material-symbols-outlined icon">visibility</span>
+            </button>
+        </button>
     </td>
 
     <td class="svcr-list-item-cell" data-column="manage">

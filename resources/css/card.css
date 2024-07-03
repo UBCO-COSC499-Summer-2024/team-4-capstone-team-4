@@ -53,6 +53,15 @@
     font-size: 1rem;
 }
 
+section.card-section-item p {
+    font-size: 0.8rem;
+    color: #555;
+    background: #f5f5f5;
+    width: 100%;
+    padding: 4px;
+    border-radius: 8px;
+}
+
 .card-section-item.svcr-card-instructors {
     display: flex;
     flex-direction: column;
