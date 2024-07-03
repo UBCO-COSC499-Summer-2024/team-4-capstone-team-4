@@ -29,13 +29,48 @@ class ImportAssignCourse extends Component
     public function handleSubmit() {
 
         foreach ($this->assignments as $assignment) {
-            dd($assignment);
-
             if ($assignment['instructor_id'] != null) {
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => (int) $assignment['instructor_id'],
                 ]);
+
+                // dd($assignment['year']);
+
+                $performance = InstructorPerformance::where('instructor_id', $assignment['instructor_id'] )->where('year', $assignment['year'] )->first();
+
+                if($performance != null){
+                   /*  $performance->update([
+                        'target_hours' => SeiData::calculateTargetHours($assignment['course_section_id']),
+                        'score' => SeiData::calculateScore($assignment['course_section_id']),
+                    ]); */
+                  
+                }else{
+                    InstructorPerformance::create([
+                        'instructor_id'=> $assignment['instructor_id'],
+                        'score' => 0,
+                        'total_hours' => json_encode([
+                            'January' => 0,
+                            'February' => 0,
+                            'March' => 0,
+                            'April' => 0,
+                            'May' => 0,
+                            'June' => 0,
+                            'July' => 0,
+                            'August' => 0,
+                            'September' => 0,
+                            'October' => 0,
+                            'November' => 0,
+                            'December' => 0,
+                        ]),
+                        'target_hours' => null,
+                        'sei_avg' => 0,
+                        'enrolled_avg'=> 0,
+                        'dropped_avg'=> 0,
+                        'capacity_avg'=> 0,
+                        'year' => $assignment['year'],
+                    ]);
+                }
             }
         }
 
