@@ -21,6 +21,7 @@ class ImportAssignCourse extends Component
             return [
                 'course_section_id' => $course->id,
                 'instructor_id' => null,
+                'year' => $course->year,
             ];
         })->toArray();
     }
@@ -28,7 +29,7 @@ class ImportAssignCourse extends Component
     public function handleSubmit() {
 
         foreach ($this->assignments as $assignment) {
-            // dd($assignment);
+            dd($assignment);
 
             if ($assignment['instructor_id'] != null) {
                 Teach::create([
