@@ -1,5 +1,35 @@
 # Angelina's Personal Log 
 
+## Wednesday (6/30 - 7/3)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log630-73.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Create Additional Visualizations for Department Dashboard
+  * #2: Connect Database to Chart Visualizations
+  * #4: Create Leaderboard
+
+### Progress Update (since 6/5/2024)
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Department Visualizations | In Progess  |
+| Connect Database to Charts| In Progess  |
+| Dashboard Leaderboard     | In Progess  |
+| Create Dashboard Tests    | In Progress |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Updated the database to supply all of the necessary data for the dashboard to extract. Began modifying the charts backend to allow for role based access and account for several user types by connecting to the database.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+ * Continue to integrate user role based access for dashboard
+ * Finish connecting dashboard to database
+ * Create tests for dashboard features
+
+---
+
 ## Friday (6/27 - 6/29)
 
 ### Timesheet
@@ -18,17 +48,18 @@ Clockify report
 |---------------------------|-------------|
 | Department Visualizations | In Progess  |
 | Connect Database to Charts| In Progess  |
-| Remove Progress Bar Plugin| In Progess  |
+| Remove Progress Bar Plugin| Completed   |
 | Dashboard Leaderboard     | In Progess  |
-| Improve Containers        | In Progress |
+| Improve Containers        | Completed   |
 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-
+Removed the need for a progress bar plugin by using a horizontally stacked bar chart instead of a regular horizontal bar chart. Added details to the new progress bar and began creating a solid container structure for the dashboard. Began creating visualizations and designing the final version of the dashboard, and created space for all of the data we wished to present, including the leaderboard.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
- * Integrate user role based access for dashboard and sidebar
- * Shrink sidebar
+ * Integrate user role based access for dashboard
+ * Begin connecting database to the charts
+ * Continue creating formatting for the leaderboard and lists
  * Create tests for dashboard features
 
 ---
