@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\AreaPerformance;
 use App\Models\CourseSection;
+use App\Models\DepartmentPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\SeiData;
 use App\Models\Teach;
@@ -68,6 +69,7 @@ class ImportAssignCourse extends Component
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
 
+        DepartmentPerformance::updateDepartmentPerformance();
         AreaPerformance::updateAreaPerformance();
         InstructorPerformance::updatePerformance();
         // Teach::getInstructorsForCourses();

@@ -44,4 +44,22 @@ class DepartmentPerformance extends Model {
     public function department() {
         return $this->belongsTo(Department::class, 'department_id');
     }
+
+    //other functions
+
+    public static function updateDepartmentPerformance() {
+        $departmentAverages = SeiData::calculateSEIDepartmentAverages();
+        
+        foreach ($departmentAverages as $departmentId => $averageScore) {
+            $roundedScore = round($averageScore, 1); // Round to one decimal place
+            
+            // DepartmentPerformance::updateOrCreate(
+            //     ['department_id' => $departmentId],
+            //     ['sei_avg' => $roundedScore]
+            // );
+
+            echo 'department ', $departmentId, ' ' , 'score ', $roundedScore;
+        }
+    }
+    
 }
