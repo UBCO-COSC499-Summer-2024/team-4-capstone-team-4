@@ -73,6 +73,14 @@ class User extends Authenticatable {
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
     }
+
+    public function hasRole($role) {
+        return $this->roles->contains('role', $role);
+    }
+
+    public function hasRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
     
     public function teaches(){
         return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
@@ -91,7 +99,7 @@ class User extends Authenticatable {
         return $this->hasMany(AuthMethod::class,'user_id');
     }
 
-    public function instructorPerformance(){
+    public function instructorPerformances(){
         return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
                     ->where('user_roles.role', 'instructor');
     }

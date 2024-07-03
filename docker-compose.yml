@@ -31,7 +31,7 @@ services:
     InsightDB:
         image: 'postgres:16-alpine'
         ports:
-            - '${FORWARD_DB_PORT:-5433}:5432'
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
             PGPASSWORD: '${DB_PASSWORD:-secret}'
             POSTGRES_DB: '${DB_DATABASE}'
@@ -65,7 +65,7 @@ services:
             PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-secret}'
         volumes:
             - 'pgadmin:/var/lib/pgadmin'
-            - './pgadmin-config:/var/lib/pgadmin/pgadmin4.conf'
+            - '.:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
             - InsightDB
         networks:
@@ -73,7 +73,7 @@ services:
         
 networks:
     InsightNet:
-      #  driver: bridge
+        driver: bridge
 volumes:
     sail-pgsql:
         driver: local

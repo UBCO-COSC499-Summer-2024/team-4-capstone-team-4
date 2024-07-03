@@ -26,7 +26,20 @@
     <body class="font-sans antialiased">
         <x-header />
         <main>
-            <x-sidebar :items="[]" />
+            @php
+                $user = Auth::user();
+            @endphp
+
+            @if($user && $user->hasRoles(['admin', 'dept_head', 'dept_staff']))
+                <x-sidebar :items="[
+                    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
+                    ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
+                    ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Import']
+                ]" />
+            @else
+                <x-sidebar :items="[]" />
+            @endif
             <section class="container">
                 {{ $slot }}
             </section>
