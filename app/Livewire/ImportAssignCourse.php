@@ -20,7 +20,7 @@ class ImportAssignCourse extends Component
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
                 'course_section_id' => $course->id,
-                'user_role_id' => null,
+                'instructor_id' => null,
             ];
         })->toArray();
     }
@@ -28,11 +28,12 @@ class ImportAssignCourse extends Component
     public function saveAssignments() {
 
         foreach ($this->assignments as $assignment) {
+            // dd($assignment);
 
-            if ($assignment['user_role_id'] != null) {
+            if ($assignment['instructor_id'] != null) {
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
-                    'user_role_id' => (int) $assignment['user_role_id'],
+                    'instructor_id' => (int) $assignment['instructor_id'],
                 ]);
             }
         }
@@ -52,7 +53,7 @@ class ImportAssignCourse extends Component
     public function getAvailableInstructors() {
     //    $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
 
-    //    $assignedInstructorIds = Teach::whereIn('user_role_id', $instructorRoleIds)->pluck('user_role_id');
+    //    $assignedInstructorIds = Teach::whereIn('instructor_id', $instructorRoleIds)->pluck('instructor_id');
 
     //    return User::whereIn('id', $instructorRoleIds)
     //        ->whereNotIn('id', $assignedInstructorIds)

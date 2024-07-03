@@ -10,7 +10,7 @@
         <div class="import-form-row flex justify-between items-center px-2 py-6 border-b">
             <div class="import-input w-4/12">{{ $availableCourses->firstWhere('id', $assignment['course_section_id'])->name }}</div>
             <div class="import-input w-4/12">
-                <select wire:model="assignments.{{ $index }}.user_role_id" class="instructor-select" style="width: 100%">
+                <select wire:model="assignments.{{ $index }}.instructor_id" class="instructor-select" style="width: 100%">
                     <option value="">Select Instructor</option>
                     @foreach($availableInstructors as $instructor)
                         <option value="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
