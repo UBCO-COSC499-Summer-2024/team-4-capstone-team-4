@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class StaffListEditMode extends Component
 {
@@ -13,6 +14,7 @@ class StaffListEditMode extends Component
     public $selectedAreas = [];
     public $changedInput = [];
 
+   
     public function render()
     {
         $query = $this->searchTerm;
@@ -39,32 +41,40 @@ class StaffListEditMode extends Component
             });
         }
         //join all the tables
-        $usersQuery = $usersQuery->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        $currentYear = date('Y');
+        $usersQuery = $usersQuery->distinct()
+        ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
         ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin('instructor_performance', 'user_roles.id', '=', 'instructor_performance.instructor_id');
-
+        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id');
         // Sort according to sort fields
+        $currentMonth = date('F'); 
         switch ($this->sortField) {
-            case 'firstname':
-                $usersQuery->orderBy('firstname', $this->sortDirection);
-                break;
             case 'area':
-                $usersQuery->orderBy('areas.name', $this->sortDirection);
+                $usersQuery->select('users.*', 'instructor_performance.instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
+                ->groupBy('users.id', 'instructor_performance.instructor_id')          
+                            ->orderBy('area_names', $this->sortDirection);
                 break;
             case 'total_hours':
-                $usersQuery->orderBy('instructor_performance.total_hours', $this->sortDirection);
+                //extract hours of the current month
+                $usersQuery->select('users.*', 'instructor_performance.instructor_id', DB::raw("CAST(instructor_performance.total_hours->>'$currentMonth' AS INTEGER) AS month_hours"))
+                           ->orderBy('month_hours', $this->sortDirection);
                 break;
             case 'target_hours':
-                $usersQuery->orderBy('instructor_performance.target_hours', $this->sortDirection);
+                $usersQuery->select('users.*', 'instructor_performance.instructor_id','instructor_performance.target_hours')
+                            ->orderBy('instructor_performance.target_hours', $this->sortDirection);
                 break;
-            default:
-                $usersQuery->orderBy('instructor_performance.score', $this->sortDirection);
+            case 'score' :
+                $usersQuery->select('users.*', 'instructor_performance.instructor_id', 'instructor_performance.score')
+                            ->orderBy('instructor_performance.score', $this->sortDirection);
+                break;                
+            default: // by firstname
+                $usersQuery->select('users.*', 'instructor_performance.instructor_id')
+                           ->orderBy('firstname', $this->sortDirection);
         }
-       
-        $users = $usersQuery->distinct()->get();
-        //dd($users);
+
+        $users = $usersQuery->get();
 
         return view('livewire.staff-list-edit-mode', ['users'=> $users]);
     }
@@ -103,14 +113,17 @@ class StaffListEditMode extends Component
         foreach ($this->changedInput as $email => $hours) {
             $user = User::where('email', $email)->first();
             if ($user) {
-                $instructorPerformance = $user->roles()->where('role', 'instructor')->first()->instructorPerformance;
-                if ($instructorPerformance) {
-                    $instructorPerformance->update(['target_hours' => $hours]);
+                $instructor = $user->roles->where('role', 'instructor')->first();
+                $performance = $instructor->instructorPerformances()->where('year', date('Y'))->first();
+                if ($performance) {
+                    $performance->update(['target_hours' => $hours]);
+                } else {
+                    return session()->flash('error', 'Instructor performance not found.');
                 }
             }
         }
-        session()->flash('message', 'Changes have been saved successfully.');
-        return redirect()->to('/staff');
+        //session()->flash('success', 'Changes have been saved successfully.');
+        return redirect()->to('/staff')->with('showSuccessModal', true);
     }
 
     public function exit()

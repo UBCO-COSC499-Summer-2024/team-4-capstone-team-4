@@ -79,7 +79,7 @@ class UserRole extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|null
      */
-    public function instructorPerformance() {
+    public function instructorPerformances() {
         if ($this->role === 'instructor') {
             return $this->hasMany(InstructorPerformance::class, 'instructor_id', 'id');
         }

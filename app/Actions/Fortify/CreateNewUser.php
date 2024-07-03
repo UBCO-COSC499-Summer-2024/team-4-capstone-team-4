@@ -46,9 +46,25 @@ class CreateNewUser implements CreatesNewUsers
         InstructorPerformance::create([
             'instructor_id'=> $user_role->id,
             'score' => 0,
-            'total_hours' => 0,
+            'total_hours' => json_encode([
+                'January' => 0,
+                'February' => 0,
+                'March' => 0,
+                'April' => 0,
+                'May' => 0,
+                'June' => 0,
+                'July' => 0,
+                'August' => 0,
+                'September' => 0,
+                'October' => 0,
+                'November' => 0,
+                'December' => 0,
+            ]),
             'target_hours' => null,
             'sei_avg' => 0,
+            'enrolled_avg'=> 0,
+            'dropped_avg'=> 0,
+            'capacity_avg'=> 0,
             'year' => date("Y"),
         ]);
 
