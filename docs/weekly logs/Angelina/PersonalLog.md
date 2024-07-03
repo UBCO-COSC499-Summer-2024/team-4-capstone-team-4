@@ -1,5 +1,69 @@
 # Angelina's Personal Log 
 
+## Wednesday (6/30 - 7/3)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log630-73.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Create Additional Visualizations for Department Dashboard
+  * #2: Connect Database to Chart Visualizations
+  * #4: Create Leaderboard
+
+### Progress Update (since 6/5/2024)
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Department Visualizations | In Progess  |
+| Connect Database to Charts| In Progess  |
+| Dashboard Leaderboard     | In Progess  |
+| Create Dashboard Tests    | In Progress |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Updated the database to supply all of the necessary data for the dashboard to extract. Began modifying the charts backend to allow for role based access and account for several user types by connecting to the database.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+ * Continue to integrate user role based access for dashboard
+ * Finish connecting dashboard to database
+ * Create tests for dashboard features
+
+---
+
+## Friday (6/27 - 6/29)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log627-629.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Create Additional Visualizations for Department Dashboard
+  * #2: Connect Database to Chart Visualizations
+  * #3: Remove Need for Custom Plugin for the Progress Bar
+  * #4: Create Leaderboard
+  * #5: Improve Container Structure for Dashboard
+
+### Progress Update (since 6/5/2024)
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Department Visualizations | In Progess  |
+| Connect Database to Charts| In Progess  |
+| Remove Progress Bar Plugin| Completed   |
+| Dashboard Leaderboard     | In Progess  |
+| Improve Containers        | Completed   |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Removed the need for a progress bar plugin by using a horizontally stacked bar chart instead of a regular horizontal bar chart. Added details to the new progress bar and began creating a solid container structure for the dashboard. Began creating visualizations and designing the final version of the dashboard, and created space for all of the data we wished to present, including the leaderboard.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+ * Integrate user role based access for dashboard
+ * Begin connecting database to the charts
+ * Continue creating formatting for the leaderboard and lists
+ * Create tests for dashboard features
+
+---
+
 ## Wednesday (6/23 - 6/26)
 
 ### Timesheet
@@ -7,26 +71,29 @@ Clockify report
 ![Clockify report](./clockifylogs/log623-626.png)
 
 ### Current Tasks (Provide sufficient detail)
-  * #1: Modify Chart Controller to Display a Relevant Chart Template
-  * #2: Add Second Chart to Chart Controller
-  * #3: Create Progress Bar Plugin
-  * #4: Add Instructor Lists to Dashboard
-  * #5: Create Container Structure for Dashboard
+  * #1: Debug Chart.JS issues
+  * #2: Continue Integration of Progress Bar Plugin
+  * #3: Improve Dashboard Containers
+  * #4: Change Environment to Linux for faster navigation
 
 ### Progress Update (since 6/5/2024)
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
-| Dashboard Containers      | In Progess  |
-| Add Chart Controller      | In Progress |
+| Debug Chart.JS Issues     | Completed   |
 | Progress Bar Plugin       | In Progress |
+| Improve Containers        | In Progress |
+| Move to Linux             | Completed   |
 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-
+Began debugging Chart.JS and worked with Clement to move my environment to linux so that the pages loaded faster as the slow rendering was hindering my chart testing process. This environment change proved to be more complicated than expected, and we encountered hurdles such as long download and updating time, needing to reinstall docker, conflicting index.html files, reconfiguring php, and other extension confiuration related errors. This process took the majority of our project meeting. Debugging Cahrt.JS also took some time, as the plugin setup caused the charts to no longer appear. Upon reintegrating CHart.JS, I have decided using a plugin for the progress bar may be overkill and unnecessary, and my time would be more valuably spent working on all of the dashboard components.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * 
-
+  * Find a new way to display a progress bar without a custom plugin
+  * Continue improving the container structure of the dashboard
+  * Add leaderboard to dashboard frontend
+  * Connect database to charts
+  * Create charts for the department dashboard
 
 ---
 
