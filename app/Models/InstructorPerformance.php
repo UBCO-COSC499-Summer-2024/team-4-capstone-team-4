@@ -77,12 +77,12 @@ class InstructorPerformance extends Model {
         }
 
         echo $instructor_id . " - " .  $sei_avg ;
-       /*  $performance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', $year)->first();
-        if ($performance!= null) {
+        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+        if ($performance != null) {
             $performance->update([
                 'sei_avg' => $sei_avg
             ]);
-        } */
+        }
 
     }
 }
