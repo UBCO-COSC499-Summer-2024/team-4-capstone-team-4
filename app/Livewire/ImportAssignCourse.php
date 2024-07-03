@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\CourseSection;
+use App\Models\InstructorPerformance;
+use App\Models\SeiData;
 use App\Models\Teach;
 use App\Models\User;
 use App\Models\UserRole;
@@ -16,7 +18,7 @@ class ImportAssignCourse extends Component
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
                 'course_section_id' => $course->id,
-                'instructor_id' => null,
+                'user_role_id' => null,
             ];
         })->toArray();
     }
@@ -24,10 +26,11 @@ class ImportAssignCourse extends Component
     public function saveAssignments() {
 
         foreach ($this->assignments as $assignment) {
-            if ($assignment['instructor_id'] != null) {
+
+            if ($assignment['user_role_id'] != null) {
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
-                    'instructor_id' => (int) $assignment['instructor_id'],
+                    'user_role_id' => (int) $assignment['user_role_id'],
                 ]);
             }
         }
@@ -45,19 +48,28 @@ class ImportAssignCourse extends Component
     }
 
     public function getAvailableInstructors() {
-       $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
+    //    $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
 
-       $assignedInstructorIds = Teach::whereIn('instructor_id', $instructorRoleIds)->pluck('instructor_id');
+    //    $assignedInstructorIds = Teach::whereIn('user_role_id', $instructorRoleIds)->pluck('user_role_id');
 
-       return User::whereIn('id', $instructorRoleIds)
-           ->whereNotIn('id', $assignedInstructorIds)
-           ->get();
+    //    return User::whereIn('id', $instructorRoleIds)
+    //        ->whereNotIn('id', $assignedInstructorIds)
+    //        ->get();
+
+        $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
+
+        return User::whereIn('id', $instructorRoleIds)
+            ->get();
     }
 
     public function render()
     {
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
+
+        InstructorPerformance::updatePerformance();
+        // Teach::getInstructorsForCourses();
+        // SeiData::calculateSEIAverages();
 
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),

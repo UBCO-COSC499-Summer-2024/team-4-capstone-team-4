@@ -45,4 +45,37 @@ class InstructorPerformance extends Model {
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
     }
+
+    // other functions
+
+    public static function updatePerformance()
+{
+    $seiAverages = SeiData::calculateSEIAverages();
+    $courseInstructors = Teach::getInstructorsForCourses();
+
+    $instructorScores = [];
+
+    foreach ($seiAverages as $courseSectionId => $averageScore) {
+        if (isset($courseInstructors[$courseSectionId])) {
+            foreach ($courseInstructors[$courseSectionId] as $userRoleId) {
+                if (!isset($instructorScores[$userRoleId])) {
+                    $instructorScores[$userRoleId] = 0;
+                }
+                $instructorScores[$userRoleId] += $averageScore;
+            }
+        }
+    }
+
+    foreach ($instructorScores as $userRoleId => $totalScore) {
+        $roundedScore = round($totalScore, 1); // Round to one decimal place
+        self::updateOrCreate(
+            ['instructor_id' => $userRoleId],
+            ['sei_avg' => $roundedScore]
+        );
+
+        // echo 'userrole', $userRoleId, 'score', $roundedScore;
+    }
+
+
+}
 }

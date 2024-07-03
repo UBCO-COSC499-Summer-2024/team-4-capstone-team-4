@@ -53,4 +53,22 @@ class SeiData extends Model {
     public function courseSection() {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
+
+
+
+    // other functions
+
+    public static function calculateSEIAverages() {
+        $seiData = self::all();
+
+        $seiAverages = [];
+
+        foreach ($seiData as $data) {
+            $questions = json_decode($data->questions, true);
+            $averageScore = array_sum($questions) / count($questions);
+            $seiAverages[$data->course_section_id] = $averageScore;
+        }
+
+        return $seiAverages;
+    }
 }
