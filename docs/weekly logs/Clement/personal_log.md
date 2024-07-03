@@ -1,3 +1,57 @@
+## Cycle: June 28th - July 2nd
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_06_28_2024-07_02_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Service Role Manager Page Development
+  * #2: Livewire Troubleshooting (toolbar/data issues)
+  * #3: Display Data Properly and Bug Fixing
+  * #4: Modal Implementation for Viewing and Adding Extra Hours
+
+### Progress Update (since 06/28/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Group Meeting</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Discussed Changes to Forms and Data</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Service Role Manager Page Development</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Livewire Troubleshooting (toolbar/data issues)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Display Data Properly and Bug Fixing</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Modal Implementation for Viewing and Adding Extra Hours</td>
+        <td>In Progress</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Group meeting on the 28th was productive, leading to important changes in forms and data handling. Encountered issues with Livewire on both the 28th and 29th but managed to resolve them. Successfully displayed data properly and fixed related bugs. Service Role Manager Page development is ongoing, and modals for viewing and adding extra hours are being implemented but facing loading issues.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Finalize Service Role Manager Page Development for MVP
+  * Resolve issues with modals not loading content
+  * Complete and test modal functionality for viewing and adding extra hours
+  * Continue refining Livewire components and overall functionality
+
+---
+
 ## Cycle: June 26th - June 27th
 
 ### Timesheet
