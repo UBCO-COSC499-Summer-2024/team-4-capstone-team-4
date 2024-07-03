@@ -48,40 +48,29 @@ class InstructorPerformance extends Model {
 
     // other functions
 
-    public static function updatePerformance() {
+    public static function updatePerformance($instructor_id) {
         $seiAverages = SeiData::calculateSEIAverages();
-        $courseInstructors = Teach::getInstructorsForCourses();
-    
-        $instructorScores = [];
-        $courseCounts = [];
-    
-        foreach ($seiAverages as $courseSectionId => $averageScore) {
-            if (isset($courseInstructors[$courseSectionId])) {
-                foreach ($courseInstructors[$courseSectionId] as $userRoleId) {
-                    if (!isset($instructorScores[$userRoleId])) {
-                        $instructorScores[$userRoleId] = 0;
-                        $courseCounts[$userRoleId] = 0;
-                    }
-                    $instructorScores[$userRoleId] += $averageScore;
-                    $courseCounts[$userRoleId] += 1;
-                }
+        $courses = Teach::where('instructor_id', $instructor_id)->pluck('course_section_id');
+                
+        if (count($courses) === 0) {
+            echo "No courses found for instructor ID: $instructor_id";
+            return;
+        }
+
+        $sei_sum = 0;
+        $count = 0;
+        foreach ($courses as $course_id) {
+            if (isset($seiAverages[$course_id])) {
+                //echo $course_id . ":" . $seiAverages[$course_id] . "\n";
+                $sei_sum += $seiAverages[$course_id];
+                $count ++;
             }
         }
-    
-        foreach ($instructorScores as $userRoleId => $totalScore) {
-            $courseCount = $courseCounts[$userRoleId];
-            $averageScore = $totalScore / $courseCount;
-            $roundedScore = round($averageScore, 1); // Round to one decimal place
-    
-            // self::updateOrCreate(
-            //     ['instructor_id' => $userRoleId],
-            //     ['sei_avg' => $roundedScore]
-            // );
-    
-            // Uncomment for debugging:
-            // echo 'userrole ', $userRoleId, ' ', 'score', $roundedScore;
-        }
+        //echo $sei_sum  . "\n" ;
+        //echo count($courses)  . "\n" ;
+        $sei_avg = $sei_sum / $count;
 
+        echo $instructor_id . " - " .  $sei_avg ;
 
-}
+    }
 }
