@@ -2,10 +2,11 @@
 
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
-    ['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
-    ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
     ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
     ['icon' => 'list', 'href' => route('course-details',['instructor_id']), 'title' => 'Courses']
+    //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
+    //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
+    
 ];
 
 // add to $items

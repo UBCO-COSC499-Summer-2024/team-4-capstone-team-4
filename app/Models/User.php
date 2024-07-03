@@ -73,6 +73,14 @@ class User extends Authenticatable {
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
     }
+
+    public function hasRole($role) {
+        return $this->roles->contains('role', $role);
+    }
+
+    public function hasRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
     
     public function teaches(){
         return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')

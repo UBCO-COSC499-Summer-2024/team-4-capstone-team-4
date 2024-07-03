@@ -6,6 +6,7 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Middleware\CheckRole;
 
 // Route::get('/', function () {
 //     return view('auth.login');
@@ -37,25 +38,18 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/staff', function(){
         return view('staff');
     })->name('staff');
 });
 
-
-/* Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::post('/staff', [StaffController::class, 'add_target_hours'])->name('staff');
-}); */
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/staff-edit-mode', function(){
         return view('staff-edit-mode');
@@ -87,6 +81,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/leaderboard', function () {
         return view('leaderboard');
@@ -123,6 +118,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/import', function () {
         return view('import');
