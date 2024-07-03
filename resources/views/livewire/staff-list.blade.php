@@ -41,7 +41,7 @@
                         }else{
                             $currentMonthHours = null;
                         }
-    
+   
                         if ($instructor && $instructor->teaches) {
                             $course_ids = $instructor->teaches->pluck('course_section_id')->all();
                             

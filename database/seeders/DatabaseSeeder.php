@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
         ]);
-
+      
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
