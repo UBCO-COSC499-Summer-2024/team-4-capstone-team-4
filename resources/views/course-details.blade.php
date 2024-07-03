@@ -5,6 +5,7 @@
                 <h1 class="justify-between text-2xl font-bold text-gray-1000">{{ __('Department Details') }}</h1>
             </div>
             <div class="flex items-center space-x-4 ml-auto">
+                <x-assign-button />
                 <x-edit-button />
             </div>
         </div> 

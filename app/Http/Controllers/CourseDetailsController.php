@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
-use Illuminate\Support\Facades\Log;
 
 class CourseDetailsController extends Controller {
 

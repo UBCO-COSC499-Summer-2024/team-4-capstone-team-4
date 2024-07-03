@@ -490,3 +490,12 @@ th.editable:focus {
     border: 1px solid #007bff;
     background-color: #e9f7fe;
 }
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+.modal-dialog-centered .modal-content {
+    margin: auto;
+}
