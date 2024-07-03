@@ -49,5 +49,12 @@
                 <span class="material-symbols-outlined sort-icon {{$sortField === 'courseCapacity' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="courseCapacity" data-direction="desc">arrow_downward</span>
             </div>
         </th>
+        <th scope="col" class="sortable {{$sortField==='courseCapacity'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            SEI Data
+            <div class="sort-icons">
+                <span class="material-symbols-outlined sort-icon {{$sortField === 'courseCapacity' && $sortDirection === 'asc' ? 'active' : ''}}" data-field="courseCapacity" data-direction="asc">arrow_upward</span>
+                <span class="material-symbols-outlined sort-icon {{$sortField === 'courseCapacity' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="courseCapacity" data-direction="desc">arrow_downward</span>
+            </div>
+        </th>
     </tr>
 </thead>
