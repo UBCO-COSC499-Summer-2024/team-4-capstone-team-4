@@ -9,6 +9,7 @@ Clockify report
   * #2: Edit/remove target hours
   * #3: Set up DronceCi
   * #4: Feature Testing
+  * #5: Siderbar permissions
 
 ### Progress Update (since 6/28/2024) 
 |TASK/ISSUE |STATUS|
@@ -17,9 +18,10 @@ Clockify report
 | Edit/remove target hours | Complete |
 | Set up DroneCi | In progress |
 | Feature Testing | In progress |
+| Siderbar permissions | Complete |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-I have completed adding, editing/removing target hours functionality. I have written basic tests for the staff page. I did have to change the way I queried the database due to instructor perfomance schema change. I also merged the staff page to pre-dev integartion branch and it went well. 
+I have completed adding, editing/removing target hours functionality. I have written basic tests for the staff page. I did have to change the way I queried the database due to instructor perfomance schema change. I also merged the staff page to pre-dev integartion branch and it went well. I helped with sidebar permissions ensuring the what is on the sidebar is dependant on the role of the user and preventing user from trying to access pages they shouldn't.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Have staff page ready for MVP
