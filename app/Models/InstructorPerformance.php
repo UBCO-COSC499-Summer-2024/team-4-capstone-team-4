@@ -48,33 +48,39 @@ class InstructorPerformance extends Model {
 
     // other functions
 
-    public static function updatePerformance()
-{
-    $seiAverages = SeiData::calculateSEIAverages();
-    $courseInstructors = Teach::getInstructorsForCourses();
-
-    $instructorScores = [];
-
-    foreach ($seiAverages as $courseSectionId => $averageScore) {
-        if (isset($courseInstructors[$courseSectionId])) {
-            foreach ($courseInstructors[$courseSectionId] as $userRoleId) {
-                if (!isset($instructorScores[$userRoleId])) {
-                    $instructorScores[$userRoleId] = 0;
+    public static function updatePerformance() {
+        $seiAverages = SeiData::calculateSEIAverages();
+        $courseInstructors = Teach::getInstructorsForCourses();
+    
+        $instructorScores = [];
+        $courseCounts = [];
+    
+        foreach ($seiAverages as $courseSectionId => $averageScore) {
+            if (isset($courseInstructors[$courseSectionId])) {
+                foreach ($courseInstructors[$courseSectionId] as $userRoleId) {
+                    if (!isset($instructorScores[$userRoleId])) {
+                        $instructorScores[$userRoleId] = 0;
+                        $courseCounts[$userRoleId] = 0;
+                    }
+                    $instructorScores[$userRoleId] += $averageScore;
+                    $courseCounts[$userRoleId] += 1;
                 }
-                $instructorScores[$userRoleId] += $averageScore;
             }
         }
-    }
-
-    foreach ($instructorScores as $userRoleId => $totalScore) {
-        $roundedScore = round($totalScore, 1); // Round to one decimal place
-        self::updateOrCreate(
-            ['instructor_id' => $userRoleId],
-            ['sei_avg' => $roundedScore]
-        );
-
-        // echo 'userrole', $userRoleId, 'score', $roundedScore;
-    }
+    
+        foreach ($instructorScores as $userRoleId => $totalScore) {
+            $courseCount = $courseCounts[$userRoleId];
+            $averageScore = $totalScore / $courseCount;
+            $roundedScore = round($averageScore, 1); // Round to one decimal place
+    
+            // self::updateOrCreate(
+            //     ['instructor_id' => $userRoleId],
+            //     ['sei_avg' => $roundedScore]
+            // );
+    
+            // Uncomment for debugging:
+            echo 'userrole ', $userRoleId, ' ', 'score', $roundedScore;
+        }
 
 
 }

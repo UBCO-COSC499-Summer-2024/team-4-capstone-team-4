@@ -71,4 +71,31 @@ class SeiData extends Model {
 
         return $seiAverages;
     }
+
+    public static function calculateSEIAreaAverages() {
+        $seiAverages = self::calculateSEIAverages();
+        $coursesByArea = CourseSection::getCoursesByArea();
+        
+        $areaAverages = [];
+        
+        foreach ($coursesByArea as $areaId => $courses) {
+            $totalScore = 0;
+            $courseCount = 0;
+            
+            foreach ($courses as $course) {
+                if (isset($seiAverages[$course->id])) {
+                    $totalScore += $seiAverages[$course->id];
+                    $courseCount++;
+                }
+            }
+            
+            if ($courseCount > 0) {
+                $areaAverages[$areaId] = $totalScore / $courseCount;
+            } else {
+                $areaAverages[$areaId] = 0;
+            }
+        }
+        
+        return $areaAverages;
+    }
 }

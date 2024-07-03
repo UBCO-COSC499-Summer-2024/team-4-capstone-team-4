@@ -74,4 +74,10 @@ class CourseSection extends Model {
     public function teaches() {
         return $this->hasMany(Teach::class, 'course_section_id');
     }
+
+    // other functions
+
+    public static function getCoursesByArea() {
+        return self::with('area')->get()->groupBy('area_id');
+    }
 }

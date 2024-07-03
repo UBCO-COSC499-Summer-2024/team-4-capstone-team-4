@@ -44,4 +44,21 @@ class AreaPerformance extends Model {
     public function area() {
         return $this->belongsTo(Area::class, 'area_id');
     }
+
+    //other functions
+
+    public static function updateAreaPerformance() {
+        $areaAverages = SeiData::calculateSEIAreaAverages();
+        
+        foreach ($areaAverages as $areaId => $averageScore) {
+            $roundedScore = round($averageScore, 1); // Round to one decimal place
+            
+            // AreaPerformance::updateOrCreate(
+            //     ['area_id' => $areaId],
+            //     ['sei_avg' => $roundedScore]
+            // );
+
+            echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
+        }
+    }
 }
