@@ -25,7 +25,7 @@ class ImportAssignCourse extends Component
         })->toArray();
     }
 
-    public function saveAssignments() {
+    public function handleSubmit() {
 
         foreach ($this->assignments as $assignment) {
             // dd($assignment);

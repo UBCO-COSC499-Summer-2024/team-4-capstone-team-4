@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="saveAssignments" class="import-form relative">
+    <form wire:submit.prevent="handleSubmit" class="import-form relative">
         <div class="header flex justify-between py-2 bg-gray-200">
             <div class="w-4/12 text-center px-1">Course</div>
             <div class="w-4/12 text-center px-1">Instructor</div>
@@ -11,7 +11,7 @@
             @php
                 $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
             @endphp
-                    <div class="import-input w-4/12">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
+            <div class="import-input w-4/12">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
             <div class="import-input w-4/12">
                 <select wire:model="assignments.{{ $index }}.instructor_id" class="instructor-select" style="width: 100%">
                     <option value="">Select Instructor</option>
