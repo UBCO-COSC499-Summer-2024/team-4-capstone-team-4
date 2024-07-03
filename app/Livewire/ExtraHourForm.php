@@ -22,7 +22,12 @@ class ExtraHourForm extends Component
     public $areas;
     public $user_roles;
     public $serviceRoleId;
-    public $show = false;
+    public $showExtraHourForm = false;
+    public $showExtraHourView = false;
+    public $show = true;
+    protected $listeners = [
+        'showExtraHourForm' => 'showForm'
+    ];
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -37,7 +42,7 @@ class ExtraHourForm extends Component
 
     public function mount()
     {
-        //$this->serviceRoleId = $serviceRoleId;
+        // $this->serviceRoleId = $serviceRoleId;
         $this->year = date('Y');
         $this->month = date('n');
         $this->user_roles = UserRole::where('role', 'instructor')->get();
@@ -73,6 +78,10 @@ class ExtraHourForm extends Component
                 'type' => 'error'
             ]);
         }
+    }
+
+    public function cancel() {
+        $this->dispatch('closeModal');
     }
 
     public function resetForm()

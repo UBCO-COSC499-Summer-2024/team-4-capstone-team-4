@@ -34,7 +34,9 @@
         <script>
             Livewire.on('show-toast', (data) => {
                 // it seems data is an array of objects
+                console.log(data);
                 data.forEach((toast) => {
+                    console.log(toast)
                     Toastify({
                         text: toast.message,
                         duration: 3000,
@@ -50,8 +52,13 @@
             Livewire.on('confirmDelete', (data) => {
                 console.log(data);
                 data.forEach((item) => {
+                    console.log(item);
                     if (confirm(item.message)) {
-                        Livewire.dispatch('deleteServiceRole', item.serviceRoleId);
+                        if (item.model) {
+                            Livewire.emit('delete', item.model, item.id);
+                        } else {
+                            Livewire.dispatch('deleteServiceRole', { id: item.serviceRoleId});
+                        }
                     }
                 })
             });

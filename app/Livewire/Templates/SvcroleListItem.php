@@ -45,6 +45,11 @@ class SvcroleListItem extends Component
 
     public function deleteServiceRole($serviceRoleId)
     {
+        // dd($serviceRoleId);
+        $this->dispatch('show-toast', [
+            'message' => $serviceRoleId,
+            'type' => 'success'
+        ]);
         $count = ServiceRole::destroy($serviceRoleId);
         if ($count > 0) {
             $this->dispatch('show-toast', [
@@ -106,7 +111,7 @@ class SvcroleListItem extends Component
         ]);
     }
 
-    public function openExtraHourModal($serviceRoleId) {
+    public function openExtraHourForm($serviceRoleId) {
         $this->dispatch('openModal', 'extra-hour-form', ['serviceRoleId' => $serviceRoleId]);
     }
 

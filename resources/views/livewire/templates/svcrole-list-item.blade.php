@@ -61,13 +61,15 @@
             {{-- modal button to view/edit extra hours --}}
             <button class="svcr-list-item-action" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
                     title="Add Extra Hours"
-                    wire:click="openExtraHourModal({{ $serviceRole->id }})"
+                    wire:click="openExtraHourForm({{ $serviceRole->id }})"
+                    @click="showExtraHoursForm = true"
                     x-cloak>
                 <span class="material-symbols-outlined icon">add</span>
             </button>
             <button class="svcr-list-item-action" id="svcr-extra-hours-view-{{ $serviceRole->id }}"
                     title="Manage Extra Hours"
                     wire:click="openExtraHourView({{ $serviceRole->id }})"
+                    @click="showExtraHoursView = true"
                     x-cloak>
                 <span class="material-symbols-outlined icon">visibility</span>
             </button>

@@ -481,7 +481,7 @@ h1, h2, h3, h4, h5, h6 {
     .link-bar.vert {
         z-index: 400;
     }
-    
+
     .link-bar.vert.active {
         display: flex;
     }
@@ -549,4 +549,8 @@ h1, h2, h3, h4, h5, h6 {
 a,
 .material-symbols-outlined {
     outline: none !important;
+}
+
+.nobs {
+    box-shadow: none !important;
 }

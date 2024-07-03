@@ -161,46 +161,16 @@
     </div>
 
     @include('components.link-bar', ['links' => $links])
-    <div x-data="{ showExtraHourForm: false, showExtraHourView: false }"
-        @open-extra-hour-form.window="showExtraHourForm = true"
-        @close-modal.window="showExtraHourForm = false"
-        @open-extra-hour-view.window="showExtraHourView = true"
-        @close-modal.window="showExtraHourView = false" >
-
+    <div x-data="{ showExtraHourForm: @entangle('showExtraHourForm'), showExtraHourView: @entangle('showExtraHourView') }">
         <!-- Extra Hour Form Modal -->
-        <x-dialog-modal wire:model="showExtraHourForm" id="extraHourFormModal">
-            <x-slot name="title">
-                {{ __('Add Extra Hours') }}
-            </x-slot>
-
-            <x-slot name="content">
-                <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" />
-            </x-slot>
-
-            <x-slot name="footer">
-                <x-secondary-button wire:click="$dispatch('closeModal')" wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-                <!--  Your save button logic in ExtraHourForm -->
-            </x-slot>
-        </x-dialog-modal>
+        <div x-show="showExtraHourForm">
+            <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourForm-'.$serviceRoleIdForModal" />
+        </div>
 
         <!-- Extra Hour View Modal -->
-        <x-dialog-modal wire:model="showExtraHourView" id="extraHourViewModal">
-            <x-slot name="title">
-                {{ __('View Extra Hours') }}
-            </x-slot>
-
-            <x-slot name="content">
-                <livewire:extra-hour-view :serviceRoleId="$serviceRoleIdForModal" />
-            </x-slot>
-
-            <x-slot name="footer">
-                <x-secondary-button wire:click="$dispatch('closeModal')" wire:loading.attr="disabled">
-                    {{ __('Close') }}
-                </x-secondary-button>
-            </x-slot>
-        </x-dialog-modal>
+        <div x-show="showExtraHourView">
+            <livewire:extra-hour-view :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourView-'.$serviceRoleIdForModal" />
+        </div>
     </div>
 </div>
 <script type="text/javascript">

@@ -328,21 +328,21 @@ class ServiceRolesList extends Component
         }
     }
 
-    public function deleteServiceRole($serviceRoleId) {
-        $count = ServiceRole::destroy($serviceRoleId);
-        if ($count > 0) {
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role deleted successfully.',
-                'type' => 'success'
-            ]);
-        } else {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to delete Service Role.',
-                'type' => 'error'
-            ]);
-        }
-        $this->render();
-    }
+    // public function deleteServiceRole($serviceRoleId) {
+    //     $count = ServiceRole::destroy($serviceRoleId);
+    //     if ($count > 0) {
+    //         $this->dispatch('show-toast', [
+    //             'message' => 'Service Role deleted successfully.',
+    //             'type' => 'success'
+    //         ]);
+    //     } else {
+    //         $this->dispatch('show-toast', [
+    //             'message' => 'Failed to delete Service Role.',
+    //             'type' => 'error'
+    //         ]);
+    //     }
+    //     $this->render();
+    // }
 
     public function saveSelected() {
         $this->dispatch('saveServiceRole', $this->selectedItems);
@@ -368,20 +368,28 @@ class ServiceRolesList extends Component
 
     public function openModal($component, $arguments)
     {
-        // Update the modal visibility and pass data
+        $svcrId = $arguments['serviceRoleId'];
         if ($component === 'extra-hour-form') {
-            $this->showExtraHourForm = true;
-            $this->serviceRoleIdForModal = $arguments['serviceRoleId'];
+            $this->openExtraHourForm($svcrId);
         } else if ($component === 'extra-hour-view') {
-            $this->showExtraHourView = true;
-            $this->serviceRoleIdForModal = $arguments['serviceRoleId'];
+            $this->openExtraHourView($svcrId);
         }
+    }
+
+    public function openExtraHourForm($serviceRoleId)
+    {
+        $this->serviceRoleIdForModal = $serviceRoleId;
+        $this->showExtraHourForm = true;
+    }
+
+    public function openExtraHourView($serviceRoleId)
+    {
+        $this->serviceRoleIdForModal = $serviceRoleId;
+        $this->showExtraHourView = true;
     }
 
     public function closeModal()
     {
-        $this->showExtraHourForm = false;
-        $this->showExtraHourView = false;
-        $this->serviceRoleIdForModal = null;
+        $this->reset(['showExtraHourForm', 'showExtraHourView']);
     }
 }
