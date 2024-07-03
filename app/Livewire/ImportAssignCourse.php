@@ -29,6 +29,8 @@ class ImportAssignCourse extends Component
     public function handleSubmit() {
 
         foreach ($this->assignments as $assignment) {
+            //dd($assignment);
+
             if ($assignment['instructor_id'] != null) {
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
@@ -44,7 +46,6 @@ class ImportAssignCourse extends Component
                         'target_hours' => SeiData::calculateTargetHours($assignment['course_section_id']),
                         'score' => SeiData::calculateScore($assignment['course_section_id']),
                     ]); */
-                  
                 }else{
                     InstructorPerformance::create([
                         'instructor_id'=> $assignment['instructor_id'],
@@ -73,6 +74,7 @@ class ImportAssignCourse extends Component
                 }
             }
         }
+
 
         // Reset the form
         $this->mount();
@@ -108,7 +110,7 @@ class ImportAssignCourse extends Component
 
         // DepartmentPerformance::updateDepartmentPerformance();
         // AreaPerformance::updateAreaPerformance();
-        // InstructorPerformance::updatePerformance();
+        InstructorPerformance::updatePerformance(1);
         // Teach::getInstructorsForCourses();
         // SeiData::calculateSEIAverages();
 
