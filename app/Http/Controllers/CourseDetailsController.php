@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
+use App\Models\SeiData;
+use Illuminate\Support\Facades\Log;
 
 class CourseDetailsController extends Controller {
 
     public function show(Request $request){
         $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
+            $seiData = SeiData::where('course_section_id', $section->id)->first();
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+
             return (object) [
                 'id' => $section->id,
                 'serialNumber' => $index + 1,
@@ -18,6 +23,7 @@ class CourseDetailsController extends Controller {
                 'enrolled' => $section->enrolled,
                 'dropped' => $section->dropped,
                 'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
             ];
         });
 
@@ -26,8 +32,7 @@ class CourseDetailsController extends Controller {
         return view('course-details', compact('courseSections', 'sortField', 'sortDirection'));
     }
 
-    public function save(Request $request)
-    {
+    public function save(Request $request){
         $ids = $request->input('ids', []);
         $courseNames = $request->input('courseNames', []);
         $courseDurations = $request->input('courseDurations', []);
@@ -55,5 +60,14 @@ class CourseDetailsController extends Controller {
             'message' => 'Courses updated successfully.',
             'updatedSections' => $updatedSections
         ]);
+    }
+    private function calculateAverageRating($questionsJson) {
+        $questions = json_decode($questionsJson, true);
+        if (is_array($questions) && !empty($questions)) {
+            $ratings = array_values($questions); 
+            $averageRating = count($ratings) > 0 ? array_sum($ratings) / count($ratings) : 0;
+            return round($averageRating, 2);
+        }
+        return 0;
     }
 }

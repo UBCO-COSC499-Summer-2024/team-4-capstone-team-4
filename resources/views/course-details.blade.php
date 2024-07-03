@@ -24,6 +24,7 @@
                             :droppedStudents="$section->dropped" 
                             :courseCapacity="$section->capacity"
                             :sectionId="$section->id"
+                            :seiData="$section->averageRating"
                             />
                         @endforeach
                     @else
