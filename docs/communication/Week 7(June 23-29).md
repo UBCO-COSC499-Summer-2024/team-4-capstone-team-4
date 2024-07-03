@@ -1,1 +1,6 @@
 
+
+|  Meeting Date |Meeting Type| Attendees | Times | Minutes        | Design Decision | Next meeting Details |
+| :-------------: | ------------- | ------------- |------------- |------------- | ------------- | ---|
+|June 26, 2024 |Team Meeting |Angelina Dubrule,	Catherine Magoke,	Clement Abel-Nwachukwu,	Sumer Mann,	Kate Naychuk| 10:30 am  - 7:30 pm| Team worked on their own stuff - evaluations - troubleshooting - Clement worked on merge conflicts - Kate and Catherine worked on converting stuff to livewire - troubleshooting - debug | No design decisions were made in the meeting |June 28, 2024 - The team would be working on the code, functionalities and database, testing for the MVP presentation | 
+|June 28, 2024 |Team Meeting|Angelina Dubrule,	Catherine Magoke,	Clement Abel-Nwachukwu,	Sumer Mann,	Kate Naychuk| 10:30 am - 7:45 pm | Team worked on their own stuff, completing the functionalities, code reviews and progressing towards MVP presentation | No design decisions were made in the meeting | June 30, 2024 - A small online meetings discussing progress | 
