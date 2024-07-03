@@ -58,7 +58,7 @@ class AreaPerformance extends Model {
             //     ['sei_avg' => $roundedScore]
             // );
 
-            echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
+            // echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
         }
     }
 }

@@ -58,7 +58,7 @@ class DepartmentPerformance extends Model {
             //     ['sei_avg' => $roundedScore]
             // );
 
-            echo 'department ', $departmentId, ' ' , 'score ', $roundedScore;
+            // echo 'department ', $departmentId, ' ' , 'score ', $roundedScore;
         }
     }
     

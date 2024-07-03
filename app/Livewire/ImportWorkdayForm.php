@@ -19,7 +19,6 @@ class ImportWorkdayForm extends Component
     public $showModal = false;
 
     public function mount() {
-
         if(Session::has('workdayFormData')) {
             $this->rows = Session::get('workdayFormData');
         } else {
@@ -129,11 +128,13 @@ class ImportWorkdayForm extends Component
 
         Session::forget('workdayFormData');
 
-        session()->flash('success', 'Successfully Saved!');
+        $this->showModal = true;
 
-        if (session()->has('success')) {
-            $this->showModal = true;
-        }
+        session()->flash('success', $this->showModal);
+
+        // if (session()->has('success')) {
+        //     $this->showModal = true;
+        // }
 
     }
 

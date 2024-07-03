@@ -79,7 +79,7 @@ class InstructorPerformance extends Model {
             // );
     
             // Uncomment for debugging:
-            echo 'userrole ', $userRoleId, ' ', 'score', $roundedScore;
+            // echo 'userrole ', $userRoleId, ' ', 'score', $roundedScore;
         }
 
 
