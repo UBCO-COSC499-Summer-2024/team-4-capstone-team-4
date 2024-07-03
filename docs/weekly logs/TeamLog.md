@@ -19,6 +19,7 @@
 
 ![image of tasks](./tasks/todo_june28_july3.png)
 ![image of tasks](./tasks/inprogress_june28_july3.png)
+![image of tasks](./tasks/inreview_june28_july3.png)
 ![image of tasks](./tasks/done_june28_july3.png)
 
 ## Tasks for Next Cycle:
