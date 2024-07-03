@@ -2,6 +2,60 @@
 
 ## Date Range:
 
+- June 28 - July 2
+
+## Features in the Project Plan Cycle:
+
+- Staff Page
+- Import Page
+- Course Details Page
+- Role Based Access
+- Dashboard Visualizations
+- Service Role Management
+- Drone CI
+- Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_june28_july3.png)
+![image of tasks](./tasks/inprogress_june28_july3.png)
+![image of tasks](./tasks/inreview_june28_july3.png)
+![image of tasks](./tasks/done_june28_july3.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_june28_july3.png)
+![image of tasks](./tasks/inprogress_june28_july3.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_june28_july3.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_june28_july3.png)
+![image of clockify report](./clockify/individual_june28_july3.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_june28_july3.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_june28_july3.png)
+![image of tasks](./tasks/inprogress_june28_july3.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_june21_june25.png)
+![image of test report](./testing/feature_june21_june25.png)
+
+## Overview:
+
+We are wrapping up the features needed for the MVP. In the final cycle before the deadline, we will work on integrating all the exisiting issues and features our team members have been working on. Finally, we hope to polish any performance issues and wrap up testing to ensure everything runs smoothly.
+
+## Date Range:
+
 - June 26 - June 27
 
 ## Features in the Project Plan Cycle:
