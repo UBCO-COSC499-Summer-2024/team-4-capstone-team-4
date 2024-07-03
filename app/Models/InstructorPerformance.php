@@ -48,9 +48,12 @@ class InstructorPerformance extends Model {
 
     // other functions
 
-    public static function updatePerformance($instructor_id) {
+    public static function updatePerformance($instructor_id, $year) {
         $seiAverages = SeiData::calculateSEIAverages();
-        $courses = Teach::where('instructor_id', $instructor_id)->pluck('course_section_id');
+        $courses = Teach::where('instructor_id', $instructor_id)
+        ->whereHas('courseSection', function ($query) use ($year) {
+            $query->where('year', $year);
+        })->pluck('course_section_id');
                 
         if (count($courses) === 0) {
             echo "No courses found for instructor ID: $instructor_id";
@@ -68,9 +71,18 @@ class InstructorPerformance extends Model {
         }
         //echo $sei_sum  . "\n" ;
         //echo count($courses)  . "\n" ;
-        $sei_avg = $sei_sum / $count;
+        $sei_avg = 0;
+        if($count > 0){
+            $sei_avg = $sei_sum / $count;
+        }
 
         echo $instructor_id . " - " .  $sei_avg ;
+       /*  $performance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', $year)->first();
+        if ($performance!= null) {
+            $performance->update([
+                'sei_avg' => $sei_avg
+            ]);
+        } */
 
     }
 }
