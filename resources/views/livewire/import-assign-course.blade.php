@@ -8,7 +8,10 @@
 
         @foreach($assignments as $index => $assignment)
         <div class="import-form-row flex justify-between items-center px-2 py-6 border-b">
-            <div class="import-input w-4/12">{{ $availableCourses->firstWhere('id', $assignment['course_section_id'])->name }}</div>
+            @php
+                $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
+            @endphp
+                    <div class="import-input w-4/12">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
             <div class="import-input w-4/12">
                 <select wire:model="assignments.{{ $index }}.instructor_id" class="instructor-select" style="width: 100%">
                     <option value="">Select Instructor</option>
