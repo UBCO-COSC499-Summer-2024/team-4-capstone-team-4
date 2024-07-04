@@ -14,19 +14,19 @@ Clockify report
 ### Progress Update (since 6/5/2024)
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
-| Department Visualizations | In Progess  |
-| Connect Database to Charts| In Progess  |
+| Department Visualizations | Completed   |
+| Connect Database to Charts| Completed   |
 | Dashboard Leaderboard     | In Progess  |
 | Create Dashboard Tests    | In Progress |
 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Updated the database to supply all of the necessary data for the dashboard to extract. Began modifying the charts backend to allow for role based access and account for several user types by connecting to the database.
+Updated the database to supply all of the necessary data for the dashboard to extract. Completed modifying the charts backend to allow for role based access and account for several user types by connecting to the database. Successfully implemented first draft of dashboard front and backend fucntionality, including role based access and redirection for certain user types.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
- * Continue to integrate user role based access for dashboard
- * Finish connecting dashboard to database
  * Create tests for dashboard features
+ * Get ready for MVP presentation
+ * Get a leaderboard and ranking system added to the dashboard
 
 ---
 
