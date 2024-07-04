@@ -13,7 +13,8 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/js/app.js', 'resources/js/staff.js', 'resources/css/import.css'])
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <!-- Chart.js Library -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,7 +26,20 @@
     <body class="font-sans antialiased">
         <x-header />
         <main>
-            <x-sidebar :items="[]" />
+            @php
+                $user = Auth::user();
+            @endphp
+
+            @if($user && $user->hasRoles(['admin', 'dept_head', 'dept_staff']))
+                <x-sidebar :items="[
+                    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
+                    ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
+                    ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Import']
+                ]" />
+            @else
+                <x-sidebar :items="[]" />
+            @endif
             <section class="container">
                 {{ $slot }}
             </section>

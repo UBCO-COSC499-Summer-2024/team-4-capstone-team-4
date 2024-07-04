@@ -10,7 +10,6 @@ use App\Models\UserRole;
 use App\Models\ServiceRole;
 use App\Models\AreaPerformance;
 use App\Models\InstructorPerformance;
-use App\Models\Departmentperformance;
 use App\Models\Teach;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +23,6 @@ class DatabaseSeeder extends Seeder
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
-
 
         Area::factory()->create([
             'name' => 'Computer Science',
@@ -56,7 +54,6 @@ class DatabaseSeeder extends Seeder
             InstructorPerformance::factory()->create([
                 'year' => date('Y'),
                 'instructor_id' => $user->id,
-                'target_hours' => null,
             ]);
         }
 
@@ -78,7 +75,6 @@ class DatabaseSeeder extends Seeder
         InstructorPerformance::factory()->create([
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
-            'target_hours' => null,
         ]);
       
         $head = User::factory()->create([

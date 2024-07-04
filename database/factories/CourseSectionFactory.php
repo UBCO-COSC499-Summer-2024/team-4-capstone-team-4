@@ -17,14 +17,18 @@ class CourseSectionFactory extends Factory {
      */
     protected $model=CourseSection::class;
 
-    public function definition(): array {
+    public function definition() {
+        $prefixes = ['COSC', 'MATH', 'STAT', 'PHYS'];
         return [
-            'name'=>fake()->name(),
+            'name'=>fake()->randomElement($prefixes).' '.fake()->numberBetween(100,500),
             'area_id'=>Area::pluck('id')->random(),
             'year'=>fake()->year(),
-            'enrolled'=>fake()->numberBetween(0,100),
-            'dropped'=>fake()->numberBetween(0,100),
-            'capacity'=>fake()->numberBetween(0,100),
+            'enrolled'=>fake()->numberBetween(10,100),
+            'dropped'=>fake()->numberBetween(0,20),
+            'capacity'=>fake()->numberBetween(10,200),
+            'term' => fake()->randomElement(['1', '2', '1-2']),
+            'session' => fake()->randomElement(['W', 'S']),
+            'section' => fake()->randomElement(['001', '002', '003']),
         ];
     }
 }

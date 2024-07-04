@@ -53,7 +53,7 @@ class ServiceRole extends Model {
      */
     public function userRoles()
     {
-        return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'user_role_id')
+        return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'instructor_id')
                     ->where('role', 'instructor') 
                     ->withPivot('assigner_id')
                     ->withTimestamps();

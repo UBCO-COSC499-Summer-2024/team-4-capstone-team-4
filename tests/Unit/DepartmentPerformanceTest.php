@@ -6,8 +6,10 @@ use Tests\TestCase;
 use App\Models\Department;
 use App\Models\DepartmentPerformance;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DepartmentPerformanceTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if department performance table exists.
      *

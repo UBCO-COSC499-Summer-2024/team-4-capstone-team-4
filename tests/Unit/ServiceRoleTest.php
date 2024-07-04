@@ -6,8 +6,10 @@ use App\Models\Area;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\ServiceRole;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ServiceRoleTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if service_roles table exists.
      *

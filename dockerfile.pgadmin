@@ -1,0 +1,20 @@
+# Use the pgadmin4 image as the base
+FROM dpage/pgadmin4
+
+USER root
+
+# Install sqlite3 and krb5 based on the detected Linux distribution
+RUN if [ -f /etc/alpine-release ]; then \
+        apk update && \
+        apk add sqlite krb5; \
+    elif [ -f /etc/debian_version ]; then \
+        apt-get update && \
+        apt-get install -y sqlite3 libkrb5-dev; \
+    elif [ -f /etc/os-release ] && grep -qi 'centos\|rhel' /etc/os-release; then \
+        yum install -y sqlite krb5-devel; \
+    else \
+        echo "Unsupported base image" && exit 1; \
+    fi
+
+# Set the user back to pgadmin's default
+USER pgadmin

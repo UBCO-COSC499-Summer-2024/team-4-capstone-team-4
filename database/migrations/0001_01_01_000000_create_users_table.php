@@ -81,10 +81,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->string('year');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
+            $table->year('year');
+            $table->string('term');
+            $table->string('session');
+            $table->string('section');
             $table->timestamps();
         });
     
@@ -169,8 +172,6 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-
-
     }
 
     /**

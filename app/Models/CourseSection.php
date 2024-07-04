@@ -25,7 +25,7 @@ class CourseSection extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'area_id', 'year', 'enrolled', 'dropped', 'capacity',
+        'name', 'area_id', 'enrolled', 'dropped', 'capacity', 'year', 'term', 'session', 'section'
     ];
 
     /**
