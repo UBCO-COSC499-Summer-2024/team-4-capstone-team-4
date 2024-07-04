@@ -103,31 +103,6 @@ class DatabaseSeeder extends Seeder
                     'instructor_id' => $role->id,
                 ]);
 
-                // Create course sections and teach records
-                $courseSections = CourseSection::factory(2)->create()->each(function ($section) use ($createdAreas) {
-                    // Assign random area to each course section
-                    $section->area_id = $createdAreas[array_rand($createdAreas)]->id;
-                    $section->save();
-                });
-
-                foreach ($courseSections as $section) {
-                    Teach::factory()->create([
-                        'instructor_id' => $role->id,
-                        'course_section_id' => $section->id,
-                    ]);
-
-                    SeiData::factory()->create([
-                        'course_section_id' => $section->id,
-                        'questions' => json_encode([
-                            'q1' => rand(1, 5),
-                            'q2' => rand(1, 5),
-                            'q3' => rand(1, 5),
-                            'q4' => rand(1, 5),
-                            'q5' => rand(1, 5),
-                            'q6' => rand(1, 5),
-                        ]),
-                    ]);
-                }
             }
         }
     }

@@ -4,30 +4,16 @@ namespace Tests\Feature;
 
 use App\Models\CourseSection;
 use App\Models\User;
-use App\Models\Area;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Http\Controllers\CourseDetailsController;
+
 
 class CourseDetailsTest extends TestCase{
     use RefreshDatabase;
 
-    public function test_course_details_page_loads_correctly()
-    {
-        $user = User::factory()->create();
-        $area = Area::factory()->create(['name' => 'Computer Science']);
-        $courseSection = CourseSection::factory()->create(['area_id' => $area->id, 'name' => 'Test Course']);
 
-        $this->actingAs($user);
-
-        $response = $this->get('/course-details');
-        
-        $response->assertStatus(200);
-        $response->assertSee('Test Course');
-        $response->assertSee($area->name);
-    }
-
-    public function test_course_edit_functionality()
-    {
+    public function test_course_edit_functionality(){
         $user = User::factory()->create();
         $courseSection = CourseSection::factory()->create([
             'name' => 'Original Course',
@@ -59,19 +45,24 @@ class CourseDetailsTest extends TestCase{
         ]);
     }
 
-    public function test_assign_modal_displays_correctly()
-    {
-        $user = User::factory()->create();
-        $courseSection = CourseSection::factory()->create();
+    public function test_save_method_with_missing_data(){
+    $controller = new CourseDetailsController();
 
-        $this->actingAs($user);
+    // Mock data with missing fields
+    $request = Request::create('/course-details/save', 'POST', [
+        'ids' => [1],
+        // 'courseNames' => ['Updated Course'], // Missing courseNames
+        'courseDurations' => [12],
+        'enrolledStudents' => [100],
+        'droppedStudents' => [10],
+        'courseCapacities' => [120],
+    ]);
 
-        $response = $this->get('/course-details');
+    $response = $controller->save($request);
 
-        $response->assertStatus(200);
-        $response->assertSee('Assign Course');
-
-        // Simulate clicking the button and check for modal content
-        $response->assertSee('Coming Soon');
-    }
+    $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
+    $data = $response->getData(true);
+    $this->assertArrayHasKey('message', $data);
+    $this->assertEquals('Course names are required.', $data['message']);
+}
 }

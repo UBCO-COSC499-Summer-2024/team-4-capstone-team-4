@@ -53,6 +53,10 @@ class CourseDetailsController extends Controller {
 
         $updatedSections = [];
 
+        if (empty($courseNames)) {
+            return response()->json(['message' => 'Course names are required.'], 400);
+        }
+
         for ($i = 0; $i < count($ids); $i++) {
             $courseSection = CourseSection::find($ids[$i]);
             if ($courseSection) {
