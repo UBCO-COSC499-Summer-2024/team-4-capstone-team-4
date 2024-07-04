@@ -23,6 +23,11 @@ class ExtraHourView extends Component
     public function mount($serviceRoleId)
     {
         $this->serviceRoleId = $serviceRoleId;
+        if ($this->serviceRoleId == null) {
+            $this->extraHours = [];
+        } else {
+            $this->extraHours = ServiceRole::find($this->serviceRoleId)->extra_hours()->paginate(10);
+        }
     }
 
     public function showView()
@@ -42,7 +47,11 @@ class ExtraHourView extends Component
     public function render()
     {
         // dd($this->serviceRoleId);
-        // dd(ServiceRole::find($this->serviceRoleId));
+        if ($this->serviceRoleId == null) {
+            return view('livewire.extra-hour-view', [
+                'extraHours' => []
+            ]);
+        }
         $this->extraHours = ServiceRole::find($this->serviceRoleId)->extra_hours()->paginate(10);
         // dd($this->extraHours);
         return view('livewire.extra-hour-view', [

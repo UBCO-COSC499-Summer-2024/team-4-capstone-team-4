@@ -38,9 +38,17 @@ class SvcroleListItem extends Component
 
     public function toggleEditMode($selectedItems)
     {
-        if (in_array($this->serviceRole->id, $selectedItems)) {
-            $this->isEditing = !$this->isEditing;
+        $this->isSelected = in_array($this->serviceRole->id, $selectedItems);
+
+        if ($this->isSelected) {
+            $this->isEditing = true;
+        } else {
+            $this->isEditing = false;
         }
+        $this->dispatch('show-toast', [
+            'message' => 'Edit mode toggled ' . ($this->isEditing ? 'on' : 'off') . ' for ' . $this->serviceRole->name,
+            'type' => 'success'
+        ]);
     }
 
     public function deleteServiceRole($serviceRoleId)

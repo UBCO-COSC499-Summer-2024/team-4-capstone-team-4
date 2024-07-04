@@ -85,7 +85,7 @@
 
 .form-input {
     padding: 8px;
-    background-color: rgba(240, 240, 240, 0.9);
+    background-color: rgba(240, 240, 240, 0.9) !important;
     font-weight: 600;
     border-radius: 12px !important;
     min-height: 40px;

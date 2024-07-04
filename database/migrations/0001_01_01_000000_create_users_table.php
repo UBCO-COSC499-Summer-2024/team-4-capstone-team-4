@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->boolean('approved')->default(false);
             $table->string('acces_code')->nullable();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
@@ -84,10 +83,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->string('duration');
             $table->integer('enrolled');
             $table->integer('dropped');
             $table->integer('capacity');
+            $table->year('year');
+            $table->string('term');
+            $table->string('session');
+            $table->string('section');
             $table->timestamps();
         });
 
@@ -122,10 +124,13 @@ return new class extends Migration
 
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score')->nullable();
-            $table->integer('total_hours')->default(0);
+            $table->integer('score');
+            $table->json('total_hours');
             $table->integer('target_hours')->nullable();
-            $table->float('sei_avg')->nullable();
+            $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -133,10 +138,11 @@ return new class extends Migration
 
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score')->nullable();
-            $table->integer('total_hours')->default(0);
-            $table->integer('target_hours')->nullable();
-            $table->float('sei_avg')->nullable();
+            $table->json('total_hours');
+            $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -144,10 +150,11 @@ return new class extends Migration
 
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score')->nullable();
-            $table->integer('total_hours')->default(0);
-            $table->integer('target_hours')->nullable();
-            $table->float('sei_avg')->nullable();
+            $table->json('total_hours');
+            $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
+            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();
@@ -213,9 +220,6 @@ return new class extends Migration
             $table->text('transaction_id')->nullable();
             $table->text('query')->nullable();
             $table->jsonb('params')->nullable();
-
-            // --- Additional Fields ---
-
             $table->text('session_id')->nullable();
             $table->integer('pid')->nullable();
             $table->text('user_query')->nullable();

@@ -168,9 +168,9 @@
         </div>
 
         <!-- Extra Hour View Modal -->
-        <div x-show="showExtraHourView">
+        {{-- <div x-show="showExtraHourView">
             <livewire:extra-hour-view :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourView-'.$serviceRoleIdForModal" />
-        </div>
+        </div> --}}
     </div>
 </div>
 <script type="text/javascript">
@@ -311,9 +311,18 @@
         if (actions) {
             actions.addEventListener('change', function(e) {
                 // @this.set('selectedAction', this.value);
-                console.log(`selectedAction: ${this.value}`);
-                console.log(selectedItems);
-                @this.dispatch('performAction', this.value, selectedItems);
+                // console.log(`selectedAction: ${this.value}`);
+                // console.log(selectedItems);
+                // should be ['id' => true/false] for php
+                let sendItems = Object.keys(selectedItems).reduce((acc, key) => {
+                    acc[key] = selectedItems[key];
+                    return acc;
+                }, {});
+                // console.log(sendItems);
+                @this.dispatch('performAction', {
+                    'action': this.value,
+                    'items': sendItems
+                });
             });
         }
     }

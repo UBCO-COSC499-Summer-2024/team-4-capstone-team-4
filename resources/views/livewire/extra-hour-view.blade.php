@@ -57,7 +57,9 @@
                 </tbody>
             </table>
 
-            {{ $extraHours->links() }}
+            @if(!empty($extraHours))
+                {{ $extraHours->links() }}
+            @endif
         </x-slot>
 
         <x-slot name="footer">

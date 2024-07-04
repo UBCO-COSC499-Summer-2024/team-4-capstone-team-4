@@ -9,6 +9,7 @@ use App\Models\AreaPerformance;
 use App\Models\DepartmentPerformance;
 use App\Models\UserRole;
 use App\Models\Area;
+use Illuminate\Support\Facades\DB;
 
 class ServiceRole extends Model {
     use HasFactory;
@@ -56,7 +57,7 @@ class ServiceRole extends Model {
      */
     public function userRoles()
     {
-        return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'user_role_id')
+        return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'instructor_id')
                     ->where('role', 'instructor')
                     ->withPivot('assigner_id')
                     ->withTimestamps();
@@ -79,8 +80,7 @@ class ServiceRole extends Model {
                     });
     }
 
-    public function extra_hours() {
-        // sum of all extra hours for instructors assigned to this service role
-        return $this->hasManyThrough(ExtraHour::class, RoleAssignment::class,'service_role_id','instructor_id','id', 'instructor_id');
+    public function areaPerformance() {
+        return $this->hasOne(AreaPerformance::class, 'service_role_id');
     }
 }

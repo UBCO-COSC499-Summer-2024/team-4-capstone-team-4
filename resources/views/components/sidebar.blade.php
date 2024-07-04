@@ -1,11 +1,12 @@
 @php
+
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
-    ['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
-    ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
     ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => '/courses', 'title' => 'Courses'],
-    ['icon' => 'group', 'href' => '/svcroles', 'title' => 'Service Roles']
+    ['icon' => 'list', 'href' => route('course-details',['instructor_id']), 'title' => 'Courses']
+    //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
+    //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
+
 ];
 
 // add to $items
@@ -27,7 +28,7 @@ if (isset($items)) {
         <x-sidebar-item icon="settings" href="{{ route('profile.show') }}" title="{{ __('Settings') }}" />
         <form method="POST" action="{{ route('logout') }}" x-data>
             @csrf
-            <div class="sidebar-item">                
+            <div class="sidebar-item">
                 <x-link class="sidebar-link text-xl" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
             </div>
         </form>

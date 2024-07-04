@@ -276,14 +276,6 @@ class ServiceRolesList extends Component
     }
 
     public function performAction($action, $items) {
-        if (empty($items)) {
-            $this->toast('No items selected.', 'warning');
-            return;
-        }
-        $items = collect($items)->map(function ($item) {
-            return $item['id'];
-        })->toArray();
-        dd($action, $items);
         $this->selectedItems = $items;
 
         switch ($action) {
@@ -310,8 +302,9 @@ class ServiceRolesList extends Component
         // Implement your logic to enable editing for selected items
         // so each item has a livewire in SvcroleCardItem or SvcroleListItem and have a property called isEditing and a method called editServiceRole and saveServiceRole
 
-        $this->dispatch('toggleEditMode', $this->selectedItems);
-        $this->toast('Editing enabled for selected items');
+        $this->dispatch('toggleEditMode', [
+            'selectedItesm' => $this->selectedItems
+        ]);
     }
 
     public function deleteSelected() {

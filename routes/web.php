@@ -1,8 +1,13 @@
-<?php
+ <?php
 
 use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffEditModeController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseDetailsController;
+use App\Http\Middleware\CheckRole;
 
 // Route::get('/', function () {
 //     return view('auth.login');
@@ -17,9 +22,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [ChartController::class, 'showChart'])->name('main');
 });
 
 Route::middleware([
@@ -36,10 +39,22 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
-    Route::get('/staff', function () {
+    Route::get('/staff', function(){
         return view('staff');
     })->name('staff');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
+])->group(function () {
+    Route::get('/staff-edit-mode', function(){
+        return view('staff-edit-mode');
+    })->name('staff-edit-mode');
 });
 
 Route::middleware([
@@ -67,6 +82,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/leaderboard', function () {
         return view('leaderboard');
@@ -118,6 +134,11 @@ Route::middleware([
         return view('svcroles');
     })->name('svcroles.manage');
 
+    // manage/id
+    Route::get('/manage/{id}', function () {
+        return view('svcroles');
+    })->name('svcroles.manage.id');
+
     // Requests
     Route::get('/requests', function () {
         return view('svcroles');
@@ -125,6 +146,8 @@ Route::middleware([
 
     // Logs
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
+})->group(function(){
+    Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
 
 Route::get('/privacy-policy', function () {
@@ -134,3 +157,22 @@ Route::get('/privacy-policy', function () {
 Route::get('/tos', function () {
     return view('terms');
 })->name('tos');
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
+])->group(function () {
+    Route::get('/import', function () {
+        return view('import');
+    })->name('import');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
+});

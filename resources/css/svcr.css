@@ -1,7 +1,9 @@
-table {
+.svcr-table,
+#svcr-table {
     width: 100%;
     border-collapse: separate;
     border: none;
+    /* background: rgb(107 114 128 / 1) */
 }
 
 .svcr-list {
@@ -14,7 +16,7 @@ table {
 }
 
 .svcr-list-header {
-    background: #f5f5f5;
+    background: rgb(249 250 251 / 1);
 }
 
 .card-view .svcrole-card {
@@ -36,6 +38,7 @@ table {
 .svcr-list-header-item {
     justify-content: space-between;
     align-items: center;
+    min-height: 40px;
 }
 
 .list-header-actions {
@@ -59,9 +62,11 @@ table {
     background: #f0f0f0;
 }
 
-thead {
+.svcr-table thead,
+#svcr-table thead {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
+    display: table-header-group;
 }
 
 /* .svcr-list-header {
@@ -106,7 +111,8 @@ thead {
     padding-left: 8px;
 }
 
-tbody {
+.svcr-table tbody,
+#svcr-table tbody {
     width: 100%;
 }
 

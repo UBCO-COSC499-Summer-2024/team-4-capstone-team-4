@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\UserRole;
 use App\Models\ExtraHours;
 use App\Models\Area;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExtraHoursTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if extra_hours table exists.
      *

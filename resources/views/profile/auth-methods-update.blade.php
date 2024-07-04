@@ -13,16 +13,16 @@
         </div>
 
         {{-- user.authMethods --}}
-        @if ($authMethods->isNotEmpty())
+        {{-- @if ($authMethods->isNotEmpty())
             <div class="mt-5 space-y-6">
                 @foreach ($authMethods as $authMethod)
-                    <div class="flex items center justify-between">
+                    <div class="flex justify-between items center">
                         <div class="flex items center">
                             <div>
                                 @if ($authMethod->provider === 'google')
-                                    <x-google-icon class="h-8 w-8 text-gray-400" />
+                                    <x-google-icon class="w-8 h-8 text-gray-400" />
                                 @elseif ($authMethod->provider === 'facebook')
-                                    <x-facebook-icon class="h-8 w-8 text-gray-400" />
+                                    <x-facebook-icon class="w-8 h-8 text-gray-400" />
                                 @endif
                             </div>
 
@@ -51,6 +51,6 @@
                     {{ __('No connected accounts.') }}
                 </div>
             </div>
-        @endif
+        @endif --}}
     </x-slot>
 </x-action-section>

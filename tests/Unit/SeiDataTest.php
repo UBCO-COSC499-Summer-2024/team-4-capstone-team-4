@@ -6,8 +6,10 @@ use App\Models\CourseSection;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\SeiData;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SeiDataTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if sei_data table exists.
      *

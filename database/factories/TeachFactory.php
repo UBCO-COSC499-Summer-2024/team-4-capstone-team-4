@@ -21,7 +21,7 @@ class TeachFactory extends Factory {
     public function definition(): array {
         return [
             'course_section_id'=>CourseSection::pluck('id')->random(),
-            'instructor_id'=>UserRole::pluck('id')->random(),
+            'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
         ];
     }
 }

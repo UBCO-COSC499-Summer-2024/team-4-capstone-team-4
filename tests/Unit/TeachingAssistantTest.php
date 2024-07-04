@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\TeachingAssistant;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TeachingAssistantTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if teaching assistant table exists.
      *

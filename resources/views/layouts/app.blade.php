@@ -14,7 +14,11 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js', 'resources/js/dropdown.js'])
+        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js', 'resources/js/dropdown.js', 'resources/js/staff.js'])
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Chart.js Library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <!-- Styles -->
         @livewireStyles
@@ -23,7 +27,20 @@
     <body class="font-sans antialiased">
         <x-header />
         <main>
-            <x-sidebar :items="[]" />
+            @php
+                $user = Auth::user();
+            @endphp
+
+            @if($user && $user->hasRoles(['admin', 'dept_head', 'dept_staff']))
+                <x-sidebar :items="[
+                    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
+                    ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
+                    ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Import'],
+                ]" />
+            @else
+                <x-sidebar :items="[]" />
+            @endif
             <section class="container">
                 {{ $slot }}
             </section>

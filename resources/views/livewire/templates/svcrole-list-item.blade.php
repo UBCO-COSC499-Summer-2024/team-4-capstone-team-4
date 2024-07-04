@@ -1,7 +1,10 @@
 <tr class="svcr-list-item"
     id="svcrli-{{ $serviceRole->id }}"
-    x-data="{ isEditing: false }"
-    :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
+    x-data="{ isEditing: @entangle('isEditing') }"
+    {{-- :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }"> --}}
+    :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }"
+    {{-- wire:key="svcrli-{{ $serviceRole->id }}" --}}
+    >
 
     <td class="svcr-list-item-cell" data-column="select">
         <input type="checkbox" class="svcr-list-item-select"
@@ -62,17 +65,17 @@
             <button class="svcr-list-item-action" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
                     title="Add Extra Hours"
                     wire:click="openExtraHourForm({{ $serviceRole->id }})"
-                    @click="showExtraHoursForm = true"
-                    x-cloak>
+                    @click="showExtraHourForm = true"
+                >
                 <span class="material-symbols-outlined icon">add</span>
             </button>
-            <button class="svcr-list-item-action" id="svcr-extra-hours-view-{{ $serviceRole->id }}"
+            {{-- <button class="svcr-list-item-action" id="svcr-extra-hours-view-{{ $serviceRole->id }}"
                     title="Manage Extra Hours"
                     wire:click="openExtraHourView({{ $serviceRole->id }})"
                     @click="showExtraHoursView = true"
                     x-cloak>
                 <span class="material-symbols-outlined icon">visibility</span>
-            </button>
+            </button> --}}
         </button>
     </td>
 

@@ -16,6 +16,7 @@
         "vite": "^5.2.13"
     },
     "dependencies": {
-        "toastify": "^2.0.1"
+        "toastify": "^2.0.1",
+        "chart.js": "^4.4.3"
     }
 }

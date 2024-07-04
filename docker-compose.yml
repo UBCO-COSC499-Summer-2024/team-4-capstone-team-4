@@ -69,7 +69,7 @@ services:
             PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-secret}'
         volumes:
             - 'pgadmin:/var/lib/pgadmin'
-            - './pgadmin-config:/var/lib/pgadmin/pgadmin4.conf'
+            - '.:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
             - insightdb
         networks:

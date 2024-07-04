@@ -1,5 +1,5 @@
-<div>
-    <x-dialog-modal id="extraHourFormModal">
+<div x-data>
+    <x-dialog-modal id="extraHourFormModal" wire:model.live="showExtraHourForm" wire:key='extra-hour-form{{ $serviceRoleId }}'>
         <x-slot name="title">
             {{ __('Add Extra Hour') }}
         </x-slot>
@@ -93,7 +93,7 @@
 
         <x-slot name="footer">
             <x-secondary-button
-                wire:click="cancel"
+                wire:click="$toggle('showExtraHourForm')"
                 wire:loading.attr="disabled"
                 wire:key="cancel-extra-hour-form{{ $serviceRoleId }}"
             >

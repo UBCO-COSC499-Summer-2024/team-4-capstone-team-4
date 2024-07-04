@@ -2,14 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\CourseSection;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ServiceRole;
+use App\Models\AreaPerformance;
 use Illuminate\Database\Seeder;
 use App\Models\Department;
 use App\Models\Area;
 use App\Models\UserRole;
 use App\Models\InstructorPerformance;
+use App\Models\CourseSection;
+use App\Models\User;
 use App\Models\Teach;
 
 class DatabaseSeeder extends Seeder
@@ -19,8 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //CourseSection::factory(10)->create();
-
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
@@ -77,7 +76,6 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
         ]);
-
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -115,8 +113,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            DepartmentSeeder::class,
-            AreaSeeder::class,
+            // DepartmentSeeder::class,
+            // AreaSeeder::class,
             ServiceRoleSeeder::class
         ]);
     }

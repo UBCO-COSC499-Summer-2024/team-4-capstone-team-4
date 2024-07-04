@@ -17,7 +17,26 @@
         @if(request()->is('svcroles/add'))
             @include('components.svcrole.add-svcrole')
         @elseif(request()->is('svcroles/manage'))
-            @include('components.svcrole.manage-svcroles')
+            {{-- needs id --}}
+            @php
+                $serviceRole = \App\Models\ServiceRole::first();
+            @endphp
+            <livewire:manage-service-role
+                :links="$links"
+                :serviceRole="$serviceRole"
+            >
+        @elseif (request()->is('svcroles/manage/*'))
+            @php
+                $svcId = request()->route('id');
+                $serviceRole = \App\Models\ServiceRole::find($svcId);
+                if (!$serviceRole) {
+                    return redirect()->route('svcroles');
+                }
+            @endphp
+            <livewire:manage-service-role
+                :links="$links"
+                :serviceRole="$serviceRole"
+            >
         @elseif(request()->is('svcroles/requests'))
             @include('components.svcrole.requests')
         @elseif(request()->is('svcroles/audit-logs'))

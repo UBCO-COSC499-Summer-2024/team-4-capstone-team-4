@@ -85,4 +85,9 @@ class RoleAssignment extends Model {
     {
         return $this->belongsTo(UserRole::class, 'instructor_id');
     }
+    
+    public function extraHours()
+    {
+        return $this->hasManyThrough(ExtraHour::class, UserRole::class, 'id', 'instructor_id', 'instructor_id', 'id');
+    }
 }
