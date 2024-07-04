@@ -73,6 +73,7 @@ class ImportAssignCourse extends Component
                     ]);
                    InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
                    AreaPerformance::updateAreaPerformance($assignment['year']);
+                   DepartmentPerformance::updateDepartmentPerformance($assignment['year']);
                 }
             }
         }
@@ -111,11 +112,13 @@ class ImportAssignCourse extends Component
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
 
-        // DepartmentPerformance::updateDepartmentPerformance();
+        // DepartmentPerformance::updateDepartmentPerformance(1989);
         // AreaPerformance::updateAreaPerformance();
         // InstructorPerformance::updatePerformance(1, 2024);
         // Teach::getInstructorsForCourses();
         // SeiData::calculateSEIAverages();
+
+        
 
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),

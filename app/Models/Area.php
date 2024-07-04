@@ -68,6 +68,6 @@ class Area extends Model {
     // other functions
 
     public static function getAreasByDepartment() {
-        return Area::with('department')->get()->groupBy('department_id');
+        return Area::with('department')->get()->groupBy('dept_id');
     }
 }
