@@ -56,7 +56,7 @@
                     console.log(toast)
                     Toastify({
                         text: toast.message,
-                        duration: 3000,
+                        duration: 5000,
                         close: true,
                         gravity: "top",
                         position: "right",

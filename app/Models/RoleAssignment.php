@@ -37,20 +37,20 @@ class RoleAssignment extends Model {
         'updated_at' => 'datetime',
     ];
 
-    public static function boot() {
-        parent::boot();
+    // public static function boot() {
+    //     parent::boot();
 
-        static::created(function ($assignment) {
-            $serviceRole = $assignment->serviceRole;
-            $instructorPerformance = InstructorPerformance::firstOrCreate(
-                ['instructor_id' => $assignment->instructor_id, 'year' => $serviceRole->year],
-                ['total_hours' => 0, 'sei_avg' => 0]
-            );
+    //     static::created(function ($assignment) {
+    //         $serviceRole = $assignment->serviceRole;
+    //         $instructorPerformance = InstructorPerformance::firstOrCreate(
+    //             ['instructor_id' => $assignment->instructor_id, 'year' => $serviceRole->year],
+    //             ['total_hours' => 0, 'sei_avg' => 0]
+    //         );
 
-            $instructorPerformance->total_hours += array_sum($serviceRole->monthly_hours);
-            $instructorPerformance->save();
-        });
-    }
+    //         $instructorPerformance->total_hours += array_sum($serviceRole->monthly_hours);
+    //         $instructorPerformance->save();
+    //     });
+    // }
 
     /**
      * Get the service role associated with the assignment.
@@ -85,7 +85,7 @@ class RoleAssignment extends Model {
     {
         return $this->belongsTo(UserRole::class, 'instructor_id');
     }
-    
+
     public function extraHours()
     {
         return $this->hasManyThrough(ExtraHour::class, UserRole::class, 'id', 'instructor_id', 'instructor_id', 'id');

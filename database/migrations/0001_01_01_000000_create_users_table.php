@@ -77,6 +77,8 @@ return new class extends Migration
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['service_role_id', 'instructor_id']);
         });
 
         Schema::create('course_sections', function (Blueprint $table) {

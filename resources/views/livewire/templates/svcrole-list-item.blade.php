@@ -16,7 +16,7 @@
 
     <td class="svcr-list-item-cell" data-column="name">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            {{ $serviceRole->name }}
+            <x-link href="{{ route('svcroles.manage.id', $serviceRole->id) }}" title="{{ $serviceRole->name }}" />
         </span>
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
                {{-- wire:model="serviceRole.name" --}}

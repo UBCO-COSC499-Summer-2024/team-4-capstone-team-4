@@ -9,6 +9,7 @@ use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
 use App\Models\ExtraHour;
 use App\Models\RoleAssignment;
+use App\Models\UserRole;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
@@ -16,45 +17,88 @@ use Livewire\WithPagination;
 class ManageServiceRole extends Component
 {
     use WithPagination;
+    public $serviceRoleId = 1;
     public $serviceRole;
     public $isEditing = false;
     public $year;
     public $showInstructorModal = false;
     public $showExtraHourModal = false;
     public $instructors;
+    public $allInstructors;
     public $instructor_id;
+    public $role;
     public $areas;
     public $allRoles;
     public $links;
+    public $assigner_id;
+    public $name;
+    public $description;
+    public $area_id;
+    public $temp = [
+        'name' => '',
+        'description' => '',
+        'year' => '',
+        'monthly_hours' => [],
+        'area_id' => '',
+    ];
     public $monthly_hours;
 
     protected $listeners = [
         'toggleEditMode' => 'toggleEditMode',
         'editServiceRole' => 'editServiceRole',
-        'updateServiceRole' => 'saveServiceRole',
+        'update-role' => 'saveServiceRole',
         'deleteServiceRole' => 'deleteServiceRole',
         'showInstructorModal' => 'showInstructorModal',
         'showExtraHourModal' => 'showExtraHourModal',
         'addExtraHour' => 'addExtraHour',
+        'closeModal' => 'closeModal',
+        'save-instructor' => 'saveInstructor',
     ];
 
     protected $rules = [
-        'serviceRole.name' => 'required|string|max:255',
-        'serviceRole.description' => 'nullable|string',
-        'serviceRole.year' => 'required|integer',
-        'serviceRole.monthly_hours.*' => 'required|array|min:0|max:744',
-        'serviceRole.area_id' => 'required|exists:areas,id',
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'year' => 'required|integer',
+        'monthly_hours.*' => 'nullable|integer|min:0|max:744',
+        'area_id' => 'required|exists:areas,id',
     ];
 
-    public function mount(ServiceRole $serviceRole, $links = [])
+    public function mount($serviceRoleId, $links = [])
     {
-        $this->serviceRole = $serviceRole;
+        $this->fetchServiceRole($serviceRoleId);
         $this->links = $links;
-        $this->year = date('Y');
-        $this->areas = Area::all();
-        $this->allRoles = ServiceRole::all();
+        $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id;
+    }
+
+    public function fetchServiceRole($id) {
+        $this->serviceRole = ServiceRole::find($id);
+        if (!$this->serviceRole) {
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role not found.',
+                'type' => 'error'
+            ]);
+            return redirect()->route('svcroles');
+        }
+        $this->serviceRoleId = $id;
+        $this->serviceRole = ServiceRole::find($this->serviceRole->id);
+        $this->year = $this->serviceRole->year;
         $this->instructors = $this->serviceRole->instructors;
+        $this->monthly_hours = json_decode($this->serviceRole->monthly_hours, true) ?? [];
         $this->fixMonthNames();
+        $this->temp = [
+            'name' => $this->serviceRole->name,
+            'description' => $this->serviceRole->description,
+            'year' => $this->serviceRole->year,
+            'monthly_hours' => $this->monthly_hours,
+            'area_id' => $this->serviceRole->area_id,
+        ];
+        $this->allInstructors = UserRole::all()->where('role', 'instructor');
+        $this->allRoles = ServiceRole::all();
+        $this->areas = Area::all();
+        $this->role = $this->serviceRole->id;
+        $this->area_id = $this->serviceRole->area_id;
+        $this->description = $this->serviceRole->description;
+        $this->name = $this->serviceRole->name;
     }
 
     public function fixMonthNames()
@@ -144,11 +188,21 @@ class ManageServiceRole extends Component
         $this->toggleEditMode(true);
     }
 
+    public function save() {
+        $this->saveServiceRole();
+    }
+
     public function saveServiceRole()
     {
         try {
+            $this->serviceRole->name = $this->name;
+            $this->serviceRole->description = $this->description;
+            $this->serviceRole->year = $this->year;
+            $this->serviceRole->area_id = $this->area_id;
             $this->validate();
             $this->serviceRole->save();
+            $this->serviceRole->refresh();
+            $this->fetchServiceRole($this->serviceRole->id);
             $this->dispatch('show-toast', [
                 'message' => 'Service Role updated successfully.',
                 'type' => 'success'
@@ -223,6 +277,71 @@ class ManageServiceRole extends Component
 
     public function render()
     {
-        return view('livewire.manage-service-role');
+        return view('livewire.manage-service-role', [
+            'serviceRole' => $this->serviceRole,
+            'instructors' => $this->instructors,
+            'allInstructors' => $this->allInstructors,
+            'allRoles' => $this->allRoles,
+            'areas' => $this->areas,
+            'links' => $this->links,
+        ]);
+    }
+
+    public function saveInstructor() {
+        try {
+            $role_assignment_rules = [
+                'instructor_id' => 'required|exists:user_roles,id',
+                'role' => 'required|exists:service_roles,id',
+                'assigner_id' => 'required|exists:user_roles,id',
+            ];
+            $this->validate($role_assignment_rules);
+            // check for duplicates
+            $roleAssignment = RoleAssignment::where('instructor_id', $this->instructor_id)->where('service_role_id', $this->role)->first();
+            if ($roleAssignment) {
+                $this->dispatch('show-toast', [
+                    'message' => 'Instructor already assigned to this role.',
+                    'type' => 'error'
+                ]);
+                return;
+            }
+            $roleAssignment = new RoleAssignment();
+            $roleAssignment->assigner_id = $this->assigner_id;
+            $roleAssignment->instructor_id = $this->instructor_id;
+            $roleAssignment->service_role_id = (int) $this->role;
+            $roleAssignment->save();
+            $this->instructors = $this->serviceRole->instructors;
+            $this->dispatch('show-toast', [
+                'message' => 'Instructor assigned successfully.',
+                'type' => 'success'
+            ]);
+            $this->showInstructorModal = false;
+            $instructorPerformance = InstructorPerformance::where('instructor_id', $this->instructor_id)->where('year', $this->year)->first();
+            if ($instructorPerformance) {
+                $instructorPerformance->updateTotalHours($this->monthly_hours);
+                $this->dispatch('show-toast', [
+                    'message' => 'Instructor Performance updated successfully.',
+                    'type' => 'success'
+                ]);
+            } else {
+                $this->dispatch('show-toast', [
+                    'message' => 'Instructor Performance not found.',
+                    'type' => 'error'
+                ]);
+            }
+        } catch(\Exception $e) {
+            // if development then toast full error message, else toast generic error message
+            // check for error types for example duplicates, etc
+            if (config('app.env') === 'local') {
+                $this->dispatch('show-toast', [
+                    'message' => 'Failed to assign Instructor. ' . $e->getMessage(),
+                    'type' => 'error'
+                ]);
+            } else {
+                $this->dispatch('show-toast', [
+                    'message' => 'Failed to assign Instructor.',
+                    'type' => 'error'
+                ]);
+            }
+        }
     }
 }
