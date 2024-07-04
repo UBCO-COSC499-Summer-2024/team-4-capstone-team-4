@@ -106,7 +106,7 @@ class ImportAssignCourse extends Component
     public function render()
     {
 
-        AreaPerformance::updateAreaPerformance(2019);
+        //AreaPerformance::updateAreaPerformance(2019);
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
 
