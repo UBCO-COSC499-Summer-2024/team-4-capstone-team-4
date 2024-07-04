@@ -46,6 +46,10 @@ class ImportAssignCourse extends Component
                         'target_hours' => SeiData::calculateTargetHours($assignment['course_section_id']),
                         'score' => SeiData::calculateScore($assignment['course_section_id']),
                     ]); */
+
+                    InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
+                    AreaPerformance::updateAreaPerformance($assignment['year']);
+                    DepartmentPerformance::updateDepartmentPerformance($assignment['year']);
                 }else{
                     InstructorPerformance::create([
                         'instructor_id'=> $assignment['instructor_id'],

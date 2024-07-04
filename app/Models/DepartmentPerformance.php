@@ -49,6 +49,7 @@ class DepartmentPerformance extends Model {
 
     public static function updateDepartmentPerformance($year) {
         $departmentAverages = SeiData::calculateSEIDepartmentAverages($year);
+
         
         foreach($departmentAverages as $deptId => $averageScore){
             $performance = self::where('dept_id', $deptId)->where('year', $year)->first();

@@ -123,7 +123,6 @@ class SeiData extends Model {
             }
         }
 
-        
         return $departmentAverages;
     }
 }
