@@ -2,28 +2,24 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\CourseSection;
+use App\Models\User;
 use App\Models\Area;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class CourseDetailsTest extends TestCase
-{
+class CourseDetailsTest extends TestCase{
     use RefreshDatabase;
 
     public function test_course_details_page_loads_correctly()
     {
-        $area = Area::factory()->create();
-        CourseSection::factory()->create([
-            'name' => 'Test Course',
-            'area_id' => $area->id,
-            'duration' => 10,
-            'enrolled' => 20,
-            'dropped' => 5,
-            'capacity' => 30
-        ]);
+        $user = User::factory()->create();
+        $area = Area::factory()->create(['name' => 'Computer Science']);
+        $courseSection = CourseSection::factory()->create(['area_id' => $area->id, 'name' => 'Test Course']);
 
-        $response = $this->get('/courses');
+        $this->actingAs($user);
+
+        $response = $this->get('/course-details');
         
         $response->assertStatus(200);
         $response->assertSee('Test Course');
@@ -32,15 +28,16 @@ class CourseDetailsTest extends TestCase
 
     public function test_course_edit_functionality()
     {
-        $area = Area::factory()->create();
+        $user = User::factory()->create();
         $courseSection = CourseSection::factory()->create([
-            'name' => 'Test Course',
-            'area_id' => $area->id,
+            'name' => 'Original Course',
             'duration' => 10,
             'enrolled' => 20,
-            'dropped' => 5,
-            'capacity' => 30
+            'dropped' => 2,
+            'capacity' => 30,
         ]);
+
+        $this->actingAs($user);
 
         $response = $this->post('/course-details/save', [
             'ids' => [$courseSection->id],
@@ -58,13 +55,18 @@ class CourseDetailsTest extends TestCase
             'duration' => 12,
             'enrolled' => 25,
             'dropped' => 3,
-            'capacity' => 35
+            'capacity' => 35,
         ]);
     }
 
     public function test_assign_modal_displays_correctly()
     {
-        $response = $this->get('/courses');
+        $user = User::factory()->create();
+        $courseSection = CourseSection::factory()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->get('/course-details');
 
         $response->assertStatus(200);
         $response->assertSee('Assign Course');

@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
+use App\Models\User;
+use App\Models\Teach;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class CourseDetailsController extends Controller {
 
@@ -12,7 +17,7 @@ class CourseDetailsController extends Controller {
         $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
             $seiData = SeiData::where('course_section_id', $section->id)->first();
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
+    
             return (object) [
                 'id' => $section->id,
                 'serialNumber' => $index + 1,
@@ -25,11 +30,18 @@ class CourseDetailsController extends Controller {
                 'averageRating' => $averageRating,
             ];
         });
-
+    
+        // Fetch additional data needed by the view
+        $courses = CourseSection::all(); // Adjust query as needed
+        $instructors = User::all(); // Adjust query as needed
+    
         $sortField = 'courseName';
         $sortDirection = 'asc';
-        return view('course-details', compact('courseSections', 'sortField', 'sortDirection'));
+    
+        return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
     }
+    
+
 
     public function save(Request $request){
         $ids = $request->input('ids', []);
@@ -60,10 +72,28 @@ class CourseDetailsController extends Controller {
             'updatedSections' => $updatedSections
         ]);
     }
+
+    public function assignCourse(Request $request) {
+       $courseId = $request->input('course_id');
+    $instructorId = $request->input('instructor_id');
+
+        $courseSection = CourseSection::find($request->course_id);
+        $courseSection->instructor_id = $request->instructor_id;
+        $courseSection->save();
+
+        Teach::create([
+            'course_section_id' => $courseId,
+            'user_id' => $instructorId
+        ]);
+    
+        return redirect()->route('course-details')->with('success', 'Course assigned to instructor successfully.');
+    }
     private function calculateAverageRating($questionsJson) {
         $questions = json_decode($questionsJson, true);
         if (is_array($questions) && !empty($questions)) {
-            $ratings = array_values($questions); 
+            $ratings = array_filter(array_values($questions), function($value) {
+                return is_numeric($value);
+            });
             $averageRating = count($ratings) > 0 ? array_sum($ratings) / count($ratings) : 0;
             return round($averageRating, 2);
         }

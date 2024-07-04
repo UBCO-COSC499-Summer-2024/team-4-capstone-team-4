@@ -42,6 +42,6 @@
         </form>
     </div> 
     <x-save-confirm />
-    <x-save-details-message />
-    <x-assign-modal />
+    <x-save-details-message/>
+    <x-assign-course-modal :courses="$courses" :instructors="$instructors"/>
 </x-app-layout>
