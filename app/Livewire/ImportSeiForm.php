@@ -4,10 +4,13 @@ namespace App\Livewire;
 
 use App\Models\CourseSection;
 use App\Models\SeiData;
+use App\Models\Teach;
+use App\Models\InstructorPerformance;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
+
 
 class ImportSeiForm extends Component
 {
@@ -117,7 +120,16 @@ class ImportSeiForm extends Component
                 ]),
             ]);
 
+            $teach = Teach::where('course_section_id', $row['cid'])->first();
+            if($teach){
+                $instructor_id = $teach->instructor_id;
+                $year = CourseSection::find($row['cid'])->year;
+                InstructorPerformance::updatePerformance($instructor_id, $year);
+            }
+
         }
+
+       
 
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],

@@ -77,7 +77,7 @@ class CourseSection extends Model {
 
     // other functions
 
-    public static function getCoursesByArea() {
-        return self::with('area')->get()->groupBy('area_id');
+    public static function getCoursesByArea($year) {
+        return self::with('area')->where('year', $year)->get()->groupBy('area_id');
     }
 }

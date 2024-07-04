@@ -71,7 +71,7 @@ class ImportAssignCourse extends Component
                         'capacity_avg'=> 0,
                         'year' => $assignment['year'],
                     ]);
-                   // InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
+                   InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
                 }
             }
         }
@@ -105,6 +105,8 @@ class ImportAssignCourse extends Component
 
     public function render()
     {
+
+        AreaPerformance::updateAreaPerformance(2019);
 
         // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
 

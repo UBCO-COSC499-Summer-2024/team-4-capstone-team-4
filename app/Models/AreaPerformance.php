@@ -22,7 +22,7 @@ class AreaPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'area_id',
+        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'area_id', 'enrolled_avg', 'dropped_avg', 'capacity_avg'
     ];
 
     /**
@@ -47,18 +47,57 @@ class AreaPerformance extends Model {
 
     //other functions
 
-    public static function updateAreaPerformance() {
-        $areaAverages = SeiData::calculateSEIAreaAverages();
+    // public static function updateAreaPerformance($year) {
+    //     $areaAverages = SeiData::calculateSEIAreaAverages($year);
         
-        foreach ($areaAverages as $areaId => $averageScore) {
-            $roundedScore = round($averageScore, 1); // Round to one decimal place
+    //     foreach ($areaAverages as $areaId => $averageScore) {
+    //         $roundedScore = round($averageScore, 1); 
             
-            // AreaPerformance::updateOrCreate(
-            //     ['area_id' => $areaId],
-            //     ['sei_avg' => $roundedScore]
-            // );
+    //         AreaPerformance::updateOrCreate(
+    //             ['area_id' => $areaId],
+    //             ['sei_avg' => $roundedScore]
+    //         );
 
-            // echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
+    //         echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
+    //     }
+
+        
+    // }
+
+    public static function updateAreaPerformance($year) {
+        $areaAverages = SeiData::calculateSEIAreaAverages($year);
+
+        foreach($areaAverages as $areaId => $averageScore){
+            $performance = self::where('area_id', $areaId)->where('year', $year)->first();
+            if($performance != null){
+                $performance->update(['sei_avg'=> $averageScore]);
+            }else{
+                self::create([
+                    'area_id'=>$areaId,
+                    'year'=> $year,
+                    'sei_avg'=> $averageScore,
+                    'enrolled_avg'=> 0,
+                    'dropped_avg'=> 0,
+                    'capacity_avg'=> 0,
+                    'total_hours' => json_encode([
+                        'January' => 0,
+                        'February' => 0,
+                        'March' => 0,
+                        'April' => 0,
+                        'May' => 0,
+                        'June' => 0,
+                        'July' => 0,
+                        'August' => 0,
+                        'September' => 0,
+                        'October' => 0,
+                        'November' => 0,
+                        'December' => 0,
+                    ]),
+                ]);
+            }
+           
         }
+
+        return;
     }
 }

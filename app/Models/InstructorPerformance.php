@@ -76,7 +76,6 @@ class InstructorPerformance extends Model {
             $sei_avg = $sei_sum / $count;
         }
 
-        echo $instructor_id . " - " .  $sei_avg ;
         $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
         if ($performance != null) {
             $performance->update([
@@ -84,5 +83,6 @@ class InstructorPerformance extends Model {
             ]);
         }
 
+        return;
     }
 }
