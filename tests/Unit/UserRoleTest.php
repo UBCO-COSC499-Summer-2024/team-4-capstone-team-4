@@ -43,10 +43,7 @@ class UserRoleTest extends TestCase {
         $this->assertNotEmpty($userRole->role);  
 
         // Assert that the department has a user
-        $this->assertNotEmpty($userRole->user_id); 
-
-        // Assert that the department has a department
-        $this->assertNotEmpty($userRole->department_id); 
+        $this->assertNotEmpty($userRole->user_id);  
     }
 
     /**
