@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\SeiData;
 use App\Models\Teach;
@@ -125,6 +126,7 @@ class ImportSeiForm extends Component
                 $instructor_id = $teach->instructor_id;
                 $year = CourseSection::find($row['cid'])->year;
                 InstructorPerformance::updatePerformance($instructor_id, $year);
+                AreaPerformance::updateAreaPerformance($year);
             }
 
         }

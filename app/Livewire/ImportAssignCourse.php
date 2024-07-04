@@ -72,6 +72,7 @@ class ImportAssignCourse extends Component
                         'year' => $assignment['year'],
                     ]);
                    InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
+                   AreaPerformance::updateAreaPerformance($assignment['year']);
                 }
             }
         }
