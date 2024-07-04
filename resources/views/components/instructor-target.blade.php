@@ -11,20 +11,28 @@
     </div>
     <div class="column performance-column">
         <div class="leader-board">
-            <!-- Leaderboard content here -->
+            Gamification Coming Soon...
         </div>
         <div class="course-performance">
-            <div class="course-metric">
-                <x-sei-score />
+            <div class="course-metric glass">
+                <div class="metric-header">SEI Score Avg.</div>
+                <div class="metric-value">{{ $seiAvg }} / 5</div>
             </div>
-            <div class="course-metric">
-                <x-enrolled-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Enrolled Avg.</div>
+                <div class="metric-value">{{ $enrolledAvg }}%</div>
             </div>
-            <div class="course-metric">
-                <x-dropped-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Dropped Avg.</div>
+                <div class="metric-value">{{ $droppedAvg }}%</div>
+            </div>
+            <div class="course-metric glass">
+                <div class="metric-header">Capacity Avg.</div>
+                <div class="metric-value">{{ $capacityAvg }}%</div>
             </div>
         </div>
     </div>
 </div>
+
 
 

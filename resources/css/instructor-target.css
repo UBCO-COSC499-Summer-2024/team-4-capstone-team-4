@@ -27,7 +27,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1; /* Make sure the containers take equal space within their parent */
+    flex: 1; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +46,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 2; 
+    flex: 2;
 }
 
 .course-performance {
@@ -55,23 +55,32 @@
     border: 0px solid #ccc;
     border-radius: 0px;
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
-    flex: 1; 
+    flex: 1;
     display: flex;
-    gap: 12px; /* Increase gap between columns */
+    gap: 12px; 
 }
 
 .course-metric {
-    flex: 1; /* Each metric container takes equal space */
+    flex: 1; 
     padding: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; 
 }
 
-.course-performance .course-metric:not(:last-child) {
-    margin-bottom: 0; /* Remove bottom margin for last child to avoid extra spacing */
+.metric-header {
+    margin-bottom: 5px;
+    font-size: 0.8rem; 
+    padding-bottom: 10px;
 }
+
+.metric-value {
+    font-weight: bold;
+    font-size: 24px; 
+}
+
 
 
 

@@ -1,56 +1,42 @@
-@vite(['resources/css/instructor-lists.css'])
-<div class="instructor-list">
-    <div class="instructor-preview">
+@vite(['resources/css/department-lists.css'])
+
+<div class="department-list">
+    <div class="department-preview glass">
         <div class="tb">
-            <div class="row-head">
-                <div class="col">Service Roles</div>
+            <div class="dept-head">
+                <div class="col">Total Service Roles by Area</div>
             </div>
-            <!-- List items for Service Roles -->
-            <div class="row-item">
-                <div class="col">&#149; Service Role 1</div>
+            @foreach($areaRolesTotal as $role)
+            <div class="dept-item">
+                <div class="col">{{ $role[0] }}: {{ $role[1] }}</div>
             </div>
-            <div class="row-item">
-                <div class="col">&#149; Service Role 2</div>
-            </div>
-            <div class="row-item">
-                <div class="col">&#149; Service Role 3</div>
-            </div>
+            @endforeach
         </div>
     </div>
     
-    <div class="instructor-preview">
+    <div class="department-preview glass">
         <div class="tb">
-            <div class="row-head">
-                <div class="col">Extra Hours</div>
+            <div class="dept-head">
+                <div class="col">Total Extra Hours by Area:</div>
             </div>
-            <!-- List items for Extra Hours -->
-            <div class="row-item">
-                <div class="col">&#149; Extra Hour 1</div>
+            @foreach($areaExtrasTotal as $extra)
+            <div class="dept-item">
+                <div class="col">{{ $extra[0] }}: {{ $extra[1] }}</div>
             </div>
-            <div class="row-item">
-                <div class="col">&#149; Extra Hour 2</div>
-            </div>
-            <div class="row-item">
-                <div class="col">&#149; Extra Hour 3</div>
-            </div>
+            @endforeach
         </div>
     </div>
     
-    <div class="instructor-preview">
+    <div class="department-preview glass">
         <div class="tb">
-            <div class="row-head">
-                <div class="col">Course Sections</div>
+            <div class="dept-head">
+                <div class="col">Total Course Sections by Area</div>
             </div>
-            <!-- List items for Course Sections -->
-            <div class="row-item">
-                <div class="col">&#149; Course Section 1</div>
+            @foreach($areaCoursesTotal as $course)
+            <div class="dept-item">
+                <div class="col">{{ $course[0] }}: {{ $course[1] }}</div>
             </div>
-            <div class="row-item">
-                <div class="col">&#149; Course Section 2</div>
-            </div>
-            <div class="row-item">
-                <div class="col">&#149; Course Section 3</div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>

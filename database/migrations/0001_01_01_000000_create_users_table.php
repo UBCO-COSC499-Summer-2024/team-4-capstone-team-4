@@ -121,7 +121,7 @@ return new class extends Migration
             $table->id();
             $table->integer('score');
             $table->json('total_hours');
-            $table->json('target_hours')->nullable();
+            $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
             $table->integer('enrolled_avg');
             $table->integer('dropped_avg');

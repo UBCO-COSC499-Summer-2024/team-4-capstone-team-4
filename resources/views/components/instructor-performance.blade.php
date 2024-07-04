@@ -2,35 +2,46 @@
 
 <div class="instructor-container">
     <div class="column hours-column">
-        <div class="hours-container total-hours">
-            <!-- Display total hours here -->
-            <div class="row-head">
-                <div class="col">January Total Hours: 120</div>
-            </div>
-            <div class="row-item">
-                <div class="col">Service Role Hours: 115</div>
-            </div>
-            <div class="row-item">
-                <div class="col">Extra Hours: 5</div>
+        <div class="hours-container">
+            <div class="hours-row">
+                <div class="hours-col">
+                    <div class="row-head">{{ $currentMonth }} Total Hours:</div>
+                    <div class="row-item">{{ $currentMonthHours }}</div>
+                </div>
+                <div class="hours-col">
+                    <div class="row-head">{{ $currentMonth }} Service Role Hours:</div>
+                    <div class="row-item">{{ $roleHoursTotal }}</div>
+                </div>
+                <div class="hours-col">
+                    <div class="row-head">{{ $currentMonth }} Extra Hours:</div>
+                    <div class="row-item">{{ $extraHoursTotal }}</div>
+                </div>
             </div>
         </div>
-        <div class="hours-container line-chart">
-            <x-chart :chart="$chart3"/>
+        <div class="line-chart-container">
+            <x-chart :chart="$chart1"/>
         </div>
     </div>
     <div class="column performance-column">
         <div class="leader-board">
-            <!-- Leaderboard content here -->
+            Gamification Coming Soon...
         </div>
         <div class="course-performance">
-            <div class="course-metric">
-                <x-sei-score />
+            <div class="course-metric glass">
+                <div class="metric-header">SEI Score Avg.</div>
+                <div class="metric-value">{{ $seiAvg }} / 5</div>
             </div>
-            <div class="course-metric">
-                <x-enrolled-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Enrolled Avg.</div>
+                <div class="metric-value">{{ $enrolledAvg }}%</div>
             </div>
-            <div class="course-metric">
-                <x-dropped-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Dropped Avg.</div>
+                <div class="metric-value">{{ $droppedAvg }}%</div>
+            </div>
+            <div class="course-metric glass">
+                <div class="metric-header">Capacity Avg.</div>
+                <div class="metric-value">{{ $capacityAvg }}%</div>
             </div>
         </div>
     </div>

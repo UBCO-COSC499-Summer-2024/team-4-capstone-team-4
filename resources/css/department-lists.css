@@ -1,10 +1,9 @@
-.instructor-list {
+.department-list {
     display: flex;
     gap: 1rem;
-    height: 100%;
 }
 
-.instructor-preview {
+.department-preview {
     flex: 1;
     padding: 1rem;
     background-color: #f9f9f9;
@@ -20,22 +19,25 @@
     padding: 0; 
 }
 
-.row-item {
+.dept-item {
     background: #fafafa;
     padding: 2px; 
     max-height: 50px;
+    font-weight: normal;
+    font-size: 15px;
     align-items: left;
     margin-bottom: 2px;
     box-sizing: border-box;
 }
 
-.row-head {
+.dept-head {
     background: #fafafa;
     color: #000000;
     max-height: 50px;
     font-weight: bolder;
     align-items: left;
-    padding: 8px;
+    font-size: 15px;
+    align-items: left;
 }
 
 .col {

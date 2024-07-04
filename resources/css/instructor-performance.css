@@ -22,40 +22,53 @@
 }
 
 .hours-container {
+    flex: 1;
+    padding: 0px;
+    background-color: #ffffff;
+    border: 0px solid #ddd;
+    border-radius: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.line-chart-container {
+    flex: 1;
     padding: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.hours-row {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 12px;
+}
+
+.hours-col {
     flex: 1;
-    display: flex;
-    flex-direction: column; 
-    align-items: left;
-    justify-content: left;
-}
-
-.hours-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0px; 
-}
-
-.row-head, .row-item {
-    display: flex;
-    flex-direction: column;
+    padding: 10px;
     background-color: #f9f9f9;
-    padding: 0px;
-    border: 0px solid #ddd;
-    border-radius: 0px;
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    gap: 12px;
 }
 
-.col {
-    margin: 0px 0; 
+.row-head {
+    margin-bottom: 5px;
+    font-size: 0.8rem; 
+    padding-bottom: 10px;
 }
 
-.total-hours {
-    font-weight: bold; 
+.row-item {
+    font-weight: bold;
+    font-size: 24px; 
 }
 
 .performance-column {
@@ -80,7 +93,7 @@
     border: 0px solid #ccc;
     border-radius: 0px;
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
-    flex: 1; 
+    flex: 1;
     display: flex;
     gap: 12px; 
 }
@@ -92,8 +105,16 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; 
 }
 
-.course-performance .course-metric:not(:last-child) {
-    margin-bottom: 0; 
+.metric-header {
+    margin-bottom: 5px;
+    font-size: 0.8rem; 
+    padding-bottom: 10px;
+}
+
+.metric-value {
+    font-weight: bold;
+    font-size: 24px; 
 }

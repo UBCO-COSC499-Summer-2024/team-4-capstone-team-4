@@ -20,22 +20,25 @@
     padding: 0; 
 }
 
-.row-item {
+.inst-item {
     background: #fafafa;
     padding: 2px; 
     max-height: 50px;
+    font-weight: normal;
+    font-size: 15px;
     align-items: left;
     margin-bottom: 2px;
     box-sizing: border-box;
 }
 
-.row-head {
+.inst-head {
     background: #fafafa;
     color: #000000;
     max-height: 50px;
     font-weight: bolder;
     align-items: left;
-    padding: 8px;
+    font-size: 15px;
+    align-items: left;
 }
 
 .col {

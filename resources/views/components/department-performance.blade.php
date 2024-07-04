@@ -1,37 +1,53 @@
 @vite(['resources/css/department-performance.css'])
 
-<div class="instructor-container">
+<div class="department-container">
     <div class="column hours-column">
-        <div class="hours-container total-hours">
-            <!-- Display total hours here -->
-            <div class="row-head">
-                <div class="col">{{($currentMonth . ' Total Hours: 120') }}</div>
-            </div>
-            <div class="row-item">
-                <div class="col">Service Role Hours: 115</div>
-            </div>
-            <div class="row-item">
-                <div class="col">Extra Hours: 5</div>
+        <div class="hours-container">
+            <div class="hours-row">
+                <div class="hours-col">
+                    <div class="row-head">{{ $currentMonth }} Total Hours:</div>
+                    <div class="row-item">{{ $deptMonthHours }}</div>
+                </div>
+                <div class="hours-col">
+                    <div class="row-head">Service Role Count:</div>
+                    <div class="row-item">{{ $deptRolesTotal }}</div>
+                </div>
+                <div class="hours-col">
+                    <div class="row-head">Extra Hours Count:</div>
+                    <div class="row-item">{{ $deptExtrasTotal }}</div>
+                </div>
+                <div class="hours-col">
+                    <div class="row-head">Course Section Count:</div>
+                    <div class="row-item">{{ $deptCoursesTotal }}</div>
+                </div>
             </div>
         </div>
-        <div class="hours-container line-chart">
-            <x-chart :chart="$chart3"/>
+        <div class="line-chart-container">
+            <x-chart :chart="$chart1"/>
         </div>
     </div>
     <div class="column performance-column">
         <div class="leader-board">
-            <!-- Leaderboard content here -->
+            Gamification Coming Soon...
         </div>
         <div class="course-performance">
-            <div class="course-metric">
-                <x-sei-score />
+            <div class="course-metric glass">
+                <div class="metric-header">SEI Avg.</div>
+                <div class="metric-value">{{ $deptSeiAvg }} / 5</div>
             </div>
-            <div class="course-metric">
-                <x-enrolled-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Enrolled Avg.</div>
+                <div class="metric-value">{{ $deptEnrolledAvg }}%</div>
             </div>
-            <div class="course-metric">
-                <x-dropped-rate />
+            <div class="course-metric glass">
+                <div class="metric-header">Dropped Avg.</div>
+                <div class="metric-value">{{ $deptDroppedAvg }}%</div>
+            </div>
+            <div class="course-metric glass">
+                <div class="metric-header">Capacity Avg.</div>
+                <div class="metric-value">{{ $deptCapacityAvg }}%</div>
             </div>
         </div>
     </div>
 </div>
+
