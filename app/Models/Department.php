@@ -72,6 +72,6 @@ class Department extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function departmentPerformance() {
-        return $this->hasOne(DepartmentPerformance::class, 'department_id');
+        return $this->hasMany(DepartmentPerformance::class, 'department_id');
     }
 }
