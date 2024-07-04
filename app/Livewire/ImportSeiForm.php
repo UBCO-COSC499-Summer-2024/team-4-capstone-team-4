@@ -157,7 +157,12 @@ class ImportSeiForm extends Component
 
     public function render()
     {
-        $courses = CourseSection::all();
+        // $courses = CourseSection::all();
+
+        $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
+        ->whereNull('sei_data.course_section_id')
+        ->select('course_sections.*')
+        ->get();
 
         return view('livewire.import-sei-form', [
             "courses" => $courses,
