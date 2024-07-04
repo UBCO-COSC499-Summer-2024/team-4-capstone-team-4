@@ -11,8 +11,8 @@
             @php
                 $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
             @endphp
-            <div class="import-input w-4/12">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
-            <div class="import-input w-4/12">
+            <div class="assign-input w-4/12 text-center">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
+            <div class="assign-input w-4/12 text-center">
                 <select wire:model="assignments.{{ $index }}.instructor_id" class="instructor-select" style="width: 100%">
                     <option value="">Select Instructor</option>
                     @foreach($availableInstructors as $instructor)
@@ -25,7 +25,7 @@
         @endforeach
         
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="submit" class="bg-green-500 text-black p-2 rounded hover:bg-green-600">Save</button>
+            <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
 </div>

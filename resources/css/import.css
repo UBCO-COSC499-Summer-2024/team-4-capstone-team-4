@@ -118,4 +118,8 @@ input[type="file"] {
   @apply p-2 mt-2 rounded-sm text-sm hover:cursor-pointer;
 }
 
+.assign-input {
+  @apply px-2;
+}
+
 }
