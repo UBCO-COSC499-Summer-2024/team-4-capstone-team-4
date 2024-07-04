@@ -53,6 +53,8 @@ class ManageServiceRole extends Component
         'addExtraHour' => 'addExtraHour',
         'closeModal' => 'closeModal',
         'save-instructor' => 'saveInstructor',
+        'confirm-remove-instructor' => 'confirmDeleteInstructor',
+        'sr-remove-instructor' => 'removeInstructor',
     ];
 
     protected $rules = [
@@ -92,7 +94,9 @@ class ManageServiceRole extends Component
             'monthly_hours' => $this->monthly_hours,
             'area_id' => $this->serviceRole->area_id,
         ];
-        $this->allInstructors = UserRole::all()->where('role', 'instructor');
+        $this->allInstructors = UserRole::all()->where('role', 'instructor')
+            ->whereNotIn('id', $this->instructors->pluck('id'));
+        // where not already assigned
         $this->allRoles = ServiceRole::all();
         $this->areas = Area::all();
         $this->role = $this->serviceRole->id;
@@ -277,6 +281,7 @@ class ManageServiceRole extends Component
 
     public function render()
     {
+        $this->fetchServiceRole($this->serviceRoleId);
         return view('livewire.manage-service-role', [
             'serviceRole' => $this->serviceRole,
             'instructors' => $this->instructors,
@@ -342,6 +347,31 @@ class ManageServiceRole extends Component
                     'type' => 'error'
                 ]);
             }
+        }
+    }
+
+    public function confirmDeleteInstructor($id) {
+        $this->dispatch('confirmDelete', [
+            'message' => 'Are you sure you want to remove this Instructor?',
+            'id' => $id,
+            'model' => 'sr_role_assignment'
+        ]);
+    }
+
+    public function removeInstructor($id) {
+        try {
+            $roleAssignment = RoleAssignment::find($id)->where('service_role_id', $this->role)->first();
+            $roleAssignment->delete();
+            $this->instructors = $this->serviceRole->instructors;
+            $this->dispatch('show-toast', [
+                'message' => 'Instructor removed successfully.',
+                'type' => 'success'
+            ]);
+        } catch(\Exception $e) {
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to remove Instructor. ' . $e->getMessage(),
+                'type' => 'error'
+            ]);
         }
     }
 }

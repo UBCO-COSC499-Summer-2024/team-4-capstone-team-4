@@ -137,7 +137,7 @@
                             <th class="svcr-list-header-item">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody wire:model.live="instructors">
                         @forelse ($serviceRole->instructors as $instructor)
                             <tr class="svcr-list-item">
                                 <td class="svcr-list-item-cell">
@@ -146,10 +146,7 @@
                                 <td class="svcr-list-item-cell">{{ $instructor->getName() }}</td>
                                 <td class="svcr-list-item-cell">
                                     <div class="svcr-list-item-actions">
-                                        <button class="btn" wire:click="editInstructor({{ $instructor->id }})" wire:loading.attr="disabled">
-                                            <span class="material-symbols-outlined icon">edit</span>
-                                        </button>
-                                        <button class="btn" wire:click="confirmDeleteInstructor({{ $instructor->id }})" wire:loading.attr="disabled">
+                                        <button class="btn" x-on:click="$dispatch('confirm-remove-instructor', { id: {{ $instructor->id }} })" wire:loading.attr="disabled">
                                             <span class="material-symbols-outlined icon">delete</span>
                                         </button>
                                     </div>

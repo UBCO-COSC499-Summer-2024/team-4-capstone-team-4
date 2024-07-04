@@ -26,7 +26,8 @@ class SvcroleListItem extends Component
         'toggleEditMode' => 'toggleEditMode',
         'editServiceRole' => 'editServiceRole',
         'updateServiceRole' => 'saveServiceRole',
-        'deleteServiceRole' => 'deleteServiceRole'
+        'svcr-item-delete' => 'deleteServiceRole',
+        'item-modal-id' => 'updateModalId',
     ];
 
     public function mount()
@@ -51,23 +52,33 @@ class SvcroleListItem extends Component
         ]);
     }
 
-    public function deleteServiceRole($serviceRoleId)
+    public function deleteServiceRole($id)
     {
-        // dd($serviceRoleId);
-        $this->dispatch('show-toast', [
-            'message' => $serviceRoleId,
-            'type' => 'success'
-        ]);
-        $count = ServiceRole::destroy($serviceRoleId);
-        if ($count > 0) {
+        try {
+            $serviceRole = ServiceRole::find($id);
+            if ($serviceRole) {
+                $affected = $serviceRole->delete();
+                if ($affected) {
+                    $this->dispatch('show-toast', [
+                        'message' => 'Service Role deleted successfully.',
+                        'type' => 'success'
+                    ]);
+                    $this->redirect(route('svcroles'));
+                } else {
+                    $this->dispatch('show-toast', [
+                        'message' => 'Failed to delete Service Role.',
+                        'type' => 'error'
+                    ]);
+                }
+            } else {
+                $this->dispatch('show-toast', [
+                    'message' => 'Service Role not found.',
+                    'type' => 'error'
+                ]);
+            }
+        } catch (\Exception $e) {
             $this->dispatch('show-toast', [
-                'message' => 'Service Role deleted successfully.',
-                'type' => 'success'
-            ]);
-            $this->serviceRole = null;
-        } else {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to delete Service Role.',
+                'message' => 'An error occurred: ' . $e->getMessage(),
                 'type' => 'error'
             ]);
         }
@@ -101,7 +112,8 @@ class SvcroleListItem extends Component
     {
         $this->dispatch('confirmDelete', [
             'message' => 'Are you sure you want to delete this service role?',
-            'serviceRoleId' => $serviceRoleId
+            'id' => $serviceRoleId,
+            'model' => 'svcr_item_delete'
         ]);
     }
 
@@ -119,11 +131,9 @@ class SvcroleListItem extends Component
         ]);
     }
 
-    public function openExtraHourForm($serviceRoleId) {
-        $this->dispatch('openModal', 'extra-hour-form', ['serviceRoleId' => $serviceRoleId]);
-    }
-
-    public function openExtraHourView($serviceRoleId) {
-        $this->dispatch('openModal', 'extra-hour-view', ['serviceRoleId' => $serviceRoleId]);
+    public function updateModalId($id) {
+        $this->dispatch('update-modal-id', [
+            'id' => $id
+        ]);
     }
 }

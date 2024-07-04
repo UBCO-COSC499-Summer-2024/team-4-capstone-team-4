@@ -16,7 +16,7 @@
         'actions' => true,
     ];
 @endphp
-<div class="content">
+<div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
         <button class="right" onClick="window.location.href='{{ route('svcroles.add') }}'">
@@ -118,7 +118,6 @@
         <section class="svcr-items">
             <div class="svcr-list" x-show="$wire.viewMode === 'card'">
                 @forelse ($serviceRoles as $serviceRole)
-                    {{-- @livewire('templates.svcrole-card-item', ['serviceRole' => $serviceRole]) --}}
                     <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
                 @empty
                     <div class="empty-list">
@@ -142,8 +141,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($serviceRoles as $serviceRole)
-                        <livewire:templates.svcrole-list-item :serviceRole="$serviceRole" :key="'serviceRoleListI-'.$serviceRole->id" />
+                    @forelse ($serviceRoles as $svcr)
+                        <livewire:templates.svcrole-list-item :serviceRole="$svcr" :key="'serviceRoleListI-'.$svcr->id" />
                     @empty
                         <tr>
                             <td colspan="5" class="empty-list">
@@ -161,17 +160,7 @@
     </div>
 
     @include('components.link-bar', ['links' => $links])
-    <div x-data="{ showExtraHourForm: @entangle('showExtraHourForm'), showExtraHourView: @entangle('showExtraHourView') }">
-        <!-- Extra Hour Form Modal -->
-        <div x-show="showExtraHourForm">
-            <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourForm-'.$serviceRoleIdForModal" />
-        </div>
-
-        <!-- Extra Hour View Modal -->
-        {{-- <div x-show="showExtraHourView">
-            <livewire:extra-hour-view :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourView-'.$serviceRoleIdForModal" />
-        </div> --}}
-    </div>
+    <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourForm-'.$serviceRoleIdForModal"  x-show="showExtraHourFor" :showExtraHourForm="$showExtraHourForm" :serviceRoleId="$serviceRoleIdForModal" />
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', initializeToolbar);

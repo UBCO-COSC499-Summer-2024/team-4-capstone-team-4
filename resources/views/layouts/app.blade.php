@@ -67,12 +67,34 @@
             });
 
             Livewire.on('confirmDelete', (data) => {
-                console.log(data);
                 data.forEach((item) => {
-                    console.log(item);
                     if (confirm(item.message)) {
                         if (item.model) {
-                            Livewire.emit('delete', item.model, item.id);
+                            switch(item.model) {
+                                case 'svcr_item_delete':
+                                    Livewire.dispatch('svcr-item-delete', { id: item.id });
+                                    break;
+                                case 'extraHour':
+                                    Livewire.dispatch('deleteExtraHour', { id: item.id });
+                                    break;
+                                case 'staff':
+                                    Livewire.dispatch('deleteStaff', { id: item.id });
+                                    break;
+                                case 'area':
+                                    Livewire.dispatch('deleteArea', { id: item.id });
+                                    break;
+                                case 'role':
+                                    Livewire.dispatch('deleteRole', { id: item.id });
+                                    break;
+                                case 'user':
+                                    Livewire.dispatch('deleteUser', { id: item.id });
+                                    break;
+                                case 'sr_role_assignment':
+                                    Livewire.dispatch('sr-remove-instructor', { id: item.id });
+                                    break;
+                                default:
+                                    console.log('Model not found');
+                            }
                         } else {
                             Livewire.dispatch('deleteServiceRole', { id: item.serviceRoleId});
                         }

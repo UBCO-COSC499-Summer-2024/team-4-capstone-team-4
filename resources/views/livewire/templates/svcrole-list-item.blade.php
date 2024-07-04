@@ -52,30 +52,30 @@
 
     <td class="svcr-list-item-cell" data-column="instructors">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            {{ $serviceRole->instructors }} </span>
+            @forelse ($serviceRole->instructors->take(2) as $instructor)
+                {{ $instructor->getName() }}@if (!$loop->last), @endif
+            @empty
+                <span class="text-gray-400">No instructors</span>
+            @endforelse
+            @if ($serviceRole->instructors->count() > 2)
+                <button class="text-blue-500 hover:text-blue-700" onclick="window.location='{{ route('svcroles.manage.id', $serviceRole->id) }}'">
+                    <span>More</span>
+                </button>
+            @endif
+        </span>
     </td>
 
     {{-- extra hours --}}
     <td class="svcr-list-item-cell" data-column="extra-hours">
-        {{-- <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            {{ $serviceRole->extra_hours }}
-        </span> --}}
         <div class="svcr-list-item-actions">
-            {{-- modal button to view/edit extra hours --}}
             <button class="svcr-list-item-action" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
                     title="Add Extra Hours"
-                    wire:click="openExtraHourForm({{ $serviceRole->id }})"
-                    @click="showExtraHourForm = true"
+                    wire:click="
+                    $dispatch('item-modal-id', { id: {{ $serviceRole->id }} });
+                    $dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})"
                 >
                 <span class="material-symbols-outlined icon">add</span>
             </button>
-            {{-- <button class="svcr-list-item-action" id="svcr-extra-hours-view-{{ $serviceRole->id }}"
-                    title="Manage Extra Hours"
-                    wire:click="openExtraHourView({{ $serviceRole->id }})"
-                    @click="showExtraHoursView = true"
-                    x-cloak>
-                <span class="material-symbols-outlined icon">visibility</span>
-            </button> --}}
         </button>
     </td>
 

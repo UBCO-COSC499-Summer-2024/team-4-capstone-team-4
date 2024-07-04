@@ -1,7 +1,10 @@
-<div x-data>
-    <x-dialog-modal id="extraHourFormModal" wire:model.live="showExtraHourForm" wire:key='extra-hour-form{{ $serviceRoleId }}'>
+<div x-data="{ showExtraHourForm: @entangle('showExtraHourForm'), show: @entangle('showExtraHourForm') }">
+    <x-dialog-modal id="extraHourFormModal" wire:model="showExtraHourForm">
         <x-slot name="title">
             {{ __('Add Extra Hour') }}
+            @if($serviceRoleId !== null)
+                <span class="text-gray-900">for {{ App\Models\ServiceRole::find($serviceRoleId)->name }}</span>
+            @endif
         </x-slot>
 
         <x-slot name="content">
@@ -19,7 +22,7 @@
                         <div class="grouped">
                             <div class="form-item" for="description">Description</div>
                             <div class="grouped">
-                                <textarea class="form-input" id="description" wire:model="description"></textarea>
+                                <textarea class="form-input" id="description" wire:model.defer="description"></textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -51,13 +54,11 @@
                         <div class="form-item">
                             <div class="form-item-text" for="assigner_id">Assigner</div>
                             <div class="grouped">
-                                <select class="form-select" id="assigner_id" wire:model="assigner">
-                                    <option value="">Select Assigner</option>
-                                    @foreach($user_roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->user->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('assigner') <span class="error">{{ $message }}</span> @enderror
+                                <div class="form-item">
+                                    <input class="form-input text-end" disabled id="assigner" value="{{ auth()->user()->getName() }}">
+                                    <input class="min-w-0 form-input text-end w-fit"  type="number" id="assigner_id" wire:model="assigner_id" disabled value="{{ $assigner_id }}" style="min-width: 0 !important;">
+                                </div>
+                                @error('assigner_id') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -67,7 +68,9 @@
                                 <select class="form-select" id="instructor_id" wire:model="instructor_id">
                                     <option value="">Select Instructor</option>
                                     @foreach($user_roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->user->name }}</option>
+                                        <option value="{{ $role->id }}"
+                                                @if ($role->id == $instructor_id) selected @endif
+                                            >{{ $role->user->getName() }}</option>
                                     @endforeach
                                 </select>
                                 @error('instructor_id') <span class="error">{{ $message }}</span> @enderror
@@ -77,13 +80,15 @@
                         <div class="form-item">
                             <div class="form-item-text" for="area_id">Area</div>
                             <div class="grouped">
-                                <select class="form-select" id="area_id" wire:model="area">
-                                    <option value="">Select Area</option>
+                                <select class="form-select" id="area_id" wire:model="area_id">
+                                    <option>Select Area</option>
                                     @foreach($areas as $area)
-                                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                        <option value="{{ $area->id }}"
+                                                @if ($area->id == $area_id) selected @endif
+                                            >{{ $area->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('area') <span class="error">{{ $message }}</span> @enderror
+                                @error('area_id') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                     </div>

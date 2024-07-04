@@ -58,4 +58,12 @@ class InstructorPerformance extends Model {
         $this->total_hours = json_encode($totalHours);
         $this->save();
     }
+
+    public function addHours($month, $hour)
+    {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] = $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+    }
 }

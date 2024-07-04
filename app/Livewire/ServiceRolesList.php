@@ -24,7 +24,6 @@ class ServiceRolesList extends Component
     public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
-    public $showExtraHourView = false;
     public $serviceRoleIdForModal; // To store the serviceRoleId
     protected $queryString = [
         'viewMode' => ['except' => 'table'],
@@ -68,7 +67,7 @@ class ServiceRolesList extends Component
         'clearGroup' => 'clearGroup',
         'clearAll' => 'clearAll',
         'resetFilters' => 'resetFilters',
-        'openModal' => 'openModal',
+        'open-modal' => 'openModal',
         'closeModal' => 'closeModal',
         'performAction' => 'performAction',
         'deleteSelected' => 'deleteSelected',
@@ -78,6 +77,7 @@ class ServiceRolesList extends Component
         'toolbarUpdated' => 'handleToolbarUpdate',
         'applyActions' => 'handleApplyActions',
         'filtersReset' => 'resetFilters', // For resetting filters
+        'update-modal-id' => 'updateModalId',
     ];
 
     public function mount($links = []) {
@@ -362,27 +362,25 @@ class ServiceRolesList extends Component
     public function openModal($component, $arguments)
     {
         $svcrId = $arguments['serviceRoleId'];
+        $this->serviceRoleIdForModal = $svcrId;
         if ($component === 'extra-hour-form') {
-            $this->openExtraHourForm($svcrId);
-        } else if ($component === 'extra-hour-view') {
-            $this->openExtraHourView($svcrId);
+            $this->openExtraHourForm();
         }
     }
 
-    public function openExtraHourForm($serviceRoleId)
+    public function openExtraHourForm()
     {
-        $this->serviceRoleIdForModal = $serviceRoleId;
         $this->showExtraHourForm = true;
-    }
-
-    public function openExtraHourView($serviceRoleId)
-    {
-        $this->serviceRoleIdForModal = $serviceRoleId;
-        $this->showExtraHourView = true;
     }
 
     public function closeModal()
     {
-        $this->reset(['showExtraHourForm', 'showExtraHourView']);
+        $this->reset(['showExtraHourForm']);
+        $this->serviceRoleIdForModal = null;
+    }
+
+    public function updateModalId($data) {
+        $id = $data['id'];
+        $this->serviceRoleIdForModal = $id;
     }
 }
