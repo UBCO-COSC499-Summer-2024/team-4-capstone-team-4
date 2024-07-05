@@ -39,9 +39,9 @@ class ImportWorkdayForm extends Component
             $rules["rows.{$index}.session"] = 'required|string';
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
-            $rules["rows.{$index}.enrolled"] = 'required|integer|min:1|max:999';
+            $rules["rows.{$index}.enrolled"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.dropped"] = 'required|integer|min:0|max:999';
-            $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
+            $rules["rows.{$index}.capacity"] = 'required|integer|min:' . $row['enrolled'] . '|max:999';
         }
 
         return $rules;
@@ -67,17 +67,17 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
                 $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
         
-                $messages["rows.{$index}.course_name.min"] = 'enter a number 1-999';
-                $messages["rows.{$index}.duration.min"] = 'enter a number 1-999';
-                $messages["rows.{$index}.enrolled.min"] = 'enter a number 1-999';
-                $messages["rows.{$index}.dropped.min"] = 'enter a number 1-999';
-                $messages["rows.{$index}.capacity.min"] = 'enter a number 1-999';
+                $messages["rows.{$index}.course_name.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.enrolled.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to Enrolled';
     
-                $messages["rows.{$index}.course_name.max"] = 'enter a number 1-999';
-                $messages["rows.{$index}.duration.max"] = 'enter a number 1-999';
-                $messages["rows.{$index}.enrolled.max"] = 'enter a number 1-999';
-                $messages["rows.{$index}.dropped.max"] = 'enter a number 1-999';
-                $messages["rows.{$index}.capacity.max"] = 'enter a number 1-999';
+                $messages["rows.{$index}.course_name.max"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.enrolled.max"] = 'Must be lower than or equal to Capacity';
+                $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.capacity.max"] = 'Enter a number 1-999';
         }
         return $messages;
     }
