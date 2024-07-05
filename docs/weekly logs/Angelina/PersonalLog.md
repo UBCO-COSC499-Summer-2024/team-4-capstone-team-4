@@ -1,17 +1,49 @@
 # Angelina's Personal Log 
 
+## Friday (7/4 - 7/6)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log74-76.png)
+
+### Current Tasks 
+  * #1: Remove Capacity Metric
+  * #2: MVP Presentation Slides
+  * #3: Test Feauture Integration
+  * #4: Create Dashboard Tests
+  * #5: MVP Presentation
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Remove Capacity Metric    | Completed   |
+| MVP Presentation Slides   | Completed   |
+| Test Feature Integration  | Completed   |
+| Create Dashboard Tests    | In Progress |
+| MVP Presentation          | Completed   |
+
+### Cycle Goal Review 
+Created the presentation slides for the MVP and tested the features once they were integretated in our development branches. Removed unnecessary capacity metric from the performance tables in the database. Completed MVP presentation.
+
+### Next Cycle Goals 
+ * Review MVP Feedback
+ * Divide remaining features amongst group members and begin work on them
+ * Continue testing and UI enhancement for Dashboard
+
+---
+
 ## Wednesday (6/30 - 7/3)
 
 ### Timesheet
 Clockify report
 ![Clockify report](./clockifylogs/log630-73.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Create Additional Visualizations for Department Dashboard
   * #2: Connect Database to Chart Visualizations
-  * #4: Create Leaderboard
+  * #3: Create Leaderboard
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Department Visualizations | Completed   |
@@ -20,10 +52,10 @@ Clockify report
 | Create Dashboard Tests    | In Progress |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Updated the database to supply all of the necessary data for the dashboard to extract. Completed modifying the charts backend to allow for role based access and account for several user types by connecting to the database. Successfully implemented first draft of dashboard front and backend fucntionality, including role based access and redirection for certain user types.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
  * Create tests for dashboard features
  * Get ready for MVP presentation
  * Get a leaderboard and ranking system added to the dashboard
@@ -36,14 +68,14 @@ Updated the database to supply all of the necessary data for the dashboard to ex
 Clockify report
 ![Clockify report](./clockifylogs/log627-629.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks
   * #1: Create Additional Visualizations for Department Dashboard
   * #2: Connect Database to Chart Visualizations
   * #3: Remove Need for Custom Plugin for the Progress Bar
   * #4: Create Leaderboard
   * #5: Improve Container Structure for Dashboard
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Department Visualizations | In Progess  |
@@ -53,10 +85,10 @@ Clockify report
 | Improve Containers        | Completed   |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Removed the need for a progress bar plugin by using a horizontally stacked bar chart instead of a regular horizontal bar chart. Added details to the new progress bar and began creating a solid container structure for the dashboard. Began creating visualizations and designing the final version of the dashboard, and created space for all of the data we wished to present, including the leaderboard.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
  * Integrate user role based access for dashboard
  * Begin connecting database to the charts
  * Continue creating formatting for the leaderboard and lists
@@ -70,13 +102,13 @@ Removed the need for a progress bar plugin by using a horizontally stacked bar c
 Clockify report
 ![Clockify report](./clockifylogs/log623-626.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Debug Chart.JS issues
   * #2: Continue Integration of Progress Bar Plugin
   * #3: Improve Dashboard Containers
   * #4: Change Environment to Linux for faster navigation
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Debug Chart.JS Issues     | Completed   |
@@ -85,10 +117,10 @@ Clockify report
 | Move to Linux             | Completed   |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Began debugging Chart.JS and worked with Clement to move my environment to linux so that the pages loaded faster as the slow rendering was hindering my chart testing process. This environment change proved to be more complicated than expected, and we encountered hurdles such as long download and updating time, needing to reinstall docker, conflicting index.html files, reconfiguring php, and other extension confiuration related errors. This process took the majority of our project meeting. Debugging Cahrt.JS also took some time, as the plugin setup caused the charts to no longer appear. Upon reintegrating CHart.JS, I have decided using a plugin for the progress bar may be overkill and unnecessary, and my time would be more valuably spent working on all of the dashboard components.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Find a new way to display a progress bar without a custom plugin
   * Continue improving the container structure of the dashboard
   * Add leaderboard to dashboard frontend
@@ -103,14 +135,14 @@ Began debugging Chart.JS and worked with Clement to move my environment to linux
 Clockify report
 ![Clockify report](./clockifylogs/log620-622.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Modify Chart Controller to Display a Relevant Chart Template
   * #2: Add Second Chart to Chart Controller
   * #3: Create Progress Bar Plugin
   * #4: Add Instructor Lists to Dashboard
   * #5: Create Container Structure for Dashboard
 
-### Progress Update (since 6/5/2024)
+### Progress Update
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Modify Chart Controller    | Completed   |
@@ -120,10 +152,10 @@ Clockify report
 | Progress Bar Plugin       | In Progress |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Finished updating the chart controller to display a chart relevant to our data and began formatting the dashboard containers. Began adding a second chart to display the progress bar, and started to create a plugin for said chart. Added lists for service roles, course sections, and extra hours to the dashboard, and formatted them appropriately for the project vision. Creating the progress bar plugin proved more difficult than expected, and setting up Chart.JS proved to be a bit of a learning curve. I have not done much front end design for web pages either, so I am working to become more familiar with the container structue. More research was necessary this week than in other parts of the project, but progress is still evident.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Contiune configuring progress bar plugin
   * Finalize chart controller and connect to database
   * Finish creating containers for all dashboard items, and submit to group for review
@@ -137,14 +169,14 @@ Finished updating the chart controller to display a chart relevant to our data a
 Clockify report
 ![Clockify report](./clockifylogs/log616-619.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Database Model Factory Setup
   * #2: Database Model Basic Testing
   * #3: Database Model Detailed Testing
   * #4: Research Chart Library
   * #5: Create Chart Controller
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Basic Model Testing       | Completed   |
@@ -154,10 +186,10 @@ Clockify report
 | Create Chart Controller   | Completed   |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Finished creating Factories for the models and completed basic unit tests for each model. Continued detailed testing for database relations. Researched open source libraries for charts/visualizations and selected Laravel ChartJS. Created a chart controller file and began configuration.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Contiune adding relation tests to database models
   * Continue creating dashboard visualizations
 
@@ -169,14 +201,14 @@ Finished creating Factories for the models and completed basic unit tests for ea
 Clockify report
 ![Clockify report](./clockifylogs/log613-615.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Database Model Factory Setup
   * #2: Database Model Testing
   * #3: Discuss priorities for next Milestone
   * #3: Assigned next issues to group members
   * #4: Finalized and presented Mini-Presentaion 1
 
-### Progress Update (since 6/5/2024)
+### Progress Update
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Assign next issues        | Completed   |
@@ -185,10 +217,10 @@ Clockify report
 | Model Factory Setup       | In Progess  |
 | Mini-Presentation 1       | Completed   |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Comtinued creating Factories for the models and creating unit tests for each model. Discussed progress with the group and delivered presentation.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Complete Database Model Factory 
   * Complete Database Model Testing
   * Begin dashboard visualization research
@@ -202,14 +234,14 @@ Comtinued creating Factories for the models and creating unit tests for each mod
 Clockify report
 ![Clockify report](./clockifylogs/log69-612.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Database Model Setup
   * #2: Database Table Setup
   * #3: Fix Personal Log
   * #4: Database Model Factory Setup
   * #5: Datbase Model Testing
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Database Table Setup      | Completed   |
@@ -218,10 +250,10 @@ Clockify report
 | Database Model Setup      | Completed   |
 | Fix Personal Log          | Completed   |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Created the database tables in the migrations folder. Created models for the completed tables. Completed the requested restructuring of the personal log. Began creating Factories for the models and created the first of the unit tests for each model. Discussed progress with the group and prepared for the presentation.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Complete Database Model Factory 
   * Prepare for client review
   * Complete Database Model Testing
@@ -237,22 +269,22 @@ Created the database tables in the migrations folder. Created models for the com
 Clockify report
 ![Clockify report](./clockifylogs/log66-68.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Design Presentation
   * #2: Docker setup
   * #3: Database Table setup
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Design Presentation       | Complete    |
 | Docker setup              | Complete    |
 | Database Table setup      | In Progress |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 I completed the Design Presentation and Docker setup successfully. The Database Table setup is still in progress.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Complete Database Table setup
   * Prepare for client review
   * Continue improving Docker environment
@@ -265,22 +297,22 @@ I completed the Design Presentation and Docker setup successfully. The Database 
 Clockify report
 ![Clockify report](./clockifylogs/log62-65.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Design Document
   * #2: Design Presentation
   * #3: Setup Laravel
 
-### Progress Update (since 6/1/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Design Document           | In Progress |
 | Design Presentation       | In Progress |
 | Setup Laravel             | Complete    |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 I made significant progress on the Design Document and Presentation. Both are still in progress.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Complete Design Document
   * Finalize Design Presentation
   * Continue Environment Setup
@@ -293,20 +325,20 @@ I made significant progress on the Design Document and Presentation. Both are st
 Clockify report
 ![Clockify report](./clockifylogs/log53061.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Design Document
   * #2: Design Presentation
 
-### Progress Update (since 5/29/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Design Document           | In Progress |
 | Design Presentation       | In Progress |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 I started working on the Design Document and Design Presentation.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Continue Design Document
   * Continue Design Presentation
   * Set up project environment
@@ -319,22 +351,22 @@ I started working on the Design Document and Design Presentation.
 Clockify report
 ![Clockify report](./clockifylogs/log526529.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Project Plan Document
   * #2: Project Plan Presentation
   * #3: Design Documentation
 
-### Progress Update (since 5/25/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Project Plan Document     | Complete    |
 | Project Plan Presentation | Complete    |
 | Design Documentation      | In Progress |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 We completed the Project Plan Document and Presentation as planned. The design documentation has been started.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
   * Finalize Design Documentation
   * Start Design Presentation
 
