@@ -47,7 +47,8 @@ class ManageServiceRole extends Component
         'toggleEditMode' => 'toggleEditMode',
         'editServiceRole' => 'editServiceRole',
         'update-role' => 'saveServiceRole',
-        'deleteServiceRole' => 'deleteServiceRole',
+        'confirm-manage-delete' => 'confirmDelete',
+        'svcr-manage-delete' => 'deleteServiceRole',
         'showInstructorModal' => 'showInstructorModal',
         'showExtraHourModal' => 'showExtraHourModal',
         'addExtraHour' => 'addExtraHour',
@@ -85,7 +86,7 @@ class ManageServiceRole extends Component
         $this->serviceRole = ServiceRole::find($this->serviceRole->id);
         $this->year = $this->serviceRole->year;
         $this->instructors = $this->serviceRole->instructors;
-        $this->monthly_hours = json_decode($this->serviceRole->monthly_hours, true) ?? [];
+        $this->monthly_hours = $this->serviceRole->monthly_hours ?? [];
         $this->fixMonthNames();
         $this->temp = [
             'name' => $this->serviceRole->name,
@@ -108,7 +109,9 @@ class ManageServiceRole extends Component
     public function fixMonthNames()
     {
         // Decode the JSON string to an associative array
-        $monthlyHours = json_decode($this->serviceRole->monthly_hours, true);
+        // $monthlyHours = $this->serviceRole->monthly_hours;
+        // if $this->serviceRole->monthly_hours is type of string then decode else leave as is
+        $monthlyHours = is_string($this->serviceRole->monthly_hours) ? json_decode($this->serviceRole->monthly_hours, true) : $this->serviceRole->monthly_hours;
 
         // Define the mapping from short month names or numeric keys to full month names
         $monthMapping = [
@@ -179,6 +182,14 @@ class ManageServiceRole extends Component
         }
     }
 
+    public function confirmDelete() {
+        $this->dispatch('confirmDelete', [
+            'message' => 'Are you sure you want to delete this Service Role?',
+            'id' => $this->serviceRole->id,
+            'model' => 'sr_manage_delete'
+        ]);
+    }
+
     public function incrementYear() {
         $this->year++;
     }
@@ -196,13 +207,13 @@ class ManageServiceRole extends Component
         $this->saveServiceRole();
     }
 
-    public function saveServiceRole()
-    {
+    public function saveServiceRole() {
         try {
             $this->serviceRole->name = $this->name;
             $this->serviceRole->description = $this->description;
             $this->serviceRole->year = $this->year;
             $this->serviceRole->area_id = $this->area_id;
+            $this->serviceRole->monthly_hours = is_array($this->monthly_hours) ? json_encode($this->monthly_hours) : $this->monthly_hours;
             $this->validate();
             $this->serviceRole->save();
             $this->serviceRole->refresh();
@@ -220,10 +231,9 @@ class ManageServiceRole extends Component
         }
     }
 
-    public function deleteServiceRole()
-    {
+    public function deleteServiceRole($id) {
         try {
-            $count = ServiceRole::destroy($this->serviceRole->id);
+            $count = ServiceRole::destroy($id);
             DB::commit();
             if ($count > 0) {
                 $this->dispatch('show-toast', [
@@ -231,6 +241,9 @@ class ManageServiceRole extends Component
                     'type' => 'success'
                 ]);
                 $this->serviceRole = null;
+                $url = route('svcroles');
+                header("Location: $url");
+                exit();
             } else {
                 $this->dispatch('show-toast', [
                     'message' => 'Failed to delete Service Role.',
@@ -327,6 +340,10 @@ class ManageServiceRole extends Component
                     'message' => 'Instructor Performance updated successfully.',
                     'type' => 'success'
                 ]);
+
+                $url = route('svcroles.manage.id', (int) $this->serviceRoleId);
+                header("Location: $url");
+                exit();
             } else {
                 $this->dispatch('show-toast', [
                     'message' => 'Instructor Performance not found.',

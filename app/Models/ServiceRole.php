@@ -65,7 +65,7 @@ class ServiceRole extends Model {
 
     public function roleAssignments()
     {
-        return $this->hasMany(RoleAssignment::class, 'service_role_id');
+        return $this->hasMany(RoleAssignment::class);
     }
 
     public function users() {

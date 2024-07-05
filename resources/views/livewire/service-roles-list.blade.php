@@ -299,10 +299,6 @@
 
         if (actions) {
             actions.addEventListener('change', function(e) {
-                // @this.set('selectedAction', this.value);
-                // console.log(`selectedAction: ${this.value}`);
-                // console.log(selectedItems);
-                // should be ['id' => true/false] for php
                 let sendItems = Object.keys(selectedItems).reduce((acc, key) => {
                     acc[key] = selectedItems[key];
                     return acc;

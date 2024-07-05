@@ -58,7 +58,7 @@
                         text: toast.message,
                         duration: 5000,
                         close: true,
-                        gravity: "top",
+                        gravity: "bottom",
                         position: "right",
                         className: `toastify-${toast.type}`, // Optional styling
                         stopOnFocus: true,
@@ -74,8 +74,8 @@
                                 case 'svcr_item_delete':
                                     Livewire.dispatch('svcr-item-delete', { id: item.id });
                                     break;
-                                case 'extraHour':
-                                    Livewire.dispatch('deleteExtraHour', { id: item.id });
+                                case 'sr_manage_delete':
+                                    Livewire.dispatch('svcr-manage-delete', { id: item.id });
                                     break;
                                 case 'staff':
                                     Livewire.dispatch('deleteStaff', { id: item.id });

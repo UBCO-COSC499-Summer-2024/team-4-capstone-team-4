@@ -22,7 +22,7 @@
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            <button class="btn" wire:click="confirmDelete" wire:loading.attr="disabled">
+            <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                 <span class="material-symbols-outlined icon">delete</span>
                 <span>Delete</span>
             </button>
@@ -130,24 +130,28 @@
                 <table class="table svcr-table" id="svcr-table">
                     <thead>
                         <tr class="svcr-list-header">
-                            <th class="svcr-list-header-item">
+                            {{-- <th class="svcr-list-header-item">
                                 <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
-                            </th>
+                            </th> --}}
                             <th class="svcr-list-header-item">Name</th>
-                            <th class="svcr-list-header-item">Actions</th>
+                            <th class="svcr-list-header-item" style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody wire:model.live="instructors">
-                        @forelse ($serviceRole->instructors as $instructor)
+                        @php
+                            // paginate
+                            $sinstructors = $serviceRole->instructors()->paginate(5);
+                        @endphp
+                        @forelse ($sinstructors as $instructor)
                             <tr class="svcr-list-item">
-                                <td class="svcr-list-item-cell">
+                                {{-- <td class="svcr-list-item-cell">
                                     <input type="checkbox" class="svcr-list-item-select" id="svcr-select-{{ $instructor->id }}" />
-                                </td>
+                                </td> --}}
                                 <td class="svcr-list-item-cell">{{ $instructor->getName() }}</td>
                                 <td class="svcr-list-item-cell">
-                                    <div class="svcr-list-item-actions">
+                                    <div class="flex justify-full j-end svcr-list-item-actions" style="justify-content: end;">
                                         <button class="btn" x-on:click="$dispatch('confirm-remove-instructor', { id: {{ $instructor->id }} })" wire:loading.attr="disabled">
-                                            <span class="material-symbols-outlined icon">delete</span>
+                                            <span class="material-symbols-outlined icon">person_remove</span>
                                         </button>
                                     </div>
                                 </td>
@@ -158,6 +162,13 @@
                             </tr>
                         @endforelse
                     </tbody>
+                    <tfoot>
+                        <tr class="svcr-list-footer">
+                            <td class="svcr-list-footer-item" colspan="5">
+                                {{ $sinstructors->links() }}
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </section>

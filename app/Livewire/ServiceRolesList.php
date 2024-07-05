@@ -310,7 +310,9 @@ class ServiceRolesList extends Component
     public function deleteSelected() {
         if (count($this->selectedItems) > 0) {
             foreach ($this->selectedItems as $serviceRoleId) {
-                $this->dispatch('deleteServiceRole', $serviceRoleId);
+                $this->dispatch('svcr-item-delete', [
+                    'id' => $serviceRoleId
+                ]);
             }
             $this->render();
         } else {
@@ -320,22 +322,6 @@ class ServiceRolesList extends Component
             ]);
         }
     }
-
-    // public function deleteServiceRole($serviceRoleId) {
-    //     $count = ServiceRole::destroy($serviceRoleId);
-    //     if ($count > 0) {
-    //         $this->dispatch('show-toast', [
-    //             'message' => 'Service Role deleted successfully.',
-    //             'type' => 'success'
-    //         ]);
-    //     } else {
-    //         $this->dispatch('show-toast', [
-    //             'message' => 'Failed to delete Service Role.',
-    //             'type' => 'error'
-    //         ]);
-    //     }
-    //     $this->render();
-    // }
 
     public function saveSelected() {
         $this->dispatch('saveServiceRole', $this->selectedItems);

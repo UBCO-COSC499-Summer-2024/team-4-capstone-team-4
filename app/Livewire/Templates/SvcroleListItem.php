@@ -55,27 +55,22 @@ class SvcroleListItem extends Component
     public function deleteServiceRole($id)
     {
         try {
-            $serviceRole = ServiceRole::find($id);
-            if ($serviceRole) {
-                $affected = $serviceRole->delete();
-                if ($affected) {
-                    $this->dispatch('show-toast', [
-                        'message' => 'Service Role deleted successfully.',
-                        'type' => 'success'
-                    ]);
-                    $this->redirect(route('svcroles'));
-                } else {
-                    $this->dispatch('show-toast', [
-                        'message' => 'Failed to delete Service Role.',
-                        'type' => 'error'
-                    ]);
-                }
-            } else {
-                $this->dispatch('show-toast', [
-                    'message' => 'Service Role not found.',
-                    'type' => 'error'
-                ]);
-            }
+            // dd($id);
+            ServiceRole::destroy($id);
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role deleted successfully.',
+                'type' => 'success'
+            ]);
+
+            $url = route('svcroles');
+            header("Location: $url");
+            exit();
+            // } else {
+            //     $this->dispatch('show-toast', [
+            //         'message' => 'Service Role not found.',
+            //         'type' => 'error'
+            //     ]);
+            // }
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'An error occurred: ' . $e->getMessage(),

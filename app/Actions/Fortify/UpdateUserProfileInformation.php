@@ -11,6 +11,10 @@ use Laravel\Fortify\Fortify;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
+
+    public function update($user, $input) {
+        $this->show($user, $input);
+    }
     /**
      * Validate and update the given user's profile information.
      *

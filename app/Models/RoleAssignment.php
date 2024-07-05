@@ -57,8 +57,8 @@ class RoleAssignment extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function role() {
-        return $this->belongsTo(ServiceRole::class, 'service_role_id');
+    public function role() {    
+        return $this->belongsTo(ServiceRole::class);
     }
 
     /**
