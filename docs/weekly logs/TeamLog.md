@@ -17,8 +17,9 @@
 
 ![image of tasks](./tasks/todo_july3_july5.png)
 ![image of tasks](./tasks/inprogress_july3_july5.png)
-![image of tasks](./tasks/inreview_july3_july5.png)
 ![image of tasks](./tasks/done_july3_july5.png)
+![image of tasks](./tasks/done1_july3_july5.png)
+![image of tasks](./tasks/done2_july3_july5.png)
 
 ## Tasks for Next Cycle:
 
@@ -37,6 +38,8 @@
 ## Completed Tasks
 
 ![image of tasks](./tasks/done_july3_july5.png)
+![image of tasks](./tasks/done1_july3_july5.png)
+![image of tasks](./tasks/done2_july3_july5.png)
 
 ## In Progress Tasks / To do:
 
