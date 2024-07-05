@@ -2,6 +2,58 @@
 
 ## Date Range:
 
+- July 3 - July 4
+
+## Features in the Project Plan Cycle:
+
+- Integrate Import Page
+- Integrate Course Details Page
+- Integrate Dashboard Visualizations
+- Integrate Service Role Management
+- Drone CI
+- Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july3_july5.png)
+![image of tasks](./tasks/inprogress_july3_july5.png)
+![image of tasks](./tasks/inreview_july3_july5.png)
+![image of tasks](./tasks/done_july3_july5.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july3_july5.png)
+![image of tasks](./tasks/inprogress_july3_july5.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july3_july5.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july3_july5.png)
+![image of clockify report](./clockify/individual_july3_july5.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_july3_july5.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july3_july5.png)
+![image of tasks](./tasks/inprogress_june3_july5.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_july3_june5.png)
+![image of test report](./testing/feature_july3_july5.png)
+
+## Overview:
+
+We have everything ready for the MVP that we wanted. We have integrated all our pages and features into one branch and have manaully tested they work together. We also created the slides for the presentation
+
+## Date Range:
+
 - June 28 - July 2
 
 ## Features in the Project Plan Cycle:
