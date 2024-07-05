@@ -11,7 +11,7 @@ use App\Models\AreaPerformance;
 use App\Models\DepartmentPerformance;
 use App\Models\RoleAssignment;
 use App\Models\ServiceRole;
-use App\Models\ExtraHours;
+use App\Models\ExtraHour;
 use App\Models\CourseSection;
 use App\Models\Teach;
 use App\Models\InstructorPerformance;
@@ -91,11 +91,11 @@ class ChartController extends Controller {
             $deptEnrolledAvg = $deptPerformance->enrolled_avg;
             $deptDroppedAvg = $deptPerformance->dropped_avg;
             $deptMonthHours = json_decode($deptPerformance->total_hours, true)[$currentMonth];
-        
+
             // Fetch the performance for each area within the department for the current year
             $dataLabels = [];
             $areaPerformances = [];
-        
+
             // Get department name
             $deptName = Department::where('id', $dept)->value('name');
             $dataLabels[] = $deptName;
@@ -104,7 +104,7 @@ class ChartController extends Controller {
             $totalHours = [];
             $departmentHours = json_decode($deptPerformance->total_hours, true);
             $totalHours[] = array_values($departmentHours); // Convert to simple array of hours
-        
+
             // Fetch areas and their performances
             $areas = Area::where('dept_id', $dept)->get();
             foreach ($areas as $area) {
@@ -112,7 +112,7 @@ class ChartController extends Controller {
                 $performance = AreaPerformance::where('area_id', $area->id)
                     ->where('year', $currentYear)
                     ->first();
-                
+
                 // Create a new performance if one does not exist yet
                 if ($performance === null) {
                     $performance = new AreaPerformance();
@@ -157,7 +157,7 @@ class ChartController extends Controller {
             $areaExtrasTotal = [];
 
             foreach ($areas as $area) {
-                $extras = ExtraHours::where('area_id', $area->id)->where('year', $currentYear)->get();
+                $extras = ExtraHour::where('area_id', $area->id)->where('year', $currentYear)->get();
                 $areaExtrasTotal[] = [$area->name, $extras->count()];
                 $deptExtrasTotal = $deptExtrasTotal + $extras->count();
             }
@@ -171,10 +171,10 @@ class ChartController extends Controller {
                 $areaCoursesTotal[] = [$area->name, $courses->count()];
                 $deptCoursesTotal = $deptCoursesTotal + $courses->count();
             }
-        
+
             // Labels for months
             $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        
+
             // Define colors for datasets
             $colors = [
                 "rgba(37, 41, 150, 0.31)",
@@ -190,13 +190,13 @@ class ChartController extends Controller {
                 "rgba(150, 150, 41, 0.7)",
                 "rgba(41, 150, 150, 0.7)"
             ];
-        
+
             // Create datasets for the chart
             $datasets = [];
             foreach ($totalHours as $index => $hours) {
                 $color = $colors[$index % count($colors)];
                 $borderColor = $borderColors[$index % count($borderColors)];
-        
+
                 $datasets[] = [
                     "label" => $dataLabels[$index],
                     "backgroundColor" => $color,
@@ -204,7 +204,7 @@ class ChartController extends Controller {
                     "data" => $hours
                 ];
             }
-        
+
             // Create the chart configuration
             $chart1 = app()
                 ->chartjs->name("DepartmentLine")
@@ -223,14 +223,14 @@ class ChartController extends Controller {
                         ]
                     ]
                 ]);
-            
+
             if ($isInstructor) {
 
                 // Fetch the instructor performance for the current year
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
                     ->where('year', $currentYear)
                     ->first();
-                
+
                 if ($performance === null) {
                     $performance = new InstructorPerformance();
                     $performance->instructor_id = $instructorRoleId;
@@ -274,7 +274,7 @@ class ChartController extends Controller {
                 $extraHours = [];
                 $extraHoursTotal = 0;
 
-                $allExtraHours = ExtraHours::where('instructor_id', $instructorRoleId)
+                $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)
                     ->get();
 
                 foreach ($allExtraHours as $extraHrs) {
@@ -475,7 +475,7 @@ class ChartController extends Controller {
                                 ]
                             ]
                         ]);
-                    
+
                     return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
                                 'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'currentMonthHours', 'roleHoursTotal', 
                                 'extraHoursTotal', 'deptCoursesTotal', 'areaCoursesTotal', 'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 
@@ -488,7 +488,7 @@ class ChartController extends Controller {
                 return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptCoursesTotal', 'areaCoursesTotal', 
                             'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptMonthHours'));
             }
-        }        
+        }
 
         elseif ($isInstructor) {
             // Fetch the instructor performance for the current year
@@ -537,7 +537,7 @@ class ChartController extends Controller {
             $extraHours = [];
             $extraHoursTotal = 0;
 
-            $allExtraHours = ExtraHours::where('instructor_id', $instructorRoleId)
+            $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)
                 ->get();
 
             foreach ($allExtraHours as $extraHrs) {
@@ -702,7 +702,7 @@ class ChartController extends Controller {
                             ]
                         ]
                     ]);
-                
+
                 return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
                                 'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg'));
             }
@@ -735,7 +735,7 @@ class ChartController extends Controller {
                             ]
                         ]
                     ]);
-                
+
                 return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
                                 'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'currentMonthHours', 'roleHoursTotal', 'extraHoursTotal'));
             }

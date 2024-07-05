@@ -132,4 +132,11 @@ class AreaPerformance extends Model {
 
         return;
     }
+
+    public function addHours($month, $hour) {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] += $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+    }
 }
