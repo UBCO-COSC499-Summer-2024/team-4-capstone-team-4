@@ -162,6 +162,11 @@ class ImportSeiForm extends Component
         $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')
         ->select('course_sections.*')
+        ->orderBy('course_sections.year')
+        ->orderBy('course_sections.session')
+        ->orderBy('course_sections.term')
+        ->orderBy('course_sections.name')
+        ->orderBy('course_sections.section')
         ->get();
 
         return view('livewire.import-sei-form', [

@@ -108,7 +108,11 @@ class ImportAssignCourse extends Component
     public function getAvailableInstructors() {
         // $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('user_id');
 
-        return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->where('role', 'instructor')->get();
+        return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->where('role', 'instructor')
+            ->orderByRaw('LOWER(users.lastname)')
+            ->orderByRaw('LOWER(users.firstname)')
+            ->get();
     }
 
     public function render()
