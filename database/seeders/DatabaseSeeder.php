@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Department;
-use App\Models\CourseSection;
-use App\Models\User;
-use App\Models\Area;
-use App\Models\UserRole;
 use App\Models\ServiceRole;
 use App\Models\SeiData;
 use App\Models\AreaPerformance;
-use App\Models\InstructorPerformance;
-use App\Models\Teach;
 use Illuminate\Database\Seeder;
+use App\Models\Department;
+use App\Models\Area;
+use App\Models\UserRole;
+use App\Models\InstructorPerformance;
+use App\Models\CourseSection;
+use App\Models\User;
+use App\Models\Teach;
 
 class DatabaseSeeder extends Seeder
 {
@@ -47,14 +47,14 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory(10)->create();
         foreach($users as $user) {
-            UserRole::factory()->create([
+            $role = UserRole::factory()->create([
                 'user_id' => $user->id,
                 'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
             InstructorPerformance::factory()->create([
                 'year' => date('Y'),
-                'instructor_id' => $user->id,
+                'instructor_id' => $role->id,
             ]);
         }
 
@@ -92,7 +92,6 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
         ]);
-      
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -127,6 +126,12 @@ class DatabaseSeeder extends Seeder
             'user_id' => $admin->id,
             'department_id' => $dept->id,
             'role' => 'admin',
+        ]);
+
+        $this->call([
+            // DepartmentSeeder::class,
+            // AreaSeeder::class,
+            ServiceRoleSeeder::class
         ]);
     }
 }

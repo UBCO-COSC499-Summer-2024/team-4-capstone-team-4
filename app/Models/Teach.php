@@ -56,4 +56,21 @@ class Teach extends Model
         return $this->belongsTo(UserRole::class, 'instructor_id')
                     ->where('role', 'instructor');
     }
+
+    // other functions
+
+    public static function getInstructorsForCourses() {
+        $teaches = self::all();
+
+        $courseInstructors = [];
+
+        foreach ($teaches as $teach) {
+            if (!isset($courseInstructors[$teach->course_section_id])) {
+                $courseInstructors[$teach->course_section_id] = [];
+            }
+            $courseInstructors[$teach->course_section_id][] = $teach->user_role_id;
+        }
+
+        return $courseInstructors;
+    }
 }

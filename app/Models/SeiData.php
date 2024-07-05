@@ -53,4 +53,76 @@ class SeiData extends Model {
     public function courseSection() {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
+
+
+
+    // other functions
+
+    public static function calculateSEIAverages() {
+        $seiData = self::all();
+
+        $seiAverages = [];
+
+        foreach ($seiData as $data) {
+            $questions = json_decode($data->questions, true);
+            $averageScore = array_sum($questions) / count($questions);
+            $seiAverages[$data->course_section_id] = $averageScore;
+        }
+
+        return $seiAverages;
+    }
+
+    public static function calculateSEIAreaAverages($year) {
+        $seiAverages = self::calculateSEIAverages();
+        $coursesByArea = CourseSection::getCoursesByArea($year);
+    
+        $areaAverages = [];
+        
+        foreach ($coursesByArea as $areaId => $courses) {
+            $totalScore = 0;
+            $courseCount = 0;
+            
+            foreach ($courses as $course) {
+                if (isset($seiAverages[$course->id])) {
+                    $totalScore += $seiAverages[$course->id];
+                    $courseCount++;
+                }
+            }
+            
+            if ($courseCount > 0) {
+                $areaAverages[$areaId] = $totalScore / $courseCount;
+            } else {
+                $areaAverages[$areaId] = 0;
+            }
+        }
+        
+        return $areaAverages;
+    }
+
+    public static function calculateSEIDepartmentAverages($year) {
+        $areaAverages = self::calculateSEIAreaAverages($year);
+        $areasByDepartment = Area::getAreasByDepartment();
+    
+        $departmentAverages = [];
+        
+        foreach ($areasByDepartment as $departmentId => $areas) {
+            $totalScore = 0;
+            $areaCount = 0;
+    
+            foreach ($areas as $area) {
+                if (isset($areaAverages[$area->id])) {
+                    $totalScore += $areaAverages[$area->id];
+                    $areaCount++;
+                }
+            }
+            
+            if ($areaCount > 0) {
+                $departmentAverages[$departmentId] = $totalScore / $areaCount;
+            } else {
+                $departmentAverages[$departmentId] = 0;
+            }
+        }
+
+        return $departmentAverages;
+    }
 }
