@@ -1,4 +1,4 @@
- <?php
+<?php
 
 use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
@@ -147,7 +147,9 @@ Route::middleware([
     // Logs
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
 })->group(function(){
-    Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+    Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
+        Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+        Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
 });
 
 Route::get('/privacy-policy', function () {

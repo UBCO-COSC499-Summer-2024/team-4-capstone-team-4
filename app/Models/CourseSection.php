@@ -44,7 +44,7 @@ class CourseSection extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function area() {
-        return $this->belongsTo(Area::class);
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     /**

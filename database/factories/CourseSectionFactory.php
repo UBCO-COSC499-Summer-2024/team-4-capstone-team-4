@@ -11,11 +11,10 @@ use App\Models\Area;
  */
 class CourseSectionFactory extends Factory {
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    protected $model=CourseSection::class;
+     
+Define the model's default state.*
+@return array<string, mixed>*/
+protected $model=CourseSection::class;
 
     public function definition() {
         $prefixes = ['COSC', 'MATH', 'STAT', 'PHYS'];
