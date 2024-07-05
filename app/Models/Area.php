@@ -65,4 +65,10 @@ class Area extends Model {
         return $this->hasMany(AreaPerformance::class, 'area_id');
     }
 
+    // other functions
+
+    public static function getAreasByDepartment() {
+        return Area::with('department')->get()->groupBy('dept_id');
+    }
+
 }

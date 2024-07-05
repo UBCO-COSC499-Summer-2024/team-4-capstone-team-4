@@ -79,8 +79,8 @@
 
        
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Add Row</button>
-            <button type="submit" class="bg-green-500 text-black p-2 rounded hover:bg-green-600">Save</button>
+            <button type="button" wire:click="addRow" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Row</button>
+            <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
 
@@ -88,11 +88,28 @@
         <div class="text-white text-xl text-center m-80">Saving...</div>
     </div>
 
-    @if(session('success'))
+    {{-- @if(session()->has('success') && session('success')) --}}
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <x-import-modal />
+            <x-import-modal moreText="Insert More"/>
+            {{-- temp --}}
+            <div class="absolute right-5 top-16 bg-blue-50 rounded-sm shadow-lg px-6 py-4 flex flex-col ">
+        
+                <div>You Can Now Assign Instructors!</div>
+                <div class="items-center justify-center text-center mt-2 p-2">
+                    <button class="bg-white text-blue-500 outline outline-blue-500 py-2 px-4 mx-2 rounded-sm hover:bg-blue-500 hover:text-white" 
+                    onclick="location.href='{{ route('assign-courses') }}'">
+                    Assign
+                    </button>
+                </div>
+            
+            </div>
         </div>
+        {{-- <div>
+            <div>This is the toast text!</div>
+            <a href="{{ route('assign-courses') }}"></a>
+        </div> --}}
+
         @endif
-    @endif
+    {{-- @endif --}}
 </div>
