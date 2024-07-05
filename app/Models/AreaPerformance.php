@@ -22,7 +22,7 @@ class AreaPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'area_id', 'enrolled_avg', 'dropped_avg', 'capacity_avg'
+        'total_hours', 'sei_avg', 'enrolled_avg', 'dropped_avg', 'year', 'area_id',
     ];
 
     /**

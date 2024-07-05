@@ -16,10 +16,23 @@ class AreaPerformanceFactory extends Factory {
      */
     public function definition(): array {
         return [
-            'score' => fake()->numberBetween(0, 100),
-            'total_hours' => fake()->numberBetween(0, 100),
-            'target_hours' => fake()->numberBetween(0, 100),
+            'total_hours'  => json_encode([
+                'January' => $this->faker->numberBetween(0, 730),
+                'February' => $this->faker->numberBetween(0, 730),
+                'March' => $this->faker->numberBetween(0, 730),
+                'April' => $this->faker->numberBetween(0, 730),
+                'May' => $this->faker->numberBetween(0, 730),
+                'June' => $this->faker->numberBetween(0, 730),
+                'July' => $this->faker->numberBetween(0, 730),
+                'August' => $this->faker->numberBetween(0, 730),
+                'September' => $this->faker->numberBetween(0, 730),
+                'October' => $this->faker->numberBetween(0, 730),
+                'November' => $this->faker->numberBetween(0, 730),
+                'December' => $this->faker->numberBetween(0, 730),
+            ]),
             'sei_avg' => fake()->numberBetween(1, 5),
+            'enrolled_avg'=>fake()->numberBetween(0,100),
+            'dropped_avg'=>fake()->numberBetween(0,100),
             'year' => fake()->year(),
             'area_id' => Area::pluck('id')->random()
         ];

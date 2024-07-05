@@ -12,10 +12,10 @@
                 <x-form-icon icon="Password"/>
                 <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
             </x-form-item>
-            <x-form-item>
+            {{-- <x-form-item>
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
-            </x-form-item>
+            </x-form-item> --}}
 
             <x-validation-errors/>
             
