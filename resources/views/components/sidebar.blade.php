@@ -6,7 +6,7 @@ $sidebarItems = [
     ['icon' => 'list', 'href' => route('course-details',['instructor_id']), 'title' => 'Courses']
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
-    
+
 ];
 
 // add to $items
@@ -15,7 +15,7 @@ if (isset($items)) {
 }
 @endphp
 
-<aside class="sidebar glass">
+<aside class="sidebar glass" id="sidebar">
     @foreach($sidebarItems as $item)
         <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" />
     @endforeach
@@ -28,7 +28,7 @@ if (isset($items)) {
         <x-sidebar-item icon="settings" href="{{ route('profile.show') }}" title="{{ __('Settings') }}" />
         <form method="POST" action="{{ route('logout') }}" x-data>
             @csrf
-            <div class="sidebar-item">                
+            <div class="sidebar-item">
                 <x-link class="sidebar-link text-xl" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
             </div>
         </form>

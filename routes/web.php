@@ -1,5 +1,6 @@
  <?php
 
+use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffEditModeController;
@@ -21,7 +22,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', [ChartController::class, 'showChart'])->name('dashboard');
+    Route::get('/', [ChartController::class, 'showChart'])->name('main');
 });
 
 Route::middleware([
@@ -102,7 +103,50 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->group(function(){
+])->group(function () {
+    Route::get('/courses', function () {
+        return view('courses');
+    })->name('courses');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/svcroles', function () {
+        return view('svcroles');
+    })->name('svcroles');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->prefix('/svcroles')->group(function () {
+    // Add-Svcrole (for testing purposes, will be changed to modal later)
+    Route::get('/add', function () {
+        return view('svcroles');
+    })->name('svcroles.add');
+
+    // Manage-Svcroles
+    Route::get('/manage', function () {
+        return view('svcroles');
+    })->name('svcroles.manage');
+
+    // manage/id
+    Route::get('/manage/{id}', function () {
+        return view('svcroles');
+    })->name('svcroles.manage.id');
+
+    // Requests
+    Route::get('/requests', function () {
+        return view('svcroles');
+    })->name('svcroles.requests');
+
+    // Logs
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
+})->group(function(){
     Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
 });
 

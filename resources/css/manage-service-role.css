@@ -1,0 +1,43 @@
+.svcrole-item {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.svcrole-item .svcr-item {
+    min-width: 300px;
+}
+
+.svcrole-item .svcr-card-item input[type="checkbox"] {
+    display: none;
+}
+
+.svcr-table th {
+    font-size: 1rem;
+}
+
+td.empty {
+    text-align: center;
+    padding: 1rem;
+}
+
+tr:has(td.empty:hover) {
+    background: none;
+}
+
+.bg-editing.svcrole-item {
+    background: initial;
+}
+
+.bg-default .form-input {
+    background: rgb(249 250 251 / 1) !important;
+}
+
+@media screen and (max-width: 1000px) {
+    .svcrole-item {
+        grid-template-columns: 1fr;
+    }
+}

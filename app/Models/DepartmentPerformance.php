@@ -44,4 +44,11 @@ class DepartmentPerformance extends Model {
     public function department() {
         return $this->belongsTo(Department::class, 'department_id');
     }
+
+    public function addHours($month, $hour) {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] += $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+    }
 }

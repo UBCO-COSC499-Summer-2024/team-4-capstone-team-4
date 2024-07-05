@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
 use App\Models\UserRole;
 
@@ -36,13 +37,28 @@ class RoleAssignment extends Model {
         'updated_at' => 'datetime',
     ];
 
+    // public static function boot() {
+    //     parent::boot();
+
+    //     static::created(function ($assignment) {
+    //         $serviceRole = $assignment->serviceRole;
+    //         $instructorPerformance = InstructorPerformance::firstOrCreate(
+    //             ['instructor_id' => $assignment->instructor_id, 'year' => $serviceRole->year],
+    //             ['total_hours' => 0, 'sei_avg' => 0]
+    //         );
+
+    //         $instructorPerformance->total_hours += array_sum($serviceRole->monthly_hours);
+    //         $instructorPerformance->save();
+    //     });
+    // }
+
     /**
      * Get the service role associated with the assignment.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function role() {
-        return $this->belongsTo(ServiceRole::class, 'service_role_id');
+    public function role() {    
+        return $this->belongsTo(ServiceRole::class);
     }
 
     /**
@@ -63,5 +79,15 @@ class RoleAssignment extends Model {
     public function instructor()
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
+    }
+
+    public function userRole()
+    {
+        return $this->belongsTo(UserRole::class, 'instructor_id');
+    }
+
+    public function extraHours()
+    {
+        return $this->hasManyThrough(ExtraHour::class, UserRole::class, 'id', 'instructor_id', 'instructor_id', 'id');
     }
 }

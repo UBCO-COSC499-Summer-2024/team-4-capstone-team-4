@@ -64,4 +64,5 @@ class Area extends Model {
     public function areaPerformance() {
         return $this->hasMany(AreaPerformance::class, 'area_id');
     }
+
 }
