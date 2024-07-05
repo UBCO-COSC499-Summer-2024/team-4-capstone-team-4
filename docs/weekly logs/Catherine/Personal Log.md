@@ -1,3 +1,30 @@
+## Friday (7/3 - 7/5)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_03_2024-07_05_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Helped with import page performance calculations
+  * #2: Database Seeder
+  * #3: Presentation for MVP
+
+### Progress Update (since 6/28/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Import page performance calculations| Complete |
+| Database Seeder | Complete |
+| Presentation for MVP | Complete |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I helped with import page performance calculations adn updated the database seeder to fill all our tables with accurate data. I also helped with creating our presentation slides for the MVP.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Improve UI
+  * Continuing more testing
+  * Work on remaining feature
+  * Make improvements based in MVP feedback
+
 ## Wednesday (6/28 - 7/3)
 
 ### Timesheet
