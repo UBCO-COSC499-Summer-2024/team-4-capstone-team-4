@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
-    
+    const editButton = document.getElementById('editButton'); 
+    const cancelButton = document.getElementById('cancelButton');
+
     saveButton.addEventListener('click', function () {
         const confirmSave = confirm('Do you really want to save the changes?');
 
@@ -11,11 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             rows.forEach(row => {
                 formData.append('ids[]', row.getAttribute('data-id'));
-                formData.append('courseNames[]', row.children[1].innerText.trim());
-                formData.append('courseDurations[]', row.children[3].innerText.trim()); // Ensure correct column index
-                formData.append('enrolledStudents[]', row.children[4].innerText.trim()); // Ensure correct column index
-                formData.append('droppedStudents[]', row.children[5].innerText.trim()); // Ensure correct column index
-                formData.append('courseCapacities[]', row.children[6].innerText.trim()); // Ensure correct column index
+                if (row.children[1]) formData.append('courseNames[]', row.children[1].innerText.trim());
+                if (row.children[3]) formData.append('enrolledStudents[]', row.children[3].innerText.trim()); 
+                if (row.children[4]) formData.append('droppedStudents[]', row.children[4].innerText.trim()); 
+                if (row.children[5]) formData.append('courseCapacities[]', row.children[5].innerText.trim());
             });
 
             console.log('Form Data:', Array.from(formData.entries())); // Log form data for debugging
@@ -45,6 +46,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveButton.style.display = 'none';
                     cancelButton.style.display = 'none';
                     editButton.style.display = 'block';
+
+                    // Update the rows based on the updated data from the server
+                    result.updatedSections.forEach(updatedSection => {
+                        const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
+                        if (row) {
+                            row.children[1].innerText = updatedSection.name;
+                            row.children[3].innerText = updatedSection.enrolled;
+                            row.children[4].innerText = updatedSection.dropped;
+                            row.children[5].innerText = updatedSection.capacity;
+                        }
+                    });
                 } else {
                     console.error('Save failed.');
                 }

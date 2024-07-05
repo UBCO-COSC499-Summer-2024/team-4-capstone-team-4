@@ -1,12 +1,5 @@
 <thead class="bg-gray-50">
     <tr>
-        <th scope="col" class="sortable {{$sortField==='serialNumber'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            #
-            <div class="sort-icons">
-                <span class="material-symbols-outlined sort-icon {{$sortField === 'serialNumber' && $sortDirection === 'asc' ? 'active' : ''}}" data-field="serialNumber" data-direction="asc">arrow_upward</span>
-                <span class="material-symbols-outlined sort-icon {{$sortField === 'serialNumber' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="serialNumber" data-direction="desc">arrow_downward</span>
-            </div>
-        </th>
         <th scope="col" class="sortable {{$sortField==='courseName'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Course Name
             <div class="sort-icons">
@@ -19,13 +12,6 @@
             <div class="sort-icons">
                 <span class="material-symbols-outlined sort-icon {{$sortField === 'departmentName' && $sortDirection === 'asc' ? 'active' : ''}}" data-field="departmentName" data-direction="asc">arrow_upward</span>
                 <span class="material-symbols-outlined sort-icon {{$sortField === 'departmentName' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="departmentName" data-direction="desc">arrow_downward</span>
-            </div>
-        </th>
-        <th scope="col" class="sortable {{$sortField==='courseDuration'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Course Duration (weeks)
-            <div class="sort-icons">
-                <span class="material-symbols-outlined sort-icon {{$sortField === 'courseDuration' && $sortDirection === 'asc' ? 'active' : ''}}" data-field="courseDuration" data-direction="asc">arrow_upward</span>
-                <span class="material-symbols-outlined sort-icon {{$sortField === 'courseDuration' && $sortDirection === 'desc' ? 'active' : ''}}" data-field="courseDuration" data-direction="desc">arrow_downward</span>
             </div>
         </th>
         <th scope="col" class="sortable {{$sortField==='enrolledStudents'?($sortDirection==='asc'?'th-sort-asc':'th-sort-desc'):''}} px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

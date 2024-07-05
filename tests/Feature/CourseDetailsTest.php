@@ -5,15 +5,17 @@ namespace Tests\Feature;
 use App\Models\CourseSection;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Tests\TestCase;
 use App\Http\Controllers\CourseDetailsController;
 
-
-class CourseDetailsTest extends TestCase{
+class CourseDetailsTest extends TestCase
+{
     use RefreshDatabase;
+    
 
-
-    public function test_course_edit_functionality(){
+    public function test_course_edit_functionality()
+    {
         $user = User::factory()->create();
         $courseSection = CourseSection::factory()->create([
             'name' => 'Original Course',
@@ -45,24 +47,25 @@ class CourseDetailsTest extends TestCase{
         ]);
     }
 
-    public function test_save_method_with_missing_data(){
-    $controller = new CourseDetailsController();
+    public function test_save_method_with_missing_data()
+    {
+        $controller = new CourseDetailsController();
 
-    // Mock data with missing fields
-    $request = Request::create('/course-details/save', 'POST', [
-        'ids' => [1],
-        // 'courseNames' => ['Updated Course'], // Missing courseNames
-        'courseDurations' => [12],
-        'enrolledStudents' => [100],
-        'droppedStudents' => [10],
-        'courseCapacities' => [120],
-    ]);
+        // Mock data with missing fields
+        $request = Request::create('/course-details/save', 'POST', [
+            'ids' => [1],
+            // 'courseNames' => ['Updated Course'], // Missing courseNames
+            'courseDurations' => [12],
+            'enrolledStudents' => [100],
+            'droppedStudents' => [10],
+            'courseCapacities' => [120],
+        ]);
 
-    $response = $controller->save($request);
+        $response = $controller->save($request);
 
-    $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
-    $data = $response->getData(true);
-    $this->assertArrayHasKey('message', $data);
-    $this->assertEquals('Course names are required.', $data['message']);
-}
+        $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
+        $data = $response->getData(true);
+        $this->assertArrayHasKey('message', $data);
+        $this->assertEquals('Course names are required.', $data['message']);
+    }
 }

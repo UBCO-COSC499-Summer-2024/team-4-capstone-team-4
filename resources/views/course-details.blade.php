@@ -17,10 +17,8 @@
                     @if(isset($courseSections) && !empty($courseSections))
                         @foreach ($courseSections as $section)
                             <x-coursedetails-table-row 
-                            :serialNumber="$section->serialNumber"
                             :courseName="$section->name" 
                             :departmentName="$section->departmentName"
-                            :courseDuration="$section->duration" 
                             :enrolledStudents="$section->enrolled" 
                             :droppedStudents="$section->dropped" 
                             :courseCapacity="$section->capacity"

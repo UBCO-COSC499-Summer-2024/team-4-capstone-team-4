@@ -11,22 +11,37 @@ use App\Models\Area;
  */
 class CourseSectionFactory extends Factory {
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    protected $model=CourseSection::class;
+     
+Define the model's default state.*
+@return array<string, mixed>*/
+protected $model=CourseSection::class;
 
     public function definition() {
-        $prefixes=['COSC', 'MATH','PHYS','STAT'];
-        return [
+        $prefixes = ['COSC', 'MATH', 'STAT', 'PHYS'];
+        $areas = Area::pluck('id', 'name')->toArray();
 
-            'name'=>fake()->randomElement($prefixes).' '.fake()->numberBetween(100,500),
-            'area_id'=>Area::factory(),
-            'duration'=>fake()->numberBetween(4,12),
-            'enrolled'=>fake()->numberBetween(10,100),
-            'dropped'=>fake()->numberBetween(0,20),
-            'capacity'=>fake()->numberBetween(10,200),
+        // Define the mapping of prefixes to area IDs
+        $prefixAreaMapping = [
+            'COSC' => $areas['Computer Science'],
+            'MATH' => $areas['Mathematics'],
+            'STAT' => $areas['Statistics'],
+            'PHYS' => $areas['Physics']
+        ];
+
+        // Select a random prefix
+        $prefix = fake()->randomElement($prefixes);
+
+        return [
+            'name' => $prefix . ' ' . fake()->numberBetween(100, 500),
+            'area_id' => $prefixAreaMapping[$prefix],
+            'year' => fake()->year(),
+            'enrolled' => fake()->numberBetween(10, 100),
+            'dropped' => fake()->numberBetween(0, 20),
+            'capacity' => fake()->numberBetween(10, 200),
+            'term' => fake()->randomElement(['1', '2', '1-2']),
+            'session' => fake()->randomElement(['W', 'S']),
+            'section' => fake()->randomElement(['001', '002', '003']),
         ];
     }
+
 }
