@@ -33,7 +33,6 @@ class AreaPerformanceFactory extends Factory {
             'sei_avg' => fake()->numberBetween(1, 5),
             'enrolled_avg'=>fake()->numberBetween(0,100),
             'dropped_avg'=>fake()->numberBetween(0,100),
-            'capacity_avg'=>fake()->numberBetween(0,100),
             'year' => fake()->year(),
             'area_id' => Area::pluck('id')->random()
         ];

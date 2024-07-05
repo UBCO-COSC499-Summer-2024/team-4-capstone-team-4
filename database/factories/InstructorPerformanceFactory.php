@@ -43,7 +43,6 @@ class InstructorPerformanceFactory extends Factory {
             'sei_avg' => $this->faker->randomFloat(2, 1, 5),
             'enrolled_avg'=>fake()->numberBetween(0,100),
             'dropped_avg'=>fake()->numberBetween(0,100),
-            'capacity_avg'=>fake()->numberBetween(0,100),
             'year' => $this->faker->year,
             'instructor_id' => $instructor ? $instructor->id : UserRole::factory()->create(['role' => 'instructor'])->id,
         ];
