@@ -128,7 +128,6 @@ return new class extends Migration
             $table->float('sei_avg');
             $table->integer('enrolled_avg');
             $table->integer('dropped_avg');
-            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -140,7 +139,6 @@ return new class extends Migration
             $table->float('sei_avg');
             $table->integer('enrolled_avg');
             $table->integer('dropped_avg');
-            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -152,7 +150,6 @@ return new class extends Migration
             $table->float('sei_avg');
             $table->integer('enrolled_avg');
             $table->integer('dropped_avg');
-            $table->integer('capacity_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();

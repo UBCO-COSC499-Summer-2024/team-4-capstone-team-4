@@ -26,10 +26,6 @@
                 <div class="metric-header">Dropped Avg.</div>
                 <div class="metric-value">{{ $droppedAvg }}%</div>
             </div>
-            <div class="course-metric glass">
-                <div class="metric-header">Capacity Avg.</div>
-                <div class="metric-value">{{ $capacityAvg }}%</div>
-            </div>
         </div>
     </div>
 </div>

@@ -69,7 +69,6 @@ class ChartController extends Controller {
                 $deptPerformance->sei_avg = 0;
                 $deptPerformance->enrolled_avg = 0;
                 $deptPerformance->dropped_avg = 0;
-                $deptPerformance->capacity_avg = 0;
                 $deptPerformance->total_hours = json_encode([
                     'January' => 0,
                     'February' => 0,
@@ -91,7 +90,6 @@ class ChartController extends Controller {
             $deptSeiAvg = $deptPerformance->sei_avg;
             $deptEnrolledAvg = $deptPerformance->enrolled_avg;
             $deptDroppedAvg = $deptPerformance->dropped_avg;
-            $deptCapacityAvg = $deptPerformance->capacity_avg;
             $deptMonthHours = json_decode($deptPerformance->total_hours, true)[$currentMonth];
         
             // Fetch the performance for each area within the department for the current year
@@ -123,7 +121,6 @@ class ChartController extends Controller {
                     $performance->sei_avg = 0;
                     $performance->enrolled_avg = 0;
                     $performance->dropped_avg = 0;
-                    $performance->capacity_avg = 0;
                     $performance->total_hours = json_encode([
                         'January' => 0,
                         'February' => 0,
@@ -241,7 +238,6 @@ class ChartController extends Controller {
                     $performance->sei_avg = 0;
                     $performance->enrolled_avg = 0;
                     $performance->dropped_avg = 0;
-                    $performance->capacity_avg = 0;
                     $performance->total_hours = json_encode([
                         'January' => 0,
                         'February' => 0,
@@ -304,7 +300,6 @@ class ChartController extends Controller {
                 $seiAvg = $performance->sei_avg;
                 $enrolledAvg = $performance->enrolled_avg;
                 $droppedAvg = $performance->dropped_avg;
-                $capacityAvg = $performance->capacity_avg;
 
                 // Get the total instructor hours for the year
                 $totalHours = array_values(json_decode($performance->total_hours, true));
@@ -359,9 +354,9 @@ class ChartController extends Controller {
                     // Progress Bar Data
                     $label = [$currentMonth . ' Hours'];
                     $monthsHours = [$currentMonthHours];
-                    $hoursNeed = [(($performance->target_hours) / 12) - $currentMonthHours];
-                    if ($hoursNeed < 0) {
-                        $hoursNeed = 0;
+                    $hoursNeed = [0];
+                    if ((($performance->target_hours) / 12) > $currentMonthHours) {
+                        $hoursNeed = [(($performance->target_hours) / 12) - $currentMonthHours];
                     }
 
                     $chart3 = app()
@@ -448,8 +443,8 @@ class ChartController extends Controller {
                         ]);
                     
                     return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'capacityAvg', 'deptCoursesTotal', 'areaCoursesTotal', 
-                                'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptCapacityAvg', 'deptMonthHours'));
+                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'deptCoursesTotal', 'areaCoursesTotal', 'deptExtrasTotal', 
+                                'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptMonthHours'));
                 }
 
                 else {
@@ -482,16 +477,16 @@ class ChartController extends Controller {
                         ]);
                     
                     return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'capacityAvg', 'currentMonthHours', 'roleHoursTotal', 
-                                'extraHoursTotal', 'deptCoursesTotal', 'areaCoursesTotal', 'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 
-                                'deptEnrolledAvg', 'deptDroppedAvg', 'deptCapacityAvg', 'deptMonthHours'));
+                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'currentMonthHours', 'roleHoursTotal', 
+                                'extraHoursTotal', 'deptCoursesTotal', 'areaCoursesTotal', 'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 
+                                'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptMonthHours'));
                 }
 
             }
 
             else {
                 return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptCoursesTotal', 'areaCoursesTotal', 
-                            'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptCapacityAvg', 'deptMonthHours'));
+                            'deptExtrasTotal', 'areaExtrasTotal', 'deptRolesTotal', 'areaRolesTotal', 'deptSeiAvg', 'deptEnrolledAvg', 'deptDroppedAvg', 'deptMonthHours'));
             }
         }        
 
@@ -508,7 +503,6 @@ class ChartController extends Controller {
                 $performance->sei_avg = 0;
                 $performance->enrolled_avg = 0;
                 $performance->dropped_avg = 0;
-                $performance->capacity_avg = 0;
                 $performance->total_hours = json_encode([
                     'January' => 0,
                     'February' => 0,
@@ -567,7 +561,6 @@ class ChartController extends Controller {
             $seiAvg = $performance->sei_avg;
             $enrolledAvg = $performance->enrolled_avg;
             $droppedAvg = $performance->dropped_avg;
-            $capacityAvg = $performance->capacity_avg;
 
             // Get the total instructor hours for the year
             $totalHours = array_values(json_decode($performance->total_hours, true));
@@ -622,9 +615,9 @@ class ChartController extends Controller {
                 // Progress Bar Data
                 $label = [$currentMonth . ' Hours'];
                 $monthsHours = [$currentMonthHours];
-                $hoursNeed = [(($performance->target_hours) / 12) - $currentMonthHours];
-                if ($hoursNeed < 0) {
-                    $hoursNeed = 0;
+                $hoursNeed = [0];
+                if ((($performance->target_hours) / 12) > $currentMonthHours) {
+                    $hoursNeed = [(($performance->target_hours) / 12) - $currentMonthHours];
                 }
 
                 $chart2 = app()
@@ -711,7 +704,7 @@ class ChartController extends Controller {
                     ]);
                 
                 return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'capacityAvg'));
+                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg'));
             }
 
             else {
@@ -744,7 +737,7 @@ class ChartController extends Controller {
                     ]);
                 
                 return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'capacityAvg', 'currentMonthHours', 'roleHoursTotal', 'extraHoursTotal'));
+                                'courseSections', 'extraHours', 'serviceRoles', 'seiAvg', 'enrolledAvg', 'droppedAvg', 'currentMonthHours', 'roleHoursTotal', 'extraHoursTotal'));
             }
         }
 
