@@ -21,7 +21,7 @@
                 <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->name }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
+                        <option value="{{ $course->id }}">{{ $course->name }} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
@@ -59,10 +59,10 @@
         </div>    
 
         @endforeach
-    
+        
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Add Row</button>
-            <button type="submit" class="bg-green-500 text-black p-2 rounded hover:bg-green-600">Save</button>
+            <button type="button" wire:click="addRow" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Row</button>
+            <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
 
@@ -73,7 +73,7 @@
     @if(session('success'))
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <x-import-modal />
+            <x-import-modal moreText="Insert More" />
         </div>
         @endif
     @endif

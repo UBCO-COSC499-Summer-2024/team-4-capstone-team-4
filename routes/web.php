@@ -174,5 +174,15 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::get('/assign-courses', function () {
+        return view('assign-courses');
+    })->name('assign-courses');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });

@@ -2,12 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Models\AreaPerformance;
 use App\Models\CourseSection;
+use App\Models\DepartmentPerformance;
 use App\Models\SeiData;
+use App\Models\Teach;
+use App\Models\InstructorPerformance;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
+
 
 class ImportSeiForm extends Component
 {
@@ -117,7 +122,18 @@ class ImportSeiForm extends Component
                 ]),
             ]);
 
+            $teach = Teach::where('course_section_id', $row['cid'])->first();
+            if($teach){
+                $instructor_id = $teach->instructor_id;
+                $year = CourseSection::find($row['cid'])->year;
+                InstructorPerformance::updatePerformance($instructor_id, $year);
+                AreaPerformance::updateAreaPerformance($year);
+                DepartmentPerformance::updateDepartmentPerformance($year);
+            }
+
         }
+
+       
 
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
@@ -141,7 +157,17 @@ class ImportSeiForm extends Component
 
     public function render()
     {
-        $courses = CourseSection::all();
+        // $courses = CourseSection::all();
+
+        $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
+        ->whereNull('sei_data.course_section_id')
+        ->select('course_sections.*')
+        ->orderBy('course_sections.year')
+        ->orderBy('course_sections.session')
+        ->orderBy('course_sections.term')
+        ->orderBy('course_sections.name')
+        ->orderBy('course_sections.section')
+        ->get();
 
         return view('livewire.import-sei-form', [
             "courses" => $courses,
