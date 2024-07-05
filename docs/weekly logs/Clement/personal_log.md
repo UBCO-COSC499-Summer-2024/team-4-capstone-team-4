@@ -1,3 +1,54 @@
+## Cycle: July 3rd - July 4th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_03_2024-07_04_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Development for Service Role Management Pages
+  * #2: Troubleshooting Issues with Service Role Pages
+  * #3: Implementing and Managing Service Roles
+  * #4: Modal Functionality and Toast Events
+  * #5: Toolbar Functionality
+
+### Progress Update (since 07/03/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Front End Development for Service Role Management Pages</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Troubleshooting Issues with Service Role Pages</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implementing and Managing Service Roles</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Modal Functionality and Toast Events</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Toolbar Functionality</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Team meeting on July 3rd helped outline troubleshooting steps and front-end requirements. Successfully fixed all issues on the Service Role Pages by July 4th. Implemented and managed adding, removing, and editing individual service roles and hours. Resolved modal loading issues and added toast events for better UX. Toolbar functionality is working as expected.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Present MVP to the team
+  * Discuss and assign new tasks based on the MVP presentation
+  * Implement UI changes and continuous debugging
+  * Refine any remaining modal functionality and enhance UI/UX
+
+---
+
 ## Cycle: June 28th - July 2nd
 
 ### Timesheet
