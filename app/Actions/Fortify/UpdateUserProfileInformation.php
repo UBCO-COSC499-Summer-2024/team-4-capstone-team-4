@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Laravel\Fortify\Fortify;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -16,6 +15,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      *
      * @param  array<string, mixed>  $input
      */
+    public function update($user, $input) {
+        $this->show($user, $input);
+    }
     public function show(User $user, array $input): void
     {
         Validator::make($input, [
