@@ -11,12 +11,12 @@
         <p class="text-lg font-light mb-6">Successfully Saved!</p>
         <div class="flex justify-center mt-6">
             <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 rounded-sm hover:bg-green-500 hover:text-white" 
-                    onclick="location.href='{{ route('assign-courses') }}'">
+                    onclick="location.href='{{ route('course-details') }}'">
             View Courses
             </button>
             <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 rounded-sm hover:bg-green-500 hover:text-white" 
                     wire:click="closeModal">
-            Insert More
+            {{ $moreText }}
             </button>
         </div>
     </div>

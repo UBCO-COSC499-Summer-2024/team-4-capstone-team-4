@@ -16,6 +16,8 @@ class ImportAssignCourse extends Component
 {
     public $assignments = [];
 
+    public $showModal = false;
+
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
@@ -87,6 +89,14 @@ class ImportAssignCourse extends Component
         $this->mount();
 
         session()->flash('success', 'Instructors assigned successfully!');
+
+        if(session()->has('success')) {
+            $this->showModal = true;
+        }
+    }
+
+    public function closeModal() {
+        $this->showModal = false;
     }
 
     public function getAvailableCourses() {
@@ -96,34 +106,13 @@ class ImportAssignCourse extends Component
     }
 
     public function getAvailableInstructors() {
-    //    $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('id');
-
-    //    $assignedInstructorIds = Teach::whereIn('instructor_id', $instructorRoleIds)->pluck('instructor_id');
-
-    //    return User::whereIn('id', $instructorRoleIds)
-    //        ->whereNotIn('id', $assignedInstructorIds)
-    //        ->get();
-
-        $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('user_id');
+        // $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('user_id');
 
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')->where('role', 'instructor')->get();
     }
 
     public function render()
     {
-
-        //AreaPerformance::updateAreaPerformance(2019);
-
-        // dd($this->getAvailableCourses(), $this->getAvailableInstructors());
-
-        // DepartmentPerformance::updateDepartmentPerformance(1989);
-        // AreaPerformance::updateAreaPerformance();
-        // InstructorPerformance::updatePerformance(1, 2024);
-        // Teach::getInstructorsForCourses();
-        // SeiData::calculateSEIAverages();
-
-        
-
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
             'availableCourses' => $this->getAvailableCourses(),

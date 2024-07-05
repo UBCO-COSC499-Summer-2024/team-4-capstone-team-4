@@ -91,7 +91,7 @@
     {{-- @if(session()->has('success') && session('success')) --}}
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <x-import-modal />
+            <x-import-modal moreText="Insert More"/>
             {{-- temp --}}
             <div class="absolute right-5 top-16 bg-blue-50 rounded-sm shadow-lg px-6 py-4 flex flex-col ">
         

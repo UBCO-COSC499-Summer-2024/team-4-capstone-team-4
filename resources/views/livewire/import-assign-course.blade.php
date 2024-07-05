@@ -28,6 +28,18 @@
             <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
+
+    <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="text-white text-xl text-center m-80">Saving...</div>
+    </div>
+
+    @if(session('success'))
+        @if($showModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-import-modal moreText="Assign More"/>
+        </div>
+        @endif
+    @endif
 </div>
 
 <script>
