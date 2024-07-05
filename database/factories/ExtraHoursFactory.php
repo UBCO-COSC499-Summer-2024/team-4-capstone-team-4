@@ -31,7 +31,7 @@ class ExtraHoursFactory extends Factory {
         $area = Area::inRandomOrder()->first();
 
         return [
-            'name' => $this->faker->word,
+            'name' => fake()->randomElement(['Meeting','Conference', 'Committee']),
             'description' => $this->faker->sentence,
             'hours' => $this->faker->numberBetween(1, 730),
             'year'=> $this->faker->year(),
