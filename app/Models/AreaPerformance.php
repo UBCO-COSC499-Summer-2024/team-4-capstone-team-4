@@ -81,7 +81,6 @@ class AreaPerformance extends Model {
                     'sei_avg'=> $roundedScore,
                     'enrolled_avg'=> 0,
                     'dropped_avg'=> 0,
-                    'capacity_avg'=> 0,
                     'total_hours' => json_encode([
                         'January' => 0,
                         'February' => 0,
@@ -112,7 +111,6 @@ class AreaPerformance extends Model {
         //         'sei_avg'=> 0,
         //         'enrolled_avg'=> $areaEnrolledAverages,
         //         'dropped_avg'=> $areaDroppedAverages,
-        //         'capacity_avg'=> 0,
         //         'total_hours' => json_encode([
         //             'January' => 0,
         //             'February' => 0,
