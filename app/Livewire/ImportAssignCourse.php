@@ -74,7 +74,6 @@ class ImportAssignCourse extends Component
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
-                        'capacity_avg'=> 0,
                         'year' => $assignment['year'],
                     ]);
                    InstructorPerformance::updatePerformance($assignment['instructor_id'], $assignment['year']);
