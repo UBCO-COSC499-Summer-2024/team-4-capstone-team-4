@@ -50,6 +50,7 @@ class InstructorPerformance extends Model {
 
     public static function updatePerformance($instructor_id, $year) {
         $seiAverages = SeiData::calculateSEIAverages();
+        // $enrolledAverages = CourseSection::calculateEnrolledAverages();
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
             $query->where('year', $year);
@@ -81,7 +82,7 @@ class InstructorPerformance extends Model {
         $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
         if ($performance != null) {
             $performance->update([
-                'sei_avg' => $roundedAvg
+                'sei_avg' => $roundedAvg,
             ]);
         }
 

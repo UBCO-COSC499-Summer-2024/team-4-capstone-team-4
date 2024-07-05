@@ -62,10 +62,12 @@ class AreaPerformance extends Model {
     //     }
 
         
-    // }
+    // 
 
     public static function updateAreaPerformance($year) {
         $areaAverages = SeiData::calculateSEIAreaAverages($year);
+        // $areaEnrolledAverages = CourseSection::calculateAreaEnrolledAvg($year);
+        // $areaDroppedAverages = CourseSection::calculateAreaDroppedAvg($year);
 
         foreach($areaAverages as $areaId => $averageScore){
             $roundedScore = round($averageScore, 1);
@@ -98,6 +100,35 @@ class AreaPerformance extends Model {
             }
            
         }
+        
+        // $performance = self::where('year', $year)->get();
+        // if($performance != null){
+        //     $performance->update(['enrolled_avg'=> $areaEnrolledAverages]);
+        //     $performance->update(['dropped_avg'=> $areaDroppedAverages]);
+        // }else{
+        //     self::create([
+        //         'area_id'=>$areaId,
+        //         'year'=> $year,
+        //         'sei_avg'=> 0,
+        //         'enrolled_avg'=> $areaEnrolledAverages,
+        //         'dropped_avg'=> $areaDroppedAverages,
+        //         'capacity_avg'=> 0,
+        //         'total_hours' => json_encode([
+        //             'January' => 0,
+        //             'February' => 0,
+        //             'March' => 0,
+        //             'April' => 0,
+        //             'May' => 0,
+        //             'June' => 0,
+        //             'July' => 0,
+        //             'August' => 0,
+        //             'September' => 0,
+        //             'October' => 0,
+        //             'November' => 0,
+        //             'December' => 0,
+        //         ]),
+        //     ]);
+        // }
 
         return;
     }

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Area;
+use App\Models\AreaPerformance;
 use App\Models\CourseSection;;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
@@ -119,6 +120,8 @@ class ImportWorkdayForm extends Component
                 'dropped' => $row['dropped'], 
                 'capacity' => $row['capacity'],        
             ]);
+
+            AreaPerformance::updateAreaPerformance($row['year']);
 
         }
 
