@@ -58,9 +58,6 @@ class InstructorPerformanceTest extends TestCase {
         // Assert that the instructor performance has a dropped average
         $this->assertNotEmpty($instructor_performance->dropped_avg);
 
-        // Assert that the instructor performance has a capacity average
-        $this->assertNotEmpty($instructor_performance->capacity_avg);
-
         // Assert that the instructor performance has an associated year
         $this->assertNotEmpty($instructor_performance->year);  
 

@@ -17,7 +17,7 @@
     <div class="department-preview glass">
         <div class="tb">
             <div class="dept-head">
-                <div class="col">Total Extra Hours by Area:</div>
+                <div class="col">Total Extra Hours by Area</div>
             </div>
             @foreach($areaExtrasTotal as $extra)
             <div class="dept-item">

@@ -43,10 +43,6 @@
                 <div class="metric-header">Dropped Avg.</div>
                 <div class="metric-value">{{ $deptDroppedAvg }}%</div>
             </div>
-            <div class="course-metric glass">
-                <div class="metric-header">Capacity Avg.</div>
-                <div class="metric-value">{{ $deptCapacityAvg }}%</div>
-            </div>
         </div>
     </div>
 </div>

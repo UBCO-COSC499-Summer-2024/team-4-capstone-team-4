@@ -55,9 +55,6 @@ class AreaPerformanceTest extends TestCase {
         // Assert that the area performance has a dropped average
         $this->assertNotEmpty($area_performance->dropped_avg);
 
-        // Assert that the area performance has a capacity average
-        $this->assertNotEmpty($area_performance->capacity_avg);
-
         // Assert that the area performance has an associated year
         $this->assertNotEmpty($area_performance->year);  
 

@@ -49,9 +49,6 @@ class DepartmentPerformanceTest extends TestCase {
         // Assert that the department performance has a dropped average
         $this->assertNotEmpty($department_performance->dropped_avg);
 
-        // Assert that the department performance has a capacity average
-        $this->assertNotEmpty($department_performance->capacity_avg);
-
         // Assert that the department performance has an associated year
         $this->assertNotEmpty($department_performance->year);  
 
