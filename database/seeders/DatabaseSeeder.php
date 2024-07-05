@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Area;
 use App\Models\UserRole;
 use App\Models\ServiceRole;
+use App\Models\SeiData;
 use App\Models\AreaPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\Teach;
@@ -57,9 +58,24 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        CourseSection::factory(10)->create();
-
-        Teach::factory(5)->create();
+        $courses = CourseSection::factory(5)->create();
+        foreach($courses as $course){
+            Teach::factory()->create([
+                'course_section_id' => $course->id,
+                'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
+            ]);
+            SeiData::factory()->create([
+                'course_section_id'=> $course->id,
+                'questions'=>json_encode([
+                    'q1' => fake()->numberBetween(1,5),
+                    'q2' => fake()->numberBetween(1,5),
+                    'q3' => fake()->numberBetween(1,5),
+                    'q4' => fake()->numberBetween(1,5),
+                    'q5' => fake()->numberBetween(1,5),
+                    'q6' => fake()->numberBetween(1,5),
+                ]),
+            ]);
+        }
 
         $instructor = User::factory()->create([
             'firstname' => 'Dr',
