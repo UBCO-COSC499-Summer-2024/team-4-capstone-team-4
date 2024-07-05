@@ -59,7 +59,7 @@
         </div>    
 
         @endforeach
-    
+        
         <div class="mt-4 flex justify-end space-x-2">
             <button type="button" wire:click="addRow" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Row</button>
             <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
