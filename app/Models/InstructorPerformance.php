@@ -76,10 +76,12 @@ class InstructorPerformance extends Model {
             $sei_avg = $sei_sum / $count;
         }
 
+        $roundedAvg = round($sei_avg, 1);
+
         $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
         if ($performance != null) {
             $performance->update([
-                'sei_avg' => $sei_avg
+                'sei_avg' => $roundedAvg
             ]);
         }
 

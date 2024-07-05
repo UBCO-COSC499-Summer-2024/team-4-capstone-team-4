@@ -68,14 +68,15 @@ class AreaPerformance extends Model {
         $areaAverages = SeiData::calculateSEIAreaAverages($year);
 
         foreach($areaAverages as $areaId => $averageScore){
+            $roundedScore = round($averageScore, 1);
             $performance = self::where('area_id', $areaId)->where('year', $year)->first();
             if($performance != null){
-                $performance->update(['sei_avg'=> $averageScore]);
+                $performance->update(['sei_avg'=> $roundedScore]);
             }else{
                 self::create([
                     'area_id'=>$areaId,
                     'year'=> $year,
-                    'sei_avg'=> $averageScore,
+                    'sei_avg'=> $roundedScore,
                     'enrolled_avg'=> 0,
                     'dropped_avg'=> 0,
                     'capacity_avg'=> 0,

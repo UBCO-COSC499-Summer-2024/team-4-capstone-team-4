@@ -52,14 +52,15 @@ class DepartmentPerformance extends Model {
 
         
         foreach($departmentAverages as $deptId => $averageScore){
+            $roundedScore = round($averageScore, 1);
             $performance = self::where('dept_id', $deptId)->where('year', $year)->first();
             if($performance != null){
-                $performance->update(['sei_avg'=> $averageScore]);
+                $performance->update(['sei_avg'=> $roundedScore]);
             }else{
                 self::create([
                     'dept_id'=>$deptId,
                     'year'=> $year,
-                    'sei_avg'=> $averageScore,
+                    'sei_avg'=> $roundedScore,
                     'enrolled_avg'=> 0,
                     'dropped_avg'=> 0,
                     'capacity_avg'=> 0,
