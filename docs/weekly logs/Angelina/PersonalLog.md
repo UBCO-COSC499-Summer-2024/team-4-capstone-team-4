@@ -13,7 +13,7 @@ Clockify report
   * #4: Create Dashboard Tests
   * #5: MVP Presentation
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Remove Capacity Metric    | Completed   |
@@ -22,10 +22,10 @@ Clockify report
 | Create Dashboard Tests    | In Progress |
 | MVP Presentation          | Completed   |
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Created the presentation slides for the MVP and tested the features once they were integretated in our development branches. Removed unnecessary capacity metric from the performance tables in the database. Completed MVP presentation.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
  * Review MVP Feedback
  * Divide remaining features amongst group members and begin work on them
  * Continue testing and UI enhancement for Dashboard
@@ -38,12 +38,12 @@ Created the presentation slides for the MVP and tested the features once they we
 Clockify report
 ![Clockify report](./clockifylogs/log630-73.png)
 
-### Current Tasks (Provide sufficient detail)
+### Current Tasks 
   * #1: Create Additional Visualizations for Department Dashboard
   * #2: Connect Database to Chart Visualizations
   * #3: Create Leaderboard
 
-### Progress Update (since 6/5/2024)
+### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Department Visualizations | Completed   |
@@ -52,10 +52,10 @@ Clockify report
 | Create Dashboard Tests    | In Progress |
 
 
-### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+### Cycle Goal Review 
 Updated the database to supply all of the necessary data for the dashboard to extract. Completed modifying the charts backend to allow for role based access and account for several user types by connecting to the database. Successfully implemented first draft of dashboard front and backend fucntionality, including role based access and redirection for certain user types.
 
-### Next Cycle Goals (What are you going to accomplish during the next cycle)
+### Next Cycle Goals 
  * Create tests for dashboard features
  * Get ready for MVP presentation
  * Get a leaderboard and ranking system added to the dashboard
