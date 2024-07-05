@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,7 +20,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->boolean('approved')->default(false);
             $table->string('acces_code')->nullable();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
         });
-    
+
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
         });
-    
+
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -59,25 +59,28 @@ return new class extends Migration
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('service_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->year('year');
+            $table->text('description')->nullable()->default('Default Description');
+            $table->year('year')->default(date('Y'));
             $table->json('monthly_hours');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
+            $table->unique(['name', 'area_id']);
         });
-    
+
         Schema::create('role_assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_role_id')->constrained('service_roles')->cascadeOnDelete();
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['service_role_id', 'instructor_id']);
         });
-    
+
         Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -91,7 +94,7 @@ return new class extends Migration
             $table->string('section');
             $table->timestamps();
         });
-    
+
         Schema::create('sei_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
@@ -105,14 +108,14 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('teaching_assistants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->float('rating')->nullable();
             $table->timestamps();
         });
-    
+
         Schema::create('assists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
@@ -120,35 +123,37 @@ return new class extends Migration
             $table->float('rating')->nullable();
             $table->timestamps();
         });
-    
+
         Schema::create('instructor_performance', function (Blueprint $table) {
             $table->id();
             $table->integer('score');
-            $table->integer('total_hours');
+            $table->json('total_hours');
             $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('area_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
-    
+
         Schema::create('department_performance', function (Blueprint $table) {
             $table->id();
-            $table->integer('score');
-            $table->integer('total_hours');
-            $table->integer('target_hours')->nullable();
+            $table->json('total_hours');
             $table->float('sei_avg');
+            $table->integer('enrolled_avg');
+            $table->integer('dropped_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();
@@ -186,6 +191,46 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('audit_logs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('user_alt');
+            $table->string('action');
+            $table->text('description')->nullable();
+            $table->string('table_name');
+            $table->string('operation_type');
+            $table->jsonb('old_value')->nullable();
+            $table->jsonb('new_value')->nullable();
+            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
+
+        // for pgaudit
+        Schema::create('super_audits', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('audit_user')->nullable();
+            $table->text('application_name')->nullable();
+            $table->string('client_addr', 45)->nullable();
+            $table->integer('client_port')->nullable();
+            $table->timestamp('occurred_at', 6)->useCurrent();
+            $table->text('statement_tag')->nullable();
+            $table->text('transaction_id')->nullable();
+            $table->text('query')->nullable();
+            $table->jsonb('params')->nullable();
+            $table->text('session_id')->nullable();
+            $table->integer('pid')->nullable();
+            $table->text('user_query')->nullable();
+            $table->text('schema_name')->nullable();
+            $table->text('relation_name')->nullable();
+            $table->string('object_type')->nullable();
+            $table->string('command_tag')->nullable();
+            $table->integer('return_rows')->nullable();
+            $table->string('session_user')->nullable();
+            $table->text('security_label')->nullable();
+            $table->jsonb('context')->nullable();
+        });
     }
 
     /**
@@ -193,6 +238,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('audit_logs');
         Schema::dropIfExists('users');
         Schema::dropIfExists('user_roles');
         Schema::dropIfExists('departments');
@@ -212,5 +258,6 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('settings');
         Schema::dropIfExists('auth_methods');
+        Schema::dropIfExists('super_audits');
     }
 };

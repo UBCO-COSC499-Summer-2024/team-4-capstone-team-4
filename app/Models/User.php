@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\UserRole;
+use App\Models\Area;
+use App\Models\InstructorPerformance;
 
 class User extends Authenticatable {
     use HasApiTokens;
@@ -62,7 +64,7 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
-    
+
     /**
      * Define a one-to-many relationship with UserRole model.
      *
@@ -70,6 +72,27 @@ class User extends Authenticatable {
      */
     public function roles() {
         return $this->hasMany(UserRole::class, 'user_id');
+    }
+
+    public function hasRole($role) {
+        return $this->roles->contains('role', $role);
+    }
+
+    public function hasRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
+
+    public function getName() {
+        try {
+            return $this->firstname . ' ' . $this->lastname;
+        } catch (\Exception $e) {
+            return 'Unknown';
+        }
+    }
+
+    public function teaches(){
+        return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
+                    ->where('user_roles.role', 'instructor');
     }
 
     public function getFirstname() {
@@ -82,5 +105,10 @@ class User extends Authenticatable {
 
     public function authMethods() {
         return $this->hasMany(AuthMethod::class,'user_id');
+    }
+
+    public function instructorPerformances(){
+        return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
+                    ->where('user_roles.role', 'instructor');
     }
 }

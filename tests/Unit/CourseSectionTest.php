@@ -6,8 +6,10 @@ use Tests\TestCase;
 use App\Models\CourseSection;
 use App\Models\Area;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CourseSectionTest extends TestCase {
+    use RefreshDatabase;
     /**
      * Test if course section table exists.
      *
@@ -46,8 +48,8 @@ class CourseSectionTest extends TestCase {
         // Assert that the course section has an area
         $this->assertNotEmpty($courseSection->area); 
 
-        // Assert that the course section has a duration
-        $this->assertNotEmpty($courseSection->duration); 
+        // Assert that the course section has a year
+        $this->assertNotEmpty($courseSection->year); 
 
         // Assert that the course section has an enrolled quantity
         $this->assertNotEmpty($courseSection->enrolled); 
@@ -57,5 +59,8 @@ class CourseSectionTest extends TestCase {
 
         // Assert that the course section has a capacity
         $this->assertNotEmpty($courseSection->capacity); 
+
+        // Assert that the course section has a year
+        $this->assertNotEmpty($courseSection->year); 
     }
 }

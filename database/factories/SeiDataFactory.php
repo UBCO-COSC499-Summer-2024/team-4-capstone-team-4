@@ -19,7 +19,7 @@ class SeiDataFactory extends Factory {
     public function definition(): array {
         return [
             'course_section_id'=>CourseSection::pluck('id')->random(),
-            'questions'=>json_encode(fake()->randomElements(['Q1', 'Q2', 'Q3', 'Q4', 'Q5'],3)),
+            'questions'=>json_encode(fake()->randomElements(['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6'],3)),
         ];
     }
 }

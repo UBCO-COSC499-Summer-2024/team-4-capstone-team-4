@@ -22,7 +22,7 @@ class InstructorPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'instructor_id',
+        'score', 'total_hours', 'target_hours', 'sei_avg', 'enrolled_avg', 'dropped_avg', 'year', 'instructor_id',
     ];
 
     /**
@@ -44,5 +44,26 @@ class InstructorPerformance extends Model {
     public function instructor()
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
+    }
+
+    public function updateTotalHours($hours = [])
+    {
+        $totalHours = json_decode($this->total_hours, true);
+        foreach ($hours as $month => $hour) {
+            if ($month <= date('n')) {
+                $totalHours[$month] = $hour;
+            }
+        }
+
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+    }
+
+    public function addHours($month, $hour)
+    {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] += $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
     }
 }

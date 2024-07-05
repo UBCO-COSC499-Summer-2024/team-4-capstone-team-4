@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+if(! defined('STDIN')) define('STDIN', fopen("php://stdin","r"));
 define('LARAVEL_START', microtime(true));
 
 // Determine if the application is in maintenance mode...

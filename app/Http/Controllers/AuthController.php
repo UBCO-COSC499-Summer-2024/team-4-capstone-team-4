@@ -52,6 +52,7 @@ class AuthController extends Controller
                     'email' => $socialiteUser->getEmail(),
                     'password' => bcrypt(Config::get('app.default_password')),
                     'email_verified_at' => now(),
+                    'profile_photo_path' => $socialiteUser->getAvatar() ?? null,
                 ]);
 
                 AuthMethod::create([
@@ -71,6 +72,12 @@ class AuthController extends Controller
                     'token' => $socialiteUser->token,
                     'avatar' => $socialiteUser->getAvatar() ?? null,
                 ]);
+                // if user profile photo is not set, update it
+                if (!$user->profile_photo_path) {
+                    $user->update([
+                        'profile_photo_path' => $socialiteUser->getAvatar() ?? null,
+                    ]);
+                }
             }
         
             Auth::login($user, true);

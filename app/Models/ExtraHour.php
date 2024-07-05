@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\UserRole;
 
-class ExtraHours extends Model {
+class ExtraHour extends Model {
     use HasFactory;
 
     /**
@@ -22,7 +22,7 @@ class ExtraHours extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'hours', 'year', 'month',  'assigner', 'instructor_id', 'area',
+        'name', 'description', 'hours', 'year', 'month',  'assigner_id', 'instructor_id', 'area_id',
     ];
 
     /**
