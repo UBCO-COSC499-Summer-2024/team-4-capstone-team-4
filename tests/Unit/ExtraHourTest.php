@@ -5,11 +5,11 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\UserRole;
-use App\Models\ExtraHours;
+use App\Models\ExtraHour;
 use App\Models\Area;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ExtraHoursTest extends TestCase {
+class ExtraHourTest extends TestCase {
     use RefreshDatabase;
     /**
      * Test if extra_hours table exists.
@@ -35,7 +35,7 @@ class ExtraHoursTest extends TestCase {
         $area = Area::factory()->create();
 
         // Create an extra hours
-        $extraHours = ExtraHours::factory()->create();([
+        $extraHours = ExtraHour::factory()->create();([
             'assigner_id' => $assigner->id,
             'instructor_id'=> $instructor->id,
             'area_id' => $area->id,
@@ -46,7 +46,7 @@ class ExtraHoursTest extends TestCase {
         $this->assertModelExists($extraHours);
 
         // Assert that the extra hours was created successfully 
-        $this->assertInstanceOf(ExtraHours::class, $extraHours);
+        $this->assertInstanceOf(ExtraHour::class, $extraHours);
 
         // Assert that the course section has a name
         $this->assertNotEmpty($extraHours->name);  

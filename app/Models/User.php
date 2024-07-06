@@ -64,7 +64,7 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
-    
+
     /**
      * Define a one-to-many relationship with UserRole model.
      *
@@ -81,7 +81,15 @@ class User extends Authenticatable {
     public function hasRoles($roles = []) {
         return $this->roles->whereIn('role', $roles)->isNotEmpty();
     }
-    
+
+    public function getName() {
+        try {
+            return $this->firstname . ' ' . $this->lastname;
+        } catch (\Exception $e) {
+            return 'Unknown';
+        }
+    }
+
     public function teaches(){
         return $this->hasManyThrough(Teach::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
                     ->where('user_roles.role', 'instructor');

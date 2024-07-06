@@ -1,5 +1,6 @@
- <?php
+<?php
 
+use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffEditModeController;
@@ -20,7 +21,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', [ChartController::class, 'showChart'])->name('dashboard');
+    Route::get('/', [ChartController::class, 'showChart'])->name('main');
 });
 
 Route::middleware([
@@ -107,8 +108,53 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->group(function(){
-    Route::get('course-details/{id?}', [CourseDetailsController::class, 'show'])->name('course-details');
+])->group(function () {
+    Route::get('/courses', function () {
+        return view('courses');
+    })->name('courses');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/svcroles', function () {
+        return view('svcroles');
+    })->name('svcroles');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->prefix('/svcroles')->group(function () {
+    // Add-Svcrole (for testing purposes, will be changed to modal later)
+    Route::get('/add', function () {
+        return view('svcroles');
+    })->name('svcroles.add');
+
+    // Manage-Svcroles
+    Route::get('/manage', function () {
+        return view('svcroles');
+    })->name('svcroles.manage');
+
+    // manage/id
+    Route::get('/manage/{id}', function () {
+        return view('svcroles');
+    })->name('svcroles.manage.id');
+
+    // Requests
+    Route::get('/requests', function () {
+        return view('svcroles');
+    })->name('svcroles.requests');
+
+    // Logs
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
+})->group(function(){
+    Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
+        Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+        Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
 });
 
 Route::get('/privacy-policy', function () {
@@ -127,6 +173,16 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/assign-courses', function () {
+        return view('assign-courses');
+    })->name('assign-courses');
 });
 
 Route::middleware([

@@ -64,7 +64,6 @@ class CreateNewUser implements CreatesNewUsers
             'sei_avg' => 0,
             'enrolled_avg'=> 0,
             'dropped_avg'=> 0,
-            'capacity_avg'=> 0,
             'year' => date("Y"),
         ]);
 

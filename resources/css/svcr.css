@@ -1,0 +1,190 @@
+.svcr-table,
+#svcr-table {
+    width: 100%;
+    border-collapse: separate;
+    border: none;
+    /* background: rgb(107 114 128 / 1) */
+}
+
+.svcr-list {
+    display: grid;
+    flex-wrap: wrap;
+    /* grid auto columns with widths of 300px */
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    padding: 6px;
+    gap: 12px;
+}
+
+.svcr-list-header {
+    background: rgb(249 250 251 / 1);
+}
+
+.card-view .svcrole-card {
+    display: inline-block;
+    width: 30%;
+    margin: 1%;
+}
+
+.list-view .svcrole-list-item {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.list-header-title {
+    width: fit-content;
+}
+
+.svcr-list-header-item {
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+}
+
+.list-header-actions {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+}
+
+.list-header-action .icon {
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+}
+
+.svcr-list-item:hover {
+    background: #f5f5f5;
+}
+
+.svcr-list-item:has(.svcr-list-item-cell > input[type="checkbox"]:checked) {
+    background: #f0f0f0;
+}
+
+.svcr-table thead,
+#svcr-table thead {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    display: table-header-group;
+}
+
+/* .svcr-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+} */
+
+.svcr-list-header th {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    padding: 8px;
+}
+
+.bg-editing {
+    background-color: #f0f0f0;
+}
+
+.svcr-list-item input[type="text"],
+.svcr-list-item input[type="number"],
+.svcr-list-item select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    border-radius: 12px;
+}
+
+.svcr-list-item input[type="text"],
+.svcr-list-item input[type="number"] {
+    padding: 4px 8px;
+}
+
+.svcr-list-item select {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+}
+
+.svcr-table tbody,
+#svcr-table tbody {
+    width: 100%;
+}
+
+.svcr-list-item {
+    border-radius: 12px;
+    /* padding: 6px; */
+    border-spacing: 6px;
+    border-collapse: separate;
+}
+
+.svcr-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 6px;
+}
+
+.svcr-container .toolbar {
+    position: sticky;
+}
+
+.svcr-container .svcr-items {
+    position: relative;
+    height: 100% - 40px;
+}
+
+.svcr-list-item-cell {
+    padding: 8px;
+    border-radius: 4px;
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
+}
+
+.icon-cancel-edit {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.svcr-list-item-actions {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+.svcr-list-item-actions {
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    display: flex;
+}
+
+#svcr-select-all::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    /* border: 1px solid #ccc; */
+    border: none;
+    background-color: transparent;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#svcr-select-all:checked::before {
+    content: "✓";
+    background-color: #007bff;
+    opacity: 0;
+    color: white;
+}
+
+#svcr-select-all[indeterminate]::before {
+    content: "-";
+    text-align: center;
+    line-height: 10px; /* Vertically center the "-" */
+}

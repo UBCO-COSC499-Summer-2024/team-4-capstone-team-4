@@ -1,65 +1,126 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\SeiData;
+use App\Models\User;
+use App\Models\Teach;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-class CourseDetailsController extends Controller{
 
-    public function show(Request $user_id)
-    {
-       /* $user = User::with(['teaches.courseSection'])->find($user_id);
-        $tableData = []; // Initial empty data for the table
-        if (!$user) {
-            return redirect()->back()->with('error', 'User not found');
-        }
-        return view('course-details', compact('user', 'tableData')); */
+class CourseDetailsController extends Controller {
 
-        $user = (object)[
-            'firstname' => 'John',
-            'lastname' => 'Doe',
-            'email' => 'john.doe@example.com',
-            'profile_photo_url' => 'https://randomuser.me/api/portraits/men/1.jpg'
-        ];
+    public function show(Request $request){
+        $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
+            $seiData = SeiData::where('course_section_id', $section->id)->first();
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
 
-        $courseSections = [
-            (object)[
-                'serialNumber'=>'1',
-                'name' => 'COSC 499',
-                'department'=>'Computer Science',
-                'duration' => '14 weeks',
-                'enrolled' => 30,
-                'dropped' => 2,
-                'capacity' => 40
-            ],
-            (object)[
-                'serialNumber'=>'2',
-                'name' => 'COSC 414',
-                'department'=>'Computer Science',
-                'duration' => '14 weeks',
-                'enrolled' => 25,
-                'dropped' => 3,
-                'capacity' => 35
-            ],
-            (object)[
-                'serialNumber'=>'3',
-                'name' => 'MATH 303',
-                'department'=>'Mathematics',
-                'duration' => '14 weeks',
-                'enrolled' => 28,
-                'dropped' => 1,
-                'capacity' => 30
-            ]
-        ];
+            $formattedName = sprintf('%s %s - %s%s %s', 
+            $section->name, 
+            $section->section, 
+            $section->year, 
+            $section->session, 
+            $section->term
+        );
 
+    
+            return (object) [
+                'id' => $section->id,
+                'name' => $formattedName,
+                'departmentName' => $section->area ? $section->area->name : 'Unknown',
+                'enrolled' => $section->enrolled,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
+        });
+    
+        // Fetch additional data needed by the view
+        $courses = CourseSection::all(); // Adjust query as needed
+        $instructors = User::all(); // Adjust query as needed
+    
         $sortField = 'courseName';
         $sortDirection = 'asc';
+    
+        return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
+    }
+    
+    public function save(Request $request){
+    $ids = $request->input('ids', []);
+    $courseNames = $request->input('courseNames', []);
+    $courseDurations = $request->input('courseDurations', []);
+    $enrolledStudents = $request->input('enrolledStudents', []);
+    $droppedStudents = $request->input('droppedStudents', []);
+    $courseCapacities = $request->input('courseCapacities', []);
 
-        return view('course-details', compact('user', 'courseSections','sortField','sortDirection'));
+    $updatedSections = [];
+
+    if (empty($courseNames)) {
+        return response()->json(['message' => 'Course names are required.'], 400);
+    }
+
+    for ($i = 0; $i < count($ids); $i++) {
+        if (!isset($courseNames[$i]) || !isset($courseDurations[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
+            Log::error('Missing array index', [
+                'courseNames' => $courseNames,
+                'courseDurations' => $courseDurations,
+                'enrolledStudents' => $enrolledStudents,
+                'droppedStudents' => $droppedStudents,
+                'courseCapacities' => $courseCapacities,
+            ]);
+            continue;
+        }
+
+        $courseSection = CourseSection::find($ids[$i]);
+        if ($courseSection) {
+            $courseSection->name = $courseNames[$i];
+            $courseSection->duration = $courseDurations[$i]; // Ensure correct data type
+            $courseSection->enrolled = (int)$enrolledStudents[$i];
+            $courseSection->dropped = (int)$droppedStudents[$i];
+            $courseSection->capacity = (int)$courseCapacities[$i];
+            $courseSection->save();
+
+            $updatedSections[] = $courseSection; // Collect updated sections for response
+        } else {
+            Log::error('Course section not found', ['id' => $ids[$i]]);
+        }
+    }
+
+    return response()->json([
+        'message' => 'Courses updated successfully.',
+        'updatedSections' => $updatedSections
+    ]);
+}
 
 
-    } 
+   
+    public function assignCourse(Request $request) {
+       $courseId = $request->input('course_id');
+    $instructorId = $request->input('instructor_id');
+
+        $courseSection = CourseSection::find($request->course_id);
+        $courseSection->instructor_id = $request->instructor_id;
+        $courseSection->save();
+
+        Teach::create([
+            'course_section_id' => $courseId,
+            'user_id' => $instructorId
+        ]);
+    
+        return redirect()->route('course-details')->with('success', 'Course assigned to instructor successfully.');
+    }
+    private function calculateAverageRating($questionsJson) {
+        $questions = json_decode($questionsJson, true);
+        if (is_array($questions) && !empty($questions)) {
+            $ratings = array_filter(array_values($questions), function($value) {
+                return is_numeric($value);
+            });
+            $averageRating = count($ratings) > 0 ? array_sum($ratings) / count($ratings) : 0;
+            return round($averageRating, 2);
+        }
+        return 0;
+    }
 }
