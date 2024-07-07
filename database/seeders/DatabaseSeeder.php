@@ -24,10 +24,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create CMPS department
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
 
+        // Create the 4 areas in CMPS department
         Area::factory()->create([
             'name' => 'Computer Science',
             'dept_id' => $dept->id,
@@ -48,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'dept_id' => $dept->id,
         ]);
 
+        // Create department head
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -60,6 +63,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_head',
         ]);
 
+        // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Staff',
@@ -72,6 +76,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_staff',
         ]);
 
+        // Create admin user
         $admin = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Admin',
@@ -84,6 +89,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+        // Create an example instructor
         $instructor = User::factory()->create([
             'firstname' => 'Dr',
             'lastname' => 'Prof',
@@ -114,7 +120,7 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
         ]);
-
+        // Add course for the example instructor
         $instructor_courses = CourseSection::factory(2)->create();
         foreach($instructor_courses as $c){
             Teach::factory()->create([
@@ -122,7 +128,7 @@ class DatabaseSeeder extends Seeder
                 'instructor_id' => $instructorRole->id,
             ]);
         }
-       
+        // Add service roles for the example instructor
         $instructor_svcroles = ServiceRole::factory(3)->create();
         foreach ($instructor_svcroles as $role){}
             RoleAssignment::factory()->create([
@@ -131,17 +137,21 @@ class DatabaseSeeder extends Seeder
                 'instructor_id' => $instructorRole->id,
             ]);
 
-        $users = User::factory(10)->create(
-            ['password' => 'password']
-        );
-        $instructorRoles = [];
-        foreach($users as $user) {
+        // Create courses and assign instructors to them    
+        $courses = CourseSection::factory(10)->create([
+            'year' => date('Y'),
+        ]);
+        foreach($courses as $course){
+            $user = User::factory()->create(
+                ['password' => 'password']
+            );
+
             $role = UserRole::factory()->create([
                 'user_id' => $user->id,
                 'department_id' => $dept->id,
                 'role' => 'instructor',
             ]);
-            $instructorRoles[] = $role;
+
             InstructorPerformance::factory()->create([
                 'total_hours' => json_encode([
                     'January' => 0,
@@ -161,14 +171,12 @@ class DatabaseSeeder extends Seeder
                 'year' => date('Y'),
                 'instructor_id' => $role->id,
             ]);
-        }
 
-        $courses = CourseSection::factory(10)->create();
-        foreach($courses as $course){
             Teach::factory()->create([
                 'course_section_id' => $course->id,
-                'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
+                'instructor_id' => $role->id,
             ]);
+
             SeiData::factory()->create([
                 'course_section_id'=> $course->id,
                 'questions'=>json_encode([

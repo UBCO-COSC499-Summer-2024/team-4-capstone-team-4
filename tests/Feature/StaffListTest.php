@@ -48,7 +48,7 @@ class StaffListTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_staff_page_cannot_be_accessed_by_instructor(): void{
+    public function test_staff_pages_cannot_be_accessed_by_instructor(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
         UserRole::factory()->create([
