@@ -8,7 +8,8 @@ const Dropdown = (function () {
         multiple: false,
         external: null,
         regex: 'i',
-        debug: false
+        debug: false,
+        source: null
     };
 
     class Dropdown extends HTMLElement {
@@ -46,7 +47,7 @@ const Dropdown = (function () {
                 this.addMultiSelectFunctionality();
             }
             if (this._options.external) {
-                this.loadExternalData(this._options.external);
+                this.loadExternalData(this._options.source);
             }
 
             this.setActiveItem();
@@ -103,7 +104,8 @@ const Dropdown = (function () {
                 const dropdownButton = document.createElement('i');
                 dropdownButton.className = 'material-symbols-outlined dropdown-button noselect';
                 dropdownButton.textContent = 'arrow_drop_down';
-                this.appendChild(dropdownButton);
+                // this.appendChild(dropdownButton); after title
+                this.insertBefore(dropdownButton, this.firstChild.nextSibling.nextSibling);
             }
 
             let dropdownContent = this.querySelector('dropdown-content');
@@ -117,14 +119,16 @@ const Dropdown = (function () {
             const dropdownPreIcon = document.createElement('span');
             dropdownPreIcon.className = 'material-symbols-outlined dropdown-pre-icon icon noselect';
             dropdownPreIcon.textContent = this._options.preIcon;
-            this.appendChild(dropdownPreIcon);
+            // this.appendChild(dropdownPreIcon); make first child
+            this.insertBefore(dropdownPreIcon, this.firstChild);
         }
 
         renderTitle() {
             const dropdownTitle = document.createElement('span');
             dropdownTitle.className = 'dropdown-title noselect';
             dropdownTitle.textContent = this._options.title;
-            this.appendChild(dropdownTitle);
+            // this.appendChild(dropdownTitle); after preIcon
+            this.insertBefore(dropdownTitle, this.firstChild.nextSibling);
         }
 
         addSearchFunctionality() {
@@ -415,6 +419,9 @@ const Dropdown = (function () {
                 }
             }
 
+            // send change event and input event
+            this.dispatchEvent(new Event('input'));
+            this.dispatchEvent(new Event('change'));
             this.dispatchEvent(new CustomEvent('dropdown-item-selected', {
                 detail: { value: item.getAttribute('value') },
                 bubbles: true // Optional: Allow event to bubble up
