@@ -52,9 +52,9 @@ Route::middleware([
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
-    Route::get('/staff-edit-mode', function(){
+    Route::get('/staff/edit', function(){
         return view('staff-edit-mode');
-    })->name('staff-edit-mode');
+    })->name('staff.edit');
 });
 
 Route::middleware([

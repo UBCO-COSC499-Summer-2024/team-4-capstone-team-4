@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Area;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ServiceRolesList extends Component
@@ -181,19 +183,62 @@ class ServiceRolesList extends Component
             }
         }
 
+        // if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
+        //     $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
+        // }
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-            $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
+            if ($this->selectedFilter === 'area') {
+                // If filtering by 'area', query the Area model
+                $area = Area::find($this->filterValue);
+
+                // Check if the area exists
+                if ($area) {
+                    $serviceRolesQuery->where('area_id', $area->id);
+                } else {
+                    // Handle the case where the area doesn't exist
+                    // You might want to log this or display an error message
+                    $serviceRolesQuery->where('area_id', null); // Or any other logic
+                }
+            } else {
+                // If filtering by other columns of ServiceRole
+                $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
+            }
         }
 
+        // if (!empty($this->selectedSort)) {
+        //     $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
+        // }
+
         if (!empty($this->selectedSort)) {
-            $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
+            if (str_contains($this->selectedSort, '.')) {
+                [$relation, $column] = explode('.', $this->selectedSort);
+
+                // Handle sorting by 'area.name' specifically
+                if ($relation === 'area' && $column === 'name') {
+                    $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
+                                     ->orderBy('areas.name', $this->selectedSortOrder);
+                } else {
+                    // Handle other relations if needed
+                    $serviceRolesQuery->orderBy(
+                        ServiceRole::select($column)
+                            ->from('service_roles')
+                            ->whereColumn('service_roles.id', 'service_roles.' . $relation . '_id'),
+                        $this->selectedSortOrder
+                    );
+                }
+
+            } else {
+                $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
+            }
         }
 
         if (!empty($this->selectedGroup)) {
             $serviceRolesQuery->groupBy($this->selectedGroup, 'id');
         }
 
-        $serviceRoles = $this->pageMode === 'pagination' ? $serviceRolesQuery->paginate($this->pageSize) : $serviceRolesQuery->get();
+        $serviceRoles = $this->pageMode === 'pagination'
+            ? $serviceRolesQuery->with('area')->paginate($this->pageSize)
+            : $serviceRolesQuery->with('area')->get();
 
         return view('livewire.service-roles-list', [
             'serviceRoles' => $serviceRoles,

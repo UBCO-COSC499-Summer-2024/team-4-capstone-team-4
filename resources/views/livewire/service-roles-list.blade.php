@@ -2,7 +2,7 @@
     $viewModes = ['table' => 'Table', 'card' => 'Card'];
     $pageModes = ['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll'];
     $filterBy = ['area' => 'Area', 'name' => 'Name'];
-    $sortBy = ['name' => 'Name', 'created_at' => 'Created'];
+    $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
     $actions = ['edit' => 'Edit', 'delete' => 'Delete'];
     $groupBy = ['area_id' => 'Area', 'name' => 'Name'];

@@ -169,6 +169,64 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::create('settings', function (Blueprint $table) {
+            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
+            $table->string('auth_method');
+            $table->string('theme');
+            $table->string('language');
+            $table->timestamps();
+        });
+
+        Schema::create('auth_methods', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('provider');
+            $table->string('provider_id');
+            $table->string('token')->nullable();
+            $table->string('avatar')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('audit_logs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('user_alt');
+            $table->string('action');
+            $table->text('description')->nullable();
+            $table->string('table_name');
+            $table->string('operation_type');
+            $table->jsonb('old_value')->nullable();
+            $table->jsonb('new_value')->nullable();
+            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
+
+        // for pgaudit
+        Schema::create('super_audits', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('audit_user')->nullable();
+            $table->text('application_name')->nullable();
+            $table->string('client_addr', 45)->nullable();
+            $table->integer('client_port')->nullable();
+            $table->timestamp('occurred_at', 6)->useCurrent();
+            $table->text('statement_tag')->nullable();
+            $table->text('transaction_id')->nullable();
+            $table->text('query')->nullable();
+            $table->jsonb('params')->nullable();
+            $table->text('session_id')->nullable();
+            $table->integer('pid')->nullable();
+            $table->text('user_query')->nullable();
+            $table->text('schema_name')->nullable();
+            $table->text('relation_name')->nullable();
+            $table->string('object_type')->nullable();
+            $table->string('command_tag')->nullable();
+            $table->integer('return_rows')->nullable();
+            $table->string('session_user')->nullable();
+            $table->text('security_label')->nullable();
+            $table->jsonb('context')->nullable();
+        });
     }
 
     /**
@@ -176,6 +234,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('audit_logs');
         Schema::dropIfExists('users');
         Schema::dropIfExists('user_roles');
         Schema::dropIfExists('departments');
@@ -193,5 +252,8 @@ return new class extends Migration
         Schema::dropIfExists('department_performance');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('settings');
+        Schema::dropIfExists('auth_methods');
+        Schema::dropIfExists('super_audits');
     }
 };
