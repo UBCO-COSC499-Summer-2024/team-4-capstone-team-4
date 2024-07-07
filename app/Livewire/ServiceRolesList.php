@@ -166,6 +166,8 @@ class ServiceRolesList extends Component
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
 
+        // if area requested in filter/sort/category/group, use the area id for each item and do the action based on area name and or description and or id.
+
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
             if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
