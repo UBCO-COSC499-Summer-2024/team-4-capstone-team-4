@@ -61,12 +61,16 @@ class InstructorPerformance extends Model {
             return;
         }
 
-        $courseCount = $courses->count();
+        $courseCount = 0;
         $totalAverageScore = 0;
 
        foreach($courses as $course => $course_id) {
+
             $sei_data = SeiData::where('course_section_id', $course_id)->get();
 
+            if(!$sei_data->isEmpty()) {
+                $courseCount++;
+            }
             foreach($sei_data as $data) {
                 $questionArray = json_decode($data->questions, true);
                 $averageScore = array_sum($questionArray) / count($questionArray);
@@ -92,7 +96,7 @@ class InstructorPerformance extends Model {
 
 
         $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
-        
+
         $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
         if ($performance != null) {
             $performance->update([
