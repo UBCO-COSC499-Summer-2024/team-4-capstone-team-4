@@ -24,7 +24,7 @@ COPY init.sql /docker-entrypoint-initdb.d/
 RUN chmod +x /usr/local/bin/insight-entrypoint.sh
 
 # Copy .env file
-COPY ../.env /var/lib/postgresql/.env
+COPY .pgenv /var/lib/postgresql/.env
 
 # Set environment variables for pgaudit configuration (use these in your script)
 # ENV PGAUDIT_LOG_RELATION 'super_audits'
