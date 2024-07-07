@@ -97,13 +97,14 @@ class InstructorPerformance extends Model {
         // }
 
 
-        $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
-
-        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
-        if ($performance != null) {
-            $performance->update([
-                'sei_avg' => $totalRoundedAvg,
-            ]);
+        if($courseCount != 0) {
+            $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
+            $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
+                ]);
+            }
         }
 
         return;

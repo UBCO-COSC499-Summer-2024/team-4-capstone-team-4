@@ -28,28 +28,29 @@ class ImportAssignCourse extends Component
         })->toArray();
     }
 
-    public function handleSubmit() {
+    public function handleSubmit() { 
 
         foreach ($this->assignments as $assignment) {
             $instructor_id = (int) $assignment['instructor_id'];
+            $year = $assignment['year'];
             //dd($assignment);
 
-            if ($assignment['instructor_id'] != null) {
+            if ($instructor_id != null) {
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => $instructor_id,
                 ]);
 
                 // dd($assignment['year']);
+             
+                $areaId = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
 
-                $areaId = CourseSection::where('id', $assignment['course_section_id'])->pluck('area_id');
-
-                $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id )->where('year', $assignment['year'] )->first();
-                $areaPerformance = AreaPerformance::where('area_id', $areaId)->where('year', $assignment['year'] )->first();
+                $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id )->where('year', $year )->first();
+                $areaPerformance = AreaPerformance::where('area_id', $areaId)->where('year', $year)->first();
                 // $departmetnPerformance 
 
                 if($instructorPerformance != null){
-                    InstructorPerformance::updatePerformance($instructor_id, $assignment['year']);
+                    InstructorPerformance::updatePerformance($instructor_id, $year);
                 }else{
                     InstructorPerformance::create([
                         'instructor_id'=> $instructor_id,
@@ -72,14 +73,14 @@ class ImportAssignCourse extends Component
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
-                        'year' => $assignment['year'],
+                        'year' => $year,
                     ]);
-                   InstructorPerformance::updatePerformance($instructor_id, $assignment['year']);
+                   InstructorPerformance::updatePerformance($instructor_id, $year);
                 //    DepartmentPerformance::updateDepartmentPerformance($assignment['year']);
                 }
 
                 if ($areaPerformance != null) {
-                    AreaPerformance::updateAreaPerformance($areaId, $assignment['year']);
+                    AreaPerformance::updateAreaPerformance($areaId, $year);
                 } else {
                     AreaPerformance::create([
                         'area_id'=> $areaId,
@@ -101,9 +102,9 @@ class ImportAssignCourse extends Component
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
-                        'year' => $assignment['year'],
+                        'year' => $year,
                     ]);
-                    AreaPerformance::updateAreaPerformance($areaId, $assignment['year']);
+                    AreaPerformance::updateAreaPerformance($areaId, $year);
                 }
 
                 // if ($departmetnPerformance != null) {

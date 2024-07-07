@@ -67,7 +67,7 @@ class AreaPerformance extends Model {
     public static function updateAreaPerformance($area_id, $year) {
  
             // $areaAverages = SeiData::calculateSEIAreaAverages($year);
-
+    
         $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
 
         $courseCount = 0;
@@ -87,17 +87,15 @@ class AreaPerformance extends Model {
                 }
             }
 
-        $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
-
-
-
-        $performance = self::where('area_id', $area_id)->where('year', $year)->first();
-        if ($performance != null) {
-            $performance->update([
-                'sei_avg' => $totalRoundedAvg,
-            ]);
+        if ($courseCount != 0) {
+            $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
+            $performance = self::where('area_id', $area_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
+                ]);
+            }
         }
-
 
         return;
 
