@@ -121,7 +121,7 @@ class ImportWorkdayForm extends Component
                 'capacity' => $row['capacity'],        
             ]);
 
-            // AreaPerformance::updateAreaPerformance($row['year']);
+            AreaPerformance::updateAreaPerformance($row['year']);
 
         }
 

@@ -127,8 +127,8 @@ class ImportSeiForm extends Component
                 $instructor_id = $teach->instructor_id;
                 $year = CourseSection::find($row['cid'])->year;
                 InstructorPerformance::updatePerformance($instructor_id, $year);
-                AreaPerformance::updateAreaPerformance($year);
-                DepartmentPerformance::updateDepartmentPerformance($year);
+                // AreaPerformance::updateAreaPerformance($year, "sei");
+                // DepartmentPerformance::updateDepartmentPerformance($year);
             }
 
         }
@@ -157,7 +157,7 @@ class ImportSeiForm extends Component
 
     public function render()
     {
-        // $courses = CourseSection::all();
+        // InstructorPerformance::updatePerformance(5, 2024);
 
         $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')

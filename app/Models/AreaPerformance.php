@@ -65,7 +65,12 @@ class AreaPerformance extends Model {
     // 
 
     public static function updateAreaPerformance($year) {
-        $areaAverages = SeiData::calculateSEIAreaAverages($year);
+ 
+            $areaAverages = SeiData::calculateSEIAreaAverages($year);
+     
+  
+
+       
         // $areaEnrolledAverages = CourseSection::calculateAreaEnrolledAvg($year);
         // $areaDroppedAverages = CourseSection::calculateAreaDroppedAvg($year);
 
