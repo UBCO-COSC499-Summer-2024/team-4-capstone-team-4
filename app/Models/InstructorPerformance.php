@@ -49,6 +49,7 @@ class InstructorPerformance extends Model {
     // other functions
 
     public static function updatePerformance($instructor_id, $year) {
+
         // $seiAverages = SeiData::calculateSEIAverages();
         // $enrolledAverages = CourseSection::calculateEnrolledAverages();
         $courses = Teach::where('instructor_id', $instructor_id)
@@ -77,6 +78,7 @@ class InstructorPerformance extends Model {
                 $totalAverageScore += $averageScore;
             }
         }
+
 
         // $sei_sum = 0;
         // $count = 0;

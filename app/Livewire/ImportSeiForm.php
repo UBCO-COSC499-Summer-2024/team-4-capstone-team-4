@@ -123,11 +123,13 @@ class ImportSeiForm extends Component
             ]);
 
             $teach = Teach::where('course_section_id', $row['cid'])->first();
+            $course = CourseSection::where('id', $row['cid'])->first();
             if($teach){
                 $instructor_id = $teach->instructor_id;
+                $area_id = $course->area_id;
                 $year = CourseSection::find($row['cid'])->year;
                 InstructorPerformance::updatePerformance($instructor_id, $year);
-                // AreaPerformance::updateAreaPerformance($year, "sei");
+                AreaPerformance::updateAreaPerformance($area_id, $year);
                 // DepartmentPerformance::updateDepartmentPerformance($year);
             }
 
