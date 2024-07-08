@@ -241,16 +241,16 @@
         },
         {
             "name": "dflydev/dot-access-data",
-            "version": "v3.0.2",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dflydev/dflydev-dot-access-data.git",
-                "reference": "f41715465d65213d644d3141a6a93081be5d3549"
+                "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/f41715465d65213d644d3141a6a93081be5d3549",
-                "reference": "f41715465d65213d644d3141a6a93081be5d3549",
+                "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+                "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
                 "shasum": ""
             },
             "require": {
@@ -310,9 +310,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dflydev/dflydev-dot-access-data/issues",
-                "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
+                "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.3"
             },
-            "time": "2022-10-27T11:44:00+00:00"
+            "time": "2024-07-08T12:26:09+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1256,16 +1256,16 @@
         },
         {
             "name": "icehouse-ventures/laravel-chartjs",
-            "version": "v1.2.2",
+            "version": "v1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/icehouse-ventures/laravel-chartjs.git",
-                "reference": "6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3"
+                "reference": "a632e60aeb3c03001a3e77738b3373ba839a8862"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/icehouse-ventures/laravel-chartjs/zipball/6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3",
-                "reference": "6a7c6ab7ff3d880dec8aaec8375e502cc40b54d3",
+                "url": "https://api.github.com/repos/icehouse-ventures/laravel-chartjs/zipball/a632e60aeb3c03001a3e77738b3373ba839a8862",
+                "reference": "a632e60aeb3c03001a3e77738b3373ba839a8862",
                 "shasum": ""
             },
             "require": {
@@ -1312,9 +1312,9 @@
             ],
             "support": {
                 "issues": "https://github.com/icehouse-ventures/laravel-chartjs/issues",
-                "source": "https://github.com/icehouse-ventures/laravel-chartjs/tree/v1.2.2"
+                "source": "https://github.com/icehouse-ventures/laravel-chartjs/tree/v1.3"
             },
-            "time": "2024-06-04T22:13:24+00:00"
+            "time": "2024-07-04T22:42:52+00:00"
         },
         {
             "name": "laravel/fortify",
