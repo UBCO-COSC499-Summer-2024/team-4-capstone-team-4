@@ -16,7 +16,7 @@ class ExportReport extends Component
 
     public function render()
     {
-        $instructor = UserRole::find($this->instructor_id);
+        $instructor = UserRole::findOrFail($this->instructor_id);
         
         return view('livewire.export-report', ['instructor' => $instructor]);
     }

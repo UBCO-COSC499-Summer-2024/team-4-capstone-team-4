@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Area;
 use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
+use App\Models\ExtraHour;
 
 class UserRole extends Model {
     use HasFactory;
@@ -115,13 +116,20 @@ class UserRole extends Model {
         return null; // Return null if the user is not an instructor
     }
 
-    public function areas()
-    {
+    public function areas(){
         return $this->belongsToMany(Area::class, 'teaches', 'instructor_id', 'course_section_id')
                     ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
                     ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
                     ->select('a.*')
                     ->distinct();
+    }
+
+    public function extraHours(){
+        if ($this->role === 'instructor') {
+            return $this->hasMany(ExtraHour::class, 'instructor_id', 'id');
+        }
+        
+        return null; // Return null if the user is not an instructor
     }
 
     
