@@ -64,10 +64,7 @@ class AreaPerformance extends Model {
         
     // 
 
-    public static function updateAreaPerformance($area_id, $year) {
- 
-            // $areaAverages = SeiData::calculateSEIAreaAverages($year);
-    
+    public static function updateAreaPerformance($area_id, $year) {    
         $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
 
         $courseCount = 0;

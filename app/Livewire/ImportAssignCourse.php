@@ -41,8 +41,6 @@ class ImportAssignCourse extends Component
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => $instructor_id,
                 ]);
-
-                // dd($assignment['year']);
              
                 $area_id = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
                 $dept_id = Area::where('id', $area_id)->value('dept_id');
