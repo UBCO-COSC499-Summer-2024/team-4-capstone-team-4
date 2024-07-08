@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Area;
 use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\DepartmentPerformance;
@@ -43,11 +44,12 @@ class ImportAssignCourse extends Component
 
                 // dd($assignment['year']);
              
-                $areaId = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
+                $area_id = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
+                $dept_id = Area::where('id', $area_id)->value('dept_id');
 
                 $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id )->where('year', $year )->first();
-                $areaPerformance = AreaPerformance::where('area_id', $areaId)->where('year', $year)->first();
-                // $departmetnPerformance 
+                $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', $year)->first();
+                $departmentPerformance  = DepartmentPerformance::where('dept_id', $dept_id)->where('year', $year)->first();
 
                 if($instructorPerformance != null){
                     InstructorPerformance::updatePerformance($instructor_id, $year);
@@ -76,14 +78,13 @@ class ImportAssignCourse extends Component
                         'year' => $year,
                     ]);
                    InstructorPerformance::updatePerformance($instructor_id, $year);
-                //    DepartmentPerformance::updateDepartmentPerformance($assignment['year']);
                 }
 
                 if ($areaPerformance != null) {
-                    AreaPerformance::updateAreaPerformance($areaId, $year);
+                    AreaPerformance::updateAreaPerformance($area_id, $year);
                 } else {
                     AreaPerformance::create([
-                        'area_id'=> $areaId,
+                        'area_id'=> $area_id,
                         'total_hours' => json_encode([
                             'January' => 0,
                             'February' => 0,
@@ -104,12 +105,36 @@ class ImportAssignCourse extends Component
                         'dropped_avg'=> 0,
                         'year' => $year,
                     ]);
-                    AreaPerformance::updateAreaPerformance($areaId, $year);
+                    AreaPerformance::updateAreaPerformance($area_id, $year);
                 }
 
-                // if ($departmetnPerformance != null) {
-                //     DepartmentPerformance::updateDepartmentPerformance($assignment['year']);
-                // }
+                if ($departmentPerformance != null) {
+                    DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
+                } else {
+                    DepartmentPerformance::create([
+                        'dept_id'=> $dept_id,
+                        'total_hours' => json_encode([
+                            'January' => 0,
+                            'February' => 0,
+                            'March' => 0,
+                            'April' => 0,
+                            'May' => 0,
+                            'June' => 0,
+                            'July' => 0,
+                            'August' => 0,
+                            'September' => 0,
+                            'October' => 0,
+                            'November' => 0,
+                            'December' => 0,
+                        ]),
+                        'target_hours' => null,
+                        'sei_avg' => 0,
+                        'enrolled_avg'=> 0,
+                        'dropped_avg'=> 0,
+                        'year' => $year,
+                    ]);
+                    DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
+                }
             }
         }
 

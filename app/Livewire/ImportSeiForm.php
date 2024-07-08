@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Area;
 use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\DepartmentPerformance;
@@ -123,14 +124,16 @@ class ImportSeiForm extends Component
             ]);
 
             $teach = Teach::where('course_section_id', $row['cid'])->first();
-            $course = CourseSection::where('id', $row['cid'])->first();
+            
             if($teach){
-                $instructor_id = $teach->instructor_id;
-                $area_id = $course->area_id;
-                $year = CourseSection::find($row['cid'])->year;
+                $instructor_id = $teach->instructor_id;   
+                $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
+                $dept_id = Area::where('id', $area_id)->pluck('dept_id');
+                $year = CourseSection::find($row['cid'])->year;         
+               
                 InstructorPerformance::updatePerformance($instructor_id, $year);
                 AreaPerformance::updateAreaPerformance($area_id, $year);
-                // DepartmentPerformance::updateDepartmentPerformance($year);
+                DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
             }
 
         }
@@ -159,7 +162,6 @@ class ImportSeiForm extends Component
 
     public function render()
     {
-        // InstructorPerformance::updatePerformance(5, 2024);
 
         $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')

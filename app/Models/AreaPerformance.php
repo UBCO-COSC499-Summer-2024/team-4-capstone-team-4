@@ -71,7 +71,7 @@ class AreaPerformance extends Model {
         $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
 
         $courseCount = 0;
-        $totalAverageScore = 0;
+        $totalSumAverageScore = 0;
 
         foreach($courses as $course => $course_id) {
 
@@ -83,12 +83,12 @@ class AreaPerformance extends Model {
                 foreach($sei_data as $data) {
                     $questionArray = json_decode($data->questions, true);
                     $averageScore = array_sum($questionArray) / count($questionArray);
-                    $totalAverageScore += $averageScore;
+                    $totalSumAverageScore += $averageScore;
                 }
             }
 
         if ($courseCount != 0) {
-            $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
             $performance = self::where('area_id', $area_id)->where('year', $year)->first();
             if ($performance != null) {
                 $performance->update([
@@ -98,70 +98,6 @@ class AreaPerformance extends Model {
         }
 
         return;
-
-           
-        // $areaEnrolledAverages = CourseSection::calculateAreaEnrolledAvg($year);
-        // $areaDroppedAverages = CourseSection::calculateAreaDroppedAvg($year);
-
-        // foreach($areaAverages as $areaId => $averageScore){
-        //     $roundedScore = round($averageScore, 1);
-        //     $performance = self::where('area_id', $areaId)->where('year', $year)->first();
-        //     if($performance != null){
-        //         $performance->update(['sei_avg'=> $roundedScore]);
-        //     }else{
-        //         self::create([
-        //             'area_id'=>$areaId,
-        //             'year'=> $year,
-        //             'sei_avg'=> $roundedScore,
-        //             'enrolled_avg'=> 0,
-        //             'dropped_avg'=> 0,
-        //             'total_hours' => json_encode([
-        //                 'January' => 0,
-        //                 'February' => 0,
-        //                 'March' => 0,
-        //                 'April' => 0,
-        //                 'May' => 0,
-        //                 'June' => 0,
-        //                 'July' => 0,
-        //                 'August' => 0,
-        //                 'September' => 0,
-        //                 'October' => 0,
-        //                 'November' => 0,
-        //                 'December' => 0,
-        //             ]),
-        //         ]);
-        //     }
-           
-        // }
-        
-        // $performance = self::where('year', $year)->get();
-        // if($performance != null){
-        //     $performance->update(['enrolled_avg'=> $areaEnrolledAverages]);
-        //     $performance->update(['dropped_avg'=> $areaDroppedAverages]);
-        // }else{
-        //     self::create([
-        //         'area_id'=>$areaId,
-        //         'year'=> $year,
-        //         'sei_avg'=> 0,
-        //         'enrolled_avg'=> $areaEnrolledAverages,
-        //         'dropped_avg'=> $areaDroppedAverages,
-        //         'total_hours' => json_encode([
-        //             'January' => 0,
-        //             'February' => 0,
-        //             'March' => 0,
-        //             'April' => 0,
-        //             'May' => 0,
-        //             'June' => 0,
-        //             'July' => 0,
-        //             'August' => 0,
-        //             'September' => 0,
-        //             'October' => 0,
-        //             'November' => 0,
-        //             'December' => 0,
-        //         ]),
-        //     ]);
-        // }
-
     }
 
     public function addHours($month, $hour) {

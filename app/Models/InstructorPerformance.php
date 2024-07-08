@@ -49,9 +49,6 @@ class InstructorPerformance extends Model {
     // other functions
 
     public static function updatePerformance($instructor_id, $year) {
-
-        // $seiAverages = SeiData::calculateSEIAverages();
-        // $enrolledAverages = CourseSection::calculateEnrolledAverages();
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
             $query->where('year', $year);
@@ -63,7 +60,7 @@ class InstructorPerformance extends Model {
         }
 
         $courseCount = 0;
-        $totalAverageScore = 0;
+        $totalSumAverageScore = 0;
 
        foreach($courses as $course => $course_id) {
 
@@ -75,30 +72,12 @@ class InstructorPerformance extends Model {
             foreach($sei_data as $data) {
                 $questionArray = json_decode($data->questions, true);
                 $averageScore = array_sum($questionArray) / count($questionArray);
-                $totalAverageScore += $averageScore;
+                $totalSumAverageScore += $averageScore;
             }
         }
 
-
-        // $sei_sum = 0;
-        // $count = 0;
-        // foreach ($courses as $course_id) {
-        //     if (isset($seiAverages[$course_id])) {
-        //         echo $course_id . ":" . $seiAverages[$course_id] . "\n";
-        //         $sei_sum += $seiAverages[$course_id];
-        //         $count ++;
-        //     }
-        // }
-        // echo $sei_sum  . "\n" ;
-        // echo count($courses)  . "\n" ;
-        // $sei_avg = 0;
-        // if($count > 0){
-        //     $sei_avg = $sei_sum / $count;
-        // }
-
-
         if($courseCount != 0) {
-            $totalRoundedAvg = round($totalAverageScore/$courseCount, 1);
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
             $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
             if ($performance != null) {
                 $performance->update([

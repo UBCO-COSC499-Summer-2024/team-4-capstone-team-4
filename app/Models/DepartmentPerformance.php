@@ -47,42 +47,79 @@ class DepartmentPerformance extends Model {
 
     //other functions
 
-    public static function updateDepartmentPerformance($year) {
-        $departmentAverages = SeiData::calculateSEIDepartmentAverages($year);
+    public static function updateDepartmentPerformance($dept_id, $year) {
+        $courses = CourseSection::whereHas('area', function ($query) use ($dept_id) {
+        $query->where('dept_id', $dept_id);
+        })
+        ->where('year', $year)
+        ->pluck('id');
 
-        
-        foreach($departmentAverages as $deptId => $averageScore){
-            $roundedScore = round($averageScore, 1);
-            $performance = self::where('dept_id', $deptId)->where('year', $year)->first();
-            if($performance != null){
-                $performance->update(['sei_avg'=> $roundedScore]);
-            }else{
-                self::create([
-                    'dept_id'=>$deptId,
-                    'year'=> $year,
-                    'sei_avg'=> $roundedScore,
-                    'enrolled_avg'=> 0,
-                    'dropped_avg'=> 0,
-                    'total_hours' => json_encode([
-                        'January' => 0,
-                        'February' => 0,
-                        'March' => 0,
-                        'April' => 0,
-                        'May' => 0,
-                        'June' => 0,
-                        'July' => 0,
-                        'August' => 0,
-                        'September' => 0,
-                        'October' => 0,
-                        'November' => 0,
-                        'December' => 0,
-                    ]),
+        $courseCount = 0;
+        $totalSumAverageScore = 0;
+
+        foreach($courses as $course => $course_id) {
+
+            $sei_data = SeiData::where('course_section_id', $course_id)->get();
+
+            if(!$sei_data->isEmpty()) {
+                $courseCount++;
+            }
+            foreach($sei_data as $data) {
+                $questionArray = json_decode($data->questions, true);
+                $test[] = $questionArray;
+                $averageScore = array_sum($questionArray) / count($questionArray);
+                $totalSumAverageScore += $averageScore;
+            }
+        }
+
+        if ($courseCount != 0) {
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+            $performance = self::where('dept_id', $dept_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
                 ]);
             }
-           
         }
 
         return;
+
+
+        // $departmentAverages = SeiData::calculateSEIDepartmentAverages($year);
+
+        
+        // foreach($departmentAverages as $deptId => $averageScore){
+        //     $roundedScore = round($averageScore, 1);
+        //     $performance = self::where('dept_id', $deptId)->where('year', $year)->first();
+        //     if($performance != null){
+        //         $performance->update(['sei_avg'=> $roundedScore]);
+        //     }else{
+        //         self::create([
+        //             'dept_id'=>$deptId,
+        //             'year'=> $year,
+        //             'sei_avg'=> $roundedScore,
+        //             'enrolled_avg'=> 0,
+        //             'dropped_avg'=> 0,
+        //             'total_hours' => json_encode([
+        //                 'January' => 0,
+        //                 'February' => 0,
+        //                 'March' => 0,
+        //                 'April' => 0,
+        //                 'May' => 0,
+        //                 'June' => 0,
+        //                 'July' => 0,
+        //                 'August' => 0,
+        //                 'September' => 0,
+        //                 'October' => 0,
+        //                 'November' => 0,
+        //                 'December' => 0,
+        //             ]),
+        //         ]);
+        //     }
+           
+        // }
+
+        // return;
     }   
 
     public function addHours($month, $hour) {
