@@ -46,6 +46,12 @@ class DropdownElement extends Component
         $this->regex = $regex;
     }
 
+    public function handleItemSelected($value)
+    {
+        $this->value = $value;
+        $this->dispatch('dropdown-value-updated', $value);
+    }
+
     public function render()
     {
         return view('livewire.dropdown-element');

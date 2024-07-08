@@ -15,25 +15,24 @@
         $values = json_decode($values, true);
     }
 @endphp
-@endphp
 <dropdown-element
     id="{{ $id }}"
     role="listbox"
     tabindex="0"
     title="{{ $title }}"
     class="dropdown-element {{ $class }}"
-    values="{{ $values }}"
-    if ($multiple) $multiple @endif
-    if ($disabled) $disabled @endif
-    if ($required) $required @endif
-    if ($readonly) $readonly @endif
-    if ($autofocus) $autofocus @endif
-    if ($searachable) searchable="{{ $searchable }}" @endif
-    if ($external) external="{{ $external }}" @endif
-    if ($source) src="{{ $source }}" @endif
-    if ($value) value="{{ $value }}" @endif
-    if ($preIcon) preIcon="{{ $preIcon }}" @endif
-    if ($regex) regex="{{ $regex }}" @endif
+    values="{{ json_encode($values) }}"
+    @if ($multiple) multiple @endif
+    {{-- @if ($disabled) disabled @endif --}}
+    {{-- @if ($required) required @endif --}}
+    {{-- @if ($readonly) readonly @endif --}}
+    {{-- @if ($autofocus) autofocus @endif --}}
+    @if ($searchable) searchable="{{ $searchable }}" @endif
+    @if ($useExternal) external="{{ $useExternal }}" @endif
+    @if ($source) src="{{ $source }}" @endif
+    @if ($value) value="{{ $value }}" @endif
+    @if ($preIcon) preIcon="{{ $preIcon }}" @endif
+    @if ($regex) regex="{{ $regex }}" @endif
     >
     @if($preIcon)
         <span class="material-symbols-outlined icon dropdown-pre-icon noselect">{{ $preIcon }}</span>
@@ -43,12 +42,6 @@
     <span class="material-symbols-outlined dropdown-button icon noselect" x-on:click="open = !open">arrow_drop_down</span>
 
     <dropdown-content class="dropdown-content">
-        @foreach($values as $value => $name)
-            <dropdown-item class="dropdown-item"
-                value="{{ json_encode($value) }}"
-                wire:key="ddi-{{ json_encode($value) }}-{{ time() }}"
-                {{-- x-on:click="$wire.dispatch('dropdown-item-selected', {{ json_encode($value) }})" --}}>{{ $name }}</dropdown-item>
-        @endforeach
     </dropdown-content>
 
 </dropdown-element>

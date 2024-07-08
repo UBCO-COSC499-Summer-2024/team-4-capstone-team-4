@@ -17,11 +17,7 @@
         </span>
     </h1>
     {{-- Toolbar --}}
-    <livewire:toolbar
-        :searchCategoryValues="['category1' => 'Category 1', 'category2' => 'Category 2', 'category3' => 'Category 3']"
-        :sortValues="['sort1' => 'Sort 1', 'sort2' => 'Sort 2', 'sort3' => 'Sort 3']"
-        :sortOrderValues="['asc' => 'Ascending', 'desc' => 'Descending']"
-        :filterValues="['filter1' => 'Filter 1', 'filter2' => 'Filter 2', 'filter3' => 'Filter 3']"/>
+    <livewire:toolbar />
     {{-- Content --}}
     <section class="view">
 

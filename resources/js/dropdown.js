@@ -9,7 +9,8 @@ const Dropdown = (function () {
         external: null,
         regex: 'i',
         debug: false,
-        source: null
+        source: null,
+        value: null
     };
 
     class Dropdown extends HTMLElement {
@@ -50,10 +51,18 @@ const Dropdown = (function () {
                 this.loadExternalData(this._options.source);
             }
 
+            if (this._options.value) {
+                this.setInitialItem();
+            }
+
             this.setActiveItem();
             this.toggleDebugging(this._options.debug);
 
             this.initializeDropdownContent();
+        }
+
+        setInitialItem() {
+            this.setSelected(this._options.value);
         }
 
         disconnectedCallback() {
