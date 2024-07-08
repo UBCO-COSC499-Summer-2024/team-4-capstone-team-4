@@ -130,8 +130,8 @@ return new class extends Migration
             $table->json('total_hours');
             $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -141,8 +141,8 @@ return new class extends Migration
             $table->id();
             $table->json('total_hours');
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -152,8 +152,8 @@ return new class extends Migration
             $table->id();
             $table->json('total_hours');
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();

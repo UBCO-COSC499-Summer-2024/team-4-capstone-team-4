@@ -41,6 +41,7 @@ class ImportAssignCourse extends Component
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => $instructor_id,
                 ]);
+
              
                 $area_id = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
                 $dept_id = Area::where('id', $area_id)->value('dept_id');
@@ -169,7 +170,7 @@ class ImportAssignCourse extends Component
 
     public function render()
     {
-        // InstructorPerformance::updatePerformance(1, 2023);
+        // InstructorPerformance::updatePerformance(8, 2000);
             // AreaPerformance::updateAreaPerformance(1, 2023);
 
 
