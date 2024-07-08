@@ -90,8 +90,9 @@ class InstructorPerformance extends Model {
     }
     
     public static function updateInstructorEnrollAndDropAvg($instructor_id, $year) {
-        $enrolledPercent = 0;
-        $droppedPercent = 0;
+        $courseCount = 0;
+        $totalSumEnrolledAvg = 0;
+        $totalSumDroppedAvg = 0;
 
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
@@ -106,29 +107,35 @@ class InstructorPerformance extends Model {
                 $dropped = $courseSectionData->dropped;
                 $capacity = $courseSectionData->capacity;
 
-                $enrolledAvg = $enrolled / $capacity;
-                $droppedAvg = $dropped / $capacity;
+                $totalSumEnrolledAvg += $enrolled / $capacity;
+                $totalSumDroppedAvg += $dropped / $capacity;
 
-                $enrolledPercent = $enrolledAvg * 100;
-                $droppedPercent = $droppedAvg * 100;
-
-                if(!is_int($enrolledPercent)) {
-                    $enrolledPercent = round($enrolledPercent, 1);
-                };
-                if(!is_int($droppedPercent)) {
-                    $droppedPercent = round($droppedPercent, 1);
-                };
+                $courseCount++;
             }
+        }
 
+        if($courseCount != 0) {
+            $totalEnrolledAvg = $totalSumEnrolledAvg / $courseCount;
+            $totalDroppedAvg = $totalSumDroppedAvg / $courseCount;
+
+            $totalEnrolledPercent = $totalEnrolledAvg * 100;
+            $totalDroppedPercent = $totalDroppedAvg * 100;
+    
+            if(!is_int($totalEnrolledPercent)) {
+                $totalEnrolledPercent = round($totalEnrolledPercent, 1);
+            };
+            if(!is_int($totalDroppedPercent)) {
+                $totalDroppedPercent = round($totalDroppedPercent, 1);
+            };
+    
             $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
             if ($performance != null) {
                 $performance->update([
-                    'enrolled_avg' => $enrolledPercent,
-                    'dropped_avg' => $droppedPercent,
+                    'enrolled_avg' => $totalEnrolledPercent,
+                    'dropped_avg' => $totalDroppedPercent,
                 ]);
             }    
         }
-
         return;
     }
 

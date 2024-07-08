@@ -47,24 +47,7 @@ class AreaPerformance extends Model {
 
     //other functions
 
-    // public static function updateAreaPerformance($year) {
-    //     $areaAverages = SeiData::calculateSEIAreaAverages($year);
-        
-    //     foreach ($areaAverages as $areaId => $averageScore) {
-    //         $roundedScore = round($averageScore, 1); 
-            
-    //         AreaPerformance::updateOrCreate(
-    //             ['area_id' => $areaId],
-    //             ['sei_avg' => $roundedScore]
-    //         );
-
-    //         echo 'area ', $areaId, ' ' , 'score ', $roundedScore;
-    //     }
-
-        
-    // 
-
-    public static function updateAreaPerformance($area_id, $year) {    
+    public static function updateAreaSEIAvg($area_id, $year) {
         $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
 
         $courseCount = 0;
@@ -95,6 +78,49 @@ class AreaPerformance extends Model {
         }
 
         return;
+    }
+
+    public static function updateAreaEnrollAndDropAvg($area_id, $year) {
+        $enrolledPercent = 0;
+        $droppedPercent = 0;
+
+        $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
+
+        foreach($courses as $course) {
+  
+                $enrolled = $course->enrolled;
+                $dropped = $course->dropped;
+                $capacity = $course->capacity;
+
+                $enrolledAvg = $enrolled / $capacity;
+                $droppedAvg = $dropped / $capacity;
+
+                $enrolledPercent = $enrolledAvg * 100;
+                $droppedPercent = $droppedAvg * 100;
+
+                if(!is_int($enrolledPercent)) {
+                    $enrolledPercent = round($enrolledPercent, 1);
+                };
+                if(!is_int($droppedPercent)) {
+                    $droppedPercent = round($droppedPercent, 1);
+                };
+    
+
+            $performance = self::where('area_id', $area_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'enrolled_avg' => $enrolledPercent,
+                    'dropped_avg' => $droppedPercent,
+                ]);
+            }    
+        }
+
+        return;
+    }
+
+    public static function updateAreaPerformance($area_id, $year) {    
+        self::updateAreaSEIAvg($area_id, $year);
+        // self::updateAreaEnrollAndDropAvg($area_id, $year);
     }
 
     public function addHours($month, $hour) {
