@@ -25,7 +25,7 @@ $userRoles = auth()->user()->roles;
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptCoursesTotal="$deptCoursesTotal" 
                         :deptExtrasTotal="$deptExtrasTotal" :deptRolesTotal="$deptRolesTotal" :deptSeiAvg="$deptSeiAvg" :deptEnrolledAvg="$deptEnrolledAvg"
-                        :deptDroppedAvg="$deptDroppedAvg" :deptCapacityAvg="$deptCapacityAvg" :deptMonthHours="$deptMonthHours" />
+                        :deptDroppedAvg="$deptDroppedAvg" :deptMonthHours="$deptMonthHours" />
                 </section>
                 <section class="dash-bottom">
                     <x-department-lists :areaCoursesTotal="$areaCoursesTotal" :areaExtrasTotal="$areaExtrasTotal" :areaRolesTotal="$areaRolesTotal" />
@@ -35,7 +35,7 @@ $userRoles = auth()->user()->roles;
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptCoursesTotal="$deptCoursesTotal" 
                         :deptExtrasTotal="$deptExtrasTotal" :deptRolesTotal="$deptRolesTotal"  :deptSeiAvg="$deptSeiAvg" :deptEnrolledAvg="$deptEnrolledAvg"
-                        :deptDroppedAvg="$deptDroppedAvg" :deptCapacityAvg="$deptCapacityAvg" :deptMonthHours="$deptMonthHours" />
+                        :deptDroppedAvg="$deptDroppedAvg" :deptMonthHours="$deptMonthHours" />
                 </section>
                 <section class="dash-bottom">
                     <x-department-lists :areaCoursesTotal="$areaCoursesTotal" :areaExtrasTotal="$areaExtrasTotal" :areaRolesTotal="$areaRolesTotal" />
@@ -45,14 +45,12 @@ $userRoles = auth()->user()->roles;
                 @if ($hasTarget)
                     <section class="dash-top">
                         <x-instructor-target :chart1="$chart1" :chart2="$chart2" :currentMonth="$currentMonth" :courseSections="$courseSections"
-                            :extraHours="$extraHours" :serviceRoles="$serviceRoles" :seiAvg="$seiAvg" :enrolledAvg="$enrolledAvg" :droppedAvg="$droppedAvg"
-                            :capacityAvg="$capacityAvg"/>
+                            :extraHours="$extraHours" :serviceRoles="$serviceRoles" :seiAvg="$seiAvg" :enrolledAvg="$enrolledAvg" :droppedAvg="$droppedAvg" />
                     </section>
                 @else 
                     <section class="dash-top">
                         <x-instructor-performance :chart1="$chart1" :currentMonth="$currentMonth" :seiAvg="$seiAvg" :enrolledAvg="$enrolledAvg" 
-                        :droppedAvg="$droppedAvg" :capacityAvg="$capacityAvg" :currentMonthHours="$currentMonthHours" :roleHoursTotal="$roleHoursTotal" 
-                        :extraHoursTotal="$extraHoursTotal"/>
+                        :droppedAvg="$droppedAvg" :currentMonthHours="$currentMonthHours" :roleHoursTotal="$roleHoursTotal" :extraHoursTotal="$extraHoursTotal"/>
                     </section>
                 @endif
                 <section class="dash-bottom">

@@ -22,7 +22,7 @@ class InstructorPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'target_hours', 'sei_avg', 'enrolled_avg', 'dropped_avg', 'capacity_avg', 'year', 'instructor_id',
+        'score', 'total_hours', 'target_hours', 'sei_avg', 'enrolled_avg', 'dropped_avg', 'year', 'instructor_id',
     ];
 
     /**
@@ -44,5 +44,70 @@ class InstructorPerformance extends Model {
     public function instructor()
     {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
+    }
+
+    // other functions
+
+    public static function updatePerformance($instructor_id, $year) {
+        $seiAverages = SeiData::calculateSEIAverages();
+        // $enrolledAverages = CourseSection::calculateEnrolledAverages();
+        $courses = Teach::where('instructor_id', $instructor_id)
+        ->whereHas('courseSection', function ($query) use ($year) {
+            $query->where('year', $year);
+        })->pluck('course_section_id');
+                
+        if (count($courses) === 0) {
+            echo "No courses found for instructor ID: $instructor_id";
+            return;
+        }
+
+        $sei_sum = 0;
+        $count = 0;
+        foreach ($courses as $course_id) {
+            if (isset($seiAverages[$course_id])) {
+                //echo $course_id . ":" . $seiAverages[$course_id] . "\n";
+                $sei_sum += $seiAverages[$course_id];
+                $count ++;
+            }
+        }
+        //echo $sei_sum  . "\n" ;
+        //echo count($courses)  . "\n" ;
+        $sei_avg = 0;
+        if($count > 0){
+            $sei_avg = $sei_sum / $count;
+        }
+
+        $roundedAvg = round($sei_avg, 1);
+
+        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+        if ($performance != null) {
+            $performance->update([
+                'sei_avg' => $roundedAvg,
+            ]);
+        }
+
+        return;
+
+    }
+
+    public function updateTotalHours($hours = [])
+    {
+        $totalHours = json_decode($this->total_hours, true);
+        foreach ($hours as $month => $hour) {
+            if ($month <= date('n')) {
+                $totalHours[$month] = $hour;
+            }
+        }
+
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+    }
+
+    public function addHours($month, $hour)
+    {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] += $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
     }
 }

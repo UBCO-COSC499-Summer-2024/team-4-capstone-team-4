@@ -83,11 +83,11 @@ input[type="file"] {
 .drop-zone-file-name {
   background-color: lightgray;
   padding: 10px;
-  
+
 } */
 
 
-@tailwind base;
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
 
@@ -95,11 +95,11 @@ input[type="file"] {
 
 
 .import-nav-link{
-  @apply font-light px-3 py-2;
+  @apply px-3 py-2 font-light;
 }
 
 .import-form-row {
-  @apply  flex flex-row items-center bg-gray-50 px-3 py-2 border-b-2 border-gray-300 border-solid  shadow-none;
+  @apply  flex flex-row items-center px-3 py-2 border-b-2 border-gray-300 border-solid shadow-none bg-gray-50;
 }
 
 .import-input {
@@ -115,7 +115,11 @@ input[type="file"] {
 }
 
 .import-button {
-  @apply p-2 mt-2 rounded-sm text-sm hover:cursor-pointer;
+  @apply p-2 mt-2 text-sm rounded-sm hover:cursor-pointer;
+}
+
+.assign-input {
+  @apply px-2;
 }
 
 }
