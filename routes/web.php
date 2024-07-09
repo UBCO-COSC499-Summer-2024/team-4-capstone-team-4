@@ -73,6 +73,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->prefix('/svcroles')->group(function () {
     Route::get('/add', function () {
         return view('svcroles');
