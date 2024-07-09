@@ -2,6 +2,58 @@
 
 ## Date Range:
 
+- July 5 - July 9
+
+## Features in the Project Plan Cycle:
+
+- Testing
+- Refactor UI to be consistent
+- Instructor Report Page & Export
+- Course Details Page
+- Service Roles - Audit Logs, Requests
+- Gamification & Leaderboard
+- Import Page - File Upload
+- Drone CI
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july5_july9.png)
+![image of tasks](./tasks/inprogress_july5_july9.png)
+![image of tasks](./tasks/done_july5_july9.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july5_july9.png)
+![image of tasks](./tasks/inprogress_july5_july9.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july5_july9.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july5_july9.png)
+![image of clockify report](./clockify/individual_july5_july9.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_july5_july9.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july5_july9.png)
+![image of tasks](./tasks/inprogress_june5_july9.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_july5_july9.png)
+![image of test report](./testing/feature_july5_july9.png)
+
+## Overview:
+In terms of feature implemented, we have met our goal as we wanted to have more than 50% of our features completed and we have about 70%. We are working on refactoring our UI for the different pages so that it will be consistent throughout and improving our pages. We are behind in terms of testing and hope to be caught up by the next cycle. We have started working on instructor report page. We will start working on gamification, with the leaderboard.
+
+## Date Range:
+
 - July 3 - July 4
 
 ## Features in the Project Plan Cycle:
