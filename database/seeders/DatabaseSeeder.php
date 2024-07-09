@@ -130,6 +130,17 @@ class DatabaseSeeder extends Seeder
                 'course_section_id' => $c->id,
                 'instructor_id' => $instructorRole->id,
             ]);
+            SeiData::factory()->create([
+                'course_section_id' => $c->id,
+                'questions'=>json_encode([
+                    'q1' => fake()->numberBetween(1,5),
+                    'q2' => fake()->numberBetween(1,5),
+                    'q3' => fake()->numberBetween(1,5),
+                    'q4' => fake()->numberBetween(1,5),
+                    'q5' => fake()->numberBetween(1,5),
+                    'q6' => fake()->numberBetween(1,5),
+                ]),
+            ]);
         }
         // Add service roles for the example instructor
         $instructor_svcroles = ServiceRole::factory(3)->create([

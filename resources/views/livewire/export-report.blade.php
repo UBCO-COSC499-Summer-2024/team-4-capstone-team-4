@@ -19,6 +19,8 @@
                 $totalEnrolled = 0;
                 $totalDropped = 0;
                 $totalCapacity = 0;
+                $seiSum = 0;
+                $count = 0;
             @endphp 
             @if ($courses)
                 @foreach ($courses as $course)
@@ -26,6 +28,11 @@
                         $totalEnrolled += $course->courseSection->enrolled;
                         $totalDropped += $course->courseSection->dropped;
                         $totalCapacity += $course->courseSection->capacity;
+                        $sei = \App\Models\SeiData::calculateSEIAverage($course->courseSection->id);
+                        if($sei){
+                            $seiSum += $sei;
+                            $count++;
+                        }
                     @endphp
                     <tr>
                         <td class="border border-black">{{ $course->courseSection->name }} {{ $course->courseSection->section }}</td>
@@ -34,7 +41,7 @@
                         <td class="border border-black">{{ $course->courseSection->enrolled }}</td>
                         <td class="border border-black">{{ $course->courseSection->dropped }}</td>
                         <td class="border border-black">{{ $course->courseSection->capacity }}</td>
-                        <td class="border border-black">sei</td>
+                        <td class="border border-black">{{ $sei ? $sei : '-' }}</td>
                     </tr>
                 @endforeach
                 <tr>
@@ -42,10 +49,11 @@
                     <td class="border border-black">{{ $totalEnrolled }}</td>
                     <td class="border border-black">{{ $totalDropped }}</td>
                     <td class="border border-black">{{ $totalCapacity }}</td>
-                    <td class="border border-black"></td>
+                    <td class="border border-black">{{ $count > 0 ? $seiSum/$count : '-' }}</td>
                 </tr>
             @endif    
         </table>
+        <br>
         <h2>Service Roles & Extra Hours Performance</h2>
         <table class="w-full bg-white border border-black text-center">
             @php
@@ -137,7 +145,7 @@
                 @endphp
                 @if($performance)
                     <td class="border border-black" colspan="3">Target Hours</td>
-                    <td class="border border-black text-right" colspan="13">{{  $performance->target_hours }}</td>
+                    <td class="border border-black" colspan="13">{{  $performance->target_hours }}</td>
                 @endif
             </tr>
         </table>
