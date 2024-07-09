@@ -47,42 +47,99 @@ class DepartmentPerformance extends Model {
 
     //other functions
 
-    public static function updateDepartmentPerformance($dept_id, $year) {
+    public static function updateDepartmentSEIAvg($dept_id, $year) {
         $courses = CourseSection::whereHas('area', function ($query) use ($dept_id) {
-        $query->where('dept_id', $dept_id);
-        })
-        ->where('year', $year)
-        ->pluck('id');
+            $query->where('dept_id', $dept_id);
+            })
+            ->where('year', $year)
+            ->pluck('id');
+    
+            $courseCount = 0;
+            $totalSumAverageScore = 0;
+    
+            foreach($courses as $course => $course_id) {
+    
+                $sei_data = SeiData::where('course_section_id', $course_id)->get();
+    
+                if(!$sei_data->isEmpty()) {
+                    $courseCount++;
+                }
+                foreach($sei_data as $data) {
+                    $questionArray = json_decode($data->questions, true);
+                    $test[] = $questionArray;
+                    $averageScore = array_sum($questionArray) / count($questionArray);
+                    $totalSumAverageScore += $averageScore;
+                }
+            }
+    
+            if ($courseCount != 0) {
+                $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+                $performance = self::where('dept_id', $dept_id)->where('year', $year)->first();
+                if ($performance != null) {
+                    $performance->update([
+                        'sei_avg' => $totalRoundedAvg,
+                    ]);
+                }
+            }
+    
+            return;
+    }
 
+    public static function updateDepartmentEnrollAndDropAvg($dept_id, $year) {
         $courseCount = 0;
-        $totalSumAverageScore = 0;
+        $totalSumEnrolledAvg = 0;
+        $totalSumDroppedAvg = 0;
 
-        foreach($courses as $course => $course_id) {
+        $courses = CourseSection::whereHas('area', function ($query) use ($dept_id) {
+            $query->where('dept_id', $dept_id);
+            })
+            ->where('year', $year)
+            ->get();
 
-            $sei_data = SeiData::where('course_section_id', $course_id)->get();
+        foreach($courses as $course) {
+  
+                $enrolled = $course->enrolled;
+                $dropped = $course->dropped;
+                $capacity = $course->capacity;
 
-            if(!$sei_data->isEmpty()) {
+                $enrolledAvg = $enrolled / $capacity;
+                $droppedAvg = $dropped / $capacity;
+
+                $totalSumEnrolledAvg += $enrolledAvg;
+                $totalSumDroppedAvg += $droppedAvg;
+
                 $courseCount++;
-            }
-            foreach($sei_data as $data) {
-                $questionArray = json_decode($data->questions, true);
-                $test[] = $questionArray;
-                $averageScore = array_sum($questionArray) / count($questionArray);
-                $totalSumAverageScore += $averageScore;
-            }
         }
 
-        if ($courseCount != 0) {
-            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+        if($courseCount != 0) {
+            $totalEnrolledAvg = $totalSumEnrolledAvg / $courseCount;
+            $totalDroppedAvg = $totalSumDroppedAvg / $courseCount;
+
+            $totalEnrolledPercent = $totalEnrolledAvg * 100;
+            $totalDroppedPercent = $totalDroppedAvg * 100;
+    
+            if(!is_int($totalEnrolledPercent)) {
+                $totalEnrolledPercent = round($totalEnrolledPercent, 1);
+            };
+            if(!is_int($totalDroppedPercent)) {
+                $totalDroppedPercent = round($totalDroppedPercent, 1);
+            };  
+    
             $performance = self::where('dept_id', $dept_id)->where('year', $year)->first();
             if ($performance != null) {
                 $performance->update([
-                    'sei_avg' => $totalRoundedAvg,
+                    'enrolled_avg' => $totalEnrolledPercent,
+                    'dropped_avg' => $totalDroppedPercent,
                 ]);
-            }
+            } 
         }
 
         return;
+    }
+
+    public static function updateDepartmentPerformance($dept_id, $year) {
+        // self::updateDepartmentPerformance($dept_id, $year);
+        self::updateDepartmentEnrollAndDropAvg($dept_id, $year);
     }   
 
     public function addHours($month, $hour) {
