@@ -1,3 +1,28 @@
+## Wednesday (7/5 - 7/10)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_05_2024-07_10_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Refactor UI for staff page
+  * #2: Instructor Report Page - Report Layout
+  * #3: Testing for staff page
+
+### Progress Update (since 7/5/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Refactor UI for staff page | To Do |
+| Instructor Report Page - Report Layout | In progress |
+| Testing for staff page | Complete |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I believe I have written all the main tests for the staff page and they are passing. I started working on creating the instructor report page which the department head or staff can view and eventually export. I plan to discuss with the team what chnages I should make to the staff page UI and implement them.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Discuss with team about UI and make necessary changes
+  * Continuing working on Instructor Report Page
+
 ## Friday (7/3 - 7/5)
 
 ### Timesheet
@@ -9,7 +34,7 @@ Clockify report
   * #2: Database Seeder
   * #3: Presentation for MVP
 
-### Progress Update (since 6/28/2024) 
+### Progress Update (since 7/3/2024) 
 |TASK/ISSUE |STATUS|
 | --------| -------|
 | Import page performance calculations| Complete |
