@@ -4,15 +4,15 @@
     </h1>
     <div>
         <h2>Courses Performance</h2>
-        <table class="w-full bg-white border border-black text-center">
-            <tr>
-                <th class="border border-black">Course Section</th>
-                <th class="border border-black">Term</th>
-                <th class="border border-black">Year</th>
-                <th class="border border-black">Enrolled</th>
-                <th class="border border-black">Dropped</th>
-                <th class="border border-black">Capacity</th>
-                <th class="border border-black">SEI Average</th>
+        <table class="w-full bg-white border border-white text-center">
+            <tr class="text-white bg-blue-500">
+                <th>Course Section</th>
+                <th>Term</th>
+                <th>Year</th>
+                <th>Enrolled</th>
+                <th>Dropped</th>
+                <th>Capacity</th>
+                <th>SEI Average</th>
             </tr>
             @php
                 $courses = $instructor->teaches;
@@ -35,27 +35,27 @@
                         }
                     @endphp
                     <tr>
-                        <td class="border border-black">{{ $course->courseSection->name }} {{ $course->courseSection->section }}</td>
-                        <td class="border border-black">Term {{ $course->courseSection->term }}</td>
-                        <td class="border border-black">{{ $course->courseSection->year }}</td>
-                        <td class="border border-black">{{ $course->courseSection->enrolled }}</td>
-                        <td class="border border-black">{{ $course->courseSection->dropped }}</td>
-                        <td class="border border-black">{{ $course->courseSection->capacity }}</td>
-                        <td class="border border-black">{{ $sei ? $sei : '-' }}</td>
+                        <td>{{ $course->courseSection->name }} {{ $course->courseSection->section }}</td>
+                        <td>Term {{ $course->courseSection->term }}</td>
+                        <td>{{ $course->courseSection->year }}</td>
+                        <td>{{ $course->courseSection->enrolled }}</td>
+                        <td>{{ $course->courseSection->dropped }}</td>
+                        <td>{{ $course->courseSection->capacity }}</td>
+                        <td>{{ $sei ? $sei : '-' }}</td>
                     </tr>
                 @endforeach
-                <tr>
-                    <td class="border border-black" colspan="3">Total</td>
-                    <td class="border border-black">{{ $totalEnrolled }}</td>
-                    <td class="border border-black">{{ $totalDropped }}</td>
-                    <td class="border border-black">{{ $totalCapacity }}</td>
-                    <td class="border border-black">{{ $count > 0 ? $seiSum/$count : '-' }}</td>
+                <tr class="font bold bg-orange-300">
+                    <td colspan="3">Total</td>
+                    <td>{{ $totalEnrolled }}</td>
+                    <td>{{ $totalDropped }}</td>
+                    <td>{{ $totalCapacity }}</td>
+                    <td>{{ $count > 0 ? $seiSum/$count : '-' }}</td>
                 </tr>
             @endif    
         </table>
         <br>
         <h2>Service Roles & Extra Hours Performance</h2>
-        <table class="w-full bg-white border border-black text-center">
+        <table class="w-full bg-white border border-white text-center">
             @php
                 $svcroles = $instructor->serviceRoles;
                 $subtotalHours = [
@@ -63,16 +63,17 @@
                     'May' => 0, 'June' => 0, 'July' => 0, 'August' => 0,
                     'September' => 0, 'October' => 0, 'November' => 0, 'December' => 0,
                 ];
+                $rowcount = 0;
             @endphp
             @if ($svcroles)
-                <tr>
-                    <th class="border border-black" rowspan="{{ count($svcroles) + 2 }}">Service Roles</th>
-                    <th class="border border-black">Name</th>
-                    <th class="border border-black">Year</th>
+                <tr class="text-white bg-blue-500">
+                    <th></th>
+                    <th>Name</th>
+                    <th>Year</th>
                     @foreach ($subtotalHours as $month => $hours)
-                        <th class="border border-black">{{ $month }} Hours</th>
+                        <th>{{ $month }} Hours</th>
                     @endforeach
-                    <th class="border border-black">Total Hours</th>
+                    <th>Total Hours</th>
                 </tr>
                 @foreach ($svcroles as $role)
                     @php
@@ -80,22 +81,26 @@
                         foreach ($subtotalHours as $month => $value) {
                             $subtotalHours[$month] += $hours[$month];
                         }
+                        $rowcount++;
                     @endphp
                     <tr>
-                        <td class="border border-black">{{ $role->name }}</td>
-                        <td class="border border-black">{{ $role->year }}</td>
+                        @if($rowcount == 1)
+                            <th class="border border-white bg-blue-400" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                        @endif
+                        <td>{{ $role->name }}</td>
+                        <td>{{ $role->year }}</td>
                         @foreach ($subtotalHours as $month => $value)
-                            <td class="border border-black">{{ $hours[$month] }}</td>
+                            <td>{{ $hours[$month] }}</td>
                         @endforeach
-                        <td class="border border-black">{{ array_sum($hours) }}</td>
+                        <td>{{ array_sum($hours) }}</td>
                     </tr>
                 @endforeach
-                <tr>
-                    <td class="border border-black" colspan="2">Subtotal</td>
+                <tr class="font-bold bg-orange-200">
+                    <td colspan="2">Subtotal</td>
                     @foreach ($subtotalHours as $month => $value)
-                        <td class="border border-black">{{ $value }}</td>
+                        <td>{{ $value }}</td>
                     @endforeach
-                    <td class="border border-black">{{ array_sum($subtotalHours) }}</td>
+                    <td>{{ array_sum($subtotalHours) }}</td>
                 </tr> 
             @endif 
             @php
@@ -108,7 +113,7 @@
             @endphp
             @if ($extraHours)
                 <tr>
-                    <th class="border border-black" rowspan="{{ count($extraHours) + 2 }}">Extra Hours</th>
+                    <th class="border border-white bg-blue-400" rowspan="{{ count($extraHours) + 2 }}">Extra Hours</th>
                 </tr>
             
                 @foreach ($extraHours as $hours)
@@ -116,36 +121,37 @@
                         $extraHoursSubtotal[\DateTime::createFromFormat('!m', $hours->month)->format('F')] += $hours->hours;
                     @endphp
                     <tr>
-                        <td class="border border-black">{{ $hours->name }}</td>
-                        <td class="border border-black">{{ $hours->year }}</td>
+                        <td>{{ $hours->name }}</td>
+                        <td>{{ $hours->year }}</td>
                         @foreach ($extraHoursSubtotal as $month => $value)
-                            <td class="border border-black">{{ \DateTime::createFromFormat('!m', $hours->month)->format('F') == $month ? $hours->hours : '-' }}</td>
+                            <td>{{ \DateTime::createFromFormat('!m', $hours->month)->format('F') == $month ? $hours->hours : '-' }}</td>
                         @endforeach
-                        <td class="border border-black">{{ $hours->hours }}</td>
+                        <td>{{ $hours->hours }}</td>
                     </tr>
                 @endforeach
-                <tr>
-                    <td class="border border-black" colspan="2">Subtotal</td>
+                <tr class="font-bold bg-orange-200">
+                    <td colspan="2">Subtotal</td>
                     @foreach ($extraHoursSubtotal as $month => $value)
-                        <td class="border border-black">{{ $value }}</td>
+                        <td>{{ $value }}</td>
                     @endforeach
-                    <td class="border border-black">{{ array_sum($extraHoursSubtotal) }}</td>
+                    <td>{{ array_sum($extraHoursSubtotal) }}</td>
                 </tr> 
             @endif
-            <tr>
-                <td class="border border-black" colspan="3">Total</td>
+            <tr class="border-b border-white font-bold bg-orange-300">
+                <td colspan="3">Total</td>
                 @foreach ($subtotalHours as $month => $value)
-                    <td class="border border-black">{{ $value + $extraHoursSubtotal[$month] }}</td>
+                    <td>{{ $value + $extraHoursSubtotal[$month] }}</td>
                 @endforeach
-                <td class="border border-black">{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
+                <td>{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
             </tr> 
-            <tr>
+            <tr class="font-bold bg-orange-300">
                 @php
                     $performance = $instructor->instructorPerformances()->where('year', date('Y'))->first();
                 @endphp
                 @if($performance)
-                    <td class="border border-black" colspan="3">Target Hours</td>
-                    <td class="border border-black" colspan="13">{{  $performance->target_hours }}</td>
+                    <td colspan="3">Target Hours</td>
+                    <td colspan="12">{{  $performance->target_hours/12 }}</td>
+                    <td>{{  $performance->target_hours }}</td>
                 @endif
             </tr>
         </table>
