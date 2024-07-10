@@ -28,6 +28,27 @@ class DatabaseSeeder extends Seeder
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
+        DepartmentPerformance::create([
+            'dept_id'=> $dept->id,
+            'total_hours' => json_encode([
+                'January' => 0,
+                'February' => 0,
+                'March' => 0,
+                'April' => 0,
+                'May' => 0,
+                'June' => 0,
+                'July' => 0,
+                'August' => 0,
+                'September' => 0,
+                'October' => 0,
+                'November' => 0,
+                'December' => 0,
+            ]),
+            'sei_avg' => 0,
+            'enrolled_avg'=> 0,
+            'dropped_avg'=> 0,
+            'year' => date('Y'),
+            ]);
 
         // Create the 4 areas in CMPS department
         Area::factory()->create([
@@ -49,6 +70,30 @@ class DatabaseSeeder extends Seeder
             'name' => 'Statistics',
             'dept_id' => $dept->id,
         ]);
+        $areas = Area::all();
+        foreach ($areas as $area){
+            AreaPerformance::create([
+                'area_id'=> $area->id,
+                'total_hours' => json_encode([
+                    'January' => 0,
+                    'February' => 0,
+                    'March' => 0,
+                    'April' => 0,
+                    'May' => 0,
+                    'June' => 0,
+                    'July' => 0,
+                    'August' => 0,
+                    'September' => 0,
+                    'October' => 0,
+                    'November' => 0,
+                    'December' => 0,
+                ]),
+                'sei_avg' => 0,
+                'enrolled_avg'=> 0,
+                'dropped_avg'=> 0,
+                'year' => date('Y'),
+            ]);
+        }
 
         // Create department head
         $head = User::factory()->create([
@@ -152,16 +197,16 @@ class DatabaseSeeder extends Seeder
                 'assigner_id' =>  $headrole ->id,
                 'instructor_id' => $instructorRole->id,
             ]);
-            $this->updatePerformance($instructorRole->id, $role);
+            $this->updatePerformance($instructorRole->id, $role, $dept);
         }
         // Add extra hours for the example instructor
         $extrahour = ExtraHour::factory()->create([
-            'year' => 2024,
+            'year' => date('Y'),
             'month' => 7,
             'assigner_id' => $headrole->id,
             'instructor_id' => $instructorRole->id
         ]);
-        $this->updatePerformance2($extrahour);
+        $this->updatePerformance2($extrahour, $dept);
 
         // Create courses and assign instructors to them    
         $courses = CourseSection::factory(10)->create([
@@ -227,77 +272,71 @@ class DatabaseSeeder extends Seeder
                 'assigner_id' =>  $headrole ->id,
                 'instructor_id' => $instructor_id,
             ]);
-            $this->updatePerformance($instructor_id, $role);
-            InstructorPerformance::updatePerformance($instructor_id, 2024);
+            $this->updatePerformance($instructor_id, $role, $dept);
+            InstructorPerformance::updatePerformance($instructor_id, date('Y'));
         } 
 
         $extrahours = ExtraHour::factory(5)->create([
-            'year' => 2024,
+            'year' => date('Y'),
             'month' => 7,
             'assigner_id' => $headrole->id,
         ]);
         
         foreach ($extrahours as $hours){
-            $this->updatePerformance2($hours);
-            InstructorPerformance::updatePerformance($instructor_id, 2024); 
+            $this->updatePerformance2($hours, $dept);
+            InstructorPerformance::updatePerformance($instructor_id, date('Y')); 
         } 
         
         //Update area and dept performance
-        $areas = Area::all();
         foreach ($areas as $area){
-            AreaPerformance::create([
-                'area_id'=> $area->id,
-                'total_hours' => json_encode([
-                    'January' => 0,
-                    'February' => 0,
-                    'March' => 0,
-                    'April' => 0,
-                    'May' => 0,
-                    'June' => 0,
-                    'July' => 0,
-                    'August' => 0,
-                    'September' => 0,
-                    'October' => 0,
-                    'November' => 0,
-                    'December' => 0,
-                ]),
-                'sei_avg' => 0,
-                'enrolled_avg'=> 0,
-                'dropped_avg'=> 0,
-                'year' => 2024,
-            ]);
-            AreaPerformance::updateAreaPerformance($area->id, 2024);
+            AreaPerformance::updateAreaPerformance($area->id, date('Y'));
         }
         $depts = Department::all();
         foreach ($depts as $dept){
-            DepartmentPerformance::create([
-                'dept_id'=> $dept->id,
-                'total_hours' => json_encode([
-                    'January' => 0,
-                    'February' => 0,
-                    'March' => 0,
-                    'April' => 0,
-                    'May' => 0,
-                    'June' => 0,
-                    'July' => 0,
-                    'August' => 0,
-                    'September' => 0,
-                    'October' => 0,
-                    'November' => 0,
-                    'December' => 0,
-                ]),
-                'sei_avg' => 0,
-                'enrolled_avg'=> 0,
-                'dropped_avg'=> 0,
-                'year' => 2024,
-            ]);
-            DepartmentPerformance::updateDepartmentPerformance($dept->id, 2024); 
+            DepartmentPerformance::updateDepartmentPerformance($dept->id, date('Y')); 
         }
     }
 
-    private function updatePerformance($instructor_id, $role){
-        $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', 2024)->first();
-        $existingMonthlyHours = json_decode($instructorPerformance->total_hours, true);
+    private function updatePerformance($instructor_id, $role, $dept){
+        $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
+        $instructorPerformance->update([
+            'total_hours' => json_encode($this->updateMonthlyHours($instructorPerformance, $role)),
+        ]);
+
+        $area_id = $role->area_id;
+        $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
+        $areaPerformance->update([
+            'total_hours' => json_encode($this->updateMonthlyHours($areaPerformance, $role)),
+        ]);
+
+        $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
+        $deptPerformance->update([
+            'total_hours' => json_encode($this->updateMonthlyHours($deptPerformance, $role)),
+        ]);
+    }
+
+    private function updatePerformance2($hours, $dept){
+        $instructor_id  = $hours->instructor_id;
+        $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
+        $instructorPerformance->update([
+            'total_hours' => json_encode($this->updateExtraHours($instructorPerformance, $hours))
+        ]);
+
+        $area_id = $hours->area_id;
+        $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
+        $areaPerformance->update([
+            'total_hours' => json_encode($this->updateExtraHours($areaPerformance, $hours)),
+        ]);
+
+        $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
+        $deptPerformance->update([
+            'total_hours' => json_encode($this->updateExtraHours($deptPerformance, $hours)),
+        ]);
+
+    }
+
+    private function updateMonthlyHours($performance, $role){
+        $existingMonthlyHours = json_decode($performance->total_hours, true);
         $updatedMonthlyHours = [
             'January' => $existingMonthlyHours['January'] + $role->monthly_hours['January'],
             'February' => $existingMonthlyHours['February'] + $role->monthly_hours['February'],
@@ -312,19 +351,15 @@ class DatabaseSeeder extends Seeder
             'November' => $existingMonthlyHours['November'] + $role->monthly_hours['November'],
             'December' => $existingMonthlyHours['December'] + $role->monthly_hours['December'],
         ];
-    
-        $instructorPerformance->update([
-            'total_hours' => json_encode($updatedMonthlyHours),
-        ]);
+
+        return  $updatedMonthlyHours;
     }
 
-    private function updatePerformance2($hours){
-        $instructor_id  = $hours->instructor_id;
-            $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', 2024)->first();
-            $existingHours = json_decode($instructorPerformance->total_hours, true);
-            $existingHours['July'] += $hours->hours;
-            $instructorPerformance->update([
-                'total_hours' => json_encode($existingHours)
-            ]);
+    private function updateExtraHours($performance, $hours){
+        $existingHours = json_decode($performance->total_hours, true);
+        $existingHours[date('F')] += $hours->hours;
+
+        return $existingHours;
     }
+
 }
