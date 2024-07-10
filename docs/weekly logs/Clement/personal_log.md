@@ -1,3 +1,59 @@
+## Cycle: July 5th - July 9th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_05_2024-07_09_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Bug Fixes and Optimizations
+  * #2: Profile Picture Update Bug Fix
+  * #3: Upgrading InsightDB Image
+  * #4: Fixing Localhost Loading Issue
+  * #5: Creating AccessController for RBAC
+  * #6: Switching to AccessControl Middleware for Better Route Handling
+
+### Progress Update (since 07/05/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Bug Fixes and Optimizations</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Profile Picture Update Bug Fix</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Upgrading InsightDB Image</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fixing Localhost Loading Issue</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Creating AccessController for RBAC</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Switching to AccessControl Middleware for Better Route Handling</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Sunday, July 7th focused on optimizations and bug fixes, particularly for the profile picture update and upgrading the InsightDB image. Monday, July 8th, addressed localhost loading issues and created an AccessController for RBAC. By Tuesday, July 9th, the switch to AccessControl Middleware was completed, allowing for better route handling. Overall, the cycle was productive, with all planned tasks completed successfully.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Testing the functions of Service Role features
+  * Implementing UI changes and unifying the design
+  * Further refining AccessControl Middleware
+  * Continuous debugging and performance improvements
+
+---
+
 ## Cycle: July 3rd - July 4th
 
 ### Timesheet
