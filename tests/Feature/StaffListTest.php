@@ -19,7 +19,7 @@ use App\Livewire\StaffListEditMode;
 class StaffListTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_staff_page_can_be_rendered(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
@@ -43,7 +43,7 @@ class StaffListTest extends TestCase
             'role' => 'dept_head',
         ]);
 
-        $response = $this->actingAs($user)->get('/staff-edit-mode');
+        $response = $this->actingAs($user)->get('/staff/edit');
 
         $response->assertStatus(200);
     }
@@ -261,7 +261,7 @@ class StaffListTest extends TestCase
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
         $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
-        
+
         $user1 =  User::factory()->create([
             'firstname' => 'Adam',
             'lastname' => 'Smith',

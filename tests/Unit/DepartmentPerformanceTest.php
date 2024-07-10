@@ -28,7 +28,10 @@ class DepartmentPerformanceTest extends TestCase {
      * @return void
      */
     public function test_department_performance_can_be_created() {
+        // Create a department performance
         $department_performance = DepartmentPerformance::factory()->create();
+
+        // Assert that the department performance model exists
         $this->assertModelExists($department_performance);
         
         // Assert that the department performance was created successfully 
@@ -51,7 +54,6 @@ class DepartmentPerformanceTest extends TestCase {
 
         // Assert that the department performance has an associated department
         $this->assertNotEmpty($department_performance->dept_id);
-
     }
 
     public function test_department_performance_has_valid_department_id() {

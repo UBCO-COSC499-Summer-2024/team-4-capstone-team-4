@@ -2,20 +2,33 @@
 
 namespace Database\Seeders;
 
+<<<<<<< HEAD
 use App\Models\AreaPerformance;
 use App\Models\Department;
 use App\Models\Area;
 use App\Models\UserRole;
 use App\Models\ServiceRole;
 use App\Models\SeiData;
+=======
+use App\Models\ServiceRole;
+use App\Models\SeiData;
+use App\Models\AreaPerformance;
+use Illuminate\Database\Seeder;
+use App\Models\Department;
+use App\Models\Area;
+use App\Models\UserRole;
+>>>>>>> origin/pre-dev-integration
 use App\Models\InstructorPerformance;
 use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
+<<<<<<< HEAD
 use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
+=======
+>>>>>>> origin/pre-dev-integration
 
 class DatabaseSeeder extends Seeder
 {
@@ -50,7 +63,57 @@ class DatabaseSeeder extends Seeder
             'dept_id' => $dept->id,
         ]);
 
+<<<<<<< HEAD
         // Create department head
+=======
+        $users = User::factory(10)->create();
+        foreach($users as $user) {
+            $role = UserRole::factory()->create([
+                'user_id' => $user->id,
+                'department_id' => $dept->id,
+                'role' => 'instructor',
+            ]);
+            InstructorPerformance::factory()->create([
+                'year' => date('Y'),
+                'instructor_id' => $role->id,
+            ]);
+        }
+
+        $courses = CourseSection::factory(5)->create();
+        foreach($courses as $course){
+            Teach::factory()->create([
+                'course_section_id' => $course->id,
+                'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
+            ]);
+            SeiData::factory()->create([
+                'course_section_id'=> $course->id,
+                'questions'=>json_encode([
+                    'q1' => fake()->numberBetween(1,5),
+                    'q2' => fake()->numberBetween(1,5),
+                    'q3' => fake()->numberBetween(1,5),
+                    'q4' => fake()->numberBetween(1,5),
+                    'q5' => fake()->numberBetween(1,5),
+                    'q6' => fake()->numberBetween(1,5),
+                ]),
+            ]);
+        }
+
+        $instructor = User::factory()->create([
+            'firstname' => 'Dr',
+            'lastname' => 'Prof',
+            'email' => 'instructor@example.com',
+            'password' => 'password'
+        ]);
+        $instructorRole = UserRole::factory()->create([
+            'user_id' => $instructor->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' =>  $instructorRole->id,
+        ]);
+>>>>>>> origin/pre-dev-integration
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -89,6 +152,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+<<<<<<< HEAD
         // Create an example instructor
         $instructor = User::factory()->create([
             'firstname' => 'Dr',
@@ -244,5 +308,12 @@ class DatabaseSeeder extends Seeder
             //AreaPerformance::updateAreaPerformance(2024);
             //DepartmentPerformance::updateDepartmentPerformance(2024);  
         }  
+=======
+        $this->call([
+            // DepartmentSeeder::class,
+            // AreaSeeder::class,
+            ServiceRoleSeeder::class
+        ]);
+>>>>>>> origin/pre-dev-integration
     }
 }

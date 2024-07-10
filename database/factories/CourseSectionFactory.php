@@ -44,17 +44,19 @@ protected $model=CourseSection::class;
                 $area_id = $getOrCreateAreaId('Statistics');
                 break;
         }
-
+    
         return [
-            'name' => $prefix . ' ' . $this->faker->numberBetween(100, 500),
+            'prefix' => $prefix,
+            'number' => fake()->numberBetween(100, 500),
             'area_id' => $area_id,
-            'year' => $this->faker->year(),
-            'enrolled' => $this->faker->numberBetween(10, 100),
-            'dropped' => $this->faker->numberBetween(0, 20),
-            'capacity' => $this->faker->numberBetween(10, 200),
-            'term' => $this->faker->randomElement(['1', '2', '1-2']),
-            'session' => $this->faker->randomElement(['W', 'S']),
-            'section' => $this->faker->randomElement(['001', '002', '003']),
+            'year' => fake()->year(),
+            'enrolled' => fake()->numberBetween(10, 100),
+            'dropped' => fake()->numberBetween(0, 20),
+            'capacity' => fake()->numberBetween(10, 200),
+            'term' => fake()->randomElement(['1', '2', '1-2']),
+            'session' => fake()->randomElement(['W', 'S']),
+            'section' => fake()->randomElement(['001', '002', '003']),
         ];
-    }  
+    }
+    
 }

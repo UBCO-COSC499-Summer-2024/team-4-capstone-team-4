@@ -54,6 +54,7 @@ class SeiData extends Model {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
 
+<<<<<<< HEAD
 
 
     // other functions
@@ -125,4 +126,6 @@ class SeiData extends Model {
 
         return $departmentAverages;
     }
+=======
+>>>>>>> origin/pre-dev-integration
 }

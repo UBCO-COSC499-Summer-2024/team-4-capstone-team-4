@@ -1,16 +1,17 @@
-<x-app-layout>
-    <div class="content">
-        <h1>{{ __('Dashboard') }}</h1>
-        <section class="dash-top">
-            <x-chart :chart="$chart"/>
-        </section>
-        <section class="dash-bottom">
-            <x-staff-preview />
-        </section>
+@php
+$userRoles = auth()->user()->roles; 
+@endphp
+        
+@if ($userRoles->isEmpty() || (!$isDeptHead && !$isDeptStaff && !$isInstructor))
+    <div class="alert alert-danger">
+        No valid role assigned to your account. Redirecting...
     </div>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 </x-app-layout>
 =======
+=======
+>>>>>>> origin/pre-dev-integration
                 
     <!-- Redirect using JavaScript after a brief delay -->
     <script>
@@ -71,4 +72,7 @@
 </form>
 
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> origin/pre-dev-integration

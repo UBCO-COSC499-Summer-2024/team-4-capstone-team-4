@@ -48,9 +48,7 @@ class InstructorPerformance extends Model {
 
     // other functions
 
-    public static function updatePerformance($instructor_id, $year) {
-        $seiAverages = SeiData::calculateSEIAverages();
-        // $enrolledAverages = CourseSection::calculateEnrolledAverages();
+    public static function updateInstructorSEIAvg($instructor_id, $year) {
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
             $query->where('year', $year);
@@ -61,32 +59,90 @@ class InstructorPerformance extends Model {
             return;
         }
 
-        $sei_sum = 0;
-        $count = 0;
-        foreach ($courses as $course_id) {
-            if (isset($seiAverages[$course_id])) {
-                //echo $course_id . ":" . $seiAverages[$course_id] . "\n";
-                $sei_sum += $seiAverages[$course_id];
-                $count ++;
+        $courseCount = 0;
+        $totalSumAverageScore = 0;
+
+       foreach($courses as $course => $course_id) {
+
+            $seiData = SeiData::where('course_section_id', $course_id)->get();
+
+            if(!$seiData->isEmpty()) {
+                $courseCount++;
+            }
+            foreach($seiData as $data) {
+                $questionArray = json_decode($data->questions, true);
+                $averageScore = array_sum($questionArray) / count($questionArray);
+                $totalSumAverageScore += $averageScore;
             }
         }
-        //echo $sei_sum  . "\n" ;
-        //echo count($courses)  . "\n" ;
-        $sei_avg = 0;
-        if($count > 0){
-            $sei_avg = $sei_sum / $count;
-        }
 
-        $roundedAvg = round($sei_avg, 1);
-
-        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
-        if ($performance != null) {
-            $performance->update([
-                'sei_avg' => $roundedAvg,
-            ]);
+        if($courseCount != 0) {
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+            $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
+                ]);
+            }
         }
 
         return;
+    }
+    
+    public static function updateInstructorEnrollAndDropAvg($instructor_id, $year) {
+        $courseCount = 0;
+        $totalSumEnrolledAvg = 0;
+        $totalSumDroppedAvg = 0;
+
+        $courses = Teach::where('instructor_id', $instructor_id)
+        ->whereHas('courseSection', function ($query) use ($year) {
+            $query->where('year', $year);
+        })->pluck('course_section_id');
+
+        foreach($courses as $course) {
+            $courseSectionData = CourseSection::select('enrolled', 'dropped', 'capacity')->where('id', $course)->first();
+
+            if($courseSectionData) {
+                $enrolled = $courseSectionData->enrolled;
+                $dropped = $courseSectionData->dropped;
+                $capacity = $courseSectionData->capacity;
+
+                $totalSumEnrolledAvg += $enrolled / $capacity;
+                $totalSumDroppedAvg += $dropped / $capacity;
+
+                $courseCount++;
+            }
+        }
+
+        if($courseCount != 0) {
+            $totalEnrolledAvg = $totalSumEnrolledAvg / $courseCount;
+            $totalDroppedAvg = $totalSumDroppedAvg / $courseCount;
+
+            $totalEnrolledPercent = $totalEnrolledAvg * 100;
+            $totalDroppedPercent = $totalDroppedAvg * 100;
+    
+            if(!is_int($totalEnrolledPercent)) {
+                $totalEnrolledPercent = round($totalEnrolledPercent, 1);
+            };
+            if(!is_int($totalDroppedPercent)) {
+                $totalDroppedPercent = round($totalDroppedPercent, 1);
+            };
+    
+            $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'enrolled_avg' => $totalEnrolledPercent,
+                    'dropped_avg' => $totalDroppedPercent,
+                ]);
+            }    
+        }
+        return;
+    }
+
+    public static function updatePerformance($instructor_id, $year) {
+        self::updateInstructorSEIAvg($instructor_id, $year);
+        self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
+
 
     }
 
