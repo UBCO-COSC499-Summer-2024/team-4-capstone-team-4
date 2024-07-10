@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\SeiData;
 use App\Models\User;
 use App\Models\Teach;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
 
 class CourseDetailsController extends Controller {
 
@@ -19,14 +17,13 @@ class CourseDetailsController extends Controller {
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
 
             $formattedName = sprintf('%s %s - %s%s %s', 
-            $section->name, 
-            $section->section, 
-            $section->year, 
-            $section->session, 
-            $section->term
-        );
+                $section->name, 
+                $section->section, 
+                $section->year, 
+                $section->session, 
+                $section->term
+            );
 
-    
             return (object) [
                 'id' => $section->id,
                 'name' => $formattedName,
@@ -37,17 +34,16 @@ class CourseDetailsController extends Controller {
                 'averageRating' => $averageRating,
             ];
         });
-    
-        // Fetch additional data needed by the view
-        $courses = CourseSection::all(); // Adjust query as needed
-        $instructors = User::all(); // Adjust query as needed
-    
+
+        $courses = CourseSection::all(); 
+        $instructors = User::all(); 
+
         $sortField = 'courseName';
         $sortDirection = 'asc';
-    
+
         return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
     }
-    
+
     public function save(Request $request){
         $ids = $request->input('ids', []);
         $courseNames = $request->input('courseNames', []);
@@ -55,15 +51,28 @@ class CourseDetailsController extends Controller {
         $droppedStudents = $request->input('droppedStudents', []);
         $courseCapacities = $request->input('courseCapacities', []);
 
+        // Log the request data for debugging
+        Log::info('Request Data:', [
+            'ids' => $ids,
+            'courseNames' => $courseNames,
+            'enrolledStudents' => $enrolledStudents,
+            'droppedStudents' => $droppedStudents,
+            'courseCapacities' => $courseCapacities,
+        ]);
+
         $updatedSections = [];
 
-        if (empty($courseNames)) {
-            return response()->json(['message' => 'Course names are required.'], 400);
+        // Ensure all arrays have the same length
+        $arrayLengths = [count($ids), count($courseNames), count($enrolledStudents), count($droppedStudents), count($courseCapacities)];
+        if (count(array_unique($arrayLengths)) !== 1) {
+            return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
         }
 
         for ($i = 0; $i < count($ids); $i++) {
+            // Check if the key exists before accessing the array
             if (!isset($courseNames[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
                 Log::error('Missing array index', [
+                    'index' => $i,
                     'courseNames' => $courseNames,
                     'enrolledStudents' => $enrolledStudents,
                     'droppedStudents' => $droppedStudents,
@@ -80,7 +89,7 @@ class CourseDetailsController extends Controller {
                 $courseSection->capacity = (int)$courseCapacities[$i];
                 $courseSection->save();
 
-                $updatedSections[] = $courseSection; // Collect updated sections for response
+                $updatedSections[] = $courseSection;
             } else {
                 Log::error('Course section not found', ['id' => $ids[$i]]);
             }
@@ -91,24 +100,39 @@ class CourseDetailsController extends Controller {
             'updatedSections' => $updatedSections
         ]);
     }
-
-    public function assignCourse(Request $request) {
-        $courseId = $request->input('course_id');
-        $instructorId = $request->input('instructor_id');
-
-        $courseSection = CourseSection::find($request->course_id);
-        $courseSection->instructor_id = $request->instructor_id;
-        $courseSection->save();
-
-        Teach::create([
-            'course_section_id' => $courseId,
-            'user_id' => $instructorId
-        ]);
-
-        return redirect()->route('course-details')->with('success', 'Course assigned to instructor successfully.');
+    public function search(Request $request) {
+        $query = $request->input('query');
+        $courseSections = CourseSection::with('area')
+            ->where('name', 'LIKE', "%$query%")
+            ->orWhereHas('area', function($q) use ($query) {
+                $q->where('name', 'LIKE', "%$query%");
+            })
+            ->get()
+            ->map(function ($section, $index) {
+                $seiData = SeiData::where('course_section_id', $section->id)->first();
+                $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+    
+                $formattedName = sprintf('%s %s - %s%s %s', 
+                    $section->name, 
+                    $section->section, 
+                    $section->year, 
+                    $section->session, 
+                    $section->term
+                );
+    
+                return [
+                    'id' => $section->id,
+                    'name' => $formattedName,
+                    'departmentName' => $section->area ? $section->area->name : 'Unknown',
+                    'enrolled' => $section->enrolled,
+                    'dropped' => $section->dropped,
+                    'capacity' => $section->capacity,
+                    'averageRating' => $averageRating,
+                ];
+            });
+    
+        return response()->json($courseSections);
     }
-
-
 
     private function calculateAverageRating($questionsJson) {
         $questions = json_decode($questionsJson, true);

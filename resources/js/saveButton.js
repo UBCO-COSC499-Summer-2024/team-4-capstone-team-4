@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             rows.forEach(row => {
                 formData.append('ids[]', row.getAttribute('data-id'));
-                if (row.children[1]) formData.append('courseNames[]', row.children[1].innerText.trim());
-                if (row.children[3]) formData.append('enrolledStudents[]', row.children[3].innerText.trim()); 
-                if (row.children[4]) formData.append('droppedStudents[]', row.children[4].innerText.trim()); 
-                if (row.children[5]) formData.append('courseCapacities[]', row.children[5].innerText.trim());
+                formData.append('courseNames[]', row.children[1]?.innerText.trim() || '');
+                formData.append('enrolledStudents[]', row.children[2]?.innerText.trim() || '');
+                formData.append('droppedStudents[]', row.children[3]?.innerText.trim() || '');
+                formData.append('courseCapacities[]', row.children[4]?.innerText.trim() || '');
             });
 
             console.log('Form Data:', Array.from(formData.entries())); // Log form data for debugging
@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                         if (row) {
                             row.children[1].innerText = updatedSection.name;
-                            row.children[3].innerText = updatedSection.enrolled;
-                            row.children[4].innerText = updatedSection.dropped;
-                            row.children[5].innerText = updatedSection.capacity;
+                            row.children[2].innerText = updatedSection.enrolled;
+                            row.children[3].innerText = updatedSection.dropped;
+                            row.children[4].innerText = updatedSection.capacity;
                         }
                     });
                 } else {
