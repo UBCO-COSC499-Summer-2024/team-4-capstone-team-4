@@ -42,11 +42,11 @@ $userRoles = auth()->user()->roles;
                 <!-- Instructor View -->
                 @if ($hasTarget)
                     <section class="dash-top">
-                        <x-instructor-target :chart1="$chart1" :currentMonth="$currentMonth" :performance="$performance" />
+                        <x-instructor-target :chart1="$chart1" :chart2="$chart2" :currentMonth="$currentMonth" :performance="$performance" />
                     </section>
                 @else 
                     <section class="dash-top">
-                        <x-instructor-performance :chart1="$chart1" :chart2="$chart2" :currentMonth="$currentMonth" :assignmentCount="$assignmentCount" 
+                        <x-instructor-performance :chart1="$chart1" :currentMonth="$currentMonth" :assignmentCount="$assignmentCount" 
                         :performance="$performance" />
                     </section>
                 @endif
