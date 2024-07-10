@@ -1,3 +1,143 @@
+## Wednesday (7/5- 7/10)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_05_2024-07_10_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Testing
+  * #3: Assign Courses to Instructors Page
+  * #4: Create functions to calculate averages
+  * #5: Small housekeeping taskss
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+         <!-- Task/Issue # -->
+         <td>Create Functions to Average Performance Data / #250
+         </td>
+         <!-- Status -->
+         <td>Complete
+         </td>
+     </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Assign Course to Instructors / #249
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Testing / #233
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Cleanup Tasks / #311
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Now that MVP is complete, we are working to really focus on testing our pages fully to ensure a solid system is in place. We will also now focus on some of the extra functionality planned, like gamification, and adding extra functionlaity to pages that may be helpful to users.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Testing for my pages
+  * Small UI changes and extra functionality
+
+## Friday (7/3- 7/5)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_03_2024-07_05_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Testing
+  * #3: Assign Courses to Instructors Page
+  * #4: Create functions to calculate averages
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>Complete for MVP
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Assign Course to Instructors / #249
+        </td>
+        <!-- Status -->
+        <td>Complete for MVP
+        </td>
+    </tr>
+    <tr>
+         <!-- Task/Issue # -->
+         <td>Create Functions to Average Performance Data / #250
+         </td>
+         <!-- Status -->
+         <td>In Progress
+         </td>
+     </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Testing / #233
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Finished everything I was assigned and am preparing for the MVP presentation and milestone deadline. Since my unit tests are not complete for the MVP, I am doing thourough manual testing to ensure that everything will work smoothly on the day. We have integrated everyone's parts into the existing system and should be ready for MVP.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Write the functions to calculate course enrollment averages
+  * Testing for my pages
+  * Small UI changes and extra functionality
+
 ## Wednesday (6/28- 7/3)
 
 ### Timesheet
