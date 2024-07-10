@@ -5,7 +5,7 @@
             <div class="inst-head">
                 <div class="col">Service Roles</div>
             </div>
-            @foreach($serviceRoles as $role)
+            @foreach($assignmentCount[0] as $role)
             <div class="inst-item">
                 <div class="col">{{ $role }}</div>
             </div>
@@ -18,7 +18,7 @@
             <div class="inst-head">
                 <div class="col">Extra Hours</div>
             </div>
-            @foreach($extraHours as $extra)
+            @foreach($assignmentCount[1] as $extra)
             <div class="inst-item">
                 <div class="col">{{ $extra }}</div>
             </div>
@@ -31,7 +31,7 @@
             <div class="inst-head">
                 <div class="col">Course Sections</div>
             </div>
-            @foreach($courseSections as $course)
+            @foreach($assignmentCount[2] as $course)
             <div class="inst-item">
                 <div class="col">{{ $course }}</div>
             </div>

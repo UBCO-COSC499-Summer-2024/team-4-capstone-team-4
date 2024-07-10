@@ -6,15 +6,15 @@
             <div class="hours-row">
                 <div class="hours-col">
                     <div class="row-head">{{ $currentMonth }} Total Hours:</div>
-                    <div class="row-item">{{ $currentMonthHours }}</div>
+                    <div class="row-item">{{ json_decode($performance->total_hours, true)[$currentMonth] }}</div>
                 </div>
                 <div class="hours-col">
                     <div class="row-head">{{ $currentMonth }} Service Role Hours:</div>
-                    <div class="row-item">{{ $roleHoursTotal }}</div>
+                    <div class="row-item">{{ $assignmentCount[3] }}</div>
                 </div>
                 <div class="hours-col">
                     <div class="row-head">{{ $currentMonth }} Extra Hours:</div>
-                    <div class="row-item">{{ $extraHoursTotal }}</div>
+                    <div class="row-item">{{ $assignmentCount[4] }}</div>
                 </div>
             </div>
         </div>
@@ -29,15 +29,15 @@
         <div class="course-performance">
             <div class="course-metric glass">
                 <div class="metric-header">SEI Score Avg.</div>
-                <div class="metric-value">{{ $seiAvg }} / 5</div>
+                <div class="metric-value">{{ $performance->sei_avg }} / 5</div>
             </div>
             <div class="course-metric glass">
                 <div class="metric-header">Enrolled Avg.</div>
-                <div class="metric-value">{{ $enrolledAvg }}%</div>
+                <div class="metric-value">{{ $performance->enrolled_avg }}%</div>
             </div>
             <div class="course-metric glass">
                 <div class="metric-header">Dropped Avg.</div>
-                <div class="metric-value">{{ $droppedAvg }}%</div>
+                <div class="metric-value">{{ $performance->dropped_avg }}%</div>
             </div>
         </div>
     </div>
