@@ -138,7 +138,7 @@ class DepartmentPerformance extends Model {
     }
 
     public static function updateDepartmentPerformance($dept_id, $year) {
-        // self::updateDepartmentPerformance($dept_id, $year);
+        self::updateDepartmentSEIAvg($dept_id, $year);
         self::updateDepartmentEnrollAndDropAvg($dept_id, $year);
     }   
 

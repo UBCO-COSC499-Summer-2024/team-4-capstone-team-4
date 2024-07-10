@@ -173,8 +173,7 @@ class ImportAssignCourse extends Component
         // InstructorPerformance::updatePerformance(8, 2000);
             // AreaPerformance::updateAreaPerformance(1, 2023);
             // DepartmentPerformance::updateDepartmentPerformance(1, 2023);
-
-
+         
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
             'availableCourses' => $this->getAvailableCourses(),
