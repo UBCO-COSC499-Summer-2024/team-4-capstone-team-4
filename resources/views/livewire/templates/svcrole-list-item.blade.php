@@ -68,13 +68,14 @@
     {{-- extra hours --}}
     <td class="svcr-list-item-cell" data-column="extra-hours">
         <div class="svcr-list-item-actions">
-            <button class="svcr-list-item-action" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
+            <button class="px-2 rounded-md shadow-sm svcr-list-item-action bg-slate-100" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
                     title="Add Extra Hours"
                     wire:click="
                     $dispatch('item-modal-id', { id: {{ $serviceRole->id }} });
                     $dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})"
                 >
                 <span class="material-symbols-outlined icon">add</span>
+                <span>Add</span>
             </button>
         </button>
     </td>
