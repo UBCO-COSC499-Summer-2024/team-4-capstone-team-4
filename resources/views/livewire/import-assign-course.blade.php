@@ -11,7 +11,7 @@
             @php
                 $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
             @endphp
-            <div class="assign-input w-4/12 text-center">{{ $course->name }} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
+            <div class="assign-input w-4/12 text-center">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year}}{{ $course->session}} Term {{ $course->term }}</div>
             <div class="assign-input w-4/12 text-center">
                 <select wire:model="assignments.{{ $index }}.instructor_id" class="instructor-select" style="width: 100%">
                     <option value="">Select Instructor</option>
