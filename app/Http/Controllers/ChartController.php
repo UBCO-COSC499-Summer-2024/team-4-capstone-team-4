@@ -266,7 +266,7 @@ class ChartController extends Controller {
                     $role = ServiceRole::where('id', $assignedRole->service_role_id);
                     if ($role->year === $currentYear) {
                         $serviceRoles[] = $role->name;
-                        $roleHoursTotal = $roleHoursTotal + json_decode($role->monthly_hours, true)[$currentMonth];
+                        $roleHoursTotal = $roleHoursTotal + $role->monthly_hours[$currentMonth];
                     }
                 }
 
@@ -530,7 +530,7 @@ class ChartController extends Controller {
             foreach ($assignedRoles as $assignedRole) {
                 $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
                 $serviceRoles[] = $role->name;
-                $roleHoursTotal = $roleHoursTotal + json_decode($role->monthly_hours, true)[$currentMonth];
+                $roleHoursTotal = $roleHoursTotal + $role->monthly_hours[$currentMonth];
             }
 
             // Fetch the instructor extra hours for the current year
