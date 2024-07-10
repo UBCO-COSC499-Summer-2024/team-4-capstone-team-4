@@ -13,15 +13,15 @@
                 <button wire:click="sort('firstname')">
                     @if($sortField === 'firstname' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
-                            arrow_upward
+                            keyboard_arrow_up
                         </span>
                     @elseif($sortField === 'firstname' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
-                            arrow_downward
+                            keyboard_arrow_down
                         </span>
                     @else
-                        <span class="material-symbols-outlined">
-                            sort
+                       <span class="material-symbols-outlined">
+                            unfold_more
                         </span>
                     @endif
                 </button>
@@ -33,15 +33,15 @@
                 <button wire:click="sort('area')">
                     @if($sortField === 'area' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
-                            arrow_upward
+                            keyboard_arrow_up
                         </span>
                     @elseif($sortField === 'area' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
-                            arrow_downward
+                            keyboard_arrow_down
                         </span>
                     @else
-                        <span class="material-symbols-outlined">
-                            sort
+                       <span class="material-symbols-outlined">
+                            unfold_more
                         </span>
                     @endif
                 </button>
@@ -53,15 +53,15 @@
                 <button wire:click="sort('total_hours')">
                     @if($sortField === 'total_hours' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
-                            arrow_upward
+                            keyboard_arrow_up
                         </span>
                     @elseif($sortField === 'total_hours' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
-                            arrow_downward
+                            keyboard_arrow_down
                         </span>
                     @else
-                        <span class="material-symbols-outlined">
-                            sort
+                       <span class="material-symbols-outlined">
+                            unfold_more
                         </span>
                     @endif
                 </button>
@@ -73,15 +73,15 @@
                 <button wire:click="sort('target_hours')">
                     @if($sortField === 'target_hours' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
-                            arrow_upward
+                            keyboard_arrow_up
                         </span>
                     @elseif($sortField === 'target_hours' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
-                            arrow_downward
+                            keyboard_arrow_down
                         </span>
                     @else
-                        <span class="material-symbols-outlined">
-                            sort
+                       <span class="material-symbols-outlined">
+                            unfold_more
                         </span>
                     @endif
                 </button>
@@ -93,15 +93,15 @@
                 <button wire:click="sort('score')">
                     @if($sortField === 'score' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
-                            arrow_upward
+                            keyboard_arrow_up
                         </span>
                     @elseif($sortField === 'score' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
-                            arrow_downward
+                            keyboard_arrow_down
                         </span>
                     @else
-                        <span class="material-symbols-outlined">
-                            sort
+                       <span class="material-symbols-outlined">
+                            unfold_more
                         </span>
                     @endif
                 </button>

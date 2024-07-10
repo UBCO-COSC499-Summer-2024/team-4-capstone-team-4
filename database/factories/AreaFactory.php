@@ -10,9 +10,11 @@ class AreaFactory extends Factory {
     protected $model = Area::class;
 
     public function definition() {
+        $department = Department::inRandomOrder()->first();
+
         return [
             'name' => $this->faker->word,
-            'dept_id' => Department::factory(), 
+            'dept_id' => $department ? $department->id : Department::factory()->create()->id, 
         ];
     }
 }

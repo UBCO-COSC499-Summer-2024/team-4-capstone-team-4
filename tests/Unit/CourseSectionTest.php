@@ -42,8 +42,11 @@ class CourseSectionTest extends TestCase {
         // Assert that the course section was created successfully 
         $this->assertInstanceOf(CourseSection::class, $courseSection);
 
-        // Assert that the course section has a name
-        $this->assertNotEmpty($courseSection->name);  
+        // Assert that the course section has a prefix
+        $this->assertNotEmpty($courseSection->prefix); 
+
+        // Assert that the course section has a number
+        $this->assertNotEmpty($courseSection->number);  
 
         // Assert that the course section has an area
         $this->assertNotEmpty($courseSection->area); 
