@@ -16,15 +16,15 @@
         <div class="course-performance">
             <div class="course-metric glass">
                 <div class="metric-header">SEI Score Avg.</div>
-                <div class="metric-value">{{ $seiAvg }} / 5</div>
+                <div class="metric-value">{{ $performance->sei_avg }} / 5</div>
             </div>
             <div class="course-metric glass">
                 <div class="metric-header">Enrolled Avg.</div>
-                <div class="metric-value">{{ $enrolledAvg }}%</div>
+                <div class="metric-value">{{ $performance->enrolled_avg }}%</div>
             </div>
             <div class="course-metric glass">
                 <div class="metric-header">Dropped Avg.</div>
-                <div class="metric-value">{{ $droppedAvg }}%</div>
+                <div class="metric-value">{{ $performance->dropped_avg }}%</div>
             </div>
         </div>
     </div>
