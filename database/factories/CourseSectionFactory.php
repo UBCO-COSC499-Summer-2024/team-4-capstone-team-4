@@ -17,23 +17,38 @@ Define the model's default state.*
 protected $model=CourseSection::class;
 
     public function definition() {
-        $prefixes = ['COSC', 'MATH', 'STAT', 'PHYS'];
-        $areas = Area::pluck('id', 'name')->toArray();
-    
-        // Define the mapping of prefixes to area IDs
-        $prefixAreaMapping = [
-            'COSC' => $areas['Computer Science'],
-            'MATH' => $areas['Mathematics'],
-            'STAT' => $areas['Statistics'],
-            'PHYS' => $areas['Physics']
-        ];
-    
-        // Select a random prefix
-        $prefix = fake()->randomElement($prefixes);
+        $prefixes = ['COSC', 'MATH', 'PHYS', 'STAT'];
+        $prefix = $this->faker->randomElement($prefixes);
+
+        // Define a function to get or create an area and return its ID
+        $getOrCreateAreaId = function($areaName) {
+            $area = Area::where('name', $areaName)->first();
+            if ($area == null) {
+                $area = Area::factory()->create(['name' => $areaName]);
+            }
+            return $area->id;
+        };
+
+        switch ($prefix) {
+            case 'COSC':
+                $area_id = $getOrCreateAreaId('Computer Science');
+                break;
+            case 'MATH':
+                $area_id = $getOrCreateAreaId('Mathematics');
+                break;
+            case 'PHYS':
+                $area_id = $getOrCreateAreaId('Physics');
+                break;
+            case 'STAT':
+            default:
+                $area_id = $getOrCreateAreaId('Statistics');
+                break;
+        }
     
         return [
-            'name' => $prefix . ' ' . fake()->numberBetween(100, 500),
-            'area_id' => $prefixAreaMapping[$prefix],
+            'prefix' => $prefix,
+            'number' => fake()->numberBetween(100, 500),
+            'area_id' => $area_id,
             'year' => fake()->year(),
             'enrolled' => fake()->numberBetween(10, 100),
             'dropped' => fake()->numberBetween(0, 20),

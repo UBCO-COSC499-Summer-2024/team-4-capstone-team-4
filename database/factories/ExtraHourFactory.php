@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\ExtraHours;
+use App\Models\ExtraHour;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Area;
 
-class ExtraHoursFactory extends Factory {
+class ExtraHourFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ExtraHours::class;
+    protected $model = ExtraHour::class;
 
     /**
      * Define the model's default state.
@@ -31,7 +31,7 @@ class ExtraHoursFactory extends Factory {
         $area = Area::inRandomOrder()->first();
 
         return [
-            'name' => $this->faker->word,
+            'name' => fake()->randomElement(['Meeting','Conference', 'Committee']),
             'description' => $this->faker->sentence,
             'hours' => $this->faker->numberBetween(1, 730),
             'year'=> $this->faker->year(),

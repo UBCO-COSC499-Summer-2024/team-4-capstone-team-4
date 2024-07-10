@@ -52,9 +52,9 @@ Route::middleware([
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
-    Route::get('/staff-edit-mode', function(){
+    Route::get('/staff/edit', function(){
         return view('staff-edit-mode');
-    })->name('staff-edit-mode');
+    })->name('staff.edit');
 });
 
 Route::middleware([
@@ -180,6 +180,14 @@ Route::middleware([
     Route::get('/assign-courses', function () {
         return view('assign-courses');
     })->name('assign-courses');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });
 
 Route::middleware([

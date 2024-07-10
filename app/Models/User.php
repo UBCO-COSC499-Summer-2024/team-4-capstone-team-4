@@ -64,6 +64,21 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
+     /**
+     * Get the default profile photo URL if no profile photo has been uploaded.
+     *
+     * @return string
+     */
+    protected function defaultProfilePhotoUrl(){
+        $initials = $this->generateInitials($this->firstname, $this->lastname);
+        return 'https://ui-avatars.com/api/?name=' . urlencode($initials) . '&color=7F9CF5&background=EBF4FF';
+    }
+
+    protected function generateInitials($firstname, $lastname){
+        $firstInitial = isset($firstname[0]) ? strtoupper($firstname[0]) : '';
+        $lastInitial = isset($lastname[0]) ? strtoupper($lastname[0]) : '';
+        return $firstInitial . $lastInitial;
+    }
 
     /**
      * Define a one-to-many relationship with UserRole model.

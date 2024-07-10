@@ -3,9 +3,9 @@
     <form wire:submit.prevent="handleSubmit" class="import-form relative">
         <div class="header flex justify-between py-2 bg-gray-200">
             <div class="w-1/12 text-center px-1">#</div>
-            <div class="w-4/12 text-center px-1">Course Name</div>
-            <div class="w-2/12 text-center px-1">Section</div>
             <div class="w-4/12 text-center px-1">Area</div>
+            <div class="w-2/12 text-center px-1">Number</div>
+            <div class="w-2/12 text-center px-1">Section</div>
             <div class="w-2/12 text-center px-1">Session</div>
             <div class="w-2/12 text-center px-1">Term</div>
             <div class="w-3/12 text-center px-1">Year</div>
@@ -19,14 +19,6 @@
         <div class="import-form-row flex justify-between items-center p-2 border-b">
             <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
             <div class="import-input w-4/12">
-                <input type="text" placeholder="COSC123" wire:model="rows.{{$index}}.course_name" class="p-1 w-full">
-                @error('rows.'.$index.'.course_name')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-2/12">
-                <input type="text" placeholder="001" wire:model="rows.{{$index}}.section" class="p-1 w-full">
-                @error('rows.'.$index.'.section')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-4/12">
                 <select wire:model="rows.{{$index}}.area_id" class="p-1 w-full">
                     <option value="">Select</option>
                     @foreach ($areas as $area)
@@ -34,6 +26,14 @@
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
+            </div>
+            <div class="import-input w-2/12">
+                <input type="text" placeholder="123" wire:model="rows.{{$index}}.number" class="p-1 w-full">
+                @error('rows.'.$index.'.number')<span class="import-error">{{ $message }}</span>@enderror
+            </div>
+            <div class="import-input w-2/12">
+                <input type="text" placeholder="001" wire:model="rows.{{$index}}.section" class="p-1 w-full">
+                @error('rows.'.$index.'.section')<span class="import-error">{{ $message }}</span>@enderror
             </div>
             <div class="import-input w-2/12">
                 <select wire:model="rows.{{$index}}.session" class="p-1 w-full">
