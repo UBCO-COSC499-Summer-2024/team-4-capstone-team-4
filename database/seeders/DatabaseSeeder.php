@@ -8,16 +8,10 @@ use App\Models\Area;
 use App\Models\UserRole;
 use App\Models\ServiceRole;
 use App\Models\SeiData;
-use App\Models\ServiceRole;
-use App\Models\SeiData;
 use App\Models\InstructorPerformance;
 use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
-use App\Models\RoleAssignment;
-use App\Models\ExtraHour;
-use App\Models\DepartmentPerformance;
-use Illuminate\Database\Seeder;
 use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
@@ -31,12 +25,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create CMPS department
-        // Create CMPS department
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
 
-        // Create the 4 areas in CMPS department
         // Create the 4 areas in CMPS department
         Area::factory()->create([
             'name' => 'Computer Science',
@@ -59,7 +51,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create department head
-        // Create department head
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -67,13 +58,11 @@ class DatabaseSeeder extends Seeder
             'password' => 'password'
         ]);
         $headrole = UserRole::factory()->create([
-        $headrole = UserRole::factory()->create([
             'user_id' => $head->id,
             'department_id' => $dept->id,
             'role' => 'dept_head',
         ]);
 
-        // Create department staff
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
@@ -87,7 +76,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_staff',
         ]);
 
-        // Create admin user
         // Create admin user
         $admin = User::factory()->create([
             'firstname' => 'Dept',
@@ -240,9 +228,7 @@ class DatabaseSeeder extends Seeder
                 'instructor_id' => $instructor_id,
             ]);
             $this->updatePerformance($instructor_id, $role);
-            //InstructorPerformance::updatePerformance($instructor_id, 2024);
-            //AreaPerformance::updateAreaPerformance(2024);
-            //DepartmentPerformance::updateDepartmentPerformance(2024);
+            InstructorPerformance::updatePerformance($instructor_id, 2024);
         } 
 
         $extrahours = ExtraHour::factory(5)->create([
@@ -253,10 +239,60 @@ class DatabaseSeeder extends Seeder
         
         foreach ($extrahours as $hours){
             $this->updatePerformance2($hours);
-            //InstructorPerformance::updatePerformance($instructor_id, 2024);
-            //AreaPerformance::updateAreaPerformance(2024);
-            //DepartmentPerformance::updateDepartmentPerformance(2024);  
-        }  
+            InstructorPerformance::updatePerformance($instructor_id, 2024); 
+        } 
+        
+        //Update area and dept performance
+        $areas = Area::all();
+        foreach ($areas as $area){
+            AreaPerformance::create([
+                'area_id'=> $area->id,
+                'total_hours' => json_encode([
+                    'January' => 0,
+                    'February' => 0,
+                    'March' => 0,
+                    'April' => 0,
+                    'May' => 0,
+                    'June' => 0,
+                    'July' => 0,
+                    'August' => 0,
+                    'September' => 0,
+                    'October' => 0,
+                    'November' => 0,
+                    'December' => 0,
+                ]),
+                'sei_avg' => 0,
+                'enrolled_avg'=> 0,
+                'dropped_avg'=> 0,
+                'year' => 2024,
+            ]);
+            AreaPerformance::updateAreaPerformance($area->id, 2024);
+        }
+        $depts = Department::all();
+        foreach ($depts as $dept){
+            DepartmentPerformance::create([
+                'dept_id'=> $dept->id,
+                'total_hours' => json_encode([
+                    'January' => 0,
+                    'February' => 0,
+                    'March' => 0,
+                    'April' => 0,
+                    'May' => 0,
+                    'June' => 0,
+                    'July' => 0,
+                    'August' => 0,
+                    'September' => 0,
+                    'October' => 0,
+                    'November' => 0,
+                    'December' => 0,
+                ]),
+                'sei_avg' => 0,
+                'enrolled_avg'=> 0,
+                'dropped_avg'=> 0,
+                'year' => 2024,
+            ]);
+            DepartmentPerformance::updateDepartmentPerformance($dept->id, 2024); 
+        }
     }
 
     private function updatePerformance($instructor_id, $role){

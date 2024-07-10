@@ -35,7 +35,7 @@
                             }
                         @endphp
                         <tr>
-                            <td class="border border-gray-300">{{ $course->courseSection->name }} {{ $course->courseSection->section }}</td>
+                            <td class="border border-gray-300">{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
                             <td class="border border-gray-300">Term {{ $course->courseSection->term }}</td>
                             <td class="border border-gray-300">{{ $course->courseSection->year }}</td>
                             <td class="border border-gray-300">{{ $course->courseSection->enrolled }}</td>
