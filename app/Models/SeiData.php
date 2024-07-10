@@ -60,7 +60,7 @@ class SeiData extends Model {
             $questions = json_decode($data->questions, true);
             $averageScore = array_sum($questions) / count($questions);
     
-            return $averageScore; 
+            return round($averageScore, 1); 
         }
         
         return null;

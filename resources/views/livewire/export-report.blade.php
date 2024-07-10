@@ -11,6 +11,7 @@
             $totalCapacity = 0;
             $seiSum = 0;
             $count = 0;
+            $performance = $instructor->instructorPerformances()->where('year', date('Y'))->first();
         @endphp 
         @if ($courses !== null)
             <table class="w-full bg-white border border-gray-300 text-center ">
@@ -44,12 +45,12 @@
                             <td class="border border-gray-300">{{ $sei ? $sei : '-' }}</td>
                         </tr>
                     @endforeach
-                    <tr class="font bold bg-gray-400">
-                        <td colspan="3">Total</td>
-                        <td class="border border-gray-300">{{ $totalEnrolled }}</td>
-                        <td class="border border-gray-300">{{ $totalDropped }}</td>
+                    <tr class="font-bold bg-gray-400">
+                        <td colspan="3">Total Average</td>
+                        <td class="border border-gray-300">{{ $performance->enrolled_avg }}%</td>
+                        <td class="border border-gray-300">{{ $performance->dropped_avg }}%</td>
                         <td class="border border-gray-300">{{ $totalCapacity }}</td>
-                        <td class="border border-gray-300">{{ $count > 0 ? $seiSum/$count : '-' }}</td>
+                        <td class="border border-gray-300">{{ $performance->sei_avg }}</td>
                     </tr>  
             </table>
         @else
