@@ -13,8 +13,6 @@ use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
 use App\Models\RoleAssignment;
-use App\Models\ExtraHour;
-use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -209,7 +207,5 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
             'dept_id' => $dept->id,
         ]);
-
-        ExtraHour::factory(25)->create();
     }
 }
