@@ -95,9 +95,9 @@ class ChartController extends Controller {
                 $totalHours[] = array_values(json_decode($performance->total_hours, true));
             }
 
-            $deptAssignmentCount = $this->countDeptAssignments($areas);
+            $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
 
-            $chart1 = $this->deptLineChart($totalHours);
+            $chart1 = $this->deptLineChart($dataLabels, $totalHours);
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -113,7 +113,7 @@ class ChartController extends Controller {
                     $hasTarget = true;
                 }
 
-                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget);
+                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear);
 
                 $chart2 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -143,7 +143,7 @@ class ChartController extends Controller {
                 $hasTarget = true;
             }
 
-            $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget);
+            $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear);
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -324,9 +324,10 @@ class ChartController extends Controller {
      * based on total hours for each month of the current year.
      *
      * @param array $totalHours An array of total hours for each entity (department and areas).
+     * @param array $dataLabels An array of labels for each entity (department and areas).
      * @return string The JSON configuration for the Chart.js line chart.
      */
-    private function deptLineChart($totalHours) {
+    private function deptLineChart($dataLabels, $totalHours) {
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $colors = [
             "rgba(37, 41, 150, 0.31)",
