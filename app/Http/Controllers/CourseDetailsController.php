@@ -49,57 +49,52 @@ class CourseDetailsController extends Controller {
     }
     
     public function save(Request $request){
-    $ids = $request->input('ids', []);
-    $courseNames = $request->input('courseNames', []);
-    $courseDurations = $request->input('courseDurations', []);
-    $enrolledStudents = $request->input('enrolledStudents', []);
-    $droppedStudents = $request->input('droppedStudents', []);
-    $courseCapacities = $request->input('courseCapacities', []);
+        $ids = $request->input('ids', []);
+        $courseNames = $request->input('courseNames', []);
+        $enrolledStudents = $request->input('enrolledStudents', []);
+        $droppedStudents = $request->input('droppedStudents', []);
+        $courseCapacities = $request->input('courseCapacities', []);
 
-    $updatedSections = [];
+        $updatedSections = [];
 
-    if (empty($courseNames)) {
-        return response()->json(['message' => 'Course names are required.'], 400);
-    }
-
-    for ($i = 0; $i < count($ids); $i++) {
-        if (!isset($courseNames[$i]) || !isset($courseDurations[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
-            Log::error('Missing array index', [
-                'courseNames' => $courseNames,
-                'courseDurations' => $courseDurations,
-                'enrolledStudents' => $enrolledStudents,
-                'droppedStudents' => $droppedStudents,
-                'courseCapacities' => $courseCapacities,
-            ]);
-            continue;
+        if (empty($courseNames)) {
+            return response()->json(['message' => 'Course names are required.'], 400);
         }
 
-        $courseSection = CourseSection::find($ids[$i]);
-        if ($courseSection) {
-            $courseSection->name = $courseNames[$i];
-            $courseSection->duration = $courseDurations[$i]; // Ensure correct data type
-            $courseSection->enrolled = (int)$enrolledStudents[$i];
-            $courseSection->dropped = (int)$droppedStudents[$i];
-            $courseSection->capacity = (int)$courseCapacities[$i];
-            $courseSection->save();
+        for ($i = 0; $i < count($ids); $i++) {
+            if (!isset($courseNames[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
+                Log::error('Missing array index', [
+                    'courseNames' => $courseNames,
+                    'enrolledStudents' => $enrolledStudents,
+                    'droppedStudents' => $droppedStudents,
+                    'courseCapacities' => $courseCapacities,
+                ]);
+                continue;
+            }
 
-            $updatedSections[] = $courseSection; // Collect updated sections for response
-        } else {
-            Log::error('Course section not found', ['id' => $ids[$i]]);
+            $courseSection = CourseSection::find($ids[$i]);
+            if ($courseSection) {
+                $courseSection->name = $courseNames[$i];
+                $courseSection->enrolled = (int)$enrolledStudents[$i];
+                $courseSection->dropped = (int)$droppedStudents[$i];
+                $courseSection->capacity = (int)$courseCapacities[$i];
+                $courseSection->save();
+
+                $updatedSections[] = $courseSection; // Collect updated sections for response
+            } else {
+                Log::error('Course section not found', ['id' => $ids[$i]]);
+            }
         }
+
+        return response()->json([
+            'message' => 'Courses updated successfully.',
+            'updatedSections' => $updatedSections
+        ]);
     }
 
-    return response()->json([
-        'message' => 'Courses updated successfully.',
-        'updatedSections' => $updatedSections
-    ]);
-}
-
-
-   
     public function assignCourse(Request $request) {
-       $courseId = $request->input('course_id');
-    $instructorId = $request->input('instructor_id');
+        $courseId = $request->input('course_id');
+        $instructorId = $request->input('instructor_id');
 
         $courseSection = CourseSection::find($request->course_id);
         $courseSection->instructor_id = $request->instructor_id;
@@ -109,9 +104,12 @@ class CourseDetailsController extends Controller {
             'course_section_id' => $courseId,
             'user_id' => $instructorId
         ]);
-    
+
         return redirect()->route('course-details')->with('success', 'Course assigned to instructor successfully.');
     }
+
+
+
     private function calculateAverageRating($questionsJson) {
         $questions = json_decode($questionsJson, true);
         if (is_array($questions) && !empty($questions)) {

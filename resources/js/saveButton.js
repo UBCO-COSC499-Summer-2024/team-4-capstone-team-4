@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
-    const editButton = document.getElementById('editButton'); 
-    const cancelButton = document.getElementById('cancelButton');
+    const editButton = document.getElementById('editButton'); // Assuming you have an edit button
+    const cancelButton = document.getElementById('cancelButton'); // Assuming you have a cancel button
 
     saveButton.addEventListener('click', function () {
         const confirmSave = confirm('Do you really want to save the changes?');

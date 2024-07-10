@@ -16,7 +16,7 @@
                 <tbody>
                     @if(isset($courseSections) && !empty($courseSections))
                         @foreach ($courseSections as $section)
-                            <x-coursedetails-table-row 
+                            <x-coursedetails-table-row
                             :courseName="$section->name" 
                             :departmentName="$section->departmentName"
                             :enrolledStudents="$section->enrolled" 
