@@ -19,7 +19,7 @@
 
 ![image of tasks](./tasks/todo_july5_july9.png)
 ![image of tasks](./tasks/inprogress_july5_july9.png)
-![image of tasks](./tasks/done_july5_july9.png)
+![image of tasks](./tasks/inreview_july5_july9.png)
 
 ## Tasks for Next Cycle:
 
@@ -37,12 +37,12 @@
 
 ## Completed Tasks
 
-![image of tasks](./tasks/done_july5_july9.png)
+![image of tasks](./tasks/inreview_july5_july9.png)
 
 ## In Progress Tasks / To do:
 
 ![image of tasks](./tasks/todo_july5_july9.png)
-![image of tasks](./tasks/inprogress_june5_july9.png)
+![image of tasks](./tasks/inprogress_july5_july9.png)
 
 ## Test Report / Testing Status:
 
