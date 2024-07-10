@@ -80,7 +80,7 @@ class ImportDataTest extends TestCase
             ->assertSee('Capacity');
     }
 
-    public function test_valid_data_is_inserted_into_database(): void
+    public function test_valid_data_is_inserted_workday(): void
     {
 
         $this->seed();
@@ -185,7 +185,7 @@ class ImportDataTest extends TestCase
     }
 
 
-    public function test_valid_data_is_inserted_into_sei_data(): void
+    public function test_valid_data_is_inserted_sei_data(): void
     {
         $this->seed();
 

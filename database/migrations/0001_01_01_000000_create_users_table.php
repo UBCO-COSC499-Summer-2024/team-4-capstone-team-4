@@ -83,7 +83,8 @@ return new class extends Migration
 
         Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('prefix');
+            $table->string('number');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->integer('enrolled');
             $table->integer('dropped');

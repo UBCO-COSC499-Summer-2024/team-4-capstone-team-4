@@ -169,7 +169,8 @@ class ImportSeiForm extends Component
         ->orderBy('course_sections.year')
         ->orderBy('course_sections.session')
         ->orderBy('course_sections.term')
-        ->orderBy('course_sections.name')
+        ->orderBy('course_sections.prefix')
+        ->orderBy('course_sections.number')
         ->orderBy('course_sections.section')
         ->get();
 
