@@ -64,12 +64,12 @@ class ImportDataTest extends TestCase
     {
         // Create a user and assign a role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         // Test the form rendering
         Livewire::test('import-workday-form')
-            ->assertSee('Course Name')
+            ->assertSee('Number')
             ->assertSee('Section')
             ->assertSee('Area')
             ->assertSee('Session')
@@ -86,12 +86,12 @@ class ImportDataTest extends TestCase
         $this->seed();
         // Create a user and assign a role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         // Test the form submission
         Livewire::test('import-workday-form')
-            ->set('rows.0.course_name', 'COSC123')
+            ->set('rows.0.number', '123')
             ->set('rows.0.section', '001')
             ->set('rows.0.area_id', 1)
             ->set('rows.0.session', 'W')
@@ -105,7 +105,7 @@ class ImportDataTest extends TestCase
         
 
         $course = Livewire::test('import-workday-form')
-            ->set('rows.0.course_name', 'COSC123')
+            ->set('rows.0.number', '123')
             ->set('rows.0.section', '001')
             ->set('rows.0.area_id', 1)
             ->set('rows.0.session', 'W')
@@ -122,7 +122,8 @@ class ImportDataTest extends TestCase
 
         // Assert the data is in the database
         $this->assertDatabaseHas('course_sections', [
-            'name' => 'COSC123',
+            'prefix' => 'COSC',
+            'number' => '123',
             'section' => '001',
             'area_id' => 1,
             'session' => 'W',
@@ -138,12 +139,12 @@ class ImportDataTest extends TestCase
     {
         // Create a user and assign a role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         // Test the form submission with invalid data
         Livewire::test('import-workday-form')
-            ->set('rows.0.course_name', '')
+            ->set('rows.0.number', '')
             ->set('rows.0.section', '')
             ->set('rows.0.area_id', '')
             ->set('rows.0.session', '')
@@ -154,7 +155,7 @@ class ImportDataTest extends TestCase
             ->set('rows.0.capacity', '')
             ->call('handleSubmit')
             ->assertHasErrors([
-                'rows.0.course_name' => 'required',
+                'rows.0.number' => 'required',
                 'rows.0.section' => 'required',
                 'rows.0.area_id' => 'required',
                 'rows.0.session' => 'required',
@@ -170,7 +171,7 @@ class ImportDataTest extends TestCase
     {
         // Create a user and assign a role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         // Test the form rendering
@@ -191,7 +192,7 @@ class ImportDataTest extends TestCase
 
         // Create a user and assign a role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         // Create a department
@@ -207,7 +208,8 @@ class ImportDataTest extends TestCase
 
         // Create a course section
         $course = CourseSection::factory()->create([
-            'name' => 'COSC123',
+            'prefix' => 'COSC',
+            'number' => '123',
             'area_id' => $area->id,
             'year' => 2010,
             'enrolled' => 50,
@@ -254,7 +256,7 @@ class ImportDataTest extends TestCase
     {
 
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
         Livewire::test('import-sei-form')
