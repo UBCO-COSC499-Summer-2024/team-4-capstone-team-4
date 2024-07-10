@@ -19,9 +19,15 @@ use App\Livewire\StaffListEditMode;
 class StaffListTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_staff_page_can_be_rendered(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
 
         $response = $this->actingAs($user)->get('/staff');
 
@@ -29,11 +35,35 @@ class StaffListTest extends TestCase
     }
 
     public function test_staff_edit_mode_can_be_rendered(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
 
-        $response = $this->actingAs($user)->get('/staff-edit-mode');
+        $response = $this->actingAs($user)->get('/staff/edit');
 
         $response->assertStatus(200);
+    }
+
+    public function test_staff_pages_cannot_be_accessed_by_instructor(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+
+        $response = $this->actingAs($user)->get('/staff');
+
+        $response->assertStatus(403);
+
+        $response2 = $this->actingAs($user)->get('/staff-edit-mode');
+
+        $response2->assertStatus(403);
     }
 
     public function test_staff_page_shows_a_list_of_instructors(): void{
@@ -231,7 +261,7 @@ class StaffListTest extends TestCase
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
         $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
-        
+
         $user1 =  User::factory()->create([
             'firstname' => 'Adam',
             'lastname' => 'Smith',

@@ -4,7 +4,7 @@
     <form wire:submit="handleSubmit" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
             <div class="w-1/12 text-center">#</div>
-            <div class="w-6/12 text-center">ID</div>
+            <div class="w-6/12 text-center">Course</div>
             <div class="w-3/12 text-center">Q1 (IM)</div>
             <div class="w-3/12 text-center">Q2 (IM)</div>
             <div class="w-3/12 text-center">Q3 (IM)</div>
@@ -21,7 +21,7 @@
                 <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->name }} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
+                        <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror

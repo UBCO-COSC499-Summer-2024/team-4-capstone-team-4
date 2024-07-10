@@ -1,4 +1,4 @@
-<div class="relative shadow-md sm:rounded-lg">
+<div class="relative sm:rounded-lg">
     <div class="sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
         <x-staff-search />
         <div class="flex items-center space-x-4">

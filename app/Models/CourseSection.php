@@ -25,7 +25,7 @@ class CourseSection extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'area_id', 'enrolled', 'dropped', 'capacity', 'year', 'term', 'session', 'section'
+        'prefix', 'number', 'area_id', 'enrolled', 'dropped', 'capacity', 'year', 'term', 'session', 'section'
     ];
 
     /**
@@ -75,80 +75,4 @@ class CourseSection extends Model {
         return $this->hasMany(Teach::class, 'course_section_id');
     }
 
-    // other functions
-
-    public static function getCoursesByArea($year) {
-        return self::with('area')->where('year', $year)->get()->groupBy('area_id');
-    }
-
-    public static function calculateEnrolledAverages() {
-        // $courseSectionData = self::all();
-
-        // $enrolledAvg = [];
-
-        // foreach ($courseSectionData as $data) {
-        //     $questions = json_decode($data->questions, true);
-        //     $averageScore = array_sum($questions) / count($questions);
-        //     $seiAverages[$data->course_section_id] = $averageScore;
-        // }
-
-        // return $seiAverages;
-    }
-
-    public static function calculateAreaEnrolledAverages($year) {
-        // $data = self::where('year', $year)
-        //     ->select('enrolled', 'capacity')
-        //     ->get();
-
-        // $totalEnrolled = $data->sum('enrolled');
-        // $totalCapacity = $data->sum('capacity');
-
-        // $averageEnrolled = $totalCapacity > 0 ? $totalEnrolled / $totalCapacity : 0;
-
-        // $percentEnrolled = round($averageEnrolled * 100, 1);
-
-        // return $percentEnrolled;
-
-        // $areaAverages = self::calculateSEIAreaAverages($year);
-        // $areasByDepartment = Area::getAreasByDepartment();
-    
-        // $departmentAverages = [];
-        
-        // foreach ($areasByDepartment as $departmentId => $areas) {
-        //     $totalScore = 0;
-        //     $areaCount = 0;
-    
-        //     foreach ($areas as $area) {
-        //         if (isset($areaAverages[$area->id])) {
-        //             $totalScore += $areaAverages[$area->id];
-        //             $areaCount++;
-        //         }
-        //     }
-            
-        //     if ($areaCount > 0) {
-        //         $departmentAverages[$departmentId] = $totalScore / $areaCount;
-        //     } else {
-        //         $departmentAverages[$departmentId] = 0;
-        //     }
-        // }
-
-        // return $departmentAverages;
-    }
-
-    public static function calculateAreaDroppedAverages($year) {
-    //     $data = self::where('year', $year)
-    //         ->select('dropped', 'capacity')
-    //         ->get();
-
-    //     $totalDropped = $data->sum('dropped');
-    //     $totalCapacity = $data->sum('capacity');
-
-    //     $averageDropped = $totalCapacity > 0 ? $totalDropped / $totalCapacity : 0;
-
-    //     $percentDropped = round($averageDropped * 100, 1);
-
-    //     return $percentDropped;
-    // }
-
-    }
 }

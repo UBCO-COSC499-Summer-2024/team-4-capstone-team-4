@@ -23,10 +23,13 @@ COPY init.sql /docker-entrypoint-initdb.d/
 # Make entrypoint script executable
 RUN chmod +x /usr/local/bin/insight-entrypoint.sh
 
+# Copy .env file
+COPY .pgenv /var/lib/postgresql/.env
+
 # Set environment variables for pgaudit configuration (use these in your script)
-ENV PGAUDIT_LOG_RELATION 'super_audits'
-ENV PGAUDIT_ROLES '*' 
-ENV PGAUDIT_ACTIONS 'all' 
+# ENV PGAUDIT_LOG_RELATION 'super_audits'
+# ENV PGAUDIT_ROLES '*'
+# ENV PGAUDIT_ACTIONS 'all'
 
 # Entrypoint to configure and start PostgreSQL
 ENTRYPOINT ["insight-entrypoint.sh"]
