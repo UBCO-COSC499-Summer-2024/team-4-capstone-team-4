@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
-class AccessController extends Controller
+class AccessControl
 {
     protected const ROLES = [
         'admin' => 'Admin',
@@ -13,6 +17,7 @@ class AccessController extends Controller
         'dept_staff' => 'Department Staff',
         'instructor' => 'Instructor',
     ];
+
     protected const PERMISSIONS = [
         'svcroles' => [
             'create' => 'CREATE SVCROLES',
@@ -50,7 +55,7 @@ class AccessController extends Controller
             'read' => 'READ SEI',
             'update' => 'UPDATE SEI',
             'delete' => 'DELETE SEI',
-            'upload' => 'UPLOAD SEI', // if they can upload SEI otherwise use UI entry
+            'upload' => 'UPLOAD SEI',
         ],
         'audit_log' => [
             'read' => 'READ AUDIT LOG',
@@ -58,49 +63,51 @@ class AccessController extends Controller
         ],
         'request' => [
             'read' => 'READ REQUEST',
-            'update' => 'UPDATE REQUEST', // approve, deny, cancel
+            'update' => 'UPDATE REQUEST',
             'delete' => 'DELETE REQUEST',
             'self.approve' => 'APPROVE OWN REQUEST',
         ]
     ];
+
     protected const ROLE_PERMISSIONS = [
         'admin' => [
-            'CREATE SVCROLES', 'READ SVCROLES', 'UPDATE SVCROLES', 'DELETE SVCROLES',
-            'ASSIGN SVCROLE INSTRUCTOR', 'REMOVE SVCROLE INSTRUCTOR', 'READ SVCROLE INSTRUCTOR',
+            'CREATE SVCROLES', 'READ ALL SVCROLES', 'UPDATE SVCROLES', 'DELETE SVCROLES',
+            'ASSIGN SVCROLE INSTRUCTOR', 'REMOVE SVCROLE INSTRUCTOR', 'READ ALL SVCROLE INSTRUCTORS',
             'SVCROLE ADD EXTRA HOURS', 'SVCROLE VIEW EXTRA HOURS', 'SVCROLE DELETE EXTRA HOURS',
-            'CREATE STAFF', 'READ STAFF', 'UPDATE STAFF', 'DELETE STAFF',
+            'CREATE STAFF', 'READ ALL STAFF', 'UPDATE STAFF', 'DELETE STAFF',
             'CREATE COURSES', 'READ COURSES', 'UPDATE COURSES', 'DELETE COURSES',
             'CREATE SEI', 'READ SEI', 'UPDATE SEI', 'DELETE SEI', 'UPLOAD SEI',
             'READ AUDIT LOG', 'DELETE AUDIT LOG',
             'READ REQUEST', 'UPDATE REQUEST', 'DELETE REQUEST', 'APPROVE OWN REQUEST',
         ],
         'dept_head' => [
-            'READ SVCROLES', 'ASSIGN SVCROLE INSTRUCTOR', 'REMOVE SVCROLE INSTRUCTOR',
+            'READ ALL SVCROLES', 'ASSIGN SVCROLE INSTRUCTOR', 'REMOVE SVCROLE INSTRUCTOR',
             'SVCROLE ADD EXTRA HOURS', 'SVCROLE VIEW EXTRA HOURS', 'SVCROLE DELETE EXTRA HOURS',
-            'READ STAFF', 'UPDATE STAFF',
+            'READ ALL STAFF', 'UPDATE STAFF',
             'CREATE COURSES', 'READ COURSES', 'UPDATE COURSES', 'DELETE COURSES',
             'READ SEI', 'UPDATE SEI', 'UPLOAD SEI',
             'READ AUDIT LOG',
             'READ REQUEST', 'UPDATE REQUEST', 'DELETE REQUEST',
         ],
         'dept_staff' => [
-            'READ SVCROLES', 'UPDATE SVCROLES',
-            'READ STAFF', 'UPDATE STAFF',
+            'READ ALL SVCROLES', 'UPDATE SVCROLES',
+            'READ ALL STAFF', 'UPDATE STAFF',
             'READ COURSES', 'UPDATE COURSES',
             'READ SEI', 'UPDATE SEI',
             'READ AUDIT LOG',
             'READ REQUEST', 'UPDATE REQUEST',
         ],
         'instructor' => [
-            'READ SVCROLE INSTRUCTOR',
+            'READ ASSIGNED SVCROLE',
             'SVCROLE VIEW EXTRA HOURS',
-            'READ STAFF',
-            'READ COURSES',
+            'READ SELF STAFF',
+            'READ ASSIGNED COURSES',
             'READ SEI',
             'READ AUDIT LOG',
             'READ REQUEST', 'APPROVE OWN REQUEST',
         ],
     ];
+
     protected $user;
     protected $routes;
     protected $routes_access;
@@ -112,43 +119,68 @@ class AccessController extends Controller
     public function __construct()
     {
         $this->user = auth()->user();
-        $this->routes = Route::getRoutes();
+        $this->routes = app('router')->getRoutes();
         $this->initializeRoutesAccess();
     }
 
-    public static function check() {
-        // when accessing a route, if it requires an id, check the user's id and if it has read.all/read.others/read.single or only read.self
+    public function handle(Request $request, Closure $next): Response
+    {
+        $routeName = $request->route()->getName();
+
+        if (in_array($routeName, $this->public_routes)) {
+            return $next($request);
+        }
+
+        if (!$this->user || !$this->canAccessRoute($routeName)) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return $next($request);
+    }
+
+    protected function initializeRoutesAccess()
+    {
+        $this->routes_access = [];
+
+        foreach (self::ROLES as $role => $roleName) {
+            $this->routes_access[$role] = $this->public_routes;
+        }
+
+        foreach (self::ROLE_PERMISSIONS as $role => $permissions) {
+            foreach ($permissions as $permission) {
+                foreach (self::PERMISSIONS as $resource => $actions) {
+                    if (in_array($permission, $actions)) {
+                        $this->routes_access[$role][] = "{$resource}.*";
+                    }
+                }
+            }
+        }
+    }
+
+    protected function canAccessRoute($routeName)
+    {
+        foreach ($this->user->roles as $role) {
+            if (isset($this->routes_access[$role]) && in_array($routeName, $this->routes_access[$role])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function check()
+    {
         $access = new self();
         $user = $access->user;
         if (!$user) {
             return false;
         }
-        // get current route
+
         $route = Route::current();
-        $route_name = $route->getName();
-        $route_parameters = $route->parameters();
-    }
+        $routeName = $route->getName();
+        $routeParameters = $route->parameters();
 
-    public function getPermissionForRoute($routeName, $params) {
-        $routePermissions = [
-            'svcroles.manage.id' => 'read.all',
-            'svcroles' => AccessController::PERMISSIONS['svcroles'],
-            'svcroles.create' => 'create',
-            // rest
-        ];
-
-        if (isset($routePermissions[$routeName])) {
-            return $routePermissions[$routeName];
-        }
-    }
-
-    public function initializeRoutesAccess()
-    {
-        $this->routes_access = [];
-
-        // routes aren't necessarily named after permissions but some pages are role access controlled
-        // instructor has access to public routes
-        $this->routes_access[self::ROLES['instructor']] = $this->public_routes;
+        return $access->canAccessRoute($routeName);
     }
 
     public static function getRoutesAccess()
@@ -168,23 +200,17 @@ class AccessController extends Controller
 
     public static function useAsRole($role)
     {
-        $access = new AccessController();
+        $access = new AccessControl();
         $access->initializeRoutesAccess();
         $access->routes_access[$role] = $access->public_routes;
         return $access;
     }
 
     public static function showIf($role, $item) {
-        return in_array($role, auth()->user()->roles) ? $item : null;
+        $user = auth()->user();
+        return $user && in_array($role, $user->roles) ? $item : null;
     }
 
-    /**
-     * Show item if user has permission
-     *
-     * @param string $permission
-     * @param mixed $item
-     * @return mixed
-     */
     public static function showIfPermission($permission, $item) {
         $access = new self();
         if ($access->can($permission)) {
@@ -193,8 +219,8 @@ class AccessController extends Controller
         return null;
     }
 
-    public static function can($permission) {
-        $user = self::$user;
+    public function can($permission) {
+        $user = $this->user;
         if (!$user) {
             return false;
         }
