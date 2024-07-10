@@ -21,11 +21,7 @@
                 <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
-<<<<<<< HEAD
-                        <option value="{{ $course->id }}">{{ $course->name }} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
-=======
                         <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
->>>>>>> origin/pre-dev-integration
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
