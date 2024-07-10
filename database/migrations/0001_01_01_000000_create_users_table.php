@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -62,11 +63,12 @@ return new class extends Migration
         Schema::create('service_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->year('year');
+            $table->text('description')->nullable()->default('Default Description');
+            $table->year('year')->default(date('Y'));
             $table->json('monthly_hours');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
+            $table->unique(['name', 'area_id']);
         });
 
         Schema::create('role_assignments', function (Blueprint $table) {
@@ -75,11 +77,14 @@ return new class extends Migration
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['service_role_id', 'instructor_id']);
         });
 
         Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('prefix');
+            $table->string('number');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->integer('enrolled');
             $table->integer('dropped');
@@ -126,8 +131,8 @@ return new class extends Migration
             $table->json('total_hours');
             $table->integer('target_hours')->nullable();
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->timestamps();
@@ -137,8 +142,8 @@ return new class extends Migration
             $table->id();
             $table->json('total_hours');
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
@@ -148,8 +153,8 @@ return new class extends Migration
             $table->id();
             $table->json('total_hours');
             $table->float('sei_avg');
-            $table->integer('enrolled_avg');
-            $table->integer('dropped_avg');
+            $table->float('enrolled_avg');
+            $table->float('dropped_avg');
             $table->year('year');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
             $table->timestamps();

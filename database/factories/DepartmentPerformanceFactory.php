@@ -15,6 +15,8 @@ class DepartmentPerformanceFactory extends Factory {
      * @return array<string, mixed>
      */
     public function definition(): array {
+        $department = Department::inRandomOrder()->first();
+
         return [
             'total_hours'  => json_encode([
                 'January' => $this->faker->numberBetween(0, 730),
@@ -34,7 +36,7 @@ class DepartmentPerformanceFactory extends Factory {
             'enrolled_avg'=>fake()->numberBetween(0,100),
             'dropped_avg'=>fake()->numberBetween(0,100),
             'year' => fake()->year(),
-            'dept_id' => Department::pluck('id')->random()
+            'dept_id' => $department ? $department->id : Department::factory()->create()->id, 
         ];
     }
 }

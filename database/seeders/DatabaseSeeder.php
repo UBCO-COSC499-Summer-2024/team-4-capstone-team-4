@@ -8,10 +8,16 @@ use App\Models\Area;
 use App\Models\UserRole;
 use App\Models\ServiceRole;
 use App\Models\SeiData;
+use App\Models\ServiceRole;
+use App\Models\SeiData;
 use App\Models\InstructorPerformance;
 use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
+use App\Models\RoleAssignment;
+use App\Models\ExtraHour;
+use App\Models\DepartmentPerformance;
+use Illuminate\Database\Seeder;
 use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
@@ -25,10 +31,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create CMPS department
+        // Create CMPS department
         $dept = Department::factory()->create([
             'name' => 'CMPS',
         ]);
 
+        // Create the 4 areas in CMPS department
         // Create the 4 areas in CMPS department
         Area::factory()->create([
             'name' => 'Computer Science',
@@ -51,6 +59,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create department head
+        // Create department head
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -58,11 +67,13 @@ class DatabaseSeeder extends Seeder
             'password' => 'password'
         ]);
         $headrole = UserRole::factory()->create([
+        $headrole = UserRole::factory()->create([
             'user_id' => $head->id,
             'department_id' => $dept->id,
             'role' => 'dept_head',
         ]);
 
+        // Create department staff
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
@@ -76,6 +87,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_staff',
         ]);
 
+        // Create admin user
         // Create admin user
         $admin = User::factory()->create([
             'firstname' => 'Dept',

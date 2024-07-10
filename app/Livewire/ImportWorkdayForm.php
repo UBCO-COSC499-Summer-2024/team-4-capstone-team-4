@@ -24,7 +24,7 @@ class ImportWorkdayForm extends Component
             $this->rows = Session::get('workdayFormData');
         } else {
             $this->rows = [
-                ['course_name' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
+                ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
             ];
         }
     }
@@ -34,7 +34,7 @@ class ImportWorkdayForm extends Component
 
 
         foreach ($this->rows as $index => $row) {
-            $rules["rows.{$index}.course_name"] = 'required|min:1|max:999';
+            $rules["rows.{$index}.number"] = 'required|integer';
             $rules["rows.{$index}.section"] = 'required|string';
             $rules["rows.{$index}.area_id"] = 'required|integer';
             $rules["rows.{$index}.session"] = 'required|string';
@@ -52,7 +52,7 @@ class ImportWorkdayForm extends Component
         $messages = [];
 
         foreach ($this->rows as $index => $row) {
-                $messages["rows.{$index}.course_name.required"] = 'Please enter a course';
+                $messages["rows.{$index}.number.required"] = 'Please enter a course number';
                 $messages["rows.{$index}.section.required"] = 'Please enter a course section';
                 $messages["rows.{$index}.area_id.required"] = 'Please select a sub area';
                 $messages["rows.{$index}.session.required"] = 'Please select a session';
@@ -68,13 +68,13 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
                 $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
         
-                $messages["rows.{$index}.course_name.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.enrolled.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to Enrolled';
     
-                $messages["rows.{$index}.course_name.max"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.enrolled.max"] = 'Must be lower than or equal to Capacity';
                 $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
@@ -90,7 +90,7 @@ class ImportWorkdayForm extends Component
     }
 
     public function addRow() {
-        $this->rows[] =  ['course_name' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''];
+        $this->rows[] =  ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''];
         Session::put('workdayFormData', $this->rows);
     }
 
@@ -107,10 +107,27 @@ class ImportWorkdayForm extends Component
     
         
         foreach ($this->rows as $row) {
+            $prefix = '';
             // dd($row);
+            
+            switch ($row['area_id']) {
+                case 1:
+                    $prefix = 'COSC';
+                    break;
+                case 2:
+                    $prefix = 'MATH';
+                    break;
+                case 3:
+                    $prefix = 'PHYS';
+                    break;
+                case 4:
+                    $prefix = 'STAT';
+                    break;
+            }
 
             CourseSection::create([
-                'name' => $row['course_name'],
+                'prefix' => $prefix,
+                'number' => $row['number'],
                 'section' => $row['section'], 
                 'area_id' => $row['area_id'], 
                 'session' => $row['session'], 
@@ -126,7 +143,7 @@ class ImportWorkdayForm extends Component
         }
 
         $this->rows = [
-            ['course_name' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
+            ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
         ];
 
         Session::forget('workdayFormData');

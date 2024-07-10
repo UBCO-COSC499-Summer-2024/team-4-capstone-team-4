@@ -76,10 +76,7 @@
                 >
                 <span class="material-symbols-outlined icon">add</span>
                 <span>Add</span>
-            </button>
-        </button>
     </td>
-
     <td class="svcr-list-item-cell" data-column="manage">
         <div class="svcr-list-item-actions">
             <button class="svcr-list-item-action"
