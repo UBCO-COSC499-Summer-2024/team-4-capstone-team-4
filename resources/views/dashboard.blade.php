@@ -6,12 +6,6 @@ $userRoles = auth()->user()->roles;
     <div class="alert alert-danger">
         No valid role assigned to your account. Redirecting...
     </div>
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-</x-app-layout>
-=======
-=======
->>>>>>> origin/pre-dev-integration
                 
     <!-- Redirect using JavaScript after a brief delay -->
     <script>
@@ -71,8 +65,3 @@ $userRoles = auth()->user()->roles;
     @csrf
 </form>
 
-
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> origin/pre-dev-integration
