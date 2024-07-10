@@ -113,7 +113,7 @@ class ChartController extends Controller {
                     $hasTarget = true;
                 }
 
-                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear);
+                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
 
                 $chart2 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -143,7 +143,7 @@ class ChartController extends Controller {
                 $hasTarget = true;
             }
 
-            $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear);
+            $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -268,9 +268,10 @@ class ChartController extends Controller {
      * @param int $instructorRoleId The ID of the instructor.
      * @param bool $hasTarget Whether the instructor has a target assigned.
      * @param int $currentYear The current year.
+     * @param int $currentMonth The current month.
      * @return array An array containing counts of service roles, extra hours, and course sections.
      */
-    private function countAssignments($instructorRoleId, $hasTarget, $currentYear) {
+    private function countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth) {
         $assignmentCount = [];
 
         $serviceRoles = [];
@@ -280,7 +281,7 @@ class ChartController extends Controller {
         foreach ($assignedRoles as $assignedRole) {
             $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
             $serviceRoles[] = $role->name;
-            $roleHoursTotal += json_decode($role->monthly_hours, true)[$currentMonth];
+            $roleHoursTotal += $role->monthly_hours[$currentMonth];
         }
 
         $assignmentCount[] = $serviceRoles;

@@ -6,13 +6,15 @@ use App\Models\AreaPerformance;
 use App\Models\Department;
 use App\Models\Area;
 use App\Models\UserRole;
-use App\Models\ExtraHour;
+use App\Models\ServiceRole;
+use App\Models\SeiData;
 use App\Models\InstructorPerformance;
-use App\Models\DepartmentPerformance;
 use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
 use App\Models\RoleAssignment;
+use App\Models\ExtraHour;
+use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
