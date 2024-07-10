@@ -148,7 +148,7 @@ Features:
 Communication Update:
 - Updated the logs for the week up to date
 
-#### Progress Update (till 7/3/2024)
+#### Progress Update (till 7/4/2024)
 
 <table>
     <tr>
