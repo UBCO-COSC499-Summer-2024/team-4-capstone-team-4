@@ -32,7 +32,8 @@ protected $model=CourseSection::class;
         $prefix = fake()->randomElement($prefixes);
     
         return [
-            'name' => $prefix . ' ' . fake()->numberBetween(100, 500),
+            'prefix' => $prefix,
+            'number' => fake()->numberBetween(100, 500),
             'area_id' => $prefixAreaMapping[$prefix],
             'year' => fake()->year(),
             'enrolled' => fake()->numberBetween(10, 100),
