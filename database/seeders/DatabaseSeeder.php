@@ -9,7 +9,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Department;
 use App\Models\Area;
 use App\Models\UserRole;
+use App\Models\ExtraHour;
 use App\Models\InstructorPerformance;
+use App\Models\DepartmentPerformance;
 use App\Models\CourseSection;
 use App\Models\User;
 use App\Models\Teach;
@@ -25,25 +27,40 @@ class DatabaseSeeder extends Seeder
             'name' => 'CMPS',
         ]);
 
-        Area::factory()->create([
-            'name' => 'Computer Science',
-            'dept_id' => $dept->id,
-        ]);
+        $areas = [
+            'Computer Science',
+            'Mathematics',
+            'Physics',
+            'Statistics'
+        ];
 
-        Area::factory()->create([
-            'name' => 'Mathematics',
-            'dept_id' => $dept->id,
-        ]);
+        foreach ($areas as $area) {
+            $areaInstance = Area::factory()->create([
+                'name' => $area,
+                'dept_id' => $dept->id,
+            ]);
 
-        Area::factory()->create([
-            'name' => 'Physics',
-            'dept_id' => $dept->id,
-        ]);
-
-        Area::factory()->create([
-            'name' => 'Statistics',
-            'dept_id' => $dept->id,
-        ]);
+            // Create area performance for each area
+            AreaPerformance::factory()->create([
+                'total_hours' => json_encode(['January' => fake()->numberBetween(2000, 5000),
+                        'February' => fake()->numberBetween(2000, 5000),
+                        'March' => fake()->numberBetween(2000, 5000),
+                        'April' => fake()->numberBetween(2000, 5000),
+                        'May' => fake()->numberBetween(2000, 5000),
+                        'June' => fake()->numberBetween(2000, 5000),
+                        'July' => fake()->numberBetween(2000, 5000),
+                        'August' => fake()->numberBetween(2000, 5000),
+                        'September' => fake()->numberBetween(2000, 5000),
+                        'October' => fake()->numberBetween(2000, 5000),
+                        'November' => fake()->numberBetween(2000, 5000),
+                        'December' => fake()->numberBetween(2000, 5000)]),
+                'sei_avg' => fake()->randomFloat(2, 1, 5),
+                'enrolled_avg' => fake()->numberBetween(0, 100),
+                'dropped_avg' => fake()->numberBetween(0, 50),
+                'year' => date('Y'),
+                'area_id' => $areaInstance->id,
+            ]);
+        }
 
         $users = User::factory(10)->create();
         foreach($users as $user) {
@@ -53,12 +70,29 @@ class DatabaseSeeder extends Seeder
                 'role' => 'instructor',
             ]);
             InstructorPerformance::factory()->create([
+                'score' => fake()->numberBetween(50, 100),
+                'total_hours' => json_encode(['January' => fake()->numberBetween(100, 500),
+                'February' => fake()->numberBetween(100, 500),
+                'March' => fake()->numberBetween(100, 500),
+                'April' => fake()->numberBetween(100, 500),
+                'May' => fake()->numberBetween(100, 500),
+                'June' => fake()->numberBetween(100, 500),
+                'July' => fake()->numberBetween(100, 500),
+                'August' => fake()->numberBetween(100, 500),
+                'September' => fake()->numberBetween(100, 500),
+                'October' => fake()->numberBetween(100, 500),
+                'November' => fake()->numberBetween(100, 500),
+                'December' => fake()->numberBetween(100, 500),]),
+                'target_hours' => fake()->numberBetween(40, 50),
+                'sei_avg' => fake()->randomFloat(2, 1, 5),
+                'enrolled_avg' => fake()->numberBetween(20, 100),
+                'dropped_avg' => fake()->numberBetween(1, 10),
                 'year' => date('Y'),
                 'instructor_id' => $role->id,
             ]);
         }
 
-        $courses = CourseSection::factory(5)->create();
+        $courses = CourseSection::factory(25)->create();
         foreach($courses as $course){
             Teach::factory()->create([
                 'course_section_id' => $course->id,
@@ -89,9 +123,27 @@ class DatabaseSeeder extends Seeder
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
+            'score' => fake()->numberBetween(50, 100),
+            'total_hours' => json_encode(['January' => fake()->numberBetween(100, 500),
+            'February' => fake()->numberBetween(100, 500),
+            'March' => fake()->numberBetween(100, 500),
+            'April' => fake()->numberBetween(100, 500),
+            'May' => fake()->numberBetween(100, 500),
+            'June' => fake()->numberBetween(100, 500),
+            'July' => fake()->numberBetween(100, 500),
+            'August' => fake()->numberBetween(100, 500),
+            'September' => fake()->numberBetween(100, 500),
+            'October' => fake()->numberBetween(100, 500),
+            'November' => fake()->numberBetween(100, 500),
+            'December' => fake()->numberBetween(100, 500),]),
+            'target_hours' => null,
+            'sei_avg' => fake()->randomFloat(2, 1, 5),
+            'enrolled_avg' => fake()->numberBetween(20, 100),
+            'dropped_avg' => fake()->numberBetween(1, 10),
             'year' => date('Y'),
             'instructor_id' =>  $instructorRole->id,
         ]);
+
         $head = User::factory()->create([
             'firstname' => 'Dept',
             'lastname' => 'Head',
@@ -133,5 +185,27 @@ class DatabaseSeeder extends Seeder
             // AreaSeeder::class,
             ServiceRoleSeeder::class
         ]);
+
+        DepartmentPerformance::factory()->create([
+            'total_hours' => json_encode(['January' => fake()->numberBetween(10000, 20000),
+                        'February' => fake()->numberBetween(10000, 20000),
+                        'March' => fake()->numberBetween(10000, 20000),
+                        'April' => fake()->numberBetween(10000, 20000),
+                        'May' => fake()->numberBetween(10000, 20000),
+                        'June' => fake()->numberBetween(10000, 20000),
+                        'July' => fake()->numberBetween(10000, 20000),
+                        'August' => fake()->numberBetween(10000, 20000),
+                        'September' => fake()->numberBetween(10000, 20000),
+                        'October' => fake()->numberBetween(10000, 20000),
+                        'November' => fake()->numberBetween(10000, 20000),
+                        'December' => fake()->numberBetween(10000, 20000)]),
+            'sei_avg' => fake()->randomFloat(1, 5, 1),
+            'enrolled_avg' => fake()->numberBetween(0, 100),
+            'dropped_avg' => fake()->numberBetween(0, 50),
+            'year' => date('Y'),
+            'dept_id' => $dept->id,
+        ]);
+
+        ExtraHour::factory(25)->create();
     }
 }

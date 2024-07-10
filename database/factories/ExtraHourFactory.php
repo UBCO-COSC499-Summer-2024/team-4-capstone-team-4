@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\ExtraHours;
+use App\Models\ExtraHour;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Area;
 
-class ExtraHoursFactory extends Factory {
+class ExtraHourFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ExtraHours::class;
+    protected $model = ExtraHour::class;
 
     /**
      * Define the model's default state.
@@ -36,9 +36,9 @@ class ExtraHoursFactory extends Factory {
             'hours' => $this->faker->numberBetween(1, 730),
             'year'=> $this->faker->year(),
             'month' => $this->faker->numberBetween(1, 12),
-            'assigner_id' => $assigner ? $assigner->id : UserRole::factory()->create(['role' => 'dept_head'])->id,
-            'instructor_id' => $instructor ? $instructor->id : UserRole::factory()->create(['role' => 'instructor'])->id,
-            'area_id' => $area ? $area->id : Area::factory()->create()->id,
+            'assigner_id' => UserRole::where('role', ['dept_head', 'dept_staff'])->pluck('id')->random(),
+            'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
+            'area_id' => Area::pluck('id')->random(),
         ];
     }
 }
