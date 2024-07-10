@@ -4,7 +4,7 @@
     <form wire:submit="handleSubmit" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
             <div class="w-1/12 text-center">#</div>
-            <div class="w-6/12 text-center">ID</div>
+            <div class="w-6/12 text-center">Course</div>
             <div class="w-3/12 text-center">Q1 (IM)</div>
             <div class="w-3/12 text-center">Q2 (IM)</div>
             <div class="w-3/12 text-center">Q3 (IM)</div>

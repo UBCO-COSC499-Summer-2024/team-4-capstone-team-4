@@ -6,6 +6,7 @@ use App\Livewire\ImportTabs;
 use App\Models\Area;
 use App\Models\CourseSection;
 use App\Models\Department;
+use App\Models\SeiData;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,7 +60,7 @@ class ImportDataTest extends TestCase
             ->assertSeeLivewire('import-file');
     }
 
-    public function test_form_renders_correctly(): void
+    public function test_workday_form_renders_correctly(): void
     {
         // Create a user and assign a role
         $user = User::factory()->create();
@@ -101,19 +102,9 @@ class ImportDataTest extends TestCase
             ->set('rows.0.capacity', 40)
             ->call('handleSubmit')
             ->assertHasNoErrors();
-
-        // $dept = Department::factory()->create([
-        //     'name' => 'CMPS',
-        // ]);
-
-        // $area = Area::factory()->create([
-        //     'name' => 'Computer Science',
-        //     'dept_id' => $dept->id
-        // ]);
-
         
 
-        Livewire::test('import-workday-form')
+        $course = Livewire::test('import-workday-form')
             ->set('rows.0.course_name', 'COSC123')
             ->set('rows.0.section', '001')
             ->set('rows.0.area_id', 1)
@@ -143,7 +134,7 @@ class ImportDataTest extends TestCase
         ]);
     }
 
-    public function test_validation_errors_are_handled(): void
+    public function test_validation_errors_are_handled_workday(): void
     {
         // Create a user and assign a role
         $user = User::factory()->create();
@@ -172,6 +163,117 @@ class ImportDataTest extends TestCase
                 'rows.0.enrolled' => 'required',
                 'rows.0.dropped' => 'required',
                 'rows.0.capacity' => 'required',
+            ]);
+    }
+
+    public function test_sei_form_renders_correctly(): void
+    {
+        // Create a user and assign a role
+        $user = User::factory()->create();
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        $this->actingAs($user);
+
+        // Test the form rendering
+        Livewire::test('import-sei-form')
+            ->assertSee('cid')
+            ->assertSee('q1')
+            ->assertSee('q2')
+            ->assertSee('q3')
+            ->assertSee('q4')
+            ->assertSee('q5')
+            ->assertSee('q6');
+    }
+
+
+    public function test_valid_data_is_inserted_into_sei_data(): void
+    {
+        $this->seed();
+
+        // Create a user and assign a role
+        $user = User::factory()->create();
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        $this->actingAs($user);
+
+        // Create a department
+        $dept = Department::factory()->create([
+            'name' => 'CMPS',
+        ]);
+
+        // Create an area
+        $area = Area::factory()->create([
+            'name' => 'Computer Science',
+            'dept_id' => $dept->id,
+        ]);
+
+        // Create a course section
+        $course = CourseSection::factory()->create([
+            'name' => 'COSC123',
+            'area_id' => $area->id,
+            'year' => 2010,
+            'enrolled' => 50,
+            'dropped' => 5,
+            'capacity' => 100,
+            'term' => '2',
+            'session' => 'W',
+            'section' => '001',
+        ]);
+
+        // Submit the form
+        Livewire::test('import-sei-form')
+            ->set('rows.0.cid', $course->id)
+            ->set('rows.0.q1', 4.5)
+            ->set('rows.0.q2', 4.0)
+            ->set('rows.0.q3', 3.5)
+            ->set('rows.0.q4', 4.0)
+            ->set('rows.0.q5', 4.2)
+            ->set('rows.0.q6', 4.3)
+            ->call('handleSubmit')
+            ->assertHasNoErrors();
+
+        // Assert that the non-JSON fields are correctly inserted
+        $this->assertDatabaseHas('sei_data', [
+            'course_section_id' => $course->id,
+        ]);
+
+        // Fetch the inserted record and decode the JSON field
+        $seiData = SeiData::where('course_section_id', $course->id)->first();
+        $questions = json_decode($seiData->questions, true);
+
+        // Assert the JSON data matches the expected values
+        $this->assertEquals([
+            'q1' => 4.5,
+            'q2' => 4.0,
+            'q3' => 3.5,
+            'q4' => 4.0,
+            'q5' => 4.2,
+            'q6' => 4.3,
+        ], $questions);
+    }
+
+    public function test_validation_errors_are_handled_sei(): void
+    {
+
+        $user = User::factory()->create();
+        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'admin']);
+        $this->actingAs($user);
+
+        Livewire::test('import-sei-form')
+            ->set('rows.0.cid', '')
+            ->set('rows.0.q1', '')
+            ->set('rows.0.q2', '')
+            ->set('rows.0.q3', '')
+            ->set('rows.0.q4', '')
+            ->set('rows.0.q5', '')
+            ->set('rows.0.q6', '')
+            ->call('handleSubmit')
+            ->assertHasErrors([
+                'rows.0.cid' => 'required',
+                'rows.0.q1' => 'required',
+                'rows.0.q2' => 'required',
+                'rows.0.q3' => 'required',
+                'rows.0.q4' => 'required',
+                'rows.0.q5' => 'required',
+                'rows.0.q6' => 'required',
             ]);
     }
 }
