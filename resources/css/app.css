@@ -586,23 +586,6 @@ a,
     padding-right: 10px;
 }
 
-th.sort-icons:hover {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-th.sort-icon:hover {
-    cursor: pointer;
-    font-size: 1rem;
-    margin: 0;
-}
-
-.sort-icon.active {
-    color: blue;
-}
-
 th.editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;

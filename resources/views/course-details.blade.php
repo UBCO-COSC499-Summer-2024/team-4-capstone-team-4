@@ -13,8 +13,7 @@
         <form id="editForm" method="POST" action="{{ route('course-details.save') }}">
             @csrf
             <x-coursedetails-table>
-                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
-                <tbody>
+                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" /><tbody>
                     @if(isset($courseSections) && !empty($courseSections))
                         @foreach ($courseSections as $section)
                             <x-coursedetails-table-row

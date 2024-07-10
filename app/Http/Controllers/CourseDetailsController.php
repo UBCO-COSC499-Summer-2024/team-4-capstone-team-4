@@ -100,15 +100,14 @@ class CourseDetailsController extends Controller {
             'updatedSections' => $updatedSections
         ]);
     }
+    
     public function search(Request $request) {
         $query = $request->input('query');
-        $courseSections = CourseSection::with('area')
-            ->where('name', 'LIKE', "%$query%")
+        $courseSections = CourseSection::with('area')->where('name', 'LIKE', "%{$query}%")
             ->orWhereHas('area', function($q) use ($query) {
-                $q->where('name', 'LIKE', "%$query%");
+                $q->where('name', 'LIKE', "%{$query}%");
             })
-            ->get()
-            ->map(function ($section, $index) {
+            ->get()->map(function ($section, $index) {
                 $seiData = SeiData::where('course_section_id', $section->id)->first();
                 $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
     
@@ -120,7 +119,7 @@ class CourseDetailsController extends Controller {
                     $section->term
                 );
     
-                return [
+                return (object) [
                     'id' => $section->id,
                     'name' => $formattedName,
                     'departmentName' => $section->area ? $section->area->name : 'Unknown',
@@ -131,8 +130,9 @@ class CourseDetailsController extends Controller {
                 ];
             });
     
-        return response()->json($courseSections);
+        return response()->json(['courseSections' => $courseSections]);
     }
+    
 
     private function calculateAverageRating($questionsJson) {
         $questions = json_decode($questionsJson, true);
