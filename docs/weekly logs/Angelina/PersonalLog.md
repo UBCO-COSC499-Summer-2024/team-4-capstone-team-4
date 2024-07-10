@@ -1,10 +1,39 @@
 # Angelina's Personal Log 
 
-## Friday (7/4 - 7/6)
+## Friday (7/5 - 7/9)
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log74-76.png)
+![Clockify report](./clockifylogs/log75-79.png)
+
+### Current Tasks 
+  * #1: Create Dashboard Tests
+  * #2: Refactor Chart Controller
+  * #3: Seed Database for Testing
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Dashboard Tests           | In Progress |
+| Refactor Controller       | Completed   |
+| Seed Database             | Completed   |
+
+### Cycle Goal Review 
+Created seeders to allow more extensive Dashboard testing. Began refactoring the chart controller for a more efficient backend. 
+
+
+### Next Cycle Goals 
+ * Divide leftover tasks
+ * Begin new tasks
+ * Continue testing and UI enhancement for Dashboard
+
+---
+
+## Thursday (7/4)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log74.png)
 
 ### Current Tasks 
   * #1: Remove Capacity Metric
