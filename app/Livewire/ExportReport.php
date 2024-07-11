@@ -31,4 +31,8 @@ class ExportReport extends Component
         
         return view('livewire.export-report', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours'));
     }
+
+    public function export(){
+        
+    }
 }
