@@ -1,5 +1,37 @@
 # Angelina's Personal Log 
 
+## Wednesday (7/5 - 7/9)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log710-711.png)
+
+### Current Tasks 
+  * #1: Create Dashboard Tests
+  * #2: Refactor Chart Controller
+  * #3: Seed Database for Testing
+  * #4: Divide Leftover Features
+  * #5: Leaderboard Design
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Dashboard Tests           | In Progress |
+| Refactor Controller       | Completed   |
+| Seed Database             | Completed   |
+| Divide Features           | Completed   |
+| Leaderboard Design        | In Progress |
+
+### Cycle Goal Review 
+Updated database seeder and tested with Catherine's help. Completed and fixed all bugs in the chart controller. Created first 6 tests for the chart controller. Divided tasks among team members. Began planning for dashboard enhancement and leaderboard feature.
+
+### Next Cycle Goals 
+ * Begin Leaderboard integration for Dashboard
+ * Complete basic Dashboard testing
+ * Begin Leaderboard Frontend
+
+---
+
 ## Friday (7/5 - 7/9)
 
 ### Timesheet
@@ -15,12 +47,11 @@ Clockify report
 | **TASK/ISSUE #**          | **STATUS**  |
 |---------------------------|-------------|
 | Dashboard Tests           | In Progress |
-| Refactor Controller       | Completed   |
+| Refactor Controller       | In Progress |
 | Seed Database             | Completed   |
 
 ### Cycle Goal Review 
-Created seeders to allow more extensive Dashboard testing. Began refactoring the chart controller for a more efficient backend. 
-
+Created seeders to allow more extensive Dashboard testing. Began refactoring the chart controller for a more efficient backend. Troubleshooted seeder issues and display issues with the new chart controller.
 
 ### Next Cycle Goals 
  * Divide leftover tasks
