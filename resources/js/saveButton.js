@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
-    const editButton = document.getElementById('editButton'); // Assuming you have an edit button
-    const cancelButton = document.getElementById('cancelButton'); // Assuming you have a cancel button
+    const editButton = document.getElementById('editButton'); 
+    const cancelButton = document.getElementById('cancelButton');
 
     saveButton.addEventListener('click', function () {
         const confirmSave = confirm('Do you really want to save the changes?');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             rows.forEach(row => {
                 formData.append('ids[]', row.getAttribute('data-id'));
-                formData.append('courseNames[]', row.children[1]?.innerText.trim() || '');
+                formData.append('courseNames[]', row.children[0]?.innerText.trim().split(' - ')[0] || '');
                 formData.append('enrolledStudents[]', row.children[2]?.innerText.trim() || '');
                 formData.append('droppedStudents[]', row.children[3]?.innerText.trim() || '');
                 formData.append('courseCapacities[]', row.children[4]?.innerText.trim() || '');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     result.updatedSections.forEach(updatedSection => {
                         const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                         if (row) {
-                            row.children[1].innerText = updatedSection.name;
+                            row.children[0].innerText = `${updatedSection.prefix} ${updatedSection.number} ${updatedSection.section} - ${updatedSection.year}${updatedSection.session} ${updatedSection.term}`;
                             row.children[2].innerText = updatedSection.enrolled;
                             row.children[3].innerText = updatedSection.dropped;
                             row.children[4].innerText = updatedSection.capacity;

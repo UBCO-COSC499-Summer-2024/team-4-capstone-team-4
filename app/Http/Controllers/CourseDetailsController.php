@@ -1,26 +1,28 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
 use App\Models\User;
-use App\Models\Teach;
 use Illuminate\Support\Facades\Log;
+
 
 class CourseDetailsController extends Controller {
 
     public function show(Request $request){
-        $courseSections = CourseSection::with('area')->get()->map(function ($section, $index) {
+        $courseSections = CourseSection::with('area')->get()->map(function ($section) {
             $seiData = SeiData::where('course_section_id', $section->id)->first();
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
 
-            $formattedName = sprintf('%s %s - %s%s %s', 
-                $section->name, 
-                $section->section, 
-                $section->year, 
-                $section->session, 
+            $formattedName = sprintf('%s %s %s - %s%s %s', 
+                $section->prefix,
+                $section->number,
+                $section->section,
+                $section->year,
+                $section->session,
                 $section->term
             );
 
@@ -35,8 +37,8 @@ class CourseDetailsController extends Controller {
             ];
         });
 
-        $courses = CourseSection::all(); 
-        $instructors = User::all(); 
+        $courses = CourseSection::all();
+        $instructors = User::all();
 
         $sortField = 'courseName';
         $sortDirection = 'asc';
@@ -83,13 +85,16 @@ class CourseDetailsController extends Controller {
 
             $courseSection = CourseSection::find($ids[$i]);
             if ($courseSection) {
-                $courseSection->name = $courseNames[$i];
+                list($prefix, $number, $section) = explode(' ', $courseNames[$i], 3);
+                $courseSection->prefix = $prefix;
+                $courseSection->number = $number;
+                $courseSection->section = $section;
                 $courseSection->enrolled = (int)$enrolledStudents[$i];
                 $courseSection->dropped = (int)$droppedStudents[$i];
                 $courseSection->capacity = (int)$courseCapacities[$i];
                 $courseSection->save();
 
-                $updatedSections[] = $courseSection;
+                $updatedSections[] = $courseSection; // Collect updated sections for response
             } else {
                 Log::error('Course section not found', ['id' => $ids[$i]]);
             }
@@ -100,39 +105,6 @@ class CourseDetailsController extends Controller {
             'updatedSections' => $updatedSections
         ]);
     }
-    
-    public function search(Request $request) {
-        $query = $request->input('query');
-        $courseSections = CourseSection::with('area')->where('name', 'LIKE', "%{$query}%")
-            ->orWhereHas('area', function($q) use ($query) {
-                $q->where('name', 'LIKE', "%{$query}%");
-            })
-            ->get()->map(function ($section, $index) {
-                $seiData = SeiData::where('course_section_id', $section->id)->first();
-                $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-    
-                $formattedName = sprintf('%s %s - %s%s %s', 
-                    $section->name, 
-                    $section->section, 
-                    $section->year, 
-                    $section->session, 
-                    $section->term
-                );
-    
-                return (object) [
-                    'id' => $section->id,
-                    'name' => $formattedName,
-                    'departmentName' => $section->area ? $section->area->name : 'Unknown',
-                    'enrolled' => $section->enrolled,
-                    'dropped' => $section->dropped,
-                    'capacity' => $section->capacity,
-                    'averageRating' => $averageRating,
-                ];
-            });
-    
-        return response()->json(['courseSections' => $courseSections]);
-    }
-    
 
     private function calculateAverageRating($questionsJson) {
         $questions = json_decode($questionsJson, true);

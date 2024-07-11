@@ -7,6 +7,7 @@
                     <h1 class="justify-between text-2xl font-bold text-gray-1000 w-fit">{{ __('Department Details') }}</h1>
                 </div>
                 <div class="flex items-center ml-auto space-x-4">
+                    <x-coursedetails-search />
                     <x-assign-button />
                     <x-edit-button />
                 </div>
