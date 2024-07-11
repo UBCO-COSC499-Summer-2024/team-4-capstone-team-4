@@ -7,12 +7,11 @@
             <label for="year">Select Year:</label>
             <select wire:model.live="year" id="year" name="year">
                 @php
-                    $startYear = 2000;
-                    $currentYear = date('Y');
+                    $allPerformances = $instructor->instructorPerformances;
                 @endphp
-                @for ($yearOption = $startYear; $yearOption <= $currentYear; $yearOption++)
-                    <option value="{{ $yearOption }}" {{ $yearOption == $year ? 'selected' : '' }}>{{ $yearOption }}</option>
-                @endfor
+                @foreach ($allPerformances as $perf)
+                    <option value="{{ $perf->year }}" {{ $perf->year == $year ? 'selected' : '' }}>{{ $perf->year }}</option>
+                @endforeach
             </select>
         </div>
         <h2 class="font-bold">Courses Performance</h2>
