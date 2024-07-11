@@ -25,20 +25,18 @@ class UserRoleFactory extends Factory {
         $roles = ['instructor', 'dept_head', 'dept_staff', 'admin'];
         $role = $this->faker->randomElement($roles);
 
-        // Default user_id
-        $user_id = User::factory()->create()->id;
+        // Fetch a random user or create one if no users exist
+        $user = User::inRandomOrder()->first() ?? User::factory()->create();
 
-        // Default department_id
-        $department_id = null;
+        // Fetch a random department or create one if no departments exist
+        $department = Department::inRandomOrder()->first() ?? Department::factory()->create();
 
-        // Depending on the role, we might need to assign a department_id
-        if (in_array($role, ['dept_head', 'dept_staff', 'instructor'])) {
-            $department_id = Department::factory()->create()->id;
-        }
+        // Determine the department_id based on the role
+        $departmentId = in_array($role, ['dept_head', 'dept_staff', 'instructor']) ? $department->id : null;
 
         return [
-            'user_id' => $user_id,
-            'department_id' => $department_id,
+            'user_id' => $user->id,
+            'department_id' => $departmentId,
             'role' => $role,
         ];
     }

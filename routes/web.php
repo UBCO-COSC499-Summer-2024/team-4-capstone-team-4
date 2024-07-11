@@ -188,3 +188,11 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
+});

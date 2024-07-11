@@ -6,7 +6,7 @@
             <div class="dept-head">
                 <div class="col">Total Service Roles by Area</div>
             </div>
-            @foreach($areaRolesTotal as $role)
+            @foreach($deptAssignmentCount[1] as $role)
             <div class="dept-item">
                 <div class="col">{{ $role[0] }}: {{ $role[1] }}</div>
             </div>
@@ -19,7 +19,7 @@
             <div class="dept-head">
                 <div class="col">Total Extra Hours by Area</div>
             </div>
-            @foreach($areaExtrasTotal as $extra)
+            @foreach($deptAssignmentCount[3] as $extra)
             <div class="dept-item">
                 <div class="col">{{ $extra[0] }}: {{ $extra[1] }}</div>
             </div>
@@ -32,7 +32,7 @@
             <div class="dept-head">
                 <div class="col">Total Course Sections by Area</div>
             </div>
-            @foreach($areaCoursesTotal as $course)
+            @foreach($deptAssignmentCount[5] as $course)
             <div class="dept-item">
                 <div class="col">{{ $course[0] }}: {{ $course[1] }}</div>
             </div>
