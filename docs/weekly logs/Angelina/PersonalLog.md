@@ -1,6 +1,6 @@
 # Angelina's Personal Log 
 
-## Wednesday (7/5 - 7/9)
+## Wednesday (7/10 - 7/11)
 
 ### Timesheet
 Clockify report
