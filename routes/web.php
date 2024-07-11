@@ -29,16 +29,6 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
     Route::get('/staff', function(){
@@ -179,14 +169,6 @@ Route::middleware([
     Route::get('/assign-courses', function () {
         return view('assign-courses');
     })->name('assign-courses');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
 });
 
 Route::middleware([

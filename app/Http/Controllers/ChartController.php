@@ -68,6 +68,9 @@ class ChartController extends Controller {
 
             if ($deptPerformance === null) {
                 $this->createPerformance($dept, "dept", $currentYear);
+                $deptPerformance = DepartmentPerformance::where('dept_id', $dept)
+                ->where('year', $currentYear)
+                ->first();
             }
 
             $dataLabels = [];
@@ -106,6 +109,9 @@ class ChartController extends Controller {
 
                 if ($performance === null) {
                     $this->createPerformance($instructorRoleId, "instructor", $currentYear);
+                    $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
+                    ->where('year', $currentYear)
+                    ->first();
                 }
 
                 $hasTarget = false;
@@ -136,6 +142,9 @@ class ChartController extends Controller {
 
             if ($performance === null) {
                 $this->createPerformance($instructorRoleId, "instructor", $currentYear);
+                $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
+                    ->where('year', $currentYear)
+                    ->first();
             }
 
             $hasTarget = false;
@@ -178,6 +187,7 @@ class ChartController extends Controller {
             $performance = new InstructorPerformance();
             $performance->instructor_id = $id;
             $performance->target_hours = null;
+            $performance->score = 0;
         } elseif ($type === "dept") {
             $performance = new DepartmentPerformance();
             $performance->dept_id = $id;
@@ -289,13 +299,11 @@ class ChartController extends Controller {
         $extraHours = [];
         $extraHoursTotal = 0;
 
-        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->get();
+        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
 
         foreach ($allExtraHours as $extraHrs) {
-            if ($extraHrs->year === $currentYear) {
-                $extraHours[] = $extraHrs->name;
-                $extraHoursTotal += $extraHrs->hours;
-            }
+            $extraHours[] = $extraHrs->name;
+            $extraHoursTotal += $extraHrs->hours;
         }
 
         $assignmentCount[] = $extraHours;
@@ -305,7 +313,7 @@ class ChartController extends Controller {
 
         foreach ($teaches as $teaching) {
             $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->first();
-            $courseSections[] = $course->name;
+            $courseSections[] = $course->prefix . " " . $course->number;
         }
 
         $assignmentCount[] = $courseSections;
