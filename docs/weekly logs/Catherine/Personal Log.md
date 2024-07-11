@@ -1,3 +1,33 @@
+## Friday (7/10 - 7/12)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_10_2024-07_12_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Refactor UI for staff page
+  * #2: Instructor Report Page - Report Layout
+  * #3: Export Function
+  * #4: Helped with chart controller
+  * #5: Database Seeder
+  * #6: Troubleshooting instructor report page
+
+### Progress Update (since 7/10/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Refactor UI for staff page | To Do |
+| Instructor Report Page - Report Layout | In progress |
+| Export Function | |
+| Helped with chart controller| Complete |
+| Database Seeder | Complete |
+| Troubleshooting instructor report page | |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I helped fixing somes issue with the chart controller and completed the database seeder. I continued working on the instructor report page and have the main report layout. I also did some troubleshooting and refactored the page a bit...
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Continuing working on Instructor Report Page
+
 ## Wednesday (7/5 - 7/10)
 
 ### Timesheet
