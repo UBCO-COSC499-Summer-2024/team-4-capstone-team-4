@@ -89,17 +89,6 @@ class ImportSeiForm extends Component
 
     public function checkDuplicate()
     {
-        // $this->isDuplicate = false;
-        // $selectedCourses = [];
-
-        // foreach($this->rows as $row) {
-        //     if (in_array($row['cid'], $selectedCourses)) {
-        //         $this->isDuplicate = true;
-        //     } else {
-        //         $selectedCourses[] = $row['cid'];
-        //     }
-        // }
-
         $this->resetValidation(); // Reset any previous validation errors
         $selectedCourses = [];
         $duplicateIndices = [];
@@ -135,6 +124,8 @@ class ImportSeiForm extends Component
     public function deleteRow($row) {
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
+
+        $this->checkDuplicate();
         Session::put('seiFormData', $this->rows);
     }
 
