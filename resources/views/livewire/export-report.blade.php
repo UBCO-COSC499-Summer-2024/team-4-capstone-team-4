@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <label for="year" class="block">Select Year:</label>
-                <select wire:model="year" id="year" name="year" class="rounded-md">
+                <select wire:model.live="year" id="year" name="year" class="rounded-md">
                     @php
                         $allPerformances = $instructor->instructorPerformances->sortBy('year');
                     @endphp
