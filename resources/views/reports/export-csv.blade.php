@@ -1,10 +1,12 @@
 <table>
     <thead>
-        <tr><th style="font-weight:bold;">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}'s Report</th></tr>
+        <tr>
+            <th style="font-weight:bold; font-size:18px;">
+                {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}'s Report
+            </th>
+        </tr>
     </thead>
-    <tbody>
-        <tr><td>Courses Performance</td></tr>
-    </tbody>
+    <tbody></tbody>
 </table>
 
 @if ($courses->isNotEmpty())
@@ -26,20 +28,20 @@
                     $capacity = $course->courseSection->capacity;
                 @endphp
                 <tr>
-                    <td>{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
+                    <td>{{ $course->courseSection->prefix }}{{ $course->courseSection->number }} {{ $course->courseSection->section }}</td>
                     <td>Term {{ $course->courseSection->term }}</td>
                     <td>{{ $course->courseSection->year }}</td>
                     <td>{{ round($course->courseSection->enrolled * 100 / $capacity, 1) }}</td>
                     <td>{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
-                    <td>{{ $sei ? $sei : '-' }}</td>
+                    <td>{{ $sei ?? '-' }}</td>
                 </tr>
             @endforeach
             @if ($performance)
                 <tr>
                     <td colspan="3"><strong>Total Average</strong></td>
-                    <td>{{ $performance->enrolled_avg }}</td>
-                    <td>{{ $performance->dropped_avg }}</td>
-                    <td>{{ $performance->sei_avg }}</td>
+                    <td><strong>{{ $performance->enrolled_avg }}</strong></td>
+                    <td><strong>{{ $performance->dropped_avg }}</strong></td>
+                    <td><strong>{{ $performance->sei_avg }}</strong></td>
                 </tr>
             @endif
         </tbody>
@@ -47,8 +49,6 @@
 @else
     <p>No courses found for this instructor.</p>
 @endif  
-
-<br>
 
 @php
     $subtotalHours = [
@@ -90,7 +90,9 @@
                     @endphp
                     <tr>
                         @if($rowcount == 1)
-                            <th rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                            <th rowspan="{{ count($svcroles) + 1 }}">
+                                <strong>Service Roles</strong>
+                            </th>
                         @endif
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->year }}</td>
@@ -119,7 +121,9 @@
                     @endphp
                     <tr>
                         @if($rowcount == 1)
-                            <th rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                            <th rowspan="{{ $extraHours->count() + 1 }}">
+                                <strong>Extra Hours</strong>
+                            </th>
                         @endif
                         <td>{{ $hours->name }}</td>
                         <td>{{ $hours->year }}</td>
@@ -132,24 +136,24 @@
                 <tr>
                     <td colspan="2"><strong>Subtotal</strong></td>
                     @foreach ($extraHoursSubtotal as $month => $value)
-                        <td>{{ $value }}</td>
+                        <td><strong>{{ $value }}</strong></td>
                     @endforeach
-                    <td>{{ array_sum($extraHoursSubtotal) }}</td>
+                    <td><strong>{{ array_sum($extraHoursSubtotal) }}</strong></td>
                 </tr>
             @endif
 
             <tr>
                 <td colspan="3"><strong>Total</strong></td>
                 @foreach ($subtotalHours as $month => $value)
-                    <td>{{ $value + $extraHoursSubtotal[$month] }}</td>
+                    <td><strong>{{ $value + $extraHoursSubtotal[$month] }}</strong></td>
                 @endforeach
-                <td>{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
+                <td><strong>{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</strong></td>
             </tr> 
             <tr>
                 @if ($performance)
                     <td colspan="3"><strong>Target Hours</strong></td>
-                    <td colspan="12">{{ round($performance->target_hours/12) }}</td>
-                    <td>{{ $performance->target_hours }}</td>
+                    <td colspan="12"><strong>{{ round($performance->target_hours / 12) }}</strong></td>
+                    <td><strong>{{ $performance->target_hours }}</strong></td>
                 @endif
             </tr>
         </tbody>

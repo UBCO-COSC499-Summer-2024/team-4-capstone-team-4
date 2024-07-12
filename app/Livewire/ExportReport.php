@@ -39,6 +39,6 @@ class ExportReport extends Component
     public function exportAsCsv(){
         $instructor = UserRole::findOrFail($this->instructor_id);
         $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
-        return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.csv');
+        return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
     }
 }

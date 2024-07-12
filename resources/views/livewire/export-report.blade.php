@@ -15,8 +15,10 @@
                     @endforeach
                 </select>
             </div>
-                <x-button id="exportButton">Export</x-button>
+            <div>
+                <x-button id="exportButton">Export pdf</x-button>
                 <x-button wire:click="exportAsCsv">Export csv</x-button>
+            </div>
         </div>
         <div id="exportContent">
             <h2 class="font-bold">Courses Performance</h2>
@@ -168,7 +170,7 @@
                     </tbody>
                 </table>
             @else
-                <p>No performance data found for this instructor.</p>
+                <p>No service roles/extra hours performance data found for this instructor.</p>
             @endif
         </div>
     </div>
