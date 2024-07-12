@@ -36,7 +36,7 @@ class ExportReport extends Component
         return view('livewire.export-report', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours', 'year'));
     } 
 
-    public function exportAsCsv(){
+    public function exportAsExcel(){
         $instructor = UserRole::findOrFail($this->instructor_id);
         $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
         return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');

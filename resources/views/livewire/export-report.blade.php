@@ -5,8 +5,8 @@
     <div>
         <div class="flex justify-between items-center">
             <div>
-                <label for="year" class="block">Select Year:</label>
-                <select wire:model.live="year" id="year" name="year" class="rounded-md">
+                <label for="year">Select Year:</label>
+                <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
                         $allPerformances = $instructor->instructorPerformances->sortBy('year');
                     @endphp
@@ -15,10 +15,7 @@
                     @endforeach
                 </select>
             </div>
-            <div>
-                <x-button id="exportButton">Export pdf</x-button>
-                <x-button wire:click="exportAsCsv">Export csv</x-button>
-            </div>
+            <x-report-dropdown/>
         </div>
         <div id="exportContent">
             <h2 class="font-bold">Courses Performance</h2>
