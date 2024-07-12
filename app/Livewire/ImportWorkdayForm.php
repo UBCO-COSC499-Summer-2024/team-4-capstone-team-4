@@ -104,7 +104,6 @@ class ImportWorkdayForm extends Component
 
         // dd($this->rows);
         $this->validate();
-    
         
         foreach ($this->rows as $row) {
             $prefix = '';
@@ -124,6 +123,8 @@ class ImportWorkdayForm extends Component
                     $prefix = 'STAT';
                     break;
             }
+
+            
 
             CourseSection::create([
                 'prefix' => $prefix,
