@@ -12,6 +12,7 @@ Clockify report
   * #3: Seed Database for Testing
   * #4: Divide Leftover Features
   * #5: Leaderboard Design
+  * #6: Add Pie Carts to Department Dashboard
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -21,14 +22,16 @@ Clockify report
 | Seed Database             | Completed   |
 | Divide Features           | Completed   |
 | Leaderboard Design        | In Progress |
+| Add Pie Chart             | In Progress |
 
 ### Cycle Goal Review 
-Updated database seeder and tested with Catherine's help. Completed and fixed all bugs in the chart controller. Created first 6 tests for the chart controller. Divided tasks among team members. Began planning for dashboard enhancement and leaderboard feature.
+Updated database seeder and tested with Catherine's help. Completed and fixed all bugs in the chart controller. Created first 6 tests for the chart controller. Divided tasks among team members. Began planning for dashboard enhancement and leaderboard feature. Created a pie chart function for the chart controller. Debugged chart view.
 
 ### Next Cycle Goals 
  * Begin Leaderboard integration for Dashboard
  * Complete basic Dashboard testing
  * Begin Leaderboard Frontend
+ * Finish Pie Chart
 
 ---
 
