@@ -194,5 +194,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
+    Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
+        return view('instructor-report', ['instructor_id' => $instructor_id]);
+    })->name('instructor-report');
 });
+
