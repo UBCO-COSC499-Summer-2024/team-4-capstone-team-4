@@ -71,9 +71,6 @@ class SvcroleListItem extends Component
                 ]);
             }
 
-            // $url = route('svcroles');
-            // header("Location: $url");
-            // exit();
             // } else {
             //     $this->dispatch('show-toast', [
             //         'message' => 'Service Role not found.',

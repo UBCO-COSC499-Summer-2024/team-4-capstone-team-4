@@ -361,6 +361,9 @@ class ServiceRolesList extends Component
                     $this->dispatch('svcr-item-delete', $id);
                 }
             }
+            $url = route('svcroles');
+            header("Location: $url");
+            exit();
             // $this->render();
         } else {
             $this->dispatch('show-toast', [
