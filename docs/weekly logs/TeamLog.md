@@ -2,6 +2,58 @@
 
 ## Date Range:
 
+- July 10 - July 11
+
+## Features in the Project Plan Cycle:
+
+- Testing
+- Refactor UI to be consistent
+- Instructor Report Page & Export
+- Course Details Page
+- Service Roles - Audit Logs, Requests
+- Gamification & Leaderboard
+- Import Page - File Upload
+- Drone CI
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july10_july11.png)
+![image of tasks](./tasks/inprogress_july10_july11.png)
+![image of tasks](./tasks/inreview_july10_july11.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july10_july11.png)
+![image of tasks](./tasks/inprogress_july10_july11.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july10_july11.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july10_july11.png)
+![image of clockify report](./clockify/individual_july10_july11.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july10_july11.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july10_july11.png)
+![image of tasks](./tasks/inprogress_july10_july11.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_july10_july11.png)
+![image of test report](./testing/feature_july10_july11.png)
+
+## Overview:
+We have been working on testing our current features and refactoring/improving them. We have assigned the remaining features amongst each other and have started implementing some of them. 
+
+## Date Range:
+
 - July 5 - July 9
 
 ## Features in the Project Plan Cycle:
