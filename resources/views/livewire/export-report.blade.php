@@ -15,7 +15,8 @@
                     @endforeach
                 </select>
             </div>
-            <x-button id="exportButton">Export</x-button>
+                <x-button id="exportButton">Export</x-button>
+                <x-button wire:click="exportAsCsv">Export csv</x-button>
         </div>
         <div id="exportContent">
             <h2 class="font-bold">Courses Performance</h2>

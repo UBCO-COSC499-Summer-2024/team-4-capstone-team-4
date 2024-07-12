@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\UserRole;
+use App\Exports\InstructorReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExportReport extends Component
 {
@@ -19,6 +21,8 @@ class ExportReport extends Component
     public function render(){
         $instructor = UserRole::findOrFail($this->instructor_id);
 
+        $year = $this->year;
+
         $courses = $instructor->teaches()->whereHas('courseSection', function($query) {
             $query->where('year', $this->year);
         })->get();
@@ -29,10 +33,12 @@ class ExportReport extends Component
 
         $extraHours = $instructor->extraHours()->where('year', $this->year)->get();
         
-        return view('livewire.export-report', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours'));
-    }
+        return view('livewire.export-report', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours', 'year'));
+    } 
 
-    public function export(){
-        
+    public function exportAsCsv(){
+        $instructor = UserRole::findOrFail($this->instructor_id);
+        $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
+        return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.csv');
     }
 }
