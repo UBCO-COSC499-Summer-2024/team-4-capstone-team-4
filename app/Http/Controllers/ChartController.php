@@ -342,18 +342,31 @@ class ChartController extends Controller {
     private function deptLineChart($dataLabels, $totalHours) {
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $colors = [
-            "rgba(0, 255, 0, 0.7)",  // Fluorescent green
-            "rgba(255, 0, 255, 0.7)",  // Fluorescent magenta
-            "rgba(0, 255, 255, 0.7)",  // Fluorescent cyan
-            "rgba(255, 255, 0, 0.7)",  // Fluorescent yellow
-            "rgba(255, 0, 0, 0.7)"  // Fluorescent red
+            "rgba(37, 41, 150, 0.31)", 
+            "rgba(29, 154, 202, 0.31)", 
+            "rgba(249, 168, 37, 0.31)", 
+            "rgba(241, 103, 69, 0.31)", 
+            "rgba(124, 63, 88, 0.31)" ,
+            "rgba(255, 127, 14, 0.31)",  
+            "rgba(44, 160, 44, 0.31)",   
+            "rgba(214, 39, 40, 0.31)",   
+            "rgba(148, 103, 189, 0.31)", 
+            "rgba(140, 86, 75, 0.31)",
+            "rgba(127, 127, 127, 0.31)"  
         ];
+        
         $borderColors = [
-            "rgba(0, 255, 0, 1)",  // Fluorescent green
-            "rgba(255, 0, 255, 1)",  // Fluorescent magenta
-            "rgba(0, 255, 255, 1)",  // Fluorescent cyan
-            "rgba(255, 255, 0, 1)",  // Fluorescent yellow
-            "rgba(255, 0, 0, 1)"  // Fluorescent red
+            "rgba(37, 41, 150, 0.7)", 
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
         ];
 
         $datasets = [];
@@ -402,25 +415,35 @@ class ChartController extends Controller {
      */
     private function departmentPieChart($areaTotals, $title, $entity, $canvas) {
         $colors = [
-            "rgba(0, 255, 0, 0.7)",  // Fluorescent green
-            "rgba(255, 0, 255, 0.7)",  // Fluorescent magenta
-            "rgba(0, 255, 255, 0.7)",  // Fluorescent cyan
-            "rgba(255, 255, 0, 0.7)",  // Fluorescent yellow
-            "rgba(255, 0, 0, 0.7)"  // Fluorescent red
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)" ,
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
         ];
         $borderColors = [
-            "rgba(0, 255, 0, 1)",  // Fluorescent green
-            "rgba(255, 0, 255, 1)",  // Fluorescent magenta
-            "rgba(0, 255, 255, 1)",  // Fluorescent cyan
-            "rgba(255, 255, 0, 1)",  // Fluorescent yellow
-            "rgba(255, 0, 0, 1)"  // Fluorescent red
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)"  
         ];
 
         $labels = [];
         $data = [];
         foreach ($areaTotals as $index => $areaTotal) {
-            $labels[] = $areaTotal[0]; // fixed typo
-            $data[] = $areaTotal[1]; // assuming $areaTotal[1] is the value you want in the chart
+            $labels[] = $areaTotal[0]; 
+            $data[] = $areaTotal[1]; 
         }
 
         $datasets = [
