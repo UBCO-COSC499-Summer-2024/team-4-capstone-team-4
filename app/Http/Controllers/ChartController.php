@@ -101,6 +101,9 @@ class ChartController extends Controller {
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
+            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles");
+            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours");
+            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections");
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -121,19 +124,19 @@ class ChartController extends Controller {
 
                 $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
 
-                $chart2 = $this->instructorLineChart($performance, $hasTarget);
+                $chart5 = $this->instructorLineChart($performance, $hasTarget);
 
                 if ($hasTarget) {
-                    $chart3 = $this->instructorProgressBar($performance, $currentMonth);
+                    $chart6 = $this->instructorProgressBar($performance, $currentMonth);
                     
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
                                 'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
                 } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
                                 'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
                 }
             } else {
-                return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance'));
             }
         } elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -566,6 +569,64 @@ class ChartController extends Controller {
                         'bottom' => 10
                     ]
                 ]
+            ]);
+    }
+
+    // Insert comment here
+
+    private function departmentPieChart($areaTotals, $title, $entity) {
+        $colors = [
+            "rgba(37, 150, 41, 0.7)",
+            "rgba(150, 41, 37, 0.7)",
+            "rgba(150, 150, 41, 0.7)",
+            "rgba(41, 150, 150, 0.7)"
+        ];
+        $borderColors = [
+            "rgba(37, 150, 41, 0.7)",
+            "rgba(150, 41, 37, 0.7)",
+            "rgba(150, 150, 41, 0.7)",
+            "rgba(41, 150, 150, 0.7)"
+        ];
+    
+        $labels = [];
+        $data = [];
+        foreach ($areaTotals as $index => $areaTotal) {
+            $color = $colors[$index % count($colors)];
+            $borderColor = $borderColors[$index % count($borderColors)];
+            $labels[] = $areaTotal[0]; // fixed typo
+            $data[] = $areaTotal[1]; // assuming $areaTotal[1] is the value you want in the chart
+        }
+    
+        $datasets = [
+            [
+                "label" => $entity,
+                "backgroundColor" => $colors,
+                "borderColor" => $borderColors,
+                "data" => $data,
+                'hoverOffset' => 4,
+            ]
+        ];
+    
+        return app()
+            ->chartjs->name("DepartmentPieChart")
+            ->type("doughnut")
+            ->size(["width" => 200, "height" => 20])
+            ->labels($labels)
+            ->datasets($datasets)
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $title,
+                        'font' => [
+                            'size' => 15,
+                        ]
+                    ],
+                    'legend' => [
+                        'display' => true,
+                    ],
+                ],
+                'radius' => '80%'
             ]);
     }
 }
