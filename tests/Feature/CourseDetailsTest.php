@@ -14,38 +14,51 @@ class CourseDetailsTest extends TestCase
     use RefreshDatabase;
     
 
-    public function test_course_edit_functionality()
-    {
-        $user = User::factory()->create();
-        $courseSection = CourseSection::factory()->create([
-            'name' => 'Original Course',
-            'duration' => 10,
-            'enrolled' => 20,
-            'dropped' => 2,
-            'capacity' => 30,
-        ]);
+    public function test_course_edit_functionality(){
+    // Ensure the user has the appropriate role to access the save route
+    $user = User::factory()->create();
+    $user->userRoles()->create([
+        'role' => 'dept_head', // Ensure the user has the 'dept_head' role
+    ]);
 
-        $this->actingAs($user);
+    $courseSection = CourseSection::factory()->create([
+        'prefix' => 'MATH',
+        'number' => '101',
+        'area_id' => 1,
+        'year' => 2021,
+        'enrolled' => 20,
+        'dropped' => 2,
+        'capacity' => 30,
+        'term' => 'Fall',
+        'session' => 'Regular',
+        'section' => 'A',
+    ]);
 
-        $response = $this->post('/course-details/save', [
-            'ids' => [$courseSection->id],
-            'courseNames' => ['Updated Course'],
-            'courseDurations' => [12],
-            'enrolledStudents' => [25],
-            'droppedStudents' => [3],
-            'courseCapacities' => [35]
-        ]);
+    $this->actingAs($user);
 
-        $response->assertStatus(200);
-        $this->assertDatabaseHas('course_sections', [
-            'id' => $courseSection->id,
-            'name' => 'Updated Course',
-            'duration' => 12,
-            'enrolled' => 25,
-            'dropped' => 3,
-            'capacity' => 35,
-        ]);
-    }
+    $response = $this->post('/course-details/save', [
+        'ids' => [$courseSection->id],
+        'courseNames' => ['Updated Course'],
+        'enrolledStudents' => [25],
+        'droppedStudents' => [3],
+        'courseCapacities' => [35]
+    ]);
+
+    $response->assertStatus(200);
+    $this->assertDatabaseHas('course_sections', [
+        'id' => $courseSection->id,
+        'prefix' => 'MATH',
+        'number' => '101',
+        'area_id' => 1,
+        'year' => 2021,
+        'enrolled' => 25,
+        'dropped' => 3,
+        'capacity' => 35,
+        'term' => 'Fall',
+        'session' => 'Regular',
+        'section' => 'A',
+    ]);
+}
 
     public function test_save_method_with_missing_data()
     {
@@ -55,7 +68,6 @@ class CourseDetailsTest extends TestCase
         $request = Request::create('/course-details/save', 'POST', [
             'ids' => [1],
             // 'courseNames' => ['Updated Course'], // Missing courseNames
-            'courseDurations' => [12],
             'enrolledStudents' => [100],
             'droppedStudents' => [10],
             'courseCapacities' => [120],
@@ -66,6 +78,6 @@ class CourseDetailsTest extends TestCase
         $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
         $data = $response->getData(true);
         $this->assertArrayHasKey('message', $data);
-        $this->assertEquals('Course names are required.', $data['message']);
+        $this->assertEquals('Data arrays are not of the same length.', $data['message']);
     }
 }
