@@ -72,7 +72,7 @@ class ServiceRolesList extends Component
         'open-modal' => 'openModal',
         'closeModal' => 'closeModal',
         'performAction' => 'performAction',
-        'deleteSelected' => 'deleteSelected',
+        'deleteAllSelected' => 'deleteSelected',
         'saveSelected' => 'saveSelected',
         'exportSelected' => 'exportSelected',
         'selectItem' => 'handleItemSelected',
@@ -349,19 +349,19 @@ class ServiceRolesList extends Component
         // Implement your logic to enable editing for selected items
         // so each item has a livewire in SvcroleCardItem or SvcroleListItem and have a property called isEditing and a method called editServiceRole and saveServiceRole
 
-        $this->dispatch('toggleEditMode', [
-            'selectedItesm' => $this->selectedItems
+        $this->dispatch('toggle-edit-mode', [
+            'selectedItems' => $this->selectedItems
         ]);
     }
 
     public function deleteSelected() {
         if (count($this->selectedItems) > 0) {
-            foreach ($this->selectedItems as $serviceRoleId) {
-                $this->dispatch('svcr-item-delete', [
-                    'id' => $serviceRoleId
-                ]);
+            foreach ($this->selectedItems as $id => $selected) {
+                if ($selected) {
+                    $this->dispatch('svcr-item-delete', $id);
+                }
             }
-            $this->render();
+            // $this->render();
         } else {
             $this->dispatch('show-toast', [
                 'message' => 'No items selected.',

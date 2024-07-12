@@ -109,7 +109,7 @@
             Livewire.on('batchDeleteServiceRoles', (data) => {
                 data = data[0];
                 if (confirm(data.message)) {
-                    Livewire.emit('deleteSelected');
+                    Livewire.dispatch('deleteAllSelected');
                 }
             })
         </script>
