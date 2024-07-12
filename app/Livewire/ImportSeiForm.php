@@ -199,10 +199,8 @@ class ImportSeiForm extends Component
         ->orderBy('course_sections.number')
         ->orderBy('course_sections.section')
         ->get();
-        
-        // dd(empty($courses), $courses);
 
-        if($courses != []) {
+        if(!$courses->isEmpty()) {
             $this->hasCourses = true;
         } else {
             $this->hasCourses = false;

@@ -72,7 +72,11 @@
     @endif
 
     @if(!$hasCourses)
-        <div>No Courses!</div>
+        <div class="flex flex-col items-center justify-center mt-10">
+            <div class="text-center text-4xl">No courses created yet</div>
+            <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
+         
+        </div>
     @endif
 
     @if(session('success'))
