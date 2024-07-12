@@ -20,6 +20,7 @@ class ImportSeiForm extends Component
     public $testCid = 123456;
     public $rows = [];
 
+    public $isDuplicate = false;
     public $showModal = false;
 
     public function mount() {
@@ -86,8 +87,42 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
-    public function updated($propertyName)
+    public function checkDuplicate()
     {
+        // $this->isDuplicate = false;
+        // $selectedCourses = [];
+
+        // foreach($this->rows as $row) {
+        //     if (in_array($row['cid'], $selectedCourses)) {
+        //         $this->isDuplicate = true;
+        //     } else {
+        //         $selectedCourses[] = $row['cid'];
+        //     }
+        // }
+
+        $this->resetValidation(); // Reset any previous validation errors
+        $selectedCourses = [];
+        $duplicateIndices = [];
+
+        foreach ($this->rows as $index => $row) {
+            if ($row['cid'] !== "" && in_array($row['cid'], $selectedCourses)) {
+                $duplicateIndices[] = $index;
+            } else {
+                $selectedCourses[] = $row['cid'];
+            }
+        }
+
+        if (!empty($duplicateIndices)) {
+            $this->isDuplicate = true;
+            foreach ($duplicateIndices as $index) {
+                $this->addError("rows.{$index}.cid", 'This course has already been selected.');
+            }
+        } else {
+            $this->isDuplicate = false;
+        }
+
+        // dd($duplicateIndices, $selectedCourses);
+
         // Save form data to session
         Session::put('seiFormData', $this->rows);
     }
