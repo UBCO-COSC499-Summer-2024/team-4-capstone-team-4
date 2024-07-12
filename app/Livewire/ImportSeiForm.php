@@ -24,7 +24,6 @@ class ImportSeiForm extends Component
     public $showModal = false;
 
     public function mount() {
-
         if(Session::has('seiFormData')) {
             $this->rows = Session::get('seiFormData');
         } else {
@@ -37,7 +36,6 @@ class ImportSeiForm extends Component
     public function rules() {
         $rules = [];
 
-     
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.cid"] = 'required|integer';
             $rules["rows.{$index}.q1"] = 'required|numeric|min:1|max:5';
@@ -131,6 +129,7 @@ class ImportSeiForm extends Component
 
     public function handleSubmit() {
 
+        $this->checkDuplicate();
         // dd($this->rows);
         $this->validate();
     
