@@ -17,16 +17,18 @@ Clockify report
 | --------| -------|
 | Refactor UI for staff page | To Do |
 | Instructor Report Page - Report Layout | In progress |
-| Export Function | |
+| Export Function | In progress |
 | Helped with chart controller| Complete |
 | Database Seeder | Complete |
-| Troubleshooting instructor report page | |
+| Troubleshooting instructor report page | Complete |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-I helped fixing somes issue with the chart controller and completed the database seeder. I continued working on the instructor report page and have the main report layout. I also did some troubleshooting and refactored the page a bit...
+I helped fixing somes issue with the chart controller and completed the database seeder. I continued working on the instructor report page and have the main report layout. I also did some troubleshooting and refactored the page a bit. I started working on the export function and got a pdf to print with the report info.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
-  * Continuing working on Instructor Report Page
+  * Finalize report layout
+  * Complete export function
+  * Testing for Instructor Report Page
 
 ## Wednesday (7/5 - 7/10)
 
