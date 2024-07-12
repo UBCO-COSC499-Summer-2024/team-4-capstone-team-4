@@ -31,7 +31,6 @@ class DepartmentPerformance extends Model {
      * @var array
      */
     protected $casts = [
-        'year' => 'date:Y',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
