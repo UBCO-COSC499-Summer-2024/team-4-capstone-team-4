@@ -123,14 +123,14 @@ class ChartControllerTest extends TestCase
     {
         // Create a user with the 'instructor' role
         $user = User::factory()->create();
-        UserRole::factory()->create(['user_id' => $user->id, 'role' => 'instructor']);
+        $role = UserRole::factory()->create(['user_id' => $user->id, 'role' => 'instructor']);
 
         // Simulate authentication
         $this->actingAs($user);
 
         // Create instructor performance data for testing
         InstructorPerformance::factory()->create([
-            'instructor_id' => $user->id,
+            'instructor_id' => $role->id,
             'score' => 79,
             'year' => date('Y'),
             'sei_avg' => 4.2,

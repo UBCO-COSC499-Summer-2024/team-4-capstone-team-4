@@ -101,9 +101,9 @@ class ChartController extends Controller {
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
-            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles");
-            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours");
-            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections");
+            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
+            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "ExtraPieCHart");
+            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "CoursePieChart");
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -342,18 +342,18 @@ class ChartController extends Controller {
     private function deptLineChart($dataLabels, $totalHours) {
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $colors = [
-            "rgba(37, 41, 150, 0.31)",
-            "rgba(37, 150, 41, 0.31)",
-            "rgba(150, 41, 37, 0.31)",
-            "rgba(150, 150, 41, 0.31)",
-            "rgba(41, 150, 150, 0.31)"
+            "rgba(0, 255, 0, 0.7)",  // Fluorescent green
+            "rgba(255, 0, 255, 0.7)",  // Fluorescent magenta
+            "rgba(0, 255, 255, 0.7)",  // Fluorescent cyan
+            "rgba(255, 255, 0, 0.7)",  // Fluorescent yellow
+            "rgba(255, 0, 0, 0.7)"  // Fluorescent red
         ];
         $borderColors = [
-            "rgba(37, 41, 150, 0.7)",
-            "rgba(37, 150, 41, 0.7)",
-            "rgba(150, 41, 37, 0.7)",
-            "rgba(150, 150, 41, 0.7)",
-            "rgba(41, 150, 150, 0.7)"
+            "rgba(0, 255, 0, 1)",  // Fluorescent green
+            "rgba(255, 0, 255, 1)",  // Fluorescent magenta
+            "rgba(0, 255, 255, 1)",  // Fluorescent cyan
+            "rgba(255, 255, 0, 1)",  // Fluorescent yellow
+            "rgba(255, 0, 0, 1)"  // Fluorescent red
         ];
 
         $datasets = [];
@@ -385,6 +385,76 @@ class ChartController extends Controller {
                         ]
                     ]
                 ]
+            ]);
+    }
+
+    /**
+     * Create a pie chart for department performance.
+     *
+     * This method prepares data for a pie chart showing the distribution of
+     * performance metrics across different areas within a department.
+     *
+     * @param array $areaTotals An array of total values for each area.
+     * @param string $title The title of the chart.
+     * @param string $entity The entity (e.g., department) the chart represents.
+     * @param string $canvas The ID of the canvas element for the chart.
+     * @return string The JSON configuration for the Chart.js pie chart.
+     */
+    private function departmentPieChart($areaTotals, $title, $entity, $canvas) {
+        $colors = [
+            "rgba(0, 255, 0, 0.7)",  // Fluorescent green
+            "rgba(255, 0, 255, 0.7)",  // Fluorescent magenta
+            "rgba(0, 255, 255, 0.7)",  // Fluorescent cyan
+            "rgba(255, 255, 0, 0.7)",  // Fluorescent yellow
+            "rgba(255, 0, 0, 0.7)"  // Fluorescent red
+        ];
+        $borderColors = [
+            "rgba(0, 255, 0, 1)",  // Fluorescent green
+            "rgba(255, 0, 255, 1)",  // Fluorescent magenta
+            "rgba(0, 255, 255, 1)",  // Fluorescent cyan
+            "rgba(255, 255, 0, 1)",  // Fluorescent yellow
+            "rgba(255, 0, 0, 1)"  // Fluorescent red
+        ];
+
+        $labels = [];
+        $data = [];
+        foreach ($areaTotals as $index => $areaTotal) {
+            $labels[] = $areaTotal[0]; // fixed typo
+            $data[] = $areaTotal[1]; // assuming $areaTotal[1] is the value you want in the chart
+        }
+
+        $datasets = [
+            [
+                "label" => $entity,
+                "backgroundColor" => $colors,
+                "borderColor" => $borderColors,
+                "data" => $data,
+                'hoverOffset' => 4,
+            ]
+        ];
+
+        return app()
+            ->chartjs->name($canvas)
+            ->type("doughnut")
+            ->size(["width" => 200, "height" => 100])
+            ->labels($labels)
+            ->datasets($datasets)
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $title,
+                        'font' => [
+                            'size' => 15,
+                        ]
+                    ],
+                    'legend' => [
+                        'display' => true,
+                        'position' => 'right',
+                    ]
+                ],
+                'radius' => '100%',
+                'aspectRatio' => 2
             ]);
     }
 
@@ -569,64 +639,6 @@ class ChartController extends Controller {
                         'bottom' => 10
                     ]
                 ]
-            ]);
-    }
-
-    // Insert comment here
-
-    private function departmentPieChart($areaTotals, $title, $entity) {
-        $colors = [
-            "rgba(37, 150, 41, 0.7)",
-            "rgba(150, 41, 37, 0.7)",
-            "rgba(150, 150, 41, 0.7)",
-            "rgba(41, 150, 150, 0.7)"
-        ];
-        $borderColors = [
-            "rgba(37, 150, 41, 0.7)",
-            "rgba(150, 41, 37, 0.7)",
-            "rgba(150, 150, 41, 0.7)",
-            "rgba(41, 150, 150, 0.7)"
-        ];
-    
-        $labels = [];
-        $data = [];
-        foreach ($areaTotals as $index => $areaTotal) {
-            $color = $colors[$index % count($colors)];
-            $borderColor = $borderColors[$index % count($borderColors)];
-            $labels[] = $areaTotal[0]; // fixed typo
-            $data[] = $areaTotal[1]; // assuming $areaTotal[1] is the value you want in the chart
-        }
-    
-        $datasets = [
-            [
-                "label" => $entity,
-                "backgroundColor" => $colors,
-                "borderColor" => $borderColors,
-                "data" => $data,
-                'hoverOffset' => 4,
-            ]
-        ];
-    
-        return app()
-            ->chartjs->name("DepartmentPieChart")
-            ->type("doughnut")
-            ->size(["width" => 200, "height" => 20])
-            ->labels($labels)
-            ->datasets($datasets)
-            ->options([
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => $title,
-                        'font' => [
-                            'size' => 15,
-                        ]
-                    ],
-                    'legend' => [
-                        'display' => true,
-                    ],
-                ],
-                'radius' => '80%'
             ]);
     }
 }

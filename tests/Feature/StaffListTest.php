@@ -61,7 +61,7 @@ class StaffListTest extends TestCase
 
         $response->assertStatus(403);
 
-        $response2 = $this->actingAs($user)->get('/staff-edit-mode');
+        $response2 = $this->actingAs($user)->get('/staff/edit');
 
         $response2->assertStatus(403);
     }
