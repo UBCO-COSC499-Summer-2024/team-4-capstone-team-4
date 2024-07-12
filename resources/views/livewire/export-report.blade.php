@@ -125,16 +125,18 @@
                             </tr>
                         @endif 
 
-                        @if ($extraHours->isNotEmpty())
-                            <tr>
-                                <th class="border border-white bg-slate-500" rowspan="{{ $extraHours->count() + 2 }}">Extra Hours</th>
-                            </tr>
+                        @php $rowcount = 0; @endphp
                         
+                        @if ($extraHours->isNotEmpty())
                             @foreach ($extraHours as $hours)
                                 @php
+                                    $rowcount++;
                                     $extraHoursSubtotal[\DateTime::createFromFormat('!m', $hours->month)->format('F')] += $hours->hours;
                                 @endphp
                                 <tr>
+                                    @if($rowcount == 1)
+                                        <th class="border border-white bg-slate-500" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                                    @endif
                                     <td class="border border-gray-300">{{ $hours->name }}</td>
                                     <td class="border border-gray-300">{{ $hours->year }}</td>
                                     @foreach ($extraHoursSubtotal as $month => $value)

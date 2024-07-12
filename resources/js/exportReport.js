@@ -5,9 +5,17 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         var { jsPDF } = window.jspdf;
-        var pdf = new jsPDF('p', 'pt', 'letter'); 
+        var pdf = new jsPDF('l', 'pt', 'letter'); 
 
-        pdf.text('Courses Performance', 40, 30);
+        pdf.setFont('helvetica', 'bold'); //make font bold
+        pdf.setFontSize(18)
+        var titleText = document.querySelector('.content-title-text').textContent;
+        var year = document.getElementById('year').value;
+        pdf.text(titleText + ' - ' + year, 40, 30);
+
+        pdf.setFont('helvetica', 'normal'); //reset font to normal
+        pdf.setFontSize(12)
+        pdf.text('Courses Performance', 40, 50);
 
         var courseTable = document.getElementById('courseTable');
         var perfTable = document.getElementById('performanceTable');
@@ -16,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (courseTable) {
             pdf.autoTable({ 
                 html: '#courseTable', 
-                startY: 40, 
+                startY: 60, 
                 useCss: true, 
             });
         } else {
@@ -32,11 +40,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 html: '#performanceTable', 
                 startY: pdf.lastAutoTable.finalY + 40, 
                 useCss: true,
+                tableWidth: 'auto',
+                //styles: { fontSize: 0.5 },
             });
         } else {
             console.error('Performance table not found.');
         }
         //save pdf
-        pdf.save('report.pdf');
+        pdf.save(titleText + '-' + year + '.pdf');
     });
 });
