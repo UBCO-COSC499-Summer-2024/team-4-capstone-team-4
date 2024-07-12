@@ -10,7 +10,7 @@
             <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block">
                 <p class="text-sm font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
             </a>
-            <a href="{{ route('instructor-report',  ['instructor_id' => $instructorId]) }}" class="block mt-1 truncate text-xs leading-5 text-gray-500">
+            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block mt-1 truncate text-xs leading-5 text-gray-500">
                 {{ $email }}
             </a>
         </div>
@@ -31,7 +31,6 @@
                 {{ $targetHours }} 
             </div>
         @endif
-
     </td>
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">{{ $rating }}</div>
