@@ -16,8 +16,8 @@ class CourseDetailsController extends Controller {
         try {
             $courseSections = CourseSection::with('area')
                 ->when($query, function ($queryBuilder) use ($query) {
-                    $queryBuilder->where('prefix', 'like', "%{$query}%")
-                        ->orWhere('number', 'like', "%{$query}%");
+                    $queryBuilder->whereRaw('LOWER(prefix) LIKE ?', ['%' . strtolower($query) . '%'])
+                    ->orWhereRaw('LOWER(number) LIKE ?', ['%' . strtolower($query) . '%']);
                 })
                 ->get()
                 ->map(function ($section, $index) {

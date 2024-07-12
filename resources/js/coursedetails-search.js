@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     row.setAttribute('data-id', section.id);
 
                     row.innerHTML = `
-                        <td>${section.name}</td>
-                        <td>${section.departmentName}</td>
-                        <td>${section.enrolled}</td>
-                        <td>${section.dropped}</td>
-                        <td>${section.capacity}</td>
-                        <td>${section.averageRating}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.departmentName}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.enrolled}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.dropped}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.capacity}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.averageRating}</td>
                     `;
 
                     tableBody.appendChild(row);
