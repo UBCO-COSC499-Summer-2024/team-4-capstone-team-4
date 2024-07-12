@@ -54,4 +54,16 @@ class SeiData extends Model {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
 
+    public static function calculateSEIAverage($courseSectionId) {
+        $data = self::where('course_section_id', $courseSectionId)->first();
+        if($data){
+            $questions = json_decode($data->questions, true);
+            $averageScore = array_sum($questions) / count($questions);
+    
+            return round($averageScore, 1); 
+        }
+        
+        return null;
+    }
+
 }
