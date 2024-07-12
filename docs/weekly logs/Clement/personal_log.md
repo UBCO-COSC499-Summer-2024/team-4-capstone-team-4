@@ -1,3 +1,39 @@
+## Cycle: July 10th - July 11th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_10_2024-07_11_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Simple Optimizations
+  * #2: Implementing Bulk Actions (Edit/Delete) on Service Role Management Page
+
+### Progress Update (since 07/10/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Simple Optimizations</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Bulk Actions (Edit/Delete) on Service Role Management Page</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+July 10th was dedicated to performing simple optimizations, which helped improve the overall performance and responsiveness of the application. On July 11th, the implementation of bulk actions (edit/delete) on the service role management page was successfully completed, enhancing the functionality and user experience of the service role management feature.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Further testing and refinement of bulk actions
+  * Enhancing user interface and experience based on feedback
+  * Continuous debugging and performance improvements
+  * Planning and implementation of new features based on project requirements
+
+---
+
 ## Cycle: July 5th - July 9th
 
 ### Timesheet
