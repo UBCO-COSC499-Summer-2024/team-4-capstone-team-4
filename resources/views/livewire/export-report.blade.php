@@ -119,10 +119,6 @@
                                 @endforeach
                                 <td class="border border-gray-300">{{ array_sum($subtotalHours) }}</td>
                             </tr> 
-                        @else
-                            <tr>
-                                <td colspan="{{ count($subtotalHours) + 2 }}">No service roles found for this instructor.</td>
-                            </tr>
                         @endif 
 
                         @php $rowcount = 0; @endphp
@@ -151,10 +147,6 @@
                                     <td class="border border-gray-300">{{ $value }}</td>
                                 @endforeach
                                 <td class="border border-gray-300">{{ array_sum($extraHoursSubtotal) }}</td>
-                            </tr>
-                        @else
-                            <tr>
-                                <td colspan="{{ count($subtotalHours) + 2 }}">No extra hours found for this instructor.</td>
                             </tr>
                         @endif
 
