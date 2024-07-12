@@ -1,29 +1,28 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('courseTableBody'); // Ensure this ID matches the table body ID
+    const courseDetailsRoute = searchInput.getAttribute('data-route');
 
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value;
-
-            fetch(`/course-details/search?query=${query}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.querySelector('tbody');
-                tbody.innerHTML = '';
-
-                data.courseSections.forEach(section => {
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value.trim();
+        fetch(`${courseDetailsRoute}?search=${query}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            tableBody.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(section => {
                     const row = document.createElement('tr');
                     row.setAttribute('data-id', section.id);
+
                     row.innerHTML = `
                         <td>${section.name}</td>
                         <td>${section.departmentName}</td>
@@ -32,14 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${section.capacity}</td>
                         <td>${section.averageRating}</td>
                     `;
-                    tbody.appendChild(row);
+
+                    tableBody.appendChild(row);
                 });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    } else {
-        console.error('searchInput element not found');
-    }
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="7" class="text-center text-gray-500 py-4">No course sections found.</td>`;
+                tableBody.appendChild(row);
+            }
+        })
+        .catch(error => console.error('Error fetching search results:', error));
+    });
 });

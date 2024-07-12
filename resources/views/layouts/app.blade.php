@@ -19,7 +19,7 @@
          'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/editButton.js', 'resources/js/saveButton.js', 'resources/js/cancelButton.js','resources/js/coursedetails-search.js'])
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+        <script> var courseDetailsRoute = "{{ route('course-details') }}";</script>
         <!-- Chart.js Library -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

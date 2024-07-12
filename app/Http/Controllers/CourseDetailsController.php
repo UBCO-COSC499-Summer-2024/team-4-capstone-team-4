@@ -1,50 +1,66 @@
 <?php
 
-
 namespace App\Http\Controllers;
-
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
 use App\Models\User;
+use App\Models\Teach;
 use Illuminate\Support\Facades\Log;
-
 
 class CourseDetailsController extends Controller {
 
     public function show(Request $request){
-        $courseSections = CourseSection::with('area')->get()->map(function ($section) {
-            $seiData = SeiData::where('course_section_id', $section->id)->first();
-            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
-            $formattedName = sprintf('%s %s %s - %s%s %s', 
-                $section->prefix,
-                $section->number,
-                $section->section,
-                $section->year,
-                $section->session,
-                $section->term
-            );
-
-            return (object) [
-                'id' => $section->id,
-                'name' => $formattedName,
-                'departmentName' => $section->area ? $section->area->name : 'Unknown',
-                'enrolled' => $section->enrolled,
-                'dropped' => $section->dropped,
-                'capacity' => $section->capacity,
-                'averageRating' => $averageRating,
-            ];
-        });
-
-        $courses = CourseSection::all();
-        $instructors = User::all();
-
-        $sortField = 'courseName';
-        $sortDirection = 'asc';
-
-        return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
+        $query = $request->input('search', '');
+    
+        try {
+            $courseSections = CourseSection::with('area')
+                ->when($query, function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('prefix', 'like', "%{$query}%")
+                        ->orWhere('number', 'like', "%{$query}%");
+                })
+                ->get()
+                ->map(function ($section, $index) {
+                    $seiData = SeiData::where('course_section_id', $section->id)->first();
+                    $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+    
+                    $formattedName = sprintf('%s %s %s - %s%s %s', 
+                        $section->prefix,
+                        $section->number, 
+                        $section->section, 
+                        $section->year, 
+                        $section->session, 
+                        $section->term
+                    );
+    
+                    return (object) [
+                        'id' => $section->id,
+                        'name' => $formattedName,
+                        'departmentName' => $section->area ? $section->area->name : 'Unknown',
+                        'enrolled' => $section->enrolled,
+                        'dropped' => $section->dropped,
+                        'capacity' => $section->capacity,
+                        'averageRating' => $averageRating,
+                    ];
+                });
+    
+            $courses = CourseSection::all(); 
+            $instructors = User::all(); 
+    
+            $sortField = 'courseName';
+            $sortDirection = 'asc';
+    
+            if ($request->ajax()) {
+                return response()->json($courseSections);
+            }
+    
+            return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching course details: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['message' => 'An error occurred while fetching course details.'], 500);
+        }
     }
+    
 
     public function save(Request $request){
         $ids = $request->input('ids', []);
@@ -53,7 +69,6 @@ class CourseDetailsController extends Controller {
         $droppedStudents = $request->input('droppedStudents', []);
         $courseCapacities = $request->input('courseCapacities', []);
 
-        // Log the request data for debugging
         Log::info('Request Data:', [
             'ids' => $ids,
             'courseNames' => $courseNames,
@@ -64,14 +79,12 @@ class CourseDetailsController extends Controller {
 
         $updatedSections = [];
 
-        // Ensure all arrays have the same length
         $arrayLengths = [count($ids), count($courseNames), count($enrolledStudents), count($droppedStudents), count($courseCapacities)];
         if (count(array_unique($arrayLengths)) !== 1) {
             return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
         }
 
         for ($i = 0; $i < count($ids); $i++) {
-            // Check if the key exists before accessing the array
             if (!isset($courseNames[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
                 Log::error('Missing array index', [
                     'index' => $i,
@@ -85,16 +98,15 @@ class CourseDetailsController extends Controller {
 
             $courseSection = CourseSection::find($ids[$i]);
             if ($courseSection) {
-                list($prefix, $number, $section) = explode(' ', $courseNames[$i], 3);
-                $courseSection->prefix = $prefix;
-                $courseSection->number = $number;
-                $courseSection->section = $section;
+                $nameParts = explode(' ', $courseNames[$i]);
+                $courseSection->prefix = $nameParts[0];
+                $courseSection->number = $nameParts[1];
                 $courseSection->enrolled = (int)$enrolledStudents[$i];
                 $courseSection->dropped = (int)$droppedStudents[$i];
                 $courseSection->capacity = (int)$courseCapacities[$i];
                 $courseSection->save();
 
-                $updatedSections[] = $courseSection; // Collect updated sections for response
+                $updatedSections[] = $courseSection;
             } else {
                 Log::error('Course section not found', ['id' => $ids[$i]]);
             }
