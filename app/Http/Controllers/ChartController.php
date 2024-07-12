@@ -68,6 +68,9 @@ class ChartController extends Controller {
 
             if ($deptPerformance === null) {
                 $this->createPerformance($dept, "dept", $currentYear);
+                $deptPerformance = DepartmentPerformance::where('dept_id', $dept)
+                ->where('year', $currentYear)
+                ->first();
             }
 
             $dataLabels = [];
@@ -98,6 +101,9 @@ class ChartController extends Controller {
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
+            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
+            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "ExtraPieCHart");
+            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "CoursePieChart");
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -106,6 +112,9 @@ class ChartController extends Controller {
 
                 if ($performance === null) {
                     $this->createPerformance($instructorRoleId, "instructor", $currentYear);
+                    $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
+                    ->where('year', $currentYear)
+                    ->first();
                 }
 
                 $hasTarget = false;
@@ -115,19 +124,19 @@ class ChartController extends Controller {
 
                 $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
 
-                $chart2 = $this->instructorLineChart($performance, $hasTarget);
+                $chart5 = $this->instructorLineChart($performance, $hasTarget);
 
                 if ($hasTarget) {
-                    $chart3 = $this->instructorProgressBar($performance, $currentMonth);
+                    $chart6 = $this->instructorProgressBar($performance, $currentMonth);
                     
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
                                 'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
                 } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
                                 'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
                 }
             } else {
-                return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance'));
             }
         } elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -136,6 +145,9 @@ class ChartController extends Controller {
 
             if ($performance === null) {
                 $this->createPerformance($instructorRoleId, "instructor", $currentYear);
+                $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
+                    ->where('year', $currentYear)
+                    ->first();
             }
 
             $hasTarget = false;
@@ -161,7 +173,7 @@ class ChartController extends Controller {
         }
     }
 
-       /**
+    /**
      * Create a performance record for the given ID and type.
      *
      * This method initializes a new performance record for an instructor, department, or area,
@@ -178,6 +190,7 @@ class ChartController extends Controller {
             $performance = new InstructorPerformance();
             $performance->instructor_id = $id;
             $performance->target_hours = null;
+            $performance->score = 0;
         } elseif ($type === "dept") {
             $performance = new DepartmentPerformance();
             $performance->dept_id = $id;
@@ -289,13 +302,11 @@ class ChartController extends Controller {
         $extraHours = [];
         $extraHoursTotal = 0;
 
-        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->get();
+        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
 
         foreach ($allExtraHours as $extraHrs) {
-            if ($extraHrs->year === $currentYear) {
-                $extraHours[] = $extraHrs->name;
-                $extraHoursTotal += $extraHrs->hours;
-            }
+            $extraHours[] = $extraHrs->name;
+            $extraHoursTotal += $extraHrs->hours;
         }
 
         $assignmentCount[] = $extraHours;
@@ -305,7 +316,7 @@ class ChartController extends Controller {
 
         foreach ($teaches as $teaching) {
             $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->first();
-            $courseSections[] = $course->name;
+            $courseSections[] = $course->prefix . " " . $course->number;
         }
 
         $assignmentCount[] = $courseSections;
@@ -331,18 +342,31 @@ class ChartController extends Controller {
     private function deptLineChart($dataLabels, $totalHours) {
         $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $colors = [
-            "rgba(37, 41, 150, 0.31)",
-            "rgba(37, 150, 41, 0.31)",
-            "rgba(150, 41, 37, 0.31)",
-            "rgba(150, 150, 41, 0.31)",
-            "rgba(41, 150, 150, 0.31)"
+            "rgba(37, 41, 150, 0.31)", 
+            "rgba(29, 154, 202, 0.31)", 
+            "rgba(249, 168, 37, 0.31)", 
+            "rgba(241, 103, 69, 0.31)", 
+            "rgba(124, 63, 88, 0.31)" ,
+            "rgba(255, 127, 14, 0.31)",  
+            "rgba(44, 160, 44, 0.31)",   
+            "rgba(214, 39, 40, 0.31)",   
+            "rgba(148, 103, 189, 0.31)", 
+            "rgba(140, 86, 75, 0.31)",
+            "rgba(127, 127, 127, 0.31)"  
         ];
+        
         $borderColors = [
-            "rgba(37, 41, 150, 0.7)",
-            "rgba(37, 150, 41, 0.7)",
-            "rgba(150, 41, 37, 0.7)",
-            "rgba(150, 150, 41, 0.7)",
-            "rgba(41, 150, 150, 0.7)"
+            "rgba(37, 41, 150, 0.7)", 
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
         ];
 
         $datasets = [];
@@ -374,6 +398,86 @@ class ChartController extends Controller {
                         ]
                     ]
                 ]
+            ]);
+    }
+
+    /**
+     * Create a pie chart for department performance.
+     *
+     * This method prepares data for a pie chart showing the distribution of
+     * performance metrics across different areas within a department.
+     *
+     * @param array $areaTotals An array of total values for each area.
+     * @param string $title The title of the chart.
+     * @param string $entity The entity (e.g., department) the chart represents.
+     * @param string $canvas The ID of the canvas element for the chart.
+     * @return string The JSON configuration for the Chart.js pie chart.
+     */
+    private function departmentPieChart($areaTotals, $title, $entity, $canvas) {
+        $colors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)" ,
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
+        ];
+        $borderColors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)"  
+        ];
+
+        $labels = [];
+        $data = [];
+        foreach ($areaTotals as $index => $areaTotal) {
+            $labels[] = $areaTotal[0]; 
+            $data[] = $areaTotal[1]; 
+        }
+
+        $datasets = [
+            [
+                "label" => $entity,
+                "backgroundColor" => $colors,
+                "borderColor" => $borderColors,
+                "data" => $data,
+                'hoverOffset' => 4,
+            ]
+        ];
+
+        return app()
+            ->chartjs->name($canvas)
+            ->type("doughnut")
+            ->size(["width" => 200, "height" => 100])
+            ->labels($labels)
+            ->datasets($datasets)
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $title,
+                        'font' => [
+                            'size' => 15,
+                        ]
+                    ],
+                    'legend' => [
+                        'display' => true,
+                        'position' => 'right',
+                    ]
+                ],
+                'radius' => '100%',
+                'aspectRatio' => 2
             ]);
     }
 

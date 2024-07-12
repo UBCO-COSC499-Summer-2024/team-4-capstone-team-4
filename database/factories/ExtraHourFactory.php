@@ -27,7 +27,7 @@ class ExtraHourFactory extends Factory {
         // Ensure we have at least one User Role with the role 'instructor'
         $instructor = UserRole::where('role', 'instructor')->inRandomOrder()->first();
 
-        // Ensure we have at least one Area 
+        // Ensure we have at least one Area
         $area = Area::inRandomOrder()->first();
 
         return [

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use App\Models\UserRole;
+use App\Models\User;
 use App\Models\ExtraHour;
 use App\Models\Area;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,8 +31,10 @@ class ExtraHourTest extends TestCase {
      */
     public function test_extra_hours_can_be_created() {
         // Create an assigner & an instructor & an area
-        $assigner = UserRole::factory()->create();
-        $instructor = UserRole::factory()->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $assigner = UserRole::factory()->create(['user_id' => $user1->id, 'role' => 'dept_head']);
+        $instructor = UserRole::factory()->create(['user_id' => $user2->id,'role' => 'instructor']);
         $area = Area::factory()->create();
 
         // Create an extra hours
@@ -39,7 +42,6 @@ class ExtraHourTest extends TestCase {
             'assigner_id' => $assigner->id,
             'instructor_id'=> $instructor->id,
             'area_id' => $area->id,
-
         ]);
 
         // Assert that the extra hours model exists

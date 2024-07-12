@@ -27,7 +27,7 @@ $userRoles = auth()->user()->roles;
                     :deptPerformance="$deptPerformance" />
                 </section>
                 <section class="dash-bottom">
-                    <x-department-lists :deptAssignmentCount="$deptAssignmentCount" />
+                    <x-department-lists :deptAssignmentCount="$deptAssignmentCount" :chart2="$chart2" :chart3="$chart3" :chart4="$chart4" />
                 </section>
             @elseif ($isDeptHead || $isDeptStaff)
                 <!-- Department View -->
@@ -36,7 +36,7 @@ $userRoles = auth()->user()->roles;
                     :deptPerformance="$deptPerformance" />
                 </section>
                 <section class="dash-bottom">
-                    <x-department-lists :deptAssignmentCount="$deptAssignmentCount" />
+                    <x-department-lists :deptAssignmentCount="$deptAssignmentCount" :chart2="$chart2" :chart3="$chart3" :chart4="$chart4" />
                 </section>
             @elseif ($isInstructor)
                 <!-- Instructor View -->
