@@ -1,3 +1,75 @@
+## Friday (7/10- 7/12)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_10_2024-07_12_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Front End Import Page
+  * #2: Assign Courses to Instructors Page
+  * #3: Small Cleanup Tasks
+  * #4: Extra Form Functionality
+  * #5: Upload File
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Front End Import Page / #177
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Assign Course to Instructors / #249
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Cleanup Tasks / #311
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Upload File / #301
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I wasn't feeling great this cycle, so I decided to take it easy. I started a couple of smaller tasks and completed some UI validation on the sei import page which will increase user experience. We are all working on our assigned tasks, so I plan to continue down the checklist in the coming cycles. I finished my basic testing which covers rendering, inserting data, and validation. These should be good for the import page for now and I will add more later if necessary.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Small UI changes
+  * Add extra validation (both for UI and database)
+  * Extra functionality for inserting data (copy row, mass delete, mass add)
+  * Upload file functionality
+
 ## Wednesday (7/5- 7/10)
 
 ### Timesheet
@@ -44,10 +116,10 @@
     </tr>
      <tr>
         <!-- Task/Issue # -->
-        <td>Import Page - Testing / #233
+        <td>Import Page - Basic Testing / #233
         </td>
         <!-- Status -->
-        <td>In Progress
+        <td>Complete
         </td>
     </tr>
     <tr>
