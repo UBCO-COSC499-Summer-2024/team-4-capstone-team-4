@@ -173,7 +173,7 @@ class ChartController extends Controller {
         }
     }
 
-       /**
+    /**
      * Create a performance record for the given ID and type.
      *
      * This method initializes a new performance record for an instructor, department, or area,
