@@ -182,6 +182,7 @@ class StaffListTest extends TestCase
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
+            'year' => date('Y'),
             'instructor_id' => $role->id,
         ]);
 
