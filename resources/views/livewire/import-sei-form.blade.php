@@ -13,6 +13,7 @@
             <div class="w-3/12 text-center"></div>
         </div>
 
+        @if($hasCourses)
         @foreach ($rows as $index => $row)
         <div class="import-form-row flex justify-between items-center p-2 border-b">
             <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
@@ -57,7 +58,6 @@
                 </button>
             </div>
         </div>    
-
         @endforeach
         
         <div class="mt-4 flex justify-end space-x-2">
@@ -69,6 +69,11 @@
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="text-white text-xl text-center m-80">Saving...</div>
     </div>
+    @endif
+
+    @if(!$hasCourses)
+        <div>No Courses!</div>
+    @endif
 
     @if(session('success'))
         @if($showModal) 

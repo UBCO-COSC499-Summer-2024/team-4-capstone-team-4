@@ -14,14 +14,15 @@ use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ImportSeiForm extends Component
 {
-    public $testCid = 123456;
     public $rows = [];
 
     public $isDuplicate = false;
     public $showModal = false;
+    public $hasCourses = false;
 
     public function mount() {
         if(Session::has('seiFormData')) {
@@ -198,6 +199,14 @@ class ImportSeiForm extends Component
         ->orderBy('course_sections.number')
         ->orderBy('course_sections.section')
         ->get();
+        
+        // dd(empty($courses), $courses);
+
+        if($courses != []) {
+            $this->hasCourses = true;
+        } else {
+            $this->hasCourses = false;
+        }
 
         return view('livewire.import-sei-form', [
             "courses" => $courses,
