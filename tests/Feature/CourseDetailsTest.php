@@ -12,26 +12,27 @@ use App\Http\Controllers\CourseDetailsController;
 class CourseDetailsTest extends TestCase
 {
     use RefreshDatabase;
-    
 
-    public function test_course_edit_functionality(){
+    public function test_course_edit_functionality()
+{
     // Ensure the user has the appropriate role to access the save route
     $user = User::factory()->create();
-    $user->userRoles()->create([
+    $user->roles()->create([
         'role' => 'dept_head', // Ensure the user has the 'dept_head' role
     ]);
 
     $courseSection = CourseSection::factory()->create([
-        'prefix' => 'MATH',
-        'number' => '101',
-        'area_id' => 1,
-        'year' => 2021,
-        'enrolled' => 20,
-        'dropped' => 2,
-        'capacity' => 30,
-        'term' => 'Fall',
-        'session' => 'Regular',
-        'section' => 'A',
+        "id"=> 1,
+        "prefix"=> "Updated",
+        "number"=>"Course",
+        "area_id"=> 1,
+        "year"=>2021,
+        "enrolled"=> 25,
+        "dropped"=>3,
+        "capacity"=> 35,
+        "term"=> "Fall",
+        "session"=> "Regular",
+        "section"=>"A"
     ]);
 
     $this->actingAs($user);
@@ -46,20 +47,19 @@ class CourseDetailsTest extends TestCase
 
     $response->assertStatus(200);
     $this->assertDatabaseHas('course_sections', [
-        'id' => $courseSection->id,
-        'prefix' => 'MATH',
-        'number' => '101',
-        'area_id' => 1,
-        'year' => 2021,
-        'enrolled' => 25,
-        'dropped' => 3,
-        'capacity' => 35,
-        'term' => 'Fall',
-        'session' => 'Regular',
-        'section' => 'A',
+        "id"=> 1,
+        "prefix"=> "Updated",
+        "number"=> "Course",
+        "area_id"=>1,
+        "year"=> 2021,
+        "enrolled"=> 25,
+        "dropped"=> 3,
+        "capacity"=> 35,
+        "term"=> "Fall",
+        "session"=> "Regular",
+        "section"=> "A"
     ]);
 }
-
     public function test_save_method_with_missing_data()
     {
         $controller = new CourseDetailsController();

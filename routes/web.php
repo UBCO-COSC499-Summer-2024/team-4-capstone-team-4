@@ -105,10 +105,10 @@ Route::middleware([
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
-    Route::get('courses/course-details/user_id', [CourseDetailsController::class, 'show'])->where('user_id', '[0-9]+')->name('course-details')->middleware(CheckRole::class.':admin,dept_head,instructor');
-    Route::post('courses/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
-    Route::post('courses/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-    Route::get('courses/course-details/search', [CourseDetailsController::class, 'search'])->name('course-details.search');
+    Route::get('course-details/user_id', [CourseDetailsController::class, 'show'])->where('user_id', '[0-9]+')->name('course-details')->middleware(CheckRole::class.':admin,dept_head,instructor');
+    Route::post('course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+    Route::post('assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
+    Route::get('course-details/search', [CourseDetailsController::class, 'search'])->name('course-details.search');
 });
 
 Route::middleware([
