@@ -105,15 +105,45 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
+    protected function validateUniqueRows()
+    {
+        $uniqueCombinations = [];
+
+        foreach ($this->rows as $index => $row) {
+            $combination = implode('-', [
+                $row['number'],
+                $row['area_id'],
+                $row['section'],
+                $row['term'],
+                $row['session'],
+                $row['year']
+            ]);
+
+            if (in_array($combination, $uniqueCombinations)) {
+                $this->addError("rows.{$index}.duplicate", 'This combination of fields as already been entered. Please create a different course');
+                return false;
+            }
+
+            $uniqueCombinations[] = $combination;
+        }
+
+        return true;
+    }
+
     public function handleSubmit() {
         $this->courseExists = false;
 
         // dd($this->rows);
         $this->validate();
+
+        if (!$this->validateUniqueRows()) {
+            return;
+        }
     
         foreach ($this->rows as $index => $row) {
             $prefix = '';
             // dd($row);
+
             
             switch ($row['area_id']) {
                 case 1:
