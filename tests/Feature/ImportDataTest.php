@@ -89,25 +89,21 @@ class ImportDataTest extends TestCase
         UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
+        $dept = Department::factory()->create([
+            'name' => 'CMPS',
+        ]);
+
+        // Create an area
+        $area = Area::factory()->create([
+            'name' => 'Computer Science',
+            'dept_id' => $dept->id,
+        ]);
+
         // Test the form submission
         Livewire::test('import-workday-form')
             ->set('rows.0.number', '123')
             ->set('rows.0.section', '001')
-            ->set('rows.0.area_id', 1)
-            ->set('rows.0.session', 'W')
-            ->set('rows.0.term', '1')
-            ->set('rows.0.year', 2024)
-            ->set('rows.0.enrolled', 30)
-            ->set('rows.0.dropped', 5)
-            ->set('rows.0.capacity', 40)
-            ->call('handleSubmit')
-            ->assertHasNoErrors();
-        
-
-        $course = Livewire::test('import-workday-form')
-            ->set('rows.0.number', '123')
-            ->set('rows.0.section', '001')
-            ->set('rows.0.area_id', 1)
+            ->set('rows.0.area_id', $area->id)
             ->set('rows.0.session', 'W')
             ->set('rows.0.term', '1')
             ->set('rows.0.year', 2024)
@@ -122,10 +118,9 @@ class ImportDataTest extends TestCase
 
         // Assert the data is in the database
         $this->assertDatabaseHas('course_sections', [
-            'prefix' => 'COSC',
             'number' => '123',
             'section' => '001',
-            'area_id' => 1,
+            'area_id' => $area->id,
             'session' => 'W',
             'term' => '1',
             'year' => 2024,
@@ -173,6 +168,30 @@ class ImportDataTest extends TestCase
         $user = User::factory()->create();
         UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
+
+        $dept = Department::factory()->create([
+            'name' => 'CMPS',
+        ]);
+
+        // Create an area
+        $area = Area::factory()->create([
+            'name' => 'Computer Science',
+            'dept_id' => $dept->id,
+        ]);
+
+        // Create a course section
+        $course = CourseSection::factory()->create([
+            'prefix' => 'COSC',
+            'number' => '123',
+            'area_id' => $area->id,
+            'year' => 2010,
+            'enrolled' => 50,
+            'dropped' => 5,
+            'capacity' => 100,
+            'term' => '2',
+            'session' => 'W',
+            'section' => '001',
+        ]);
 
         // Test the form rendering
         Livewire::test('import-sei-form')

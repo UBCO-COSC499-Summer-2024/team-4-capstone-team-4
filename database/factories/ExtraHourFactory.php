@@ -27,7 +27,7 @@ class ExtraHourFactory extends Factory {
         // Ensure we have at least one User Role with the role 'instructor'
         $instructor = UserRole::where('role', 'instructor')->inRandomOrder()->first();
 
-        // Ensure we have at least one Area 
+        // Ensure we have at least one Area
         $area = Area::inRandomOrder()->first();
 
         return [
@@ -36,9 +36,9 @@ class ExtraHourFactory extends Factory {
             'hours' => $this->faker->numberBetween(1, 730),
             'year'=> $this->faker->year(),
             'month' => $this->faker->numberBetween(1, 12),
-            'assigner_id' => $assigner ? $assigner->id : UserRole::factory()->create(['role' => 'dept_head'])->id,
-            'instructor_id' => $instructor ? $instructor->id : UserRole::factory()->create(['role' => 'instructor'])->id,
-            'area_id' => $area ? $area->id : Area::factory()->create()->id,
+            'assigner_id' => UserRole::where('role', ['dept_head', 'dept_staff'])->pluck('id')->random(),
+            'instructor_id' => UserRole::where('role', 'instructor')->pluck('id')->random(),
+            'area_id' => Area::pluck('id')->random(),
         ];
     }
 }

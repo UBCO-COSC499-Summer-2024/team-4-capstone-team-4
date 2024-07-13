@@ -14,16 +14,17 @@ use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ImportSeiForm extends Component
 {
-    public $testCid = 123456;
     public $rows = [];
 
+    public $isDuplicate = false;
     public $showModal = false;
+    public $hasCourses = false;
 
     public function mount() {
-
         if(Session::has('seiFormData')) {
             $this->rows = Session::get('seiFormData');
         } else {
@@ -36,7 +37,6 @@ class ImportSeiForm extends Component
     public function rules() {
         $rules = [];
 
-     
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.cid"] = 'required|integer';
             $rules["rows.{$index}.q1"] = 'required|numeric|min:1|max:5';
@@ -86,8 +86,31 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
-    public function updated($propertyName)
+    public function checkDuplicate()
     {
+        $this->resetValidation(); // Reset any previous validation errors
+        $selectedCourses = [];
+        $duplicateIndices = [];
+
+        foreach ($this->rows as $index => $row) {
+            if ($row['cid'] !== "" && in_array($row['cid'], $selectedCourses)) {
+                $duplicateIndices[] = $index;
+            } else {
+                $selectedCourses[] = $row['cid'];
+            }
+        }
+
+        if (!empty($duplicateIndices)) {
+            $this->isDuplicate = true;
+            foreach ($duplicateIndices as $index) {
+                $this->addError("rows.{$index}.cid", 'This course has already been selected.');
+            }
+        } else {
+            $this->isDuplicate = false;
+        }
+
+        // dd($duplicateIndices, $selectedCourses);
+
         // Save form data to session
         Session::put('seiFormData', $this->rows);
     }
@@ -100,11 +123,14 @@ class ImportSeiForm extends Component
     public function deleteRow($row) {
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
+
+        $this->checkDuplicate();
         Session::put('seiFormData', $this->rows);
     }
 
     public function handleSubmit() {
 
+        $this->checkDuplicate();
         // dd($this->rows);
         $this->validate();
     
@@ -173,6 +199,12 @@ class ImportSeiForm extends Component
         ->orderBy('course_sections.number')
         ->orderBy('course_sections.section')
         ->get();
+
+        if(!$courses->isEmpty()) {
+            $this->hasCourses = true;
+        } else {
+            $this->hasCourses = false;
+        }
 
         return view('livewire.import-sei-form', [
             "courses" => $courses,
