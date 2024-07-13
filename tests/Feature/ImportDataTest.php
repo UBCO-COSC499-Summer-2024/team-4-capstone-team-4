@@ -169,6 +169,30 @@ class ImportDataTest extends TestCase
         UserRole::factory()->create(['user_id' => $user->id, 'role' => 'dept_head']);
         $this->actingAs($user);
 
+        $dept = Department::factory()->create([
+            'name' => 'CMPS',
+        ]);
+
+        // Create an area
+        $area = Area::factory()->create([
+            'name' => 'Computer Science',
+            'dept_id' => $dept->id,
+        ]);
+
+        // Create a course section
+        $course = CourseSection::factory()->create([
+            'prefix' => 'COSC',
+            'number' => '123',
+            'area_id' => $area->id,
+            'year' => 2010,
+            'enrolled' => 50,
+            'dropped' => 5,
+            'capacity' => 100,
+            'term' => '2',
+            'session' => 'W',
+            'section' => '001',
+        ]);
+
         // Test the form rendering
         Livewire::test('import-sei-form')
             ->assertSee('cid')

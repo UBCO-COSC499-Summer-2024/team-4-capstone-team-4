@@ -75,6 +75,9 @@
             </div>
         </div>    
 
+        @error('rows.'.$index.'.exists')<span class="import-error mx-2">{{ $message }}</span>@enderror
+        @error('rows.'.$index.'.duplicate')<span class="import-error mx-2">{{ $message }}</span>@enderror
+
         @endforeach
 
        
