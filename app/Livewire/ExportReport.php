@@ -19,7 +19,16 @@ class ExportReport extends Component
     }
 
     public function render(){
-        $instructor = UserRole::findOrFail($this->instructor_id);
+        // Validate that instructor_id is a number
+        if (!is_numeric($this->instructor_id)) {
+            abort(400, 'Invalid instructor ID');
+        }
+
+        $instructor = UserRole::where('id', $this->instructor_id)->where('role', 'instructor')->first();
+        if (!$instructor) {
+            // Handle the case when the instructor_id is not for instructor role
+            abort(404, 'Instructor not found');
+        }
 
         $year = $this->year;
 
