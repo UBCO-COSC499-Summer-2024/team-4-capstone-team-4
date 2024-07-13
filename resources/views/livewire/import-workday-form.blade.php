@@ -75,7 +75,7 @@
             </div>
         </div>    
 
-        @error('rows.'.$index.'.exists')<span class="import-error">{{ $message }}</span>@enderror
+        @error('rows.'.$index.'.exists')<span class="import-error mx-2">{{ $message }}</span>@enderror
         {{-- @if($courseExists)
             <div>
                 <div class="import-error">Course already exists. Navigate to Courses to make changes</div>
