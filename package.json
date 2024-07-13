@@ -17,7 +17,9 @@
         "vite-plugin-laravel": "^0.3.1"
     },
     "dependencies": {
-        "toastify": "^2.0.1",
-        "chart.js": "^4.4.3"
+        "chart.js": "^4.4.3",
+        "jspdf": "^2.5.1",
+        "jspdf-autotable": "^3.8.2",
+        "toastify": "^2.0.1"
     }
 }

@@ -64,10 +64,14 @@
                         targetHours="{{ $performance->target_hours ?? '-' }}"
                         rating="{{ $performance->score ?? '-' }}"
                         src="{{ $user->profile_photo_url }}"
+                        instructorId="{{ $user->instructor_id }}"
                     />
                 @endforeach
+            @else
+                <tr>
+                    <td colspan="6" class="text-center">No users</td>
+                </tr>
             @endif
-
         </tbody>
     </x-staff-table>
     </form>
