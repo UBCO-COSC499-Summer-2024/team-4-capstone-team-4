@@ -1,6 +1,10 @@
 <x-app-layout>
-    <div class="content coming-soon">
-        <h1>{{ __('Leaderboard') }}</h1>
-        <p>{{ __('Coming Soon!') }}</p>
+    <div class="content">
+        <div class="leaderboard px-4">
+            @livewire('leaderboard')
+        </div>
     </div>
 </x-app-layout>
+
+
+
