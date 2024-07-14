@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="handleSubmit" class="import-form relative">
+    <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="header flex justify-between py-2 bg-gray-200">
             <div class="w-4/12 text-center px-1">Course</div>
             <div class="w-4/12 text-center px-1">Instructor</div>

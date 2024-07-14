@@ -1,7 +1,7 @@
 <div class="relative">
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
-            <div class="py-4 header flex justify-between bg-gray-50 text-gray-700 ">
+            <div class="py-2 flex justify-between bg-gray-50 text-gray-700">
                 <div class="w-1/12 text-center mx-2">#</div>
                 <div class="w-4/12 text-center mx-2">Area</div>
                 <div class="w-2/12 text-center mx-2">Number</div>
@@ -16,7 +16,7 @@
             </div>
 
             @foreach ($rows as $index => $row)
-            <div class="import-form-row flex justify-between items-center bg-white border-b">
+            <div class="import-form-row">
                 <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                 <div class="w-4/12">
                     <select wire:model="rows.{{$index}}.area_id" class="import-form-select">
@@ -69,7 +69,7 @@
                     @error('rows.'.$index.'.capacity')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-1/12 flex justify-center">
-                    <button type="button" wire:click.prevent="deleteRow({{ $index }})" class="p-2 flex items-center text-red-500 border-red-500 border rounded hover:bg-red-500 hover:text-white">
+                    <button type="button" wire:click.prevent="deleteRow({{ $index }})" class="import-form-delete-button">
                         <span class="material-symbols-outlined">delete</span>
                     </button>
                 </div>
