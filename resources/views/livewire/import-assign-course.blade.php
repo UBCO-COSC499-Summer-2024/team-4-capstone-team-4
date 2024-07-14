@@ -38,7 +38,7 @@
     @if(!$hasCourses) 
         <div class="flex flex-col items-center justify-center mt-10">
             <div class="text-center text-4xl">No courses to Assign!</div>
-            <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 my-5 rounded-sm hover:bg-green-500 hover:text-white" 
+            <button class="bg-white text-green-500 border border-green-500 py-2 px-4 mx-2 my-5 rounded-lg hover:bg-green-500 hover:text-white" 
             onclick="location.href='{{ route('import') }}'">
             Create more
             </button>

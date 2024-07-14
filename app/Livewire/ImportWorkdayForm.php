@@ -170,7 +170,7 @@ class ImportWorkdayForm extends Component
                 ->first();
 
             if ($course != null) {
-                $this->addError("rows.{$index}.exists", 'This course has already been created. You can view find it in list of courses and edit it on the Courses page');
+                $this->addError("rows.{$index}.exists", 'This course has already been created. You can view it and edit it on the Courses page');
                 $this->courseExists = true;
             } else {
                
