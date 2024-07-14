@@ -134,7 +134,7 @@ input[type="file"] {
 }
 
 .assign-input {
-  @apply px-2;
+  @apply text-sm;
 }
 
 }
