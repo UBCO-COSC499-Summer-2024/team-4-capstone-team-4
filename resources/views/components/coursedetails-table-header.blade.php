@@ -1,4 +1,4 @@
-<thead class="bg-gray-100">
+<thead class="bg-gray-100 sticky-header">
     <tr>
         @foreach(['courseNames' => 'Course Name', 'departmentName' => 'Department Name', 'enrolledStudents' => 'Enrolled Students', 'droppedStudents' => 'Dropped Students', 'courseCapacity' => 'Course Capacity', 'seiData' => 'SEI Data'] as $field => $label)
             <th scope="col" class="sortable {{$sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : ''}} px-6 py-3 text-left text-xs font-large text-gray-5000 uppercase tracking-wider">

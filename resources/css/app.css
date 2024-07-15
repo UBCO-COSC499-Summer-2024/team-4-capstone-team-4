@@ -586,34 +586,3 @@ a,
     padding-right: 10px;
 }
 
-th.editable {
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    outline: none;
-}
-
-th.editable:focus {
-    border: 1px solid #007bff;
-    background-color: #e9f7fe;
-}
-
-.editable {
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    outline: none;
-}
-
-.editable:focus {
-    border: 1px solid #007bff;
-    background-color: #e9f7fe;
-}
-
-.modal-dialog-centered {
-    display: flex;
-    align-items: center;
-    min-height: calc(100% - 1rem);
-}
-
-.modal-dialog-centered .modal-content {
-    margin: auto;
-}
