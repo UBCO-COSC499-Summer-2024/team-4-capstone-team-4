@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserRole;
 use App\Models\Department;
 use App\Models\Area;
+use App\Models\User;
 use App\Models\AreaPerformance;
 use App\Models\DepartmentPerformance;
 use App\Models\RoleAssignment;
@@ -15,6 +16,7 @@ use App\Models\ExtraHour;
 use App\Models\CourseSection;
 use App\Models\Teach;
 use App\Models\InstructorPerformance;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Controller class for handling chart-related actions.
@@ -99,6 +101,7 @@ class ChartController extends Controller {
             }
 
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
             $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
@@ -130,13 +133,13 @@ class ChartController extends Controller {
                     $chart6 = $this->instructorProgressBar($performance, $currentMonth);
                     
                     return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
+                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 } else {
                     return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance'));
+                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 }
             } else {
-                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
             }
         } elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -218,6 +221,45 @@ class ChartController extends Controller {
             'December' => 0,
         ]);
         $performance->save();
+    }
+
+    /**
+     * Retrieve and order instructor performances by score for a specified department.
+     *
+     * This function fetches the instructor performances for all instructors
+     * who teach a course, have a service role, or extra hours in an area 
+     * within a specified department. The results are ordered by their performance scores.
+     *
+     * @param int $deptId The ID of the department for which to retrieve performances.
+     * @return array An array containing the names and scores of instructors.
+     */
+    private function leaderboardPrev($deptId, $currentYear) {
+        $usersQuery = User::query();
+        $usersQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('instructor_performance', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
+                    ->where('instructor_performance.year', $currentYear);
+            })
+            ->where('areas.dept_id', $deptId);
+
+        $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
+            ->orderBy('instructor_performance.score', 'desc')->take(5);
+
+        $users = $usersQuery->get();
+
+        $leaderboardData = [];
+
+        foreach ($users as $user) {
+            $name = $user->firstname . ' ' . $user->lastname;
+            $score = $user->score;
+            $leaderboardData[] = ['name' => $name, 'score' => $score];
+        }
+
+        return $leaderboardData;
     }
 
     /**

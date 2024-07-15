@@ -116,12 +116,28 @@ class UserRole extends Model {
         return null; // Return null if the user is not an instructor
     }
 
-    public function areas(){
+    public function areas() {
         return $this->belongsToMany(Area::class, 'teaches', 'instructor_id', 'course_section_id')
-                    ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
-                    ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
-                    ->select('a.*')
+                        ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
+                        ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
+                        ->select('a.*')
+                        ->distinct()
+                        ->union($this->extraHoursAreas())  
+                        ->union($this->serviceRolesAreas()); 
+        
+    }
+    
+    private function extraHoursAreas() {
+        return $this->belongstoMany(Area::class, ExtraHour::class, 'instructor_id', 'id', 'id', 'area_id')
                     ->distinct();
+    }
+    
+    public function serviceRolesAreas() {
+        return $this->belongstoMany(Area::class, 'serviceRoles', 'instructor_id', 'service_role_id')
+                    ->join('service_roles', 'service_role_id', '=', 'serviceRoles.service_role_id')
+                    ->join('areas as a', 'a_id', '=', 'service_roles.area_id')
+                    ->select('a.*')
+                    ->distinct();  
     }
 
     public function extraHours(){
