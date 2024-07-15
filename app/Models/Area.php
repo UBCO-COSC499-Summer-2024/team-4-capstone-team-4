@@ -71,8 +71,8 @@ class Area extends Model {
         return Area::with('department')->get()->groupBy('dept_id');
     }
 
-    public static function getInstructors($area_id){
-        $courses = self::getCourseSections($area_id);
+    public static function getInstructors($area_id, $year){
+        $courses = self::getCourseSections($area_id, $year);
         $instructors = collect();
 
         foreach($courses as $course){
@@ -86,16 +86,16 @@ class Area extends Model {
         return $uniqueInstructors;
     }
 
-    public static function getCourseSections($area_id){
-        return CourseSection::where('area_id', $area_id)->get();
+    public static function getCourseSections($area_id, $year){
+        return CourseSection::where('area_id', $area_id)->where('year', $year)->get();
     }
 
-    public static function getServiceRoles($area_id){
-        return ServiceRole::where('area_id', $area_id)->get();
+    public static function getServiceRoles($area_id, $year){
+        return ServiceRole::where('area_id', $area_id)->where('year', $year)->get();
     }
 
-    public static function getExtraHours($area_id){
-        return ExtraHour::where('area_id', $area_id)->get();
+    public static function getExtraHours($area_id, $year){
+        return ExtraHour::where('area_id', $area_id)->where('year', $year)->get();
     }
 
 }
