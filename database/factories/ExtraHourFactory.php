@@ -27,11 +27,11 @@ class ExtraHourFactory extends Factory {
         // Ensure we have at least one User Role with the role 'instructor'
         $instructor = UserRole::where('role', 'instructor')->inRandomOrder()->first();
 
-        // Ensure we have at least one Area 
+        // Ensure we have at least one Area
         $area = Area::inRandomOrder()->first();
 
         return [
-            'name' => fake()->randomElement(['Meeting','Conference', 'Committee']),
+            'name' => $this->faker->randomElement(['Meeting', 'Committee', 'Conference']),
             'description' => $this->faker->sentence,
             'hours' => $this->faker->numberBetween(1, 730),
             'year'=> $this->faker->year(),

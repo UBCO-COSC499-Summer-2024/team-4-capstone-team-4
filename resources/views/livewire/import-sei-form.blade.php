@@ -1,5 +1,4 @@
 <div>
-
     <div class="italic">*IM = Interpolated Medium</div>
     <form wire:submit="handleSubmit" class="import-form relative">
         <div class="header flex justify-between p-2 bg-gray-200">
@@ -14,17 +13,19 @@
             <div class="w-3/12 text-center"></div>
         </div>
 
+        @if($hasCourses)
         @foreach ($rows as $index => $row)
         <div class="import-form-row flex justify-between items-center p-2 border-b">
             <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
             <div class="import-input w-6/12">
-                <select wire:model="rows.{{$index}}.cid" class="p-1 w-full">
+                <select wire:model="rows.{{$index}}.cid" wire:change='checkDuplicate' class="p-1 w-full">
                     <option value="">Select Course</option>
                     @foreach ($courses as $course)
                         <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
                     @endforeach
                 </select>
                 @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
+
             </div>
             <div class="import-input w-3/12">
                 <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q1" class="p-1 w-full">
@@ -57,18 +58,26 @@
                 </button>
             </div>
         </div>    
-
         @endforeach
         
         <div class="mt-4 flex justify-end space-x-2">
             <button type="button" wire:click="addRow" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Row</button>
-            <button type="submit" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
+            <button type="submit" @if($isDuplicate) disabled class="bg-gray-300 p-2 rounded" @endif class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
         </div>
     </form>
 
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="text-white text-xl text-center m-80">Saving...</div>
     </div>
+    @endif
+
+    @if(!$hasCourses)
+        <div class="flex flex-col items-center justify-center mt-10">
+            <div class="text-center text-4xl">No courses created yet</div>
+            <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
+         
+        </div>
+    @endif
 
     @if(session('success'))
         @if($showModal) 

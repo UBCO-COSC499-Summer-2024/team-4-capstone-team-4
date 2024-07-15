@@ -6,6 +6,7 @@
             <div class="w-3/12 text-center px-1"></div>
         </div>
 
+        @if($hasCourses)
         @foreach($assignments as $index => $assignment)
         <div class="import-form-row flex justify-between items-center px-2 py-6 border-b">
             @php
@@ -32,6 +33,17 @@
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="text-white text-xl text-center m-80">Saving...</div>
     </div>
+    @endif
+
+    @if(!$hasCourses) 
+        <div class="flex flex-col items-center justify-center mt-10">
+            <div class="text-center text-4xl">No courses to Assign!</div>
+            <button class="bg-white text-green-500 outline outline-green-500 py-2 px-4 mx-2 my-5 rounded-sm hover:bg-green-500 hover:text-white" 
+            onclick="location.href='{{ route('import') }}'">
+            Create more
+            </button>
+        </div>
+    @endif
 
     @if(session('success'))
         @if($showModal) 
