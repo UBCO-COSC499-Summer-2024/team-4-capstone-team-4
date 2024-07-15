@@ -14,6 +14,8 @@ Clockify report
   * #5: Leaderboard Back End
   * #6: Leaderboard Tests
   * #7: Create and Implement Value for Score in the Database
+  * #8: Make Leaderboard Department Specific
+  * #9: Add leaderboard preview to Dshboard
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -25,12 +27,14 @@ Clockify report
 | Leaderboard back End      | Completed   |
 | Leaderboard Tests         | Completed   |
 | Score Calculation         | In Progress |
+| Dept. Spec. Leaderboard   | Completed   |
+| Leaderboard Preview       | Completed   |
 
 ### Cycle Goal Review 
-Added more tests for the chart controller/dashboard view to cover all baseline tests. All tests now pass. Established a design template for the leaderbpard and used Catherine's staff page as a model to construct the front and back end for the Leaderboard. Ensured that routes were restricted to users with permission to access, and created tests to ensure the leaderboard's functionality. All tests are curently passing, tests cover baseline functionality. Fixed the bug issue with the pie charts on the department head dashboard, and adjusted them to fit the dashboard container. All added canges were pulled into pre-dev-integration, and will be added to developement soon. Created a formula for score to rank instructors in our gamification.
+Added more tests for the chart controller/dashboard view to cover all baseline tests. All tests now pass. Established a design template for the leaderbpard and used Catherine's staff page as a model to construct the front and back end for the Leaderboard. Ensured that routes were restricted to users with permission to access, and created tests to ensure the leaderboard's functionality. All tests are curently passing, tests cover baseline functionality. Fixed the bug issue with the pie charts on the department head dashboard, and adjusted them to fit the dashboard container. All added changes were pulled into pre-dev-integration, and will be added to developement soon. Created a formula for score to rank instructors in our gamification. Added a preview of the leaderboard to the department dashboard, and edited the leaderboard to be specific to the department of the viewer.
 
 ### Next Cycle Goals 
- * Begin Leaderboard integration for Dashboards
+ * Add Leaderboard Rank to Instructor Dashboard
  * Add Badges to the Database for Ranking Gamification
  * Add Instructor Performance page between Report Export page and Staff/Leaderboard pages
  * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
