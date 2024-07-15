@@ -15,7 +15,7 @@ Clockify report
   * #6: Leaderboard Tests
   * #7: Create and Implement Value for Score in the Database
   * #8: Make Leaderboard Department Specific
-  * #9: Add leaderboard preview to Dshboard
+  * #9: Add leaderboard preview to Dashboard
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
