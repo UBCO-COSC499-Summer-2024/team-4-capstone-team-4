@@ -52,7 +52,7 @@
 
     <td class="svcr-list-item-cell" data-column="instructors">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            @forelse ($serviceRole->instructors->take(2) as $instructor)
+            @forelse ($serviceRole->instructors->take(1) as $instructor)
                 {{ $instructor->getName() }}@if (!$loop->last), @endif
             @empty
                 <span class="text-gray-400">No instructors</span>

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('courseTableBody'); // Ensure this ID matches the table body ID
+    if (!searchInput || !tableBody) return; // Exit if elements are not found
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
     searchInput.addEventListener('input', function () {

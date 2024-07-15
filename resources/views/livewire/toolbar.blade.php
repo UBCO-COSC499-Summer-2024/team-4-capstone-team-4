@@ -161,3 +161,47 @@
         </section>
     @endforeach
 </section>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', initElementActions);
+    document.addEventListener('livewire:init', initElementActions);
+    document.addEventListener('livewire:load', initElementActions);
+    document.addEventListener('livewire:update', initElementActions);
+
+    function initElementActions() {
+        // for the search inputs, focus on the input when the icon is clicked and clear the search when the close icon is clicked
+        const searchIcon = document.querySelector('.toolbar-search-icon');
+        const searchInput = document.querySelector('.toolbar-search');
+        const clearSearch = document.querySelector('.toolbar-clear-search');
+
+        const filterValue = document.querySelector('.toolbar-filter-value');
+        const closeFilter = document.querySelector('.toolbar-clear-filter');
+        const filterIcon = document.querySelector('.toolbar-filter-icon');
+
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => {
+                searchInput.focus();
+            });
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+            });
+        }
+
+        if (filterIcon) {
+            filterIcon.addEventListener('click', () => {
+                filterValue.focus();
+            });
+        }
+
+        if (closeFilter) {
+            closeFilter.addEventListener('click', () => {
+                filterValue.value = '';
+                filterValue.focus();
+            });
+        }
+
+    }
+</script>

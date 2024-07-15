@@ -23,7 +23,7 @@ class ServiceRolesList extends Component
     public $selectedSort = '';
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
-    public $pageSize = 20;
+    public $pageSize = 10;
     public $selectedItems = [];
     public $showExtraHourForm = false;
     public $serviceRoleIdForModal; // To store the serviceRoleId
@@ -172,8 +172,17 @@ class ServiceRolesList extends Component
 
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
+            // dd($this->searchCategory, $searchableColumns, in_array($this->searchCategory, $searchableColumns));
             if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
-                $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+                // dd($this->searchCategory);
+                // $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+                if ($this->searchCategory === 'area_id') {
+                    $serviceRolesQuery->whereHas('area', function ($query) {
+                        $query->where('name', 'like', '%' . $this->searchQuery . '%');
+                    });
+                } else {
+                    $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+                }
             } else {
                 $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
                     foreach ($searchableColumns as $column) {
@@ -187,18 +196,10 @@ class ServiceRolesList extends Component
         //     $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
         // }
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-            if ($this->selectedFilter === 'area') {
-                // If filtering by 'area', query the Area model
-                $area = Area::find($this->filterValue);
-
-                // Check if the area exists
-                if ($area) {
-                    $serviceRolesQuery->where('area_id', $area->id);
-                } else {
-                    // Handle the case where the area doesn't exist
-                    // You might want to log this or display an error message
-                    $serviceRolesQuery->where('area_id', null); // Or any other logic
-                }
+            if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
+                $serviceRolesQuery->whereHas('area', function ($query) {
+                    $query->where('name', 'like', '%' . $this->filterValue . '%');
+                });
             } else {
                 // If filtering by other columns of ServiceRole
                 $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
