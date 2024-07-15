@@ -17,7 +17,7 @@
             </div>
             <x-report-dropdown/>
         </div>
-        <div id="exportContent">
+        <div id="exportDeptContent">
             @if ($areas->isNotEmpty())
                 <h2 class="font-bold">Courses Performance</h2>
                 <h3>Summary</h3>
@@ -77,7 +77,7 @@
 
                 @foreach($areas as $area)
                     <h3>{{$area->name}}</h3>
-                    <table class="w-full bg-white border border-gray-300 text-center">
+                    <table class="areaCourseTable w-full bg-white border border-gray-300 text-center">
                         <thead>
                             <tr class="text-white bg-slate-500">
                                 <th>Course Section</th>
@@ -130,7 +130,6 @@
                 <table id="performanceTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>
                         @php
-                            $areaHours = json_decode($areaPerformance->total_hours, true);
                             $deptHours = json_decode($deptPerformance->total_hours, true);
                             $totalSvcroles = 0;
                             $totalExtraHours = 0;
@@ -139,7 +138,7 @@
                             <th>Sub area</th>
                             <th>Num. of Service Roles</th>
                             <th>Num. of Extra Hours</th>
-                            @foreach ($areaHours as $month => $hours)
+                            @foreach ($deptHours as $month => $hours)
                                 <th>{{ substr($month, 0, 3) }} Hours</th>
                             @endforeach
                             <th>Total Hours</th>
@@ -148,6 +147,7 @@
                     <tbody>
                         @foreach ($areas as $area)
                             @php
+                                $areaPerformance = $area->areaPerformance->where('year', $year)->first();
                                 $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                                 $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
                                 $areaHours = json_decode($areaPerformance->total_hours, true);
@@ -188,10 +188,11 @@
                     <h3>{{ $area->name }}</h3>
                     @php
                         $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
+                        $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
                         $areaHours = json_decode($areaPerformance->total_hours, true);
                     @endphp
-                    @if ($svcroles->isNotEmpty())
-                        <table id="svcRoleTable" class="w-full bg-white border border-gray-300 text-center">
+                    <table class="areaPerfTable w-full bg-white border border-gray-300 text-center">
+                        @if ($svcroles->isNotEmpty())
                             <thead>
                                 <tr class="text-white bg-slate-500">
                                     <th>Service Role</th>
@@ -225,39 +226,34 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
-                    @endif
+                        @endif
 
-                    @php
-                        $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
-                    @endphp
-                    @if ($extraHours->isNotEmpty())
-                        <table id="extraHoursTable" class="w-full bg-white border border-gray-300 text-center">
+                        @if ($extraHours->isNotEmpty())
                             <thead>
                                 <tr class="text-white bg-slate-500">
-                                    <th>Extra Hour</th>
-                                    <th>Instructor</th>
-                                    <th>Month</th>
-                                    <th>Hours</th>
+                                    <th colspan="4">Extra Hour</th>
+                                    <th colspan="4">Instructor</th>
+                                    <th colspan="4">Month</th>
+                                    <th colspan="3">Hours</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($extraHours as $extraHour)
                                     <tr>
-                                        <td class="border border-gray-300">{{$extraHour->name}}</td>
-                                        <td class="border border-gray-300">
+                                        <td colspan="4" class="border border-gray-300">{{$extraHour->name}}</td>
+                                        <td colspan="4" class="border border-gray-300">
                                             @php
                                                 $instructor = $extraHour->instructor;
                                             @endphp
                                             {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}<br>
                                         </td>
-                                        <td class="border border-gray-300">{{$extraHour->month}}</td>
-                                        <td class="border border-gray-300">{{$extraHour->hours}}</td>
+                                        <td colspan="4" class="border border-gray-300">{{ \DateTime::createFromFormat('!m', $extraHour->month)->format('F') }}</td>
+                                        <td colspan="3" class="border border-gray-300">{{$extraHour->hours}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
-                    @endif
+                        @endif
+                    </table>
                     <br>
                 @endforeach
             @endif
