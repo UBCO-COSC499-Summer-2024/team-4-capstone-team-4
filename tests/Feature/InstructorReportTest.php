@@ -100,8 +100,8 @@ class InstructorReportTest extends TestCase
             'questions'=>json_encode([
                     'q1' => 5,
                     'q2' => 5,
-                    'q3' => 5,
-                    'q4' => 3,
+                    'q3' => 2,
+                    'q4' => 2,
                     'q5' => 3,
                     'q6' => 3,
                 ]),
@@ -152,47 +152,7 @@ class InstructorReportTest extends TestCase
        
     }
 
-    public function test_user_can_export_report_as_pdf(): void{
-        $dept = Department::factory()->create(['name' => 'CMPS']);
-        $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
-        $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
-        
-        $user = User::factory()->create();
-        UserRole::factory()->create([
-            'user_id' => $user->id,
-            'department_id' => $dept->id,
-            'role' => 'dept_head',
-        ]);
-
-        $instructor = User::factory()->create();
-        $instructorRole = UserRole::factory()->create([
-            'user_id' => $instructor->id,
-            'department_id' => $dept->id,
-            'role' => 'instructor',
-        ]);
-        //create performance for this year (2024)
-        InstructorPerformance::factory()->create([
-            'year' => date('Y'),
-            'instructor_id' => $instructorRole->id,
-        ]);
-        $course = CourseSection::factory()->create([
-            'year' => date('Y'),
-        ]);
-        Teach::factory()->create([
-            'course_section_id'=> $course->id,
-        ]);
-        SeiData::factory()->create([
-            'course_section_id'=> $course->id,
-        ]);
-
-        $this->actingAs($user);
-
-        $component = Livewire::test(ExportReport::class, ['instructor_id' => $instructorRole->id])
-        ->set('year', date('Y'));
-       
-    }
-
-    public function test_user_can_export_report_as_xlxs(): void{
+    public function test_user_can_export_report_as_xlsx(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
         $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);

@@ -14,7 +14,7 @@
             {{ __('As pdf') }}
         </x-dropdown-link>
         <x-dropdown-link id="exportExcel" wire:click="exportAsExcel">
-            {{ __('As xlxs') }}
+            {{ __('As xlsx') }}
         </x-dropdown-link>
     </x-slot>
 </x-dropdown>
