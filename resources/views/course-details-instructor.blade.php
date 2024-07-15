@@ -3,16 +3,10 @@
         <div class="fixed-header">
             <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                 <div class="flex items-center space-x-4">
-                    <h1 class="justify-between text-2xl font-bold text-gray-1000">{{ __('Department Details') }}</h1>
-                </div>
-                <div class="flex items-center space-x-4 ml-auto">
-                    <x-save-button />
-                    <x-cancel-button />
+                    <h1 class="justify-between text-2xl font-bold text-gray-1000">{{ __('My Courses') }}</h1>
                 </div>
                 <div class="flex items-center space-x-4 ml-auto">
                     <x-coursedetails-search :user="$user" />
-                    <x-assign-button />
-                    <x-edit-button />
                 </div>
             </div>
         </div>
