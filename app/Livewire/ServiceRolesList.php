@@ -172,11 +172,8 @@ class ServiceRolesList extends Component
 
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
-            // dd($this->searchCategory, $searchableColumns, in_array($this->searchCategory, $searchableColumns));
             if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
-                // dd($this->searchCategory);
-                // $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
-                if ($this->searchCategory === 'area_id') {
+                if ($this->searchCategory === 'area_id' || $this->searchCategory === 'area') {
                     $serviceRolesQuery->whereHas('area', function ($query) {
                         $query->where('name', 'like', '%' . $this->searchQuery . '%');
                     });
@@ -192,29 +189,20 @@ class ServiceRolesList extends Component
             }
         }
 
-        // if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-        //     $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
-        // }
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
             if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
                 $serviceRolesQuery->whereHas('area', function ($query) {
                     $query->where('name', 'like', '%' . $this->filterValue . '%');
                 });
             } else {
-                // If filtering by other columns of ServiceRole
                 $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
             }
         }
-
-        // if (!empty($this->selectedSort)) {
-        //     $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
-        // }
 
         if (!empty($this->selectedSort)) {
             if (str_contains($this->selectedSort, '.')) {
                 [$relation, $column] = explode('.', $this->selectedSort);
 
-                // Handle sorting by 'area.name' specifically
                 if ($relation === 'area' && $column === 'name') {
                     $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
                                      ->orderBy('areas.name', $this->selectedSortOrder);
@@ -234,7 +222,13 @@ class ServiceRolesList extends Component
         }
 
         if (!empty($this->selectedGroup)) {
-            $serviceRolesQuery->groupBy($this->selectedGroup, 'id');
+            if ($this->selectedGroup === 'area' || $this->selectedGroup === 'area_id') {
+                $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
+                ->select('service_roles.*', 'areas.name as area_name', 'areas.id as area_id')
+                ->groupBy('areas.id', 'areas.name', 'service_roles.id');
+            } else {
+                $serviceRolesQuery->groupBy($this->selectedGroup, 'service_roles.id');
+            }
         }
 
         $serviceRoles = $this->pageMode === 'pagination'
