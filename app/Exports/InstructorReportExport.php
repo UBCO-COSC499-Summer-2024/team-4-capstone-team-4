@@ -32,6 +32,6 @@ class InstructorReportExport implements FromView
 
         $extraHours = $instructor->extraHours()->where('year', $this->year)->get();
         
-        return view('reports.export-csv', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours', 'year'));
+        return view('reports.export-xlsx', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours', 'year'));
     }
 }

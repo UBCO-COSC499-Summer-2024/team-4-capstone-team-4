@@ -21,7 +21,7 @@
             @if ($areas->isNotEmpty())
                 <h2 class="font-bold">Courses Performance</h2>
                 <h3>Summary</h3>
-                <table id="coursesTable" class="w-full bg-white border border-gray-300 text-center">
+                <table id="courseTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>    
                         <tr class="text-white bg-slate-500">
                             <th>Sub area</th>
@@ -225,19 +225,15 @@
                                         <td class="border border-gray-300">{{ array_sum($areaHours)}}</td>
                                     </tr>
                                 @endforeach
-                            </tbody>
                         @endif
 
                         @if ($extraHours->isNotEmpty())
-                            <thead>
                                 <tr class="text-white bg-slate-500">
                                     <th colspan="4">Extra Hour</th>
                                     <th colspan="4">Instructor</th>
                                     <th colspan="4">Month</th>
                                     <th colspan="3">Hours</th>
                                 </tr>
-                            </thead>
-                            <tbody>
                                 @foreach ($extraHours as $extraHour)
                                     <tr>
                                         <td colspan="4" class="border border-gray-300">{{$extraHour->name}}</td>
@@ -245,7 +241,7 @@
                                             @php
                                                 $instructor = $extraHour->instructor;
                                             @endphp
-                                            {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}<br>
+                                            {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}
                                         </td>
                                         <td colspan="4" class="border border-gray-300">{{ \DateTime::createFromFormat('!m', $extraHour->month)->format('F') }}</td>
                                         <td colspan="3" class="border border-gray-300">{{$extraHour->hours}}</td>
