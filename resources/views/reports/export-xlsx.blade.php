@@ -9,6 +9,17 @@
     <tbody></tbody>
 </table>
 
+<table>
+    <thead>
+        <tr>
+            <th style="font-weight:bold; font-size:15px;">
+                Course Performance
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
 @if ($courses->isNotEmpty())
     <table>
         <thead>
@@ -64,6 +75,18 @@
         'September' => 0, 'October' => 0, 'November' => 0, 'December' => 0,
     ];
 @endphp
+
+<table>
+    <thead>
+    </thead>
+    <tbody>
+        <tr>
+            <th style="font-weight:bold; font-size:15px;">
+                Service Roles and Extra Hours Performance
+            </th>
+        </tr>
+    </tbody>
+</table>
 
 @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
     <table>
