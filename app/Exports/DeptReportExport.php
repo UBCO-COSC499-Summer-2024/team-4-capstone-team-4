@@ -29,4 +29,6 @@ class DeptReportExport implements FromView
 
         return view('reports.dept-export-xlsx', compact('dept', 'areas', 'year', 'deptPerformance'));
     }
+
+    
 }

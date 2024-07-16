@@ -9,21 +9,33 @@
     <tbody></tbody>
 </table>
 
+<table>
+    <thead>
+        <tr>
+            <th style="font-weight:bold; font-size:15px;">
+                Course Performance
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
 @if ($areas->isNotEmpty())
-    <p>Courses Performance</p>
-    <p>Summary</p>
     <table>
-        <thead>    
+        <thead>
             <tr>
-                <th>Sub area</th>
-                <th>Num. of Instructors</th>
-                <th>Num. of Course Sections</th>
-                <th>Enrolled (%)</th>
-                <th>Dropped (%)</th>
-                <th>SEI Average (IM)</th>
+                <th style="font-weight:bold;">Summary</th>
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <th style="font-weight:bold;">Sub area</th>
+                <th style="font-weight:bold;">Num. of Instructors</th>
+                <th style="font-weight:bold;">Num. of Course Sections</th>
+                <th style="font-weight:bold;">Enrolled (%)</th>
+                <th style="font-weight:bold;">Dropped (%)</th>
+                <th style="font-weight:bold;">SEI Average (IM)</th>
+            </tr>
             @php
                 $totalInstructors = 0;
                 $totalCourses = 0;
@@ -53,34 +65,34 @@
             @endforeach
             @if ($deptPerformance)
                 <tr>
-                    <td>Total</td>
-                    <td>{{ $totalInstructors }}</td>
-                    <td>{{ $totalCourses }}</td>
-                    <td>{{ $deptPerformance->enrolled_avg }}</td>
-                    <td>{{ $deptPerformance->dropped_avg }}</td>
-                    <td>{{ $deptPerformance->sei_avg }}</td>
+                    <td><strong>Total</strong></td>
+                    <td><strong>{{ $totalInstructors }}</strong></td>
+                    <td><strong>{{ $totalCourses }}</strong></td>
+                    <td><strong>{{ $deptPerformance->enrolled_avg }}</strong></td>
+                    <td><strong>{{ $deptPerformance->dropped_avg }}</strong></td>
+                    <td><strong>{{ $deptPerformance->sei_avg }}</strong></td>
                 </tr>
             @endif
         </tbody>
     </table>
 
-    <br>
-
     @foreach($areas as $area)
-        <p>{{$area->name}}</p>
         <table>
             <thead>
                 <tr>
-                    <th>Course Section</th>
-                    <th>Term</th>
-                    <th>Year</th>
-                    <th>Instructor</th>
-                    <th>Enrolled (%)</th>
-                    <th>Dropped (%)</th>
-                    <th>SEI Average (IM)</th>
+                    <th colspan="7" style="font-weight:bold;">{{$area->name}}</th>
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <th style="font-weight:bold;">Course Section</th>
+                    <th style="font-weight:bold;">Term</th>
+                    <th style="font-weight:bold;">Year</th>
+                    <th style="font-weight:bold;">Instructor</th>
+                    <th style="font-weight:bold;">Enrolled (%)</th>
+                    <th style="font-weight:bold;">Dropped (%)</th>
+                    <th style="font-weight:bold;">SEI Average (IM)</th>
+                </tr>
                 @php
                     $courses = \App\Models\Area::getCourseSections($area->id, $year);
                     $areaPerformance = $area->areaPerformance->where('year', $year)->first();
@@ -103,21 +115,28 @@
                 @endforeach
                 @if ($areaPerformance)
                     <tr>
-                        <td colspan="4">Total</td>
-                        <td>{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</td>
-                        <td>{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
-                        <td>{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
+                        <td colspan="4"><strong>Total</strong></td>
+                        <td><strong>{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</strong></td>
+                        <td><strong>{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</strong></td>
+                        <td><strong>{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</strong></td>
                     </tr>
                 @endif
             </tbody>
         </table>
-        <br>
     @endforeach
 
-    <br>
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="font-weight:bold; font-size:15px;">
+                    Service Roles and Extra Hours Performance
+                </th>
+            </tr>
+        </tbody>
+    </table>
 
-    <p>Service Roles & Extra Hours Performance</p>
-    <p>Summary</p>
     <table>
         <thead>
             @php
@@ -125,17 +144,20 @@
                 $totalSvcroles = 0;
                 $totalExtraHours = 0;
             @endphp
-            <tr>
-                <th>Sub area</th>
-                <th>Num. of Service Roles</th>
-                <th>Num. of Extra Hours</th>
-                @foreach ($deptHours as $month => $hours)
-                    <th>{{ substr($month, 0, 3) }} Hours</th>
-                @endforeach
-                <th>Total Hours</th>
-            </tr>
+             <tr>
+                <th style="font-weight:bold;">Summary</th>
+             </tr>
         </thead>
         <tbody>
+            <tr>
+                <th style="font-weight:bold;">Sub area</th>
+                <th style="font-weight:bold;">Num. of Service Roles</th>
+                <th style="font-weight:bold;">Num. of Extra Hours</th>
+                @foreach ($deptHours as $month => $hours)
+                    <th style="font-weight:bold;">{{ substr($month, 0, 3) }} Hours</th>
+                @endforeach
+                <th style="font-weight:bold;">Total Hours</th>
+            </tr>
             @foreach ($areas as $area)
                 @php
                     $areaPerformance = $area->areaPerformance->where('year', $year)->first();
@@ -162,39 +184,39 @@
                 @endif
             @endforeach
             <tr>
-                <td>Total</td>
-                <td>{{ $totalSvcroles }}</td>
-                <td>{{ $totalExtraHours }}</td>
+                <td><strong>Total</strong></td>
+                <td><strong>{{ $totalSvcroles }}</strong></td>
+                <td><strong>{{ $totalExtraHours }}</strong></td>
                 @foreach ($deptHours as $month => $hours)
-                    <td>{{ $hours }}</td>   
+                    <td><strong>{{ $hours }}</strong></td>   
                 @endforeach
-                <td>{{ array_sum($deptHours) }}</td>
+                <td><strong>{{ array_sum($deptHours) }}</strong></td>
             </tr> 
         </tbody>
     </table>
 
-    <br>
-
     @foreach ($areas as $area)
-        <p>{{ $area->name }}</p>
-        @php
-            $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
-            $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
-            $areaHours = json_decode($areaPerformance->total_hours, true);
-        @endphp
         <table>
-            @if ($svcroles->isNotEmpty())
-                <thead>
+            <thead>
+                <tr>
+                    <th colspan="6" style="font-weight:bold;">{{$area->name}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
+                    $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
+                    $areaHours = json_decode($areaPerformance->total_hours, true);
+                @endphp
+                @if ($svcroles->isNotEmpty())
                     <tr>
-                        <th>Service Role</th>
-                        <th>Instructors</th>
+                        <th style="font-weight:bold;">Service Role</th>
+                        <th style="font-weight:bold;">Instructors</th>
                         @foreach ($areaHours as $month => $hours)
-                            <th>{{ substr($month, 0, 3) }} Hours</th>
+                            <th style="font-weight:bold;">{{ substr($month, 0, 3) }} Hours</th>
                         @endforeach
-                        <th>Total Hours</th>
+                        <th style="font-weight:bold;">Total Hours</th>
                     </tr>
-                </thead>
-                <tbody>
                     @foreach ($svcroles as $svcRole)
                         <tr>
                             <td>{{$svcRole->name}}</td>
@@ -216,35 +238,30 @@
                             <td>{{ array_sum($areaHours)}}</td>
                         </tr>
                     @endforeach
-                </tbody>
-            @endif
+                @endif
 
-            @if ($extraHours->isNotEmpty())
-                <thead>
+                @if ($extraHours->isNotEmpty())
                     <tr>
-                        <th colspan="4">Extra Hour</th>
-                        <th colspan="4">Instructor</th>
-                        <th colspan="4">Month</th>
-                        <th colspan="3">Hours</th>
+                        <th style="font-weight:bold;">Extra Hour</th>
+                        <th style="font-weight:bold;">Instructor</th>
+                        <th style="font-weight:bold;">Month</th>
+                        <th style="font-weight:bold;">Hours</th>
                     </tr>
-                </thead>
-                <tbody>
                     @foreach ($extraHours as $extraHour)
                         <tr>
-                            <td colspan="4">{{$extraHour->name}}</td>
-                            <td colspan="4">
+                            <td>{{$extraHour->name}}</td>
+                            <td>
                                 @php
                                     $instructor = $extraHour->instructor;
                                 @endphp
-                                {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}<br>
+                                {{ $instructor->user->firstname }} {{ $instructor->user->lastname }}
                             </td>
-                            <td colspan="4">{{ \DateTime::createFromFormat('!m', $extraHour->month)->format('F') }}</td>
-                            <td colspan="3">{{$extraHour->hours}}</td>
+                            <td>{{ \DateTime::createFromFormat('!m', $extraHour->month)->format('F') }}</td>
+                            <td>{{$extraHour->hours}}</td>
                         </tr>
                     @endforeach
-                </tbody>
-            @endif
+                @endif
+            </tbody>
         </table>
-        <br>
     @endforeach
 @endif
