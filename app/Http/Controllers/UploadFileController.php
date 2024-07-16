@@ -9,16 +9,72 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadFileController extends Controller {
 
+    private function readCSV($filePath)
+    {
+        $csvData = [];
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            $firstLine = fgets($handle);
+
+
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                // Ensure each row has at least two elements to form a key-value pair
+                if (count($row) >= 2) {
+                    $key = $row[0];
+                    $value = $row[1];
+                    $csvData[$key] = $value;
+                }
+            }
+            fclose($handle);
+        }
+
+        if ($firstLine) {
+            $csvData['Course Name'] = $firstLine;
+        }
+
+        return $csvData;
+    }
+
     public function upload(Request $request) {
-        // Validate the request
+        $trimCSV = [];
+                // Validate the request
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt|max:2048',
+            'files.*' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
-        // Handle the uploaded file
-        $filePath = $request->file('file')->getRealPath();
+        $uploadedFiles = [];
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+            $csvData = $this->readCSV($filePath);
+    
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        dd($uploadedFiles);
+
+        foreach ($csvData as $key => $value) {
+            switch ($key) {
+                case 'Course Name':
+                    $trimCSV[$key] = $value;
+                    break;
+                case 'Academic Period':
+                    $trimCSV[$key] = $value;
+                    break;
+                case 'Enrolled/Capacity':
+                    $trimCSV[$key] = $value;
+                    break;
+            }
+        }
+    
+
+        // dd($trimCSV);
 
         session()->flash('message', 'File uploaded successfully!');
+        session()->put('csvData', $csvData);
+        session()->put('trimCSV', $trimCSV);
 
         // Process the file as needed
         // For demonstration, just dump the file path

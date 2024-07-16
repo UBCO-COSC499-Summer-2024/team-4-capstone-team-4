@@ -1,3 +1,9 @@
+@php
+    // $csvData = session('csvData');
+    $trimCSV = session('trimCSV');
+@endphp
+
+
 @if (session()->has('message'))
     <div class="alert alert-success">
         {{ session('message') }}
@@ -6,9 +12,19 @@
 
 <form action="{{ route('upload.file') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <input type="file" name="file">
+    <input type="file" name="files[]" multiple>
     <button type="submit">Submit</button>
 </form>
+
+{{-- @foreach ($csvData as $key => $value)
+    <div>{{$key}}</div>
+    <div>{{$value}}</div>
+@endforeach --}}
+
+@foreach ($trimCSV as $key => $value)
+    <div>{{$key}} : {{$value}}</div>
+@endforeach
+
 
 {{-- <div class="import-container">
     <div class="import-form-container">    
