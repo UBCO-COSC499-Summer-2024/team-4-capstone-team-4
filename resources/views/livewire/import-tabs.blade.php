@@ -13,7 +13,8 @@
 
     <div class=" mt-5">
         @if ($activeTab === 'file')
-            @livewire('import-file')
+            {{-- @livewire('import-file') --}}
+            <x-upload-file />
         @elseif ($activeTab === 'sei')
             @livewire('import-sei-form')
         @elseif ($activeTab === 'workday')

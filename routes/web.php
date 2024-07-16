@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Controllers\UploadFileController;
 use App\Http\Middleware\CheckRole;
 
 // Route::get('/', function () {
@@ -159,6 +160,7 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+    Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
 });
 
 Route::middleware([

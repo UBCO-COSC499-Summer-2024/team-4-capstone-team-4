@@ -1,10 +1,24 @@
+@if (session()->has('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+@endif
+
+<form action="{{ route('upload.file') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file">
+    <button type="submit">Submit</button>
+</form>
+
 {{-- <div class="import-container">
     <div class="import-form-container">    
-        <form wire:submit.prevent="upload" enctype="multipart/form-data">
-            @csrf
+        <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+       
+        @csrf
             <div class="import-select">
                 <label class="import-label" for="data">Choose a type:</label>
-                <select wire:model="data" id="data">
+
+                <select name="data" id="data">
                     <option value="sei">SEI Data</option>
                     <option value="saab">Workday Data</option>
                 </select> 
@@ -14,49 +28,22 @@
                 <label class="import-label">Upload a File:</label>
                 <div class="drop-zone">
                     <span class="drop-zone-prompt">Drop file here or <div class="drop-zone-button">Browse</div></span>
-                    <input type="file" wire:model="file" class="drop-zone-input outline outline-blue-500">
-                </div>
+                    <input type="file" name="file" class="drop-zone-input outline outline-blue-500">
+                  </div>
+                 
             </div>
             <span id="file-name" class="drop-zone-file-name"></span>
             <button type="submit" class="btn btn-primary mt-3">Upload</button>
         </form>
 
         @if ($errors->any())
-            <div>
-                <x-validation-errors />
-            </div>  
-        @endif
-
-        @if (session()->has('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
-
-        @if (!empty($csvData))
-            <div class="csv-data mt-3">
-                <h3>Uploaded CSV Data:</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            @foreach ($csvData[0] as $header)
-                                <th>{{ $header }}</th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (array_slice($csvData, 1) as $row)
-                            <tr>
-                                @foreach ($row as $cell)
-                                    <td>{{ $cell }}</td>
-                                @endforeach
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        <div>
+            <x-validation-errors />
+        </div>  
         @endif
     </div> 
+
+
 </div>
 
 <script>
