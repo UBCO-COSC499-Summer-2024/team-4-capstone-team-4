@@ -1,8 +1,8 @@
 <div class="relative">
-    <button class="bg-white text-blue-500 border border-blue-500 py-2 px-4 mx-2 rounded-lg hover:bg-blue-500 hover:text-white" 
+    {{-- <button class="bg-white text-blue-500 border border-blue-500 py-2 px-4 mx-2 rounded-lg hover:bg-blue-500 hover:text-white" 
                     onclick="location.href='{{ route('upload-file') }}'">
                     Upload File
-    </button>
+    </button> --}}
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
             <div class="py-2 flex justify-between bg-gray-50 text-gray-700">
