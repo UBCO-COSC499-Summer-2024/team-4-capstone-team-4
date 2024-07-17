@@ -22,7 +22,7 @@
             @if ($courses->isNotEmpty())
                 <table id="courseTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>    
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th>Course Section</th>
                             <th>Term</th>
                             <th>Year</th>
@@ -80,7 +80,7 @@
             @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
                 <table id="performanceTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th></th>
                             <th>Name</th>
                             <th>Year</th>
@@ -102,7 +102,7 @@
                                 @endphp
                                 <tr>
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-slate-500" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
                                     @endif
                                     <td class="border border-gray-300">{{ $role->name }}</td>
                                     <td class="border border-gray-300">{{ $role->year }}</td>
@@ -131,7 +131,7 @@
                                 @endphp
                                 <tr>
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-slate-500" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
                                     @endif
                                     <td class="border border-gray-300">{{ $hours->name }}</td>
                                     <td class="border border-gray-300">{{ $hours->year }}</td>

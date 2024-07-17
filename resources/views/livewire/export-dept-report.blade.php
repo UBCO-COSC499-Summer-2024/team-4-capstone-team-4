@@ -23,7 +23,7 @@
                 <h3>Summary</h3>
                 <table id="courseTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>    
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th>Sub area</th>
                             <th>Num. of Instructors</th>
                             <th>Num. of Course Sections</th>
@@ -79,7 +79,7 @@
                     <h3>{{$area->name}}</h3>
                     <table class="areaCourseTable w-full bg-white border border-gray-300 text-center">
                         <thead>
-                            <tr class="text-white bg-slate-500">
+                            <tr class="text-white bg-[#3b4779]">
                                 <th>Course Section</th>
                                 <th>Term</th>
                                 <th>Year</th>
@@ -134,7 +134,7 @@
                             $totalSvcroles = 0;
                             $totalExtraHours = 0;
                         @endphp
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th>Sub area</th>
                             <th>Num. of Service Roles</th>
                             <th>Num. of Extra Hours</th>
@@ -185,16 +185,18 @@
                 <br>
 
                 @foreach ($areas as $area)
-                    <h3>{{ $area->name }}</h3>
                     @php
                         $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                         $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
                         $areaHours = json_decode($areaPerformance->total_hours, true);
                     @endphp
+                    @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())   
+                        <h3>{{ $area->name }}</h3>
+                    @endif
                     <table class="areaPerfTable w-full bg-white border border-gray-300 text-center">
                         @if ($svcroles->isNotEmpty())
                             <thead>
-                                <tr class="text-white bg-slate-500">
+                                <tr class="text-white bg-[#3b4779]">
                                     <th>Service Role</th>
                                     <th>Instructors</th>
                                     @foreach ($areaHours as $month => $hours)
@@ -228,7 +230,7 @@
                         @endif
 
                         @if ($extraHours->isNotEmpty())
-                                <tr class="text-white bg-slate-500">
+                                <tr class="text-white bg-[#3b4779]">
                                     <th colspan="4">Extra Hour</th>
                                     <th colspan="4">Instructor</th>
                                     <th colspan="4">Month</th>
