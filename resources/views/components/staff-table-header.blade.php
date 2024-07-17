@@ -89,7 +89,7 @@
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
             <div class="flex items-center px-1.5 py-2 text-xs">
-                Rating
+                Score
                 <button wire:click="sort('score')">
                     @if($sortField === 'score' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">
