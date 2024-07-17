@@ -2,6 +2,66 @@
 
 ## Date Range:
 
+- July 12 - July 16
+
+## Features in the Project Plan Cycle:
+
+- Testing
+- Refactor UI to be consistent
+- Instructor Report Page & Export
+- Course Details Page
+- Service Roles - Audit Logs, Requests
+- Gamification & Leaderboard
+- Import Page - File Upload
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july12_july17.png)
+![image of tasks](./tasks/inprogress_july12_july17.png)
+![image of tasks](./tasks/inreview_july12_july17.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july12_july17.png)
+![image of tasks](./tasks/inprogress_july12_july17.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july12_july17.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july12_july17.png)
+![image of clockify report](./clockify/individual_july12_july17.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july12_july17.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july12_july17.png)
+![image of tasks](./tasks/inprogress_july12_july17.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_july12_july17.png)
+![image of test report](./testing/feature_july12_july17.png)
+
+## Overview:
+This cycle the team continued to work on the remaining features, which are each assigned to members individually. We got all tests to pass on our integrated system and that version currently exists on the branch 'pre-dev-integration'. We will continue to evaluate our progress to see if we have the time to add extra functionality.
+
+## Goals for next cycle
+- File upload functionality
+- Gamification features
+- Unit testing
+- Feature testing
+- Refactor some UI
+- Exporting reports
+- Service role audit logs
+
+## Date Range:
+
 - July 10 - July 11
 
 ## Features in the Project Plan Cycle:
