@@ -20,8 +20,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function enableEditing() {
         document.querySelectorAll('td[contenteditable="false"]').forEach(td => {
-            td.setAttribute('contenteditable', 'true');
+            row.querySelectorAll('td').forEach((cell, index) => {
+                if ([2, 3, 4].includes(index)) { 
+                    cell.setAttribute('contenteditable', 'true');
+                }
         });
+    });
         toggleButtonVisibility(editButton);
     }
 
