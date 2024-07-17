@@ -113,4 +113,3 @@ Route::middleware([
         return view('dept-report');
     })->name('dept-report');
 });
-
