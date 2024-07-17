@@ -24,7 +24,7 @@ $userRoles = auth()->user()->roles;
                 <!-- Department View with Button -->
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount"
-                    :deptPerformance="$deptPerformance" />
+                    :deptPerformance="$deptPerformance" :leaderboard="$leaderboard" />
                 </section>
                 <section class="dash-bottom">
                     <x-department-lists :deptAssignmentCount="$deptAssignmentCount" :chart2="$chart2" :chart3="$chart3" :chart4="$chart4" />
@@ -33,7 +33,7 @@ $userRoles = auth()->user()->roles;
                 <!-- Department View -->
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount" 
-                    :deptPerformance="$deptPerformance" />
+                    :deptPerformance="$deptPerformance" :leaderboard="$leaderboard" />
                 </section>
                 <section class="dash-bottom">
                     <x-department-lists :deptAssignmentCount="$deptAssignmentCount" :chart2="$chart2" :chart3="$chart3" :chart4="$chart4" />

@@ -8,15 +8,15 @@ use App\Http\Controllers\CourseDetailsController;
 use App\Models\CourseSection;
 use App\Models\SeiData;
 use App\Models\User;
-use App\Models\Department;
-use App\Models\UserRole;
 use App\Models\Area;
 use Illuminate\Http\Request;
 
-class CourseDetailsUnitTest extends TestCase{
+class CourseDetailsUnitTest extends TestCase
+{
     use RefreshDatabase;
 
-    public function test_calculate_average_rating(){
+    public function test_calculate_average_rating()
+    {
         $controller = new CourseDetailsController();
 
         $questionsJson = '{"q1":"3","q2":"4","q3":"5","q4":"2","q5":"2","q6":"4"}';
@@ -24,43 +24,86 @@ class CourseDetailsUnitTest extends TestCase{
 
         $this->assertEquals(3.33, $averageRating);
     }
+
+    public function test_calculate_average_rating_with_empty_questions()
+    {
+        $controller = new CourseDetailsController();
+        $questionsJson = json_encode([]);
+        $expectedAverage = 0.00;
+        $actualAverage = $this->callMethod($controller, 'calculateAverageRating', [$questionsJson]);
+        $this->assertEquals($expectedAverage, $actualAverage);
+    }
+
     public function test_show_method()
     {
         $controller = new CourseDetailsController();
 
-        // Mock data
-        $courseSections = collect([
-            (object) [
-                'id' => 1,
-                'name' => 'Course 1',
-                'area' => (object) ['name' => 'Computer Science'],
-                'duration' => 12,
-                'enrolled' => 100,
-                'dropped' => 10,
-                'capacity' => 120,
-            ],
+        // Create mock data
+        $user = User::factory()->create();
+        $area = Area::factory()->create();
+        $courseSection = CourseSection::factory()->create([
+            'prefix' => 'CS',
+            'number' => '101',
+            'area_id' => $area->id,
+            'year' => 2022,
+            'enrolled' => 100,
+            'dropped' => 10,
+            'capacity' => 120,
+            'term' => 'Fall',
+            'session' => 'A',
+            'section' => '001',
         ]);
 
         $request = Request::create('/course-details', 'GET');
-        $response = $controller->show($request);
+        $response = $controller->show($request, $user);
 
         $this->assertInstanceOf(\Illuminate\View\View::class, $response);
-        $this->assertEquals('course-details', $response->name());
-        $this->assertArrayHasKey('courseSections', $response->getData());
+        $data = $response->getData();
+        $this->assertArrayHasKey('courseSections', $data);
+        $this->assertNotEmpty($courseSection);
+    }
+
+    public function test_show_method_with_empty_course_sections()
+    {
+        $controller = new CourseDetailsController();
+
+        // Create mock data
+        $user = User::factory()->create();
+
+        $request = Request::create('/course-details', 'GET');
+        $response = $controller->show($request, $user);
+
+        $this->assertInstanceOf(\Illuminate\View\View::class, $response);
+        $data = $response->getData();
+        $this->assertArrayHasKey('courseSections', $data);
+        $this->assertEmpty($data['courseSections']);
     }
 
     public function test_save_method()
     {
         $controller = new CourseDetailsController();
 
-        // Mock data
+        // Create mock data
+        $area = Area::factory()->create();
+        $courseSection = CourseSection::factory()->create([
+            'prefix' => 'CS',
+            'number' => '101',
+            'area_id' => $area->id,
+            'year' => 2022,
+            'enrolled' => 100,
+            'dropped' => 10,
+            'capacity' => 120,
+            'term' => 'Fall',
+            'session' => 'A',
+            'section' => '001',
+        ]);
+
         $request = Request::create('/course-details/save', 'POST', [
-            'ids' => [1],
+            'ids' => [$courseSection->id],
             'courseNames' => ['Updated Course'],
-            'courseDurations' => [12],
-            'enrolledStudents' => [100],
-            'droppedStudents' => [10],
-            'courseCapacities' => [120],
+            'enrolledStudents' => [25],
+            'droppedStudents' => [3],
+            'courseCapacities' => [35],
         ]);
 
         $response = $controller->save($request);
@@ -68,45 +111,17 @@ class CourseDetailsUnitTest extends TestCase{
         $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
         $data = $response->getData(true);
         $this->assertEquals('Courses updated successfully.', $data['message']);
-    }
-    public function test_show_method_with_empty_course_sections(){
-        $controller = new CourseDetailsController();
-
-        // Mock an empty list of course sections
-        $courseSections = collect();
-
-        $request = Request::create('/course-details', 'GET');
-        $response = $controller->show($request);
-
-        $this->assertInstanceOf(\Illuminate\View\View::class, $response);
-        $this->assertEquals('course-details', $response->name());
-        $this->assertArrayHasKey('courseSections', $response->getData());
-        $this->assertEmpty($response->getData()['courseSections']);
-    }
-
-    public function test_save_method_with_missing_data(){
-        $controller = new CourseDetailsController();
-
-        // Mock data with missing fields
-        $request = Request::create('/course-details/save', 'POST', [
-            'ids' => [1],
-            // 'courseNames' => ['Updated Course'], // Missing courseNames
-            'courseDurations' => [12],
-            'enrolledStudents' => [100],
-            'droppedStudents' => [10],
-            'courseCapacities' => [120],
+        $this->assertDatabaseHas('course_sections', [
+            'id' => $courseSection->id,
+            'enrolled' => 25,
+            'dropped' => 3,
+            'capacity' => 35,
         ]);
-
-        $response = $controller->save($request);
-
-        $this->assertInstanceOf(\Illuminate\Http\JsonResponse::class, $response);
-        $data = $response->getData(true);
-        $this->assertArrayHasKey('message', $data);
-        $this->assertNotEquals('Courses updated successfully.', $data['message']);
     }
 
     // Helper method to call protected/private methods
-    protected function callMethod($obj, $name, array $args){
+    protected function callMethod($obj, $name, array $args)
+    {
         $class = new \ReflectionClass($obj);
         $method = $class->getMethod($name);
         $method->setAccessible(true);

@@ -23,6 +23,7 @@ services:
             - InsightNet
         depends_on:
             - insightdb
+            - selenium
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
@@ -72,6 +73,14 @@ services:
             - '.:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
             - insightdb
+        networks:
+            - InsightNet
+    selenium:
+        image: 'selenium/standalone-chrome'
+        extra_hosts:
+        - 'host.docker.internal:host-gateway'
+        volumes:
+            - '/dev/shm:/dev/shm'
         networks:
             - InsightNet
 

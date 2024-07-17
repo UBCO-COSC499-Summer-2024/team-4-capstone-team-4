@@ -94,10 +94,12 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
 ])->group(function () {
-    Route::get('/courses', function () {
-        return view('courses');
-    })->name('courses');
+    Route::get('course-details/user_id', [CourseDetailsController::class, 'show'])->where('user_id', '[0-9]+')->name('course-details')->middleware(CheckRole::class.':admin,dept_head,instructor');
+    Route::post('course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+    Route::post('assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
+    Route::get('course-details/search', [CourseDetailsController::class, 'search'])->name('course-details.search');
 });
 
 Route::middleware([
@@ -138,10 +140,8 @@ Route::middleware([
     // Logs
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
 })->group(function(){
-    Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
-        Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
-        Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-});
+    return view('svcroles');
+    })->name('svcroles.audit-logs');
 
 Route::get('/privacy-policy', function () {
     return view('policy');
@@ -199,9 +199,21 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+     CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
     })->name('instructor-report');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+     CheckRole::class.':admin,dept_head,dept_staff',
+])->group(function () {
+    Route::get('/dept-report', function () {
+        return view('dept-report');
+    })->name('dept-report');
 });
 
