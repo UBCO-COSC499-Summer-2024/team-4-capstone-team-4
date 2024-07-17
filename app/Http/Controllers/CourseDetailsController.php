@@ -10,79 +10,75 @@ use Illuminate\Support\Facades\Log;
 
 class CourseDetailsController extends Controller {
 
-    public function show(Request $request, User $user){
+    public function show(Request $request, User $user)
+    {
+        $authenticatedUser = $request->user();
+
+        // Check if the authenticated user can access this user's course details
+        if ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head'])) {
+            abort(403, 'Unauthorized access.');
+        }
+
         $userRole = $user->roles->first()->role ?? 'guest';
         $query = $request->input('search', '');
 
         Log::info('User Role:', ['role' => $userRole]);
         Log::info('Search Query:', ['query' => $query]);
 
-        try {
-            if ($userRole === 'dept_head') {
-                $courseSections = CourseSection::with('area')
-                    ->when($query, function ($queryBuilder) use ($query) {
-                        $queryBuilder->where('prefix', 'like', "%{$query}%")
-                            ->orWhere('number', 'like', "%{$query}%");
-                    })
-                    ->get();
-            } else if ($userRole === 'instructor') {
-                $courseSections = CourseSection::with('area')
-                    ->whereHas('teaches', function ($queryBuilder) use ($user) {
-                        $queryBuilder->where('instructor_id', $user->id);
-                    })
-                    ->when($query, function ($queryBuilder) use ($query) {
-                        $queryBuilder->where('prefix', 'like', "%{$query}%")
-                            ->orWhere('number', 'like', "%{$query}%");
-                    })
-                    ->get();
-            } else {
-                return response()->json(['message' => 'Unauthorized access.'], 403);
-            }
-
-            Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-            
-            $courseSections = $courseSections->map(function ($section) {
-                $seiData = SeiData::where('course_section_id', $section->id)->first();
-                $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
-                $formattedName = sprintf('%s %s %s - %s%s %s', 
-                    $section->prefix,
-                    $section->number, 
-                    $section->section, 
-                    $section->year, 
-                    $section->session, 
-                    $section->term
-                );
-
-                return (object) [
-                    'id' => $section->id,
-                    'name' => $formattedName,
-                    'departmentName' => $section->area ? $section->area->name : 'Unknown',
-                    'enrolled' => $section->enrolled,
-                    'dropped' => $section->dropped,
-                    'capacity' => $section->capacity,
-                    'averageRating' => $averageRating,
-                ];
-            });
-
-            Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-
-            if ($request->ajax()) {
-                return response()->json($courseSections);
-            }
-
-            $sortField = 'courseName';
-            $sortDirection = 'asc';
-
-            if ($userRole === 'dept_head') {
-                return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection'));
-            } else if ($userRole === 'instructor') {
-                return view('course-details-instructor', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection'));
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching course details: ' . $e->getMessage(), ['exception' => $e]);
-            return response()->json(['message' => 'An error occurred while fetching course details.'], 500);
+        if (in_array($userRole, ['admin', 'dept_head'])) {
+            $courseSections = CourseSection::with('area')
+                ->when($query, function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('prefix', 'like', "%{$query}%")
+                        ->orWhere('number', 'like', "%{$query}%");
+                })
+                ->get();
+        } else {
+            $courseSections = CourseSection::with('area')
+                ->whereHas('teaches', function ($queryBuilder) use ($user) {
+                    $queryBuilder->where('instructor_id', $user->id);
+                })
+                ->when($query, function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('prefix', 'like', "%{$query}%")
+                        ->orWhere('number', 'like', "%{$query}%");
+                })
+                ->get();
         }
+
+        $courseSections = $courseSections->map(function ($section) {
+            $seiData = $section->seiData()->first() ?? null; // Ensure seiData relationship exists and get the first record if available
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+
+            $formattedName = sprintf('%s %s %s - %s%s %s',
+                $section->prefix,
+                $section->number,
+                $section->section,
+                $section->year,
+                $section->session,
+                $section->term
+            );
+
+            return (object)[
+                'id' => $section->id,
+                'name' => $formattedName,
+                'departmentName' => $section->area->name ?? 'Unknown',
+                'enrolled' => $section->enrolled,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
+        });
+
+        Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+        Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+
+        if ($request->ajax()) {
+            return response()->json($courseSections);
+        }
+
+        $sortField = 'courseName';
+        $sortDirection = 'asc';
+
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection'));
     }
     
     

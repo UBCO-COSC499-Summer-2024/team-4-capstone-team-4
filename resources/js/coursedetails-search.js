@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.getElementById('courseTableBody'); // Ensure this ID matches the table body ID
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
+    if (!searchInput || !tableBody) return;
     searchInput.addEventListener('input', function () {
         const query = searchInput.value.trim();
         fetch(`${courseDetailsRoute}?search=${query}`, {

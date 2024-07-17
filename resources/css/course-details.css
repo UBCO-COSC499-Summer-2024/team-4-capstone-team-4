@@ -39,9 +39,10 @@ th.editable:focus {
     top: 0;
     z-index: 1000;
     background-color: white; /* Ensure the background color matches your page */
-    padding: 10px 0;
+    padding: 10px 20px; /* Adjusted padding for better alignment */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    align-items: right;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -50,7 +51,6 @@ th.editable:focus {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0 20px;
 }
 
 .fixed-header .header-title {
