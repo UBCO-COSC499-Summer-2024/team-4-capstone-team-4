@@ -355,7 +355,7 @@ class StaffListTest extends TestCase
         ->set('sortField', 'firstname')
         ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
 
-        //sorting by subarea
+        //sorting by area
         Livewire::test(StaffList::class)
         ->set('sortDirection', 'asc')
         ->set('sortField', 'area')
