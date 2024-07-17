@@ -172,8 +172,15 @@ class ServiceRolesList extends Component
 
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
-
-        // if area requested in filter/sort/category/group, use the area id for each item and do the action based on area name and or description and or id.
+        $user = auth()->user();
+        $userRole = $user->roles;
+        if (($userRole->contains('role', 'dept_head') || $userRole->contains('role', 'dept_staff')) && !$userRole->contains('role', 'admin')) {
+            $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
+            // area then department
+            $serviceRolesQuery->whereHas('area', function ($query) use ($deptId) {
+                $query->where('dept_id', $deptId);
+            });
+        }
 
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);

@@ -25,7 +25,22 @@
 
     <td class="svcr-list-item-cell" data-column="area">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            {{ $serviceRole->area->name }}
+            @switch($serviceRole->area->name)
+                @case("Computer Science")
+                    <span class="text-blue-500" style="color: rgba(29, 154, 202, 1);">{{ __("COSC") }}</span>
+                    @break
+                @case("Mathematics")
+                    <span class="text-green-500" style="color: rgba(44, 160, 44, 1);">{{ __("MATH") }}</span>
+                    @break
+                @case("Physics")
+                    <span class="text-yellow-500" style="color: rgba(249, 168, 37, 1);">{{ __("PHYS") }}</span>
+                    @break
+                @case("Statistics")
+                    <span class="text-red-500" style="color: rgba(214, 39, 40, 1);">{{ __("STAT") }}</span>
+                    @break
+                @default
+
+            @endswitch
         </span>
         @php
             $selectedValue = [$serviceRole->area_id => $serviceRole->area->name];
@@ -91,12 +106,12 @@
                     :title="isEditing ? 'Save' : 'Edit'"
                     @click="isEditing = !isEditing"
                     wire:click="editServiceRole({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon" x-text="isEditing ? 'save' : 'edit'"></span>
+                <span class="material-symbols-outlined icon text-[#3b4779]" x-text="isEditing ? 'save' : 'edit'"></span>
             </button>
 
             <button class="svcr-list-item-action"
                     wire:click="confirmDelete({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon">delete</span>
+                <span class="material-symbols-outlined icon text-[#ea3030]">archive</span>
             </button>
         </div>
     </td>

@@ -429,8 +429,8 @@ class ManageServiceRole extends Component
         }
 
         if ($format === 'pdf' || $format === 'xlsx' || $format === 'csv') {
-            $serviceRole = ServiceRole::find($this->serviceRoleId);
-            return Excel::download(new SvcroleExport($serviceRole), 'service_roles.' . $format);
+            // $serviceRole = ServiceRole::find($this->serviceRole);
+            return Excel::download(new SvcroleExport($this->serviceRole), 'service_roles.' . $format);
         }
     }
 }

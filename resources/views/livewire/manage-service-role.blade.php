@@ -36,19 +36,19 @@
                 <span>Delete</span>
             </button>
             {{-- export --}}
-            <livewire:dropdown-element
+            {{-- <livewire:dropdown-element
                 title="Export"
                 id="exportDropdown"
                 pre-icon="file_download"
                 name="export"
                 :values="$exports"
-            />
-                {{-- <select id="exportDropdown" title="Export" class="form-select">
+            /> --}}
+                <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
                     @foreach ($exports as $name => $format)
                         <option value="{{ $format }}">{{ $name }}</option>
                     @endforeach
-                </select> --}}
+                </select>
         </div>
     </h1>
 

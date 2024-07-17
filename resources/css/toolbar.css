@@ -1,14 +1,15 @@
 .toolbar {
     padding: 4px;
-    border-radius: 50px;
+    border-radius: 4px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-    margin: 4px;
+    margin: 0 4px;
     /* max-height: 40px; */
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
     gap: 6px;
-    background: rgba(50, 50, 50, 0.9);
+    /* background: rgba(50, 50, 50, 0.9); */
+    background: rgba(59, 71, 121, 1);
     color: #999;
     flex-wrap: nowrap;
     position: sticky;
@@ -27,6 +28,20 @@
     gap: 6px;
     background: rgba(50, 50, 50, 0.9);
     color: #999;
+}
+
+* {
+    /* "rgba(37, 41, 150, 0.31)",
+    "rgba(29, 154, 202, 0.31)",
+    "rgba(249, 168, 37, 0.31)",
+    "rgba(241, 103, 69, 0.31)",
+    "rgba(124, 63, 88, 0.31)" ,
+    "rgba(255, 127, 14, 0.31)",
+    "rgba(44, 160, 44, 0.31)",
+    "rgba(214, 39, 40, 0.31)",
+    "rgba(148, 103, 189, 0.31)",
+    "rgba(140, 86, 75, 0.31)",
+    "rgba(127, 127, 127, 0.31)" */
 }
 
 .mini-toolbar.right,

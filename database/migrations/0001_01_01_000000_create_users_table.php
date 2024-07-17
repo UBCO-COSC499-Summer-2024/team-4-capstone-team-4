@@ -26,26 +26,28 @@ return new class extends Migration
             $table->timestamps();
         });
 
-            Schema::create('departments', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->timestamps();
-            });
+        Schema::create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('archived')->default(false);
+            $table->timestamps();
+        });
 
-            Schema::create('areas', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
-                $table->timestamps();
-            });
+        Schema::create('areas', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+            $table->boolean('archived')->default(false);
+            $table->timestamps();
+        });
 
-            Schema::create('user_roles', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-                $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
-                $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
-                $table->timestamps();
-            });
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
+            $table->timestamps();
+        });
 
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
@@ -57,6 +59,7 @@ return new class extends Migration
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -68,6 +71,7 @@ return new class extends Migration
             $table->json('monthly_hours');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
+            $table->boolean('archived')->default(false);
             $table->unique(['name', 'area_id']);
         });
 
@@ -93,6 +97,7 @@ return new class extends Migration
             $table->string('term');
             $table->string('session');
             $table->string('section');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -100,6 +105,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
             $table->json('questions');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
