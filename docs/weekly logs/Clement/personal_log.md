@@ -1,3 +1,38 @@
+## Cycle: July 12th - July 16th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_12_2024-07_16_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Adding features to individual service role page
+  * #2: Completing toolbar functionality for service roles list page
+  * #3: Starting export feature for service roles (individual and all items)
+
+### Progress Update (since 07/15/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Adding features to individual service role page</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Completing toolbar functionality for service roles list page</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Starting export feature for service roles (individual and all items)</td>
+        <td>In Progress (Buggy)</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+On July 15th, more features were successfully added to the individual service role page, and the toolbar functionality for the service roles list page was completed. On July 16th, the initial implementation of the export feature for servi
+
+---
+
 ## Cycle: July 10th - July 11th
 
 ### Timesheet
