@@ -1,5 +1,47 @@
 # Angelina's Personal Log 
 
+## Friday (7/12 - 7/16)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log712-716.png)
+
+### Current Tasks 
+  * #1: Create Dashboard Tests
+  * #2: Leaderboard Design
+  * #3: Add Pie Charts to Department Dashboard
+  * #4: Leaderboard Front End
+  * #5: Leaderboard Back End
+  * #6: Leaderboard Tests
+  * #7: Create and Implement Value for Score in the Database
+  * #8: Make Leaderboard Department Specific
+  * #9: Add leaderboard preview to Dashboard
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Dashboard Tests           | Completed   |
+| Leaderboard Design        | Completed   |
+| Add Pie Charts            | Completed   |
+| Leaderboard Front End     | Completed   |
+| Leaderboard back End      | Completed   |
+| Leaderboard Tests         | Completed   |
+| Score Calculation         | In Progress |
+| Dept. Spec. Leaderboard   | Completed   |
+| Leaderboard Preview       | Completed   |
+
+### Cycle Goal Review 
+Added more tests for the chart controller/dashboard view to cover all baseline tests. All tests now pass. Established a design template for the leaderbpard and used Catherine's staff page as a model to construct the front and back end for the Leaderboard. Ensured that routes were restricted to users with permission to access, and created tests to ensure the leaderboard's functionality. All tests are curently passing, tests cover baseline functionality. Fixed the bug issue with the pie charts on the department head dashboard, and adjusted them to fit the dashboard container. All added changes were pulled into pre-dev-integration, and will be added to developement soon. Created a formula for score to rank instructors in our gamification. Added a preview of the leaderboard to the department dashboard, and edited the leaderboard to be specific to the department of the viewer.
+
+### Next Cycle Goals 
+ * Add Leaderboard Rank to Instructor Dashboard
+ * Add Badges to the Database for Ranking Gamification
+ * Add Instructor Performance page between Report Export page and Staff/Leaderboard pages
+ * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
+ * Add score calculation method to Performance Model
+
+---
+
 ## Wednesday (7/10 - 7/11)
 
 ### Timesheet
@@ -12,7 +54,7 @@ Clockify report
   * #3: Seed Database for Testing
   * #4: Divide Leftover Features
   * #5: Leaderboard Design
-  * #6: Add Pie Carts to Department Dashboard
+  * #6: Add Pie Charts to Department Dashboard
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -22,7 +64,7 @@ Clockify report
 | Seed Database             | Completed   |
 | Divide Features           | Completed   |
 | Leaderboard Design        | In Progress |
-| Add Pie Chart             | In Progress |
+| Add Pie Charts            | In Progress |
 
 ### Cycle Goal Review 
 Updated database seeder and tested with Catherine's help. Completed and fixed all bugs in the chart controller. Created first 6 tests for the chart controller. Divided tasks among team members. Began planning for dashboard enhancement and leaderboard feature. Created a pie chart function for the chart controller. Debugged chart view.
