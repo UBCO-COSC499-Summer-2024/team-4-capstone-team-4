@@ -25,8 +25,8 @@
                     <thead>    
                         <tr class="text-white bg-[#3b4779]">
                             <th>Sub area</th>
-                            <th>Num. of Instructors</th>
-                            <th>Num. of Course Sections</th>
+                            <th>No. of Instructors</th>
+                            <th>No. of Course Sections</th>
                             <th>Enrolled (%)</th>
                             <th>Dropped (%)</th>
                             <th>SEI Average (IM)</th>
@@ -136,12 +136,12 @@
                         @endphp
                         <tr class="text-white bg-[#3b4779]">
                             <th>Sub area</th>
-                            <th>Num. of Service Roles</th>
-                            <th>Num. of Extra Hours</th>
+                            <th>No. of Service Roles</th>
+                            <th>No. of Extra Hrs</th>
                             @foreach ($deptHours as $month => $hours)
-                                <th>{{ substr($month, 0, 3) }} Hours</th>
+                                <th>{{ substr($month, 0, 3) }} Hrs</th>
                             @endforeach
-                            <th>Total Hours</th>
+                            <th>Total Hrs</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,9 +200,9 @@
                                     <th>Service Role</th>
                                     <th>Instructors</th>
                                     @foreach ($areaHours as $month => $hours)
-                                        <th>{{ substr($month, 0, 3) }} Hours</th>
+                                        <th>{{ substr($month, 0, 3) }} Hrs</th>
                                     @endforeach
-                                    <th>Total Hours</th>
+                                    <th>Total Hrs</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -85,9 +85,9 @@
                             <th>Name</th>
                             <th>Year</th>
                             @foreach ($subtotalHours as $month => $hours)
-                                <th>{{ substr($month, 0, 3) }} Hours</th>
+                                <th>{{ substr($month, 0, 3) }} Hrs</th>
                             @endforeach
-                            <th>Total Hours</th>
+                            <th>Total Hrs</th>
                         </tr>
                     </thead>
                     <tbody>
