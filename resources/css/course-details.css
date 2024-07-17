@@ -6,6 +6,7 @@ th.editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
     outline: none;
+    cursor: pointer;
 }
 
 th.editable:focus {
@@ -44,6 +45,7 @@ th.editable:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .fixed-header .header-container {
@@ -56,6 +58,7 @@ th.editable:focus {
 .fixed-header .header-title {
     font-size: 24px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .fixed-header .header-search {
@@ -75,4 +78,5 @@ th.editable:focus {
     z-index: 500;
     background-color: rgb(199, 199, 199);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
