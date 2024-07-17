@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
     if (!searchInput || !tableBody) return;
+
     searchInput.addEventListener('input', function () {
         const query = searchInput.value.trim();
         fetch(`${courseDetailsRoute}?search=${query}`, {
