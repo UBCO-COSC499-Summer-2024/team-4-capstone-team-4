@@ -1,4 +1,64 @@
-## Friday (7/10- 7/12)
+## Friday (7/12 - 7/17)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_12_2024-07_17_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Extra Form Functionality
+  * #2: Upload File
+  * #3: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Cleanup Tasks / #311
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Update UI / #356
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Upload File / #301
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I updated all the import page UI to be more unified with the rest of the application. I also began to work on the file upload functionality. I am having to rework some of the routing, but so far I am able to upload multiple files and pull the necessary data from them. Next step to is to either insert that into the database or populate a input form with the found data.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Fix routing
+  * Upload file UI
+  * Populate form from pulled data
+
+## Friday (7/10 - 7/12)
 
 ### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_10_2024-07_12_2024.pdf)
