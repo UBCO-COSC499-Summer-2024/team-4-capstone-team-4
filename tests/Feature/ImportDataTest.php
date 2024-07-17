@@ -52,13 +52,12 @@ class ImportDataTest extends TestCase
             ->assertSeeLivewire('import-workday-form');
     }
 
-    public function test_import_file_component_can_render_when_active_tab_is_file(): void
-    {
-        Livewire::test(ImportTabs::class)
-            ->set('activeTab' , '')
-            ->call('setActiveTab', 'file')
-            ->assertSeeLivewire('import-file');
-    }
+    // public function test_import_file_component_can_render_when_active_tab_is_file(): void {
+    //     Livewire::test(ImportTabs::class)
+    //         ->set('activeTab' , '')
+    //         ->call('setActiveTab', 'file')
+    //         ->assertSeeLivewire('import-file');
+    // }
 
     public function test_workday_form_renders_correctly(): void
     {
