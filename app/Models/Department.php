@@ -74,4 +74,9 @@ class Department extends Model {
     public function departmentPerformance() {
         return $this->hasMany(DepartmentPerformance::class, 'dept_id');
     }
+
+    public function userRoles()
+    {
+        return $this->hasMany(UserRole::class, 'department_id');
+    }
 }

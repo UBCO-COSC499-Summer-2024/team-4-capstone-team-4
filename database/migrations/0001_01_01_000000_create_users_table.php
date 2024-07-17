@@ -26,26 +26,26 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('departments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+            Schema::create('departments', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->timestamps();
+            });
 
-        Schema::create('areas', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
-            $table->timestamps();
-        });
+            Schema::create('areas', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+                $table->timestamps();
+            });
 
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
-            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
-            $table->timestamps();
-        });
+            Schema::create('user_roles', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+                $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+                $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
+                $table->timestamps();
+            });
 
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();

@@ -3,6 +3,7 @@
     $pageModes = ['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll'];
     $filterBy = ['area' => 'Area', 'name' => 'Name'];
     $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
+    $searchCategories = ['name' => 'Name', 'area_id' => 'Area', 'description' => 'Description'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
     $actions = ['edit' => 'Edit', 'delete' => 'Delete'];
     $groupBy = ['area_id' => 'Area', 'name' => 'Name'];
@@ -52,7 +53,7 @@
                 </div>
 
                 <select id="searchCategoryDropdown" class="toolbar-dropdown">
-                    @foreach ($filterBy as $value => $name)
+                    @foreach ($searchCategories as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($searchCategory == $value) selected @endif
                             >{{ $name }}</option>
@@ -116,16 +117,6 @@
             </section>
         </section>
         <section class="svcr-items">
-            <div class="svcr-list" x-show="$wire.viewMode === 'card'">
-                @forelse ($serviceRoles as $serviceRole)
-                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
-                @empty
-                    <div class="empty-list">
-                        <span>No service roles found.</span>
-                    </div>
-                @endforelse
-            </div>
-
             <table id="svcr-table" x-show="$wire.viewMode === 'table'">
                 <thead>
                     <tr class="svcr-list-header">
@@ -136,7 +127,7 @@
                         <th class="svcr-list-header-item">Area</th>
                         <th class="svcr-list-header-item">Description</th>
                         <th class="svcr-list-header-item">Instructors</th>
-                        <th class="svcr-list-header-item">Extra Hours</th>
+                        <th class="svcr-list-header-item">Hours</th>
                         <th class="svcr-list-header-item">Manage</th>
                     </tr>
                 </thead>
@@ -152,6 +143,16 @@
                     @endforelse
                 </tbody>
             </table>
+
+            <div class="svcr-list" x-show="$wire.viewMode === 'card'">
+                @forelse ($serviceRoles as $serviceRole)
+                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
+                @empty
+                    <div class="empty-list">
+                        <span>No service roles found.</span>
+                    </div>
+                @endforelse
+            </div>
 
             @if ($pageMode == 'pagination')
                 {!! $serviceRoles->links() !!}
@@ -247,14 +248,21 @@
 
         if (pageModeDropdown) {
             pageModeDropdown.addEventListener('change', function(e) {
-                @this.set('pageMode', this.value);
+                console.log(e, this.value);
+                // @this.set('pageMode', this.value);
+                @this.dispatch('changePageMode', {
+                    'mode': this.value
+                })
             });
         }
 
         if (search) {
             search.addEventListener('input', function(e) {
                 const value = this.value;
-                @this.set('searchQuery', value);
+                // @this.set('searchQuery', value);
+                @this.dispatch('changeSearchQuery', {
+                    'query': value
+                });
             });
         }
 
@@ -262,25 +270,30 @@
         if (searchCategory) {
             searchCategory.addEventListener('change', function(e) {
                 const value = this.value;
-                @this.set('searchCategory', value);
-            });
-        }
-
-        if (filter) {
-            filter.addEventListener('change', function(e) {
-                @this.set('selectedFilter', this.value);
+                // @this.set('searchCategory', value);
+                @this.dispatch('changeSearchCategory', {
+                    'category': value
+                });
             });
         }
 
         if (filterValueElement) {
             filterValueElement.addEventListener('input', function(e) {
-                @this.set('filterValue', this.value);
+                // @this.set('filterValue', this.value);
+                @this.dispatch('changeFilter', {
+                    'value': this.value,
+                    'filter': filter?.value ?? null
+                });
             });
         }
 
-        if (sort) {
-            sort.addEventListener('change', function(e) {
-                @this.set('selectedSort', this.value);
+        if (filter) {
+            filter.addEventListener('change', function(e) {
+                // @this.set('selectedFilter', this.value);
+                @this.dispatch('changeFilter', {
+                    'filter': this.value,
+                    'value': filterValueElement?.value ?? null
+                });
             });
         }
 
@@ -291,9 +304,22 @@
             })
         }
 
+        if (sort) {
+            sort.addEventListener('change', function(e) {
+                // @this.set('selectedSort', this.value);
+                @this.dispatch('changeSort', {
+                    'sort': this.value,
+                    'order': sortOrder?.value ?? 'asc'
+                });
+            });
+        }
+
         if (group) {
             group.addEventListener('change', function(e) {
-                @this.set('selectedGroup', this.value);
+                // @this.set('selectedGroup', this.value);
+                @this.dispatch('changeGroup', {
+                    'group': this.value
+                });
             });
         }
 
@@ -310,5 +336,55 @@
                 });
             });
         }
+    }
+</script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', initElementActions);
+    document.addEventListener('livewire:init', initElementActions);
+    document.addEventListener('livewire:load', initElementActions);
+    document.addEventListener('livewire:update', initElementActions);
+
+    function initElementActions() {
+        const searchIcon = document.querySelector('.toolbar-search-icon');
+        const searchInput = document.querySelector('.toolbar-search');
+        const clearSearch = document.querySelector('.toolbar-clear-search');
+
+        const filterValue = document.querySelector('.toolbar-filter-value');
+        const closeFilter = document.querySelector('.toolbar-clear-filter');
+        const filterIcon = document.querySelector('.toolbar-filter-icon');
+
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => {
+                searchInput.focus();
+            });
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+                @this.dispatch('changeSearchQuery', {
+                    'query': null,
+                });
+            });
+        }
+
+        if (filterIcon) {
+            filterIcon.addEventListener('click', () => {
+                filterValue.focus();
+            });
+        }
+
+        if (closeFilter) {
+            closeFilter.addEventListener('click', () => {
+                filterValue.value = '';
+                filterValue.focus();
+                @this.dispatch('changeFilter', {
+                    'value': null,
+                    'filter': filter?.value ?? null
+                });
+            });
+        }
+
     }
 </script>

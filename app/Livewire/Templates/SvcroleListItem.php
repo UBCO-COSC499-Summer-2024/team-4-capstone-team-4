@@ -24,6 +24,7 @@ class SvcroleListItem extends Component
 
     protected $listeners = [
         'toggleEditMode' => 'toggleEditMode',
+        'toggle-edit-mode' => 'toggleEditMode',
         'editServiceRole' => 'editServiceRole',
         'updateServiceRole' => 'saveServiceRole',
         'svcr-item-delete' => 'deleteServiceRole',
@@ -37,34 +38,39 @@ class SvcroleListItem extends Component
         $this->formattedAreas = $this->getFormattedAreasProperty();
     }
 
-    public function toggleEditMode($selectedItems)
+    public function toggleEditMode($data)
     {
-        $this->isSelected = in_array($this->serviceRole->id, $selectedItems);
-
-        if ($this->isSelected) {
-            $this->isEditing = true;
-        } else {
-            $this->isEditing = false;
+        // selected items is in the format of [id => boolean, id => boolean, ...]
+        // print type of selectedItems
+        $selectedItems = $data['selectedItems'];
+        foreach ($selectedItems as $id => $isSelected) {
+            if ($id == $this->serviceRole->id) {
+                $this->isSelected = $isSelected;
+                if ($this->isSelected) {
+                    $this->isEditing = true;
+                } else {
+                    $this->isEditing = false;
+                }
+                $this->dispatch('show-toast', [
+                    'message' => 'Edit mode toggled ' . ($this->isEditing ? 'on' : 'off') . ' for ' . $this->serviceRole->name,
+                    'type' => 'success'
+                ]);
+            }
         }
-        $this->dispatch('show-toast', [
-            'message' => 'Edit mode toggled ' . ($this->isEditing ? 'on' : 'off') . ' for ' . $this->serviceRole->name,
-            'type' => 'success'
-        ]);
     }
 
     public function deleteServiceRole($id)
     {
         try {
             // dd($id);
-            ServiceRole::destroy($id);
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role deleted successfully.',
-                'type' => 'success'
-            ]);
+            if ($id == $this->serviceRole->id) {
+                ServiceRole::destroy($id);
+                $this->dispatch('show-toast', [
+                    'message' => 'Service Role deleted successfully.',
+                    'type' => 'success'
+                ]);
+            }
 
-            $url = route('svcroles');
-            header("Location: $url");
-            exit();
             // } else {
             //     $this->dispatch('show-toast', [
             //         'message' => 'Service Role not found.',

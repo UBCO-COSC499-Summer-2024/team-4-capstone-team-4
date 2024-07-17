@@ -52,7 +52,7 @@
 
     <td class="svcr-list-item-cell" data-column="instructors">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            @forelse ($serviceRole->instructors->take(2) as $instructor)
+            @forelse ($serviceRole->instructors->take(1) as $instructor)
                 {{ $instructor->getName() }}@if (!$loop->last), @endif
             @empty
                 <span class="text-gray-400">No instructors</span>
@@ -74,7 +74,7 @@
                     $dispatch('item-modal-id', { id: {{ $serviceRole->id }} });
                     $dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})"
                 >
-                <span class="material-symbols-outlined icon">add</span>
+                <span class="material-symbols-outlined icon">more_time</span>
                 <span>Add</span>
     </td>
     <td class="svcr-list-item-cell" data-column="manage">

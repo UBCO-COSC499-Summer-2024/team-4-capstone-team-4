@@ -83,4 +83,57 @@ class ServiceRole extends Model {
     public function areaPerformance() {
         return $this->hasOne(AreaPerformance::class, 'service_role_id');
     }
+
+    public function extra_hours() {
+        // Schema::create('extra_hours', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->text('description');
+        //     $table->integer('hours');
+        //     $table->year('year');
+        //     $table->integer('month');
+        //     $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
+        //     $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
+        //     $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+        //     $table->timestamps();
+        // });
+
+        // Schema::create('service_roles', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->text('description')->nullable()->default('Default Description');
+        //     $table->year('year')->default(date('Y'));
+        //     $table->json('monthly_hours');
+        //     $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+        //     $table->timestamps();
+        //     $table->unique(['name', 'area_id']);
+        // });
+
+        // get extra hours based on instructors assigned to this service role, and the area, and the year
+
+        $instructors = $this->instructors;
+        $area_id = $this->area_id;
+        $year = $this->year;
+
+        $extra_hours = DB::table('extra_hours')
+            ->whereIn('instructor_id', $instructors->pluck('id'))
+            ->where('area_id', $area_id)
+            ->where('year', $year)
+            ->get();
+
+        // return extra hours as relationship instance
+        return $extra_hours;
+    }
+
+    public function extraHours()
+    {
+        return $this->hasManyThrough(
+            ExtraHour::class,
+            UserRole::class,
+            'department_id', // Foreign key on UserRole table
+            'instructor_id', // Foreign key on ExtraHour table
+            'area_id', // Local key on ServiceRole table (adjust if necessary)
+            'id' // Local key on UserRole table
+        );
+    }
 }
