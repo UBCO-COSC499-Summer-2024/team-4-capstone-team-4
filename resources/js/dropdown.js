@@ -228,6 +228,7 @@ const Dropdown = (function () {
         handleMultiSelect(e) {
             if (e.key === 'Enter' && e.target.tagName.toLowerCase() === 'dropdown-item') {
                 const selectedValue = e.target.getAttribute('value');
+                console.log('selectedValue');
                 if (this._selectedItems.has(selectedValue)) {
                     this._selectedItems.delete(selectedValue);
                 } else {
@@ -418,10 +419,14 @@ const Dropdown = (function () {
         }
 
         selectItem(item) {
-            if (this._options.multiple) {
+            let val;
+            if (this._options.multiple === true) {
                 this.handleMultiSelect({ target: item, key: "Enter" }); // Simulate Enter key press
+                this.setSelected([...this._selectedItems]);
             } else {
-                this.value = item.getAttribute('value');
+                val = item.getAttribute('value');
+                this.value = val;
+                this.setSelected(val);
 
                 if (this.querySelector('dropdown-content.show')) {
                     this.toggleDropdown({ stopPropagation: () => { } }); // Close dropdown
@@ -432,7 +437,9 @@ const Dropdown = (function () {
             this.dispatchEvent(new Event('input'));
             this.dispatchEvent(new Event('change'));
             this.dispatchEvent(new CustomEvent('dropdown-item-selected', {
-                detail: { value: item.getAttribute('value') },
+                detail: {
+                    value: this._options.multiple ? [...this._selectedItems] : val,
+                },
                 bubbles: true // Optional: Allow event to bubble up
             }));
         }
@@ -443,6 +450,7 @@ const Dropdown = (function () {
 
             dropdownContent.addEventListener('click', (e) => {
                 if (e.target.tagName.toLowerCase() === 'dropdown-item') {
+                    // console.log(e.target);
                     this.selectItem(e.target);
                 }
             });

@@ -1,10 +1,10 @@
 @php
     $exports = [
-        'csv'=> 'CSV',
-        'xlsx'=> 'Excel',
-        'pdf'=> 'PDF',
-        'text'=> 'Text',
-        'print'=> 'Print'
+        'CSV' => 'csv',
+        'Excel' => 'xlsx',
+        'PDF' => 'pdf',
+        'Text' => 'text',
+        'Print' => 'print'
     ];
 @endphp
 @vite('resources/css/manage-service-role.css')
@@ -36,15 +36,19 @@
                 <span>Delete</span>
             </button>
             {{-- export --}}
-            <livewire:dropdown-element
+            {{-- <livewire:dropdown-element
                 title="Export"
                 id="exportDropdown"
                 pre-icon="file_download"
                 name="export"
                 :values="$exports"
-                wire:model.live="export"
-                :key="'exportDropdown-'.time()"
-            />
+            /> --}}
+            <select id="exportDropdown" title="Export" class="form-select">
+                <option value="">Export</option>
+                @foreach ($exports as $name => $format)
+                    <option value="{{ $format }}">{{ $name }}</option>
+                @endforeach
+            </select>
         </div>
     </h1>
 
@@ -347,6 +351,24 @@
     document.addEventListener('livewire:load', initServiceRoleForm);
     document.addEventListener('livewire:update', initServiceRoleForm);
 
+    document.addEventListener('DOMContentLoaded', handleExport);
+    document.addEventListener('livewire:init', handleExport);
+    document.addEventListener('livewire:load', handleExport);
+    document.addEventListener('livewire:update', handleExport);
+
+    function handleExport() {
+        if (document.querySelector('#exportDropdown.initialized')) return;
+        const exportDropdown = document.getElementById('exportDropdown');
+        if (!exportDropdown) return;
+        exportDropdown.classList.add('initialized');
+        // exportDropdown.addEventListener('dropdown-item-selected', function (e) {
+        exportDropdown.addEventListener('change', function (e) {
+            // const value = e.detail.value;
+            const value = exportDropdown.value;
+            @this.dispatch('export-role', { 'format': value });
+        });
+    }
+
     function initInstructorForm() {
         if (document.querySelector('.instructor-form-init')) return;
         const form = document.getElementById('instructor-form');
@@ -380,6 +402,7 @@
         const area_id = document.querySelector('#area_id');
         const monthlyHours = document.querySelectorAll('.monthlyHour input');
         const saveSRButton = document.querySelector('#save-service-role');
+
 
         if (name) {
             name.addEventListener('change', function () {

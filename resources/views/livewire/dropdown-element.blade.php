@@ -33,6 +33,8 @@
     @if ($value) value="{{ $value }}" @endif
     @if ($preIcon) preIcon="{{ $preIcon }}" @endif
     @if ($regex) regex="{{ $regex }}" @endif
+    {{-- wire:key="{{ str()->random(50) }}" --}}
+    $attributes
     >
     @if($preIcon)
         <span class="material-symbols-outlined icon dropdown-pre-icon noselect">{{ $preIcon }}</span>
@@ -42,10 +44,17 @@
     <span class="material-symbols-outlined dropdown-button icon noselect" x-on:click="open = !open">arrow_drop_down</span>
 
     <dropdown-content class="dropdown-content">
+        @foreach ($values as $name => $svalue)
+            <dropdown-item
+                value="{{ $svalue }}"
+                wire:key="{{ str()->random(50) }}"
+                @if ($svalue == $value) selected @endif
+                >{{ $name }}</dropdown-item>
+        @endforeach
     </dropdown-content>
 
 </dropdown-element>
-@push('scripts')
+{{-- @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', initThisDropdown);
         document.addEventListener('Liveiwre:init', initThisDropdown);
@@ -74,4 +83,4 @@
             });
         }
     </script>
-@endpush
+@endpush --}}

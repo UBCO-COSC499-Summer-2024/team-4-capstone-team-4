@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Exports\SvcroleExport;
 use App\Models\Area;
 use App\Models\AreaPerformance;
 use App\Models\DepartmentPerformance;
@@ -13,6 +14,7 @@ use App\Models\UserRole;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManageServiceRole extends Component
 {
@@ -35,6 +37,9 @@ class ManageServiceRole extends Component
     public $description;
     public $area_id;
     public $extra_hours;
+    protected $validExportOptions = [
+        'csv', 'xlsx', 'pdf', 'text', 'print'
+    ];
     public $temp = [
         'name' => '',
         'description' => '',
@@ -59,6 +64,7 @@ class ManageServiceRole extends Component
         'sr-remove-instructor' => 'removeInstructor',
         'dec-year' => 'decrementYear',
         'inc-year' => 'incrementYear',
+        'export-role' => 'export',
     ];
 
     protected $rules = [
@@ -393,6 +399,38 @@ class ManageServiceRole extends Component
                 'message' => 'Failed to remove Instructor. ' . $e->getMessage(),
                 'type' => 'error'
             ]);
+        }
+    }
+
+    public function export($format)
+    {
+        if (!in_array($format, $this->validExportOptions)) {
+            $this->dispatch('show-toast', [
+                'message' => 'Invalid export format.',
+                'type' => 'error'
+            ]);
+            return;
+        }
+
+        if ($format === 'print') {
+            $this->dispatch('toast', [
+                'message' => 'Printing...',
+                'type' => 'info'
+            ]);
+            return;
+        }
+
+        if ($format === 'text') {
+            $this->dispatch('toast', [
+                'message' => 'Text export not supported.',
+                'type' => 'error'
+            ]);
+            return;
+        }
+
+        if ($format === 'pdf' || $format === 'xlsx' || $format === 'csv') {
+            $serviceRole = ServiceRole::find($this->serviceRoleId);
+            return Excel::download(new SvcroleExport($serviceRole), 'service_roles.' . $format);
         }
     }
 }

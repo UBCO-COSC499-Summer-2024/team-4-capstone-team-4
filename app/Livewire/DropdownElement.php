@@ -23,7 +23,6 @@ class DropdownElement extends Component
     public $searchValue = '';
     public $useCustomRegex = false;
     public $regex = 'i';
-
     protected $listeners = [
         'dropdown-item-selected' => 'handleItemSelected',
         'dropdown-source-loaded' => 'handleExternalDataLoaded',
@@ -44,7 +43,17 @@ class DropdownElement extends Component
         $this->source = $source;
         $this->useCustomRegex = $useCustomRegex;
         $this->regex = $regex;
+        // $this->mapAttributes(...$attributes);
     }
+
+    // public function mapAttributes(...$attrs)
+    // {
+    //     $attributes = '';
+    //     collect(...$attrs)->each(function ($value, $attr) use (&$attributes) {
+    //         $attributes .= " {$attr}=\"{$value}\"";
+    //     });
+    //     $this->attributes = $attributes;
+    // }
 
     public function handleItemSelected($value)
     {

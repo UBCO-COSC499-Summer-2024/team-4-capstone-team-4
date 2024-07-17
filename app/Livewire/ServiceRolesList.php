@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Exports\SvcroleExport;
 use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Area;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ServiceRolesList extends Component
 {
@@ -27,6 +29,9 @@ class ServiceRolesList extends Component
     public $selectedItems = [];
     public $showExtraHourForm = false;
     public $serviceRoleIdForModal; // To store the serviceRoleId
+    protected $validExportOptions = [
+        'csv', 'xlsx', 'pdf', 'text', 'print'
+    ];
     protected $queryString = [
         'viewMode' => ['except' => 'table'],
         'pageMode' => ['except' => 'pagination'],
@@ -413,5 +418,43 @@ class ServiceRolesList extends Component
     public function updateModalId($data) {
         $id = $data['id'];
         $this->serviceRoleIdForModal = $id;
+    }
+
+    public function export($as, $options) {
+        if (!in_array($as, $this->validExportOptions)) {
+            $this->toast('Invalid export format.', 'error');
+            return;
+        }
+
+        if ($as === 'print') {
+            $this->toast('Printig not implemented yet.', 'info');
+            return;
+        }
+
+        $selectedIds = array_keys(array_filter($this->selectedItems));
+
+        if (empty($selectedIds) && !isset($options['all']) && !isset($options['allExcept'])) {
+            $this->toast('No items selected.', 'warning');
+            return;
+        }
+
+        if (isset($options['all']) && $options['all']) {
+            $serviceRoles = ServiceRole::all();
+        } elseif (isset($options['selected']) && $options['selected']) {
+            $serviceRoles = ServiceRole::whereIn('id', $selectedIds)->get();
+        } elseif (isset($options['allExcept']) && is_array($options['allExcept'])) {
+            $serviceRoles = ServiceRole::whereNotIn('id', $options['allExcept'])->get();
+        }
+
+        if ($as === 'csv' || $as === 'xlsx' || $as === 'pdf') {
+            return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.' . $as);
+        }
+
+        // Assuming you have the package installed and configured:
+        return response()->streamDownload(function () use ($as) {
+            // echo (new \App\Exports\ServiceRolesExport($this->items))->download('service_roles.' . $as)->getFile()->getContent();
+        }, 'service_roles.' . $as, [
+            'Content-Type' => 'text/' . $as,
+        ]);
     }
 }
