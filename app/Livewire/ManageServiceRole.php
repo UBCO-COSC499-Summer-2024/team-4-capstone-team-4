@@ -34,6 +34,7 @@ class ManageServiceRole extends Component
     public $name;
     public $description;
     public $area_id;
+    public $extra_hours;
     public $temp = [
         'name' => '',
         'description' => '',
@@ -56,6 +57,8 @@ class ManageServiceRole extends Component
         'save-instructor' => 'saveInstructor',
         'confirm-remove-instructor' => 'confirmDeleteInstructor',
         'sr-remove-instructor' => 'removeInstructor',
+        'dec-year' => 'decrementYear',
+        'inc-year' => 'incrementYear',
     ];
 
     protected $rules = [
@@ -104,6 +107,7 @@ class ManageServiceRole extends Component
         $this->area_id = $this->serviceRole->area_id;
         $this->description = $this->serviceRole->description;
         $this->name = $this->serviceRole->name;
+        $this->extra_hours = $this->serviceRole->extraHours;
     }
 
     public function fixMonthNames()

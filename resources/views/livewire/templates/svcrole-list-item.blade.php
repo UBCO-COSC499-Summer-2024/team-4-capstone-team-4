@@ -74,7 +74,7 @@
                     $dispatch('item-modal-id', { id: {{ $serviceRole->id }} });
                     $dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})"
                 >
-                <span class="material-symbols-outlined icon">add</span>
+                <span class="material-symbols-outlined icon">more_time</span>
                 <span>Add</span>
     </td>
     <td class="svcr-list-item-cell" data-column="manage">
