@@ -26,10 +26,10 @@
     <td class="px-6 py-4">
         <div class="flex items-center justify-center">
             @if($targetHours === '-')
-            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-gray-700 bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-[#3b4779] bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-[#3b4779] focus:ring-1 focus:ring-[#3b4779] focus:border-[#3b4779]" 
             value="" />
         @else
-            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-gray-700 bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-[#3b4779] bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:outline-[#3b4779] focus:ring-1 focus:ring-[#3b4779] focus:border-[#3b4779]" 
             value="{{ $targetHours }}" /> 
         @endif
         
