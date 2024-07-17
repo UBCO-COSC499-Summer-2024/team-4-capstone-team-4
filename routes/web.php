@@ -160,7 +160,21 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+    // Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
+    // Route::post('/handle-submit', [UploadFileController::class, 'handleSubmit'])->name('handle.submit');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    CheckRole::class.':admin,dept_head,dept_staff'
+])->group(function () {
+    Route::get('/upload-file', function () {
+        return view('upload-file');
+    })->name('upload-file');
     Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
+    Route::post('/handle-submit', [UploadFileController::class, 'handleSubmit'])->name('handle.submit');
 });
 
 Route::middleware([

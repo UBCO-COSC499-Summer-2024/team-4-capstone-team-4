@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadFileController extends Controller {
 
-    private function readCSV($filePath)
-    {
+    private function readCSV($filePath) {
         $csvData = [];
         $result = '';
         if (($handle = fopen($filePath, 'r')) !== false) {
@@ -98,6 +97,7 @@ class UploadFileController extends Controller {
 
         foreach ($uploadedFiles as $uploadedFile) {
             $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];
             foreach ($uploadedFile['csvData'] as $key => $value) {
                 switch ($key) {
                     case 'Area':
@@ -119,112 +119,22 @@ class UploadFileController extends Controller {
         dd($finalCSVs);
 
         session()->flash('message', 'File uploaded successfully!');
-        session()->put('csvData', $csvData);
-        session()->put('trimCSV', $trimCSV);
+        // session()->put('csvData', $csvData);
+        // session()->put('trimCSV', $trimCSV);
         session()->put('finalCSVs', $finalCSVs);
+
+
+        // return straight to
+        // return view('livewire.import-workday-form', [
+        //     'finalCSVs' => $finalCSVs,
+        // ]);
 
 
         // Process the file as needed
         // For demonstration, just dump the file path
         // dd('File uploaded successfully!', $filePath);
-        return redirect()->route('import');
+        // return redirect()->route('import');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    // Method to show the import form
-    // public function showImportForm() {
-    //     return view('import');
-    // }
-
-    // Method to handle the import logic
-    // public function uploadFile(Request $request) {
-    //     // Validate the uploaded file
-
-    //     // $request->validate([
-    //     //     'file' => 'required|file|mimes:csv',
-    //     // ]);
-
-    //     // $file = $request->file('file');
-    //     // $path = $file->getRealPath();
-    //     // $csvData = array_map('str_getcsv', file($path));
-
-    //     // $header = $csvData[0];
-    //     // $rows = array_slice($csvData, 1);
-
-    //     // $validator = Validator::make($rows, [
-    //     //     '*.0' => 'required|unique:test_table,customer_id',
-    //     //     '*.1' => 'required|string', 
-    //     //     '*.2' => 'required|string', 
-    //     // ], [
-    //     //     '*.0.required' => 'The customer ID field is required.',
-    //     //     '*.0.unique' => 'The customer ID ":input" already exists.',
-    //     //     '*.1.required' => 'The firstname field is required.',
-    //     //     '*.2.required' => 'The lastname field is required.',
-    //     // ]);
-
-    //     // if ($validator->fails()) {
-    //     //     return redirect()->back()->withErrors($validator)->withInput();
-    //     // }
-
-    //     // foreach ($rows as $row) {
-    //     //     TestModel::create([
-    //     //         'customer_id' => $row[0],
-    //     //         'firstname' => $row[1],
-    //     //         'lastname' => $row[2],
-    //     //     ]);
-    //     // }
-       
-        
-    //     // return back()->with('success', 'File uploaded successfully');
-    //     // return redirect()->route('import')->with('success', 'File uploaded and data inserted successfully!');
-
-
-    //     // ------- read from file ----------
-
-
-    //     //  Validate the request
-    //      $request->validate([
-    //         'file' => 'required|file|mimes:csv,txt',
-    //         'data' => 'required|string',
-    //     ]);
-
-    //     // Handle the uploaded file
-    //     $file = $request->file('file');
-    //     $dataType = $request->input('data');
-
-    //     // Process the CSV file
-    //     $csvData = $this->readCSV($file);
-
-    //     // For demonstration, let's just return a response with the CSV data
-    //     return response()->json([
-    //         'message' => 'File uploaded successfully!',
-    //         'fileName' => $file->getClientOriginalName(),
-    //         'dataType' => $dataType,
-    //         'csvData' => $csvData,
-    //     ], 200);
-
-    // }
-
-    // private function readCSV($file)
-    // {
-    //     $csvData = [];
-    //     if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
-    //         while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-    //             $csvData[] = $row;
-    //         }
-    //         fclose($handle);
-    //     }
-    //     return $csvData;
-    // }
     
 }
+

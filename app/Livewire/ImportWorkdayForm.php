@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Session;
 
 class ImportWorkdayForm extends Component
 {
-    public $testCid = 123456;
-
     #[Session]
     public $rows = [];
 
