@@ -28,7 +28,25 @@
     </div>
     <div class="column performance-column">
         <div class="leader-board">
-            Gamification Coming Soon...
+            <div class="leaderboard-title">LEADERBOARD TOP 5</div>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Instructor</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($leaderboard as $index => $entry)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $entry['name'] }}</td>
+                                <td>{{ $entry['score'] }}</td>
+                            </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
         <div class="course-performance">
             <div class="course-metric glass">

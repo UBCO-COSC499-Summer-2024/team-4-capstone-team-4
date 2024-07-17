@@ -87,6 +87,32 @@
     flex: 2;
 }
 
+.leaderboard-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-left: 7px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.leaderboard-table {
+    width: 100%;
+    font-size: 1.0rem;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    background-color: rgba(102, 105, 182, 1);
+    font-weight: bold;
+    color: #ffffff;
+}
+
 .course-performance {
     padding: 0px;
     background-color: #ffffff;
