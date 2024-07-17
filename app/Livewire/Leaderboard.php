@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +31,7 @@ class Leaderboard extends Component {
      */
     public function render() {
         $areas = $this->selectedAreas;
-
+        $deptId = UserRole::where('user_id', Auth::id())->firstWhere('role', 'dept_head')->department_id;
         $usersQuery = User::query();
 
         $usersQuery->whereHas('roles', function ($queryBuilder) {
@@ -48,7 +50,11 @@ class Leaderboard extends Component {
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
             ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
             ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-            ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id');
+            ->leftJoin('instructor_performance', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
+                    ->where('instructor_performance.year', $currentYear);
+            })
+            ->where('areas.dept_id', $deptId);
 
         $usersQuery->select('users.*', 'instructor_performance.instructor_id', 'instructor_performance.score')
             ->orderBy('instructor_performance.score', 'desc');
