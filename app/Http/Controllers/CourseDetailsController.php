@@ -15,7 +15,7 @@ class CourseDetailsController extends Controller
         $authenticatedUser = $request->user();
 
         // Check if the authenticated user can access this user's course details
-        if ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head'])) {
+        if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
             abort(403, 'Unauthorized access.');
         }
 

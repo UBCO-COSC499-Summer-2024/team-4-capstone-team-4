@@ -41,10 +41,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
-])->group(function () {
-    Route::get('/staff/edit', function(){
+])->prefix('/staff')->group(function () {
+    Route::get('/edit', function(){
         return view('staff-edit-mode');
     })->name('staff.edit');
+    Route::get('/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('staff.id');
 });
 
 Route::middleware([
@@ -93,12 +94,11 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    ])->group(function () {
-        Route::get('course-details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('course-details');
-        Route::post('course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
-        Route::post('assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-
-    });
+])->prefix('/courses')->group(function () {
+    Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
+    Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
+    Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
+});
 
 Route::middleware([
     'auth:sanctum',
