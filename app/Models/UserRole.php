@@ -58,7 +58,7 @@ class UserRole extends Model {
         if ($this->role === 'dept_head' || $this->role === 'dept_staff' || $this->role === 'instructor') {
             return $this->belongsTo(Department::class);
         }
-        
+
         return null; // Return null if the user is not an instructor or dept head or staff
     }
 
@@ -71,7 +71,7 @@ class UserRole extends Model {
         if ($this->role === 'dept_head' || $this->role === 'dept_staff') {
             return $this->hasMany(RoleAssignment::class, 'assigner_id');
         }
-        
+
         return null; // Return null if the user is not a dept head or staff
     }
 
@@ -84,7 +84,7 @@ class UserRole extends Model {
         if ($this->role === 'instructor') {
             return $this->hasMany(InstructorPerformance::class, 'instructor_id', 'id');
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -99,7 +99,7 @@ class UserRole extends Model {
                         ->withPivot('assigner_id')
                         ->withTimestamps();
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -128,9 +128,8 @@ class UserRole extends Model {
         if ($this->role === 'instructor') {
             return $this->hasMany(ExtraHour::class, 'instructor_id', 'id');
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
-    
 }
