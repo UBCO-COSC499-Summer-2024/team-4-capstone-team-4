@@ -18,6 +18,7 @@ class ImportAssignCourse extends Component
     public $assignments = [];
 
     public $showModal = false;
+    public $hasCourses = false;
 
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
@@ -98,7 +99,6 @@ class ImportAssignCourse extends Component
                             'November' => 0,
                             'December' => 0,
                         ]),
-                        'target_hours' => null,
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
@@ -126,7 +126,6 @@ class ImportAssignCourse extends Component
                             'November' => 0,
                             'December' => 0,
                         ]),
-                        'target_hours' => null,
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
@@ -174,6 +173,12 @@ class ImportAssignCourse extends Component
             // AreaPerformance::updateAreaPerformance(1, 2023);
             // DepartmentPerformance::updateDepartmentPerformance(1, 2023);
          
+        if(!$this->getAvailableCourses()->isEmpty()) {
+            $this->hasCourses = true;
+        } else {
+            $this->hasCourses = false;
+        }
+
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
             'availableCourses' => $this->getAvailableCourses(),

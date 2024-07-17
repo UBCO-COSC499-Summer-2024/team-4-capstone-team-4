@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Exports\SvcroleExport;
 use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Area;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ServiceRolesList extends Component
 {
@@ -23,10 +25,13 @@ class ServiceRolesList extends Component
     public $selectedSort = '';
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
-    public $pageSize = 20;
+    public $pageSize = 10;
     public $selectedItems = [];
     public $showExtraHourForm = false;
     public $serviceRoleIdForModal; // To store the serviceRoleId
+    protected $validExportOptions = [
+        'csv', 'xlsx', 'pdf', 'text', 'print'
+    ];
     protected $queryString = [
         'viewMode' => ['except' => 'table'],
         'pageMode' => ['except' => 'pagination'],
@@ -72,7 +77,7 @@ class ServiceRolesList extends Component
         'open-modal' => 'openModal',
         'closeModal' => 'closeModal',
         'performAction' => 'performAction',
-        'deleteSelected' => 'deleteSelected',
+        'deleteAllSelected' => 'deleteSelected',
         'saveSelected' => 'saveSelected',
         'exportSelected' => 'exportSelected',
         'selectItem' => 'handleItemSelected',
@@ -173,7 +178,13 @@ class ServiceRolesList extends Component
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
             if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
-                $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+                if ($this->searchCategory === 'area_id' || $this->searchCategory === 'area') {
+                    $serviceRolesQuery->whereHas('area', function ($query) {
+                        $query->where('name', 'like', '%' . $this->searchQuery . '%');
+                    });
+                } else {
+                    $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
+                }
             } else {
                 $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
                     foreach ($searchableColumns as $column) {
@@ -183,37 +194,20 @@ class ServiceRolesList extends Component
             }
         }
 
-        // if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-        //     $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
-        // }
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-            if ($this->selectedFilter === 'area') {
-                // If filtering by 'area', query the Area model
-                $area = Area::find($this->filterValue);
-
-                // Check if the area exists
-                if ($area) {
-                    $serviceRolesQuery->where('area_id', $area->id);
-                } else {
-                    // Handle the case where the area doesn't exist
-                    // You might want to log this or display an error message
-                    $serviceRolesQuery->where('area_id', null); // Or any other logic
-                }
+            if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
+                $serviceRolesQuery->whereHas('area', function ($query) {
+                    $query->where('name', 'like', '%' . $this->filterValue . '%');
+                });
             } else {
-                // If filtering by other columns of ServiceRole
                 $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
             }
         }
-
-        // if (!empty($this->selectedSort)) {
-        //     $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
-        // }
 
         if (!empty($this->selectedSort)) {
             if (str_contains($this->selectedSort, '.')) {
                 [$relation, $column] = explode('.', $this->selectedSort);
 
-                // Handle sorting by 'area.name' specifically
                 if ($relation === 'area' && $column === 'name') {
                     $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
                                      ->orderBy('areas.name', $this->selectedSortOrder);
@@ -233,7 +227,13 @@ class ServiceRolesList extends Component
         }
 
         if (!empty($this->selectedGroup)) {
-            $serviceRolesQuery->groupBy($this->selectedGroup, 'id');
+            if ($this->selectedGroup === 'area' || $this->selectedGroup === 'area_id') {
+                $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
+                ->select('service_roles.*', 'areas.name as area_name', 'areas.id as area_id')
+                ->groupBy('areas.id', 'areas.name', 'service_roles.id');
+            } else {
+                $serviceRolesQuery->groupBy($this->selectedGroup, 'service_roles.id');
+            }
         }
 
         $serviceRoles = $this->pageMode === 'pagination'
@@ -349,19 +349,22 @@ class ServiceRolesList extends Component
         // Implement your logic to enable editing for selected items
         // so each item has a livewire in SvcroleCardItem or SvcroleListItem and have a property called isEditing and a method called editServiceRole and saveServiceRole
 
-        $this->dispatch('toggleEditMode', [
-            'selectedItesm' => $this->selectedItems
+        $this->dispatch('toggle-edit-mode', [
+            'selectedItems' => $this->selectedItems
         ]);
     }
 
     public function deleteSelected() {
         if (count($this->selectedItems) > 0) {
-            foreach ($this->selectedItems as $serviceRoleId) {
-                $this->dispatch('svcr-item-delete', [
-                    'id' => $serviceRoleId
-                ]);
+            foreach ($this->selectedItems as $id => $selected) {
+                if ($selected) {
+                    $this->dispatch('svcr-item-delete', $id);
+                }
             }
-            $this->render();
+            $url = route('svcroles');
+            header("Location: $url");
+            exit();
+            // $this->render();
         } else {
             $this->dispatch('show-toast', [
                 'message' => 'No items selected.',
@@ -415,5 +418,43 @@ class ServiceRolesList extends Component
     public function updateModalId($data) {
         $id = $data['id'];
         $this->serviceRoleIdForModal = $id;
+    }
+
+    public function export($as, $options) {
+        if (!in_array($as, $this->validExportOptions)) {
+            $this->toast('Invalid export format.', 'error');
+            return;
+        }
+
+        if ($as === 'print') {
+            $this->toast('Printig not implemented yet.', 'info');
+            return;
+        }
+
+        $selectedIds = array_keys(array_filter($this->selectedItems));
+
+        if (empty($selectedIds) && !isset($options['all']) && !isset($options['allExcept'])) {
+            $this->toast('No items selected.', 'warning');
+            return;
+        }
+
+        if (isset($options['all']) && $options['all']) {
+            $serviceRoles = ServiceRole::all();
+        } elseif (isset($options['selected']) && $options['selected']) {
+            $serviceRoles = ServiceRole::whereIn('id', $selectedIds)->get();
+        } elseif (isset($options['allExcept']) && is_array($options['allExcept'])) {
+            $serviceRoles = ServiceRole::whereNotIn('id', $options['allExcept'])->get();
+        }
+
+        if ($as === 'csv' || $as === 'xlsx' || $as === 'pdf') {
+            return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.' . $as);
+        }
+
+        // Assuming you have the package installed and configured:
+        return response()->streamDownload(function () use ($as) {
+            // echo (new \App\Exports\ServiceRolesExport($this->items))->download('service_roles.' . $as)->getFile()->getContent();
+        }, 'service_roles.' . $as, [
+            'Content-Type' => 'text/' . $as,
+        ]);
     }
 }

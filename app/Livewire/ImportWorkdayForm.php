@@ -12,12 +12,11 @@ use Illuminate\Support\Facades\Session;
 
 class ImportWorkdayForm extends Component
 {
-    public $testCid = 123456;
-
     #[Session]
     public $rows = [];
 
     public $showModal = false;
+    public $courseExists = false;
 
     public function mount() {
         if(Session::has('workdayFormData')) {
@@ -90,25 +89,59 @@ class ImportWorkdayForm extends Component
     }
 
     public function addRow() {
+        $this->resetValidation();
+
         $this->rows[] =  ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''];
         Session::put('workdayFormData', $this->rows);
     }
 
     public function deleteRow($row) {
+        $this->resetValidation();
+
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
         Session::put('workdayFormData', $this->rows);
     }
 
+    protected function validateUniqueRows()
+    {
+        $uniqueCombinations = [];
+
+        foreach ($this->rows as $index => $row) {
+            $combination = implode('-', [
+                $row['number'],
+                $row['area_id'],
+                $row['section'],
+                $row['term'],
+                $row['session'],
+                $row['year']
+            ]);
+
+            if (in_array($combination, $uniqueCombinations)) {
+                $this->addError("rows.{$index}.duplicate", 'This combination of fields as already been entered. Please create a different course');
+                return false;
+            }
+
+            $uniqueCombinations[] = $combination;
+        }
+
+        return true;
+    }
+
     public function handleSubmit() {
+        $this->courseExists = false;
 
         // dd($this->rows);
         $this->validate();
+
+        if (!$this->validateUniqueRows()) {
+            return;
+        }
     
-        
-        foreach ($this->rows as $row) {
+        foreach ($this->rows as $index => $row) {
             $prefix = '';
             // dd($row);
+
             
             switch ($row['area_id']) {
                 case 1:
@@ -125,32 +158,52 @@ class ImportWorkdayForm extends Component
                     break;
             }
 
-            CourseSection::create([
-                'prefix' => $prefix,
-                'number' => $row['number'],
-                'section' => $row['section'], 
-                'area_id' => $row['area_id'], 
-                'session' => $row['session'], 
-                'term' => $row['term'], 
-                'year' => $row['year'], 
-                'enrolled' => $row['enrolled'], 
-                'dropped' => $row['dropped'], 
-                'capacity' => $row['capacity'],        
-            ]);
+            $course = CourseSection::where('prefix', $prefix)
+                ->where('number', $row['number'])
+                ->where('area_id', $row['area_id'])
+                ->where('year', $row['year'])
+                ->where('term', $row['term'])
+                ->where('session', $row['session'])
+                ->where('section' , $row['section'])
+                ->first();
 
+            if ($course != null) {
+                $this->addError("rows.{$index}.exists", 'This course has already been created. You can view it and edit it on the Courses page');
+                $this->courseExists = true;
+            } else {
+               
+            }
+            
             // AreaPerformance::updateAreaPerformance($row['year']);
-
+            
         }
 
-        $this->rows = [
-            ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
-        ];
+        if(!$this->courseExists) {
+            foreach($this->rows as $index => $row) {
+                CourseSection::create([
+                    'prefix' => $prefix,
+                    'number' => $row['number'],
+                    'section' => $row['section'], 
+                    'area_id' => $row['area_id'], 
+                    'session' => $row['session'], 
+                    'term' => $row['term'], 
+                    'year' => $row['year'], 
+                    'enrolled' => $row['enrolled'], 
+                    'dropped' => $row['dropped'], 
+                    'capacity' => $row['capacity'],        
+                ]);
 
-        Session::forget('workdayFormData');
+                $this->rows = [
+                    ['number' => '', 'area_id' => '', 'enrolled' => '', 'dropped' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => ''],
+                ];
 
-        $this->showModal = true;
+                Session::forget('workdayFormData');
 
-        session()->flash('success', $this->showModal);
+                $this->showModal = true;
+
+                session()->flash('success', $this->showModal);
+            }
+        }
 
         // if (session()->has('success')) {
         //     $this->showModal = true;

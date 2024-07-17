@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Area;
 use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
+use App\Models\ExtraHour;
 
 class UserRole extends Model {
     use HasFactory;
@@ -57,7 +58,7 @@ class UserRole extends Model {
         if ($this->role === 'dept_head' || $this->role === 'dept_staff' || $this->role === 'instructor') {
             return $this->belongsTo(Department::class);
         }
-        
+
         return null; // Return null if the user is not an instructor or dept head or staff
     }
 
@@ -70,7 +71,7 @@ class UserRole extends Model {
         if ($this->role === 'dept_head' || $this->role === 'dept_staff') {
             return $this->hasMany(RoleAssignment::class, 'assigner_id');
         }
-        
+
         return null; // Return null if the user is not a dept head or staff
     }
 
@@ -83,7 +84,7 @@ class UserRole extends Model {
         if ($this->role === 'instructor') {
             return $this->hasMany(InstructorPerformance::class, 'instructor_id', 'id');
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -94,11 +95,11 @@ class UserRole extends Model {
      */
     public function serviceRoles() {
         if ($this->role === 'instructor') {
-            return $this->belongsToMany(ServiceRole::class, 'role_assignments', 'user_id', 'service_role_id')
+            return $this->belongsToMany(ServiceRole::class, 'role_assignments', 'instructor_id', 'service_role_id')
                         ->withPivot('assigner_id')
                         ->withTimestamps();
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -115,8 +116,7 @@ class UserRole extends Model {
         return null; // Return null if the user is not an instructor
     }
 
-    public function areas()
-    {
+    public function areas(){
         return $this->belongsToMany(Area::class, 'teaches', 'instructor_id', 'course_section_id')
                     ->join('course_sections', 'course_sections.id', '=', 'teaches.course_section_id')
                     ->join('areas as a', 'a.id', '=', 'course_sections.area_id')
@@ -124,5 +124,12 @@ class UserRole extends Model {
                     ->distinct();
     }
 
-    
+    public function extraHours(){
+        if ($this->role === 'instructor') {
+            return $this->hasMany(ExtraHour::class, 'instructor_id', 'id');
+        }
+
+        return null; // Return null if the user is not an instructor
+    }
+
 }
