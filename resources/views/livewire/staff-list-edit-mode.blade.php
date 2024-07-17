@@ -3,7 +3,7 @@
         <x-staff-search />
         <div class="flex items-center space-x-4">
             <x-staff-filter />
-            <x-staff-button wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button>
+            <x-staff-button-green wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button-green>
             <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
         </div>
     </div>
