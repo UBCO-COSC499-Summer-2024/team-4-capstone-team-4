@@ -1,10 +1,10 @@
 <div class="relative">
     <form wire:submit.prevent="handleSubmit" class="relative">
-        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
+        <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="mt-4 flex justify-end space-x-2">
                 <button type="submit" class="import-form-save-button">Save</button>
             </div>
-            <div class="py-2 flex justify-between bg-gray-50 text-gray-700">
+            <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">
                 <div class="w-10/12 text-left mx-2">Course</div>
                 <div class="w-8/12 text-left mx-2">Instructor</div>
                 <div class="w-5/12"></div>
