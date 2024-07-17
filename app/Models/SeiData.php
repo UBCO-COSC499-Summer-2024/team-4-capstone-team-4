@@ -21,8 +21,17 @@ class SeiData extends Model {
      *
      * @var array
      */
+    
+    //  ------ old -------
+
+    // protected $fillable = [
+    //     'cid', 'q1im', 'q2im', 'q3im', 'q4im', 'q5im', 'q6im',
+    // ];
+
+    //  ------ new -------
+
     protected $fillable = [
-        'cid', 'q1im', 'q2im', 'q3im', 'q4im', 'q5im', 'q6im',
+        'course_section_id', 'questions',
     ];
 
     /**
@@ -31,6 +40,7 @@ class SeiData extends Model {
      * @var array
      */
     protected $casts = [
+        'questions' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -43,4 +53,17 @@ class SeiData extends Model {
     public function courseSection() {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
+
+    public static function calculateSEIAverage($courseSectionId) {
+        $data = self::where('course_section_id', $courseSectionId)->first();
+        if($data){
+            $questions = json_decode($data->questions, true);
+            $averageScore = array_sum($questions) / count($questions);
+    
+            return round($averageScore, 1); 
+        }
+        
+        return null;
+    }
+
 }

@@ -1,0 +1,89 @@
+.instructor-container {
+    display: flex;
+    padding: 0px;
+    gap: 12px;
+}
+
+.column {
+    flex: 1;
+    margin: 0px;
+    padding: 0px;
+    background-color: #ffffff;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.charts-column {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chart-container {
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.performance-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.leader-board {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 2;
+}
+
+.course-performance {
+    padding: 0px;
+    background-color: #ffffff;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    gap: 12px; 
+}
+
+.course-metric {
+    flex: 1; 
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+}
+
+.metric-header {
+    margin-bottom: 5px;
+    font-size: 0.8rem; 
+    padding-bottom: 10px;
+}
+
+.metric-value {
+    font-weight: bold;
+    font-size: 24px; 
+}
+
+
+
+
+
+
+

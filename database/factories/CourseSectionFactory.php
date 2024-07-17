@@ -11,20 +11,52 @@ use App\Models\Area;
  */
 class CourseSectionFactory extends Factory {
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    protected $model=CourseSection::class;
+     
+Define the model's default state.*
+@return array<string, mixed>*/
+protected $model=CourseSection::class;
 
-    public function definition(): array {
+    public function definition() {
+        $prefixes = ['COSC', 'MATH', 'PHYS', 'STAT'];
+        $prefix = $this->faker->randomElement($prefixes);
+
+        // Define a function to get or create an area and return its ID
+        $getOrCreateAreaId = function($areaName) {
+            $area = Area::where('name', $areaName)->first();
+            if ($area == null) {
+                $area = Area::factory()->create(['name' => $areaName]);
+            }
+            return $area->id;
+        };
+
+        switch ($prefix) {
+            case 'COSC':
+                $area_id = $getOrCreateAreaId('Computer Science');
+                break;
+            case 'MATH':
+                $area_id = $getOrCreateAreaId('Mathematics');
+                break;
+            case 'PHYS':
+                $area_id = $getOrCreateAreaId('Physics');
+                break;
+            case 'STAT':
+            default:
+                $area_id = $getOrCreateAreaId('Statistics');
+                break;
+        }
+    
         return [
-            'name'=>fake()->name(),
-            'area_id'=>Area::pluck('id')->random(),
-            'duration'=>$this->faker->sentence,
-            'enrolled'=>fake()->numberBetween(10,100),
-            'dropped'=>fake()->numberBetween(0,20),
-            'capacity'=>fake()->numberBetween(10,200),
+            'prefix' => $prefix,
+            'number' => fake()->numberBetween(100, 500),
+            'area_id' => $area_id,
+            'year' => fake()->year(),
+            'enrolled' => fake()->numberBetween(10, 100),
+            'dropped' => fake()->numberBetween(0, 20),
+            'capacity' => fake()->numberBetween(10, 200),
+            'term' => fake()->randomElement(['1', '2', '1-2']),
+            'session' => fake()->randomElement(['W', 'S']),
+            'section' => fake()->randomElement(['001', '002', '003']),
         ];
     }
+    
 }

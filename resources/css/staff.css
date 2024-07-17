@@ -221,6 +221,32 @@ button {
     max-width: 80px !important;
     max-height: 80px !important;
 }
+.staff-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.staff-item{
+    display: inline-block;
+    margin: 5px;
+
+}
+
+.staff-link{
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.staff-link:hover{
+    text-decoration: underline;
+    color: #2980b9;
+}
+
 
 .staff-preview-item span,
 .staff-preview-item  h5 {

@@ -1,0 +1,22 @@
+.department-list {
+    display: flex;
+    gap: 1rem;
+}
+
+.department-preview {
+    flex: 1;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.col {
+    flex: 0;
+    width: 327px; 
+}
+
+.col:first-child {
+    flex: 0;
+    width: 327px; 
+}

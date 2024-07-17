@@ -8,7 +8,7 @@
         <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
     </head>
     <body>
-        <x-header-auth />
+        {{-- <x-header-auth /> --}}
         <main>
             <div class="auth-container">
                 <section id="auth-login" class="auth-section active glass">

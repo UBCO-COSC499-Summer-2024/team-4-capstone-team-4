@@ -25,7 +25,7 @@ class CourseSection extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'area_id', 'duration', 'enrolled', 'dropped', 'capacity',
+        'prefix', 'number', 'area_id', 'enrolled', 'dropped', 'capacity', 'year', 'term', 'session', 'section'
     ];
 
     /**
@@ -44,7 +44,7 @@ class CourseSection extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function area() {
-        return $this->belongsTo(Area::class);
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     /**
@@ -74,4 +74,5 @@ class CourseSection extends Model {
     public function teaches() {
         return $this->hasMany(Teach::class, 'course_section_id');
     }
+
 }

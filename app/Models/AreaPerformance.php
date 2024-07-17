@@ -22,7 +22,7 @@ class AreaPerformance extends Model {
      * @var array
      */
     protected $fillable = [
-        'score', 'total_hours', 'target_hours', 'sei_avg', 'year', 'area_id',
+        'total_hours', 'sei_avg', 'enrolled_avg', 'dropped_avg', 'year', 'area_id',
     ];
 
     /**
@@ -31,7 +31,6 @@ class AreaPerformance extends Model {
      * @var array
      */
     protected $casts = [
-        'year' => 'date:Y',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -43,5 +42,100 @@ class AreaPerformance extends Model {
      */
     public function area() {
         return $this->belongsTo(Area::class, 'area_id');
+    }
+
+    //other functions
+
+    public static function updateAreaSEIAvg($area_id, $year) {
+        $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->pluck("id");
+
+        $courseCount = 0;
+        $totalSumAverageScore = 0;
+
+        foreach($courses as $course => $course_id) {
+
+                $sei_data = SeiData::where('course_section_id', $course_id)->get();
+
+                if(!$sei_data->isEmpty()) {
+                    $courseCount++;
+                }
+                foreach($sei_data as $data) {
+                    $questionArray = json_decode($data->questions, true);
+                    $averageScore = array_sum($questionArray) / count($questionArray);
+                    $totalSumAverageScore += $averageScore;
+                }
+            }
+
+        if ($courseCount != 0) {
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+            $performance = self::where('area_id', $area_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
+                ]);
+            }
+        }
+
+        return;
+    }
+
+    public static function updateAreaEnrollAndDropAvg($area_id, $year) {
+        $courseCount = 0;
+        $totalSumEnrolledAvg = 0;
+        $totalSumDroppedAvg = 0;
+
+        $courses = CourseSection::where("area_id", $area_id)->where("year", $year)->get();
+
+        foreach($courses as $course) {
+  
+                $enrolled = $course->enrolled;
+                $dropped = $course->dropped;
+                $capacity = $course->capacity;
+
+                $enrolledAvg = $enrolled / $capacity;
+                $droppedAvg = $dropped / $capacity;
+
+                $totalSumEnrolledAvg += $enrolledAvg;
+                $totalSumDroppedAvg += $droppedAvg;
+
+                $courseCount++;
+        }
+
+        if($courseCount != 0) {
+            $totalEnrolledAvg = $totalSumEnrolledAvg / $courseCount;
+            $totalDroppedAvg = $totalSumDroppedAvg / $courseCount;
+
+            $totalEnrolledPercent = $totalEnrolledAvg * 100;
+            $totalDroppedPercent = $totalDroppedAvg * 100;
+    
+            if(!is_int($totalEnrolledPercent)) {
+                $totalEnrolledPercent = round($totalEnrolledPercent, 1);
+            };
+            if(!is_int($totalDroppedPercent)) {
+                $totalDroppedPercent = round($totalDroppedPercent, 1);
+            };  
+    
+            $performance = self::where('area_id', $area_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'enrolled_avg' => $totalEnrolledPercent,
+                    'dropped_avg' => $totalDroppedPercent,
+                ]);
+            } 
+        }
+
+        return;
+    }
+
+    public static function updateAreaPerformance($area_id, $year) {    
+        self::updateAreaSEIAvg($area_id, $year);
+        self::updateAreaEnrollAndDropAvg($area_id, $year);
+    }
+
+    public function addHours($month, $hour) {
+        $totalHours = json_decode($this->total_hours, true);
+        $totalHours[$month] += $hour;
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
     }
 }

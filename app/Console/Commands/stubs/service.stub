@@ -1,0 +1,8 @@
+<?php
+
+namespace App\Services;
+
+class {{serviceName}}
+{
+    // Define your service methods here
+}

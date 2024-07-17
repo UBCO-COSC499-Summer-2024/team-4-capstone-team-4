@@ -12,10 +12,10 @@
                 <x-form-icon icon="Password"/>
                 <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
             </x-form-item>
-            <x-form-item>
+            {{-- <x-form-item>
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
-            </x-form-item>
+            </x-form-item> --}}
 
             <x-validation-errors/>
             
@@ -32,5 +32,18 @@
                 <span class="input-label">Don't have an account? <x-link href="{{ route('register') }}" title="Register" /></span>
             </x-form-item>
         </form>
+    </section>
+    <section id="auth-provider" class="auth-section active glass">
+        <h1>Or Login With</h1>
+        @if (session('provider-error'))
+            <div class="alert alert-danger">
+                {{ session('provider-error') }}
+            </div>
+        @endif
+        <div class="provider-list">
+            <x-link href="{{ route('auth.provider', 'google') }}" title="Google" class="auth-provider-link">
+                <x-logos.google/>
+            </x-link>
+        </div>
     </section>
 </x-auth-layout>

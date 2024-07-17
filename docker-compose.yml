@@ -22,14 +22,17 @@ services:
         networks:
             - InsightNet
         depends_on:
-            - InsightDB
+            - insightdb
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
-    InsightDB:
-        image: 'postgres:16-alpine'
+    insightdb:
+        # image: postgres:16-alpine
+        build:
+            context: ./dockerfiles
+            dockerfile: dockerfile.insightdb
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -42,12 +45,12 @@ services:
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
             - InsightNet
+        command: ["-c", "shared_preload_libraries=pgaudit"]
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -q -d ${DB_DATABASE} -U ${DB_USERNAME}"]
             interval: 10s
             retries: 3
             timeout: 5s
-    # This is for testing
     InsightMailUI:
         image: mailhog/mailhog
         ports:
@@ -55,9 +58,28 @@ services:
             - "8025:8025"
         networks:
             - InsightNet
+    insight-pgadmin:
+        build:
+            context: ./dockerfiles
+            dockerfile: dockerfile.pgadmin
+        ports:
+            - "5050:80"
+        environment:
+            PGADMIN_DEFAULT_EMAIL: '${PGADMIN_EMAIL}'
+            PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-secret}'
+        volumes:
+            - 'pgadmin:/var/lib/pgadmin'
+            - '.:/var/lib/pgadmin/pgadmin4.conf'
+        depends_on:
+            - insightdb
+        networks:
+            - InsightNet
+
 networks:
     InsightNet:
         driver: bridge
 volumes:
     sail-pgsql:
+        driver: local
+    pgadmin:
         driver: local

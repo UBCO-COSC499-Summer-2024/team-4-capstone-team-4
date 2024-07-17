@@ -32,8 +32,21 @@
                 <x-form-input type="submit" name="submit" value="Register" />
             </x-form-item>
             <x-form-item>
-                <span class="input-label">Already have an account? <a href="/login" data-type="tab" data-pg="login">Login</a></span>
+                <span class="input-label">Already have an account?<x-link href="{{ route('login') }}" title='Login' /></span>
             </x-form-item>
         </form>
+    </section>
+    <section id="auth-provider" class="auth-section active glass">
+        <h1>Or Register With</h1>
+        @if (session('provider-error'))
+            <div class="alert alert-danger">
+                {{ session('provider-error') }}
+            </div>
+        @endif
+        <div class="provider-list">
+            <x-link href="{{ route('auth.provider', 'google') }}" title="Google" class="auth-provider-link">
+                <x-logos.google/>
+            </x-link>
+        </div>
     </section>
 </x-auth-layout>

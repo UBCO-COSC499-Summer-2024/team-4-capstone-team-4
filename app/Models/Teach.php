@@ -24,7 +24,7 @@ class Teach extends Model
      * @var array
      */
     protected $fillable = [
-        'course_section_id', 'user_role_id',
+        'course_section_id', 'instructor_id',
     ];
 
     /**
@@ -53,7 +53,24 @@ class Teach extends Model
      */
     public function instructor()
     {
-        return $this->belongsTo(UserRole::class, 'user_role_id')
+        return $this->belongsTo(UserRole::class, 'instructor_id')
                     ->where('role', 'instructor');
+    }
+
+    // other functions
+
+    public static function getInstructorsForCourses() {
+        $teaches = self::all();
+
+        $courseInstructors = [];
+
+        foreach ($teaches as $teach) {
+            if (!isset($courseInstructors[$teach->course_section_id])) {
+                $courseInstructors[$teach->course_section_id] = [];
+            }
+            $courseInstructors[$teach->course_section_id][] = $teach->user_role_id;
+        }
+
+        return $courseInstructors;
     }
 }
