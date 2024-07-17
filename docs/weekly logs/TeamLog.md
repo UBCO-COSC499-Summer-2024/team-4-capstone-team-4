@@ -45,8 +45,8 @@
 
 ## Test Report / Testing Status:
 
-![image of test report](./testing/unit_july12_july17.png)
-![image of test report](./testing/feature_july12_july17.png)
+![image of test report](./testing/unit_test_july12_july17.png)
+![image of test report](./testing/feature_test_july12_july17.png)
 
 ## Overview:
 This cycle the team continued to work on the remaining features, which are each assigned to members individually. We got all tests to pass on our integrated system and that version currently exists on the branch 'pre-dev-integration'. We will continue to evaluate our progress to see if we have the time to add extra functionality.
