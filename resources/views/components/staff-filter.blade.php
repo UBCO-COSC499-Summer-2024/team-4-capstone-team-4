@@ -14,7 +14,9 @@
         </h6>
         <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
             @php
-                $allAreas = App\Models\Area::all();
+                $user = Auth::user();
+                $dept_id = App\Models\UserRole::find($user->id)->department_id;
+                $allAreas = App\Models\Area::where('dept_id', $dept_id)->get();
             @endphp
             @foreach ($allAreas as $area)
                 <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
@@ -22,7 +24,10 @@
                     {{ $area->name }}
                 </li>
             @endforeach
-            <x-staff-button wire:click="filter">Filter</x-staff-button>
+            <div>
+                <x-staff-button wire:click="filter">Filter</x-staff-button>
+                <x-staff-button wire:click="clearFilter">Clear</x-staff-button>
+            </div>
         </ul>
     </div>
 </div>
