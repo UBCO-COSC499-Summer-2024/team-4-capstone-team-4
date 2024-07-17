@@ -97,8 +97,8 @@ Route::middleware([
         Route::get('course-details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('course-details');
         Route::post('course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
         Route::post('assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-        Route::get('course-details/search', [CourseDetailsController::class, 'search'])->name('course-details.search');
-});
+
+    });
 
 Route::middleware([
     'auth:sanctum',
