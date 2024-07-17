@@ -1,3 +1,34 @@
+## Wednesday (7/12 - 7/17)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_12_2024-07_17_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Testing Instructor Report
+  * #2: Export Function - Instructor Report
+  * #3: Dept Report Page - Report Layout
+  * #4: Export Function - Dept Report
+  * #5: Set up Laravel Dusk
+  * #6: Testing Dept Report
+
+### Progress Update (since 7/12/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Testing Instructor Report | In progress |
+| Export Function - Instructor Report | Complete |
+| Dept Report Page - Report Layout | Complete |
+| Export Function - Dept Report | Complete |
+| Set up Laravel Dusk | Complete |
+| Testing Dept Report | In progress |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I completed the report layouts and export functions for the instructor and department reports. I am working on writing test for them. I set up Laravel Dusk in order to do browser/front-end testing. Had some challenges getting it to work at first. Not sure how to test pdf file download.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Finish testing both report pages
+  * Prep for peer testing on Friday
+
 ## Friday (7/10 - 7/12)
 
 ### Timesheet
