@@ -29,7 +29,7 @@
         </th>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
-                Sub-Area(s)
+                Area(s)
                 <button wire:click="sort('area')">
                     @if($sortField === 'area' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">

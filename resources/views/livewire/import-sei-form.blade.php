@@ -1,8 +1,8 @@
 <div class="relative">
     <div class="italic">*IM = Interpolated Medium</div>
     <form wire:submit="handleSubmit" class="relative">
-        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
-            <div class="py-2 flex justify-between bg-gray-50 text-gray-700">
+        <div class="relative overflow-x-auto shadow-sm rounded-lg">
+            <div class="py-3 flex justify-between bg-[#3b4779] text-white">
                 <div class="w-1/12 text-center mx-2">#</div>
                 <div class="w-6/12 text-center mx-2">Course</div>
                 <div class="w-3/12 text-center mx-2">Q1 (IM)</div>
@@ -73,11 +73,11 @@
     @endif
 
     @if(!$hasCourses)
-        <div class="flex flex-col items-center justify-center mt-10">
-            <div class="text-center text-4xl">No courses created yet</div>
-            <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
-         
-        </div>
+    <div class="flex flex-col items-center justify-center py-10">
+        <div class="text-center text-4xl">No courses created yet</div>
+        <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
+        
+    </div>
     @endif
 
     @if(session('success'))

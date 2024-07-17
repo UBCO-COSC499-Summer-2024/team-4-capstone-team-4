@@ -94,7 +94,7 @@ input[type="file"] {
 @layer components {
 
 .import-nav-link {
-  @apply inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300
+  @apply inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-500 hover:border-gray-300
 }
 
 .import-form-row {
@@ -106,7 +106,7 @@ input[type="file"] {
 }
 
 .import-form-input {
-  @apply w-full bg-gray-50 border border-gray-300 border-solid text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block;
+  @apply w-full bg-gray-50 border border-gray-300 border-solid text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block;
 }
 
 .import-form-row input:focus {
@@ -114,7 +114,7 @@ input[type="file"] {
 }
 
 .import-form-select {
-  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2;
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block w-full p-2;
 }
 
 .import-form-delete-button {
@@ -122,11 +122,11 @@ input[type="file"] {
 }
 
 .import-form-save-button {
-  @apply text-green-500 hover:text-white border border-green-500 hover:bg-green-500 focus:ring-1 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-1 mb-2;
+  @apply text-[#3B784F] hover:text-white border border-[#3B784F] hover:bg-[#3B784F] focus:ring-1 focus:outline-none focus:ring-[#3B784F] font-medium rounded-lg text-sm px-5 py-2 text-center me-1 mb-2;
 }
 
 .import-form-add-button {
-  @apply  text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-1 mb-2;
+  @apply  text-[#3b4779] hover:text-white border border-[#3b4779] hover:bg-[#3b4779] focus:ring-1 focus:outline-none focus:ring-[#3b4779] font-medium rounded-lg text-sm px-5 py-2 text-center me-1 mb-2;
 }
 
 .import-error {
