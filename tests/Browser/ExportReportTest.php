@@ -59,20 +59,21 @@ class ExportReportTest extends DuskTestCase
         ]);
 
         $this->browse(function (Browser $browser) use ($user,$instructor, $instructorRole){
-            $browser->visit('/login')
-            ->type('email', $user->email)
-            ->type('password', 'password')
-            ->press('Login')
+            $browser->loginAs($user)
                         ->visit('/instructor-report/' . $instructorRole->id)
-                        ->waitForText('Export', 10) 
                         ->assertSee('Export')
-                        ->click('#exportButton')
-                        ->pause(2000);
-            $browser->screenshot('report.png');
+                        ->press('Export')
+                        ->clickLink('As xlsx')
+                        ->pause(5000);
+            $browser->screenshot('report');
 
-            $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y');
+            $relativeDownloadPath = 'tests/Browser/downloads';
+            $absoluteDownloadPath = base_path($relativeDownloadPath);
+            $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y') . '.xlsx';
 
-            //$browser->assertDownloaded($name . '.xlsx');
+            $filePath = $absoluteDownloadPath . '/' . $name;
+            $this->assertFileExists($filePath);
+
         });
        
     }

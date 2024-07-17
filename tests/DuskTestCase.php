@@ -25,34 +25,30 @@ abstract class DuskTestCase extends BaseTestCase
     /**
      * Create the RemoteWebDriver instance.
      */
-    protected function driver(): RemoteWebDriver
-    {
-       /*  $options = (new ChromeOptions)->addArguments(collect([
-            $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
-        ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
-            return $items->merge([
-                '--disable-gpu',
-                '--headless=new',
-            ]);
-        })->all());
-
-        return RemoteWebDriver::create(
-            'http://localhost:9515',
-            DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY,$options
-            ),
-        ); */
+    protected function driver(): RemoteWebDriver{
+        $downloadPath = base_path('tests/Browser/downloads');
+        if (!is_dir($downloadPath)) {
+            mkdir($downloadPath, 0777, true);
+        }
+    
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
             '--headless',
             '--no-sandbox',
             '--window-size=1920,1080',
+        ])->setExperimentalOption('prefs', [
+            'download.default_directory' => $downloadPath,
+            'download.prompt_for_download' => false,
+            'download.directory_upgrade' => true,
+            'safebrowsing.enabled' => true,
         ]);
-
+    
         return RemoteWebDriver::create(
-            'http://selenium:4444/wd/hub', DesiredCapabilities::chrome()->setCapability(
-            ChromeOptions::CAPABILITY, $options
-        )->setCapability('acceptInsecureCerts', TRUE)
+            'http://selenium:4444/wd/hub', 
+            DesiredCapabilities::chrome()->setCapability(
+                ChromeOptions::CAPABILITY, $options
+            )->setCapability('acceptInsecureCerts', true)
         );
-    }
+    }  
+
 }

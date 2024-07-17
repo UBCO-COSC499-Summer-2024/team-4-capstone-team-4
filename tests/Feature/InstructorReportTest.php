@@ -42,6 +42,20 @@ class InstructorReportTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_instructor_report_page_cannot_be_accessed_by_instructor(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        $instructorRole = UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+
+        $response = $this->actingAs($user)->get('/instructor-report/'.$instructorRole->id);
+
+        $response->assertStatus(403);
+    }
+
     public function test_instructor_report_page_shows_error_when_instructor_id_is_invalid(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();

@@ -3,11 +3,13 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\UserRole;
 use App\Models\Area;
 use App\Models\Department;
 use App\Models\DepartmentPerformance;
 use App\Exports\DeptReportExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class ExportDeptReport extends Component
 {
@@ -20,9 +22,12 @@ class ExportDeptReport extends Component
     public function render(){
         $year = $this->year;
 
-        $dept = Department::find(1);
+        $user = Auth::user();
 
-        $areas = Area::all();
+        $dept_id = UserRole::find($user->id)->department_id;
+        $dept = Department::find($dept_id);
+
+        $areas = $dept->areas;
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', $year)->first();
 
@@ -31,8 +36,13 @@ class ExportDeptReport extends Component
     }
 
     public function exportAsExcel(){
-        $dept = Department::find(1);
+        $user = Auth::user();
+
+        $dept_id = UserRole::find($user->id)->department_id;
+        $dept = Department::find($dept_id);
+
         $name = $dept->name . " Department Report - " . $this->year;
+        
         return Excel::download(new DeptReportExport($this->year), $name.'.xlsx');
     }
 }

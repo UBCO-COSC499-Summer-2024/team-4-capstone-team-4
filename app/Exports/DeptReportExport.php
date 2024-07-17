@@ -5,9 +5,12 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use App\Models\UserRole;
 use App\Models\Area;
 use App\Models\Department;
 use App\Models\DepartmentPerformance;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class DeptReportExport implements FromView
 {
@@ -21,9 +24,11 @@ class DeptReportExport implements FromView
     public function view(): View{
         $year = $this->year;
 
-        $dept = Department::find(1);
+        $user = Auth::user();
+        $dept_id = UserRole::find($user->id)->department_id;
+        $dept = Department::find($dept_id);
 
-        $areas = Area::all();
+        $areas = $dept->areas;
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', $year)->first();
 

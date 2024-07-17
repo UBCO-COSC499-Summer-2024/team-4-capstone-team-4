@@ -183,6 +183,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+     CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
@@ -193,6 +194,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+     CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/dept-report', function () {
         return view('dept-report');
