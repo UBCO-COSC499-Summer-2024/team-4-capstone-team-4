@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         editButton.addEventListener('click', function () {
             document.querySelectorAll('tbody tr').forEach(row => {
                 row.querySelectorAll('td').forEach((cell, index) => {
-                    if ([2, 3, 4].includes(index)) { // Only enable editing for columns 3, 4, and 5
+                    if ([2, 3, 4].includes(index)) {
                         cell.setAttribute('contenteditable', 'true');
                     }
                 });

@@ -1,10 +1,10 @@
 <div class="relative overflow-x-auto sm:rounded-lg">
-    <div class="sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
+    <div class="px-2 sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
         <x-staff-search />
         <div class="flex items-center space-x-4">
             <x-staff-filter />
-            <x-staff-button wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button>
-            <x-staff-button wire:click="exit" id="staff-exit" name="staff-exit">Exit</x-staff-button>
+            <x-staff-button-green wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button-green>
+            <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
         </div>
     </div>
     @if(session()->has('error'))

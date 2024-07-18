@@ -7,7 +7,6 @@ use Livewire\Component;
 
 class ImportTabs extends Component
 {
-
     #[Session]
     public $activeTab = 'workday';
     

@@ -16,7 +16,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css','resources/css/course-details.css',
         'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js',
-         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/editButton.js', 'resources/js/saveButton.js', 'resources/js/cancelButton.js','resources/js/coursedetails-search.js'])
+         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js'])
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -115,7 +115,7 @@
             Livewire.on('batchDeleteServiceRoles', (data) => {
                 data = data[0];
                 if (confirm(data.message)) {
-                    Livewire.emit('deleteSelected');
+                    Livewire.dispatch('deleteAllSelected');
                 }
             })
         </script>

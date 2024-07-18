@@ -1,6 +1,6 @@
 @props(['sortField', 'sortDirection'])
 
-<thead class="sticky top-20 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">  
+<thead class="sticky top-20 text-xs text-white uppercase bg-[#3b4779] dark:bg-gray-700 dark:text-gray-400">  
    <tr>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
@@ -29,7 +29,7 @@
         </th>
         <th scope="col" class="px-6 py-3">
             <div class="flex items-center">
-                Sub-Area(s)
+                Area(s)
                 <button wire:click="sort('area')">
                     @if($sortField === 'area' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">

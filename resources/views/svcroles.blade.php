@@ -36,7 +36,8 @@
         @elseif(request()->is('svcroles/requests'))
             @include('components.svcrole.requests')
         @elseif(request()->is('svcroles/audit-logs'))
-            @include('components.svcrole.logs')
+            {{-- @include('components.svcrole.logs') --}}
+            <livewire:audit-logs />
         @else
             <livewire:service-roles-list :links="$links"/>
         @endif

@@ -24,6 +24,11 @@
         ['group'],
         ['actions', 'export', 'import', 'settings'],
     ],
+    'searchCategories' => [
+        'category1' => 'Category 1',
+        'category2' => 'Category 2',
+        'category3' => 'Category 3',
+    ],
     'viewModes' => [
         'card' => 'Card',
         'list' => 'List',
@@ -78,24 +83,25 @@
                         @case('viewMode')
                             <x-dropdown-element
                                 id="viewModeDropdown"
-                                title="View Mode" 
-                                :values="$viewModes" 
+                                title="View Mode"
+                                :values="$viewModes"
+                                :value="'card'"
                                 preIcon="view_comfy" />
                             @break
 
                         @case('pageMode')
                             <x-dropdown-element
                                 id="pageModeDropdown"
-                                title="Page Mode" 
-                                :values="$pageModes" 
+                                title="Page Mode"
+                                :values="$pageModes"
                                 preIcon="view_list" />
                             @break
 
                         @case('searchCategory')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="searchCategoryDropdown"
-                                title="Category" 
-                                :values="$filterBy" 
+                                title="Category"
+                                :values="$searchCategories"
                                 preIcon="category" />
                             @break
 
@@ -104,10 +110,10 @@
                             @break
 
                         @case('filter')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="filterDropdown"
-                                title="Filter" 
-                                :values="$filterBy" 
+                                title="Filter"
+                                :values="$filterBy"
                                 preIcon="filter_list" />
                             @break
 
@@ -116,31 +122,31 @@
                             @break
 
                         @case('sort')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="sortByDropdown"
-                                title="Sort" 
-                                :values="$sortBy" 
+                                title="Sort"
+                                :values="$sortBy"
                                 preIcon="sort" />
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="sortOrderDropdown"
-                                title="Sort Order" 
-                                :values="$sortOrder" 
+                                title="Sort Order"
+                                :values="$sortOrder"
                                 preIcon="sort_by_alpha" />
                             @break
 
                         @case('group')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="groupByDropdown"
-                                title="Group" 
-                                :values="$groupBy" 
+                                title="Group"
+                                :values="$groupBy"
                                 preIcon="group" />
                             @break
 
                         @case('actions')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="actionsDropdown"
-                                title="Actions" 
-                                :values="$actions" 
+                                title="Actions"
+                                :values="$actions"
                                 preIcon="list_alt" />
                             <button>
                                 <span class="material-symbols-outlined icon">done</span>
@@ -149,18 +155,18 @@
                             @break
 
                         @case('export')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="exportDropdown"
-                                title="Export As" 
-                                :values="$exports" 
+                                title="Export As"
+                                :values="$exports"
                                 preIcon="save_alt" />
                             @break
 
                         @case('import')
-                            <x-dropdown-element 
+                            <x-dropdown-element
                                 id="importDropdown"
-                                title="Import From" 
-                                :values="$imports" 
+                                title="Import From"
+                                :values="$imports"
                                 preIcon="file_upload" />
                             @break
 

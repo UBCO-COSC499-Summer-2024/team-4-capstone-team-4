@@ -5,8 +5,8 @@
     <div>
         <div class="flex justify-between items-center">
             <div>
-                <label for="year" class="block">Select Year:</label>
-                <select wire:model.live="year" id="year" name="year" class="rounded-md">
+                <label for="year">Select Year:</label>
+                <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
                         $allPerformances = $instructor->instructorPerformances->sortBy('year');
                     @endphp
@@ -15,14 +15,14 @@
                     @endforeach
                 </select>
             </div>
-            <x-button id="exportButton">Export</x-button>
+            <x-report-dropdown/>
         </div>
         <div id="exportContent">
             <h2 class="font-bold">Courses Performance</h2>
             @if ($courses->isNotEmpty())
                 <table id="courseTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>    
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th>Course Section</th>
                             <th>Term</th>
                             <th>Year</th>
@@ -80,14 +80,14 @@
             @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
                 <table id="performanceTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>
-                        <tr class="text-white bg-slate-500">
+                        <tr class="text-white bg-[#3b4779]">
                             <th></th>
                             <th>Name</th>
                             <th>Year</th>
                             @foreach ($subtotalHours as $month => $hours)
-                                <th>{{ substr($month, 0, 3) }} Hours</th>
+                                <th>{{ substr($month, 0, 3) }} Hrs</th>
                             @endforeach
-                            <th>Total Hours</th>
+                            <th>Total Hrs</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,7 +102,7 @@
                                 @endphp
                                 <tr>
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-slate-500" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
                                     @endif
                                     <td class="border border-gray-300">{{ $role->name }}</td>
                                     <td class="border border-gray-300">{{ $role->year }}</td>
@@ -131,7 +131,7 @@
                                 @endphp
                                 <tr>
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-slate-500" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
                                     @endif
                                     <td class="border border-gray-300">{{ $hours->name }}</td>
                                     <td class="border border-gray-300">{{ $hours->year }}</td>
@@ -167,7 +167,7 @@
                     </tbody>
                 </table>
             @else
-                <p>No performance data found for this instructor.</p>
+                <p>No service roles/extra hours performance data found for this instructor.</p>
             @endif
         </div>
     </div>

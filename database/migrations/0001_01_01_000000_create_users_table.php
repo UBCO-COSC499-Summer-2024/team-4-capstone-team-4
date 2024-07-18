@@ -26,26 +26,26 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('departments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+            Schema::create('departments', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->timestamps();
+            });
 
-        Schema::create('areas', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
-            $table->timestamps();
-        });
+            Schema::create('areas', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+                $table->timestamps();
+            });
 
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
-            $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
-            $table->timestamps();
-        });
+            Schema::create('user_roles', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+                $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+                $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
+                $table->timestamps();
+            });
 
         Schema::create('extra_hours', function (Blueprint $table) {
             $table->id();
@@ -240,18 +240,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('audit_logs');
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('user_roles');
-        Schema::dropIfExists('departments');
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists('role_assignments');
         Schema::dropIfExists('extra_hours');
         Schema::dropIfExists('service_roles');
-        Schema::dropIfExists('role_assignments');
-        Schema::dropIfExists('course_sections');
-        Schema::dropIfExists('sei_data');
-        Schema::dropIfExists('teaches');
-        Schema::dropIfExists('teaching_assistants');
         Schema::dropIfExists('assists');
+        Schema::dropIfExists('teaches');
+        Schema::dropIfExists('sei_data');
+        Schema::dropIfExists('teaching_assistants');
+        Schema::dropIfExists('course_sections');
         Schema::dropIfExists('instructor_performance');
         Schema::dropIfExists('area_performance');
         Schema::dropIfExists('department_performance');
@@ -260,5 +256,9 @@ return new class extends Migration
         Schema::dropIfExists('settings');
         Schema::dropIfExists('auth_methods');
         Schema::dropIfExists('super_audits');
+        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('areas');
+        Schema::dropIfExists('departments');
+        Schema::dropIfExists('users');
     }
 };
