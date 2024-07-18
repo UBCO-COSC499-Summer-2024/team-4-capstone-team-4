@@ -62,8 +62,7 @@
     text-align: center;
 }
 
-.svcr-list-header-item:has(.svcr-list-item[data-column="description"]),
-.svcr-list-header-item:nth-child(4) {
+.svcr-list-header-item:has(.svcr-list-item[data-column="description"]) {
     width: 700px;
 }
 

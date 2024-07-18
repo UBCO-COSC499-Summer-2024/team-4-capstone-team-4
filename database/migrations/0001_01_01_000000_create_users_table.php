@@ -201,12 +201,12 @@ return new class extends Migration
 
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('user_alt');
-            $table->string('action');
+            $table->bigInteger('user_id')->nullable();
+            $table->string('user_alt')->nullable();
+            $table->string('action')->nullable();
             $table->text('description')->nullable();
-            $table->string('table_name');
-            $table->string('operation_type');
+            $table->string('table_name')->nullable();
+            $table->string('operation_type')->nullable();
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
             $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));

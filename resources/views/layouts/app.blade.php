@@ -112,6 +112,41 @@
                 })
             });
 
+            Livewire.on('confirmArchive', (data) => {
+                data.forEach((item) => {
+                    if (confirm(item.message)) {
+                        switch(item.model) {
+                            case 'svcr_item_archive':
+                                Livewire.dispatch('svcr-item-archive', { id: item.id });
+                                break;
+                            case 'sr_manage_archive':
+                                Livewire.dispatch('svcr-manage-archive', { id: item.id });
+                                break;
+                            case 'sr_manage_unarchive':
+                                Livewire.dispatch('svcr-manage-unarchive', { id: item.id });
+                                break;
+                            case 'staff':
+                                Livewire.dispatch('archiveStaff', { id: item.id });
+                                break;
+                            case 'area':
+                                Livewire.dispatch('archiveArea', { id: item.id });
+                                break;
+                            case 'role':
+                                Livewire.dispatch('archiveRole', { id: item.id });
+                                break;
+                            case 'user':
+                                Livewire.dispatch('archiveUser', { id: item.id });
+                                break;
+                            case 'sr_role_assignment':
+                                Livewire.dispatch('sr-archive-instructor', { id: item.id });
+                                break;
+                            default:
+                                console.log('Model not found');
+                        }
+                    }
+                })
+            });
+
             Livewire.on('batchDeleteServiceRoles', (data) => {
                 data = data[0];
                 if (confirm(data.message)) {

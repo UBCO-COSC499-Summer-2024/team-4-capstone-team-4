@@ -21,19 +21,41 @@
         </span>
 
         <div class="flex right">
-            <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
-                <span class="material-symbols-outlined icon">
-                    edit
-                </span>
-                <span>Edit</span>
-            </button>
+            @if(!$serviceRole->archived)
+                <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
+                    <span class="material-symbols-outlined icon">
+                        edit
+                    </span>
+                    <span>Edit</span>
+                </button>
+            @endif
             <button class="btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
-                <span class="material-symbols-outlined icon">delete</span>
-                <span>Delete</span>
+            {{-- if user has admin role in roles --}}
+            @if (auth()->user()->hasRoles(['admin']))
+                <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    <span class="material-symbols-outlined icon">delete</span>
+                    <span>Delete</span>
+                </button>
+            @endif
+            <button class="btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    @if ($serviceRole->archived)
+                        <span class="material-symbols-outlined icon">
+                            unarchive
+                        </span>
+                        <span>
+                            Unarchive
+                        </span>
+                    @else
+                        <span class="material-symbols-outlined icon">
+                            archive
+                        </span>
+                        <span>
+                            Archive
+                        </span>
+                    @endif
             </button>
             {{-- export --}}
             {{-- <livewire:dropdown-element
@@ -66,8 +88,8 @@
     <div class="svcrole-item" :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
         <section id="about-role" class="svcr-item">
             <form id="service-role-update-form" class="form svcr-item-form">
-                <div class="horizontal grouped">
-                    <div class="form-group">
+                <div class="horizontal grouped w-fit">
+                    <div class="form-group svcrole-self">
                         <div class="form-item">
                             <label class="form-item" for="name">Name</label>
                             <div class="grouped">
@@ -162,7 +184,7 @@
                                     <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
                                 </th>
                                 <th class="text-left svcr-list-header-item">Name</th>
-                                <th class="text-right svcr-list-header-item">Actions</th>
+                                <th class="svcr-list-header-item">Actions</th>
                             </tr>
                         </thead>
                         <tbody wire:model.live="instructors">

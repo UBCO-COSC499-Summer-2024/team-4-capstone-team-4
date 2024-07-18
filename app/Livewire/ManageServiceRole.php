@@ -54,7 +54,10 @@ class ManageServiceRole extends Component
         'editServiceRole' => 'editServiceRole',
         'update-role' => 'saveServiceRole',
         'confirm-manage-delete' => 'confirmDelete',
+        'confirm-manage-archive' => 'confirmArchive',
         'svcr-manage-delete' => 'deleteServiceRole',
+        'svcr-manage-archive' => 'archiveServiceRole',
+        'svcr-manage-unarchive' => 'archiveServiceRole',
         'showInstructorModal' => 'showInstructorModal',
         'showExtraHourModal' => 'showExtraHourModal',
         'addExtraHour' => 'addExtraHour',
@@ -200,6 +203,21 @@ class ManageServiceRole extends Component
         ]);
     }
 
+    public function confirmArchive() {
+        $isArchived = $this->serviceRole->archived;
+        $this->dispatch('confirmArchive', [
+            'message' => !$isArchived ? 'Are you sure you want to archive this Service Role?' : 'Are you sure you want to unarchive this Service Role?',
+            'id' => $this->serviceRole->id,
+            'model' => !$isArchived ? 'sr_manage_archive' : 'sr_manage_unarchive'
+        ]);
+    }
+
+    public function navigate($route) {
+        $url = $route;
+        header("Location: $url");
+        exit();
+    }
+
     public function incrementYear() {
         $this->year++;
     }
@@ -251,9 +269,7 @@ class ManageServiceRole extends Component
                     'type' => 'success'
                 ]);
                 $this->serviceRole = null;
-                $url = route('svcroles');
-                header("Location: $url");
-                exit();
+                $this->navigate(route('svcroles'));
             } else {
                 $this->dispatch('show-toast', [
                     'message' => 'Failed to delete Service Role.',
@@ -431,6 +447,24 @@ class ManageServiceRole extends Component
         if ($format === 'pdf' || $format === 'xlsx' || $format === 'csv') {
             // $serviceRole = ServiceRole::find($this->serviceRole);
             return Excel::download(new SvcroleExport($this->serviceRole), 'service_roles.' . $format);
+        }
+    }
+
+    public function archiveServiceRole($id) {
+        try {
+            $serviceRole = ServiceRole::find($id);
+            $serviceRole->archived = !$serviceRole->archived;
+            $serviceRole->save();
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role archived successfully.',
+                'type' => 'success'
+            ]);
+            $this->navigate(route('svcroles.manage.id', (int) $this->serviceRoleId));
+        } catch(\Exception $e) {
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to archive Service Role. ' . $e->getMessage(),
+                'type' => 'error'
+            ]);
         }
     }
 }

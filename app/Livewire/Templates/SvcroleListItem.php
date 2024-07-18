@@ -51,10 +51,6 @@ class SvcroleListItem extends Component
                 } else {
                     $this->isEditing = false;
                 }
-                $this->dispatch('show-toast', [
-                    'message' => 'Edit mode toggled ' . ($this->isEditing ? 'on' : 'off') . ' for ' . $this->serviceRole->name,
-                    'type' => 'success'
-                ]);
             }
         }
     }

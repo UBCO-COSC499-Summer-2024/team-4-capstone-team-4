@@ -8,6 +8,7 @@
     $actions = [
         'edit' => 'Edit',
         'delete' => 'Delete',
+        'archive' => 'Archive',
         'export' => 'Export All',
         'selected' => 'Export Selected',
         'allExcept' => 'Export All Except',
@@ -102,13 +103,13 @@
             </section> --}}
 
             <section class="toolbar-section">
-                <select id="groupDropdown" class="toolbar-dropdown">
+                {{-- <select id="groupDropdown" class="toolbar-dropdown">
                     @foreach ($groupBy as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($selectedGroup == $value) selected @endif
                             >{{ $name }}</option>
                     @endforeach
-                </select>
+                </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
                     <option>Actions</option>
@@ -255,6 +256,8 @@
                 Livewire.dispatch('handleItemSelected', checkbox.value, checkbox.checked);
             });
         }
+
+        updateSelectAll();
 
         if (checkAll) {
             checkAll.addEventListener('change', function (e) {

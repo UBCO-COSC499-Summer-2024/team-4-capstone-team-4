@@ -27,16 +27,16 @@
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
             @switch($serviceRole->area->name)
                 @case("Computer Science")
-                    <span class="text-blue-500" style="color: rgba(29, 154, 202, 1);">{{ __("COSC") }}</span>
+                    <span class="font-bold" style="color: rgba(29, 154, 202, 1);">{{ __("COSC") }}</span>
                     @break
                 @case("Mathematics")
-                    <span class="text-green-500" style="color: rgba(44, 160, 44, 1);">{{ __("MATH") }}</span>
+                    <span class="font-bold" style="color: rgba(44, 160, 44, 1);">{{ __("MATH") }}</span>
                     @break
                 @case("Physics")
-                    <span class="text-yellow-500" style="color: rgba(249, 168, 37, 1);">{{ __("PHYS") }}</span>
+                    <span class="font-bold" style="color: rgba(249, 168, 37, 1);">{{ __("PHYS") }}</span>
                     @break
                 @case("Statistics")
-                    <span class="text-red-500" style="color: rgba(214, 39, 40, 1);">{{ __("STAT") }}</span>
+                    <span class="font-bold" style="color: rgba(214, 39, 40, 1);">{{ __("STAT") }}</span>
                     @break
                 @default
 
@@ -93,7 +93,7 @@
                 <span>Add</span>
     </td>
     <td class="svcr-list-item-cell" data-column="manage">
-        <div class="svcr-list-item-actions">
+        <div class="flex justify-end item-end svcr-list-item-actions">
             <button class="svcr-list-item-action"
                     title="Cancel"
                     @click="isEditing = !isEditing"
@@ -111,8 +111,21 @@
 
             <button class="svcr-list-item-action"
                     wire:click="confirmDelete({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon text-[#ea3030]">archive</span>
+                <span class="material-symbols-outlined icon text-[#ea3030]">
+                    @if ($serviceRole->archived)
+                        archive
+                    @else
+                        unarchive
+                    @endif
+                </span>
             </button>
+
+            @if(auth()->user()->hasRoles(['admin']))
+                <button class="svcr-list-item-action"
+                        wire:click="confirmDelete({{ $serviceRole->id }})">
+                    <span class="material-symbols-outlined icon text-[#ea3030]">delete</span>
+                </button>
+            @endif
         </div>
     </td>
 </tr>
