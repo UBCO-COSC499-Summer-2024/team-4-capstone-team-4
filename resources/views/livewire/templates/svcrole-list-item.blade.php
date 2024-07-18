@@ -104,15 +104,26 @@
 
             @if(!$serviceRole->archived)
                 <button class="svcr-list-item-action"
-                        :title="isEditing ? 'Save' : 'Edit'"
-                        @click="isEditing = !isEditing"
-                        wire:click="editServiceRole({{ $serviceRole->id }})">
-                    <span class="material-symbols-outlined icon text-[#3b4779]" x-text="isEditing ? 'save' : 'edit'"></span>
+                        :title="'Edit'"
+                        @click="isEditing = true"
+                        x-show="!isEditing"
+                        x-cloak
+                        >
+                    <span class="material-symbols-outlined icon text-[#3b4779]" x-text="'edit'"></span>
                 </button>
             @endif
 
+            {{-- save button --}}
             <button class="svcr-list-item-action"
-                    wire:click="confirmDelete({{ $serviceRole->id }})">
+                    title="Save"
+                    @click="isEditing = !isEditing; $dispatch('update-service-role', { id: {{ $serviceRole->id }} })"
+                    x-show="isEditing"
+                    x-cloak>
+                <span class="material-symbols-outlined icon text-[#3b4779]">save</span>
+            </button>
+
+            <button class="svcr-list-item-action"
+                    wire:click="confirmSArchive({{ $serviceRole->id }})">
                 <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
                     $serviceRole->archived ? 'Unarchive' : 'Archive'
                 }}">
@@ -126,7 +137,7 @@
 
             @if(auth()->user()->hasRoles(['admin']))
                 <button class="svcr-list-item-action"
-                        wire:click="confirmDelete({{ $serviceRole->id }})">
+                        wire:click="confirmSDelete({{ $serviceRole->id }})">
                     <span class="material-symbols-outlined icon text-[#ea3030]">delete</span>
                 </button>
             @endif

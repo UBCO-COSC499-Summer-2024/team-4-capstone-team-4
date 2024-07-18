@@ -182,7 +182,10 @@
                 </thead>
                 <tbody>
                     @forelse ($serviceRoles as $svcr)
-                        <livewire:templates.svcrole-list-item :serviceRole="$svcr" :key="'serviceRoleListI-'.$svcr->id" />
+                        @php
+                            $svcrId = $svcr->id;
+                        @endphp
+                        <livewire:templates.svcrole-list-item :serviceRoleId="$svcrId" :key="'serviceRoleListI-'.$svcrId" />
                     @empty
                         <tr>
                             <td colspan="5" class="empty-list">

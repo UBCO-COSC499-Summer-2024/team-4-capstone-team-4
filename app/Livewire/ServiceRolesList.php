@@ -470,46 +470,70 @@ class ServiceRolesList extends Component
     }
 
     public function archive($selectedIds) {
+        DB::beginTransaction();
+
         try {
-            // For example:
+            $archivedCount = 0;
+            $errors = [];
+            $changes = []; // Array to store old and new values
+
             foreach ($selectedIds as $id => $selected) {
-                // Convert the ID to an integer
-                $numericId = (int) $id;
+                if ($selected === true) {
+                    $serviceRole = ServiceRole::find((int)$id);
 
-                if ($selected) {
-                    $serviceRole = ServiceRole::find($numericId);
                     if ($serviceRole) {
-                        $isArchived = $serviceRole->archived;
-                        $serviceRole->archived = !$isArchived;
-                        $serviceRole->save();
+                        $changes[] = [
+                            'service_role_id' => $serviceRole->id,
+                            'old_value' => $serviceRole->getOriginal(), // Get original attributes
+                            'new_value' => array_merge($serviceRole->getOriginal(), ['archived' => !$serviceRole->archived]),
+                        ];
 
-                        AuditLog::create([
-                            'user_id' => (int) auth()->user()->id,
-                            'user_alt' => auth()->user()->name,
-                            'action' => 'archive',
-                            'table_name' => 'service_roles',
-                            'operation_type' => 'UPDATE',
-                            'old_value' => json_encode($serviceRole->getOriginal()),
-                            'new_value' => json_encode($serviceRole->getAttributes()),
-                            'description' => 'Service Role ' . $serviceRole->name . ' archived by ' . auth()->user()->name,
-                        ]);
-
-                        // Optionally, show a success message
-                        $this->toast('Successfully '.(
-                            $isArchived ? 'unarchived' : 'archived'
-                        ).' service role: ' . $serviceRole->name, 'success');
+                        if ($serviceRole->update(['archived' => !$serviceRole->archived])) {
+                            $archivedCount++;
+                        } else {
+                            $errors[] = $serviceRole->name;
+                        }
                     }
                 }
             }
 
-            // Optionally, show a success message
-            // $this->toast('Selected service roles archived successfully!', 'success');
-            // wait 1 second
-            // sleep(1);
+            DB::commit();
+
+            $this->toast('Successfully ' . ($archivedCount ? 'archived ' . $archivedCount . ' service roles' : 'updated service roles'), 'success');
+
+            // Log the bulk operation details along with changes
+            AuditLog::create([
+                'user_id' => (int)auth()->user()->id,
+                'user_alt' => User::find((int) auth()->user()->id)->getName(),
+                'action' => 'bulk_archive_service_roles',
+                'table_name' => 'service_roles',
+                'description' => "Archived {$archivedCount} service roles.",
+                'old_value' => !empty($changes) ? json_encode($changes) : null, // Store changes for potential restoration
+            ]);
+
+            // Log any errors encountered
+            if (!empty($errors)) {
+                AuditLog::create([
+                    'user_id' => (int) auth()->user()->id,
+                    'user_alt' => auth()->user()->name,
+                    'action' => 'bulk_archive_service_roles_errors',
+                    'table_name' => 'service_roles',
+                    'description' => "Errors archiving service roles: " . implode(', ', $errors),
+                ]);
+            }
+
         } catch (\Exception $e) {
-            // Optionally, show an error message
-            // dd($e);
+            DB::rollBack(); // Rollback the transaction on error
             $this->toast('An error occurred: ' . $e->getMessage(), 'error');
+
+            // Log the exception
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => auth()->user()->name,
+                'action' => 'bulk_archive_service_roles_exception',
+                'table_name' => 'service_roles',
+                'description' => "Exception: " . $e->getMessage(),
+            ]);
         }
     }
 
