@@ -126,4 +126,8 @@ class User extends Authenticatable {
         return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
                     ->where('user_roles.role', 'instructor');
     }
+
+    public function settings() {
+        return $this->hasOne(Setting::class, 'user_id');
+    }
 }

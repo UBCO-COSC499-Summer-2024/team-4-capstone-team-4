@@ -232,12 +232,12 @@
                 <div class="svcr-extra-hours">
                     <h2 class="nos content-title form-item">
                         <span class="flex-1 w-fill content-title-text"style="width: fit-content;">{{ __('Extra Hours') }}</span>
-                        <div class="flex justify-end">
+                        {{-- <div class="flex justify-end">
                             <button class="btn form-input" x-on:click="$dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})" wire:loading.attr="disabled">
                                 <span class="material-symbols-outlined icon">more_time</span>
                                 <span>Add Extra Hours</span>
                             </button>
-                        </div>
+                        </div> --}}
                     </h2>
                     <table class="table svcr-table" id="svcr-table">
                         <thead>
@@ -353,10 +353,10 @@
                     <span class="material-symbols-outlined icon">cancel</span>
                     <span>Cancel</span>
                 </x-secondary-button>
-                <button type="button" class="btn" wire:loading.attr="disabled" id="save-instructor">
+                <x-button type="button" class="ml-2 btn" wire:loading.attr="disabled" id="save-instructor">
                     <span class="material-symbols-outlined icon">save</span>
                     <span>Save</span>
-                </button>
+                </x-button>
             </x-slot>
         </x-dialog-modal>
     </div>

@@ -11,7 +11,7 @@ class Setting extends Model
 
     protected $table = 'settings';
 
-    protected $fillable = ['user_id', 'auth_method', 'theme', 'timezone', 'locale', 'language', 'key', 'value'];
+    protected $fillable = ['user_id', 'auth_method', 'theme', 'timezone', 'locale', 'language', 'custom'];
 
     public function user()
     {
@@ -20,7 +20,11 @@ class Setting extends Model
 
     public function getSetting($key)
     {
-        return $this->where('key', $key)->first();
+        if ($this->findSetting($key)) {
+            return $this->findSetting($key)->value;
+        } else {
+            return null;
+        }
     }
 
     public function findSetting($name) {
@@ -29,44 +33,37 @@ class Setting extends Model
         if (in_array($name, ['auth_method', 'theme', 'timezone', 'locale', 'language'])) {
             return $this->where('key', $name)->first();
         } else {
-            $setting = $this->where('key', $name)->first();
-            if ($setting) {
-                return $setting;
-            } else {
-                return $this->create([
-                    'user_id' => auth()->id(),
-                    'key' => $name,
-                    'value' => null
-                ]);
-            }
+            // search custom which is a jsonb
+
         }
     }
 
     public function setSetting($key, $value)
     {
-        $setting = $this->where('key', $key)->first();
+        $setting = $this->findSetting($key);
         if ($setting) {
-            $setting->value = $value;
+            if(in_array($key, ['auth_method', 'theme', 'timezone', 'locale', 'language'])) {
+                $setting[$key] = $value;
+            } else {
+                // update custom jsonb
+                $setting->custom[$key] = $value;
+            }
             $setting->save();
-        } else {
-            $this->create([
-                'user_id' => auth()->id(),
-                'key' => $key,
-                'value' => $value
-            ]);
         }
     }
 
-    public function getSettings()
-    {
-        return $this->where('user_id', auth()->id())->get();
-    }
-
-    public function setSettings($settings)
-    {
-        foreach ($settings as $key => $value) {
-            $this->setSetting($key, $value);
+    public function showSettings() {
+        $settingsArray = [];
+        $settingsArray['auth_method'] = $this->getAuthMethod();
+        $settingsArray['theme'] = $this->getTheme();
+        $settingsArray['timezone'] = $this->getTimezone();
+        $settingsArray['locale'] = $this->getLocale();
+        $settingsArray['language'] = $this->getLanguage();
+        $custom = $this->custom;
+        foreach ($custom as $key => $value) {
+            $settingsArray[$key] = $value;
         }
+        return $settingsArray;
     }
 
     public function getTheme()
@@ -117,5 +114,15 @@ class Setting extends Model
     public function setAuthMethod($auth_method)
     {
         $this->setSetting('auth_method', $auth_method);
+    }
+
+    public function getCustomSetting($key)
+    {
+        return $this->custom[$key];
+    }
+
+    public function setCustomSetting($key, $value)
+    {
+        $this->custom[$key] = $value;
     }
 }

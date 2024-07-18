@@ -188,8 +188,7 @@ return new class extends Migration
             $table->string('timezone')->nullable()->default(date_default_timezone_get());
             $table->string('locale')->nullable()->default('en');
             $table->string('language')->nullable()->default('en');
-            $table->string('key')->nullable();
-            $table->text('value')->nullable();
+            $table->jsonb('custom')->nullable();
             $table->timestamps();
         });
 

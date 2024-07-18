@@ -1,10 +1,7 @@
-<div x-data="{ showExtraHourForm: @entangle('showExtraHourForm'), show: @entangle('showExtraHourForm') }">
+<div x-data="{ showExtraHourForm: @entangle('showExtraHourForm'), show: @entangle('showExtraHourForm')}">
     <x-dialog-modal id="extraHourFormModal" wire:model="showExtraHourForm">
         <x-slot name="title">
-            {{ __('Add Extra Hour') }}
-            @if($serviceRoleId !== null)
-                <span class="text-gray-900">for {{ App\Models\ServiceRole::find($serviceRoleId)->name }}</span>
-            @endif
+            {{ __('Add Service Time') }}
         </x-slot>
 
         <x-slot name="content">
@@ -100,7 +97,7 @@
             <x-secondary-button
                 wire:click="$toggle('showExtraHourForm')"
                 wire:loading.attr="disabled"
-                wire:key="cancel-extra-hour-form{{ $serviceRoleId }}"
+                wire:key="cancel-extra-hour-form"
             >
                 {{ __('Cancel') }}
             </x-secondary-button>

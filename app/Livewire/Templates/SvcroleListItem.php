@@ -15,6 +15,10 @@ use function Laravel\Prompts\confirm;
 class SvcroleListItem extends Component
 {
     public $serviceRole;
+    public $srname;
+    public $sryear;
+    public $srdescription;
+    public $srarea_id;
     public $isEditing = false;
     public $isSelected = false;
     public $formattedAreas;
@@ -35,6 +39,13 @@ class SvcroleListItem extends Component
         'item-modal-id' => 'updateModalId',
     ];
 
+    protected $rules = [
+        'srname' => 'required',
+        'sryear' => 'required|integer',
+        'srdescription' => 'nullable',
+        'srarea_id' => 'required|exists:areas,id'
+    ];
+
     public function mount($serviceRoleId)
     {
         $serviceRole = ServiceRole::find($serviceRoleId);
@@ -42,6 +53,10 @@ class SvcroleListItem extends Component
         $this->areas = Area::all();
         $this->instructors = UserRole::where('role', 'instructor')->get();
         $this->formattedAreas = $this->getFormattedAreasProperty();
+        $this->srname = $this->serviceRole->name;
+        $this->sryear = $this->serviceRole->year;
+        $this->srdescription = $this->serviceRole->description;
+        $this->srarea_id = $this->serviceRole->area_id;
     }
 
     public function toggleEditMode($data)
@@ -95,6 +110,7 @@ class SvcroleListItem extends Component
             }
             $serviceRole = ServiceRole::find((int) $id);
             if ($serviceRole) {
+                $this->validate();
                 $isArchived = $serviceRole->archived;
                 $serviceRole->archived = !$isArchived;
                 $serviceRole->save();
@@ -143,10 +159,10 @@ class SvcroleListItem extends Component
             return;
         }
         // $this->validate([
-        //     'serviceRole.name' => 'required',
-        //     'serviceRole.year' => 'required|integer',
-        //     'serviceRole.description' => 'nullable',
-        //     'serviceRole.area_id' => 'required|exists:areas,id'
+        //     'srname' => 'required',
+        //     'sryear' => 'required|integer',
+        //     'srdescription' => 'nullable',
+        //     'srarea_id' => 'required|exists:areas,id'
         // ]);
 
         // $this->serviceRole->save();
@@ -158,15 +174,14 @@ class SvcroleListItem extends Component
         //     'type' => 'success'
         // ]);
         try {
-            $this->validate([
-                'serviceRole.name' => 'required',
-                'serviceRole.year' => 'required|integer',
-                'serviceRole.description' => 'nullable',
-                'serviceRole.area_id' => 'required|exists:areas,id'
-            ]);
+            $this->validate();
 
             $audit_user = User::find((int) auth()->user()->id)->name;
             $oldValue = $this->serviceRole->getOriginal();
+            $this->serviceRole->name = $this->srname;
+            $this->serviceRole->year = $this->sryear;
+            $this->serviceRole->description = $this->srdescription;
+            $this->serviceRole->area_id = $this->srarea_id;
             $this->serviceRole->save();
             $this->isEditing = false;
             $this->dispatch('show-toast', [

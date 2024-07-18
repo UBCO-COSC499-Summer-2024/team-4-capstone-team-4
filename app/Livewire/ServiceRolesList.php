@@ -29,7 +29,6 @@ class ServiceRolesList extends Component
     public $pageSize = 10;
     public $selectedItems = [];
     public $showExtraHourForm = false;
-    public $serviceRoleIdForModal; // To store the serviceRoleId
     protected $validExportOptions = [
         'csv', 'xlsx', 'pdf', 'text', 'print'
     ];
@@ -85,7 +84,6 @@ class ServiceRolesList extends Component
         'toolbarUpdated' => 'handleToolbarUpdate',
         'applyActions' => 'handleApplyActions',
         'filtersReset' => 'resetFilters', // For resetting filters
-        'update-modal-id' => 'updateModalId',
     ];
 
     public function mount($links = []) {
@@ -406,10 +404,8 @@ class ServiceRolesList extends Component
         $this->dispatch('show-toast', ['message' => $msg, 'type' => $type]);
     }
 
-    public function openModal($component, $arguments)
+    public function openModal($component)
     {
-        $svcrId = $arguments['serviceRoleId'];
-        $this->serviceRoleIdForModal = $svcrId;
         if ($component === 'extra-hour-form') {
             $this->openExtraHourForm();
         }
@@ -423,12 +419,6 @@ class ServiceRolesList extends Component
     public function closeModal()
     {
         $this->reset(['showExtraHourForm']);
-        $this->serviceRoleIdForModal = null;
-    }
-
-    public function updateModalId($data) {
-        $id = $data['id'];
-        $this->serviceRoleIdForModal = $id;
     }
 
     public function export($as, $options) {
