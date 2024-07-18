@@ -1,9 +1,9 @@
 @php
     $viewModes = ['table' => 'Table', 'card' => 'Card'];
     $pageModes = ['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll'];
-    $filterBy = ['area' => 'Area', 'name' => 'Name'];
+    $filterBy = ['' => 'Filter By', 'area' => 'Area', 'name' => 'Name'];
     $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
-    $searchCategories = ['name' => 'Name', 'area_id' => 'Area', 'description' => 'Description'];
+    $searchCategories = ['*' => 'All', 'name' => 'Name', 'area_id' => 'Area', 'description' => 'Description'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
     $actions = [
         'edit' => 'Edit',
@@ -112,7 +112,7 @@
                 </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
-                    <option>Actions</option>
+                    <option>Bulk Actions</option>
                     @foreach ($actions as $value => $name)
                         <option value="{{ $value }}">{{ $name }}</option>
                     @endforeach
