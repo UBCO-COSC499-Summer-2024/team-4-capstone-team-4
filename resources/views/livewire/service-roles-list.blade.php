@@ -1,9 +1,9 @@
 @php
     $viewModes = ['table' => 'Table', 'card' => 'Card'];
     $pageModes = ['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll'];
-    $filterBy = ['area' => 'Area', 'name' => 'Name'];
-    $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
-    $searchCategories = ['name' => 'Name', 'area_id' => 'Area', 'description' => 'Description'];
+    $filterBy = ['' => 'Filter By', 'area' => 'Area', 'name' => 'Name', 'year' => 'Year'];
+    $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created', 'year' => 'Year'];
+    $searchCategories = ['*' => 'All', 'name' => 'Name', 'area_id' => 'Area', 'description' => 'Description', 'year' => 'Year'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
     $actions = [
         'edit' => 'Edit',
@@ -27,10 +27,22 @@
 <div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
-        <button class="right" onClick="window.location.href='{{ route('svcroles.add') }}'">
-            <span class="button-title">Create New</span>
-            <span class="material-symbols-outlined">add</span>
-        </button>
+        <div class="flex gap-2 right">
+            <button class="inline-flex px-3 py-1.5 items-center text-[#3b4779] hover:text-white border border-[#3b4779] hover:bg-[#3b4779] focus:ring-1 focus:outline-none focus:ring-[#3b4779] font-medium rounded-lg text-sm text-center" onClick="window.location.href='{{ route('svcroles.add') }}'">
+                <span class="button-title">Create New</span>
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="px-2 rounded-md shadow-sm svcr-list-item-action bg-slate-100" id="svcr-extra-hours-add"
+                    title="Add Extra Hours"
+                    x-on:click="
+                        $dispatch('open-modal', {
+                            'component': 'extra-hour-form'
+                        });
+                    ">
+                <span class="material-symbols-outlined icon">more_time</span>
+                <span>Add</span>
+            </button>
+        </div>
     </h1>
 
     <div class="svcr-container">
@@ -112,7 +124,7 @@
                 </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
-                    <option>Actions</option>
+                    <option>Bulk Actions</option>
                     @foreach ($actions as $value => $name)
                         <option value="{{ $value }}">{{ $name }}</option>
                     @endforeach
@@ -135,14 +147,23 @@
                             <div class="flex">
                                     Service Role
                                     <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                    <span class="material-symbols-outlined sort-icon " data-field="name" data-direction="asc">unfold_more</span>
                                 </div>
                             </div>
                         </th>
                         <th class="svcr-list-header-item">
-                            <div class="flex">Area
+                            <div class="flex">
+                                Area
                                 <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                    <span class="material-symbols-outlined sort-icon " data-field="area_id" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Year
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="year" data-direction="asc">unfold_more</span>
                                 </div>
                             </div>
                         </th>
@@ -150,7 +171,7 @@
                             <div class="flex">
                                 Description
                                 <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                    <span class="material-symbols-outlined sort-icon " data-field="description" data-direction="asc">unfold_more</span>
                                 </div>
                             </div>
                         </th>
@@ -158,31 +179,25 @@
                             <div class="flex">
                                 Instructors
                                 <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                    <span class="material-symbols-outlined sort-icon " data-field="instructors" data-direction="asc">unfold_more</span>
                                 </div>
-                            </div>
-                        </th>
-                        <th class="svcr-list-header-item">
-                            <div class="flex">
-                                Hours
-                                {{-- <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
-                                </div> --}}
                             </div>
                         </th>
                         <th class="svcr-list-header-item">
                             <div class="flex">
                                 Manage
-                                <div class="ml-1 sort-icons">
-                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
-                                </div>
                             </div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($serviceRoles as $svcr)
-                        <livewire:templates.svcrole-list-item :serviceRole="$svcr" :key="'serviceRoleListI-'.$svcr->id" />
+                        @php
+                            $svcrId = $svcr->id;
+                        @endphp
+                        <livewire:templates.svcrole-list-item :serviceRoleId="$svcrId"
+                        :key="'svcrli-'.$svcrId"
+                        />
                     @empty
                         <tr>
                             <td colspan="5" class="empty-list">
@@ -195,7 +210,7 @@
 
             <div class="svcr-list" x-show="$wire.viewMode === 'card'">
                 @forelse ($serviceRoles as $serviceRole)
-                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
+                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'svcrci-'.$serviceRole->id" />
                 @empty
                     <div class="empty-list">
                         <span>No service roles found.</span>
@@ -210,7 +225,7 @@
     </div>
 
     @include('components.link-bar', ['links' => $links])
-    <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourForm-'.$serviceRoleIdForModal"  x-show="showExtraHourFor" :showExtraHourForm="$showExtraHourForm" :serviceRoleId="$serviceRoleIdForModal" />
+    <livewire:extra-hour-form :key="'extraHourForm'.time()" :showExtraHourForm="$showExtraHourForm" x-show="showExtraHourForm" x-cloak/>
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', initializeToolbar);

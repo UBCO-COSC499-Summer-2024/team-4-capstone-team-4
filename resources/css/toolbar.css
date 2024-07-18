@@ -141,7 +141,6 @@ h1 button {
     padding: 4px;
     border-radius: 16px;
     border: none;
-    outline: none !important;
     background: #fff;
     font-size: 14px;
     cursor: pointer;
