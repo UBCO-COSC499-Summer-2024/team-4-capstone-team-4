@@ -16,6 +16,8 @@ class StaffList extends Component
     public $selectedAreas = [];
     public $hours;
     public $staffCheckboxes = [];
+    public $selectedYear;
+    public $selectedMonth;
     public $showModal = false;
 
     public $showSuccessModal = false;
@@ -23,6 +25,12 @@ class StaffList extends Component
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
     ];
+
+    public function mount()
+    {
+        $this->selectedYear = date('Y');
+        $this->selectedMonth = date('F');
+    }
 
     public function render()
     {
@@ -53,7 +61,7 @@ class StaffList extends Component
             });
         }
         //join all the tables
-        $currentYear = date('Y');
+        $currentYear = $this->selectedYear;
         $usersQuery = $usersQuery->distinct()
         ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
@@ -63,7 +71,7 @@ class StaffList extends Component
         ->where('areas.dept_id', $dept_id);
 
         // Sort according to sort fields
-        $currentMonth = date('F'); 
+        $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
             case 'area':
                 $usersQuery->select('users.*', 'instructor_performance.instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
