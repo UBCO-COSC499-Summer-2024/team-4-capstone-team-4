@@ -67,8 +67,8 @@
             /> --}}
                 <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
-                    @foreach ($exports as $name => $format)
-                        <option value="{{ $format }}">{{ $name }}</option>
+                    @foreach ($exports as $fname => $format)
+                        <option value="{{ $format }}">{{ $fname }}</option>
                     @endforeach
                 </select>
         </div>
@@ -93,14 +93,14 @@
                         <div class="form-item">
                             <label class="form-item" for="name">Name</label>
                             <div class="grouped">
-                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $serviceRole->name }}">
+                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $name }}">
                                 @error('name') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="grouped">
                             <label class="form-item" for="description">Description</label>
                             <div class="grouped">
-                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $serviceRole->description }}</textarea>
+                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $description }}</textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                                 <select class="form-select" id="area_id" wire:model="area_id" x-bind:disabled="!isEditing" >
                                     <option value="">Select Area</option>
                                     @foreach($areas as $area)
-                                        <option value="{{ $area->id }}" @if ($serviceRole->area_id == $area->id) selected @endif>{{ $area->name }}</option>
+                                        <option value="{{ $area->id }}" @if ($area_id == $area->id) selected @endif>{{ $area->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('area_id') <span class="error">{{ $message }}</span> @enderror
