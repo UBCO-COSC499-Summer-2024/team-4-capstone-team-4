@@ -102,17 +102,21 @@
                 <span class="material-symbols-outlined icon icon-cancel-edit">block</span>
             </button>
 
-            <button class="svcr-list-item-action"
-                    :title="isEditing ? 'Save' : 'Edit'"
-                    @click="isEditing = !isEditing"
-                    wire:click="editServiceRole({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon text-[#3b4779]" x-text="isEditing ? 'save' : 'edit'"></span>
-            </button>
+            @if(!$serviceRole->archived)
+                <button class="svcr-list-item-action"
+                        :title="isEditing ? 'Save' : 'Edit'"
+                        @click="isEditing = !isEditing"
+                        wire:click="editServiceRole({{ $serviceRole->id }})">
+                    <span class="material-symbols-outlined icon text-[#3b4779]" x-text="isEditing ? 'save' : 'edit'"></span>
+                </button>
+            @endif
 
             <button class="svcr-list-item-action"
                     wire:click="confirmDelete({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon text-[#ea3030]">
-                    @if ($serviceRole->archived)
+                <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
+                    $serviceRole->archived ? 'Unarchive' : 'Archive'
+                }}">
+                    @if (!$serviceRole->archived)
                         archive
                     @else
                         unarchive
