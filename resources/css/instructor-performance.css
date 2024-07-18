@@ -87,6 +87,36 @@
     flex: 2;
 }
 
+.leaderboard-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-left: 7px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.leaderboard-table {
+    width: 100%;
+    font-size: 1.0rem;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    padding: 4px;
+    text-align: left;
+}
+
+.leaderboard-table th {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.leaderboard-table td {
+    font-size: 40px;
+    font-weight: bold;
+    padding-left: 40px;
+}
+
 .course-performance {
     padding: 0px;
     background-color: #ffffff;
@@ -117,4 +147,32 @@
 .metric-value {
     font-weight: bold;
     font-size: 24px; 
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.icon-circle {
+    width: 64px; 
+    height: 64px; 
+    border-radius: 50%;
+    background-color: rgba(12, 189, 255, 0.1); 
+    border: 1px solid rgba(12, 189, 255, 0.5); 
+    color: #d3af37; 
+    display: flex;
+}
+
+.badge-container {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.custom-icon {
+    font-size: 48px !important;
+    padding-left: 7px;
+    padding-top: 6px;
 }

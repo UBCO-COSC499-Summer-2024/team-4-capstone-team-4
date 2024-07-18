@@ -101,7 +101,7 @@ class ChartController extends Controller {
             }
 
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
-            $leaderboard = $this->leaderboardPrev($dept, $currentYear);
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, false);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
             $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
@@ -126,6 +126,8 @@ class ChartController extends Controller {
                 }
 
                 $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
+                $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
+                $src = User::where('id', $userId)->first()->profile_photo_url;
 
                 $chart5 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -133,10 +135,10 @@ class ChartController extends Controller {
                     $chart6 = $this->instructorProgressBar($performance, $currentMonth);
                     
                     return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                                'assignmentCount', 'ranking', 'src', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 } else {
                     return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                                'assignmentCount', 'ranking', 'src', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 }
             } else {
                 return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
@@ -159,6 +161,8 @@ class ChartController extends Controller {
             }
 
             $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
+            $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
+            $src = User::where('id', $userId)->first()->profile_photo_url;
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
 
@@ -166,10 +170,10 @@ class ChartController extends Controller {
                 $chart2 = $this->instructorProgressBar($performance, $currentMonth);
 
                 return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'performance'));
+                                'assignmentCount', 'ranking', 'src', 'performance'));
             } else {
                 return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'performance'));
+                            'assignmentCount', 'ranking', 'src', 'performance'));
             }
         } else {
             return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor'));
@@ -231,9 +235,11 @@ class ChartController extends Controller {
      * within a specified department. The results are ordered by their performance scores.
      *
      * @param int $deptId The ID of the department for which to retrieve performances.
-     * @return array An array containing the names and scores of instructors.
+     * @param int $currentYear The current year.
+     * @param boolean $forRank Defines if the user is getting the leaderboard for ranking purposes.
+     * @return array An array containing the names and scores of instructors. 
      */
-    private function leaderboardPrev($deptId, $currentYear) {
+    private function leaderboardPrev($deptId, $currentYear, $forRank) {
         $usersQuery = User::query();
         $usersQuery->distinct()
             ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
@@ -246,8 +252,15 @@ class ChartController extends Controller {
             })
             ->where('areas.dept_id', $deptId);
 
-        $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
-            ->orderBy('instructor_performance.score', 'desc')->take(5);
+        if ($forRank) {
+            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
+                ->orderBy('instructor_performance.score', 'desc');
+        }
+        
+        else {
+            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
+                ->orderBy('instructor_performance.score', 'desc')->take(5);
+        }
 
         $users = $usersQuery->get();
 
@@ -260,6 +273,55 @@ class ChartController extends Controller {
         }
 
         return $leaderboardData;
+    }
+
+    /**
+     * Retrieves the rank of an instructor based on their performance in a given year.
+     *
+     * This method joins multiple tables to gather data about the instructor, including the
+     * departments they are associated with, and calculates their rank within each department.
+     *
+     * @param int $instructorId The ID of the instructor.
+     * @param int $currentYear The year for which the ranking is being calculated.
+     * @param float $score The performance score of the instructor.
+     * @return array An array containing the rank, score, and standing percentage of the instructor
+     *               within each department they are associated with.
+     */
+    private function getRank($instructorId, $currentYear, $score) {
+        $deptIdsQuery = User::query();
+        $deptIdsQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
+            ->leftJoin('service_roles', 'role_assignments.service_role_id', '=', 'service_roles.id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
+                    ->where('extra_hours.year', $currentYear);
+            })
+            ->where('user_roles.id', $instructorId)
+            ->where(function ($query) use ($currentYear) {
+                $query->where('course_sections.year', $currentYear)
+                    ->orWhere('extra_hours.year', $currentYear);
+            });
+
+        $deptIdsQuery->select('areas.dept_id', 'users.firstname', 'users.lastname');
+
+        $results = $deptIdsQuery->get();
+        $deptIds = $results->pluck('dept_id')->unique();
+        $name = $results->pluck('firstname')->first() . ' ' . $results->pluck('lastname')->first();
+        $ranking = [];
+
+        foreach ($deptIds as $dept) {
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, true);
+            $rank = array_search($name, array_column($leaderboard, 'name')) + 1;
+            $standing = ($rank / count($leaderboard)) * 100;
+            $rank = $this->addOrdinalSuffix($rank);
+            $ranking[] = ['rank' => $rank, 'score' => $score, 'standing' => $standing];
+        }
+
+        return $ranking;
     }
 
     /**
@@ -552,7 +614,7 @@ class ChartController extends Controller {
                 ->datasets([
                     [
                         "label" => "Total Hours",
-                        "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                        "backgroundColor" => "rgba(59, 71, 121, 1)",
                         "borderColor" => "rgba(37, 41, 150, 0.7)",
                         "data" => $totalHours
                     ],
@@ -585,7 +647,7 @@ class ChartController extends Controller {
                 ->datasets([
                     [
                         "label" => "Total Hours",
-                        "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                        "backgroundColor" => "rgba(59, 71, 121, 1)",
                         "borderColor" => "rgba(37, 41, 150, 0.7)",
                         "data" => $totalHours
                     ]
@@ -631,7 +693,7 @@ class ChartController extends Controller {
             ->datasets([
                 [
                     "label" => "Current Hours",
-                    "backgroundColor" => "rgba(37, 41, 150, 0.7)",
+                    "backgroundColor" => "rgba(59, 71, 121, 1)",
                     "borderColor" => "rgba(37, 41, 150, 0.31)",
                     "borderWidth" => 0,
                     "borderSkipped" => false,
@@ -706,4 +768,43 @@ class ChartController extends Controller {
                 ]
             ]);
     }
+
+    /**
+     * Adds an ordinal suffix to a number to denote its position.
+     *
+     * Examples:
+     * - 1 becomes 1st
+     * - 2 becomes 2nd
+     * - 3 becomes 3rd
+     * - 4 becomes 4th
+     * - and so on...
+     *
+     * @param int $number The number to which the ordinal suffix is added.
+     * @return string The number with its ordinal suffix.
+     */
+    private function addOrdinalSuffix($number) {
+        $suffix = '';
+    
+        if (!in_array(($number % 100), [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1:
+                    $suffix = 'st';
+                    break;
+                case 2:
+                    $suffix = 'nd';
+                    break;
+                case 3:
+                    $suffix = 'rd';
+                    break;
+                default:
+                    $suffix = 'th';
+                    break;
+            }
+        } else {
+            $suffix = 'th';
+        }
+    
+        return $number . $suffix;
+    }
+
 }

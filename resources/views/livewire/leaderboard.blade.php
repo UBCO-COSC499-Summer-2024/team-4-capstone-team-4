@@ -23,6 +23,8 @@
                         @endphp
                         <x-leaderboard-row
                             rank="{{ $loop->iteration }}"
+                            rankString="{{ $this->addOrdinalSuffix($loop->iteration) }}"
+                            count="{{ count($users) }}"
                             instructorId="{{ $user->instructor_id }}"
                             src="{{ $user->profile_photo_url }}"
                             fullname="{{ $user->firstname }} {{ $user->lastname }}"

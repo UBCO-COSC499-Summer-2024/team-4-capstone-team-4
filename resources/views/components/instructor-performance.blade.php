@@ -24,7 +24,30 @@
     </div>
     <div class="column performance-column">
         <div class="leader-board">
-            Gamification Coming Soon...
+            <div class="leaderboard-title">ACHIEVEMENTS</div>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank:</th>
+                                <th>Score:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ranking as $rank)
+                                <tr>
+                                    <td>{{ $rank['rank'] }}</td>
+                                    <td>{{ $rank['score'] }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">
+                                        <div class="badge-container">
+                                            <x-badge :standing="$rank['standing']" :rank="$rank['rank']" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
         </div>
         <div class="course-performance">
             <div class="course-metric glass">
