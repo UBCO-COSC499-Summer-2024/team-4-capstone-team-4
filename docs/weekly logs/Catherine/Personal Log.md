@@ -1,3 +1,34 @@
+## Friday (7/17 - 7/19)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_17_2024-07_19_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Testing Instructor Report
+  * #2: Testing Dept Report
+  * #3: Refactor UI - staff page
+  * #4: Refactor UI - report pages
+  * #5: Peer Testing Task List
+  * #6: Peer Testing Google Form
+
+### Progress Update (since 7/17/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Testing Instructor Report | In progress |
+| Testing Dept Report | In progress |
+| Refactor UI - staff page | Complete |
+| Refactor UI - report pages| Complete |
+| Peer Testing Task List| Complete |
+| Peer Testing Google Form | Complete |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * 
+
 ## Wednesday (7/12 - 7/17)
 
 ### Timesheet
