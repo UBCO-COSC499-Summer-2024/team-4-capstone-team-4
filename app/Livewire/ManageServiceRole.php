@@ -237,14 +237,16 @@ class ManageServiceRole extends Component
 
     public function saveServiceRole() {
         try {
+            // dd($this->name, $this->description, $this->year, $this->area_id, $this->monthly_hours);
             $this->serviceRole->name = $this->name;
             $this->serviceRole->description = $this->description;
             $this->serviceRole->year = $this->year;
             $this->serviceRole->area_id = $this->area_id;
             $this->serviceRole->monthly_hours = is_array($this->monthly_hours) ? json_encode($this->monthly_hours) : $this->monthly_hours;
             $this->validate();
+            // dd($this->serviceRole);
             $this->serviceRole->save();
-            $this->serviceRole->refresh();
+            // $this->serviceRole->refresh();
             $this->fetchServiceRole($this->serviceRole->id);
             $this->dispatch('show-toast', [
                 'message' => 'Service Role updated successfully.',
