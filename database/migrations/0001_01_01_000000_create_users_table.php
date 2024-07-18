@@ -182,6 +182,7 @@ return new class extends Migration
         });
 
         Schema::create('settings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
             $table->string('auth_method')->nullable()->default('email-password');
             $table->string('theme')->nullable()->default('light');

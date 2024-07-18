@@ -45,7 +45,7 @@
                         </div>
 
                         <div class="text-sm text-gray-500">
-                            {{ __('Toggle dark mode.') }}
+                            {{ __('Select your theme.') }}
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,9 @@
                     <x-dropdown :align="'right'">
                         <x-slot name="trigger">
                             <button class="flex items-center">
-                                <span>{{ __('Select theme') }}</span>
+                                {{-- <span>{{ __('Select theme') }}</span> --}}
+                                {{-- default from db --}}
+                                <span>{{ $theme }}</span>
                                 <span >
                                     <span class="flex justify-center w-5 h-5 p-0 m-0 items center material-symbols-outlined icon">expand_more</span>
                                 </span>
@@ -120,7 +122,8 @@
                     <x-dropdown :align="'right'" width="64">
                         <x-slot name="trigger">
                             <button class="flex items-center">
-                                <span>{{ __('Select your timezone.') }}</span>
+                                {{-- <span>{{ __('Select your timezone.') }}</span> --}}
+                                <span>{{ $timezone }}</span>
                                 <span >
                                     <span class="flex items-center justify-center w-5 h-5 p-0 m-0 material-symbols-outlined icon">expand_more</span>
                                 </span>
@@ -158,7 +161,8 @@
                     <x-dropdown :align="'right'">
                         <x-slot name="trigger">
                             <button class="flex items-center">
-                                <span>{{ __('Select your locale.') }}</span>
+                                {{-- <span>{{ __('Select your locale.') }}</span> --}}
+                                <span>{{ locales()[$locale] }}</span>
                                 <span >
                                     <span class="flex items-center justify-center w-5 h-5 p-0 m-0 material-symbols-outlined icon">expand_more</span>
                                 </span>
@@ -195,7 +199,8 @@
                     <x-dropdown :align="'right'">
                         <x-slot name="trigger">
                             <button class="flex items-center">
-                                <span>{{ __('Select your Language.') }}</span>
+                                {{-- <span>{{ __('Select your Language.') }}</span> --}}
+                                <span>{{ languages()[$language] }}</span>
                                 <span >
                                     <span class="flex items-center justify-center w-5 h-5 p-0 m-0 material-symbols-outlined icon">expand_more</span>
                                 </span>

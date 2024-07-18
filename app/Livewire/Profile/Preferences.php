@@ -14,6 +14,7 @@ class Preferences extends Component
     public $timezone;
     public $locale;
     public $language;
+    public $theme;
     public $auth_method;
     public $custom = [];
 
@@ -31,6 +32,7 @@ class Preferences extends Component
         $this->settings = auth()->user()->settings;
         $this->timezone = $this->settings['timezone'];
         $this->locale = $this->settings['locale'];
+        $this->theme = $this->settings['theme'];
         $this->language = $this->settings['language'];
         $this->auth_method = $this->settings['auth_method'];
         if ($this->settings['custom'] === null) {
@@ -55,6 +57,7 @@ class Preferences extends Component
         try {
             $this->validate();
             $this->settings['timezone'] = $this->timezone;
+            $this->settings['theme'] = $this->theme;
             $this->settings['locale'] = $this->locale;
             $this->settings['language'] = $this->language;
             $this->settings['auth_method'] = $this->auth_method;
@@ -102,6 +105,11 @@ class Preferences extends Component
     public function setLanguage($language)
     {
         $this->settings['language'] = $language;
+    }
+
+    public function setTheme($theme)
+    {
+        $this->settings['theme'] = $theme;
     }
 
     // public function setAuthMethod($auth_method)

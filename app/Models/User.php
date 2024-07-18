@@ -79,6 +79,13 @@ class User extends Authenticatable {
         $lastInitial = isset($lastname[0]) ? strtoupper($lastname[0]) : '';
         return $firstInitial . $lastInitial;
     }
+    
+    protected static function boot() {
+        parent::boot();
+        static::created(function ($user) {
+            $user->createSettings();
+        });
+    }
 
     /**
      * Define a one-to-many relationship with UserRole model.
@@ -129,5 +136,9 @@ class User extends Authenticatable {
 
     public function settings() {
         return $this->hasOne(Setting::class, 'user_id');
+    }
+
+    public function createSettings() {
+        return $this->settings()->create();
     }
 }
