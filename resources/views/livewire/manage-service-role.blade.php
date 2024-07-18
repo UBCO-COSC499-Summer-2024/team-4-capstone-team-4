@@ -21,34 +21,56 @@
         </span>
 
         <div class="flex right">
-            <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
-                <span class="material-symbols-outlined icon">
-                    edit
-                </span>
-                <span>Edit</span>
-            </button>
+            @if(!$serviceRole->archived)
+                <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
+                    <span class="material-symbols-outlined icon">
+                        edit
+                    </span>
+                    <span>Edit</span>
+                </button>
+            @endif
             <button class="btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
-                <span class="material-symbols-outlined icon">delete</span>
-                <span>Delete</span>
+            {{-- if user has admin role in roles --}}
+            @if (auth()->user()->hasRoles(['admin']))
+                <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    <span class="material-symbols-outlined icon">delete</span>
+                    <span>Delete</span>
+                </button>
+            @endif
+            <button class="btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    @if ($serviceRole->archived)
+                        <span class="material-symbols-outlined icon">
+                            unarchive
+                        </span>
+                        <span>
+                            Unarchive
+                        </span>
+                    @else
+                        <span class="material-symbols-outlined icon">
+                            archive
+                        </span>
+                        <span>
+                            Archive
+                        </span>
+                    @endif
             </button>
             {{-- export --}}
-            <livewire:dropdown-element
+            {{-- <livewire:dropdown-element
                 title="Export"
                 id="exportDropdown"
                 pre-icon="file_download"
                 name="export"
                 :values="$exports"
-            />
-                {{-- <select id="exportDropdown" title="Export" class="form-select">
+            /> --}}
+                <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
-                    @foreach ($exports as $name => $format)
-                        <option value="{{ $format }}">{{ $name }}</option>
+                    @foreach ($exports as $fname => $format)
+                        <option value="{{ $format }}">{{ $fname }}</option>
                     @endforeach
-                </select> --}}
+                </select>
         </div>
     </h1>
 
@@ -66,19 +88,19 @@
     <div class="svcrole-item" :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
         <section id="about-role" class="svcr-item">
             <form id="service-role-update-form" class="form svcr-item-form">
-                <div class="horizontal grouped">
-                    <div class="form-group">
+                <div class="horizontal grouped w-fit">
+                    <div class="form-group svcrole-self">
                         <div class="form-item">
                             <label class="form-item" for="name">Name</label>
                             <div class="grouped">
-                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $serviceRole->name }}">
+                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $name }}">
                                 @error('name') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="grouped">
                             <label class="form-item" for="description">Description</label>
                             <div class="grouped">
-                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $serviceRole->description }}</textarea>
+                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $description }}</textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -95,7 +117,7 @@
                                 <select class="form-select" id="area_id" wire:model="area_id" x-bind:disabled="!isEditing" >
                                     <option value="">Select Area</option>
                                     @foreach($areas as $area)
-                                        <option value="{{ $area->id }}" @if ($serviceRole->area_id == $area->id) selected @endif>{{ $area->name }}</option>
+                                        <option value="{{ $area->id }}" @if ($area_id == $area->id) selected @endif>{{ $area->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('area_id') <span class="error">{{ $message }}</span> @enderror
@@ -162,7 +184,7 @@
                                     <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
                                 </th>
                                 <th class="text-left svcr-list-header-item">Name</th>
-                                <th class="text-right svcr-list-header-item">Actions</th>
+                                <th class="svcr-list-header-item">Actions</th>
                             </tr>
                         </thead>
                         <tbody wire:model.live="instructors">

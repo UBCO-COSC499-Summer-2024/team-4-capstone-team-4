@@ -8,7 +8,7 @@
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
-            <div class="flex items-center px-1.5 py-2 text-xs">
+            <div class="flex items-center px-1.5 py-2 text-sm">
                 Name
                 <button wire:click="sort('firstname')">
                     @if($sortField === 'firstname' && $sortDirection === 'asc')
@@ -28,7 +28,7 @@
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
-            <div class="flex items-center px-1.5 py-2 text-xs">
+            <div class="flex items-center px-1.5 py-2 text-sm">
                 Area(s)
                 <button wire:click="sort('area')">
                     @if($sortField === 'area' && $sortDirection === 'asc')
@@ -48,7 +48,7 @@
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
-            <div class="flex items-center px-1.5 py-2 text-xs">
+            <div class="flex items-center px-1.5 py-2 text-sm">
                 Completed Hours - {{ date('F') }}
                 <button wire:click="sort('total_hours')">
                     @if($sortField === 'total_hours' && $sortDirection === 'asc')
@@ -68,7 +68,7 @@
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
-            <div class="flex items-center px-1.5 py-2 text-xs">
+            <div class="flex items-center px-1.5 py-2 text-sm">
                 Target Hours - {{ date('Y') }}
                 <button wire:click="sort('target_hours')">
                     @if($sortField === 'target_hours' && $sortDirection === 'asc')
@@ -88,7 +88,7 @@
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
-            <div class="flex items-center px-1.5 py-2 text-xs">
+            <div class="flex items-center px-1.5 py-2 text-sm">
                 Score
                 <button wire:click="sort('score')">
                     @if($sortField === 'score' && $sortDirection === 'asc')

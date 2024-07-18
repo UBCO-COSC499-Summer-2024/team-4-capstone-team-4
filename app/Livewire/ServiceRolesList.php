@@ -7,6 +7,7 @@ use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Area;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -172,8 +173,15 @@ class ServiceRolesList extends Component
 
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
-
-        // if area requested in filter/sort/category/group, use the area id for each item and do the action based on area name and or description and or id.
+        $user = auth()->user();
+        $userRole = $user->roles;
+        if (($userRole->contains('role', 'dept_head') || $userRole->contains('role', 'dept_staff')) && !$userRole->contains('role', 'admin')) {
+            $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
+            // area then department
+            $serviceRolesQuery->whereHas('area', function ($query) use ($deptId) {
+                $query->where('dept_id', $deptId);
+            });
+        }
 
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
@@ -340,6 +348,9 @@ class ServiceRolesList extends Component
             case 'edit':
                 $this->toggleEdit();
                 break;
+            case 'archive':
+                $this->archive($items);
+                break;
             default:
                 break;
         }
@@ -457,4 +468,49 @@ class ServiceRolesList extends Component
             'Content-Type' => 'text/' . $as,
         ]);
     }
+
+    public function archive($selectedIds) {
+        try {
+            // For example:
+            foreach ($selectedIds as $id => $selected) {
+                // Convert the ID to an integer
+                $numericId = (int) $id;
+
+                if ($selected) {
+                    $serviceRole = ServiceRole::find($numericId);
+                    if ($serviceRole) {
+                        $isArchived = $serviceRole->archived;
+                        $serviceRole->archived = !$isArchived;
+                        $serviceRole->save();
+
+                        AuditLog::create([
+                            'user_id' => (int) auth()->user()->id,
+                            'user_alt' => auth()->user()->name,
+                            'action' => 'archive',
+                            'table_name' => 'service_roles',
+                            'operation_type' => 'UPDATE',
+                            'old_value' => json_encode($serviceRole->getOriginal()),
+                            'new_value' => json_encode($serviceRole->getAttributes()),
+                            'description' => 'Service Role ' . $serviceRole->name . ' archived by ' . auth()->user()->name,
+                        ]);
+
+                        // Optionally, show a success message
+                        $this->toast('Successfully '.(
+                            $isArchived ? 'unarchived' : 'archived'
+                        ).' service role: ' . $serviceRole->name, 'success');
+                    }
+                }
+            }
+
+            // Optionally, show a success message
+            // $this->toast('Selected service roles archived successfully!', 'success');
+            // wait 1 second
+            // sleep(1);
+        } catch (\Exception $e) {
+            // Optionally, show an error message
+            // dd($e);
+            $this->toast('An error occurred: ' . $e->getMessage(), 'error');
+        }
+    }
+
 }

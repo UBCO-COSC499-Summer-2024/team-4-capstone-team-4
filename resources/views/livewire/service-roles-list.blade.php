@@ -5,7 +5,14 @@
     $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
     $searchCategories = ['name' => 'Name', 'area_id' => 'Area', 'description' => 'Description'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
-    $actions = ['edit' => 'Edit', 'delete' => 'Delete'];
+    $actions = [
+        'edit' => 'Edit',
+        'delete' => 'Delete',
+        'archive' => 'Archive',
+        'export' => 'Export All',
+        'selected' => 'Export Selected',
+        'allExcept' => 'Export All Except',
+    ];
     $groupBy = ['area_id' => 'Area', 'name' => 'Name'];
     $features = [
         'viewMode' => true,
@@ -77,7 +84,7 @@
                 </div>
             </section>
 
-            <section class="toolbar-section">
+            {{-- <section class="toolbar-section">
                 <select id="sortDropdown" class="toolbar-dropdown">
                     @foreach ($sortBy as $value => $name)
                         <option value="{{ $value }}"
@@ -93,16 +100,16 @@
                             >{{ $name }}</option>
                     @endforeach
                 </select>
-            </section>
+            </section> --}}
 
             <section class="toolbar-section">
-                <select id="groupDropdown" class="toolbar-dropdown">
+                {{-- <select id="groupDropdown" class="toolbar-dropdown">
                     @foreach ($groupBy as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($selectedGroup == $value) selected @endif
                             >{{ $name }}</option>
                     @endforeach
-                </select>
+                </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
                     <option>Actions</option>
@@ -111,7 +118,8 @@
                     @endforeach
                 </select>
 
-                <button class="toolbar-button" wire:click="refresh">
+                <button class="toolbar-button"
+                    x-on:click="window.location.href = window.location.href;">
                     <span class="material-symbols-outlined">refresh</span>
                 </button>
             </section>
@@ -123,12 +131,53 @@
                         <th class="svcr-list-header-item">
                             <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
                         </th>
-                        <th class="svcr-list-header-item">Service Role</th>
-                        <th class="svcr-list-header-item">Area</th>
-                        <th class="svcr-list-header-item">Description</th>
-                        <th class="svcr-list-header-item">Instructors</th>
-                        <th class="svcr-list-header-item">Hours</th>
-                        <th class="svcr-list-header-item">Manage</th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                    Service Role
+                                    <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">Area
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Description
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Instructors
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Hours
+                                {{-- <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div> --}}
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Manage
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="courseNames" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -207,6 +256,8 @@
                 Livewire.dispatch('handleItemSelected', checkbox.value, checkbox.checked);
             });
         }
+
+        updateSelectAll();
 
         if (checkAll) {
             checkAll.addEventListener('change', function (e) {
