@@ -23,7 +23,7 @@ services:
             - InsightNet
         depends_on:
             - insightdb
-            - selenium
+            - insight-selenium
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
@@ -75,8 +75,8 @@ services:
             - insightdb
         networks:
             - InsightNet
-    selenium:
-        image: 'seleniarm/standalone-chromium'
+    insight-selenium:
+        image: 'selenium/standalone-chrome'
         extra_hosts:
         - 'host.docker.internal:host-gateway'
         volumes:

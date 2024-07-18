@@ -33,7 +33,7 @@ class ExtraHourFactory extends Factory {
         return [
             'name' => $this->faker->randomElement(['Meeting', 'Committee', 'Conference']),
             'description' => $this->faker->sentence,
-            'hours' => $this->faker->numberBetween(1, 730),
+            'hours' => $this->faker->numberBetween(1, 160),
             'year'=> $this->faker->year(),
             'month' => $this->faker->numberBetween(1, 12),
             'assigner_id' => UserRole::where('role', ['dept_head', 'dept_staff'])->pluck('id')->random(),

@@ -25,8 +25,9 @@ class ExtraHourForm extends Component
     public $area_id;
     public $areas;
     public $user_roles;
-    public $serviceRoleId;
-    public $showExtraHourForm = false;
+    // public $serviceRoleId;
+    public $showExtraHourForm;
+    public $show;
     protected $listeners = [
         'showExtraHourForm' => 'showForm'
     ];
@@ -42,23 +43,24 @@ class ExtraHourForm extends Component
         'area_id' => 'required|exists:areas,id',
     ];
 
-    public function mount($showExtraHourForm, $serviceRoleId)
+    public function mount($showExtraHourForm = true)
     {
-        $this->serviceRoleId = $serviceRoleId;
+        // $this->serviceRoleId = $serviceRoleId;
         $this->year = date('Y');
         $this->month = date('n');
-        // $this->user_roles = UserRole::where('role', 'instructor')->get();
+        $this->user_roles = UserRole::where('role', 'instructor')->get();
         // ServiceRole::find($this->serviceRoleId)->where('area_id', $this->area_id)
         // ->where('year', $this->year)
         // ->first();
-        if ($this->serviceRoleId) {
-            $this->user_roles = ServiceRole::find($this->serviceRoleId)->userRoles->where('role', 'instructor');
-        } else {
-            $this->user_roles = UserRole::where('role', 'instructor')->get();
-        }
+        // if ($this->serviceRoleId) {
+        //     $this->user_roles = ServiceRole::find($this->serviceRoleId)->userRoles->where('role', 'instructor');
+        // } else {
+        // }
+        $this->user_roles = UserRole::where('role', 'instructor')->get();
         $this->areas = Area::all();
         $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id ?? null;
-        $this->area_id = $serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
+        // $this->area_id = $serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
+        $this->area_id = null;
         $this->showExtraHourForm = $showExtraHourForm;
     }
 
@@ -67,11 +69,11 @@ class ExtraHourForm extends Component
         $clear = false;
         $this->validate();
 
-        $serviceRole = ServiceRole::find($this->serviceRoleId)->where('area_id', $this->area_id)
-        ->where('year', $this->year)
-        ->first();
-        $instructors = $serviceRole->instructors;
-        dd($instructors);
+        // $serviceRole = ServiceRole::find($this->serviceRoleId)->where('area_id', $this->area_id)
+        // ->where('year', $this->year)
+        // ->first();
+        $instructors = UserRole::where('role', 'instructor')->get();
+        // dd($instructors);
         if ($this->instructor_id == null) {
             $this->instructor_id = (int) $this->instructor_id;
             foreach ($instructors as $instructor) {
@@ -173,7 +175,7 @@ class ExtraHourForm extends Component
                 ]);
             }
 
-            $departmentPerformance = Area::find($this->area)->department->departmentPerformance()
+            $departmentPerformance = Area::find($this->area_id)->department->departmentPerformance()
                 ->where('year', $this->year)
                 ->first();
             if ($departmentPerformance) {
@@ -193,11 +195,17 @@ class ExtraHourForm extends Component
 
         if ($clear) {
             $this->resetForm();
+            $this->dispatch('closeModal');
         }
     }
 
     public function cancel() {
         $this->dispatch('closeModal');
+    }
+
+    public function showForm()
+    {
+        $this->showExtraHourForm = true;
     }
 
     public function resetForm()
@@ -209,7 +217,8 @@ class ExtraHourForm extends Component
         $this->month = date('n');
         $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id ?? null;
         $this->instructor_id = null;
-        $this->area_id = $this->serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
+        // $this->area_id = $this->serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
+        $this->area_id = null;
     }
 
     public function render()
