@@ -2,6 +2,68 @@
 
 ## Date Range:
 
+- July 17 - July 18
+
+## Features in the Project Plan Cycle:
+
+- Testing
+- Refactor UI to be consistent
+- Instructor Report Page & Export
+- Course Details Page
+- Service Roles - Audit Logs, Requests
+- Gamification & Leaderboard - Badges
+- Import Page - File Upload
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july17_july19.png)
+![image of tasks](./tasks/inprogress_july17_july19.png)
+![image of tasks](./tasks/inreview_july17_july19.png)
+![image of tasks](./tasks/done_july17_july19.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july17_july19.png)
+![image of tasks](./tasks/inprogress_july17_july19.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july17_july19.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july17_july19.png)
+![image of clockify report](./clockify/individual_july17_july19.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july17_july19.png)
+![image of tasks](./tasks/done_july17_july19.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july17_july19.png)
+![image of tasks](./tasks/inprogress_july17_july19.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_july17_july19.png)
+![image of test report](./testing/feature_test_july17_july19.png)
+
+## Overview:
+Our team worked on ensuring the project was stable and ready for the upcoming testing event. We have unified our UI and touched up small details dealing with responsiveness and other design details. We created our list of tasks for people to test our project and a google form survey for them to provide feedback. 
+
+## Goals for next cycle
+
+- File upload functionality
+- Gamification features
+- Unit testing
+- Feature testing
+- Exporting reports
+- Service role audit logs
+
+## Date Range:
+
 - July 12 - July 16
 
 ## Features in the Project Plan Cycle:
