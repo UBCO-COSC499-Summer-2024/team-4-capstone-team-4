@@ -123,7 +123,7 @@
             @endif
 
             <button class="svcr-list-item-action"
-                    wire:click="confirmDelete({{ $serviceRole->id }})">
+                    wire:click="confirmSArchive({{ $serviceRole->id }})">
                 <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
                     $serviceRole->archived ? 'Unarchive' : 'Archive'
                 }}">
@@ -137,7 +137,7 @@
 
             @if(auth()->user()->hasRoles(['admin']))
                 <button class="svcr-list-item-action"
-                        wire:click="confirmDelete({{ $serviceRole->id }})">
+                        wire:click="confirmSDelete({{ $serviceRole->id }})">
                     <span class="material-symbols-outlined icon text-[#ea3030]">delete</span>
                 </button>
             @endif
