@@ -98,7 +98,7 @@ class StaffList extends Component
 
         $users = $usersQuery->get();
         //dd($users);
-        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal]);
+        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth]);
     }
 
     public function sort($field){

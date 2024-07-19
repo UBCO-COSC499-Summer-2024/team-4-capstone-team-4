@@ -1,4 +1,4 @@
-@props(['sortField', 'sortDirection'])
+@props(['sortField', 'sortDirection', 'selectedYear', 'selectedMonth'])
 
 <thead class="sticky top-20 text-xs text-white uppercase bg-[#3b4779] dark:bg-gray-700 dark:text-gray-400">
    <tr class="svcr-list-header">
@@ -52,8 +52,8 @@
                 <label for="month-select" class="mr-2">Completed Hours</label>
                 <div class="relative">
                     <select id="month-select" wire:model.live="selectedMonth" class="appearance-none border border-white rounded-md px-1.5 py-1 text-xs text-white bg-[#3b4779] pr-8">
-                        @foreach (['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
-                            <option value="{{ $month }}" {{ $month === date('F') ? 'selected' : '' }}>{{ substr($month, 0, 3) }}</option>
+                        @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                            <option value="{{ $month }}" {{ $month == $selectedMonth ? 'selected' : '' }}>{{ substr($month, 0, 3) }}</option>
                         @endforeach
                     </select>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -89,8 +89,8 @@
                             $dept_id = \App\Models\UserRole::find($user->id)->department_id;
                             $years = \App\Models\DepartmentPerformance::where('dept_id', $dept_id)->pluck('year');
                         @endphp
-                        @foreach ($years as $year)
-                            <option value="{{ $year }}" {{ $year === date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                        @foreach ($years as $y)
+                            <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>{{ $y }}</option>
                         @endforeach
                     </select>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

@@ -29,7 +29,7 @@
         </div>
     @endif
     <x-staff-table>
-        <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+        <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :selectedYear="$selectedYear" :selectedMonth="$selectedMonth" />
         <tbody>
             @if(isset($users))
                 @foreach ($users as $user)
@@ -37,11 +37,11 @@
                         $area_names = [];
                         $instructor = App\Models\UserRole::find($user->instructor_id);
                         $performance = App\Models\InstructorPerformance::where('instructor_id', $user->instructor_id)
-                                                                        ->where('year', date('Y'))
+                                                                        ->where('year', $selectedYear)
                                                                         ->first();
                         if($performance){
                             $totalHours = json_decode($performance->total_hours, true);
-                            $currentMonthHours = $totalHours[date('F')];
+                            $currentMonthHours = $totalHours[$selectedMonth];
                         }else{
                             $currentMonthHours = null;
                         }
