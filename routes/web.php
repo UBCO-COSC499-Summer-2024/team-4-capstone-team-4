@@ -66,6 +66,10 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+    Route::get('/requests', function () {
+        return view('svcrole.requests');
+    })->name('service.requests');
+    Route::get('/audits', [AuditLogController::class, 'index'])->name('svcrole.logs');
 });
 
 // Svcroles routes
@@ -83,10 +87,6 @@ Route::middleware([
     Route::get('/manage/{id}', function () {
         return view('svcroles');
     })->name('svcroles.manage.id');
-    Route::get('/requests', function () {
-        return view('svcroles');
-    })->name('svcroles.requests');
-    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('svcroles.logs');
     Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
     Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
 });

@@ -7,12 +7,19 @@ $sidebarItems = [
     ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Courses']
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
-
 ];
 
 // add to $items
 if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
+}
+if($user->hasRoles(['admin', 'dept_head'])) {
+    // audit logs
+    $sidebarItems = array_merge($sidebarItems, [
+        ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
+        ['icon' => 'work_history', 'href' => '/audits', 'title' => 'Audit Logs'],
+        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin'],
+    ]);
 }
 @endphp
 

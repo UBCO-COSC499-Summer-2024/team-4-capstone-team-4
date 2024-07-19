@@ -27,12 +27,12 @@
 <div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
-        <div class="flex gap-2 right">
-            <button class="inline-flex px-3 py-1.5 items-center text-[#3b4779] hover:text-white border border-[#3b4779] hover:bg-[#3b4779] focus:ring-1 focus:outline-none focus:ring-[#3b4779] font-medium rounded-lg text-sm text-center" onClick="window.location.href='{{ route('svcroles.add') }}'">
+        <div class="flex gap-2 right content-title-btn-holder">
+            <button class="content-title-btn" onClick="window.location.href='{{ route('svcroles.add') }}'">
                 <span class="button-title">Create New</span>
                 <span class="material-symbols-outlined">add</span>
             </button>
-            <button class="px-2 rounded-md shadow-sm svcr-list-item-action bg-slate-100" id="svcr-extra-hours-add"
+            <button class="content-title-btn" id="svcr-extra-hours-add"
                     title="Add Extra Hours"
                     x-on:click="
                         $dispatch('open-modal', {

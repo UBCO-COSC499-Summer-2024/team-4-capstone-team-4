@@ -254,3 +254,24 @@ nav[aria-label="Pagination Navigation"] {
     justify-content: center;
     align-items: center;
 }
+
+.content-title-btn-holder {
+    width: fit-content;
+    gap: 6px;
+}
+
+.content-title-btn {
+    width:fit-content;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(59,71,121, 1) !important;
+}
+
+.content-title-btn:hover {
+    background: rgba(59,71,121, 1);
+    border: none !important;
+}

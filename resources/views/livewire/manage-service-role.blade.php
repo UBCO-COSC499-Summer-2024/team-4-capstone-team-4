@@ -36,27 +36,27 @@
             @endif
         </span>
 
-        <div class="flex right">
+        <div class="flex right content-title-btn-holder">
             @if(!$serviceRole->archived)
-                <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
+                <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
                     <span class="material-symbols-outlined icon">
                         edit
                     </span>
                     <span>Edit</span>
                 </button>
             @endif
-            <button class="btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
+            <button class="content-title-btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
             {{-- if user has admin role in roles --}}
             @if (auth()->user()->hasRoles(['admin']))
-                <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                     <span class="material-symbols-outlined icon">delete</span>
                     <span>Delete</span>
                 </button>
             @endif
-            <button class="btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+            <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                     @if ($serviceRole->archived)
                         <span class="material-symbols-outlined icon">
                             unarchive
@@ -81,12 +81,29 @@
                 name="export"
                 :values="$exports"
             /> --}}
-                <select id="exportDropdown" title="Export" class="form-select">
+                {{-- <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
                     @foreach ($exports as $fname => $format)
                         <option value="{{ $format }}">{{ $fname }}</option>
                     @endforeach
-                </select>
+                </select> --}}
+            <x-dropdown :align="'right'" :width='48'>
+                <x-slot name="trigger">
+                    <button class="flex items-center content-title-btn">
+                        <span class="material-symbols-outlined icon">file_download</span>
+                        <span>Export</span>
+                        <span class="material-symbols-outlined icon">arrow_drop_down</span>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    @foreach ($exports as $fname => $format)
+                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900" wire:click="exportRole('{{ $format }}')" role="menuitem">
+                            {{ $fname }}
+                        </button>
+                    @endforeach
+                </x-slot>
+            </x-dropdown>
         </div>
     </h1>
 
