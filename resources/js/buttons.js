@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelButton = document.getElementById('cancelButton');
     const table = document.querySelector('tbody');
     const form = document.getElementById('editForm');
+    const instructorFilter = document.getElementById('instructorFilter');
 
     function toggleButtonVisibility(buttonToHide, reverse = false) {
         const buttons = [editButton, saveButton, cancelButton];
@@ -42,7 +43,32 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleButtonVisibility(editButton, true);
     }
 
+    function validateInput() {
+        let isValid = true;
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.querySelectorAll('td').forEach((cell, index) => {
+                if ([2, 3, 4].includes(index)) {
+                    const value = cell.innerText.trim();
+                    if (isNaN(value) || value === '') {
+                        cell.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        cell.classList.remove('input-error');
+                    }
+                }
+            });
+        });
+        return isValid;
+    }
+
     function saveChanges() {
+
+        if (!validateInput()) {
+            alert('Please enter valid numeric values in the editable fields.');
+            return;
+        }
+
         const confirmSave = confirm('Do you really want to save the changes?');
         if (!confirmSave) return;
 
@@ -110,5 +136,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (saveButton) {
         saveButton.addEventListener('click', saveChanges);
+    }
+
+    if (instructorFilter) {
+        instructorFilter.addEventListener('change', function () {
+            const selectedInstructorId = this.value;
+            const url = new URL(window.location.href);
+            if (selectedInstructorId) {
+                url.searchParams.set('instructor_id', selectedInstructorId);
+            } else {
+                url.searchParams.delete('instructor_id');
+            }
+            window.location.href = url.toString();
+        });
     }
 });
