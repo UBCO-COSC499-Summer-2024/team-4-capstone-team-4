@@ -1,3 +1,93 @@
+## Cycle: July 17th - July 18th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_17_2024-07_18_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: CSV export for service roles
+  * #2: Fixing XLSX export
+  * #3: Implementing bulk actions and tests for the service role page
+  * #4: UI fixes and bug resolutions
+  * #5: Hiding buttons on archive and delete, showing only for admin
+  * #6: Updating Livewire config to legacy model binding
+  * #7: Detaching extra hours from service roles
+  * #8: Completing settings functionality
+  * #9: UI and styling changes
+  * #10: Implementing DOMPDF for PDF exports
+  * #11: Styling and route changes
+
+### Progress Update (since 07/17/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>CSV export for service roles</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fixing XLSX export</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implementing bulk actions</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Tests for service role page</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>UI fixes</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Bug resolutions</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Hiding buttons on archive and delete (admin only)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Updating Livewire config to legacy model binding</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Detaching extra hours from service roles</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Completing settings functionality</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>UI and styling changes</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implementing DOMPDF for PDF exports</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Styling and route changes</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+During this cycle, significant progress was made across various areas. CSV export, XLSX export, bulk actions, and testing for the service role page were successfully implemented. Numerous UI fixes and bug resolutions were completed. Specific buttons were hidden for non-admin users to enhance security. The Livewire config was updated, extra hours were detached from service roles, and settings functionality was completed. DOMPDF was successfully implemented for PDF exports. UI and styling changes were also completed. Overall, the process went smoothly, and most tasks were completed as planned.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Perform extensive testing on the new features
+  * Gather feedback from peer testing and make necessary adjustments
+  * Plan and implement additional features as per project requirements
+  * Continue refining the UI and enhancing user experience
+  * Address any remaining or new bugs
+
+---
+
 ## Cycle: July 12th - July 16th
 
 ### Timesheet
