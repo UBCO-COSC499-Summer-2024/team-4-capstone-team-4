@@ -1,5 +1,6 @@
 .instructor-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     gap: 1rem;
     height: 100%;
 }
@@ -13,6 +14,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.instructor-preview:first-child, 
+.instructor-preview:nth-child(2) {
+    flex: 2;
+}
+
 .tb {
     display: grid; 
     grid-template-columns: 1fr; 
@@ -24,29 +30,27 @@
     background: #fafafa;
     padding: 2px; 
     max-height: 50px;
-    font-weight: normal;
-    font-size: 15px;
-    align-items: left;
+    font-weight: bold;
+    font-size: 18px;
     margin-bottom: 2px;
     box-sizing: border-box;
+    text-align: center;
 }
 
 .inst-head {
     background: #fafafa;
     color: #000000;
     max-height: 50px;
-    font-weight: bolder;
-    align-items: left;
+    font-weight: normal;
     font-size: 15px;
-    align-items: left;
+    padding-bottom: 8px;
+    text-align: center;
 }
 
 .col {
     flex: 0;
-    width: 327px; 
 }
 
 .col:first-child {
-    flex: 0;
-    width: 327px; 
+    width: 210px; 
 }
