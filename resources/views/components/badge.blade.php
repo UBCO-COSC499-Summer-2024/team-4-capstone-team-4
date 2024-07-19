@@ -14,20 +14,20 @@
 
         .trophy-gold {
             color: gold;
-            background-color: rgba(255, 223, 0, 0.2);
-            border: 1px solid rgba(255, 223, 0, 1);
+            background: linear-gradient(45deg, #fcf8f0, #f8e9c8);
+            border: 3px outset gold;
         }
 
         .trophy-silver {
-            color: silver;
-            background-color: rgba(192, 192, 192, 0.1);
-            border: 1px solid rgba(192, 192, 192, 1);
+            color: rgb(135, 135, 135);
+            background: linear-gradient(45deg, #e1e1e1, #f3f3f3);
+            border: 3px outset #c0c0c0;
         }
 
         .trophy-bronze {
             color: #cd7f32;
-            background-color: rgba(205, 127, 50, 0.1);
-            border: 1px solid rgba(205, 127, 50, 0.5);
+            background: linear-gradient(45deg, #fff3e8, #fedab5);
+            border: 3px outset rgba(205, 127, 50, 0.5);
         }
 
         .badge-blue {
@@ -68,8 +68,8 @@
 
         .custom-icon {
             font-size: 48px !important;
-            padding-left: 7px;
             padding-top: 6px;
+            padding-left: 7px;
         }
 
         .badge-desc {
