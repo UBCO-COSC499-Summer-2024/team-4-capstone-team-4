@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.querySelectorAll('td').forEach((cell, index) => {
                     if ([2, 3, 4].includes(index)) {
                         cell.setAttribute('contenteditable', 'true');
+                        cell.classList.add('editable-highlight');
                     }
                 });
         toggleButtonVisibility(editButton);
@@ -34,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
         table.querySelectorAll('tr').forEach(row => {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
+                cell.classList.remove('editable-highlight');
+
             });
         });
         toggleButtonVisibility(editButton, true);
