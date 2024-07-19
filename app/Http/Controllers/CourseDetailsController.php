@@ -1,6 +1,6 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers;
+
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
@@ -8,60 +8,85 @@ use App\Models\User;
 use App\Models\Teach;
 use Illuminate\Support\Facades\Log;
 
-class CourseDetailsController extends Controller {
-
-    public function show(Request $request){
-        $query = $request->input('search', '');
+class CourseDetailsController extends Controller
+{
+    public function show(Request $request, User $user)
+    {
+        $authenticatedUser = $request->user();
     
-        try {
-            $courseSections = CourseSection::with('area')
-                ->when($query, function ($queryBuilder) use ($query) {
-                    $queryBuilder->whereRaw('LOWER(prefix) LIKE ?', ['%' . strtolower($query) . '%'])
-                    ->orWhereRaw('LOWER(number) LIKE ?', ['%' . strtolower($query) . '%']);
-                })
-                ->get()
-                ->map(function ($section, $index) {
-                    $seiData = SeiData::where('course_section_id', $section->id)->first();
-                    $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-    
-                    $formattedName = sprintf('%s %s %s - %s%s %s', 
-                        $section->prefix,
-                        $section->number, 
-                        $section->section, 
-                        $section->year, 
-                        $section->session, 
-                        $section->term
-                    );
-    
-                    return (object) [
-                        'id' => $section->id,
-                        'name' => $formattedName,
-                        'departmentName' => $section->area ? $section->area->name : 'Unknown',
-                        'enrolled' => $section->enrolled,
-                        'dropped' => $section->dropped,
-                        'capacity' => $section->capacity,
-                        'averageRating' => $averageRating,
-                    ];
-                });
-    
-            $courses = CourseSection::all(); 
-            $instructors = User::all(); 
-    
-            $sortField = 'courseName';
-            $sortDirection = 'asc';
-    
-            if ($request->ajax()) {
-                return response()->json($courseSections);
-            }
-    
-            return view('course-details', compact('courseSections', 'courses', 'instructors', 'sortField', 'sortDirection'));
-        } catch (\Exception $e) {
-            Log::error('Error fetching course details: ' . $e->getMessage(), ['exception' => $e]);
-            return response()->json(['message' => 'An error occurred while fetching course details.'], 500);
+        if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
+            abort(403, 'Unauthorized access.');
         }
+    
+        $userRole = $user->roles->first()->role ?? 'guest';
+        $query = $request->input('search', '');
+        $instructorId = $request->input('instructor_id', null);
+    
+        Log::info('User Role:', ['role' => $userRole]);
+        Log::info('Search Query:', ['query' => $query]);
+    
+        $courseSections = CourseSection::with('area')
+            ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($user) {
+                    $query->where('instructor_id', $user->id);
+                });
+            })
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($q) use ($query) {
+                    $q->whereRaw('LOWER(prefix) LIKE ?', ['%' . strtolower($query) . '%'])
+                      ->orWhereRaw('LOWER(number) LIKE ?', ['%' . strtolower($query) . '%']);
+                });
+            })
+            ->when($instructorId, function ($queryBuilder) use ($instructorId) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($instructorId) {
+                    $query->where('instructor_id', $instructorId);
+                });
+            })
+            ->get();
+    
+        $courseSections = $courseSections->map(function ($section) {
+            $seiData = $section->seiData()->first() ?? null;
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+    
+            $formattedName = sprintf('%s %s %s - %s%s %s',
+                $section->prefix,
+                $section->number,
+                $section->section,
+                $section->year,
+                $section->session,
+                $section->term
+            );
+    
+            return (object)[
+                'id' => $section->id,
+                'name' => $formattedName,
+                'departmentName' => $section->area->name ?? 'Unknown',
+                'enrolled' => $section->enrolled,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
+        });
+    
+        Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+        Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+    
+        $instructors = User::whereHas('roles', function ($query) {
+            $query->where('role', 'instructor');
+        })->get();
+    
+        if ($request->ajax()) {
+            return response()->json($courseSections);
+        }
+    
+        $sortField = 'courseName';
+        $sortDirection = 'asc';
+    
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'instructors', 'instructorId'));
     }
     
-
+    
+    
     public function save(Request $request){
         $ids = $request->input('ids', []);
         $courseNames = $request->input('courseNames', []);
@@ -118,10 +143,10 @@ class CourseDetailsController extends Controller {
         ]);
     }
 
-    private function calculateAverageRating($questionsJson) {
+    private function calculateAverageRating($questionsJson){
         $questions = json_decode($questionsJson, true);
         if (is_array($questions) && !empty($questions)) {
-            $ratings = array_filter(array_values($questions), function($value) {
+            $ratings = array_filter(array_values($questions), function ($value) {
                 return is_numeric($value);
             });
             $averageRating = count($ratings) > 0 ? array_sum($ratings) / count($ratings) : 0;

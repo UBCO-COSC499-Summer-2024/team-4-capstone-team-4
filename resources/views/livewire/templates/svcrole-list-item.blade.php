@@ -10,7 +10,7 @@
         <input type="checkbox" class="svcr-list-item-select"
             id="svcr-select-{{ $serviceRole->id }}"
             value="{{ $serviceRole->id }}"
-            {{-- wire:model.live="isSelected" --}}
+            wire:model.live="isSelected"
         >
     </td>
 
@@ -19,26 +19,50 @@
             <x-link href="{{ route('svcroles.manage.id', $serviceRole->id) }}" title="{{ $serviceRole->name }}" />
         </span>
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
-               {{-- wire:model="serviceRole.name" --}}
-               x-cloak value="{{ $serviceRole->name }}">
+               wire:model="srname"
+               x-cloak value="{{ $srname }}">
     </td>
 
     <td class="svcr-list-item-cell" data-column="area">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            {{ $serviceRole->area->name }}
+            @switch($serviceRole->area->name)
+                @case("Computer Science")
+                    <span class="font-bold" style="color: rgba(29, 154, 202, 1);">{{ __("COSC") }}</span>
+                    @break
+                @case("Mathematics")
+                    <span class="font-bold" style="color: rgba(44, 160, 44, 1);">{{ __("MATH") }}</span>
+                    @break
+                @case("Physics")
+                    <span class="font-bold" style="color: rgba(249, 168, 37, 1);">{{ __("PHYS") }}</span>
+                    @break
+                @case("Statistics")
+                    <span class="font-bold" style="color: rgba(214, 39, 40, 1);">{{ __("STAT") }}</span>
+                    @break
+                @default
+
+            @endswitch
         </span>
         @php
             $selectedValue = [$serviceRole->area_id => $serviceRole->area->name];
         @endphp
         <select x-show="isEditing" class="svcr-list-item-edit"
-                {{-- wire:model="serviceRole.area_id" --}}
+                wire:model="srarea_id"
                 x-cloak>
             @foreach ($areas as $area)
                 <option value="{{ $area->area_id }}"
-                        @if ($serviceRole->area_id == $area->area_id) selected @endif
+                        @if ($srarea_id == $area->area_id) selected @endif
                     >{{ $area->name }}</option>
             @endforeach
         </select>
+    </td>
+
+    <td class="svcr-list-item-cell" data-column="year">
+        <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
+            {{ $serviceRole->year }}
+        </span>
+        <input x-show="isEditing" type="number" class="svcr-list-item-edit"
+               wire:model="sryear"
+               x-cloak value="{{ $sryear }}">
     </td>
 
     <td class="svcr-list-item-cell" data-column="description">
@@ -46,12 +70,12 @@
             {{ $serviceRole->description }}
         </span>
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
-               {{-- wire:model="serviceRole.description" --}}
-               x-cloak value="{{ $serviceRole->description }}">
+               wire:model="srdescription"
+               x-cloak value="{{ $srdescription }}">
     </td>
 
     <td class="svcr-list-item-cell" data-column="instructors">
-        <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
+        <span class="svcr-list-item-title" x-cloak>
             @forelse ($serviceRole->instructors->take(1) as $instructor)
                 {{ $instructor->getName() }}@if (!$loop->last), @endif
             @empty
@@ -66,19 +90,8 @@
     </td>
 
     {{-- extra hours --}}
-    <td class="svcr-list-item-cell" data-column="extra-hours">
-        <div class="svcr-list-item-actions">
-            <button class="px-2 rounded-md shadow-sm svcr-list-item-action bg-slate-100" id="svcr-extra-hours-add-{{ $serviceRole->id }}"
-                    title="Add Extra Hours"
-                    wire:click="
-                    $dispatch('item-modal-id', { id: {{ $serviceRole->id }} });
-                    $dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})"
-                >
-                <span class="material-symbols-outlined icon">more_time</span>
-                <span>Add</span>
-    </td>
     <td class="svcr-list-item-cell" data-column="manage">
-        <div class="svcr-list-item-actions">
+        <div class="flex justify-end item-end svcr-list-item-actions">
             <button class="svcr-list-item-action"
                     title="Cancel"
                     @click="isEditing = !isEditing"
@@ -87,17 +100,47 @@
                 <span class="material-symbols-outlined icon icon-cancel-edit">block</span>
             </button>
 
+            @if(!$serviceRole->archived)
+                <button class="svcr-list-item-action"
+                        :title="'Edit'"
+                        @click="isEditing = !isEditing"
+                        {{-- wire:click="editServiceRole({{ $serviceRole->id }})" --}}x-show="!isEditing"
+                        x-cloak>
+                    <span class="material-symbols-outlined icon text-[#3b4779]" x-text="'edit'"></span>
+                </button>
+            @endif
+
+            {{-- save button --}}
+            @if(!$serviceRole->archived)
             <button class="svcr-list-item-action"
-                    :title="isEditing ? 'Save' : 'Edit'"
-                    @click="isEditing = !isEditing"
-                    wire:click="editServiceRole({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon" x-text="isEditing ? 'save' : 'edit'"></span>
+                    title="Save"
+                    x-show="isEditing"
+                    x-cloak
+                    x-on:click="
+                    $dispatch('update-service-role', {'id': {{ $serviceRole->id }} })">
+                <span class="material-symbols-outlined icon text-[#3b4779]">save</span>
             </button>
+            @endif
 
             <button class="svcr-list-item-action"
                     wire:click="confirmDelete({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon">delete</span>
+                <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
+                    $serviceRole->archived ? 'Unarchive' : 'Archive'
+                }}">
+                    @if (!$serviceRole->archived)
+                        archive
+                    @else
+                        unarchive
+                    @endif
+                </span>
             </button>
+
+            @if(auth()->user()->hasRoles(['admin']))
+                <button class="svcr-list-item-action"
+                        wire:click="confirmDelete({{ $serviceRole->id }})">
+                    <span class="material-symbols-outlined icon text-[#ea3030]">delete</span>
+                </button>
+            @endif
         </div>
     </td>
 </tr>

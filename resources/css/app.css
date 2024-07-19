@@ -72,6 +72,10 @@ header:not(:has(#header-misc)) {
     align-items: center;
 }
 
+#header-brand h1 {
+    color: rgb(59, 71, 121);
+}
+
 #header-img {
 }
 
@@ -293,6 +297,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     align-items: center;
     text-transform: uppercase;
+    color: rgb(59, 71, 121);
 }
 
 .coming-soon {
@@ -586,34 +591,3 @@ a,
     padding-right: 10px;
 }
 
-th.editable {
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    outline: none;
-}
-
-th.editable:focus {
-    border: 1px solid #007bff;
-    background-color: #e9f7fe;
-}
-
-.editable {
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    outline: none;
-}
-
-.editable:focus {
-    border: 1px solid #007bff;
-    background-color: #e9f7fe;
-}
-
-.modal-dialog-centered {
-    display: flex;
-    align-items: center;
-    min-height: calc(100% - 1rem);
-}
-
-.modal-dialog-centered .modal-content {
-    margin: auto;
-}

@@ -1,4 +1,5 @@
-<button id="assignButton" type="button" class="bg-blue-500 hover:bg-blue-750 text-white font-bold py-2 px-4 rounded " 
-style="display: block;" data-toggle="modal" data-target="#assignModal">
+<button id="assignButton" type="button" 
+   class="custom-ubc-blue hover:text-white border focus:ring-1 focus:outline-none font-medium rounded-lg text-sm px-5 py-2 text-center me-1 mb-2" 
+   style="display: block;" data-toggle="modal" data-target="#assignModal">
    Assign
 </button>

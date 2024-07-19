@@ -7,6 +7,7 @@ use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Area;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,7 +29,6 @@ class ServiceRolesList extends Component
     public $pageSize = 10;
     public $selectedItems = [];
     public $showExtraHourForm = false;
-    public $serviceRoleIdForModal; // To store the serviceRoleId
     protected $validExportOptions = [
         'csv', 'xlsx', 'pdf', 'text', 'print'
     ];
@@ -84,7 +84,6 @@ class ServiceRolesList extends Component
         'toolbarUpdated' => 'handleToolbarUpdate',
         'applyActions' => 'handleApplyActions',
         'filtersReset' => 'resetFilters', // For resetting filters
-        'update-modal-id' => 'updateModalId',
     ];
 
     public function mount($links = []) {
@@ -172,8 +171,15 @@ class ServiceRolesList extends Component
 
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
-
-        // if area requested in filter/sort/category/group, use the area id for each item and do the action based on area name and or description and or id.
+        $user = auth()->user();
+        $userRole = $user->roles;
+        if (($userRole->contains('role', 'dept_head') || $userRole->contains('role', 'dept_staff')) && !$userRole->contains('role', 'admin')) {
+            $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
+            // area then department
+            $serviceRolesQuery->whereHas('area', function ($query) use ($deptId) {
+                $query->where('dept_id', $deptId);
+            });
+        }
 
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
@@ -340,6 +346,9 @@ class ServiceRolesList extends Component
             case 'edit':
                 $this->toggleEdit();
                 break;
+            case 'archive':
+                $this->archive($items);
+                break;
             default:
                 break;
         }
@@ -395,10 +404,8 @@ class ServiceRolesList extends Component
         $this->dispatch('show-toast', ['message' => $msg, 'type' => $type]);
     }
 
-    public function openModal($component, $arguments)
+    public function openModal($component)
     {
-        $svcrId = $arguments['serviceRoleId'];
-        $this->serviceRoleIdForModal = $svcrId;
         if ($component === 'extra-hour-form') {
             $this->openExtraHourForm();
         }
@@ -412,12 +419,6 @@ class ServiceRolesList extends Component
     public function closeModal()
     {
         $this->reset(['showExtraHourForm']);
-        $this->serviceRoleIdForModal = null;
-    }
-
-    public function updateModalId($data) {
-        $id = $data['id'];
-        $this->serviceRoleIdForModal = $id;
     }
 
     public function export($as, $options) {
@@ -457,4 +458,73 @@ class ServiceRolesList extends Component
             'Content-Type' => 'text/' . $as,
         ]);
     }
+
+    public function archive($selectedIds) {
+        DB::beginTransaction();
+
+        try {
+            $archivedCount = 0;
+            $errors = [];
+            $changes = []; // Array to store old and new values
+
+            foreach ($selectedIds as $id => $selected) {
+                if ($selected === true) {
+                    $serviceRole = ServiceRole::find((int)$id);
+
+                    if ($serviceRole) {
+                        $changes[] = [
+                            'service_role_id' => $serviceRole->id,
+                            'old_value' => $serviceRole->getOriginal(), // Get original attributes
+                            'new_value' => array_merge($serviceRole->getOriginal(), ['archived' => !$serviceRole->archived]),
+                        ];
+
+                        if ($serviceRole->update(['archived' => !$serviceRole->archived])) {
+                            $archivedCount++;
+                        } else {
+                            $errors[] = $serviceRole->name;
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            $this->toast('Successfully ' . ($archivedCount ? 'archived ' . $archivedCount . ' service roles' : 'updated service roles'), 'success');
+
+            // Log the bulk operation details along with changes
+            AuditLog::create([
+                'user_id' => (int)auth()->user()->id,
+                'user_alt' => User::find((int) auth()->user()->id)->getName(),
+                'action' => 'bulk_archive_service_roles',
+                'table_name' => 'service_roles',
+                'description' => "Archived {$archivedCount} service roles.",
+                'old_value' => !empty($changes) ? json_encode($changes) : null, // Store changes for potential restoration
+            ]);
+
+            // Log any errors encountered
+            if (!empty($errors)) {
+                AuditLog::create([
+                    'user_id' => (int) auth()->user()->id,
+                    'user_alt' => auth()->user()->name,
+                    'action' => 'bulk_archive_service_roles_errors',
+                    'table_name' => 'service_roles',
+                    'description' => "Errors archiving service roles: " . implode(', ', $errors),
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback the transaction on error
+            $this->toast('An error occurred: ' . $e->getMessage(), 'error');
+
+            // Log the exception
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => auth()->user()->name,
+                'action' => 'bulk_archive_service_roles_exception',
+                'table_name' => 'service_roles',
+                'description' => "Exception: " . $e->getMessage(),
+            ]);
+        }
+    }
+
 }

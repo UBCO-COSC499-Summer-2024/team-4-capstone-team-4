@@ -4,8 +4,8 @@
                     Upload File
     </button> --}}
     <form wire:submit.prevent="handleSubmit" class="relative">
-        <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
-            <div class="py-2 flex justify-between bg-gray-50 text-gray-700">
+        <div class="relative overflow-x-auto shadow-sm rounded-md">
+            <div class="py-3 flex justify-between bg-[#3b4779] text-white">
                 <div class="w-1/12 text-center mx-2">#</div>
                 <div class="w-4/12 text-center mx-2">Area</div>
                 <div class="w-2/12 text-center mx-2">Number</div>
@@ -32,7 +32,7 @@
                     @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12 ">
-                    <input type="text" placeholder="123" wire:model="rows.{{$index}}.number" class="import-form-input ">
+                    <input type="text" placeholder="101" wire:model="rows.{{$index}}.number" class="import-form-input ">
                     @error('rows.'.$index.'.number')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
@@ -104,7 +104,7 @@
         
                 <div>You Can Now Assign Instructors!</div>
                 <div class="items-center justify-center text-center mt-2 p-2">
-                    <button class="bg-white text-blue-500 border border-blue-500 py-2 px-4 mx-2 rounded-lg hover:bg-blue-500 hover:text-white" 
+                    <button class="bg-white text-[#3b4779] border border-[#3b4779] py-2 px-4 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
                     onclick="location.href='{{ route('assign-courses') }}'">
                     Assign
                     </button>

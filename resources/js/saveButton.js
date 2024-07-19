@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const editButton = document.getElementById('editButton'); 
     const cancelButton = document.getElementById('cancelButton');
 
+
+    if(saveButton){
     saveButton.addEventListener('click', function () {
         const confirmSave = confirm('Do you really want to save the changes?');
 
@@ -66,4 +68,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+}
 });
