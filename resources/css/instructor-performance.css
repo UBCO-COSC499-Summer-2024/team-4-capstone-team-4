@@ -87,34 +87,35 @@
     flex: 2;
 }
 
+.circle {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
 .leaderboard-title {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    padding-left: 7px;
-    text-align: left;
+    font-size: 20px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .leaderboard-table {
     width: 100%;
-    font-size: 1.0rem;
     border-collapse: collapse;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .leaderboard-table th, .leaderboard-table td {
-    padding: 4px;
-    text-align: left;
-}
-
-.leaderboard-table th {
-    font-size: 18px;
-    font-weight: normal;
-}
-
-.leaderboard-table td {
-    font-size: 40px;
-    font-weight: bold;
-    padding-left: 40px;
+    padding: 10px;
+    text-align: center;
+    justify-content: center;
+    padding-left: 20px;
 }
 
 .course-performance {
@@ -175,4 +176,90 @@
     font-size: 48px !important;
     padding-left: 7px;
     padding-top: 6px;
+}
+
+.icon-circle {
+    width: 115px; 
+    height: 115px; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.trophy-gold {
+    color: gold;
+    background-color: rgba(255, 223, 0, 0.2);
+    border: 1px solid rgba(255, 223, 0, 1);
+}
+
+.trophy-silver {
+    color: silver;
+    background-color: rgba(192, 192, 192, 0.1);
+    border: 1px solid rgba(192, 192, 192, 1);
+}
+
+.trophy-bronze {
+    color: #cd7f32;
+    background-color: rgba(205, 127, 50, 0.1);
+    border: 1px solid rgba(205, 127, 50, 0.5);
+}
+
+.badge-blue {
+    color: #007bff; 
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.5);
+}
+
+.badge-red {
+    color: #dc3545; 
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+.badge-green {
+    color: #28a745; 
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.badge-magenta {
+    color: #c2185b; 
+    background-color: rgba(194, 24, 91, 0.1);
+    border: 1px solid rgba(194, 24, 91, 0.5);
+}
+
+.badge-purple {
+    color: #6f42c1; 
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.5);
+}
+
+.badge-default {
+    color: #fd7e14; 
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.5);
+}
+
+.custom-icon {
+    font-size: 95px !important;
+    padding-top: 8px;
+    padding-right: 7px;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    width: 92%;
+    padding-top: 5px;
+    padding-left: 22px;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.badge-desc {
+    padding-top: 25px;
+    font-size: 18px;
+    font-weight: bold;
 }

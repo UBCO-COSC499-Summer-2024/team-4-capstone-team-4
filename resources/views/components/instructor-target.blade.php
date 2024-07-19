@@ -1,4 +1,4 @@
-@vite(['resources/css/instructor-target.css'])
+@vite(['resources/css/instructor-targets.css'])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +12,7 @@
     <div class="instructor-container">
         <div class="column charts-column">
             <div class="chart-container progress-bar">
-                <x-chart :chart="$chart2"/>
+                <x-chart :chart="$chart4"/>
             </div>
             <div class="chart-container line-chart">
                 <x-chart :chart="$chart1"/>
@@ -20,7 +20,7 @@
         </div>
         <div class="column performance-column">
             <div class="leader-board flex items-center justify-center gap-4 p-2 flex-col">
-                <h2 class="leaderboard-title flex items-center justify-center ">ACHIEVEMENTS</h2>
+                <h2 class="leaderboard-title flex items-center justify-center">ACHIEVEMENTS</h2>
                 @foreach ($ranking as $rank)
                     @php
                         $icon = 'military_tech'; 
@@ -58,13 +58,19 @@
                             $description = 'Keep Climbing! Greatness awaits!';
                         }
                     @endphp
-                    <div class="flex justify-center items-center gap-2">
-                        <div class="circle {{ $colorClass }}">{{ $rank['rank'] }}</div>
-                        <span class="material-symbols-outlined icon-circle custom-icon {{ $colorClass }}">{{ $icon }}</span>
-                        <div class="circle {{ $colorClass }}">{{ $rank['score'] }}</div>
-                    </div>
-                    <div class="badge-desc flex justify-center items-center p-1">
-                        {{ $description }}
+                    <div class="rank-wrapper">
+                        <div class="rank-circle-container flex justify-center items-center gap-2">
+                            <div class="circle {{ $colorClass }}">{{ $rank['rank'] }}</div>
+                            <span class="material-symbols-outlined icon-circle custom-icon {{ $colorClass }}">{{ $icon }}</span>
+                            <div class="circle {{ $colorClass }}">{{ $rank['score'] }}</div>
+                        </div>
+                        <div class="labels">
+                            <div>Rank</div>
+                            <div>Score</div>
+                        </div>
+                        <div class="badge-desc flex justify-center items-center p-1">
+                            {{ $description }}
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -86,3 +92,5 @@
     </div>
 </body>
 </html>
+
+

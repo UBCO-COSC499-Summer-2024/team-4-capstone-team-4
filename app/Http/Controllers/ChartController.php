@@ -104,9 +104,9 @@ class ChartController extends Controller {
             $leaderboard = $this->leaderboardPrev($dept, $currentYear, false);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
-            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
-            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "ExtraPieCHart");
-            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "CoursePieChart");
+            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "DeptRolePieChart");
+            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "DeptExtraPieCHart");
+            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "DeptCoursePieChart");
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -127,18 +127,19 @@ class ChartController extends Controller {
 
                 $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
                 $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
-                $src = User::where('id', $userId)->first()->profile_photo_url;
 
                 $chart5 = $this->instructorLineChart($performance, $hasTarget);
+                $chart6 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
+                $chart7 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
 
                 if ($hasTarget) {
-                    $chart6 = $this->instructorProgressBar($performance, $currentMonth);
+                    $chart8 = $this->instructorProgressBar($performance, $currentMonth);
                     
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'ranking', 'src', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
+                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'src', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 }
             } else {
                 return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
@@ -162,18 +163,19 @@ class ChartController extends Controller {
 
             $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
             $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
-            $src = User::where('id', $userId)->first()->profile_photo_url;
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
+            $chart2 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
+            $chart3 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
 
             if ($hasTarget) {
-                $chart2 = $this->instructorProgressBar($performance, $currentMonth);
+                $chart4 = $this->instructorProgressBar($performance, $currentMonth);
 
-                return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'src', 'performance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                                'assignmentCount', 'ranking', 'performance'));
             } else {
-                return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'ranking', 'src', 'performance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                            'assignmentCount', 'ranking', 'performance'));
             }
         } else {
             return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor'));
@@ -397,7 +399,7 @@ class ChartController extends Controller {
 
         foreach ($assignedRoles as $assignedRole) {
             $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
-            $serviceRoles[] = $role->name;
+            $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
             $roleHoursTotal += $role->monthly_hours[$currentMonth];
         }
 
@@ -409,7 +411,7 @@ class ChartController extends Controller {
         $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
 
         foreach ($allExtraHours as $extraHrs) {
-            $extraHours[] = $extraHrs->name;
+            $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
             $extraHoursTotal += $extraHrs->hours;
         }
 
@@ -513,7 +515,7 @@ class ChartController extends Controller {
      *
      * @param array $areaTotals An array of total values for each area.
      * @param string $title The title of the chart.
-     * @param string $entity The entity (e.g., department) the chart represents.
+     * @param string $entity The entity (e.g., service roles) the chart represents.
      * @param string $canvas The ID of the canvas element for the chart.
      * @return string The JSON configuration for the Chart.js pie chart.
      */
@@ -766,6 +768,86 @@ class ChartController extends Controller {
                         'bottom' => 10
                     ]
                 ]
+            ]);
+    }
+
+    /**
+     * Create a pie chart for department performance.
+     *
+     * This method prepares data for a pie chart showing the distribution of
+     * performance metrics across different areas within a department.
+     *
+     * @param array $enitityHours An array of total hours for each entity.
+     * @param string $title The title of the chart.
+     * @param string $entity The entity (e.g., service roles) the chart represents.
+     * @param string $canvas The ID of the canvas element for the chart.
+     * @return string The JSON configuration for the Chart.js pie chart.
+     */
+    private function instructorPieChart($entityHours, $title, $entity, $canvas) {
+        $colors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)" ,
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
+        ];
+        $borderColors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)"  
+        ];
+
+        $labels = [];
+        $data = [];
+        foreach ($entityHours as $index => $hours) {
+            $labels[] = $hours['name']; 
+            $data[] = $hours['hours']; 
+        }
+
+        $datasets = [
+            [
+                "label" => $entity,
+                "backgroundColor" => $colors,
+                "borderColor" => $borderColors,
+                "data" => $data,
+                'hoverOffset' => 4,
+            ]
+        ];
+
+        return app()
+            ->chartjs->name($canvas)
+            ->type("doughnut")
+            ->size(["width" => 200, "height" => 100])
+            ->labels($labels)
+            ->datasets($datasets)
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $title,
+                        'font' => [
+                            'size' => 15,
+                        ]
+                    ],
+                    'legend' => [
+                        'display' => true,
+                        'position' => 'right',
+                    ]
+                ],
+                'radius' => '90%',
+                'aspectRatio' => 2
             ]);
     }
 

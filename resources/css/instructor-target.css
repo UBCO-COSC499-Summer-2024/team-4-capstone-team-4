@@ -192,6 +192,22 @@
     padding-top: 10px;
 }
 
+.labels {
+    display: flex;
+    justify-content: space-between;
+    width: 92%;
+    padding-top: 5px;
+    padding-left: 22px;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.badge-desc {
+    padding-top: 25px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 
 
 
