@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class StaffListEditMode extends Component
 {
@@ -19,6 +21,9 @@ class StaffListEditMode extends Component
     {
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
+
+        $user = Auth::user();
+        $dept_id = UserRole::find($user->id)->department_id;
       
         $usersQuery = User::query();
         //find all users that are instructors
@@ -47,7 +52,9 @@ class StaffListEditMode extends Component
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
         ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id');
+        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
+        ->where('areas.dept_id', $dept_id);
+
         // Sort according to sort fields
         $currentMonth = date('F'); 
         switch ($this->sortField) {
@@ -92,6 +99,10 @@ class StaffListEditMode extends Component
         $this->selectedAreas = $this->selectedAreas;
     }
 
+    public function clearFilter(){
+        $this->selectedAreas = [];
+    }
+
     public function update($email, $hours){
         $this->changedInput[$email] = $hours;
     }
@@ -103,6 +114,10 @@ class StaffListEditMode extends Component
             if(!empty($hours)){
                 if (!is_numeric($hours) || $hours < 0) {
                     session()->flash('error', 'Target hours must be a non-negative number.');
+                    return;
+                }
+                if ($hours > 2000) {
+                    session()->flash('error', 'Target hours must less than 2000.');
                     return;
                 }
             }else{

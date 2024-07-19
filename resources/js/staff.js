@@ -3,7 +3,7 @@ window.onload = function() {
     const staffSelectAll = document.getElementById('staff-select-all');
     if (staffSelectAll) {
         staffSelectAll.addEventListener('click', function() {
-            const checkboxes = document.querySelectorAll('input[name="staff[]"]');
+            const checkboxes = document.querySelectorAll('input[name="staff-checkboxes[]');
             checkboxes.forEach(checkbox => {
                 checkbox.checked = staffSelectAll.checked;
             });

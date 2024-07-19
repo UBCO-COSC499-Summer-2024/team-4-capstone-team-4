@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class StaffList extends Component
 {
@@ -18,7 +20,7 @@ class StaffList extends Component
 
     public $showSuccessModal = false;
     protected $rules = [
-        'hours' => 'required|numeric|min:0',
+        'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
     ];
 
@@ -26,9 +28,12 @@ class StaffList extends Component
     {
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
+
+        $user = Auth::user();
+        $dept_id = UserRole::find($user->id)->department_id;
       
         $usersQuery = User::query();
-        //find all users that are instructors
+        //find all users that are instructors in the department
         $usersQuery->whereHas('roles', function ($queryBuilder) {
             $queryBuilder->where('role', 'instructor');
         });
@@ -54,7 +59,8 @@ class StaffList extends Component
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
         ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id');
+        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
+        ->where('areas.dept_id', $dept_id);
 
         // Sort according to sort fields
         $currentMonth = date('F'); 
@@ -98,6 +104,9 @@ class StaffList extends Component
 
     public function filter(){
         $this->selectedAreas = $this->selectedAreas;
+    }
+    public function clearFilter(){
+        $this->selectedAreas = [];
     }
 
     public function submit()

@@ -1,10 +1,18 @@
 @php
     $viewModes = ['table' => 'Table', 'card' => 'Card'];
     $pageModes = ['pagination' => 'Pagination', 'infinite' => 'Infinite Scroll'];
-    $filterBy = ['area' => 'Area', 'name' => 'Name'];
-    $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created'];
+    $filterBy = ['' => 'Filter By', 'area' => 'Area', 'name' => 'Name', 'year' => 'Year'];
+    $sortBy = ['name' => 'Name', 'area' => 'Area', 'created_at' => 'Created', 'year' => 'Year'];
+    $searchCategories = ['*' => 'All', 'name' => 'Name', 'area_id' => 'Area', 'description' => 'Description', 'year' => 'Year'];
     $sortOrder = ['asc' => 'Ascending', 'desc' => 'Descending'];
-    $actions = ['edit' => 'Edit', 'delete' => 'Delete'];
+    $actions = [
+        'edit' => 'Edit',
+        'delete' => 'Delete',
+        'archive' => 'Archive',
+        'export' => 'Export All',
+        'selected' => 'Export Selected',
+        'allExcept' => 'Export All Except',
+    ];
     $groupBy = ['area_id' => 'Area', 'name' => 'Name'];
     $features = [
         'viewMode' => true,
@@ -19,10 +27,22 @@
 <div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
-        <button class="right" onClick="window.location.href='{{ route('svcroles.add') }}'">
-            <span class="button-title">Create New</span>
-            <span class="material-symbols-outlined">add</span>
-        </button>
+        <div class="flex gap-2 right">
+            <button class="inline-flex px-3 py-1.5 items-center text-[#3b4779] hover:text-white border border-[#3b4779] hover:bg-[#3b4779] focus:ring-1 focus:outline-none focus:ring-[#3b4779] font-medium rounded-lg text-sm text-center" onClick="window.location.href='{{ route('svcroles.add') }}'">
+                <span class="button-title">Create New</span>
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="px-2 rounded-md shadow-sm svcr-list-item-action bg-slate-100" id="svcr-extra-hours-add"
+                    title="Add Extra Hours"
+                    x-on:click="
+                        $dispatch('open-modal', {
+                            'component': 'extra-hour-form'
+                        });
+                    ">
+                <span class="material-symbols-outlined icon">more_time</span>
+                <span>Add</span>
+            </button>
+        </div>
     </h1>
 
     <div class="svcr-container">
@@ -52,7 +72,7 @@
                 </div>
 
                 <select id="searchCategoryDropdown" class="toolbar-dropdown">
-                    @foreach ($filterBy as $value => $name)
+                    @foreach ($searchCategories as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($searchCategory == $value) selected @endif
                             >{{ $name }}</option>
@@ -76,7 +96,7 @@
                 </div>
             </section>
 
-            <section class="toolbar-section">
+            {{-- <section class="toolbar-section">
                 <select id="sortDropdown" class="toolbar-dropdown">
                     @foreach ($sortBy as $value => $name)
                         <option value="{{ $value }}"
@@ -92,57 +112,92 @@
                             >{{ $name }}</option>
                     @endforeach
                 </select>
-            </section>
+            </section> --}}
 
             <section class="toolbar-section">
-                <select id="groupDropdown" class="toolbar-dropdown">
+                {{-- <select id="groupDropdown" class="toolbar-dropdown">
                     @foreach ($groupBy as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($selectedGroup == $value) selected @endif
                             >{{ $name }}</option>
                     @endforeach
-                </select>
+                </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
-                    <option>Actions</option>
+                    <option>Bulk Actions</option>
                     @foreach ($actions as $value => $name)
                         <option value="{{ $value }}">{{ $name }}</option>
                     @endforeach
                 </select>
 
-                <button class="toolbar-button" wire:click="refresh">
+                <button class="toolbar-button"
+                    x-on:click="window.location.href = window.location.href;">
                     <span class="material-symbols-outlined">refresh</span>
                 </button>
             </section>
         </section>
         <section class="svcr-items">
-            <div class="svcr-list" x-show="$wire.viewMode === 'card'">
-                @forelse ($serviceRoles as $serviceRole)
-                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'serviceRoleCardI-'.$serviceRole->id" />
-                @empty
-                    <div class="empty-list">
-                        <span>No service roles found.</span>
-                    </div>
-                @endforelse
-            </div>
-
             <table id="svcr-table" x-show="$wire.viewMode === 'table'">
                 <thead>
                     <tr class="svcr-list-header">
                         <th class="svcr-list-header-item">
                             <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
                         </th>
-                        <th class="svcr-list-header-item">Service Role</th>
-                        <th class="svcr-list-header-item">Area</th>
-                        <th class="svcr-list-header-item">Description</th>
-                        <th class="svcr-list-header-item">Instructors</th>
-                        <th class="svcr-list-header-item">Extra Hours</th>
-                        <th class="svcr-list-header-item">Manage</th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                    Service Role
+                                    <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="name" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Area
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="area_id" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Year
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="year" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Description
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="description" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Instructors
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="instructors" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
+                                Manage
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($serviceRoles as $svcr)
-                        <livewire:templates.svcrole-list-item :serviceRole="$svcr" :key="'serviceRoleListI-'.$svcr->id" />
+                        @php
+                            $svcrId = $svcr->id;
+                        @endphp
+                        <livewire:templates.svcrole-list-item :serviceRoleId="$svcrId"
+                        :key="'svcrli-'.$svcrId"
+                        />
                     @empty
                         <tr>
                             <td colspan="5" class="empty-list">
@@ -153,6 +208,16 @@
                 </tbody>
             </table>
 
+            <div class="svcr-list" x-show="$wire.viewMode === 'card'">
+                @forelse ($serviceRoles as $serviceRole)
+                    <livewire:templates.svcrole-card-item :serviceRole="$serviceRole" :key="'svcrci-'.$serviceRole->id" />
+                @empty
+                    <div class="empty-list">
+                        <span>No service roles found.</span>
+                    </div>
+                @endforelse
+            </div>
+
             @if ($pageMode == 'pagination')
                 {!! $serviceRoles->links() !!}
             @endif
@@ -160,7 +225,7 @@
     </div>
 
     @include('components.link-bar', ['links' => $links])
-    <livewire:extra-hour-form :serviceRoleId="$serviceRoleIdForModal" :key="'extraHourForm-'.$serviceRoleIdForModal"  x-show="showExtraHourFor" :showExtraHourForm="$showExtraHourForm" :serviceRoleId="$serviceRoleIdForModal" />
+    <livewire:extra-hour-form :key="'extraHourForm'.time()" :showExtraHourForm="$showExtraHourForm" x-show="showExtraHourForm" x-cloak/>
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', initializeToolbar);
@@ -207,6 +272,8 @@
             });
         }
 
+        updateSelectAll();
+
         if (checkAll) {
             checkAll.addEventListener('change', function (e) {
                 const isChecked = e.target.checked;
@@ -247,14 +314,21 @@
 
         if (pageModeDropdown) {
             pageModeDropdown.addEventListener('change', function(e) {
-                @this.set('pageMode', this.value);
+                console.log(e, this.value);
+                // @this.set('pageMode', this.value);
+                @this.dispatch('changePageMode', {
+                    'mode': this.value
+                })
             });
         }
 
         if (search) {
             search.addEventListener('input', function(e) {
                 const value = this.value;
-                @this.set('searchQuery', value);
+                // @this.set('searchQuery', value);
+                @this.dispatch('changeSearchQuery', {
+                    'query': value
+                });
             });
         }
 
@@ -262,25 +336,30 @@
         if (searchCategory) {
             searchCategory.addEventListener('change', function(e) {
                 const value = this.value;
-                @this.set('searchCategory', value);
-            });
-        }
-
-        if (filter) {
-            filter.addEventListener('change', function(e) {
-                @this.set('selectedFilter', this.value);
+                // @this.set('searchCategory', value);
+                @this.dispatch('changeSearchCategory', {
+                    'category': value
+                });
             });
         }
 
         if (filterValueElement) {
             filterValueElement.addEventListener('input', function(e) {
-                @this.set('filterValue', this.value);
+                // @this.set('filterValue', this.value);
+                @this.dispatch('changeFilter', {
+                    'value': this.value,
+                    'filter': filter?.value ?? null
+                });
             });
         }
 
-        if (sort) {
-            sort.addEventListener('change', function(e) {
-                @this.set('selectedSort', this.value);
+        if (filter) {
+            filter.addEventListener('change', function(e) {
+                // @this.set('selectedFilter', this.value);
+                @this.dispatch('changeFilter', {
+                    'filter': this.value,
+                    'value': filterValueElement?.value ?? null
+                });
             });
         }
 
@@ -291,9 +370,22 @@
             })
         }
 
+        if (sort) {
+            sort.addEventListener('change', function(e) {
+                // @this.set('selectedSort', this.value);
+                @this.dispatch('changeSort', {
+                    'sort': this.value,
+                    'order': sortOrder?.value ?? 'asc'
+                });
+            });
+        }
+
         if (group) {
             group.addEventListener('change', function(e) {
-                @this.set('selectedGroup', this.value);
+                // @this.set('selectedGroup', this.value);
+                @this.dispatch('changeGroup', {
+                    'group': this.value
+                });
             });
         }
 
@@ -310,5 +402,55 @@
                 });
             });
         }
+    }
+</script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', initElementActions);
+    document.addEventListener('livewire:init', initElementActions);
+    document.addEventListener('livewire:load', initElementActions);
+    document.addEventListener('livewire:update', initElementActions);
+
+    function initElementActions() {
+        const searchIcon = document.querySelector('.toolbar-search-icon');
+        const searchInput = document.querySelector('.toolbar-search');
+        const clearSearch = document.querySelector('.toolbar-clear-search');
+
+        const filterValue = document.querySelector('.toolbar-filter-value');
+        const closeFilter = document.querySelector('.toolbar-clear-filter');
+        const filterIcon = document.querySelector('.toolbar-filter-icon');
+
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => {
+                searchInput.focus();
+            });
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+                @this.dispatch('changeSearchQuery', {
+                    'query': null,
+                });
+            });
+        }
+
+        if (filterIcon) {
+            filterIcon.addEventListener('click', () => {
+                filterValue.focus();
+            });
+        }
+
+        if (closeFilter) {
+            closeFilter.addEventListener('click', () => {
+                filterValue.value = '';
+                filterValue.focus();
+                @this.dispatch('changeFilter', {
+                    'value': null,
+                    'filter': filter?.value ?? null
+                });
+            });
+        }
+
     }
 </script>

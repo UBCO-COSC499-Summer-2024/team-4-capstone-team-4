@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -36,12 +37,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('dept_id')->constrained('departments')->cascadeOnDelete();
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
@@ -57,6 +59,7 @@ return new class extends Migration
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -68,6 +71,7 @@ return new class extends Migration
             $table->json('monthly_hours');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
+            $table->boolean('archived')->default(false);
             $table->unique(['name', 'area_id']);
         });
 
@@ -93,6 +97,7 @@ return new class extends Migration
             $table->string('term');
             $table->string('session');
             $table->string('section');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -100,6 +105,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_section_id')->constrained('course_sections')->cascadeOnDelete();
             $table->json('questions');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
@@ -176,10 +182,14 @@ return new class extends Migration
         });
 
         Schema::create('settings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
-            $table->string('auth_method');
-            $table->string('theme');
-            $table->string('language');
+            $table->string('auth_method')->nullable()->default('email-password');
+            $table->string('theme')->nullable()->default('light');
+            $table->string('timezone')->nullable()->default(date_default_timezone_get());
+            $table->string('locale')->nullable()->default('en');
+            $table->string('language')->nullable()->default('en');
+            $table->jsonb('custom')->nullable();
             $table->timestamps();
         });
 
@@ -195,12 +205,12 @@ return new class extends Migration
 
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('user_alt');
-            $table->string('action');
+            $table->bigInteger('user_id')->nullable();
+            $table->string('user_alt')->nullable();
+            $table->string('action')->nullable();
             $table->text('description')->nullable();
-            $table->string('table_name');
-            $table->string('operation_type');
+            $table->string('table_name')->nullable();
+            $table->string('operation_type')->nullable();
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
             $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
@@ -240,18 +250,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('audit_logs');
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('user_roles');
-        Schema::dropIfExists('departments');
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists('role_assignments');
         Schema::dropIfExists('extra_hours');
         Schema::dropIfExists('service_roles');
-        Schema::dropIfExists('role_assignments');
-        Schema::dropIfExists('course_sections');
-        Schema::dropIfExists('sei_data');
-        Schema::dropIfExists('teaches');
-        Schema::dropIfExists('teaching_assistants');
         Schema::dropIfExists('assists');
+        Schema::dropIfExists('teaches');
+        Schema::dropIfExists('sei_data');
+        Schema::dropIfExists('teaching_assistants');
+        Schema::dropIfExists('course_sections');
         Schema::dropIfExists('instructor_performance');
         Schema::dropIfExists('area_performance');
         Schema::dropIfExists('department_performance');
@@ -260,5 +266,9 @@ return new class extends Migration
         Schema::dropIfExists('settings');
         Schema::dropIfExists('auth_methods');
         Schema::dropIfExists('super_audits');
+        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('areas');
+        Schema::dropIfExists('departments');
+        Schema::dropIfExists('users');
     }
 };

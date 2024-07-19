@@ -69,10 +69,10 @@ class CourseSection extends Model {
     /**
      * Get the instructors teaching this course section.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function teaches() {
-        return $this->hasMany(Teach::class, 'course_section_id');
+        return $this->hasOne(Teach::class, 'course_section_id');
     }
 
 }

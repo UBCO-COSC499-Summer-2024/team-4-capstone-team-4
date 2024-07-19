@@ -147,7 +147,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
-            'score' => 0,
+            'score' => 80,
             'total_hours' => json_encode([
                     'January' => 0,
                     'February' => 0,

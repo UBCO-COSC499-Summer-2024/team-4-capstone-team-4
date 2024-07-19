@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelButton = document.getElementById('cancelButton');
     const table = document.querySelector('tbody');
     const form = document.getElementById('editForm');
+    const instructorFilter = document.getElementById('instructorFilter');
 
     function toggleButtonVisibility(buttonToHide, reverse = false) {
         const buttons = [editButton, saveButton, cancelButton];
@@ -19,22 +20,56 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function enableEditing() {
-        document.querySelectorAll('td[contenteditable="false"]').forEach(td => {
-            td.setAttribute('contenteditable', 'true');
-        });
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.querySelectorAll('td').forEach((cell, index) => {
+                    if ([2, 3, 4].includes(index)) {
+                        cell.setAttribute('contenteditable', 'true');
+                        cell.classList.add('editable-highlight');
+                    }
+                });
         toggleButtonVisibility(editButton);
-    }
+    });
+}
+
 
     function disableEditing() {
         table.querySelectorAll('tr').forEach(row => {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
+                cell.classList.remove('editable-highlight');
+                cell.classList.remove('input-error');
+
             });
         });
         toggleButtonVisibility(editButton, true);
     }
 
+    function validateInput() {
+        let isValid = true;
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.querySelectorAll('td').forEach((cell, index) => {
+                if ([2, 3, 4].includes(index)) {
+                    const value = cell.innerText.trim();
+                    if (isNaN(value) || value === '') {
+                        cell.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        cell.classList.remove('input-error');
+                    }
+                }
+            });
+        });
+        return isValid;
+    }
+
     function saveChanges() {
+
+        if (!validateInput()) {
+            alert('Please enter valid numeric values in the editable fields.');
+            return;
+        }
+
         const confirmSave = confirm('Do you really want to save the changes?');
         if (!confirmSave) return;
 
@@ -43,10 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         rows.forEach(row => {
             formData.append('ids[]', row.getAttribute('data-id'));
-            if (row.children[1]) formData.append('courseNames[]', row.children[1].innerText.trim());
-            if (row.children[3]) formData.append('enrolledStudents[]', row.children[3].innerText.trim());
-            if (row.children[4]) formData.append('droppedStudents[]', row.children[4].innerText.trim());
-            if (row.children[5]) formData.append('courseCapacities[]', row.children[5].innerText.trim());
+            formData.append('courseNames[]', row.children[0]?.innerText.trim().split(' - ')[0] || '');
+            formData.append('enrolledStudents[]', row.children[2]?.innerText.trim() || '');
+            formData.append('droppedStudents[]', row.children[3]?.innerText.trim() || '');
+            formData.append('courseCapacities[]', row.children[4]?.innerText.trim() || '');
         });
 
         console.log('Form Data:', Array.from(formData.entries()));
@@ -73,12 +108,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 result.updatedSections.forEach(updatedSection => {
                     const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                     if (row) {
-                        if (row.children[1]) row.children[1].innerText = updatedSection.name;
-                        if (row.children[3]) row.children[3].innerText = updatedSection.enrolled;
-                        if (row.children[4]) row.children[4].innerText = updatedSection.dropped;
-                        if (row.children[5]) row.children[5].innerText = updatedSection.capacity;
+                        row.children[0].innerText = `${updatedSection.prefix} ${updatedSection.number} ${updatedSection.section} - ${updatedSection.year}${updatedSection.session} ${updatedSection.term}`;
+                        row.children[2].innerText = updatedSection.enrolled;
+                        row.children[3].innerText = updatedSection.dropped;
+                        row.children[4].innerText = updatedSection.capacity;
                     }
                 });
+
+                saveButton.style.display = 'none';
+                cancelButton.style.display = 'none';
+                editButton.style.display = 'block';
             } else {
                 console.error('Save failed.');
             }
@@ -98,5 +137,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (saveButton) {
         saveButton.addEventListener('click', saveChanges);
+    }
+
+    if (instructorFilter) {
+        instructorFilter.addEventListener('change', function () {
+            const selectedInstructorId = this.value;
+            const url = new URL(window.location.href);
+            if (selectedInstructorId) {
+                url.searchParams.set('instructor_id', selectedInstructorId);
+            } else {
+                url.searchParams.delete('instructor_id');
+            }
+            window.location.href = url.toString();
+        });
     }
 });
