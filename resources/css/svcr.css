@@ -200,7 +200,7 @@ nav[aria-label="Pagination Navigation"] {
 
 #svcr-select-all:checked::before {
     content: "✓";
-    background-color: #007bff;
+    background-color:#3b4779;
     opacity: 0;
     color: white;
 }

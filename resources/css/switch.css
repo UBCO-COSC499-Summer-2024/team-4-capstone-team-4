@@ -41,11 +41,11 @@
 }
 
 input:checked + .slider {
-	background-color: rgba(30, 75, 250, 1);
+	background-color: #3b4779;
 }
 
 input:focus + .slider {
-	box-shadow: 0 0 1px rgba(30, 75, 250, 1);
+	box-shadow: 0 0 1px #3b4779;
 }
 
 input:checked + .slider:before {
