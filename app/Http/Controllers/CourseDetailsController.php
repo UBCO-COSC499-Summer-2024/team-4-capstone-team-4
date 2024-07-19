@@ -13,19 +13,18 @@ class CourseDetailsController extends Controller
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user();
-
-        // Check if the authenticated user can access this user's course details
+    
         if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
             abort(403, 'Unauthorized access.');
         }
-
+    
         $userRole = $user->roles->first()->role ?? 'guest';
         $query = $request->input('search', '');
-
+        $instructorId = $request->input('instructor_id', null);
+    
         Log::info('User Role:', ['role' => $userRole]);
         Log::info('Search Query:', ['query' => $query]);
-
-        // Get course sections based on the role and query
+    
         $courseSections = CourseSection::with('area')
             ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
                 $queryBuilder->whereHas('teaches', function ($query) use ($user) {
@@ -38,12 +37,17 @@ class CourseDetailsController extends Controller
                       ->orWhereRaw('LOWER(number) LIKE ?', ['%' . strtolower($query) . '%']);
                 });
             })
+            ->when($instructorId, function ($queryBuilder) use ($instructorId) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($instructorId) {
+                    $query->where('instructor_id', $instructorId);
+                });
+            })
             ->get();
-
+    
         $courseSections = $courseSections->map(function ($section) {
             $seiData = $section->seiData()->first() ?? null;
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
+    
             $formattedName = sprintf('%s %s %s - %s%s %s',
                 $section->prefix,
                 $section->number,
@@ -52,7 +56,7 @@ class CourseDetailsController extends Controller
                 $section->session,
                 $section->term
             );
-
+    
             return (object)[
                 'id' => $section->id,
                 'name' => $formattedName,
@@ -63,19 +67,25 @@ class CourseDetailsController extends Controller
                 'averageRating' => $averageRating,
             ];
         });
-
+    
         Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
         Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-
+    
+        $instructors = User::whereHas('roles', function ($query) {
+            $query->where('role', 'instructor');
+        })->get();
+    
         if ($request->ajax()) {
             return response()->json($courseSections);
         }
-
+    
         $sortField = 'courseName';
         $sortDirection = 'asc';
-
-        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection'));
+    
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'instructors', 'instructorId'));
     }
+    
+    
     
     public function save(Request $request){
         $ids = $request->input('ids', []);

@@ -1,5 +1,5 @@
 <div class="relative">
-    <div class="italic">*IM = Interpolated Medium</div>
+    <div class="italic">*IM = Interpolated Median</div>
     <form wire:submit="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="py-3 flex justify-between bg-[#3b4779] text-white">

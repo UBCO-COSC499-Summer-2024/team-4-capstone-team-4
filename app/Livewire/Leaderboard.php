@@ -72,5 +72,43 @@ class Leaderboard extends Component {
     public function filter() {
         $this->selectedAreas = $this->selectedAreas;
     }
+
+    /**
+    * Adds an ordinal suffix to a number to denote its position.
+    *
+    * Examples:
+    * - 1 becomes 1st
+    * - 2 becomes 2nd
+    * - 3 becomes 3rd
+    * - 4 becomes 4th
+    * - and so on...
+    *
+    * @param int $number The number to which the ordinal suffix is added.
+    * @return string The number with its ordinal suffix.
+    */
+    private function addOrdinalSuffix($number) {
+        $suffix = '';
+    
+        if (!in_array(($number % 100), [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1:
+                    $suffix = 'st';
+                    break;
+                case 2:
+                    $suffix = 'nd';
+                    break;
+                case 3:
+                    $suffix = 'rd';
+                    break;
+                default:
+                    $suffix = 'th';
+                    break;
+            }
+        } else {
+            $suffix = 'th';
+        }
+    
+        return $number . $suffix;
+    }
 }
 
