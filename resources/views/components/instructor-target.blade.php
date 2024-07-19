@@ -59,14 +59,10 @@
                         }
                     @endphp
                     <div class="rank-wrapper">
-                        <div class="rank-circle-container flex justify-center items-center gap-2">
-                            <div class="circle {{ $colorClass }}">{{ $rank['rank'] }}</div>
+                        <div class="rank-circle-container flex justify-center items-center gap-8">
+                            <div class="circle {{ $colorClass }}">{{ $rank['rank'] }}<div class="ldb-label">Rank</div></div>
                             <span class="material-symbols-outlined icon-circle custom-icon {{ $colorClass }}">{{ $icon }}</span>
-                            <div class="circle {{ $colorClass }}">{{ $rank['score'] }}</div>
-                        </div>
-                        <div class="labels">
-                            <div>Rank</div>
-                            <div>Score</div>
+                            <div class="circle {{ $colorClass }}">{{ $rank['score'] }}<div class="ldb-label">Score</div></div>
                         </div>
                         <div class="badge-desc flex justify-center items-center p-1">
                             {{ $description }}
