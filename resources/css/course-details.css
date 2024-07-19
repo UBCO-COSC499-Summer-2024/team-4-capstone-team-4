@@ -11,7 +11,7 @@ th.editable {
 }
 
 th.editable:focus {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
@@ -22,7 +22,7 @@ th.editable:focus {
 }
 
 .editable:focus {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
@@ -72,7 +72,7 @@ th.editable:focus {
     position: sticky;
     top: 0px;
     z-index: 500;
-    background-color: rgb(12, 35, 68);
+    background-color: rgb(59, 71, 121);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
@@ -98,8 +98,8 @@ th.editable:focus {
 }
 
 #searchInput:focus {
-    border-color: #002145;
-    box-shadow: 0 0 0 1px #002145;
+    border-color: #3b4779;
+    box-shadow: 0 0 0 1px #3b4779;
 }
 
 #searchInput::placeholder {
@@ -108,25 +108,25 @@ th.editable:focus {
 
 /* Custom blue color for the table */
 .custom-ubc-blue {
-    color: rgb(12, 35, 68);
-    border-color: rgb(12, 35, 68);
+    color: rgb(59, 71, 121);
+    border-color: rgb(59, 71, 121);
     background-color: transparent;
     transition: color 0.25s;
 }
 
 .custom-ubc-blue:hover {
-    background-color: rgb(12, 35, 68);
+    background-color: rgb(59, 71, 121);
     color: white;
 }
 
 .custom-ubc-blue:focus {
-    border-color: rgb(12, 35, 68);
-    box-shadow: 0 0 0 1px rgb(12, 35, 68);
+    border-color: rgb(59, 71, 121);
+    box-shadow: 0 0 0 1px rgb(59, 71, 121);
 }
 
 /* Highlighting the table in the edit mode */
 .editable-highlight {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #ffffff;
     padding: 15px;
     border-radius: 8px;
@@ -196,17 +196,17 @@ tbody td:last-child {
     padding: 10px 12px;
     border-radius: 8px;
     font-size: 1rem;
-    border: 2px solid #002145;
+    border: 2px solid #3b4779;
     background-color: #f8f8f8;
     transition: border-color 0.3s, box-shadow 0.3s;
     width: 50%; 
     max-width: 50%; 
-    color: #002145;
+    color: #3b4779;
 }
 
 .form-select:focus {
-    border-color: #002145; 
-    box-shadow: 0 0 0 1px #002145;
+    border-color: #3b4779; 
+    box-shadow: 0 0 0 1px #3b4779;
     outline: none;
 }
 

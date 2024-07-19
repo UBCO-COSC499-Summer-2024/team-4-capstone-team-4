@@ -37,7 +37,7 @@ if($user->hasRoles(['admin', 'dept_head'])) {
         <form method="POST" action="{{ route('logout') }}" x-data>
             @csrf
             <div class="sidebar-item">
-                <x-link class="text-xl sidebar-link" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
+                <x-link class="sidebar-link" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
             </div>
         </form>
     </div>
