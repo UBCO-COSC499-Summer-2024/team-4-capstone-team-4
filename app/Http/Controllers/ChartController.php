@@ -696,7 +696,7 @@ class ChartController extends Controller {
                 [
                     "label" => "Current Hours",
                     "backgroundColor" => "rgba(59, 71, 121, 1)",
-                    "borderColor" => "rgba(37, 41, 150, 0.31)",
+                    "borderColor" => "rgba(59, 71, 121, 0.31)",
                     "borderWidth" => 0,
                     "borderSkipped" => false,
                     "borderRadius" => 5,

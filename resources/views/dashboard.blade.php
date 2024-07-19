@@ -19,7 +19,7 @@ $userRoles = auth()->user()->roles;
 @else
     <x-app-layout>
         <div class="content">
-            <h1>{{ __('Dashboard') }}</h1>
+            <h1  style="color:black">{{ __('Dashboard') }}</h1>
             @if (($isDeptHead || $isDeptStaff) && $isInstructor)
                 <!-- Department View with Button -->
                 <section class="dash-top">

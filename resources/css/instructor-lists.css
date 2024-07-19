@@ -30,8 +30,8 @@
     background: #fafafa;
     padding: 2px; 
     max-height: 50px;
-    font-weight: normal;
-    font-size: 15px;
+    font-weight: bold;
+    font-size: 18px;
     margin-bottom: 2px;
     box-sizing: border-box;
     text-align: center;
@@ -41,8 +41,8 @@
     background: #fafafa;
     color: #000000;
     max-height: 50px;
-    font-weight: bolder;
-    font-size: 18px;
+    font-weight: normal;
+    font-size: 15px;
     padding-bottom: 8px;
     text-align: center;
 }
