@@ -3,7 +3,7 @@
 $user = auth()->user();
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
-    ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
+    // ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
     ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Courses']
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
@@ -30,7 +30,7 @@ if (isset($items)) {
         <form method="POST" action="{{ route('logout') }}" x-data>
             @csrf
             <div class="sidebar-item">
-                <x-link class="sidebar-link text-xl" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
+                <x-link class="text-xl sidebar-link" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
             </div>
         </form>
     </div>

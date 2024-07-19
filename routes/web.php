@@ -112,7 +112,7 @@ Route::middleware([
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
      Route::get('/edit', function(){
         return view('staff-edit-mode');
-    })->name('staff.edit');
+    })->name('courses.edit');
 
 });
 
