@@ -1,5 +1,43 @@
 # Angelina's Personal Log 
 
+## Wednesday (7/17 - 7/18)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log717-718.png)
+
+### Current Tasks 
+ * #1: Leaderboard Rank Front End
+ * #2: Leaderboard Rank Back End
+ * #3: Add Badges to Leaderboard
+ * #4: Enhance Badge Style
+ * #5: Score Calculation Method
+ * #6: Dashboad Buttons and Links
+ * #7: Add Instructor Charts
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Score Calculation Method  | In Progress |
+| Enhance Badge Style       | Completed   |
+| Add Badges to Leaderboard | Completed   |
+| Leaderboard Rank Front End| Completed   |
+| Leaderboard Rank Back End | Completed   |
+| Dashboard Buttons & Links | In Progress |
+| Instructor Charts         | Completed   |  
+| Testing Preparation       | Completed   |
+
+### Cycle Goal Review 
+Created backend methods to allow for rank in the leaderboard to be pulled to the dashboard. Added and created, and stylized badges for the leaderboard gamification. Updated the badge styles to look cuter with Clements assistance. Added charts to the instructor dashboard. Prepared for testing with team members, and assigned roles for each team member. 
+
+### Next Cycle Goals
+ * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
+ * Add score calculation method to Performance Model
+ * Add Administrator Dashboard
+ * Testing, Testing, Testing
+
+---
+
 ## Friday (7/12 - 7/16)
 
 ### Timesheet
