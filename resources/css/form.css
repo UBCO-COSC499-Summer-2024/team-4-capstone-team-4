@@ -245,4 +245,9 @@ select.form-select {
     }
 }
 
+.login-button {
+    background-color: #3b4779;
+    color: white;
+}
+
 /* mobile screens */

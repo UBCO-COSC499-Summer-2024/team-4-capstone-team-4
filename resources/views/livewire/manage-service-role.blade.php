@@ -13,8 +13,24 @@
 >
     <h1 class="nos content-title">
         <span class="content-title-text">
+            @php
+
+                $nextId = \App\Models\ServiceRole::where('id', '>', $serviceRole->id)->min('id') ?? \App\Models\ServiceRole::min('id');
+                $prevId = \App\Models\ServiceRole::where('id', '<', $serviceRole->id)->max('id') ?? \App\Models\ServiceRole::max('id');
+
+                $mlinks = [
+                    ['href' => route('svcroles.manage.id', ['id' => $prevId]), 'title' => __('Previous Service Role'), 'icon' => 'chevron_left', 'active' => false],
+                    ['href' => route('svcroles.manage.id', ['id' => $nextId]), 'title' => __('Next Service Role'), 'icon' => 'chevron_right', 'active' => false],
+                ];
+            @endphp
             @if ($serviceRole)
-                {{ $serviceRole->name }}
+                <div class="flex items-center justify-between gap-2">
+                    {{ $serviceRole->name }}
+                    <div class="flex items-center justify-between arrow-dir">
+                        <x-link href="{{ $mlinks[0]['href'] }}" icon="{{ $mlinks[0]['icon'] }}" />
+                        <x-link href="{{ $mlinks[1]['href'] }}" icon="{{ $mlinks[1]['icon'] }}" />
+                    </div>
+                </div>
             @else
                 {{ __('No Service Role Selected') }}
             @endif
