@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
                 cell.classList.remove('editable-highlight');
+                cell.classList.remove('input-error');
 
             });
         });
