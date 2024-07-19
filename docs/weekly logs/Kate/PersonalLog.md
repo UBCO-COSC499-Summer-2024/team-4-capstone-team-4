@@ -1,3 +1,48 @@
+## Friday (7/17 - 7/19)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_17_2024-07_19_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Extra Form Functionality
+  * #2: Upload File
+  * #3: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Upload File / #301
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I polished up necessary UI changes to the import pages and ensure that the functionality still works. I continued to work on the file upload function although the changes are still on my local machine. Finally, I helped with creating the task list for the testing event and the google survey for feedback.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Upload file UI
+  * Upload file functionality
+  * Populate form from pulled data
+  * Submit populated form to db
+
 ## Friday (7/12 - 7/17)
 
 ### Timesheet
