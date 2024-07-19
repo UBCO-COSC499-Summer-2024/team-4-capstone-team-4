@@ -7,6 +7,18 @@
             </div>
             @if($user->id < 4)
             <div class="flex items-center space-x-4">
+                @if(in_array($userRole, ['admin', 'dept_head']))
+                    <div class="filter-instructor">
+                        <select id="instructorFilter" name="instructor_id" class="form-select">
+                            <option value="">Filter By Instructor</option>
+                            @foreach($instructors as $instructor)
+                                <option value="{{ $instructor->id }}" {{ request('instructor_id') == $instructor->id ? 'selected' : '' }}>
+                                    {{ $instructor->firstname }} {{ $instructor->lastname }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <x-assign-button />
                 <x-edit-button id="editButton"/>
                 <x-save-button style="display: none;" />

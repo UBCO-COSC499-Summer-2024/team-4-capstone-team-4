@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* For the table headers and structure */
 th.editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
@@ -10,7 +11,7 @@ th.editable {
 }
 
 th.editable:focus {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
@@ -21,7 +22,7 @@ th.editable:focus {
 }
 
 .editable:focus {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
@@ -35,6 +36,7 @@ th.editable:focus {
     margin: auto;
 }
 
+/* Fixing the headers of the table */
 .fixed-header {
     position: sticky;
     top: 0;
@@ -70,7 +72,7 @@ th.editable:focus {
     position: sticky;
     top: 0px;
     z-index: 500;
-    background-color: rgb(12, 35, 68);
+    background-color: rgb(59, 71, 121);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
@@ -80,6 +82,7 @@ th.editable:focus {
     z-index: 1100;
 }
 
+/* Search bar */
 .search-bar,
 #searchInput {
     box-shadow: none;
@@ -95,33 +98,35 @@ th.editable:focus {
 }
 
 #searchInput:focus {
-    border-color: #002145;
-    box-shadow: 0 0 0 1px #002145;
+    border-color: #3b4779;
+    box-shadow: 0 0 0 1px #3b4779;
 }
 
 #searchInput::placeholder {
     color: #787878;
 }
 
+/* Custom blue color for the table */
 .custom-ubc-blue {
-    color: rgb(12, 35, 68);
-    border-color: rgb(12, 35, 68);
+    color: rgb(59, 71, 121);
+    border-color: rgb(59, 71, 121);
     background-color: transparent;
     transition: color 0.25s;
 }
 
 .custom-ubc-blue:hover {
-    background-color: rgb(12, 35, 68);
+    background-color: rgb(59, 71, 121);
     color: white;
 }
 
 .custom-ubc-blue:focus {
-    border-color: rgb(12, 35, 68);
-    box-shadow: 0 0 0 1px rgb(12, 35, 68);
+    border-color: rgb(59, 71, 121);
+    box-shadow: 0 0 0 1px rgb(59, 71, 121);
 }
 
+/* Highlighting the table in the edit mode */
 .editable-highlight {
-    border: 1px solid #002145;
+    border: 1px solid #3b4779;
     background-color: #ffffff;
     padding: 15px;
     border-radius: 8px;
@@ -129,6 +134,7 @@ th.editable:focus {
     cursor: text;
 }
 
+ /* Custom green color for the buttons */
 .custom-green {
     color: #3B784F;
     border-color: #3B784F;
@@ -144,7 +150,13 @@ th.editable:focus {
     border-color: #3B784F;
     box-shadow: 0 0 0 1px #3B784F;
 }
+/* For the error handling messages in the edit mode */
+.input-error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
 
+/* Edit Mode Display for the table  */
 table {
     border-collapse: separate;
     border-spacing: 2px 12px;
@@ -174,3 +186,35 @@ tbody td:last-child {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
+/* For the Filter Icon */
+.form-select {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 2px solid #3b4779;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 50%; 
+    max-width: 50%; 
+    color: #3b4779;
+}
+
+.form-select:focus {
+    border-color: #3b4779; 
+    box-shadow: 0 0 0 1px #3b4779;
+    outline: none;
+}
+
+.form-select::placeholder {
+    color: #f8f8f8;
+}
+
+.filter-instructor {
+    margin-top: 0rem;
+}
+

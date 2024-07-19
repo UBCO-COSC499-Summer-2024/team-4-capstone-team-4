@@ -5,21 +5,23 @@
         $links = [
             ['href' => route('svcroles'), 'title' => __('Dashboard'), 'icon' => 'group', 'active' => request()->is('svcroles')],
             ['href' => route('svcroles.add'), 'title' => __('Add Service Role'), 'icon' => 'add', 'active' => request()->is('svcroles/add')],
-            ['href' => route('svcroles.manage'), 'title' => __('Manage Service Roles'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')],
-            ['href' => route('svcroles.requests'), 'title' => __('Requests'), 'icon' => 'request_page', 'active' => request()->is('svcroles/requests')],
-            ['href' => route('svcroles.logs'), 'title' => __('Audit Logs'), 'icon' => 'description', 'active' => request()->is('svcroles/audit-logs')],
+            ['href' => route('svcroles.manage'), 'title' => __('Manage Service Roles'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
         ];
     @endphp
-
-    {{-- disabled access control for testing --}}
 
     @if ($user->hasRoles(['dept_staff', 'dept_head', 'admin']))
         @if(request()->is('svcroles/add'))
             @include('components.svcrole.add-svcrole')
         @elseif(request()->is('svcroles/manage'))
-            {{-- needs id --}}
             @php
                 $svcrId = 1;
+                $nextId = \App\Models\ServiceRole::where('id', '>', $svcrId)->min('id') ?? \App\Models\ServiceRole::min('id');
+                $prevId = \App\Models\ServiceRole::where('id', '<', $svcrId)->max('id') ?? \App\Models\ServiceRole::max('id');
+
+                $links = array_merge($links, [
+                    ['href' => route('svcroles.manage.id', ['id' => $prevId]), 'title' => __('Previous Service Role'), 'icon' => 'chevron_left', 'active' => false],
+                    ['href' => route('svcroles.manage.id', ['id' => $nextId]), 'title' => __('Next Service Role'), 'icon' => 'chevron_right', 'active' => false],
+                ]);
             @endphp
             <livewire:manage-service-role
                 :links="$links"
@@ -28,6 +30,13 @@
         @elseif (request()->is('svcroles/manage/*'))
             @php
                 $svcrId = request()->route('id');
+                $nextId = \App\Models\ServiceRole::where('id', '>', $svcrId)->min('id') ?? \App\Models\ServiceRole::min('id');
+                $prevId = \App\Models\ServiceRole::where('id', '<', $svcrId)->max('id') ?? \App\Models\ServiceRole::max('id');
+
+                $links = array_merge($links, [
+                    ['href' => route('svcroles.manage.id', ['id' => $prevId]), 'title' => __('Previous Service Role'), 'icon' => 'chevron_left', 'active' => false],
+                    ['href' => route('svcroles.manage.id', ['id' => $nextId]), 'title' => __('Next Service Role'), 'icon' => 'chevron_right', 'active' => false],
+                ]);
             @endphp
             <livewire:manage-service-role
                 :links="$links"
@@ -36,7 +45,6 @@
         @elseif(request()->is('svcroles/requests'))
             @include('components.svcrole.requests')
         @elseif(request()->is('svcroles/audit-logs'))
-            {{-- @include('components.svcrole.logs') --}}
             <livewire:audit-logs />
         @else
             <livewire:service-roles-list :links="$links"/>

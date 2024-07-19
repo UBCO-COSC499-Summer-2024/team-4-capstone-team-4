@@ -56,7 +56,7 @@
                             <button class="flex items-center">
                                 {{-- <span>{{ __('Select theme') }}</span> --}}
                                 {{-- default from db --}}
-                                <span>{{ $theme }}</span>
+                                <span>{{ Str::ucfirst($theme) }}</span>
                                 <span >
                                     <span class="flex justify-center w-5 h-5 p-0 m-0 items center material-symbols-outlined icon">expand_more</span>
                                 </span>
@@ -69,7 +69,6 @@
                                     'light' => 'Light',
                                     'dark' => 'Dark'
                                 ];
-
                                 $selectedTheme = 'light';
                             @endphp
 

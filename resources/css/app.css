@@ -107,6 +107,10 @@ header:not(:has(#header-misc)) {
     /* grid-column: 1 / span 2; */
 }
 
+.content-title-text {
+    width: 100%;
+}
+
 #header-misc form {
     width: 100%;
 }
