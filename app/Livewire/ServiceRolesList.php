@@ -447,8 +447,12 @@ class ServiceRolesList extends Component
             $serviceRoles = ServiceRole::whereNotIn('id', $options['allExcept'])->get();
         }
 
-        if ($as === 'csv' || $as === 'xlsx' || $as === 'pdf') {
+        if ($as === 'csv' || $as === 'xlsx') {
             return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.' . $as);
+        }
+
+        if ($as === 'pdf') {
+            return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
         }
 
         // Assuming you have the package installed and configured:

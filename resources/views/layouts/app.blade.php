@@ -68,13 +68,16 @@
                     console.log(toast)
                     Toastify({
                         text: toast.message,
-                        duration: 5000,
-                        close: true,
-                        gravity: "bottom",
-                        position: "right",
-                        className: `toastify-${toast.type}`, // Optional styling
-                        stopOnFocus: true,
-                        destination: toast.destination ? toast.destination : null,
+                        selector: document.querySelector('main > .container'),
+                        newWindow: toast.destination ? true : false,
+                        duration: toast.duration ?? 5000,
+                        close: toast.close ?? true,
+                        gravity: toast.gravity ?? "bottom",
+                        position: toast.position ?? "right",
+                        className: toast.className ?? toast.class?? `toastify-${toast.type}`, // Optional styling
+                        stopOnFocus: toast.stopOnFocus ??  true,
+                        destination: toast.destination ?? null,
+                        ariaLive: toast.ariaLive ?? toast.aria ?? "polite", // `assertive` or `off`
                     }).showToast();
                 });
             });

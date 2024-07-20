@@ -16,7 +16,7 @@ class Preferences extends Component
     public $language;
     public $theme;
     public $auth_method;
-    public $custom = [];
+    public $custom;
 
     protected $rules = [
         'settings.auth_method' => 'required',
@@ -24,7 +24,7 @@ class Preferences extends Component
         'settings.timezone' => 'required',
         'settings.locale' => 'required',
         'settings.language' => 'required',
-        'settings.custom' => 'array',
+        // 'settings.custom' => 'json',
     ];
 
     public function mount()
@@ -38,11 +38,7 @@ class Preferences extends Component
         if ($this->settings['custom'] === null) {
             $this->custom = [];
         } else {
-            if (is_array($this->settings['custom'])) {
-                $this->custom = $this->settings['custom'];
-            } else {
-                $this->custom = json_decode($this->settings['custom'], true);
-            }
+            $this->custom = is_string($this->settings['custom']) ? json_decode($this->settings['custom'], true) : $this->settings['custom'];
         }
     }
 
@@ -53,7 +49,7 @@ class Preferences extends Component
 
     public function savePreferences()
     {
-        $audit_user = User::find((int) auth()->user()->id);
+        $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
             $this->settings['timezone'] = $this->timezone;

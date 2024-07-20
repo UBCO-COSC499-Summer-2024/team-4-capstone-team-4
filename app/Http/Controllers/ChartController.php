@@ -101,12 +101,12 @@ class ChartController extends Controller {
             }
 
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
-            $leaderboard = $this->leaderboardPrev($dept, $currentYear);
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, false);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
-            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "RolePieChart");
-            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "ExtraPieCHart");
-            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "CoursePieChart");
+            $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "DeptRolePieChart");
+            $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "DeptExtraPieCHart");
+            $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "DeptCoursePieChart");
 
             if ($isInstructor) {
                 $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -126,17 +126,20 @@ class ChartController extends Controller {
                 }
 
                 $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
+                $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
 
                 $chart5 = $this->instructorLineChart($performance, $hasTarget);
+                $chart6 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
+                $chart7 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
 
                 if ($hasTarget) {
-                    $chart6 = $this->instructorProgressBar($performance, $currentMonth);
+                    $chart8 = $this->instructorProgressBar($performance, $currentMonth);
                     
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
+                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 }
             } else {
                 return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
@@ -159,17 +162,20 @@ class ChartController extends Controller {
             }
 
             $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
+            $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
+            $chart2 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
+            $chart3 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
 
             if ($hasTarget) {
-                $chart2 = $this->instructorProgressBar($performance, $currentMonth);
+                $chart4 = $this->instructorProgressBar($performance, $currentMonth);
 
-                return view('dashboard', compact('chart1', 'chart2', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'performance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                                'assignmentCount', 'ranking', 'performance'));
             } else {
-                return view('dashboard', compact('chart1', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'performance'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
+                            'assignmentCount', 'ranking', 'performance'));
             }
         } else {
             return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor'));
@@ -231,9 +237,11 @@ class ChartController extends Controller {
      * within a specified department. The results are ordered by their performance scores.
      *
      * @param int $deptId The ID of the department for which to retrieve performances.
-     * @return array An array containing the names and scores of instructors.
+     * @param int $currentYear The current year.
+     * @param boolean $forRank Defines if the user is getting the leaderboard for ranking purposes.
+     * @return array An array containing the names and scores of instructors. 
      */
-    private function leaderboardPrev($deptId, $currentYear) {
+    private function leaderboardPrev($deptId, $currentYear, $forRank) {
         $usersQuery = User::query();
         $usersQuery->distinct()
             ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
@@ -246,8 +254,15 @@ class ChartController extends Controller {
             })
             ->where('areas.dept_id', $deptId);
 
-        $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
-            ->orderBy('instructor_performance.score', 'desc')->take(5);
+        if ($forRank) {
+            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
+                ->orderBy('instructor_performance.score', 'desc');
+        }
+        
+        else {
+            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
+                ->orderBy('instructor_performance.score', 'desc')->take(5);
+        }
 
         $users = $usersQuery->get();
 
@@ -260,6 +275,55 @@ class ChartController extends Controller {
         }
 
         return $leaderboardData;
+    }
+
+    /**
+     * Retrieves the rank of an instructor based on their performance in a given year.
+     *
+     * This method joins multiple tables to gather data about the instructor, including the
+     * departments they are associated with, and calculates their rank within each department.
+     *
+     * @param int $instructorId The ID of the instructor.
+     * @param int $currentYear The year for which the ranking is being calculated.
+     * @param float $score The performance score of the instructor.
+     * @return array An array containing the rank, score, and standing percentage of the instructor
+     *               within each department they are associated with.
+     */
+    private function getRank($instructorId, $currentYear, $score) {
+        $deptIdsQuery = User::query();
+        $deptIdsQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
+            ->leftJoin('service_roles', 'role_assignments.service_role_id', '=', 'service_roles.id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
+                    ->where('extra_hours.year', $currentYear);
+            })
+            ->where('user_roles.id', $instructorId)
+            ->where(function ($query) use ($currentYear) {
+                $query->where('course_sections.year', $currentYear)
+                    ->orWhere('extra_hours.year', $currentYear);
+            });
+
+        $deptIdsQuery->select('areas.dept_id', 'users.firstname', 'users.lastname');
+
+        $results = $deptIdsQuery->get();
+        $deptIds = $results->pluck('dept_id')->unique();
+        $name = $results->pluck('firstname')->first() . ' ' . $results->pluck('lastname')->first();
+        $ranking = [];
+
+        foreach ($deptIds as $dept) {
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, true);
+            $rank = array_search($name, array_column($leaderboard, 'name')) + 1;
+            $standing = ($rank / count($leaderboard)) * 100;
+            $rank = $this->addOrdinalSuffix($rank);
+            $ranking[] = ['rank' => $rank, 'score' => $score, 'standing' => $standing];
+        }
+
+        return $ranking;
     }
 
     /**
@@ -335,7 +399,7 @@ class ChartController extends Controller {
 
         foreach ($assignedRoles as $assignedRole) {
             $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
-            $serviceRoles[] = $role->name;
+            $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
             $roleHoursTotal += $role->monthly_hours[$currentMonth];
         }
 
@@ -347,7 +411,7 @@ class ChartController extends Controller {
         $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
 
         foreach ($allExtraHours as $extraHrs) {
-            $extraHours[] = $extraHrs->name;
+            $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
             $extraHoursTotal += $extraHrs->hours;
         }
 
@@ -451,7 +515,7 @@ class ChartController extends Controller {
      *
      * @param array $areaTotals An array of total values for each area.
      * @param string $title The title of the chart.
-     * @param string $entity The entity (e.g., department) the chart represents.
+     * @param string $entity The entity (e.g., service roles) the chart represents.
      * @param string $canvas The ID of the canvas element for the chart.
      * @return string The JSON configuration for the Chart.js pie chart.
      */
@@ -552,7 +616,7 @@ class ChartController extends Controller {
                 ->datasets([
                     [
                         "label" => "Total Hours",
-                        "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                        "backgroundColor" => "rgba(59, 71, 121, 1)",
                         "borderColor" => "rgba(37, 41, 150, 0.7)",
                         "data" => $totalHours
                     ],
@@ -585,7 +649,7 @@ class ChartController extends Controller {
                 ->datasets([
                     [
                         "label" => "Total Hours",
-                        "backgroundColor" => "rgba(37, 41, 150, 0.31)",
+                        "backgroundColor" => "rgba(59, 71, 121, 1)",
                         "borderColor" => "rgba(37, 41, 150, 0.7)",
                         "data" => $totalHours
                     ]
@@ -631,8 +695,8 @@ class ChartController extends Controller {
             ->datasets([
                 [
                     "label" => "Current Hours",
-                    "backgroundColor" => "rgba(37, 41, 150, 0.7)",
-                    "borderColor" => "rgba(37, 41, 150, 0.31)",
+                    "backgroundColor" => "rgba(59, 71, 121, 1)",
+                    "borderColor" => "rgba(59, 71, 121, 0.31)",
                     "borderWidth" => 0,
                     "borderSkipped" => false,
                     "borderRadius" => 5,
@@ -706,4 +770,123 @@ class ChartController extends Controller {
                 ]
             ]);
     }
+
+    /**
+     * Create a pie chart for department performance.
+     *
+     * This method prepares data for a pie chart showing the distribution of
+     * performance metrics across different areas within a department.
+     *
+     * @param array $enitityHours An array of total hours for each entity.
+     * @param string $title The title of the chart.
+     * @param string $entity The entity (e.g., service roles) the chart represents.
+     * @param string $canvas The ID of the canvas element for the chart.
+     * @return string The JSON configuration for the Chart.js pie chart.
+     */
+    private function instructorPieChart($entityHours, $title, $entity, $canvas) {
+        $colors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)" ,
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)" 
+        ];
+        $borderColors = [
+            "rgba(29, 154, 202, 0.7)", 
+            "rgba(249, 168, 37, 0.7)", 
+            "rgba(241, 103, 69, 0.7)", 
+            "rgba(124, 63, 88, 0.7)",
+            "rgba(255, 127, 14, 0.7)",
+            "rgba(44, 160, 44, 0.7)",
+            "rgba(214, 39, 40, 0.7)",  
+            "rgba(148, 103, 189, 0.7)",
+            "rgba(140, 86, 75, 0.7)",  
+            "rgba(127, 127, 127, 0.7)"  
+        ];
+
+        $labels = [];
+        $data = [];
+        foreach ($entityHours as $index => $hours) {
+            $labels[] = $hours['name']; 
+            $data[] = $hours['hours']; 
+        }
+
+        $datasets = [
+            [
+                "label" => $entity,
+                "backgroundColor" => $colors,
+                "borderColor" => $borderColors,
+                "data" => $data,
+                'hoverOffset' => 4,
+            ]
+        ];
+
+        return app()
+            ->chartjs->name($canvas)
+            ->type("doughnut")
+            ->size(["width" => 200, "height" => 100])
+            ->labels($labels)
+            ->datasets($datasets)
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => $title,
+                        'font' => [
+                            'size' => 15,
+                        ]
+                    ],
+                    'legend' => [
+                        'display' => true,
+                        'position' => 'right',
+                    ]
+                ],
+                'radius' => '90%',
+                'aspectRatio' => 2
+            ]);
+    }
+
+    /**
+     * Adds an ordinal suffix to a number to denote its position.
+     *
+     * Examples:
+     * - 1 becomes 1st
+     * - 2 becomes 2nd
+     * - 3 becomes 3rd
+     * - 4 becomes 4th
+     * - and so on...
+     *
+     * @param int $number The number to which the ordinal suffix is added.
+     * @return string The number with its ordinal suffix.
+     */
+    private function addOrdinalSuffix($number) {
+        $suffix = '';
+    
+        if (!in_array(($number % 100), [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1:
+                    $suffix = 'st';
+                    break;
+                case 2:
+                    $suffix = 'nd';
+                    break;
+                case 3:
+                    $suffix = 'rd';
+                    break;
+                default:
+                    $suffix = 'th';
+                    break;
+            }
+        } else {
+            $suffix = 'th';
+        }
+    
+        return $number . $suffix;
+    }
+
 }

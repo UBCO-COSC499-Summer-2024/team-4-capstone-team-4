@@ -1,6 +1,6 @@
 <div id="successModal" class="hidden fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
     <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg">
-        <span class="material-symbols-outlined text-green-500">
+        <span class="material-symbols-outlined text-[#3B784F]">
             check_circle
         </span>
         <h2 class="text-2xl font-bold">Successfully Saved!</h2>
