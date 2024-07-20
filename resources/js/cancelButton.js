@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const editButton = document.getElementById('editButton');
     const table = document.querySelector('tbody');
 
+    if(cancelButton){
     cancelButton.addEventListener('click', function () {
         table.querySelectorAll('tr').forEach((row, index) => {
             row.querySelectorAll('td').forEach(cell => {
@@ -15,4 +16,5 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelButton.style.display = 'none';
         editButton.style.display = 'block';
     });
+}
 });

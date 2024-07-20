@@ -182,10 +182,14 @@ return new class extends Migration
         });
 
         Schema::create('settings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
-            $table->string('auth_method');
-            $table->string('theme');
-            $table->string('language');
+            $table->string('auth_method')->nullable()->default('email-password');
+            $table->string('theme')->nullable()->default('light');
+            $table->string('timezone')->nullable()->default(date_default_timezone_get());
+            $table->string('locale')->nullable()->default('en');
+            $table->string('language')->nullable()->default('en');
+            $table->jsonb('custom')->nullable();
             $table->timestamps();
         });
 

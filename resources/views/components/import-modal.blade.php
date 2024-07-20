@@ -11,12 +11,12 @@
         <p class="text-lg font-light mb-6">Successfully Saved!</p>
         <div class="flex justify-center mt-6">
             <button class="bg-white text-[#3D8B57] border border-[#3D8B57] py-2 px-4 mx-2 rounded-lg hover:bg-[#3D8B57] hover:text-white" 
-                    onclick="location.href='{{ route('course-details') }}'">
-            View Courses
+                    onclick="location.href='{{ route('courses.details.id', ['user' => auth()->user()->id]) }}'">
+                View Courses
             </button>
             <button class="bg-white text-[#3D8B57] border border-[#3D8B57] py-2 px-4 mx-2 rounded-lg hover:bg-[#3D8B57] hover:text-white" 
                     wire:click="closeModal">
-            {{ $moreText }}
+                {{ $moreText }}
             </button>
         </div>
     </div>
