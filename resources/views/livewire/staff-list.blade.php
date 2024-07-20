@@ -66,7 +66,6 @@
                         subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}"
                         completedHours="{{ $currentMonthHours ?? '-' }}"
                         targetHours="{{ $performance->target_hours ?? '-' }}"
-                        rating="{{ $performance->score ?? '-' }}"
                         src="{{ $user->profile_photo_url }}"
                         instructorId="{{ $user->instructor_id }}"
                     />

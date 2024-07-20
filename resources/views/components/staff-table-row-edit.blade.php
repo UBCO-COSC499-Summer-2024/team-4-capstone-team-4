@@ -1,4 +1,4 @@
-@props(['targetHours', 'email', 'subarea', 'completedHours','rating', 'fullname', 'src'])
+@props(['targetHours', 'email', 'subarea', 'completedHours','rating', 'fullname', 'src', 'instructorId'])
 
 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
     <td class="w-3 px-6 py-4">
@@ -36,8 +36,8 @@
         </div>
     </td>
     <td class="px-6 py-4">
-        <div class="flex items-center justify-center">
-            <div class="text-center">{{ $rating }}</div>
+        <div class="flex items-center justify-center h-full">
+            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}"><span class="material-symbols-outlined">description</span></a>
         </div>
     </td>
 </tr>
