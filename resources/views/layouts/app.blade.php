@@ -44,7 +44,7 @@
                     ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
                     ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
                     ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
-                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Import'],
+                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Course Import'],
                 ]" />
             @else
                 <x-sidebar :items="[]" />
