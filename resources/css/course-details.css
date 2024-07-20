@@ -1,0 +1,220 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* For the table headers and structure */
+th.editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+    cursor: pointer;
+}
+
+th.editable:focus {
+    border: 1px solid #3b4779;
+    background-color: #e9f7fe;
+}
+
+.editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+}
+
+.editable:focus {
+    border: 1px solid #3b4779;
+    background-color: #e9f7fe;
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal-dialog-centered .modal-content {
+    margin: auto;
+}
+
+/* Fixing the headers of the table */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: pointer;
+    margin-bottom: 6px;
+}
+
+.fixed-header .header-title {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.fixed-header .header-search {
+    flex: 1;
+    display: flex;
+    padding: 1px;
+    border-radius: 4px;
+}
+
+.fixed-header .header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.sticky-header th {
+    position: sticky;
+    top: 0px;
+    z-index: 500;
+    background-color: rgb(59, 71, 121);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* Ensures the dropdown menu has a higher z-index than other elements */
+.dropdown-menu {
+    z-index: 1100;
+}
+
+/* Search bar */
+.search-bar,
+#searchInput {
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+    outline: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 50%;
+    max-width: 100%;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchInput:focus {
+    border-color: #3b4779;
+    box-shadow: 0 0 0 1px #3b4779;
+}
+
+#searchInput::placeholder {
+    color: #787878;
+}
+
+/* Custom blue color for the table */
+.custom-ubc-blue {
+    color: rgb(59, 71, 121);
+    border-color: rgb(59, 71, 121);
+    background-color: transparent;
+    transition: color 0.25s;
+}
+
+.custom-ubc-blue:hover {
+    background-color: rgb(59, 71, 121);
+    color: white;
+}
+
+.custom-ubc-blue:focus {
+    border-color: rgb(59, 71, 121);
+    box-shadow: 0 0 0 1px rgb(59, 71, 121);
+}
+
+/* Highlighting the table in the edit mode */
+.editable-highlight {
+    border: 1px solid #3b4779;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: text;
+}
+
+ /* Custom green color for the buttons */
+.custom-green {
+    color: #3B784F;
+    border-color: #3B784F;
+    background-color: transparent;
+}
+
+.custom-green:hover {
+    background-color: #3B784F;
+    color: white;
+}
+
+.custom-green:focus {
+    border-color: #3B784F;
+    box-shadow: 0 0 0 1px #3B784F;
+}
+/* For the error handling messages in the edit mode */
+.input-error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+/* Edit Mode Display for the table  */
+table {
+    border-collapse: separate;
+    border-spacing: 2px 12px;
+}
+
+tbody tr {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+tbody td {
+    padding: 12px 15px;
+    background-color: #ffffff;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.1s, border-color 0.1s;
+}
+
+tbody td:first-child {
+    border-left: 1px solid rgb(255, 255, 255);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+tbody td:last-child {
+    border-right: 1px solid rgb(255, 255, 255);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+/* For the Filter Icon */
+.form-select {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 2px solid #3b4779;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 50%; 
+    max-width: 50%; 
+    color: #3b4779;
+}
+
+.form-select:focus {
+    border-color: #3b4779; 
+    box-shadow: 0 0 0 1px #3b4779;
+    outline: none;
+}
+
+.form-select::placeholder {
+    color: #f8f8f8;
+}
+
+.filter-instructor {
+    margin-top: 0rem;
+}
+

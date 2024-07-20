@@ -19,8 +19,8 @@
         <div class="flex items-center justify-center h-full">{{ $score }}</div>
     </td>    
     <td class="px-6 py-4">
-        <div class="flex items-center justify-center h-full">
-            <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="{{ $badge }}" alt="">
+        <div class="flex items-left justify-left">
+            <x-badge :rank="$rankString" :score="$score" :standing="($rank/$count) * 100"/>
         </div>
     </td>
 </tr>

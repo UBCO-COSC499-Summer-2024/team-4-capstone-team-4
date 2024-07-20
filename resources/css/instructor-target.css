@@ -49,6 +49,39 @@
     flex: 2;
 }
 
+.circle {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    position: relative;
+    border: 3px outset #c0c0c0;
+}
+
+.leaderboard-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    padding: 10px;
+    text-align: center;
+    justify-content: center;
+    padding-left: 20px;
+}
+
 .course-performance {
     padding: 0px;
     background-color: #ffffff;
@@ -81,9 +114,111 @@
     font-size: 24px; 
 }
 
+.course-performance {
+    padding: 0px;
+    background-color: #ffffff;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    gap: 12px; 
+}
 
+.icon-circle {
+    width: 115px; 
+    height: 115px; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
 
+.trophy-gold {
+    color: gold;
+    background: linear-gradient(45deg, #fcf8f0, #f8e9c8);
+    border: 3px outset gold;
+}
 
+.trophy-silver {
+    color: rgb(135, 135, 135);
+    background: linear-gradient(45deg, #e1e1e1, #f3f3f3);
+    border: 3px outset #c0c0c0;
+}
 
+.trophy-bronze {
+    color: #cd7f32;
+    background: linear-gradient(45deg, #fff3e8, #fedab5);
+    border: 3px outset rgba(205, 127, 50, 0.5);
+}
 
+.badge-blue {
+    color: #007bff; 
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.5);
+}
 
+.badge-red {
+    color: #dc3545; 
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+.badge-green {
+    color: #28a745; 
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.badge-magenta {
+    color: #c2185b; 
+    background-color: rgba(194, 24, 91, 0.1);
+    border: 1px solid rgba(194, 24, 91, 0.5);
+}
+
+.badge-purple {
+    color: #6f42c1; 
+    background-color: rgba(111, 66, 193, 0.1);
+    border: 1px solid rgba(111, 66, 193, 0.5);
+}
+
+.badge-default {
+    color: #fd7e14; 
+    background-color: rgba(253, 126, 20, 0.1);
+    border: 1px solid rgba(253, 126, 20, 0.5);
+}
+
+.custom-icon {
+    font-size: 95px !important;
+    padding-top: 10px;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    width: 92%;
+    padding-top: 5px;
+    padding-left: 22px;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.badge-desc {
+    padding-top: 25px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.ldb-label {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: #333;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: fit-content;
+}

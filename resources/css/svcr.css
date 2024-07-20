@@ -6,6 +6,34 @@
     /* background: rgb(107 114 128 / 1) */
 }
 
+.arrow-dir {
+    border-radius:20px;
+    padding: 4px;
+    /* background: rgba(59,71,121,1); */
+    gap: 0.25rem;
+}
+
+.arrow-dir a {
+    gap: 0;
+}
+
+.arrow-dir .material-symbols-outlined {
+    padding: 2px !important;
+    border-radius: 50px;
+    color: rgba(59,71,171, 1);
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+}
+
+.arrow-dir a:hover .material-symbols-outlined {
+    /* background: rgba(59,71,171, 1);
+    color: #fff; */
+    font-weight: 900;
+}
+
 .svcr-list {
     display: grid;
     flex-wrap: wrap;
@@ -23,7 +51,8 @@
 }
 
 .svcr-list-header {
-    background: rgb(249 250 251 / 1);
+    /* background: rgb(249 250 251 / 1); */
+    background: rgb(59, 71, 121);
 }
 
 .card-view .svcrole-card {
@@ -48,10 +77,12 @@
     min-height: 30px;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #333;
+    /* color: #333; */
     text-align: left;
     padding: 4px 8px;
-    color: rgb(55 65 81 / 1);
+    /* color: rgb(55 65 81 / 1); */
+    color: #fff;
+    border-radius: 4px;
 }
 
 .svcr-list-header-item:first-child,
@@ -59,8 +90,7 @@
     text-align: center;
 }
 
-.svcr-list-header-item:has(.svcr-list-item[data-column="description"]),
-.svcr-list-header-item:nth-child(4) {
+.svcr-list-header-item:has(.svcr-list-item[data-column="description"]) {
     width: 700px;
 }
 
@@ -198,7 +228,7 @@ nav[aria-label="Pagination Navigation"] {
 
 #svcr-select-all:checked::before {
     content: "✓";
-    background-color: #007bff;
+    background-color:#3b4779;
     opacity: 0;
     color: white;
 }
@@ -207,4 +237,41 @@ nav[aria-label="Pagination Navigation"] {
     content: "-";
     text-align: center;
     line-height: 10px; /* Vertically center the "-" */
+}
+
+
+.svcr-list-header-item > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+.svcr-list-header-item > div .material-symbols-outlined {
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-title-btn-holder {
+    width: fit-content;
+    gap: 6px;
+}
+
+.content-title-btn {
+    width:fit-content;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(59,71,121, 1) !important;
+}
+
+.content-title-btn:hover {
+    background: rgba(59,71,121, 1);
+    border: none !important;
 }
