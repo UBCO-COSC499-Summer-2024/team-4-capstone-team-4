@@ -4,7 +4,7 @@
         <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="py-3 flex justify-between bg-[#3b4779] text-white">
                 <div class="w-1/12 text-center mx-2">#</div>
-                <div class="w-6/12 text-center mx-2">Course</div>
+                <div class="w-6/12 text-center mx-2">Course Section</div>
                 <div class="w-3/12 text-center mx-2">Q1 (IM)</div>
                 <div class="w-3/12 text-center mx-2">Q2 (IM)</div>
                 <div class="w-3/12 text-center mx-2">Q3 (IM)</div>
@@ -20,7 +20,7 @@
                 <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
                 <div class="w-6/12">
                     <select wire:model="rows.{{$index}}.cid" wire:change='checkDuplicate' class="import-form-select">
-                        <option value="">Select Course</option>
+                        <option value="">Select Course Section</option>
                         @foreach ($courses as $course)
                             <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
                         @endforeach
@@ -75,7 +75,7 @@
     @if(!$hasCourses)
     <div class="flex flex-col items-center justify-center py-10">
         <div class="text-center text-4xl">No courses created yet</div>
-        <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
+        <div class="text-center text-xl">Navigate to the "Add Course Section" tab</div>
         
     </div>
     @endif

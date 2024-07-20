@@ -4,7 +4,7 @@
             <a id="tab-file" class="import-nav-link @if($activeTab === 'file') active border-solid border-b-blue-500 hover:border-b-blue-500 @endif" href="#" wire:click.prevent="setActiveTab('file')">Upload File</a>
         </li> --}}
         <li class="me-2">
-            <a id="tab-workday" class="import-nav-link @if($activeTab === 'workday') active text-[#3b4779] hover:text-[#3b4779] border-solid border-b-[#3b4779] hover:border-b-[#3b4779] @endif" href="#" wire:click.prevent="setActiveTab('workday')">Add Course (Workday)</a>
+            <a id="tab-workday" class="import-nav-link @if($activeTab === 'workday') active text-[#3b4779] hover:text-[#3b4779] border-solid border-b-[#3b4779] hover:border-b-[#3b4779] @endif" href="#" wire:click.prevent="setActiveTab('workday')">Add Course Section</a>
         </li>
         <li class="me-2">
             <a id="tab-sei" class="import-nav-link @if($activeTab === 'sei') active text-[#3b4779] hover:text-[#3b4779] border-solid border-b-[#3b4779] hover:border-b-[#3b4779] @endif" href="#" wire:click.prevent="setActiveTab('sei')">Add SEI Data</a>
