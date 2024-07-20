@@ -7,7 +7,9 @@
     background: #f39c12;
 }
 
-.toastify-error {
+.toastify-error,
+.toastify-danger,
+.toastify-err {
     background: #e74c3c;
 }
 

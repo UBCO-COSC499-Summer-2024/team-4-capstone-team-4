@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\ServiceRole;
 use App\Models\Area;
+use App\Models\AuditLog;
+use App\Models\User;
 
 class ServiceRoleForm extends Component
 {
@@ -44,24 +46,59 @@ class ServiceRoleForm extends Component
 
     public function save()
     {
-        $this->validate();
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        try {
+            $this->validate();
 
-        $serviceRole = ServiceRole::create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'year' => $this->year,
-            'monthly_hours' => $this->monthly_hours,
-            'area_id' => $this->area_id,
-        ]);
+            $serviceRole = ServiceRole::where('name', $this->name)->where('year', $this->year)->where('area_id', $this->area_id)->first();
 
-        $this->toast('Service Role created successfully.');
+            if ($serviceRole) {
+                $this->toast('Service Role already exists.', 'error');
+                return;
+            }
 
-        $this->resetForm();
+            $serviceRole = ServiceRole::create([
+                'name' => $this->name,
+                'description' => $this->description,
+                'year' => $this->year,
+                'monthly_hours' => $this->monthly_hours,
+                'area_id' => $this->area_id,
+            ]);
+
+            $this->toast('Service Role created successfully.', 'success', [
+                'destination' => route('svcroles.manage.id', ['id' => $serviceRole->id]),
+            ]);
+
+            $this->resetForm();
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'create',
+                'table_name' => 'service_roles',
+                'operation_type' => 'CREATE',
+                'new_value' => json_encode($serviceRole),
+                'description' => $audit_user . ' created a new Service Role: ' . $serviceRole->name,
+            ]);
+        } catch (\Exception $e) {
+            $this->toast('An error occurred while creating the Service Role.', 'error');
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'create',
+                'table_name' => 'service_roles',
+                'operation_type' => 'CREATE',
+                'description' => $audit_user . ' tried to create a new Service Role but an error occurred. \n' . $e->getMessage(),
+            ]);
+        }
     }
 
-    public function toast($message)
+    public function toast($message, $type, $options = [])
     {
-        $this->dispatch('show-toast', ['message' => $message, 'type' => 'success']);
+        $this->dispatch('show-toast', [
+            'message' => $message,
+            'type' => $type,
+            ...$options,
+        ]);
     }
 
     public function resetForm()
