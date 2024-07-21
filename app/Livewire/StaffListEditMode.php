@@ -117,7 +117,7 @@ class StaffListEditMode extends Component
                     return;
                 }
                 if ($hours > 2000) {
-                    session()->flash('error', 'Target hours must less than 2000.');
+                    session()->flash('error', 'Target hours must not be greater than 2000.');
                     return;
                 }
             }else{

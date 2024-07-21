@@ -16,6 +16,8 @@ class StaffList extends Component
     public $selectedAreas = [];
     public $hours;
     public $staffCheckboxes = [];
+   // public $selectAll = false;
+    public $currentUsers;
     public $selectedYear;
     public $selectedMonth;
     public $showModal = false;
@@ -97,6 +99,7 @@ class StaffList extends Component
         }
 
         $users = $usersQuery->get();
+        $this->currentUsers = $users;
         //dd($users);
         return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth]);
     }
@@ -117,6 +120,26 @@ class StaffList extends Component
         $this->selectedAreas = [];
     }
 
+   /*  public function updatedSelectAll($value)
+    {
+        if ($value) {
+            $this->staffCheckboxes = $this->currentUsers->pluck('email')->toArray();
+        } else {
+            $this->staffCheckboxes = [];
+        }
+    } */
+
+    public function showTargetModal(){
+        if(count($this->staffCheckboxes) > 0){
+            $this->showModal = true;
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Please select at least one staff member',
+                'type' => 'error'
+            ]); 
+        }
+    }
+
     public function submit()
     {
         $this->validate();
@@ -135,6 +158,8 @@ class StaffList extends Component
             }
         }
 
+        //$this->selectAll = false;
+        $this->staffCheckboxes = [];
         //session()->flash('success', 'Target hours added successfully.');
         $this->showModal = false;
         $this->showSuccessModal = true;
