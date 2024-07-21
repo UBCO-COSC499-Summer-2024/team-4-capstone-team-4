@@ -171,6 +171,9 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
         ]);
         foreach($instructor_courses as $c){
+            $c->update([
+                'enrolled'=>rand(1,$c->capacity-1),
+            ]);
             Teach::factory()->create([
                 'course_section_id' => $c->id,
                 'instructor_id' => $instructorRole->id,
@@ -213,6 +216,10 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
+            $course->update([
+                'enrolled' => rand(1, $course->capacity - 1),
+            ]);
+            
             $user = User::factory()->create(
                 ['password' => 'password']
             );
