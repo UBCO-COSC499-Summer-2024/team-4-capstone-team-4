@@ -1,4 +1,4 @@
-<div class="coming-soon">
+<div>
     <form wire:submit.prevent="save" id="service-role" class="form">
         <div class="horizontal grouped w-fit">
             <div class="form-group">
@@ -89,6 +89,11 @@
             </div>
         </div>
         <div class="form-item">
+            <div class="items-center justify-start form-item">
+                <input type="checkbox" class="form-input" id="stay" wire:model="stay">
+                <label for="stay">Stay on this page</label>
+            </div>
+            <button class="form-input" type="reset">Reset</button>
             <button class="form-input" type="submit">Save</button>
         </div>
     </form>

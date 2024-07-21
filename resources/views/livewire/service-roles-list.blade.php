@@ -71,13 +71,13 @@
                     <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
                 </div>
 
-                <select id="searchCategoryDropdown" class="toolbar-dropdown">
+                {{-- <select id="searchCategoryDropdown" class="toolbar-dropdown">
                     @foreach ($searchCategories as $value => $name)
                         <option value="{{ $value }}"
                                 @if ($searchCategory == $value) selected @endif
                             >{{ $name }}</option>
                     @endforeach
-                </select>
+                </select> --}}
             </section>
 
             <section class="toolbar-section">
@@ -136,6 +136,7 @@
                 </button>
             </section>
         </section>
+
         <section class="svcr-items">
             <table id="svcr-table" x-show="$wire.viewMode === 'table'">
                 <thead>
