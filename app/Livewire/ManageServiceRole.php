@@ -5,11 +5,13 @@ namespace App\Livewire;
 use App\Exports\SvcroleExport;
 use App\Models\Area;
 use App\Models\AreaPerformance;
+use App\Models\AuditLog;
 use App\Models\DepartmentPerformance;
 use App\Models\InstructorPerformance;
 use App\Models\ServiceRole;
 use App\Models\ExtraHour;
 use App\Models\RoleAssignment;
+use App\Models\User;
 use App\Models\UserRole;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -404,6 +406,7 @@ class ManageServiceRole extends Component
     }
 
     public function removeInstructor($id) {
+        $audit_user = User::find((int) auth()->id())->getName();
         try {
             $roleAssignment = RoleAssignment::find($id)->where('service_role_id', $this->role)->first();
             $roleAssignment->delete();
@@ -412,11 +415,30 @@ class ManageServiceRole extends Component
                 'message' => 'Instructor removed successfully.',
                 'type' => 'success'
             ]);
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'delete',
+                'table_name' => 'role_assignments',
+                'operation_type' => 'DELETE',
+                'old_value' => json_encode($roleAssignment),
+                'description' => $audit_user . ' removed an Instructor from a Service Role: ' . $this->serviceRole->name,
+            ]);
         } catch(\Exception $e) {
             $this->dispatch('show-toast', [
-                'message' => 'Failed to remove Instructor. ' . $e->getMessage(),
+                'message' => 'Failed to remove Instructor from Service Role. ',
                 'type' => 'error'
             ]);
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'delete',
+                'table_name' => 'role_assignments',
+                'operation_type' => 'DELETE',
+                'description' => $audit_user . ' tried to remove an Instructor from a Service Role but an error occurred. \n' . $e->getMessage(),
+            ]);
+        } finally {
+            $this->navigate(route('svcroles.manage.id', (int) $this->serviceRoleId));
         }
     }
 
