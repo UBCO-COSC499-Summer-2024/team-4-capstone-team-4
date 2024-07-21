@@ -111,6 +111,8 @@ th.editable:focus {
     color: rgb(59, 71, 121);
     border-color: rgb(59, 71, 121);
     background-color: transparent;
+    font-weight: bold; 
+    border-width: 2px;
     transition: color 0.25s;
 }
 
@@ -139,6 +141,9 @@ th.editable:focus {
     color: #3B784F;
     border-color: #3B784F;
     background-color: transparent;
+    font-weight: bold; 
+    border-width: 2px;
+    transition: color 0.25s;
 }
 
 .custom-green:hover {
@@ -150,6 +155,26 @@ th.editable:focus {
     border-color: #3B784F;
     box-shadow: 0 0 0 1px #3B784F;
 }
+
+.custom-red {
+    color: #E3342F;
+    border-color: #E3342F;
+    background-color: transparent;
+    font-weight: bold; /* Make the text bold */
+    border-width: 2px; /* Make the border bolder */
+    transition: color 0.25s;
+}
+
+.custom-red:hover {
+    background-color: #E3342F;
+    color: white;
+}
+
+.custom-red:focus {
+    border-color: #E3342F;
+    box-shadow: 0 0 0 1px #E3342F;
+}
+
 /* For the error handling messages in the edit mode */
 .input-error {
     border: 2px solid red;
