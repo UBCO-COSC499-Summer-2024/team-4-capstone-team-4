@@ -426,7 +426,7 @@ class ManageServiceRole extends Component
             ]);
         } catch(\Exception $e) {
             $this->dispatch('show-toast', [
-                'message' => 'Failed to remove Instructor from Service Role. ',
+                'message' => 'Failed to remove Instructor from Service Role.',
                 'type' => 'error'
             ]);
             AuditLog::create([
