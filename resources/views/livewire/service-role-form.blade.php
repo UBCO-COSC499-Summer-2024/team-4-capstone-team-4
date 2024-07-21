@@ -91,7 +91,7 @@
         <div class="form-item">
             <div class="items-center justify-start form-item">
                 <input type="checkbox" class="form-input" id="stay" wire:model="stay">
-                <label for="stay">Stay on this page</label>
+                <label for="stay">Stay on this page on submit</label>
             </div>
             <button class="form-input" type="reset">Reset</button>
             <button class="form-input" type="submit">Save</button>
