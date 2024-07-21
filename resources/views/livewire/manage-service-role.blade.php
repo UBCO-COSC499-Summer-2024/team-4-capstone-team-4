@@ -49,7 +49,7 @@
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            {{-- if user has admin role in roles --}}
+
             @if (auth()->user()->hasRoles(['admin']))
                 <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                     <span class="material-symbols-outlined icon">delete</span>
