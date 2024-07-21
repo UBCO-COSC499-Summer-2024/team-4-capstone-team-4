@@ -119,8 +119,11 @@
 
 .form-input[type=submit] {
     /* background: rgba(59, 71, 121, 1) !important; */
-    background: #3B784F !important;
-    color: rgba(255, 255, 255, 1);
+    /* background: #3B784F !important; */
+    background: #fff !important;
+    /* color: rgba(255, 255, 255, 1); */
+    color: #3B784F;
+    box-shadow: 0 4px 10px 0 rgba(59, 120, 79, 0.1) !important;
 }
 
 .form-input[type=reset] {
@@ -132,7 +135,7 @@
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
     /* background: rgba(220, 250, 250, 0.8); */
     background: rgba(255, 255, 255, 1) !important;
-    background: rgb(12, 68, 29) !important;
+    background: rgba(12, 68, 29, 0.8) !important;
     /* color: rgba(12, 35, 68, 1) ; */
     color: #fff;
 }
