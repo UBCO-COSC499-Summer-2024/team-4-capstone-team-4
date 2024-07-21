@@ -85,8 +85,16 @@
             @endforeach
         </div>
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="import-form-add-button">Add Row</button>
+            <button type="button" wire:click="addRow" class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>    
+                Add Row
+            </button>
             <button type="submit" class="import-form-save-button">Save</button>
+        </div>
+
+        <div>
+            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='rowAmount'>
+            <button type="button" wire:click='addManyRows'>Add multiple</button>
         </div>
     </form>
 

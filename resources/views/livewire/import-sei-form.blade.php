@@ -62,7 +62,10 @@
             @endforeach
         </div>
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="import-form-add-button">Add Row</button>
+            <button type="button" wire:click="addRow" class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>
+                Add Row
+            </button>
             <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >Save</button>
         </div>
     </form>

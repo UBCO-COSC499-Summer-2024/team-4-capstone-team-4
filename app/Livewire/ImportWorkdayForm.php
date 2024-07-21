@@ -17,6 +17,8 @@ class ImportWorkdayForm extends Component
 
     public $showModal = false;
     public $courseExists = false;
+    public $addRowAmount = 0;
+    public $deleteRowAmount = 0;
 
     public function mount() {
         if(Session::has('workdayFormData')) {
@@ -95,12 +97,24 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
+    public function addManyRows() {
+        for($i=0; $i<$this->addRowAmount; $i++) {
+            $this->addRow();
+        }
+    }
+
     public function deleteRow($row) {
         $this->resetValidation();
 
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
         Session::put('workdayFormData', $this->rows);
+    }
+
+    public function deleteManyRows() {
+        for($i=0; $i<$this->deleteRowAmount; $i++) {
+            $this->deleteRow();
+        }
     }
 
     protected function validateUniqueRows()
