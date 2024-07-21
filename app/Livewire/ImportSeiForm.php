@@ -23,8 +23,7 @@ class ImportSeiForm extends Component
     public $isDuplicate = false;
     public $showModal = false;
     public $hasCourses = false;
-    public $addRowAmount = 0;
-    public $deleteRowAmount = 0;
+    public $rowAmount = 0;
 
     public function mount() {
         if(Session::has('seiFormData')) {
@@ -123,7 +122,7 @@ class ImportSeiForm extends Component
     }
 
     public function addManyRows() {
-        for($i=0; $i<$this->addRowAmount; $i++) {
+        for($i=0; $i<$this->rowAmount; $i++) {
             $this->addRow();
         }
     }
@@ -137,7 +136,7 @@ class ImportSeiForm extends Component
     }
 
     public function deleteManyRows() {
-        for($i=0; $i<$this->deleteRowAmount; $i++) {
+        for($i=0; $i<$this->rowAmount; $i++) {
             $count = count($this->rows);
             $this->deleteRow($count-1);
         }

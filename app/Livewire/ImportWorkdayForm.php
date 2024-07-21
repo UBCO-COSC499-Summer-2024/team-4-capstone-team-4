@@ -17,8 +17,7 @@ class ImportWorkdayForm extends Component
 
     public $showModal = false;
     public $courseExists = false;
-    public $addRowAmount = 0;
-    public $deleteRowAmount = 0;
+    public $rowAmount = 0;
 
     public function mount() {
         if(Session::has('workdayFormData')) {
@@ -98,7 +97,7 @@ class ImportWorkdayForm extends Component
     }
 
     public function addManyRows() {
-        for($i=0; $i<$this->addRowAmount; $i++) {
+        for($i=0; $i<$this->rowAmount; $i++) {
             $this->addRow();
         }
     }
@@ -112,7 +111,7 @@ class ImportWorkdayForm extends Component
     }
 
     public function deleteManyRows() {
-        for($i=0; $i<$this->deleteRowAmount; $i++) {
+        for($i=0; $i<$this->rowAmount; $i++) {
             $count = count($this->rows);
             $this->deleteRow($count-1);
         }

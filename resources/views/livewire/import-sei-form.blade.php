@@ -70,12 +70,8 @@
         </div>
 
         <div>
-            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='addRowAmount'>
+            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='rowAmount'>
             <button type="button" wire:click='addManyRows'>Add multiple</button>
-        </div>
-
-        <div>
-            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='deleteRowAmount'>
             <button type="button" wire:click='deleteManyRows'>Delete multiple</button>
         </div>
     </form>
