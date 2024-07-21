@@ -68,6 +68,16 @@
             </button>
             <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >Save</button>
         </div>
+
+        <div>
+            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='addRowAmount'>
+            <button type="button" wire:click='addManyRows'>Add multiple</button>
+        </div>
+
+        <div>
+            <input type="number" step="1" min="1" max="999" placeholder="#" wire:model='deleteRowAmount'>
+            <button type="button" wire:click='deleteManyRows'>Delete multiple</button>
+        </div>
     </form>
 
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
