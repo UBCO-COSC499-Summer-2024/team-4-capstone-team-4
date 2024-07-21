@@ -29,6 +29,7 @@ class ServiceRoleForm extends Component
     ];
     public $area_id;
     public $areas;
+    public $stay;
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -50,17 +51,17 @@ class ServiceRoleForm extends Component
 
         try {
             $this->validate();
-        
+
             $serviceRole = ServiceRole::where('name', $this->name)
                 ->where('year', $this->year)
                 ->where('area_id', $this->area_id)
                 ->first();
-        
+
             if ($serviceRole) {
                 $this->toast('Service Role already exists.', 'error');
                 return;
             }
-        
+
             $serviceRole = ServiceRole::create([
                 'name' => $this->name,
                 'description' => $this->description,
@@ -68,13 +69,13 @@ class ServiceRoleForm extends Component
                 'monthly_hours' => $this->monthly_hours,
                 'area_id' => $this->area_id,
             ]);
-        
+
             $this->toast('Service Role created successfully.', 'success', [
                 'destination' => route('svcroles.manage.id', ['id' => $serviceRole->id]),
             ]);
-        
+
             $this->resetForm();
-        
+
             AuditLog::create([
                 'user_id' => (int) auth()->user()->id,
                 'user_alt' => $audit_user,
@@ -84,11 +85,16 @@ class ServiceRoleForm extends Component
                 'new_value' => json_encode($serviceRole),
                 'description' => $audit_user . ' created a new Service Role: ' . $serviceRole->name,
             ]);
-        
+
+            if (!$this->stay) {
+                $url = route('svcroles.manage.id', ['id' => $serviceRole->id]);
+                return redirect($url);
+            }
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Validation exceptions are handled automatically and sent to the front end.
             throw $e;
-        
+
         } catch (\Exception $e) {
             $this->toast('An error occurred while creating the Service Role.', 'error');
             AuditLog::create([
