@@ -4,7 +4,7 @@
    <tr class="svcr-list-header">
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
             <div class="flex items-center px-1.5 py-2 text-sm justify-center">
-                <x-checkbox id="staff-select-all"/>
+                <x-checkbox wire:model="selectAll" id="staff-select-all"/>
             </div>
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">

@@ -16,7 +16,7 @@ class StaffList extends Component
     public $selectedAreas = [];
     public $hours;
     public $staffCheckboxes = [];
-   // public $selectAll = false;
+    //public $selectAll = false;
     public $currentUsers;
     public $selectedYear;
     public $selectedMonth;
@@ -160,10 +160,11 @@ class StaffList extends Component
 
         //$this->selectAll = false;
         $this->staffCheckboxes = [];
+        $this->hours = '';
         //session()->flash('success', 'Target hours added successfully.');
         $this->showModal = false;
         $this->showSuccessModal = true;
-        session()->flash('showSuccessModal', $this->showSuccessModal);
+        session()->flash('showSuccessModal', $this->showSuccessModal);   
     }
 
     public function closeSuccessModal(){

@@ -7,12 +7,12 @@
     <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
         <img class="h-14 w-14 flex-none rounded-full bg-gray-50" src="{{ $src }}" alt="">
         <div class="ps-3 min-w-0 flex-auto">
-            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block">
-                <p class="text-lg font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
+            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block hover:underline">
+                <p class="text-lg font-semibold leading-6 text-gray-900 hover:text-[#3b4779]">{{ $fullname }}</p>
             </a>
-            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block mt-1 truncate text-base leading-5 text-gray-500">
+            <div class="block mt-1 truncate text-base leading-5 text-gray-500">
                 {{ $email }}
-            </a>
+            </div>
         </div>
     </td>
     <td class="px-6 py-4">

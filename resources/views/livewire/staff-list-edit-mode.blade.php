@@ -14,7 +14,7 @@
     @endif
 
     <x-staff-table>
-        <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+        <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :selectedYear="$selectedYear" :selectedMonth="$selectedMonth" />
         <tbody>
             @if(isset($users))
                 @foreach ($users as $user)
