@@ -113,7 +113,8 @@ class ImportWorkdayForm extends Component
 
     public function deleteManyRows() {
         for($i=0; $i<$this->deleteRowAmount; $i++) {
-            $this->deleteRow();
+            $count = count($this->rows);
+            $this->deleteRow($count-1);
         }
     }
 
@@ -155,7 +156,6 @@ class ImportWorkdayForm extends Component
         foreach ($this->rows as $index => $row) {
             $prefix = '';
             // dd($row);
-
             
             switch ($row['area_id']) {
                 case 1:
