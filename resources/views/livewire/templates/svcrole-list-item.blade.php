@@ -19,7 +19,7 @@
             <x-link
                 href="{{ route('svcroles.manage.id', $serviceRole->id) }}"
                 title="{{ $serviceRole->name }}"
-                data-tippy-content="Click Me!"
+                class="hover:underline "
             />
         </span>
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
@@ -86,7 +86,9 @@
                 <span class="text-gray-400">No instructors</span>
             @endforelse
             @if ($serviceRole->instructors->count() > 1)
-                <span class="gap-4 text-blue-500 cursor-pointer hover:text-blue-700 material-symbols-outlined icon" onclick="window.location='{{ route('svcroles.manage.id', $serviceRole->id) }}'">more</span>
+                <span class="gap-4 text-blue-500 cursor-pointer hover:text-blue-700 material-symbols-outlined icon" onclick="window.location='{{ route('svcroles.manage.id', $serviceRole->id) }}'"
+                    data-tippy-content="View more instructors"
+                >more</span>
             @endif
         </span>
     </td>
@@ -126,9 +128,15 @@
 
             <button class="svcr-list-item-action"
                     wire:click="confirmSArchive({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
-                    $serviceRole->archived ? 'Unarchive' : 'Archive'
-                }}">
+                <span
+                    class="material-symbols-outlined icon text-[#ea3030]"
+                {{
+                    $serviceRole->archived ? 'data-tippy-content=Unarchive' : 'data-tippy-content=Archive'
+                }}
+                    {{-- title="{{
+                        $serviceRole->archived ? 'Unarchive' : 'Archive'
+                    }}" --}}
+                >
                     @if (!$serviceRole->archived)
                         archive
                     @else
