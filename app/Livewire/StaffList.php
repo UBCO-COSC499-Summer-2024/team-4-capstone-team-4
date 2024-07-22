@@ -262,6 +262,8 @@ class StaffList extends Component
                 }
             }
         }
+        $this->selectAll = false;
+        $this->staffCheckboxes = [];
         $this->editMode = false;
         $this->showSuccessModal = true;
         session()->flash('showSuccessModal', $this->showSuccessModal); 
