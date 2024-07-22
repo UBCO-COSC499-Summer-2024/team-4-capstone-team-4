@@ -19,6 +19,7 @@
                         </select>
                     </div>
                 @endif
+                <x-create-new-button />
                 <x-assign-button />
                 <x-edit-button id="editButton"/>
                 <x-save-button style="display: none;" />
