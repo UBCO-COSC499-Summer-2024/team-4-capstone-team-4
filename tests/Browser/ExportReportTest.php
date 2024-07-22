@@ -16,6 +16,7 @@ use App\Models\Teach;
 use App\Models\SeiData;
 use Livewire\Livewire;
 use App\Livewire\ExportReport;
+use Illuminate\Support\Facades\Storage;
 
 
 class ExportReportTest extends DuskTestCase
@@ -63,7 +64,7 @@ class ExportReportTest extends DuskTestCase
                         ->visit('/instructor-report/' . $instructorRole->id)
                         ->assertSee('Export')
                         ->press('Export')
-                        ->clickLink('As xlsx')
+                        ->clickLink('As pdf')
                         ->pause(5000);
             $browser->screenshot('report');
 
@@ -71,8 +72,11 @@ class ExportReportTest extends DuskTestCase
             $absoluteDownloadPath = base_path($relativeDownloadPath);
             $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y') . '.xlsx';
 
-            $filePath = $absoluteDownloadPath . '/' . $name;
-            $this->assertFileExists($filePath);
+            /* $filePath = $absoluteDownloadPath . '/' . $name;
+            $this->assertFileExists($filePath);  */
+
+            $filePath = Storage::disk('local')->path('downloads/' . $name);
+            $this->assertTrue(file_exists($filePath));
 
         });
        

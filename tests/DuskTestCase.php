@@ -36,11 +36,9 @@ abstract class DuskTestCase extends BaseTestCase
             '--headless',
             '--no-sandbox',
             '--window-size=1920,1080',
-        ])->setExperimentalOption('prefs', [
-            'download.default_directory' => $downloadPath,
-            'download.prompt_for_download' => false,
-            'download.directory_upgrade' => true,
-            'safebrowsing.enabled' => true,
+        ]);
+        $options->setExperimentalOption('prefs', [
+            'download.default_directory' => storage_path('temp')
         ]);
     
         return RemoteWebDriver::create(

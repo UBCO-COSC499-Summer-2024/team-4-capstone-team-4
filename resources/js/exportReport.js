@@ -94,7 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
     
             // Save PDF
-            pdf.save(titleText + '-' + year + '.pdf');
+            pdf.save(titleText + '-' + year + '.pdf', {
+                callback: function() {
+                    // PDF saved successfully
+                    Livewire.emit('pdfSaved', titleText + '-' + year + '.pdf');
+                }
+            });
         });
     }
 });

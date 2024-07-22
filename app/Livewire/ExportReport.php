@@ -11,6 +11,8 @@ class ExportReport extends Component
 {
     public $instructor_id;
     public $year;
+    
+    protected $listeners = ['pdfSaved' => 'handlePdfSaved'];
 
     public function mount($instructor_id)
     {
@@ -49,5 +51,12 @@ class ExportReport extends Component
         $instructor = UserRole::findOrFail($this->instructor_id);
         $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
         return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
+    }
+
+    public function handlePdfSaved($fileName){
+        $this->dispatch('show-toast', [
+            'message' => 'PDF ' . $fileName . ' has been saved successfully!',
+            'type' => 'success'
+        ]); 
     }
 }
