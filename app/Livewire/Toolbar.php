@@ -138,7 +138,7 @@ class Toolbar extends Component {
 
     public function handleDropdownSelect($event)
     {
-        dd($event);
+        // dd($event);
         Log::debug($event);
         $dropdownId = $event['target'];
         $selectedValue = $event['detail']['value'];

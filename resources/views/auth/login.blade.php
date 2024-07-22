@@ -18,7 +18,7 @@
             </x-form-item> --}}
 
             <x-validation-errors/>
-            
+
             <x-form-item>
                 <span class="input-label"><x-link href="/forgot-password" title="{{ __('Forgot Password') }}" /></span>
             </x-form-item>
@@ -29,7 +29,7 @@
                 <x-form-input type="submit" name="submit" value="Login" />
             </x-form-item>
             <x-form-item>
-                <span class="input-label">Don't have an account? <x-link href="{{ route('register') }}" title="Register" /></span>
+                <span class="input-label">Don't have an account? <x-link href="{{ route('register') }}" title="Register" style="text-decoration:underline;"/></span>
             </x-form-item>
         </form>
     </section>

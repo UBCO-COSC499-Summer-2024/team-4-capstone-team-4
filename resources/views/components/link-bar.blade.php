@@ -1,5 +1,5 @@
 {{-- @props(['links' => []]) --}}
-<section class='link-bar'>
+<section class='link-bar nos'>
     @foreach ($links as $link)
         <x-link href="{{ $link['href'] }}" title="{{ $link['title'] }}" :active="$link['active']" icon="{{ $link['icon'] }}" />
     @endforeach

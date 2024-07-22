@@ -1,17 +1,25 @@
 @php
 
+$user = auth()->user();
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
-    ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => route('course-details',['instructor_id']), 'title' => 'Courses']
+    // ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
+    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Courses']
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
-
 ];
 
 // add to $items
 if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
+}
+if($user->hasRoles(['admin', 'dept_head'])) {
+    // audit logs
+    $sidebarItems = array_merge($sidebarItems, [
+        // ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
+        // ['icon' => 'work_history', 'href' => '/audits', 'title' => 'Audit Logs'],
+        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin'],
+    ]);
 }
 @endphp
 
@@ -29,7 +37,7 @@ if (isset($items)) {
         <form method="POST" action="{{ route('logout') }}" x-data>
             @csrf
             <div class="sidebar-item">
-                <x-link class="sidebar-link text-xl" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
+                <x-link class="sidebar-link" href="{{ route('logout') }}" icon="logout" title="{{ __('Log Out') }}" @click.prevent="$root.submit();" />
             </div>
         </form>
     </div>

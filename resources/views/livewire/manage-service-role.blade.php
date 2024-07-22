@@ -13,42 +13,97 @@
 >
     <h1 class="nos content-title">
         <span class="content-title-text">
+            @php
+
+                $nextId = \App\Models\ServiceRole::where('id', '>', $serviceRole->id)->min('id') ?? \App\Models\ServiceRole::min('id');
+                $prevId = \App\Models\ServiceRole::where('id', '<', $serviceRole->id)->max('id') ?? \App\Models\ServiceRole::max('id');
+
+                $mlinks = [
+                    ['href' => route('svcroles.manage.id', ['id' => $prevId]), 'title' => __('Previous Service Role'), 'icon' => 'chevron_left', 'active' => false],
+                    ['href' => route('svcroles.manage.id', ['id' => $nextId]), 'title' => __('Next Service Role'), 'icon' => 'chevron_right', 'active' => false],
+                ];
+            @endphp
             @if ($serviceRole)
-                {{ $serviceRole->name }}
+                <div class="flex items-center justify-between gap-2">
+                    {{ $serviceRole->name }}
+                    <div class="flex items-center justify-between arrow-dir">
+                        <x-link href="{{ $mlinks[0]['href'] }}" icon="{{ $mlinks[0]['icon'] }}" />
+                        <x-link href="{{ $mlinks[1]['href'] }}" icon="{{ $mlinks[1]['icon'] }}" />
+                    </div>
+                </div>
             @else
                 {{ __('No Service Role Selected') }}
             @endif
         </span>
 
-        <div class="flex right">
-            <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
-                <span class="material-symbols-outlined icon">
-                    edit
-                </span>
-                <span>Edit</span>
-            </button>
-            <button class="btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
+        <div class="flex right content-title-btn-holder">
+            @if(!$serviceRole->archived)
+                <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
+                    <span class="material-symbols-outlined icon">
+                        edit
+                    </span>
+                    <span>Edit</span>
+                </button>
+            @endif
+            <button class="content-title-btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
-                <span class="material-symbols-outlined icon">delete</span>
-                <span>Delete</span>
+            {{-- if user has admin role in roles --}}
+            @if (auth()->user()->hasRoles(['admin']))
+                <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    <span class="material-symbols-outlined icon">delete</span>
+                    <span>Delete</span>
+                </button>
+            @endif
+            <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                    @if ($serviceRole->archived)
+                        <span class="material-symbols-outlined icon">
+                            unarchive
+                        </span>
+                        <span>
+                            Unarchive
+                        </span>
+                    @else
+                        <span class="material-symbols-outlined icon">
+                            archive
+                        </span>
+                        <span>
+                            Archive
+                        </span>
+                    @endif
             </button>
             {{-- export --}}
-            <livewire:dropdown-element
+            {{-- <livewire:dropdown-element
                 title="Export"
                 id="exportDropdown"
                 pre-icon="file_download"
                 name="export"
                 :values="$exports"
-            />
+            /> --}}
                 {{-- <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
-                    @foreach ($exports as $name => $format)
-                        <option value="{{ $format }}">{{ $name }}</option>
+                    @foreach ($exports as $fname => $format)
+                        <option value="{{ $format }}">{{ $fname }}</option>
                     @endforeach
                 </select> --}}
+            <x-dropdown :align="'right'" :width='48'>
+                <x-slot name="trigger">
+                    <button class="flex items-center content-title-btn">
+                        <span class="material-symbols-outlined icon">file_download</span>
+                        <span>Export</span>
+                        <span class="material-symbols-outlined icon">arrow_drop_down</span>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    @foreach ($exports as $fname => $format)
+                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900" wire:click="exportRole('{{ $format }}')" role="menuitem">
+                            {{ $fname }}
+                        </button>
+                    @endforeach
+                </x-slot>
+            </x-dropdown>
         </div>
     </h1>
 
@@ -66,19 +121,19 @@
     <div class="svcrole-item" :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
         <section id="about-role" class="svcr-item">
             <form id="service-role-update-form" class="form svcr-item-form">
-                <div class="horizontal grouped">
-                    <div class="form-group">
+                <div class="horizontal grouped w-fit">
+                    <div class="form-group svcrole-self">
                         <div class="form-item">
                             <label class="form-item" for="name">Name</label>
                             <div class="grouped">
-                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $serviceRole->name }}">
+                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $name }}">
                                 @error('name') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="grouped">
                             <label class="form-item" for="description">Description</label>
                             <div class="grouped">
-                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $serviceRole->description }}</textarea>
+                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $description }}</textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -95,7 +150,7 @@
                                 <select class="form-select" id="area_id" wire:model="area_id" x-bind:disabled="!isEditing" >
                                     <option value="">Select Area</option>
                                     @foreach($areas as $area)
-                                        <option value="{{ $area->id }}" @if ($serviceRole->area_id == $area->id) selected @endif>{{ $area->name }}</option>
+                                        <option value="{{ $area->id }}" @if ($area_id == $area->id) selected @endif>{{ $area->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('area_id') <span class="error">{{ $message }}</span> @enderror
@@ -162,7 +217,7 @@
                                     <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
                                 </th>
                                 <th class="text-left svcr-list-header-item">Name</th>
-                                <th class="text-right svcr-list-header-item">Actions</th>
+                                <th class="svcr-list-header-item">Actions</th>
                             </tr>
                         </thead>
                         <tbody wire:model.live="instructors">
@@ -210,12 +265,12 @@
                 <div class="svcr-extra-hours">
                     <h2 class="nos content-title form-item">
                         <span class="flex-1 w-fill content-title-text"style="width: fit-content;">{{ __('Extra Hours') }}</span>
-                        <div class="flex justify-end">
+                        {{-- <div class="flex justify-end">
                             <button class="btn form-input" x-on:click="$dispatch('open-modal', { component: 'extra-hour-form', arguments: {serviceRoleId: {{ $serviceRole->id }} }})" wire:loading.attr="disabled">
                                 <span class="material-symbols-outlined icon">more_time</span>
                                 <span>Add Extra Hours</span>
                             </button>
-                        </div>
+                        </div> --}}
                     </h2>
                     <table class="table svcr-table" id="svcr-table">
                         <thead>
@@ -331,10 +386,10 @@
                     <span class="material-symbols-outlined icon">cancel</span>
                     <span>Cancel</span>
                 </x-secondary-button>
-                <button type="button" class="btn" wire:loading.attr="disabled" id="save-instructor">
+                <x-button type="button" class="ml-2 btn" wire:loading.attr="disabled" id="save-instructor">
                     <span class="material-symbols-outlined icon">save</span>
                     <span>Save</span>
-                </button>
+                </x-button>
             </x-slot>
         </x-dialog-modal>
     </div>

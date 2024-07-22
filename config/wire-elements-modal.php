@@ -47,6 +47,6 @@ return [
 
         'dispatch_close_event' => false,
 
-        'destroy_on_close' => false,
+        'destroy_on_close' => true,
     ],
 ];

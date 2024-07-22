@@ -32,7 +32,7 @@
                     @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12 ">
-                    <input type="text" placeholder="123" wire:model="rows.{{$index}}.number" class="import-form-input ">
+                    <input type="text" placeholder="101" wire:model="rows.{{$index}}.number" class="import-form-input ">
                     @error('rows.'.$index.'.number')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
