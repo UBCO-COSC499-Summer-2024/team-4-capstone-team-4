@@ -219,7 +219,7 @@ class ManageServiceRole extends Component
         } else {
             $this->dispatch('show-toast', [
                 'message' => 'Service Role not found for the requested year.',
-                'type' => 'error'
+                'type' => 'info'
             ]);
         }
     }
