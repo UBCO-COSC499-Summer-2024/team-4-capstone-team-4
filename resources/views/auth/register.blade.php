@@ -6,7 +6,7 @@
             
             <x-form-item class="flex flex-col">
                 <div class="flex items-center">
-                    <x-form-icon icon="Email"/>
+                    <x-form-icon icon="Email" class="mr-2"/>
                     <x-form-input type="text" id="email" name="email" placeholder="Email..." value="{{ old('email') }}"/>
                 </div>
                 <x-input-error for="email" class="mt-2" />
@@ -30,14 +30,14 @@
             </div>
             <x-form-item class="flex flex-col">
                 <div class="flex items-center">
-                    <x-form-icon icon="Password"/>
+                    <x-form-icon icon="Password" class="mr-2"/>
                     <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
                 </div>
                 <x-input-error for="password" class="mt-2" />
             </x-form-item>
             <x-form-item class="flex flex-col">
                 <div class="flex items-center">
-                    <x-form-icon icon="Password"/>
+                    <x-form-icon icon="Password" class="mr-2"/>
                     <x-form-input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password..."/>
                 </div>
                 <x-input-error for="password_confirmation" class="mt-2" />
