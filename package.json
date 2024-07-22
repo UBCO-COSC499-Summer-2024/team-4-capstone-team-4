@@ -20,6 +20,7 @@
         "chart.js": "^4.4.3",
         "jspdf": "^2.5.1",
         "jspdf-autotable": "^3.8.2",
+        "tippy.js": "^6.3.7",
         "toastify": "^2.0.1"
     }
 }

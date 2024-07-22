@@ -76,7 +76,7 @@ class ManageServiceRole extends Component
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'year' => 'required|integer',
-        'monthly_hours.*' => 'nullable|integer|min:0|max:744',
+        'monthly_hours.*' => 'nullable|integer|min:0|max:200',
         'area_id' => 'required|exists:areas,id',
     ];
 
@@ -184,17 +184,6 @@ class ManageServiceRole extends Component
     public function toggleEditMode($mode = null)
     {
         $this->isEditing = $mode ?? !$this->isEditing;
-        if ($this->isEditing) {
-            $this->dispatch('show-toast', [
-                'message' => 'Edit mode toggled on for ' . $this->serviceRole->name,
-                'type' => 'success'
-            ]);
-        } else {
-            $this->dispatch('show-toast', [
-                'message' => 'Edit mode toggled off for ' . $this->serviceRole->name,
-                'type' => 'success'
-            ]);
-        }
     }
 
     public function confirmDelete() {
@@ -220,12 +209,29 @@ class ManageServiceRole extends Component
         exit();
     }
 
+    public function getServiceRoleByYear($year) {
+        $serviceRole = ServiceRole::where('name', $this->name)
+            ->where('year', $year)
+            ->where('area_id', $this->area_id)
+            ->first();
+        if ($serviceRole) {
+            $this->fetchServiceRole($serviceRole->id);
+        } else {
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role not found for the requested year.',
+                'type' => 'error'
+            ]);
+        }
+    }
+
     public function incrementYear() {
         $this->year++;
+        $this->getServiceRoleByYear($this->year);
     }
 
     public function decrementYear() {
         $this->year--;
+        $this->getServiceRoleByYear($this->year);
     }
 
     public function editServiceRole()
@@ -238,6 +244,7 @@ class ManageServiceRole extends Component
     }
 
     public function saveServiceRole() {
+        $audit_user = User::find((int) auth()->id())->getName();
         try {
             // dd($this->name, $this->description, $this->year, $this->area_id, $this->monthly_hours);
             $this->serviceRole->name = $this->name;
@@ -247,6 +254,19 @@ class ManageServiceRole extends Component
             $this->serviceRole->monthly_hours = is_array($this->monthly_hours) ? json_encode($this->monthly_hours) : $this->monthly_hours;
             $this->validate();
             // dd($this->serviceRole);
+            $oldValue = $this->serviceRole->getOriginal();
+            // check unique based on name, year, and area_id
+            $serviceRole = ServiceRole::where('name', $this->name)
+                ->where('year', $this->year)
+                ->where('area_id', $this->area_id)
+                ->first();
+            if ($serviceRole && $serviceRole->id !== $this->serviceRole->id) {
+                $this->dispatch('show-toast', [
+                    'message' => 'Service Role already exists.',
+                    'type' => 'error'
+                ]);
+                return;
+            }
             $this->serviceRole->save();
             // $this->serviceRole->refresh();
             $this->fetchServiceRole($this->serviceRole->id);
@@ -255,36 +275,69 @@ class ManageServiceRole extends Component
                 'type' => 'success'
             ]);
             $this->toggleEditMode(false);
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'update',
+                'table_name' => 'service_roles',
+                'operation_type' => 'UPDATE',
+                'old_value' => json_encode($oldValue),
+                'new_value' => json_encode($this->serviceRole->getAttributes()),
+                'description' => $audit_user . ' updated a Service Role.',
+            ]);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            throw $e;
         } catch(\Exception $e) {
+
             $this->dispatch('show-toast', [
-                'message' => 'Failed to update Service Role. ' . $e->getMessage(),
+                'message' => 'Failed to update Service Role.',
                 'type' => 'error'
+            ]);
+
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'update',
+                'table_name' => 'service_roles',
+                'operation_type' => 'UPDATE',
+                'description' => $audit_user . ' tried to update a Service Role but an error occurred. \n' . $e->getMessage(),
             ]);
         }
     }
 
     public function deleteServiceRole($id) {
+        $audit_user = User::find((int) auth()->id())->getName();
         try {
             $count = ServiceRole::destroy($id);
             DB::commit();
-            if ($count > 0) {
-                $this->dispatch('show-toast', [
-                    'message' => 'Service Role deleted successfully.',
-                    'type' => 'success'
-                ]);
-                $this->serviceRole = null;
-                $this->navigate(route('svcroles'));
-            } else {
-                $this->dispatch('show-toast', [
-                    'message' => 'Failed to delete Service Role.',
-                    'type' => 'error'
-                ]);
-            }
+            $this->dispatch('show-toast', [
+                'message' => 'Service Role deleted successfully.',
+                'type' => 'success'
+            ]);
+            $this->serviceRole = null;
+            $this->navigate(route('svcroles'));
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'delete',
+                'table_name' => 'service_roles',
+                'operation_type' => 'DELETE',
+                'description' => $audit_user . ' deleted a Service Role.',
+            ]);
         } catch(\Exception $e) {
             DB::rollBack();
             $this->dispatch('show-toast', [
-                'message' => 'Failed to delete Service Role. ' . $e->getMessage(),
+                'message' => 'Failed to delete Service Role.',
                 'type' => 'error'
+            ]);
+
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'delete',
+                'table_name' => 'service_roles',
+                'operation_type' => 'DELETE',
+                'description' => $audit_user . ' tried to delete a Service Role but an error occurred. \n' . $e->getMessage(),
             ]);
         }
     }
@@ -336,6 +389,7 @@ class ManageServiceRole extends Component
     }
 
     public function saveInstructor() {
+        $audit_user = User::find((int) auth()->id())->getName();
         try {
             $role_assignment_rules = [
                 'instructor_id' => 'required|exists:user_roles,id',
@@ -370,7 +424,6 @@ class ManageServiceRole extends Component
                     'message' => 'Instructor Performance updated successfully.',
                     'type' => 'success'
                 ]);
-
                 $url = route('svcroles.manage.id', (int) $this->serviceRoleId);
                 header("Location: $url");
                 exit();
@@ -380,20 +433,31 @@ class ManageServiceRole extends Component
                     'type' => 'error'
                 ]);
             }
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'create',
+                'table_name' => 'role_assignments',
+                'operation_type' => 'CREATE',
+                'new_value' => json_encode($roleAssignment),
+                'description' => $audit_user . ' assigned an Instructor to a Service Role: ' . $this->serviceRole->name,
+            ]);
+        } catch(\Illuminate\Validation\ValidationException $e) {
+            throw $e;
         } catch(\Exception $e) {
-            // if development then toast full error message, else toast generic error message
-            // check for error types for example duplicates, etc
-            if (config('app.env') === 'local') {
-                $this->dispatch('show-toast', [
-                    'message' => 'Failed to assign Instructor. ' . $e->getMessage(),
-                    'type' => 'error'
-                ]);
-            } else {
-                $this->dispatch('show-toast', [
-                    'message' => 'Failed to assign Instructor.',
-                    'type' => 'error'
-                ]);
-            }
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to assign Instructor.',
+                'type' => 'error'
+            ]);
+
+            AuditLog::create([
+                'user_id' => (int) auth()->user()->id,
+                'user_alt' => $audit_user,
+                'action' => 'create',
+                'table_name' => 'role_assignments',
+                'operation_type' => 'CREATE',
+                'description' => $audit_user . ' tried to assign an Instructor to a Service Role but an error occurred. \n' . $e->getMessage(),
+            ]);
         }
     }
 

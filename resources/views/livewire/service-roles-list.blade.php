@@ -146,7 +146,7 @@
                         </th>
                         <th class="svcr-list-header-item">
                             <div class="flex">
-                                    Service Role
+                                    Role
                                     <div class="ml-1 sort-icons">
                                     <span class="material-symbols-outlined sort-icon " data-field="name" data-direction="asc">unfold_more</span>
                                 </div>
@@ -229,10 +229,61 @@
     <livewire:extra-hour-form :key="'extraHourForm'.time()" :showExtraHourForm="$showExtraHourForm" x-show="showExtraHourForm" x-cloak/>
 </div>
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', initializeToolbar);
-    document.addEventListener('livewire:init', initializeToolbar);
-    document.addEventListener('livewire:load', initializeToolbar);
-    document.addEventListener('livewire:update', initializeToolbar);
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeToolbar();
+        initElementActions();
+        initReisze();
+    });
+    document.addEventListener('livewire:init', function() {
+        initializeToolbar();
+        initElementActions();
+        initResize();
+    });
+    document.addEventListener('livewire:load', function() {
+        initializeToolbar();
+        initElementActions();
+        initResize();
+    });
+    document.addEventListener('livewire:update', function() {
+        initializeToolbar();
+        initElementActions();
+        initResize();
+    });
+    function initReisze() {
+        function calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin) {
+            const itemsPerRow = Math.floor(screenWidth / (elementWidth + 2 * elementMargin));
+            const rowsPerScreen = Math.floor(screenHeight / (elementHeight + 2 * elementMargin));
+            const itemsPerScreen = itemsPerRow * rowsPerScreen;
+
+            return itemsPerScreen;
+        }
+
+        // on screen resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth < 768) {
+                viewModeDropdown.value = 'card';
+                @this.set('viewMode', 'card');
+            } else {
+                viewModeDropdown.value = 'table';
+                @this.set('viewMode', 'table');
+            }
+
+            // Example usage:
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const element = document.querySelector('.svcr-table');
+            const elementWidth = element ? element.offsetWidth : 0;
+            const elementHeight = element ? element.offsetHeight : 0;
+            const elementMargin = element ? parseInt(window.getComputedStyle(element).marginRight) + parseInt(window.getComputedStyle(element).marginLeft) : 0;
+
+            const itemsPerScreen = calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin);
+            console.log(`Number of pagination items that fit on the screen: ${itemsPerScreen}`);
+            // @this.set('pageSize', itemsPerScreen);
+            @this.dispatch('changePageSize', {
+                'size': itemsPerScreen
+            });
+        });
+    }
 
     function initializeToolbar() {
         if (document.querySelector('.toolbar-initialized')) return;
@@ -404,12 +455,6 @@
             });
         }
     }
-</script>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', initElementActions);
-    document.addEventListener('livewire:init', initElementActions);
-    document.addEventListener('livewire:load', initElementActions);
-    document.addEventListener('livewire:update', initElementActions);
 
     function initElementActions() {
         const searchIcon = document.querySelector('.toolbar-search-icon');

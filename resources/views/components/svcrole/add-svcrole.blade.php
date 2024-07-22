@@ -16,6 +16,5 @@
         </h1>
         <livewire:service-role-form />
     </section>
-
     <x-link-bar :links="$links" />
 </div>
