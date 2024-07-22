@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
+        @vite(['resources/css/var.css', 'resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
         'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js',
          'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js'])
 
@@ -59,7 +59,12 @@
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        {{-- <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script> --}}
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://unpkg.com/tippy.js@6"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7"></script>
         @php
             $isProduction = config('app.env') === 'production';
         @endphp
@@ -71,9 +76,6 @@
             <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
             <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         @endif --}}
-
-        <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-        <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         <script>
             Livewire.on('show-toast', (data) => {
                 // it seems data is an array of objects
@@ -176,6 +178,37 @@
                     Livewire.dispatch('deleteAllSelected');
                 }
             })
+            document.addEventListener('DOMContentLoaded', () => {
+                // Initial load settings
+                loadUserSettings();
+
+                // Listen for storage changes
+                window.addEventListener('storage', (event) => {
+                    if (event.key === 'userSettings') {
+                        loadUserSettings();
+                    }
+                });
+            });
+
+            function loadUserSettings() {
+                const settings = JSON.parse(localStorage.getItem('userSettings'));
+                if (settings) {
+                    // Apply settings to the current tab
+                    applySettings(settings);
+                }
+            }
+
+            function applySettings(settings) {
+                if (settings.locale) {
+                    // Set locale (this might need a page reload to fully apply)
+                    document.documentElement.lang = settings.locale;
+                }
+                if (settings.theme) {
+                    // Set theme (assuming you have a way to apply themes)
+                    const body = document.body;
+                    body.classList.toggle('dark', settings.theme === 'dark');
+                }
+            }
         </script>
     </body>
 </html>

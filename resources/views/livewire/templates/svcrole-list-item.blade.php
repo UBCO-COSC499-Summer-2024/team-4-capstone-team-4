@@ -146,14 +146,3 @@
         </div>
     </td>
 </tr>
-@push('scripts')
-<script>
-    tippy('[data-tippy-content]', {
-        theme: 'light-border',
-        allowHTML: true,
-        interactive: true,
-        arrow: false,
-        placement: 'bottom',
-    });
-</script>
-@endpush

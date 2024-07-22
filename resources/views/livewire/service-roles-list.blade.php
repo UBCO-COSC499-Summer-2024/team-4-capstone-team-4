@@ -232,7 +232,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         initializeToolbar();
         initElementActions();
-        initReisze();
+        initResize();
     });
     document.addEventListener('livewire:init', function() {
         initializeToolbar();
@@ -249,7 +249,7 @@
         initElementActions();
         initResize();
     });
-    function initReisze() {
+    function initResize() {
         function calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin) {
             const itemsPerRow = Math.floor(screenWidth / (elementWidth + 2 * elementMargin));
             const rowsPerScreen = Math.floor(screenHeight / (elementHeight + 2 * elementMargin));
@@ -258,7 +258,7 @@
             return itemsPerScreen;
         }
 
-        // on screen resize
+        // on screen <resize></resize>
         window.addEventListener('resize', function() {
             if (window.innerWidth < 768) {
                 viewModeDropdown.value = 'card';

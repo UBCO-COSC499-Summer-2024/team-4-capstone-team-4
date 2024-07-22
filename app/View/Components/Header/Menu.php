@@ -8,12 +8,13 @@ use Illuminate\View\Component;
 
 class Menu extends Component
 {
+    protected $darkMode;
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->darkMode = session('dark_mode', false);
     }
 
     /**

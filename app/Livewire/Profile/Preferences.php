@@ -82,6 +82,19 @@ class Preferences extends Component
                 'new_value' => json_encode($this->settings->getAttributes()),
                 'description' => $audit_user . ' updated their preferences',
             ]);
+            echo "<script>
+                    const newSettings = {
+                        locale: '{$this->locale}',
+                        theme: '{$this->theme}'
+                    };
+                    localStorage.setItem('userSettings', JSON.stringify(newSettings));
+
+                    // Dispatch a custom event to force localStorage sync across tabs
+                    const event = new Event('storage');
+                    event.key = 'userSettings';
+                    event.newValue = JSON.stringify(newSettings);
+                    window.dispatchEvent(event);
+                </script>";
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'Error saving preferences: ' . $e->getMessage(),
