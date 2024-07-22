@@ -77,6 +77,10 @@
             <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         @endif --}}
         <script>
+            Livewire.on('toggle-dark-mode', () => {
+                const body = document.body;
+                body.classList.toggle('dark');
+            });
             Livewire.on('show-toast', (data) => {
                 // it seems data is an array of objects
                 console.log(data);
