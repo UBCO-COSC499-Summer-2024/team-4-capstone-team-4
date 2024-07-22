@@ -16,6 +16,8 @@ use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
+use App\Models\TeachingAssistant;
+use App\Models\Assist;
 
 class DatabaseSeeder extends Seeder
 {
@@ -188,6 +190,20 @@ class DatabaseSeeder extends Seeder
                     'q5' => fake()->numberBetween(1,5),
                     'q6' => fake()->numberBetween(1,5),
                 ]),
+            ]);
+        }
+
+        // Creating Teaching Assistants
+        $teachingAssistants = TeachingAssistant::factory(10)->create();
+
+    // Assign TAs to courses
+        $courseSections = CourseSection::all();
+        foreach ($courseSections as $courseSection) {
+            $ta = $teachingAssistants->random();
+            Assist::create([
+                'course_section_id' => $courseSection->id,
+                'ta_id' => $ta->id,
+                'rating' => fake()->numberBetween(1, 5) + fake()->randomFloat(2, 0, 0.99),
             ]);
         }
         // Add service roles for the example instructor

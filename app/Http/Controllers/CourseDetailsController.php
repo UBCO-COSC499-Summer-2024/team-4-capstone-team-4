@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
+use App\Models\TeachingAssistant;
 use Illuminate\Http\Request;
 use App\Models\SeiData;
 use App\Models\User;
@@ -11,81 +12,97 @@ use Illuminate\Support\Facades\Log;
 class CourseDetailsController extends Controller
 {
     public function show(Request $request, User $user)
-{
-    $authenticatedUser = $request->user();
+    {
+        $authenticatedUser = $request->user();
 
-    if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
-        abort(403, 'Unauthorized access.');
+        if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        $userRole = $user->roles->first()->role ?? 'guest';
+        $query = $request->input('search', '');
+        $instructorId = $request->input('instructor_id', null);
+
+        Log::info('User Role:', ['role' => $userRole]);
+        Log::info('Search Query:', ['query' => $query]);
+
+        $courseSections = CourseSection::with('area')
+            ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($user) {
+                    $query->where('instructor_id', $user->id);
+                });
+            })
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($q) use ($query) {
+                    $q->whereRaw('LOWER(prefix || \' \' || number || \' \' || section || \' - \' || year || session || \' \' || term) LIKE ?', ['%' . strtolower($query) . '%']);
+                });
+            })
+            ->when($instructorId, function ($queryBuilder) use ($instructorId) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($instructorId) {
+                    $query->where('instructor_id', $instructorId);
+                });
+            })
+            ->get();
+
+        $courseSections = $courseSections->map(function ($section) {
+            $seiData = $section->seiData()->first() ?? null;
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+
+            $formattedName = sprintf('%s %s %s - %s%s %s',
+                $section->prefix,
+                $section->number,
+                $section->section,
+                $section->year,
+                $section->session,
+                $section->term
+            );
+
+            return (object)[
+                'id' => $section->id,
+                'name' => $formattedName,
+                'departmentName' => $section->area->name ?? 'Unknown',
+                'enrolled' => $section->enrolled,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
+        });
+
+        Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+        Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+
+        $instructors = User::whereHas('roles', function ($query) {
+            $query->where('role', 'instructor');
+        })->get();
+
+        $tas = TeachingAssistant::with(['courseSections.teaches.instructor'])
+            ->get()
+            ->map(function ($ta) {
+                return (object)[
+                    'name' => $ta->name,
+                    'email' => $ta->email,
+                    'rating' => $ta->rating,
+                    'taCourses' => $ta->courseSections->map(function ($course) {
+                        return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+                    })->implode(', '),
+                    'instructorName' => $ta->courseSections->map(function ($course) {
+                        return $course->teaches->instructor->user->firstname . ' ' . $course->teaches->instructor->user->lastname;
+                    })->implode(', ')
+                ];
+            });
+
+        if ($request->ajax()) {
+            return response()->json($courseSections);
+        }
+
+        $sortField = 'courseName';
+        $sortDirection = 'asc';
+
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'instructors', 'instructorId', 'tas'));
     }
 
-    $userRole = $user->roles->first()->role ?? 'guest';
-    $query = $request->input('search', '');
-    $instructorId = $request->input('instructor_id', null);
 
-    Log::info('User Role:', ['role' => $userRole]);
-    Log::info('Search Query:', ['query' => $query]);
 
-    $courseSections = CourseSection::with('area')
-        ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
-            $queryBuilder->whereHas('teaches', function ($query) use ($user) {
-                $query->where('instructor_id', $user->id);
-            });
-        })
-        ->when($query, function ($queryBuilder) use ($query) {
-            $queryBuilder->where(function ($q) use ($query) {
-                $q->whereRaw('LOWER(prefix || \' \' || number || \' \' || section || \' - \' || year || session || \' \' || term) LIKE ?', ['%' . strtolower($query) . '%']);
-            });
-        })
-        ->when($instructorId, function ($queryBuilder) use ($instructorId) {
-            $queryBuilder->whereHas('teaches', function ($query) use ($instructorId) {
-                $query->where('instructor_id', $instructorId);
-            });
-        })
-        ->get();
-
-    $courseSections = $courseSections->map(function ($section) {
-        $seiData = $section->seiData()->first() ?? null;
-        $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
-        $formattedName = sprintf('%s %s %s - %s%s %s',
-            $section->prefix,
-            $section->number,
-            $section->section,
-            $section->year,
-            $section->session,
-            $section->term
-        );
-
-        return (object)[
-            'id' => $section->id,
-            'name' => $formattedName,
-            'departmentName' => $section->area->name ?? 'Unknown',
-            'enrolled' => $section->enrolled,
-            'dropped' => $section->dropped,
-            'capacity' => $section->capacity,
-            'averageRating' => $averageRating,
-        ];
-    });
-
-    Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-    Log::info('Processed Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-
-    $instructors = User::whereHas('roles', function ($query) {
-        $query->where('role', 'instructor');
-    })->get();
-
-    if ($request->ajax()) {
-        return response()->json($courseSections);
-    }
-
-    $sortField = 'courseName';
-    $sortDirection = 'asc';
-
-    return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'instructors', 'instructorId'));
-}
-    
-    
-    
     public function save(Request $request){
         $ids = $request->input('ids', []);
         $courseNames = $request->input('courseNames', []);

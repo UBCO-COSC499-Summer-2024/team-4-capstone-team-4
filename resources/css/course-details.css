@@ -243,3 +243,12 @@ tbody td:last-child {
     margin-top: 0rem;
 }
 
+.text-ubc-blue {
+    color: rgb(59, 71, 121);
+    font-size: large;
+}
+
+.border-tab-ubc-blue {
+    border-color: rgb(59, 71, 121);
+}
+

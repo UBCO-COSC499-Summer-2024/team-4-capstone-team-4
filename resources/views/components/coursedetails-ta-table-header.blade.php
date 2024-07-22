@@ -1,6 +1,6 @@
 <thead class="sticky-header">
     <tr class="svcr-list-header">
-        @foreach(['courseNames' => 'Course Name', 'departmentName' => 'Area', 'enrolledStudents' => 'Enrolled', 'droppedStudents' => 'Dropped', 'courseCapacity' => 'Capacity', 'seiData' => 'SEI Data'] as $field => $label)
+        @foreach(['taName' => 'TA Name', 'rating' => 'Rating', 'assignedCourses' => 'Assigned Courses', 'instructorName' => 'Instructor Name'] as $field => $label)
             <th scope="col" class="sortable {{$sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : ''}} p-8 text-left text-xs font-large text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
                     <span>{{$label}}</span>
