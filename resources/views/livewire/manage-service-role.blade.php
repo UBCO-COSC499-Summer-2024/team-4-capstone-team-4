@@ -98,7 +98,9 @@
 
                 <x-slot name="content">
                     @foreach ($exports as $fname => $format)
-                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900" wire:click="exportRole('{{ $format }}')" role="menuitem">
+                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900" x-on:click="$dispatch('export-role', {
+                            'format': '{{$format}}'
+                        })" role="menuitem">
                             {{ $fname }}
                         </button>
                     @endforeach
@@ -398,8 +400,7 @@
         </x-dialog-modal>
     </div>
 </div>
-
-<script type="text/javascript">
+<script>
     document.addEventListener('DOMContentLoaded', initInstructorForm);
     document.addEventListener('livewire:init', initInstructorForm);
     document.addEventListener('livewire:load', initInstructorForm);
