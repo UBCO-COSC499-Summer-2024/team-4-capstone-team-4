@@ -1,5 +1,41 @@
 # Angelina's Personal Log 
 
+## Friday (7/19 - 7/23)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log719-723.png)
+
+### Current Tasks 
+ * #1: Create Performance Page Front End
+ * #2: Configure Performance Page Routing
+ * #3: Add Handling for Performance Routes to Chart Controller
+ * #4: Identify Issues from Test-A-Thon
+ * #5: Distribute Test-A-Thon Issues
+ * #6: Add Buttons to Dashboard
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Add Dashboard Buttons     | In Progress |
+| Distribute Issues         | Completed   |
+| Identify Issues           | Completed   |
+| Update Chart Controller   | Completed   |
+| Performance Page Routing  | Completed   |
+| Performance Front End     | Completed   |
+
+
+### Cycle Goal Review 
+Identified and distributed issues to fix post test-a-thon during group meeting on Friday. Added routing from the staff page to the performance page and added handling for these different routes to the chart controller. Created first draft of the performance page frontend for individual staff. Began adjusting routes and Chart Controller for dashbard buttons.
+
+### Next Cycle Goals
+ * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
+ * Add score calculation method to Performance Model
+ * Add Administrator Dashboard
+ * Testing, Testing, Testing
+
+---
+
 ## Wednesday (7/17 - 7/18)
 
 ### Timesheet
@@ -14,6 +50,8 @@ Clockify report
  * #5: Score Calculation Method
  * #6: Dashboad Buttons and Links
  * #7: Add Instructor Charts
+ * #8: Prepare for first test-a-thon
+ * #8: Create Performance Page and Configure Routing & Handling
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -34,6 +72,7 @@ Created backend methods to allow for rank in the leaderboard to be pulled to the
  * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
  * Add score calculation method to Performance Model
  * Add Administrator Dashboard
+ * Add Performance Page
  * Testing, Testing, Testing
 
 ---
