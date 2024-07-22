@@ -2,8 +2,14 @@
     <div class="px-2 sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
         <x-staff-search />
         <div class="flex items-center space-x-4">
-            <x-staff-filter />
-            <x-staff-dropdown />
+            @if($editMode)
+                <x-staff-filter />
+                <x-staff-button-green wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button-green>
+                <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
+            @else
+                <x-staff-filter />
+                <x-staff-dropdown :selectedYear="$selectedYear" :selectedMonth="$selectedMonth"/>
+            @endif
         </div>
     </div>
    {{--  @if (session()->has('message'))
@@ -11,11 +17,11 @@
             {{ session('message') }}
         </div>
     @endif --}}
-    @if(session()->has('error'))
+    {{-- @if(session()->has('error'))
         <div class="text-sm text-red-600">
             {{ session('error') }}
         </div>
-    @endif
+    @endif --}}
     @if(session()->has('showSuccessModal') && session('showSuccessModal'))
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <x-staff-success-modal />
@@ -73,6 +79,7 @@
                         targetHours="{{ $performance ? ($performance->target_hours) ?? '-' : '-' }}"
                         src="{{ $user->profile_photo_url }}"
                         instructorId="{{ $user->instructor_id }}"
+                        editMode="{{ $editMode }}"
                     />
                 @endforeach
             @else

@@ -1,3 +1,5 @@
+@props(['selectedYear', 'selectedMonth'])
+
 <x-dropdown>
     <x-slot name="trigger">
         <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
@@ -13,7 +15,7 @@
         <x-dropdown-link id="add-target-hours" wire:click="showTargetModal" >
             {{ __('Add Target Hours') }}
         </x-dropdown-link>
-        <x-dropdown-link href="{{ route('staff.edit') }}" id="edit-target-hours" >
+        <x-dropdown-link id="edit-target-hours" wire:click="$set('editMode', true)">
             {{ __('Edit mode') }}
         </x-dropdown-link>
     </x-slot>

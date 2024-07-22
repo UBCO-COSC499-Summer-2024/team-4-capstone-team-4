@@ -22,14 +22,24 @@
         <div class="flex items-center justify-center h-full">{{ $completedHours }}</div>
     </td>
     <td class="px-6 py-4">
-        @if (is_numeric($targetHours))
-            <div class="flex items-center justify-center h-full">
-                {{ $targetHours }} ({{ number_format($targetHours / 12, 2) }}/month)
-            </div>
+        @if($editMode)
+            @if($targetHours === '-')
+                <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-solid border-[#3b4779] bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:ring-1 focus:ring-[#3b4779]" 
+                value="" />
+            @else
+                <input wire:change="update('{{ $email }}', $event.target.value)" type="text" name="hours" class="border border-solid border-[#3b4779] bg-gray-50 rounded-lg w-3/4 p-2 text-center focus:ring-1 focus:ring-[#3b4779]" 
+                value="{{ $targetHours }}" /> 
+            @endif
         @else
-            <div class="flex items-center justify-center h-full">
-                {{ $targetHours }} 
-            </div>
+            @if (is_numeric($targetHours))
+                <div class="flex items-center justify-center h-full">
+                    {{ $targetHours }} ({{ number_format($targetHours / 12, 2) }}/month)
+                </div>
+            @else
+                <div class="flex items-center justify-center h-full">
+                    {{ $targetHours }} 
+                </div>
+            @endif
         @endif
     </td>
     <td class="px-6 py-4">
