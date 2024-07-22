@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Providers;
+namespace App\Http\Middleware;
 
-use App\View\Components\Toolbar;
+use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\Response;
 
-class AppServiceProvider extends ServiceProvider
+class ApplyUserSettings
 {
     /**
-     * Register any application services.
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
             $user = Auth::user();
@@ -34,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
                 Config::set('app.timezone', $settings->timezone);
             }
         }
-        Blade::component('toolbar', Toolbar::class);
+
+        return $next($request);
     }
 }

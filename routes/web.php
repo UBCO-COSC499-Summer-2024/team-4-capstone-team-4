@@ -7,17 +7,26 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Middleware\CheckRole;
 
 // Auth routes
-Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
-Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
+
+Route::middleware([
+    ApplyUserSettings::class,
+])->group(function () {
+    Route::prefix('/auth', function () {
+        Route::get('/{provider}', [AuthController::class, 'redirectToProvider'])->name('auth.provider');
+        Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('auth.provider.callback');
+    });
+});
 
 // Routes for authenticated and verified users
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    ApplyUserSettings::class
 ])->group(function () {
     Route::get('/', [ChartController::class, 'showChart'])->name('main');
     Route::get('/dashboard', [ChartController::class, 'showChart'])->name('dashboard');
@@ -52,7 +61,8 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    CheckRole::class.':admin,dept_head,dept_staff'
+    ApplyUserSettings::class,
+    CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/staff', function() {
         return view('staff');
@@ -77,6 +87,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    ApplyUserSettings::class,
 ])->prefix('/svcroles')->group(function () {
     Route::get('/add', function () {
         return view('svcroles');
@@ -95,7 +106,8 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-     CheckRole::class.':admin,dept_head,dept_staff',
+    ApplyUserSettings::class,
+    CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
@@ -106,6 +118,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    ApplyUserSettings::class,
 ])->prefix('/courses')->group(function () {
     Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
     Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
@@ -120,6 +133,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    ApplyUserSettings::class,
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->prefix('/staff')->group(function () {
     Route::get('/edit', function(){
@@ -132,7 +146,8 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-     CheckRole::class.':admin,dept_head,dept_staff',
+    ApplyUserSettings::class,
+    CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
     Route::get('/dept-report', function () {
         return view('dept-report');

@@ -10,6 +10,11 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\MakeService::class,
     ];
+    protected $middlewareGroups = [
+        'web' => [
+            \App\Http\Middleware\ApplyUserSettings::class,
+        ],
+    ];
     /**
      * Define the application's command schedule.
      *
