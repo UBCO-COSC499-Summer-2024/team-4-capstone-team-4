@@ -98,9 +98,13 @@
 
                 <x-slot name="content">
                     @foreach ($exports as $fname => $format)
-                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900" x-on:click="$dispatch('export-role', {
+                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
+
+                        {{-- x-on:click="$dispatch('export-role', {
                             'format': '{{$format}}'
-                        })" role="menuitem">
+                        })" --}}
+                        x-on:click="window.location.href='{{ route('svcroles.export.id', ['eid' => $serviceRole->id, 'eformat' => $format]) }}'"
+                        role="menuitem">
                             {{ $fname }}
                         </button>
                     @endforeach

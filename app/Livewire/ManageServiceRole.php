@@ -506,42 +506,41 @@ class ManageServiceRole extends Component
         }
     }
 
-    public function export($format)
-    {
-        if (!in_array($format, $this->validExportOptions)) {
-            $this->dispatch('show-toast', [
-                'message' => 'Invalid export format.',
-                'type' => 'error'
-            ]);
-            return;
-        }
+    // public function export($format)
+    // {
+    //     if (!in_array($format, $this->validExportOptions)) {
+    //         $this->dispatch('show-toast', [
+    //             'message' => 'Invalid export format.',
+    //             'type' => 'error'
+    //         ]);
+    //         return;
+    //     }
 
-        if ($format === 'print') {
-            $this->dispatch('toast', [
-                'message' => 'Printing...',
-                'type' => 'info'
-            ]);
-            return;
-        }
+    //     if ($format === 'print') {
+    //         $this->dispatch('toast', [
+    //             'message' => 'Printing...',
+    //             'type' => 'info'
+    //         ]);
+    //         return;
+    //     }
 
-        if ($format === 'text') {
-            $this->dispatch('toast', [
-                'message' => 'Text export not supported.',
-                'type' => 'error'
-            ]);
-            return;
-        }
+    //     if ($format === 'text') {
+    //         $this->dispatch('toast', [
+    //             'message' => 'Text export not supported.',
+    //             'type' => 'error'
+    //         ]);
+    //         return;
+    //     }
 
-        if ($format === 'xlsx' || $format === 'csv') {
-            // $serviceRole = ServiceRole::find($this->serviceRole);
-            return Excel::download(new SvcroleExport($this->serviceRole), 'service_role_. ' . $this->serviceRole->name . '.' . $format);
-        }
+    //     if ($format === 'xlsx' || $format === 'csv') {
+    //         // $serviceRole = ServiceRole::find($this->serviceRole);
+    //         return Excel::download(new SvcroleExport($this->serviceRole), 'service_role_. ' . $this->serviceRole->name . '.' . $format);
+    //     }
 
-        if ($format === 'pdf') {
-            // DOMPDF
-            return Excel::download(new SvcroleExport($this->serviceRole), 'service_role_. ' . $this->serviceRole->name . '.pdf');
-        }
-    }
+    //     if ($format === 'pdf') {
+    //         // build request
+    //     }
+    // }
 
     public function archiveServiceRole($id) {
         try {

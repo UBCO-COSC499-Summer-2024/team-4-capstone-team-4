@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Controllers\ServiceRoleController;
 use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Middleware\CheckRole;
 
@@ -98,6 +99,8 @@ Route::middleware([
     Route::get('/manage/{id}', function () {
         return view('svcroles');
     })->name('svcroles.manage.id');
+    Route::get('/manage/{eid}/exports/{eformat}', [ServiceRoleController::class, 'export'])
+        ->name('svcroles.export.id');
     Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
     Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
 });
