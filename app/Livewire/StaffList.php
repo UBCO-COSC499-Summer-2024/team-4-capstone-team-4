@@ -67,7 +67,11 @@ class StaffList extends Component
         $usersQuery = $usersQuery->distinct()
         ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-        ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+        ->leftJoin('course_sections', function($join) use ($currentYear) {
+            $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                ->where('course_sections.year', '=', $currentYear);
+        })
+        ->orWhereNull('course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
         ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
         ->where('areas.dept_id', $dept_id);
@@ -76,25 +80,25 @@ class StaffList extends Component
         $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
             case 'area':
-                $usersQuery->select('users.*', 'instructor_performance.instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
-                ->groupBy('users.id', 'instructor_performance.instructor_id')          
+                $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
+                ->groupBy('users.id', 'user_roles.id')          
                             ->orderBy('area_names', $this->sortDirection);
                 break;
             case 'total_hours':
                 //extract hours of the current month
-                $usersQuery->select('users.*', 'instructor_performance.instructor_id', DB::raw("CAST(instructor_performance.total_hours->>'$currentMonth' AS INTEGER) AS month_hours"))
+                $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("CAST(instructor_performance.total_hours->>'$currentMonth' AS INTEGER) AS month_hours"))
                            ->orderBy('month_hours', $this->sortDirection);
                 break;
             case 'target_hours':
-                $usersQuery->select('users.*', 'instructor_performance.instructor_id','instructor_performance.target_hours')
+                $usersQuery->select('users.*', 'user_roles.id as instructor_id','instructor_performance.target_hours')
                             ->orderBy('instructor_performance.target_hours', $this->sortDirection);
                 break;
             case 'score' :
-                $usersQuery->select('users.*', 'instructor_performance.instructor_id', 'instructor_performance.score')
+                $usersQuery->select('users.*', 'user_roles.id as instructor_id', 'instructor_performance.score')
                             ->orderBy('instructor_performance.score', $this->sortDirection);
                 break;                
             default: // by firstname
-                $usersQuery->select('users.*', 'instructor_performance.instructor_id')
+                $usersQuery->select('users.*', 'user_roles.id as instructor_id')
                            ->orderBy('firstname', $this->sortDirection);
         }
 

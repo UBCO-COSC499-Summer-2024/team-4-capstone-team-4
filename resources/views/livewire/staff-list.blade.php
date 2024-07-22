@@ -47,7 +47,12 @@
                         }
 
                         if ($instructor && $instructor->teaches) {
-                            $course_ids = $instructor->teaches->pluck('course_section_id')->all();
+                            $course_ids = $instructor->teaches()
+                                ->whereHas('courseSection', function ($query) use ($selectedYear) {
+                                    $query->where('year', $selectedYear);
+                                })
+                                ->pluck('course_section_id')
+                                ->all();
 
                             foreach ($course_ids as $course_id) {
                                 $course = App\Models\CourseSection::find($course_id);
@@ -65,7 +70,7 @@
                         email="{{ $user->email }}"
                         subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}"
                         completedHours="{{ $currentMonthHours ?? '-' }}"
-                        targetHours="{{ $performance->target_hours ?? '-' }}"
+                        targetHours="{{ $performance ? ($performance->target_hours) ?? '-' : '-' }}"
                         src="{{ $user->profile_photo_url }}"
                         instructorId="{{ $user->instructor_id }}"
                     />
