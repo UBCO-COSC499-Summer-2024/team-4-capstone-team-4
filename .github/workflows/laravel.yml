@@ -47,6 +47,12 @@ jobs:
       
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Install Node.js dependencies
+      run: npm install
+
+    - name: Build assets
+      run: npm run build
       
     - name: Generate Application Key
       run: php artisan key:generate
