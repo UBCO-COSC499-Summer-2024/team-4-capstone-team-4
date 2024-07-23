@@ -2,6 +2,78 @@
 
 ## Date Range:
 
+- July 19 - July 23
+
+## Features in the Project Plan Cycle:
+
+- Testing
+- Bug fixes from peer-testing
+- Implementing suggestions from peer-testing
+- Staff Page - year/month select
+- Course Details Page - TAs
+- Service Roles - Requests
+- Performance Page
+- Import Page - File Upload
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july19_july23.png)
+![image of tasks](./tasks/inprogress_july19_july23.png)
+![image of tasks](./tasks/inreview_july19_july23.png)
+![image of tasks](./tasks/done_july19_july23.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july19_july23.png)
+![image of tasks](./tasks/inprogress_july19_july23.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july19_july23.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july19_july23.png)
+![image of clockify report](./clockify/individual_july19_july23.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july19_july23.png)
+![image of tasks](./tasks/done_july19_july23.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july19_july23.png)
+![image of tasks](./tasks/inprogress_july19_july23.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_july19_july23.png)
+![image of test report](./testing/feature_test_july19_july23.png)
+
+## Overview:
+The peer-testing event went well and overall we received positive feedback. However, we did also discovers some bugs and areas of improvement. We divided task based on the feedback we received and everyone is working on resolving the bugs and implementing the suggestions. We also started working on performance page.
+
+## Goals for next cycle
+
+- All bugs from peer-testing fixed
+- Suggestions from peer-testing implemented
+- Testing
+- File upload
+- Pagination for tables/lists
+- Performance page 
+
+## What's left
+
+- Dark Mode
+- Help pages
+- Admin
+- Testing
+- CI
+- Individual Project Report
+
+## Date Range:
+
 - July 17 - July 18
 
 ## Features in the Project Plan Cycle:
