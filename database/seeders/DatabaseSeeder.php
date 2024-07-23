@@ -209,7 +209,7 @@ class DatabaseSeeder extends Seeder
         $this->updatePerformance2($extrahour, $dept);
 
         // Create courses and assign instructors to them    
-        $courses = CourseSection::factory(10)->create([
+        $courses = CourseSection::factory(50)->create([
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
@@ -261,7 +261,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $svcroles = ServiceRole::factory(10)->create([
+        $svcroles = ServiceRole::factory(50)->create([
             "year" => date('Y'),
             "area_id" => Area::pluck('id')->random(),
         ]);

@@ -8,9 +8,12 @@ use App\Models\UserRole;
 use App\Models\InstructorPerformance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class StaffList extends Component
 {
+    use WithPagination;
+
     public $searchTerm = '';
     public $sortField = 'firstname'; // default 
     public $sortDirection = 'asc'; //default
@@ -26,6 +29,7 @@ class StaffList extends Component
     public $showSuccessModal = false;
 
     public $editMode = false;
+    public $pagination;
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
@@ -35,6 +39,7 @@ class StaffList extends Component
     {
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
+        $this->pagination = 10;
     }
 
     public function render()
@@ -105,10 +110,26 @@ class StaffList extends Component
                            ->orderBy('firstname', $this->sortDirection);
         }
 
-        $users = $usersQuery->get();
-        $this->currentUsers = $users;
+        switch ($this->pagination) {
+            case 25:
+                $users = $usersQuery->paginate(25);
+                break;
+            case 50:
+                $users = $usersQuery->paginate(50);
+                break;
+            case 100:
+                $users = $usersQuery->paginate(100);
+                break;
+            case 'all':
+                $users = $usersQuery->get();
+                break;
+            default: 
+                $users = $usersQuery->paginate(10);
+                break;
+        }
+        //$this->currentUsers = $users;
         //dd($users);
-        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth, 'editMode'=>$this->editMode]);
+        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth, 'editMode'=>$this->editMode, 'pagination' => $this->pagination]);
     }
 
     public function sort($field){
