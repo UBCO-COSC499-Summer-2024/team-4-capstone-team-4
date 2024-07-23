@@ -16,7 +16,7 @@
         <!-- Scripts -->
         @vite(['resources/css/var.css', 'resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
         'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js',
-         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js'])
+         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js', 'resources/js/darkmode.js'])
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -68,7 +68,6 @@
         @php
             $isProduction = config('app.env') === 'production';
         @endphp
-
         {{-- @if ($isProduction)
             <script src="https://unpkg.com/@popperjs/core@2"></script>
             <script src="https://unpkg.com/tippy.js@6"></script>
@@ -77,10 +76,6 @@
             <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         @endif --}}
         <script>
-            Livewire.on('toggle-dark-mode', () => {
-                const body = document.body;
-                body.classList.toggle('dark');
-            });
             Livewire.on('show-toast', (data) => {
                 // it seems data is an array of objects
                 console.log(data);
@@ -181,38 +176,7 @@
                 if (confirm(data.message)) {
                     Livewire.dispatch('deleteAllSelected');
                 }
-            })
-            document.addEventListener('DOMContentLoaded', () => {
-                // Initial load settings
-                loadUserSettings();
-
-                // Listen for storage changes
-                window.addEventListener('storage', (event) => {
-                    if (event.key === 'userSettings') {
-                        loadUserSettings();
-                    }
-                });
             });
-
-            function loadUserSettings() {
-                const settings = JSON.parse(localStorage.getItem('userSettings'));
-                if (settings) {
-                    // Apply settings to the current tab
-                    applySettings(settings);
-                }
-            }
-
-            function applySettings(settings) {
-                if (settings.locale) {
-                    // Set locale (this might need a page reload to fully apply)
-                    document.documentElement.lang = settings.locale;
-                }
-                if (settings.theme) {
-                    // Set theme (assuming you have a way to apply themes)
-                    const body = document.body;
-                    body.classList.toggle('dark', settings.theme === 'dark');
-                }
-            }
         </script>
     </body>
 </html>

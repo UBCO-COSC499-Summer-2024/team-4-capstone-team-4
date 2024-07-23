@@ -103,6 +103,10 @@ Route::middleware([
         ->name('svcroles.export.id');
     Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
     Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
+    // test route for exports.pdf.servicerole
+    Route::get('/manage/{id}/preview', function () {
+        return view('exports.pdf.servicerole');
+    })->name('exports.pdf.preview');
 });
 
 Route::middleware([
