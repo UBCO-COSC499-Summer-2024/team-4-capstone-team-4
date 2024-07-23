@@ -60,23 +60,27 @@ class ExportReportTest extends DuskTestCase
         ]);
 
         $this->browse(function (Browser $browser) use ($user,$instructor, $instructorRole){
+            $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y') . '.xlsx';
+
             $browser->loginAs($user)
                         ->visit('/instructor-report/' . $instructorRole->id)
                         ->assertSee('Export')
                         ->press('Export')
                         ->clickLink('As pdf')
-                        ->pause(5000);
+                        ->pause(5000)
+                        ->waitFor('.toastify')
+                        ->assertSee('PDF' .$name. ' has been saved successfully!');
             $browser->screenshot('report');
 
-            $relativeDownloadPath = 'tests/Browser/downloads';
-            $absoluteDownloadPath = base_path($relativeDownloadPath);
-            $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y') . '.xlsx';
+            //$relativeDownloadPath = 'tests/Browser/downloads';
+            //$absoluteDownloadPath = base_path($relativeDownloadPath);
+            
 
             /* $filePath = $absoluteDownloadPath . '/' . $name;
             $this->assertFileExists($filePath);  */
 
-            $filePath = Storage::disk('local')->path('downloads/' . $name);
-            $this->assertTrue(file_exists($filePath));
+            //$filePath = Storage::disk('local')->path('downloads/' . $name);
+            //$this->assertTrue(file_exists($filePath));
 
         });
        

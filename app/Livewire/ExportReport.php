@@ -50,7 +50,20 @@ class ExportReport extends Component
     public function exportAsExcel(){
         $instructor = UserRole::findOrFail($this->instructor_id);
         $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
-        return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
+        $file = Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
+        if($file){
+            $this->dispatch('show-toast', [
+                'message' => 'Excel '. $name.'.xlsx has been saved successfully!',
+                'type' => 'success'
+            ]);
+            return $file;
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to generate Excel '. $name.'.xlsx',
+                'type' => 'error'
+            ]);
+            return;
+        }
     }
 
     public function handlePdfSaved($fileName){
@@ -58,5 +71,6 @@ class ExportReport extends Component
             'message' => 'PDF ' . $fileName . ' has been saved successfully!',
             'type' => 'success'
         ]); 
+        return;
     }
 }

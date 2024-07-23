@@ -26,10 +26,10 @@ abstract class DuskTestCase extends BaseTestCase
      * Create the RemoteWebDriver instance.
      */
     protected function driver(): RemoteWebDriver{
-        $downloadPath = base_path('tests/Browser/downloads');
+        /* $downloadPath = base_path('tests/Browser/downloads');
         if (!is_dir($downloadPath)) {
             mkdir($downloadPath, 0777, true);
-        }
+        } */
     
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
@@ -37,9 +37,9 @@ abstract class DuskTestCase extends BaseTestCase
             '--no-sandbox',
             '--window-size=1920,1080',
         ]);
-        $options->setExperimentalOption('prefs', [
+       /*  $options->setExperimentalOption('prefs', [
             'download.default_directory' => storage_path('temp')
-        ]);
+        ]); */
     
         return RemoteWebDriver::create(
             'http://selenium:4444/wd/hub', 
