@@ -4,7 +4,7 @@
         <div class="flex items-center space-x-4">
             <div>
                 Staff per page: 
-                <select wire:model.live="pagination" class="w-12 text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5">
+                <select wire:model.live="pagination" class="w-auto min-w-[70px] text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
