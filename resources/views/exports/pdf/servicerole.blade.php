@@ -393,7 +393,7 @@
         </main>
         <footer>
             <div class="pages footer-el">
-                <a href="{{ route('svcroles') }}" class="btn btn-primary">Back to Service Roles</a>
+                <a href="{{ route('svcroles.manage.id', ['id' => $serviceRole->id]) }}" class="btn btn-primary">Back to Service Roles</a>
             </div>
             <div class="flex flex-row items-center justify-end copyright right footer-el">
                 &copy; Copyright {{config('app.name', 'Insight')}} {{date('Y')}}

@@ -37,6 +37,11 @@
         </span>
 
         <div class="flex right content-title-btn-holder">
+            {{-- preview --}}
+            <button class="content-title-btn" x-on:click="window.location.href='{{ route('exports.pdf.preview', [ 'id' => $serviceRole->id ]) }}'" wire:loading.attr="disabled">
+                <span class="material-symbols-outlined icon">preview</span>
+                <span>Preview</span>
+            </button>
             @if(!$serviceRole->archived)
                 <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
                     <span class="material-symbols-outlined icon">
