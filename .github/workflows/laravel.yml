@@ -1,0 +1,67 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ "configure-github-actions" ]
+  pull_request:
+    branches: [ "configure-github-actions" ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: localhost
+      DB_DATABASE: Insight
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+    
+    services:
+        postgres:
+          image: postgres:16-alpine
+          env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: Insight
+          ports:
+            - 5432:5432
+          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+    
+    steps:
+    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      with:
+        php-version: '8.3'
+    - uses: actions/checkout@v4
+    
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      
+   # - name: Create Database
+   #   run: |
+   #     sudo systemctl start postgresql.service
+   #     PGPASSWORD=password psql -h localhost -U postgres -c "CREATE DATABASE Insight;"
+      
+    - name: Update composer
+      run: composer update
+      
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      
+    - name: Generate Application Key
+      run: php artisan key:generate
+      
+    - name: Clear Config
+      run: php artisan config:clear
+       
+    - name: Run Migration
+      run: php artisan migrate 
+      
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
+         
+    - name: Execute tests 
+      env:
+        DB_CONNECTION: pgsql
+        DB_DATABASE: Insight
+      run: php artisan test
