@@ -19,8 +19,11 @@
     "dependencies": {
         "@popperjs/core": "^2.11.8",
         "chart.js": "^4.4.3",
+        "chromium": "^3.0.3",
         "jspdf": "^2.5.1",
         "jspdf-autotable": "^3.8.2",
+        "puppeteer": "^22.13.1",
+        "puppeteer-core": "^22.13.1",
         "tippy.js": "^6.3.7",
         "toastify": "^2.0.1"
     }

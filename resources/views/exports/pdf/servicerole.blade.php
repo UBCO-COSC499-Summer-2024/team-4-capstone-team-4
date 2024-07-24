@@ -52,16 +52,13 @@
                 max-width: 1500px;
             }
             header {
-                background-color: #f3f4f6;
+                /* background-color: var(--primary-color); */
                 border-bottom: 1px solid #d1d5db;
                 max-height: unset;
                 justify-content: flex-start;
-                z-index: 0;
+                /* z-index: 0; */
                 position: relative;
                 margin: auto;
-            }
-            #header-menu {
-                display: none;
             }
             main {
                 display: flex;
@@ -165,7 +162,7 @@
                 max-height: 500px;
                 padding: 1rem;
             }
-            section {
+            .main section {
                 width: 100%;
             }
             .details-table {
@@ -227,19 +224,49 @@
                     font-size: 12pt;
                 }
                 header, footer {
+                    /* display: none; */
+                }
+
+                #header-menu {
                     display: none;
                 }
+                footer {
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-pack: justify;
+                    -ms-flex-pack: justify;
+                    justify-content: space-between;
+                    width: 100%;
+                    position: fixed;
+                    bottom: 0;
+                    /* padding-right: 2cm !important; */
+                }
+                /* header {
+                    -webkit-box-pack: justify;
+                    -ms-flex-pack: justify;
+                    justify-content: space-between;
+                    width: 100%;
+                    position: fixed;
+                    top: 0;
+                    padding-right: 2cm !important;
+                } */
                 main {
                     width: 100%;
                     margin: 0;
                     padding: 0;
+                }
+                canvas {
+                    max-width: 1000px;
+                    max-height: unset;
                 }
                 .extras {
                     page-break-inside: avoid;
                 }
                 .details-table th, .details-table td {
                     padding: 8px;
-                    border: 1px solid #000;
+                    /* border: 1px solid #000; */
+                    border: 1px solid rgba(0,0,0,0.1);
                 }
             }
         </style>
@@ -289,7 +316,7 @@
                         <tr class="svcr-list-header">
                             <th class="svcr-list-header-item">Area ID</th>
                             <th class="svcr-list-header-item">Area Name</th>
-                            <th class="svcr-list-header-item">Area Description</th>
+                            <th class="svcr-list-header-item">Area Department</th>
                             <th class="svcr-list-header-item">Archived</th>
                         </tr>
                     </thead>
