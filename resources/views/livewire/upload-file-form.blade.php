@@ -19,10 +19,13 @@
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-2/12">       
-                        <input type="text" step="1" min="1" max="999" 
-                               placeholder="Area" 
-                               wire:model="rows.{{ $index }}.area" 
-                               class="import-form-input" required>
+                        <select wire:model="rows.{{ $index }}.area" class="import-form-select">
+                            <option value="">Select</option>
+                            <option value="COSC" {{ $rows[$index]['area'] == 'COSC' ? 'selected' : '' }}>COSC</option>
+                            <option value="MATH" {{ $rows[$index]['area'] == 'MATH' ? 'selected' : '' }}>MATH</option>
+                            <option value="PHYS" {{ $rows[$index]['area'] == 'PHYS' ? 'selected' : '' }}>PHYS</option>
+                            <option value="STAT" {{ $rows[$index]['area'] == 'STAT' ? 'selected' : '' }}>STAT</option>
+                        </select>
                     </div>
                     
                     <div class="w-2/12">       
@@ -40,17 +43,21 @@
                     </div>
 
                     <div class="w-2/12">       
-                        <input type="text" 
-                               placeholder="Session"  
-                               wire:model="rows.{{ $index }}.session" 
-                               class="import-form-input" required>
+                        <select wire:model="rows.{{ $index }}.session" class="import-form-select">
+                            <option value="">Select</option>
+                            <option value="W" {{ $rows[$index]['session'] == 'W' ? 'selected' : '' }}>W</option>
+                            <option value="S" {{ $rows[$index]['session'] == 'S' ? 'selected' : '' }}>S</option>
+                        </select>
                     </div>
 
-                    <div class="w-2/12">       
-                        <input type="text" 
-                               placeholder="Term"  
-                               wire:model="rows.{{ $index }}.term" 
-                               class="import-form-input" required>
+                    <div class="w-2/12">
+                        <select wire:model="rows.{{$index}}.term" class="import-form-select">
+                            <option value="">Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="1-2">1 & 2</option>
+                        </select>                
+                        @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
                     
                     <div class="w-2/12">       
