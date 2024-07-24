@@ -1,7 +1,7 @@
-## Cycle: July 19th - July 24th
+## Cycle: July 19th - July 23rd
 
 ### Timesheet
-[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_19_2024-07_24_2024.pdf)
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_19_2024-07_23_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Complete testing for the Service Role Page
@@ -97,7 +97,6 @@ The biggest challenge this cycle was resolving fatal errors encountered with Bro
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
  * Complete testing for the Service Role Page
- * Conduct peer testing and gather feedback
  * Apply any necessary fixes and improvements based on feedback
  * Continue implementation of remaining project requirements 
  * **Finalize troubleshooting and fully implement the PDF export feature by resolving the Browsershot errors** 
