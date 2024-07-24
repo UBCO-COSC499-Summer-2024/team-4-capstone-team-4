@@ -1,3 +1,9 @@
 .button-container {
     padding-left: 93%;
 }
+
+.dropdown {
+    font-size: small;
+    font-weight: normal;
+    color: black;
+}
