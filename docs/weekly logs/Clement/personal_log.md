@@ -1,3 +1,109 @@
+## Cycle: July 19th - July 24th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_19_2024-07_24_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Complete testing for the Service Role Page
+  * #2: Continue debugging and refining new features
+  * #3: Implement additional features as per project requirements
+  * #4: Perform peer testing and gather feedback
+  * #5: Apply any necessary fixes and improvements based on peer-testing feedback
+  * #6: Service Role PDF Export Design and Optimization
+  * #7: Implement Service Role Preview Route
+  * #8: Add Preview Button to Service Role 
+  * #9: Implement Dark Mode functionality
+  * #10: Implement Stay on Page Functionality after save
+  * #11: Implement Tooltips
+  * #12: Improve Validation for Service Role Pages
+  * #13: Redesign Add Service Role page
+  * #14: Troubleshoot and fix Browsershot fatal errors in PDF export functionality 
+
+### Progress Update (since 07/19/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Complete testing for the Service Role Page</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Continue debugging and refining new features</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Implement additional features as per project requirements</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Perform peer testing and gather feedback Part 1</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Apply any necessary fixes and improvements based on peer testing feedback</td>
+        <td>To Do</td>
+    </tr>
+    <tr>
+        <td>Service Role PDF Export Design and Optimization</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Service Role Preview Route</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Add Preview Button to Service Role</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Dark Mode functionality</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Stay on Page Functionality after save</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Tooltips</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Improve Validation for Service Role Pages</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Redesign Add Service Role page</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Troubleshoot and fix Browsershot fatal errors in PDF export functionality </td>
+        <td>In Progress</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle focused heavily on improving the Service Role management features. 
+A new PDF export design was implemented and optimized, along with a preview route and button for easier review. 
+Dark Mode functionality was completed, and a "stay on page" option was added after saving changes. 
+Tooltips were incorporated for better usability, and validation for Service Role pages was improved.
+The Add Service Role page received a redesign for a more streamlined experience.
+
+Testing of the Service Role page is ongoing, and peer testing will be conducted in the next cycle to gather feedback. 
+
+The biggest challenge this cycle was resolving fatal errors encountered with Browsershot while finalizing the PDF export functionality.  While a complete solution is still in progress, significant progress has been made and a resolution is close.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+ * Complete testing for the Service Role Page
+ * Conduct peer testing and gather feedback
+ * Apply any necessary fixes and improvements based on feedback
+ * Continue implementation of remaining project requirements 
+ * **Finalize troubleshooting and fully implement the PDF export feature by resolving the Browsershot errors** 
+
+---
+
 ## Cycle: July 17th - July 18th
 
 ### Timesheet
