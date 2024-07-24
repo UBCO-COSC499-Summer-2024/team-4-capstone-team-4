@@ -1,15 +1,15 @@
 <div class="relative sm:rounded-lg">
     <div class="sticky top-0 z-10 flex items-center justify-between h-20 bg-white dark:bg-gray-900">
         <div class="flex justify-between items-center w-full px-4">
-            <h1 class="text-2xl font-bold text-gray-900">{{ __('LEADERBOARD') }}</h1>
+            <h1 class="text-2xl font-bold text-gray-900">LEADERBOARD</h1>
             <div class="ml-auto flex items-center">
-                <x-leaderboard-filter />
+                <x-staff-filter />
             </div>
         </div>
     </div>
     <form wire:submit.prevent="submit">
         @csrf
-        <x-leaderboard-table>
+        <x-staff-table>
             <x-leaderboard-header />
             <tbody>
                 @if(isset($users))
@@ -39,7 +39,7 @@
                     </tr>
                 @endif
             </tbody>
-        </x-leaderboard-table>
+        </x-staff-table>
     </form>
 </div>
 

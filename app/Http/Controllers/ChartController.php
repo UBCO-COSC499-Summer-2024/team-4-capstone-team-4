@@ -44,6 +44,7 @@ class ChartController extends Controller {
         $isInstructor = false;
         $isDeptHead = false;
         $isDeptStaff = false;
+        $isAdmin =false;
 
         if ($chosenInstructor) {
             $instructorRoleId = $chosenInstructor;
@@ -62,6 +63,11 @@ class ChartController extends Controller {
 
         else {
             $dept = null;
+
+            $adminRole = $userRoles->firstWhere('role', 'admin');
+            if ($adminRole) {
+                $isAdmin = true;
+            }
 
             $deptHeadRole = $userRoles->firstWhere('role', 'dept_head');
             if ($deptHeadRole) {
@@ -156,14 +162,14 @@ class ChartController extends Controller {
                 if ($hasTarget) {
                     $chart8 = $this->instructorProgressBar($performance, $currentMonth);
                     
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
                 }
             } else {
-                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
+                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
             }
         } elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
@@ -193,29 +199,29 @@ class ChartController extends Controller {
                 $chart4 = $this->instructorProgressBar($performance, $currentMonth);
 
                 if ($chosenInstructor) {
-                    return view('performance', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance', 'name'));
+                    return view('performance', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'name'));
                 }
 
                 else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'switch'));
                 }
 
             } else {
 
                 if ($chosenInstructor) {
-                    return view('performance', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'ranking', 'performance', 'name'));
+                    return view('performance', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'name'));
                 }
 
                 else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'ranking', 'performance'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin',
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'switch'));
                 }
             }
         } else {
-            return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor'));
+            return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin'));
         }
     }
 

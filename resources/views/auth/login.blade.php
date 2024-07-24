@@ -16,7 +16,12 @@
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
             </x-form-item> --}}
-
+            {{-- @php
+            $userRoles = auth()->user()->roles; 
+            @endphp      
+            @if ($userRoles->isEmpty())
+                <li style="color:red;">No valid role assigned to your account.</li>
+            @endif --}}
             <x-validation-errors/>
 
             <x-form-item>
