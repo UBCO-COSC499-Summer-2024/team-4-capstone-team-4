@@ -60,16 +60,14 @@
                                 </tr>
                             @endif
                         @endforeach
-                        @if ($deptPerformance)
                             <tr class="font-bold bg-gray-400">
                                 <td class="border border-gray-300">Total</td>
                                 <td class="border border-gray-300">{{ $totalInstructors }}</td>
                                 <td class="border border-gray-300">{{ $totalCourses }}</td>
-                                <td class="border border-gray-300">{{ $deptPerformance->enrolled_avg }}</td>
-                                <td class="border border-gray-300">{{ $deptPerformance->dropped_avg }}</td>
-                                <td class="border border-gray-300">{{ $deptPerformance->sei_avg }}</td>
+                                <td class="border border-gray-300">{{ $deptPerformance ? $deptPerformance->enrolled_avg : '-'}}</td>
+                                <td class="border border-gray-300">{{ $deptPerformance ? $deptPerformance->dropped_avg : '-'}}</td>
+                                <td class="border border-gray-300">{{ $deptPerformance ? $deptPerformance->sei_avg : '-' }}</td>
                             </tr>
-                        @endif
                     </tbody>
                 </table>
 
@@ -110,14 +108,12 @@
                                     <td class="border border-gray-300">{{ $sei ? $sei : '-' }}</td>
                                 </tr>
                             @endforeach
-                            @if ($areaPerformance)
                                 <tr class="font-bold bg-gray-400">
                                     <td class="border border-gray-300" colspan="4">Total</td>
                                     <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</td>
                                     <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
                                     <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
                                 </tr>
-                            @endif
                         </tbody>
                     </table>
                     <br>
@@ -130,7 +126,11 @@
                 <table id="performanceTable" class="w-full bg-white border border-gray-300 text-center">
                     <thead>
                         @php
+                        if($deptPerformance){
                             $deptHours = json_decode($deptPerformance->total_hours, true);
+                        }else{
+                            $deptHours = [];
+                        }
                             $totalSvcroles = 0;
                             $totalExtraHours = 0;
                         @endphp
@@ -138,9 +138,15 @@
                             <th>Sub area</th>
                             <th>No. of Service Roles</th>
                             <th>No. of Extra Hrs</th>
-                            @foreach ($deptHours as $month => $hours)
-                                <th>{{ substr($month, 0, 3) }} Hrs</th>
-                            @endforeach
+                            @if($deptHours->isNotEmpty())
+                                @foreach ($deptHours as $month => $hours)
+                                    <th>{{ substr($month, 0, 3) }} Hrs</th>
+                                @endforeach
+                            @else
+                                @for ($i = 1; $i <= 12; $i++)
+                                    <th>{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
+                                @endfor
+                            @endif
                             <th>Total Hrs</th>
                         </tr>
                     </thead>
@@ -150,7 +156,12 @@
                                 $areaPerformance = $area->areaPerformance->where('year', $year)->first();
                                 $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                                 $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
-                                $areaHours = json_decode($areaPerformance->total_hours, true);
+                                if($areaPerformance){
+                                    $areaHours = json_decode($areaPerformance->total_hours, true);
+                                }else{
+                                    $areaHours = [];
+                                }
+                              
                             @endphp
                             @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
                                 @php
@@ -163,9 +174,15 @@
                                     <td class="border border-gray-300">{{$area->name}}</td>
                                     <td class="border border-gray-300">{{ $numSvcroles }}</td>
                                     <td class="border border-gray-300">{{ $numExtraHours }}</td>
-                                    @foreach ($areaHours as $month => $hours)
-                                        <td class="border border-gray-300">{{ $hours }}</td>
-                                    @endforeach
+                                    @if($areaHours->isNotEmpty())
+                                        @foreach ($areaHours as $month => $hours)
+                                            <td class="border border-gray-300">{{ $hours }}</td>
+                                        @endforeach
+                                    @else
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <td class="border border-gray-300">-</td>
+                                        @endfor
+                                    @endif
                                     <td class="border border-gray-300">{{ array_sum($areaHours) }}</td>
                                 </tr>
                             @endif
@@ -174,9 +191,15 @@
                             <td class="border border-gray-300">Total</td>
                             <td class="border border-gray-300">{{ $totalSvcroles }}</td>
                             <td class="border border-gray-300">{{ $totalExtraHours }}</td>
-                            @foreach ($deptHours as $month => $hours)
-                                <td class="border border-gray-300">{{ $hours }}</td>   
-                            @endforeach
+                            @if($areaHours->isNotEmpty())
+                                @foreach ($deptHours as $month => $hours)
+                                    <td class="border border-gray-300">{{ $hours }}</td>
+                                @endforeach
+                            @else
+                                @for ($i = 1; $i <= 12; $i++)
+                                    <td class="border border-gray-300">-</td>
+                                @endfor
+                            @endif
                             <td class="border border-gray-300">{{ array_sum($deptHours) }}</td>
                         </tr> 
                     </tbody>
@@ -188,7 +211,11 @@
                     @php
                         $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                         $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
-                        $areaHours = json_decode($areaPerformance->total_hours, true);
+                        if($areaPerformance){
+                            $areaHours = json_decode($areaPerformance->total_hours, true);
+                        }else{
+                            $areaHours = [];
+                        }
                     @endphp
                     @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())   
                         <h3>{{ $area->name }}</h3>
@@ -199,9 +226,15 @@
                                 <tr class="text-white bg-[#3b4779]">
                                     <th>Service Role</th>
                                     <th>Instructors</th>
-                                    @foreach ($areaHours as $month => $hours)
-                                        <th>{{ substr($month, 0, 3) }} Hrs</th>
-                                    @endforeach
+                                    @if($areaHours->isNotEmpty())
+                                        @foreach ($areaHours as $month => $hours)
+                                            <th>{{ substr($month, 0, 3) }} Hrs</th>
+                                        @endforeach
+                                    @else
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <th>{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
+                                        @endfor
+                                    @endif
                                     <th>Total Hrs</th>
                                 </tr>
                             </thead>
@@ -221,9 +254,15 @@
                                                 -
                                             @endif
                                         </td>
-                                        @foreach ($areaHours as $month => $hours)
-                                            <td class="border border-gray-300">{{ $hours }}</td>
-                                        @endforeach
+                                        @if($areaHours->isNotEmpty())
+                                            @foreach ($areaHours as $month => $hours)
+                                                <td class="border border-gray-300">{{ $hours }}</td>
+                                            @endforeach
+                                        @else
+                                            @for ($i = 1; $i <= 12; $i++)
+                                                <td class="border border-gray-300">-</td>
+                                            @endfor
+                                        @endif
                                         <td class="border border-gray-300">{{ array_sum($areaHours)}}</td>
                                     </tr>
                                 @endforeach
