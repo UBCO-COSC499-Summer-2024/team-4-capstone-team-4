@@ -272,7 +272,8 @@ class ChartController extends Controller {
                 $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
                     ->where('instructor_performance.year', $currentYear);
             })
-            ->where('areas.dept_id', $deptId);
+            ->where('areas.dept_id', $deptId)
+            ->where('course_sections.archived', false);
 
         if ($forRank) {
             $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
@@ -312,21 +313,29 @@ class ChartController extends Controller {
     private function getRank($instructorId, $currentYear, $score) {
         $deptIdsQuery = User::query();
         $deptIdsQuery->distinct()
-            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
-            ->leftJoin('service_roles', 'role_assignments.service_role_id', '=', 'service_roles.id')
-            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
-            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
-                $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
-                    ->where('extra_hours.year', $currentYear);
-            })
-            ->where('user_roles.id', $instructorId)
-            ->where(function ($query) use ($currentYear) {
-                $query->where('course_sections.year', $currentYear)
-                    ->orWhere('extra_hours.year', $currentYear);
-            });
+        ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
+        ->leftJoin('service_roles', function ($join) {
+            $join->on('role_assignments.service_role_id', '=', 'service_roles.id')
+                ->where('service_roles.archived', false); 
+        })
+        ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+        ->leftJoin('course_sections', function ($join) {
+            $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                ->where('course_sections.archived', false); 
+        })
+        ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+        ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+            $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
+                ->where('extra_hours.year', $currentYear)
+                ->where('extra_hours.archived', false); 
+        })
+        ->where('user_roles.id', $instructorId)
+        ->where(function ($query) use ($currentYear) {
+            $query->where('course_sections.year', $currentYear)
+                ->orWhere('extra_hours.year', $currentYear);
+        });
+
 
         $deptIdsQuery->select('areas.dept_id', 'users.firstname', 'users.lastname');
 
@@ -363,7 +372,7 @@ class ChartController extends Controller {
         $areaRolesTotal = [];
 
         foreach ($areas as $area) {
-            $roles = ServiceRole::where('area_id', $area->id)->where('year', $currentYear)->get();
+            $roles = ServiceRole::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
 
             if ($roles) {
                 $areaRolesTotal[] = [$area->name, $roles->count()];
@@ -378,7 +387,7 @@ class ChartController extends Controller {
         $areaExtrasTotal = [];
 
         foreach ($areas as $area) {
-            $extras = ExtraHour::where('area_id', $area->id)->where('year', $currentYear)->get();
+            $extras = ExtraHour::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
 
             if ($extras) {
                 $areaExtrasTotal[] = [$area->name, $extras->count()];
@@ -393,7 +402,7 @@ class ChartController extends Controller {
         $areaCoursesTotal = [];
 
         foreach ($areas as $area) {
-            $courses = CourseSection::where('area_id', $area->id)->where('year', $currentYear)->get();
+            $courses = CourseSection::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
 
             if ($courses) {
                 $areaCoursesTotal[] = [$area->name, $courses->count()];
@@ -427,7 +436,7 @@ class ChartController extends Controller {
         $assignedRoles = RoleAssignment::where('instructor_id', $instructorRoleId)->get();
 
         foreach ($assignedRoles as $assignedRole) {
-            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
+            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->where('archived', false)->first();
 
             if ($role) {
                 $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
@@ -440,7 +449,7 @@ class ChartController extends Controller {
         $extraHours = [];
         $extraHoursTotal = 0;
 
-        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
+        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->where('archived', false)->get();
 
         foreach ($allExtraHours as $extraHrs) {
             if ($extraHrs) {
@@ -455,7 +464,7 @@ class ChartController extends Controller {
         $teaches = Teach::where('instructor_id', $instructorRoleId)->get();
 
         foreach ($teaches as $teaching) {
-            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->first();
+            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->where('archived', false)->first();
             if ($course) {
                 $courseSections[] = $course->prefix . " " . $course->number;
             }
