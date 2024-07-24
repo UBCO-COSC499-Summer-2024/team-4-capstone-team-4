@@ -138,3 +138,15 @@ input[type="file"] {
 }
 
 }
+
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.drag-drop-area p {
+  margin: 0;
+}
