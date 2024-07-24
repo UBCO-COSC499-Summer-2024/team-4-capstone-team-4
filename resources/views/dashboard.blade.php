@@ -1,3 +1,5 @@
+@vite(['resources/css/performance.css'])
+
 @php
 $userRoles = auth()->user()->roles; 
 @endphp
@@ -19,9 +21,14 @@ $userRoles = auth()->user()->roles;
 @else
     <x-app-layout>
         <div class="content">
-            <h1>{{ __('Dashboard') }}</h1>
             @if (($isDeptHead || $isDeptStaff) && $isInstructor)
                 <!-- Department View with Button -->
+                <h1>{{ __('Department Dashboard') }}</h1>
+                <div class="button-container">
+                    <x-dashboard-export-button :id="$deptPerformance->dept_id">
+                        View Report
+                    </x-dashboard-export-button>
+                </div>
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount"
                     :deptPerformance="$deptPerformance" :leaderboard="$leaderboard" />
@@ -31,6 +38,12 @@ $userRoles = auth()->user()->roles;
                 </section>
             @elseif ($isDeptHead || $isDeptStaff)
                 <!-- Department View -->
+                <h1>{{ __('Department Dashboard') }}</h1>
+                <div class="button-container">
+                    <x-dashboard-export-button :id="$deptPerformance->dept_id">
+                        View Report
+                    </x-dashboard-export-button>
+                </div>
                 <section class="dash-top">
                     <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount" 
                     :deptPerformance="$deptPerformance" :leaderboard="$leaderboard" />
@@ -40,6 +53,12 @@ $userRoles = auth()->user()->roles;
                 </section>
             @elseif ($isInstructor)
                 <!-- Instructor View -->
+                <h1>{{ __('My Dashboard') }}</h1>
+                <div class="button-container">
+                    <x-performance-export-button :id="$performance->instructor_id">
+                        View Report
+                    </x-performance-export-button>
+                </div>
                 @if ($hasTarget)
                     <section class="dash-top">
                         <x-instructor-target :chart1="$chart1" :chart4="$chart4" :currentMonth="$currentMonth" :ranking="$ranking" :performance="$performance" />
