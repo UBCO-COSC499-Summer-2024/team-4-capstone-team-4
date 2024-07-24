@@ -67,7 +67,7 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
-    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file');
+    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file.show');
     Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
     Route::get('/upload-file/form', function () {
         return view('upload-file-form');
@@ -107,6 +107,9 @@ Route::middleware([
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
     })->name('instructor-report');
+    Route::get('/preview', function () {
+        return view('preview');
+    })->name('preview');
 });
 
 Route::middleware([
