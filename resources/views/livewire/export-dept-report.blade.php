@@ -42,13 +42,11 @@
                                 $areaPerformance = $area->areaPerformance->where('year', $year)->first();
                                 $courses = \App\Models\Area::getCourseSections($area->id, $year);
                                 $instructors = \App\Models\Area::getInstructors($area->id, $year);
-                            @endphp
-                            @if($courses->isNotEmpty())
-                                @php
-                                    $numInstructors = $instructors ? count($instructors) : 0;
-                                    $numCourses = $courses ? count($courses) : 0;
-                                    $totalInstructors += $numInstructors;
-                                    $totalCourses += $numCourses;
+                          
+                                $numInstructors = $instructors ? count($instructors) : 0;
+                                $numCourses = $courses ? count($courses) : 0;
+                                $totalInstructors += $numInstructors;
+                                $totalCourses += $numCourses;
                                 @endphp
                                 <tr>
                                     <td class="border border-gray-300">{{$area->name}}</td>
@@ -58,7 +56,6 @@
                                     <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
                                     <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
                                 </tr>
-                            @endif
                         @endforeach
                             <tr class="font-bold bg-gray-400">
                                 <td class="border border-gray-300">Total</td>
@@ -74,48 +71,52 @@
                 <br>
 
                 @foreach($areas as $area)
-                    <h3>{{$area->name}}</h3>
-                    <table class="areaCourseTable w-full bg-white border border-gray-300 text-center">
-                        <thead>
-                            <tr class="text-white bg-[#3b4779]">
-                                <th>Course Section</th>
-                                <th>Term</th>
-                                <th>Year</th>
-                                <th>Instructor</th>
-                                <th>Enrolled (%)</th>
-                                <th>Dropped (%)</th>
-                                <th>SEI Average (IM)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $courses = \App\Models\Area::getCourseSections($area->id, $year);
-                                $areaPerformance = $area->areaPerformance->where('year', $year)->first();
-                            @endphp
-                            @foreach ($courses as $course)
-                                @php
-                                    $sei = \App\Models\SeiData::calculateSEIAverage($course->id);
-                                    $capacity = $course->capacity;
-                                    $instructor = \App\Models\UserRole::find($course->teaches->instructor_id);
-                                @endphp
-                                <tr>
-                                    <td class="border border-gray-300">{{ $course->prefix }}{{ $course->number }}  {{ $course->section }}</td>
-                                    <td class="border border-gray-300">Term {{ $course->term }}</td>
-                                    <td class="border border-gray-300">{{ $course->year }}</td>
-                                    <td class="border border-gray-300">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}</td>
-                                    <td class="border border-gray-300">{{ round($course->enrolled * 100 / $capacity, 1) }}</td>
-                                    <td class="border border-gray-300">{{ round($course->dropped * 100 / $capacity, 1) }}</td>
-                                    <td class="border border-gray-300">{{ $sei ? $sei : '-' }}</td>
+                    @php
+                        $courses = \App\Models\Area::getCourseSections($area->id, $year);
+                        $areaPerformance = $area->areaPerformance->where('year', $year)->first();
+                    @endphp
+                    @if($courses->isNotEmpty())
+                        <h3> {{$araea->name}} </h3>
+                        <table class="areaCourseTable w-full bg-white border border-gray-300 text-center">
+                            <thead>
+                                <tr class="text-white bg-[#3b4779]">
+                                    <th>Course Section</th>
+                                    <th>Term</th>
+                                    <th>Year</th>
+                                    <th>Instructor</th>
+                                    <th>Enrolled (%)</th>
+                                    <th>Dropped (%)</th>
+                                    <th>SEI Average (IM)</th>
                                 </tr>
-                            @endforeach
-                                <tr class="font-bold bg-gray-400">
-                                    <td class="border border-gray-300" colspan="4">Total</td>
-                                    <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</td>
-                                    <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
-                                    <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
-                                </tr>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($courses as $course)
+                                    @php
+                                        $sei = \App\Models\SeiData::calculateSEIAverage($course->id);
+                                        $capacity = $course->capacity;
+                                        $instructor = \App\Models\UserRole::find($course->teaches->instructor_id);
+                                    @endphp
+                                    <tr>
+                                        <td class="border border-gray-300">{{ $course->prefix }}{{ $course->number }}  {{ $course->section }}</td>
+                                        <td class="border border-gray-300">Term {{ $course->term }}</td>
+                                        <td class="border border-gray-300">{{ $course->year }}</td>
+                                        <td class="border border-gray-300">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}</td>
+                                        <td class="border border-gray-300">{{ round($course->enrolled * 100 / $capacity, 1) }}</td>
+                                        <td class="border border-gray-300">{{ round($course->dropped * 100 / $capacity, 1) }}</td>
+                                        <td class="border border-gray-300">{{ $sei ? $sei : '-' }}</td>
+                                    </tr>
+                                @endforeach
+                                    <tr class="font-bold bg-gray-400">
+                                        <td class="border border-gray-300" colspan="4">Total</td>
+                                        <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</td>
+                                        <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
+                                        <td class="border border-gray-300">{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    @else
+                        No courses found.
+                    @endif
                     <br>
                 @endforeach
 
@@ -162,30 +163,26 @@
                                     $areaHours = [];
                                 }
                               
+                                $numSvcroles = $svcroles ? count($svcroles) : 0;
+                                $numExtraHours = $extraHours ? count($extraHours) : 0;
+                                $totalSvcroles += $numSvcroles;
+                                $totalExtraHours += $numExtraHours;
                             @endphp
-                            @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
-                                @php
-                                    $numSvcroles = $svcroles ? count($svcroles) : 0;
-                                    $numExtraHours = $extraHours ? count($extraHours) : 0;
-                                    $totalSvcroles += $numSvcroles;
-                                    $totalExtraHours += $numExtraHours;
-                                @endphp
-                                <tr>
-                                    <td class="border border-gray-300">{{$area->name}}</td>
-                                    <td class="border border-gray-300">{{ $numSvcroles }}</td>
-                                    <td class="border border-gray-300">{{ $numExtraHours }}</td>
-                                    @if(!empty($areaHours))
-                                        @foreach ($areaHours as $month => $hours)
-                                            <td class="border border-gray-300">{{ $hours }}</td>
-                                        @endforeach
-                                    @else
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <td class="border border-gray-300">-</td>
-                                        @endfor
-                                    @endif
-                                    <td class="border border-gray-300">{{ array_sum($areaHours) }}</td>
-                                </tr>
-                            @endif
+                            <tr>
+                                <td class="border border-gray-300">{{$area->name}}</td>
+                                <td class="border border-gray-300">{{ $numSvcroles }}</td>
+                                <td class="border border-gray-300">{{ $numExtraHours }}</td>
+                                @if(!empty($areaHours))
+                                    @foreach ($areaHours as $month => $hours)
+                                        <td class="border border-gray-300">{{ $hours }}</td>
+                                    @endforeach
+                                @else
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <td class="border border-gray-300">-</td>
+                                    @endfor
+                                @endif
+                                <td class="border border-gray-300">{{ array_sum($areaHours) }}</td>
+                            </tr>
                         @endforeach
                         <tr class="border-b border-white font-bold bg-gray-400">
                             <td class="border border-gray-300">Total</td>
