@@ -138,7 +138,7 @@
                             <th>Sub area</th>
                             <th>No. of Service Roles</th>
                             <th>No. of Extra Hrs</th>
-                            @if($deptHours->isNotEmpty())
+                            @if(!empty($deptHours))
                                 @foreach ($deptHours as $month => $hours)
                                     <th>{{ substr($month, 0, 3) }} Hrs</th>
                                 @endforeach
@@ -174,7 +174,7 @@
                                     <td class="border border-gray-300">{{$area->name}}</td>
                                     <td class="border border-gray-300">{{ $numSvcroles }}</td>
                                     <td class="border border-gray-300">{{ $numExtraHours }}</td>
-                                    @if($areaHours->isNotEmpty())
+                                    @if(!empty($areaHours))
                                         @foreach ($areaHours as $month => $hours)
                                             <td class="border border-gray-300">{{ $hours }}</td>
                                         @endforeach
@@ -191,7 +191,7 @@
                             <td class="border border-gray-300">Total</td>
                             <td class="border border-gray-300">{{ $totalSvcroles }}</td>
                             <td class="border border-gray-300">{{ $totalExtraHours }}</td>
-                            @if($areaHours->isNotEmpty())
+                            @if(!empty($areaHours))
                                 @foreach ($deptHours as $month => $hours)
                                     <td class="border border-gray-300">{{ $hours }}</td>
                                 @endforeach
@@ -226,7 +226,7 @@
                                 <tr class="text-white bg-[#3b4779]">
                                     <th>Service Role</th>
                                     <th>Instructors</th>
-                                    @if($areaHours->isNotEmpty())
+                                    @if(!empty($areaHours))
                                         @foreach ($areaHours as $month => $hours)
                                             <th>{{ substr($month, 0, 3) }} Hrs</th>
                                         @endforeach
@@ -254,7 +254,7 @@
                                                 -
                                             @endif
                                         </td>
-                                        @if($areaHours->isNotEmpty())
+                                        @if(!empty($areaHours))
                                             @foreach ($areaHours as $month => $hours)
                                                 <td class="border border-gray-300">{{ $hours }}</td>
                                             @endforeach
