@@ -6,6 +6,11 @@
             <!-- Department View with Switch -->
             <h1 class="nos content title">{{ __('Department Dashboard') }}</h1>
             <div class="button-container">
+                <select id="yearDropdown" name="yearDropdown" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    @foreach ($years as $year)
+                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                </select>
                 <x-dashboard-button href="{{route('dept-report')}}">
                     View Report
                 </x-dashboard-button>
@@ -24,6 +29,11 @@
             <!-- Department View -->
             <h1>{{ __('Department Dashboard') }}</h1>
             <div class="button-container">
+                <select id="yearDropdown" name="yearDropdown" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    @foreach ($deptYears as $year)
+                        <option value="{{ $year }}" {{ $year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                </select>
                 <x-dashboard-button href="{{route('dept-report')}}">
                     View Report
                 </x-dashboard-button>
@@ -39,6 +49,11 @@
             <!-- Instructor View -->
             <h1>{{ __('My Dashboard') }}</h1>
             <div class="button-container">
+                <select id="yearDropdown" name="yearDropdown" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    @foreach ($years as $year)
+                        <option value="{{ $year }}" {{ $year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                </select>
                 <x-dashboard-button href="{{ route('instructor-report', ['instructor_id' => $performance->instructor_id]) }}">
                     View Report
                 </x-dashboard-button>
@@ -64,5 +79,14 @@
         @endif
     </div>
 </x-app-layout>
+<!-- Handle year selection -->
+<script>
+    document.getElementById('yearDropdown').addEventListener('change', function() {
+        var selectedYear = this.value;
+        var params = new URLSearchParams(window.location.search);
+        params.set('year', selectedYear);
+        window.location.search = params.toString();
+    });
+</script>
 
 
