@@ -143,44 +143,11 @@ class ChartController extends Controller {
             $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "DeptExtraPieCHart");
             $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "DeptCoursePieChart");
 
-            if ($isInstructor) {
-                $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
-                    ->where('year', $currentYear)
-                    ->first();
-
-                if ($performance === null) {
-                    $this->createPerformance($instructorRoleId, "instructor", $currentYear);
-                    $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
-                    ->where('year', $currentYear)
-                    ->first();
-                }
-
-                $hasTarget = false;
-                if ($performance->target_hours !== null) {
-                    $hasTarget = true;
-                }
-
-                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
-                $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
-                $years = $this->getPerformanceYears($instructorRoleId, false);
-
-                $chart5 = $this->instructorLineChart($performance, $hasTarget);
-                $chart6 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
-                $chart7 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
-
-                if ($hasTarget) {
-                    $chart8 = $this->instructorProgressBar($performance, $currentMonth);
-                    
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
-                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'years', 'deptYears', 'currentYear'));
-                } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
-                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'years', 'deptYears', 'currentYear'));
-                }
-            } else {
-                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'deptYears', 'currentYear'));
-            }
-        } elseif ($isInstructor) {
+            return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'deptYears', 'currentYear'));
+            
+        } 
+        
+        elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
                 ->where('year', $currentYear)
                 ->first();

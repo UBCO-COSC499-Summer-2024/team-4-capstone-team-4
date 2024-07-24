@@ -3,7 +3,8 @@
 }
 
 .dropdown {
-    font-size: small;
+    font-size: 15px;
     font-weight: normal;
     color: black;
+    text-transform: none;
 }
