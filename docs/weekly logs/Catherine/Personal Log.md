@@ -1,3 +1,49 @@
+## Wednesday (7/19 - 7/24)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_19_2024-07_24_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Select year and month for staff list
+  * #2: Fix select all bug
+  * #3: Email validation bug - settings
+  * #4: Sidebar-remove notification, update titles
+  * #5: Add report button to staff list
+  * #6: Add annual specification to target hours modal
+  * #7: Hover for links 
+  * #8: Button visibility for staff page
+  * #9: register/login- show errors under each field
+  * #10: Pagination for staff page
+  * #11: Refactor edit mode
+  * #12: Github actions 
+
+### Progress Update (since 7/19/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Fix select all bug | Complete |
+| Email validation bug - settings | Complete|
+| Sidebar-remove notification, update titles | Complete |
+| Add annual specification to target hours modal | Complete |
+| Add report button to staff list | Complete |
+| Hover for links | Complete |
+| Button visibility for staff page | Complete|
+| register/login - show errors under each field | Complete|
+| Select year and month for staff list | Complete |
+| Pagination for staff page | In progress | 
+| Refactor edit mode | Complete  |
+| Github actions | In progress |
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Many of the tasks I worked one was from the feedback we got from the peer-testing event. I fixed the bugs found on the staff page and add a report button to the staff table as suggested and increased visibility  of buttons and links. I completed the select year and month function and refactored edit mode to reduce duplications. I am working on pagination for the staff page. I also started setting up Github Actions and got it to work so I just need to set it up in the important brances.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Github actions set up
+  * Complete pagination
+  * Start on help pages
+  * Refactor report layouts
+
 ## Friday (7/17 - 7/19)
 
 ### Timesheet
