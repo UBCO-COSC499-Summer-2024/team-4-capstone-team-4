@@ -1,3 +1,73 @@
+## Wednesday (7/19 - 7/24)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_19_2024-07_24_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Extra Form Functionality
+  * #2: Upload File
+  * #3: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Extra Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import File - UI / #339
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Import File - Select Multiple Files / #340
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Import File - Drag and Drop / #187
+        </td>
+        <!-- Status -->
+        <td>Todo
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I added some extra feature to the manual import page (adding and deleting multple rows). I just have to figure out a UI for those features. I also completed a big chunk of the file upload functionality. It can read from the files and populate a form, I just need to work on validating the data to prevent errors and then sending that data to the db. I will then work on UI and testing to complete the import feature completely.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Upload file UI
+  * Upload file functionality
+  * Populate form from pulled data
+  * Submit populated form to db
+  * Testing
+
 ## Friday (7/17 - 7/19)
 
 ### Timesheet
