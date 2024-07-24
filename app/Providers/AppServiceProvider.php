@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         Blade::component('toolbar', Toolbar::class);
+        Paginator::useTailwind();
     }
 }
