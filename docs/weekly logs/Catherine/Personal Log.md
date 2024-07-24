@@ -17,6 +17,7 @@ Clockify report
   * #9: register/login- show errors under each field
   * #10: Pagination for staff page
   * #11: Refactor edit mode
+  * #12: Github actions 
 
 ### Progress Update (since 7/19/2024) 
 |TASK/ISSUE |STATUS|
@@ -32,12 +33,13 @@ Clockify report
 | Select year and month for staff list | Complete |
 | Pagination for staff page | In progress | 
 | Refactor edit mode | Complete  |
-
+| Github actions | In progress |
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-Many of the tasks I worked one was from the feedback we got from the peer-testing event. I fixed the bugs found on the staff page and add a report button to the staff table as suggested and increased visibility  of buttons and links. I completed the select year and month function and refactored edit mode to reduce duplications. I am working on pagination for the staff page. 
+Many of the tasks I worked one was from the feedback we got from the peer-testing event. I fixed the bugs found on the staff page and add a report button to the staff table as suggested and increased visibility  of buttons and links. I completed the select year and month function and refactored edit mode to reduce duplications. I am working on pagination for the staff page. I also started setting up Github Actions and got it to work so I just need to set it up in the important brances.
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Github actions set up
   * Complete pagination
   * Start on help pages
   * Refactor report layouts
