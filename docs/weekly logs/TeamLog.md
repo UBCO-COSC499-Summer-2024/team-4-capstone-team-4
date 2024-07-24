@@ -25,7 +25,8 @@
 
 ## Tasks for Next Cycle:
 
-![image of tasks](./tasks/todo_july19_july23.png)
+![image of tasks](./tasks/todo1_july19_july23.png)
+![image of tasks](./tasks/todo2_july19_july23.png)
 ![image of tasks](./tasks/inprogress_july19_july23.png)
 
 ## Burn-up Chart (Velocity):
