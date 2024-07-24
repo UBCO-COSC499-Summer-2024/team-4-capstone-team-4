@@ -28,6 +28,22 @@ class ApplyUserSettings
                 Config::set('app.theme', $settings->theme);
                 Config::set('app.timezone', $settings->timezone);
             }
+        } else {
+            $locale = Session::get('locale') ?? Config::get('app.locale');
+            $theme = Session::get('theme') ?? Config::get('app.theme');
+            $timezone = Session::get('timezone') ?? Config::get('app.timezone');
+
+            if ($locale) {
+                App::setLocale($locale);
+            }
+
+            if ($theme) {
+                Config::set('app.theme', $theme);
+            }
+
+            if ($timezone) {
+                Config::set('app.timezone', $timezone);
+            }
         }
 
         return $next($request);

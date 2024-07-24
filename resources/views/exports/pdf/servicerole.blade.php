@@ -273,7 +273,7 @@
     </head>
     <body class="font-sans antialiased">
         @php
-            $serviceRoleId = request()->route('id') ?? 4;
+            $serviceRoleId = $serviceRoles?->first()->id ?? request()->route('id');
             $serviceRole = \App\Models\ServiceRole::with('area', 'instructors', 'extraHours')->find($serviceRoleId);
         @endphp
         <x-header />
