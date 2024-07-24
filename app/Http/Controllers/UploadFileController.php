@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadFileController extends Controller {
 
+    public function showUploadFile()
+    {
+        return view('upload-file');
+    }
+
     private function readCSV($filePath) {
         $csvData = [];
         $result = '';
@@ -116,7 +121,10 @@ class UploadFileController extends Controller {
         // dd($trimCSV);
     
 
-        dd($finalCSVs);
+        // dd($finalCSVs);
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file');
 
         session()->flash('message', 'File uploaded successfully!');
         // session()->put('csvData', $csvData);

@@ -17,6 +17,10 @@
     <button type="submit">Submit</button>
 </form>
 
+@if (session('finalCSVs'))
+<livewire:upload-file-form :finalCSVs="session('finalCSVs')" />
+@endif
+
 {{-- @foreach ($csvData as $key => $value)
     <div>{{$key}}</div>
     <div>{{$value}}</div>
@@ -26,8 +30,3 @@
     <div>{{$key}} : {{$value}}</div>
 @endforeach --}}
 
-{{-- @foreach ($finalCSVs as $finalCSV)
-    @foreach ($finalCSV as $key => $value)
-    <div>{{$key}}{{$value}}</div>
-    @endforeach
-@endforeach --}}

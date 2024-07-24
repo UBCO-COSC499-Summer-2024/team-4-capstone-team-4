@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Controllers\UploadFileController;
 use App\Http\Middleware\CheckRole;
 
 // Auth routes
@@ -66,6 +67,12 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file');
+    Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
+    Route::get('/upload-file/form', function () {
+        return view('upload-file-form');
+    })->name('upload-file-form');
+    // Route::post('/upload-file-form', [UploadFileController::class, 'upload'])->name('upload.file.form');
     Route::get('/requests', function () {
         return view('svcrole.requests');
     })->name('service.requests');
