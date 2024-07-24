@@ -22,7 +22,6 @@ class StaffList extends Component
     public $hours;
     public $staffCheckboxes = [];
     public $selectAll = false;
-    public $currentUsers;
     public $selectedYear;
     public $selectedMonth;
     public $showModal = false;
@@ -30,6 +29,8 @@ class StaffList extends Component
 
     public $editMode = false;
     public $pagination;
+    public $selectedDepts = [];
+    public $selectedRoles = [];
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
@@ -46,15 +47,21 @@ class StaffList extends Component
     {
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
+        $depts = $this->selectedDepts;
+        $roles = $this->selectedRoles;
+
+        $usersQuery = User::query();
 
         $user = Auth::user();
-        $dept_id = UserRole::find($user->id)->department_id;
-      
-        $usersQuery = User::query();
-        //find all users that are instructors in the department
-        $usersQuery->whereHas('roles', function ($queryBuilder) {
-            $queryBuilder->where('role', 'instructor');
-        });
+        $dept_id = null;
+        if($user->hasRoles(['dept_head', 'dept_staff'])){
+            $dept_id = UserRole::find($user->id)->department_id;
+             //find all users that are instructors in the department
+            $usersQuery->whereHas('roles', function ($queryBuilder) {
+                $queryBuilder->where('role', 'instructor');
+            });
+        }
+
         //apply search query if it is not empty
         if(!empty($query)){
             $usersQuery->where(function ($queryBuilder) use ($query) {
@@ -70,23 +77,49 @@ class StaffList extends Component
                 $queryBuilder->whereIn('name', $areas);
             });
         }
+        //filter by roles if set
+        if(!empty($roles)){
+
+        }
+
+        //filter by roles if set
+        if(!empty($depts)){
+
+        }
+
         //join all the tables
-        $currentYear = $this->selectedYear;
-        $usersQuery = $usersQuery->distinct()
-        ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
-        ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-        ->leftJoin('course_sections', function($join) use ($currentYear) {
-            $join->on('teaches.course_section_id', '=', 'course_sections.id')
-                ->where('course_sections.year', '=', $currentYear);
-        })
-        ->orWhereNull('course_sections.id')
-        ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
-        ->where('areas.dept_id', $dept_id);
+        if($user->hasRole('admin')){
+            $usersQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->join('departments', 'departments.id', '=', 'user_roles.department_id');
+        }else{
+            $currentYear = $this->selectedYear;
+            $usersQuery = $usersQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', function($join) use ($currentYear) {
+                $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                    ->where('course_sections.year', '=', $currentYear);
+            })
+            ->orWhereNull('course_sections.id')
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
+            ->where('areas.dept_id', $dept_id);
+        }
 
         // Sort according to sort fields
         $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
+            case 'dept':
+                $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                ->groupBy('users.id', 'departments.name')
+                ->orderBy('dept_name', $this->sortDirection);
+                break;
+            case 'role':
+                $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                ->groupBy('users.id', 'departments.name')
+                ->orderBy('roles_names', $this->sortDirection);
+                break;
             case 'area':
                 $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
                 ->groupBy('users.id', 'user_roles.id')          
@@ -100,14 +133,17 @@ class StaffList extends Component
             case 'target_hours':
                 $usersQuery->select('users.*', 'user_roles.id as instructor_id','instructor_performance.target_hours')
                             ->orderBy('instructor_performance.target_hours', $this->sortDirection);
-                break;
-            case 'score' :
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id', 'instructor_performance.score')
-                            ->orderBy('instructor_performance.score', $this->sortDirection);
-                break;                
-            default: // by firstname
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id')
-                           ->orderBy('firstname', $this->sortDirection);
+                break; 
+            default: 
+                if ($user->hasRole('admin')) {
+                    $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                                ->groupBy('users.id', 'departments.name')
+                                ->orderBy('firstname', $this->sortDirection);
+                } else {
+                    $usersQuery->select('users.*', 'user_roles.id as instructor_id')
+                                ->orderBy('firstname', $this->sortDirection);
+                }
+                break;          
         }
 
         switch ($this->pagination) {
@@ -127,9 +163,16 @@ class StaffList extends Component
                 $users = $usersQuery->paginate(10);
                 break;
         }
-        //$this->currentUsers = $users;
+        
         //dd($users);
-        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth, 'editMode'=>$this->editMode, 'pagination' => $this->pagination]);
+        return view('livewire.staff-list', [
+            'users'=> $users, 
+            'showModal'=> $this->showModal, 
+            'selectedYear'=>$this->selectedYear, 
+            'selectedMonth'=>$this->selectedMonth, 
+            'editMode'=>$this->editMode, 
+            'pagination' => $this->pagination
+        ]);
     }
 
     public function sort($field){

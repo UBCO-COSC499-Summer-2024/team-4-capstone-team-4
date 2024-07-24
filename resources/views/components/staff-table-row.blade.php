@@ -1,3 +1,43 @@
+@php
+    $admin = false;
+    $user = Auth::user();
+    if($user->hasRole('admin')){
+        $admin = true;
+    }
+@endphp
+
+@if($admin)
+<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <td class="w-3 px-6 py-4">
+        <div class="flex items-center justify-center h-full">
+            <x-checkbox wire:model="staffCheckboxes" name="staff-checkboxes[]" value="{{ $email }}" class="staff-checkbox"/>
+        </div>
+    </td>
+    <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+        <div class="ps-3 min-w-0 flex-auto">
+            <div class="block hover:underline">
+                <p class="text-lg font-semibold leading-6 text-gray-900 hover:text-[#3b4779] transform hover:scale-101 transition duration-300">{{ $fullname }}</p>
+            </div>
+            <div class="block mt-1 truncate text-base leading-5 text-gray-500 hover:text-[#3b4779] ">
+                {{ $email }}
+            </div>
+        </div>
+    </td>
+    <td class="px-6 py-4">
+        <div class="flex items-center justify-center h-full">{{ $dept }}</div>
+    </td> 
+    <td class="px-6 py-4">
+        <div class="flex items-center justify-center h-full">{{ $roles }}</div>
+    </td>    
+    <td class="px-6 py-4">
+        <div class="flex items-center justify-center h-full">
+            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Edit">description</span></a>
+            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Delete">description</span></a>
+            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Send Reset Link">description</span></a>
+        </div>
+    </td>
+</tr>
+@else
 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
     <td class="w-3 px-6 py-4">
         <div class="flex items-center justify-center h-full">
@@ -48,3 +88,4 @@
         </div>
     </td>
 </tr>
+@endif

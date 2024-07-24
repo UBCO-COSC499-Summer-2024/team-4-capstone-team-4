@@ -1,3 +1,11 @@
+@php
+    $admin = false;
+    $user = Auth::user();
+    if($user->hasRole('admin')){
+        $admin = true;
+    }
+@endphp
+
 <div class="relative sm:rounded-lg">
     <div class="px-2 sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
         <x-staff-search />
@@ -12,13 +20,17 @@
                     <option value="all">All</option>
                 </select>
             </div>
-            @if($editMode)
+            @if($admin)
                 <x-staff-filter />
-                <x-staff-button-green wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button-green>
-                <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
             @else
-                <x-staff-filter />
-                <x-staff-dropdown :selectedYear="$selectedYear" :selectedMonth="$selectedMonth"/>
+                @if($editMode)
+                    <x-staff-filter />
+                    <x-staff-button-green wire:click="save" id="staff-save" name="staff-save">Save</x-staff-button-green>
+                    <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
+                @else
+                    <x-staff-filter />
+                    <x-staff-dropdown :selectedYear="$selectedYear" :selectedMonth="$selectedMonth"/>
+                @endif
             @endif
         </div>
     </div>
@@ -49,7 +61,15 @@
             <tbody>
                 @if(isset($users))
                     @foreach ($users as $user)
-                        @php
+                        @if($admin)
+                            <x-staff-table-row
+                            fullname="{{ $user->firstname }} {{ $user->lastname }}"
+                            email="{{ $user->email }}"
+                            dept="{{ $user->dept_name }}"
+                            roles="{{ $user->roles_names }}"
+                            />
+                        @else
+                            @php
                             $area_names = [];
                             $instructor = App\Models\UserRole::find($user->instructor_id);
                             $performance = App\Models\InstructorPerformance::where('instructor_id', $user->instructor_id)
@@ -79,18 +99,19 @@
                                     }
                                 }
                             }
-                        @endphp
+                            @endphp
 
-                        <x-staff-table-row
-                            fullname="{{ $user->firstname }} {{ $user->lastname }}"
-                            email="{{ $user->email }}"
-                            subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}"
-                            completedHours="{{ $currentMonthHours ?? '-' }}"
-                            targetHours="{{ $performance ? ($performance->target_hours) ?? '-' : '-' }}"
-                            src="{{ $user->profile_photo_url }}"
-                            instructorId="{{ $user->instructor_id }}"
-                            editMode="{{ $editMode }}"
-                        />
+                            <x-staff-table-row
+                                fullname="{{ $user->firstname }} {{ $user->lastname }}"
+                                email="{{ $user->email }}"
+                                subarea="{{ empty($area_names) ? '-' : implode(', ', $area_names) }}"
+                                completedHours="{{ $currentMonthHours ?? '-' }}"
+                                targetHours="{{ $performance ? ($performance->target_hours) ?? '-' : '-' }}"
+                                src="{{ $user->profile_photo_url }}"
+                                instructorId="{{ $user->instructor_id }}"
+                                editMode="{{ $editMode }}"
+                            />
+                        @endif
                     @endforeach
                 @else
                     <tr>
