@@ -13,6 +13,7 @@ Clockify report
  * #4: Identify Issues from Test-A-Thon
  * #5: Distribute Test-A-Thon Issues
  * #6: Add Buttons to Dashboard
+ * #7: Add Profile to Dashboard
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -23,10 +24,11 @@ Clockify report
 | Update Chart Controller   | Completed   |
 | Performance Page Routing  | Completed   |
 | Performance Front End     | Completed   |
+| Dashboard Profile         | In Progress |
 
 
 ### Cycle Goal Review 
-Identified and distributed issues to fix post test-a-thon during group meeting on Friday. Added routing from the staff page to the performance page and added handling for these different routes to the chart controller. Created first draft of the performance page frontend for individual staff. Began adjusting routes and Chart Controller for dashbard buttons.
+Identified and distributed issues to fix post test-a-thon during group meeting on Friday. Added routing from the staff page to the performance page and added handling for these different routes to the chart controller. Created first draft of the performance page frontend for individual staff. Began adjusting routes and Chart Controller for dashbard buttons. Added report button to Dashboard, but ran into some issues with styling so this is still in progress. Added a container for the staff profile to the Dashboard.
 
 ### Next Cycle Goals
  * Add Filtering, Links, Color Changes and Role-Switching to Dashboard
