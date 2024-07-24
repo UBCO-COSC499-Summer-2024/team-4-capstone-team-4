@@ -104,7 +104,7 @@
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" class="import-form-save-button">Save</button>
+                    <button type="submit" class="import-form-save-button">Upload</button>
                 </div>
            
         </form>
