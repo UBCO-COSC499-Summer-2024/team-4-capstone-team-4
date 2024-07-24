@@ -17,7 +17,8 @@
 
 ## Associated Tasks from Project Board:
 
-![image of tasks](./tasks/todo_july19_july23.png)
+![image of tasks](./tasks/todo1_july19_july23.png)
+![image of tasks](./tasks/todo2_july19_july23.png)
 ![image of tasks](./tasks/inprogress_july19_july23.png)
 ![image of tasks](./tasks/inreview_july19_july23.png)
 ![image of tasks](./tasks/done_july19_july23.png)
