@@ -10,6 +10,7 @@ use App\Http\Controllers\CourseDetailsController;
 use App\Http\Controllers\ServiceRoleController;
 use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Middleware\CheckRole;
+use App\Models\ServiceRole;
 
 // Auth routes
 
@@ -104,8 +105,14 @@ Route::middleware([
     Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
     Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
     // test route for exports.pdf.servicerole
-    Route::get('/manage/{id}/preview', function () {
-        return view('exports.pdf.servicerole');
+    Route::get('/manage/{id}/preview', function ($id) {
+        $serviceRole = ServiceRole::find($id ?? 1)->load('area', 'instructors', 'extraHours');
+        if (!$serviceRole) {
+            abort(404);
+        }
+        return view('exports.pdf.servicerole', [
+            'serviceRole' => $serviceRole
+        ]);
     })->name('exports.pdf.preview');
 });
 

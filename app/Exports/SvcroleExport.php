@@ -41,11 +41,13 @@ class SvcroleExport implements FromCollection {
             //     'isRemoteEnabled' => true,
             //     'isJavascriptEnabled' => true
             // ])
-            $pdf = pdf()->view('exports.pdf.servicerole', ['serviceRoles' => $this->serviceRoles, 'id' => $this->serviceRoles->first()->id])
+            $serviceRole = ServiceRole::with('area', 'instructors', 'extraHours')->find($this->serviceRoles->first()->id);
+            $pdf = pdf()->view('exports.pdf.servicerole', ['serviceRole' => $serviceRole])
             // change executable
             ->withBrowsershot(function ($browsershot) {
-                $browsershot->setNodeBinary('/usr/bin/node')
-                ->setNpmBinary('/usr/bin/npm')
+                $browsershot
+                // ->setNodeBinary('/usr/bin/node')
+                // ->setNpmBinary('/usr/bin/npm')
                 ->timeout(300)
                 ->setChromePath('/usr/bin/google-chrome')
                 ->waitUntilNetworkIdle()

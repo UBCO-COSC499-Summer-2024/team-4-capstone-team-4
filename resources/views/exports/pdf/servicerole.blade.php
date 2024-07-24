@@ -3,24 +3,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Service Role Report | Insight</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <!-- Scripts -->
         @vite([
-            'resources/css/var.css', 'resources/css/app.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css',
-            'resources/css/switch.css', 'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/darkmode.js'
+            'resources/css/var.css', 'resources/css/app.css', 'resources/css/svcr.css'
         ])
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-        <!-- JSPDF Library -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
         <!-- Chart.js Library -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -272,10 +265,6 @@
         </style>
     </head>
     <body class="font-sans antialiased">
-        @php
-            $serviceRoleId = $serviceRoles?->first()->id ?? request()->route('id');
-            $serviceRole = \App\Models\ServiceRole::with('area', 'instructors', 'extraHours')->find($serviceRoleId);
-        @endphp
         <x-header />
         <main class="main">
             <div class="content-title">
@@ -363,7 +352,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($serviceRole->instructors as $instructor)
+                            @forelse ($serviceRole->instructors as $instructor)
                             <tr class="svcr-list-item">
                                 <td class="svcr-list-item-cell">{{ $instructor->id }}</td>
                                 <td class="svcr-list-item-cell">
@@ -373,7 +362,11 @@
                                 </td>
                                 <td class="svcr-list-item-cell">{{ $instructor->email }}</td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr class="empty">
+                                <td colspan="3">No instructors found</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </section>
@@ -410,7 +403,7 @@
                             </tr>
                             @empty
                             <tr class="empty">
-                                <td colspan="3">No extra hours found</td>
+                                <td colspan="6">No extra hours found</td>
                             </tr>
                             @endforelse
                         </tbody>
