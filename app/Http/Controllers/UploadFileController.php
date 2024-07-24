@@ -75,6 +75,29 @@ class UploadFileController extends Controller {
                 }
     
             }
+            // if ever expands to other departments, will need to convert the prefix to the full name based on the area table in the db.
+
+            
+
+            switch ($csvData['Area']) {
+                // cases for CMPS
+            case 'COSC':
+                $csvData['Area'] = 'Computer Science';
+                break;
+            case 'MATH':
+                $csvData['Area'] = 'Mathematics';
+                break;
+            case 'PHYS':
+                $csvData['Area'] = 'Physics';
+                break;
+            case 'STAT':
+                $csvData['Area'] = 'Statistics';
+                break;
+            default:
+                //code block
+            }
+
+
             
             // dd($csvData);
         }
@@ -121,7 +144,7 @@ class UploadFileController extends Controller {
         // dd($trimCSV);
     
 
-        // dd($finalCSVs);
+        // dd($finalCSVs); 
 
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file');

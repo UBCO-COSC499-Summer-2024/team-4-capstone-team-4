@@ -19,6 +19,7 @@ class UploadFileForm extends Component
         foreach ($finalCSVs as $index => $finalCSV) {
             $this->rows[$index] = [
                 'area' => $finalCSV['Area'] ?? '',
+                'area_id' => $this->getAreaIdByName($finalCSV['Area'] ?? ''),
                 'number' => $finalCSV['Number'] ?? '',
                 'section' => $finalCSV['Section'] ?? '',
                 'year' => $finalCSV['Year'] ?? '',
@@ -39,7 +40,7 @@ class UploadFileForm extends Component
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.number"] = 'required|integer';
             $rules["rows.{$index}.section"] = 'required|string';
-            // $rules["rows.{$index}.area"] = 'required|integer';
+            $rules["rows.{$index}.area"] = 'required|integer';
             $rules["rows.{$index}.session"] = 'required|string';
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
@@ -97,6 +98,13 @@ class UploadFileForm extends Component
 
     public function closeModal() {
         $this->showModal = false;
+    }
+
+
+    public function getAreaIdByName($areaName)
+    {
+        $area = Area::where('name', $areaName)->first();
+        return $area ? $area->id : null;
     }
 
     public function render()

@@ -19,17 +19,13 @@
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-2/12">       
-                        <select wire:model="rows.{{ $index }}.area" class="import-form-select">
+                        <select wire:model="rows.{{ $index }}.area_id" class="import-form-select">
                             <option value="">Select</option>
-                            {{-- @foreach ($areas as $area)
-                                <option value="{{ $area->id }}" {{ $rows['area'] == $area['id'] ? 'selected' : '' }}>
-                                    {{ $area['name'] }}
+                            @foreach ($areas as $area)
+                                <option value="{{ $area->id }}" {{ $rows[$index]['area'] == $area->name ? 'selected' : '' }}>
+                                    {{ $area->name }}
                                 </option>
-                            @endforeach --}}
-                            <option value="COSC" {{ $rows[$index]['area'] == 'COSC' ? 'selected' : '' }}>COSC</option>
-                            <option value="MATH" {{ $rows[$index]['area'] == 'MATH' ? 'selected' : '' }}>MATH</option>
-                            <option value="PHYS" {{ $rows[$index]['area'] == 'PHYS' ? 'selected' : '' }}>PHYS</option>
-                            <option value="STAT" {{ $rows[$index]['area'] == 'STAT' ? 'selected' : '' }}>STAT</option>
+                            @endforeach
                         </select>
                         @error('rows.'.$index.'.area')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
