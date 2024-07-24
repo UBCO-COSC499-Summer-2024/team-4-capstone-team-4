@@ -152,7 +152,7 @@ Route::middleware([
     'verified',
      CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
-    Route::get('/dept-report', function () {
+    Route::get('/dept-report/{dept_id}', function () {
         return view('dept-report');
     })->name('dept-report');
 });
