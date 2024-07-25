@@ -69,7 +69,7 @@ Route::middleware([
     Route::get('/requests', function () {
         return view('svcrole.requests');
     })->name('service.requests');
-    Route::get('/audits', [AuditLogController::class, 'index'])->name('svcrole.logs');
+    Route::get('/audits', [AuditLogController::class, 'index'])->name('audits');
 });
 
 // Svcroles routes

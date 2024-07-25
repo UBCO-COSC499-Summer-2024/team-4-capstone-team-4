@@ -1,0 +1,113 @@
+:root {
+    --max-header-height: 65px;
+    --main-height: calc(100% - var(--max-header-height));
+
+    --background-color: #fff;
+    --text-color: #222;
+    --text-color-light: #666;
+    --primary-color: rgba(12, 35, 68, 1);
+    --secondary-color: rgb(59, 71, 121);
+    --accent-color: rgba(220, 250, 250, 0.6);
+    --border-color: #ddd;
+    --table-row-even-bg: #f2f2f2;
+    --table-header-bg: #f8f8f8;
+
+    --sidebar-bg: rgba(240, 240, 240, 0.8);
+    --sidebar-text: #222;
+    --sidebar-item-hover-bg: rgba(50, 50, 50, 1);
+    --sidebar-item-hover-text: #fff;
+
+    --link-bar-bg: rgba(255, 255, 255, 0.8);
+    --link-bar-border: 3px outset rgba(59, 71, 121, 0.8);
+    --link-bar-hover-bg: rgba(59, 71, 121, 1);
+    --link-bar-hover-text: rgba(239, 150, 50, 1);
+
+    --link-bar-vert-bg: rgba(50, 50, 50, 0.8);
+    --link-bar-vert-text: #fff;
+
+    --link-title-bg: rgba(50, 50, 50, 0.8);
+    --link-title-text: #fff;
+
+    --link-hover-bg: rgba(255, 255, 255, 1);
+    --link-hover-text: rgba(59, 71, 121, 0.8);
+
+    --glass-shadow: rgba(0, 0, 0, 0.1);
+
+    --svcr-table-bg: rgb(107 114 128 / 1);
+    --arrow-dir-bg: rgba(59, 71, 121, 1);
+    --arrow-dir-icon-color: rgba(59, 71, 171, 1);
+    --svcr-list-header-bg: rgb(59, 71, 121);
+    --svcr-list-header-text: #fff;
+    --svcr-list-item-hover-bg: #f5f5f5;
+    --svcr-list-item-checked-bg: #f0f0f0;
+    --svcr-list-item-text: rgb(107 114 128 / 1);
+
+
+    --form-input-bg: rgba(240, 240, 240, 0.9);
+    --form-submit-bg: #fff;
+    --form-submit-color: #3B784F;
+    --form-submit-hover-bg: rgba(12, 68, 29, 0.8);
+    --form-submit-hover-color: #fff;
+    --form-reset-bg: rgba(255, 255, 255, 1);
+    --form-reset-color: var(--primary-color);
+    --form-reset-hover-bg: var(--secondary-color);
+    --form-reset-hover-color: #fff;
+    --form-checkbox-bg: var(--primary-color);
+    --form-checkbox-color: #ccc;
+    --form-select-bg: var(--form-input-bg);
+}
+
+.dark {
+    --background-color: #121212;
+    --text-color: #eee;
+    --text-color-light: #ccc;
+    --primary-color: #ffffff;
+    --secondary-color: #b3b3b3;
+    --accent-color: rgba(0, 128, 128, 0.6);
+    --border-color: #555;
+    --table-row-even-bg: #212121;
+    --table-header-bg: #181818;
+
+    --sidebar-bg: rgba(34, 34, 34, 0.8);
+    --sidebar-text: #eee;
+    --sidebar-item-hover-bg: rgba(200, 200, 200, 1);
+    --sidebar-item-hover-text: #222;
+
+    --link-bar-bg: rgba(0, 0, 0, 0.8);
+    --link-bar-border: 3px outset rgba(180, 180, 180, 0.8);
+    --link-bar-hover-bg: rgba(180, 180, 180, 1);
+    --link-bar-hover-text: #222;
+
+    --link-bar-vert-bg: rgba(200, 200, 200, 0.8);
+    --link-bar-vert-text: #222;
+
+    --link-title-bg: rgba(200, 200, 200, 0.8);
+    --link-title-text: #222;
+
+    --link-hover-bg: rgba(0, 0, 0, 1);
+    --link-hover-text: rgba(180, 180, 180, 0.8);
+
+    --glass-shadow: rgba(255, 255, 255, 0.1);
+
+    --svcr-table-bg: rgb(255 255 255 / 0.1);
+    --arrow-dir-bg: rgba(255, 255, 255, 0.2);
+    --arrow-dir-icon-color: rgba(139, 148, 158, 1);
+    --svcr-list-header-bg: rgb(18 28 39 / 1);
+    --svcr-list-header-text: rgb(156 163 175 / 1);
+    --svcr-list-item-hover-bg: #4b5563;
+    --svcr-list-item-checked-bg: #374151;
+    --svcr-list-item-text: rgb(158 164 173 / 1);
+
+    --form-input-bg: rgba(50, 50, 50, 0.9);
+    --form-submit-bg: #fff;
+    --form-submit-color: #3B784F;
+    --form-submit-hover-bg: rgba(12, 68, 29, 0.8);
+    --form-submit-hover-color: #fff;
+    --form-reset-bg: #333;
+    --form-reset-color: #fff;
+    --form-reset-hover-bg: var(--secondary-color);
+    --form-reset-hover-color: #fff;
+    --form-checkbox-bg: var(--secondary-color);
+    --form-checkbox-color: #ccc;
+    --form-select-bg: var(--form-input-bg);
+}

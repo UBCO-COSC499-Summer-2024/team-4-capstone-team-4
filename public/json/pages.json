@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Audit Logs",
+        "url": "audits",
+        "icon": "history"
+    },
+    {
+        "title": "pgAdmin",
+        "url": "http://localhost:5050",
+        "icon": "database"
+    },
+    {
+        "title": "Staff",
+        "url": "staff",
+        "icon": "group"
+    },
+    {
+        "title": "Course Sections",
+        "url": "course.details.id",
+        "icon": "library_books"
+    },
+    {
+        "title": "Service Roles",
+        "url": "svcroles",
+        "icon": "work_history"
+    },
+    {
+        "title": "Import Course",
+        "url": "import",
+        "icon": "upload_file"
+    }
+]
