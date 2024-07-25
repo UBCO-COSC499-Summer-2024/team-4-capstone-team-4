@@ -30,7 +30,14 @@
         <div class="flex items-center justify-center h-full">{{ $roles }}</div>
     </td>
     <td class="px-6 py-4">
-        <div class="flex items-center justify-center h-full">{{ $active ? 'Active' : 'Inactive'}}</div>
+        <div class="flex items-center justify-center h-full">
+            @if($active)
+                <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+            @else
+                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+            @endif
+            {{ $active ? 'Active' : 'Inactive'}}
+        </div>
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">

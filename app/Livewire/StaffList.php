@@ -9,10 +9,14 @@ use App\Models\InstructorPerformance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class StaffList extends Component
 {
     use WithPagination;
+    use PasswordValidationRules;
 
     public $searchTerm = '';
     public $sortField = 'firstname'; // default 
@@ -31,6 +35,13 @@ class StaffList extends Component
     public $pagination;
     public $selectedDepts = [];
     public $selectedRoles = [];
+
+    public $firstname;
+    public $lastname;
+    public $email;
+    public $password;
+    public $user_roles = [];
+
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
@@ -351,6 +362,61 @@ class StaffList extends Component
 
     public function exit(){
         $this->editMode = false;
+    }
+
+    public function addUser(){
+        
+        $data = [
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'password' => $this->password,
+            'user_roles' => $this->user_roles,
+        ];
+        
+        Validator::make($data, [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email:rfc,strict', 'max:255', 'unique:users'],
+            'password' => $this->passwordRules(),
+            'user_roles' => ['required', 'array', 'min:1'],
+        ])->validate();
+
+        // Create a new user
+        $user = User::create([
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+        ]);
+
+        // Create the user role(s)
+        foreach($this->user_roles as $role){
+            UserRole::create([
+                'user_id' => $user->id,
+                'department_id' => null,
+                'role' => $role,
+            ]);
+        }  
+    }
+
+    public function saveAdmin(){
+
+    }
+
+    //single edit
+    public function editStaff(){
+
+    }
+
+    //single delete
+    public function deleteStaff(){
+        
+    }
+
+    // bulk delete
+    public function delete(){
+
     }
 
 }

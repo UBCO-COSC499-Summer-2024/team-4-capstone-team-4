@@ -9,7 +9,7 @@
 @endphp
 
 @if($admin)
-<thead class="sticky top-20 text-xs text-white uppercase bg-[#3b4779] dark:bg-gray-700 dark:text-gray-400">
+<thead class="sticky top-20 text-xs z-10 text-white uppercase bg-[#3b4779] dark:bg-gray-700 dark:text-gray-400">
     <tr class="svcr-list-header">
          <th scope="col" class="px-6 py-3 svcr-list-header-item">
              <div class="flex items-center px-1.5 py-2 text-sm justify-center">
@@ -38,7 +38,7 @@
          </th>
          <th scope="col" class="px-6 py-3 svcr-list-header-item">
              <div class="flex items-center px-1.5 py-2 text-sm">
-                 Department
+                 Department(s)
                  <button wire:click="sort('dept')">
                      @if($sortField === 'dept' && $sortDirection === 'asc')
                          <span class="material-symbols-outlined">

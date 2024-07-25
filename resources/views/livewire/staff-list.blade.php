@@ -10,18 +10,17 @@
     <div class="px-2 sticky top-0 z-10 flex flex-wrap items-center justify-between h-20 pb-4 space-y-4 bg-white md:flex-nowrap md:space-y-0 dark:bg-gray-900">
         <x-staff-search />
         <div class="flex items-center space-x-4">
-            <div>
-                Staff per page: 
-                <select wire:model.live="pagination" class="w-auto min-w-[70px] text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="all">All</option>
-                </select>
-            </div>
             @if($admin)
-                <x-admin-staff-filter />
+                @if($editMode)
+                    <x-admin-staff-filter />
+                    <x-staff-button-green wire:click="saveAdmin" id="staff-save" name="staff-save">Save</x-staff-button-green>
+                    <x-staff-button-red wire:click="delete" id="staff-exit" name="staff-exit">Delete</x-staff-button-red>
+                    <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
+                @else
+                    <x-admin-staff-filter />
+                    <x-staff-button wire:click="$set('showModal', true)"  name="add-user" name="add-user">Add</x-staff-button>
+                    <x-staff-button wire:click="$set('editMode', true)"  name="add-user" name="add-user">Edit</x-staff-button>
+                @endif
             @else
                 @if($editMode)
                     <x-staff-filter />
@@ -49,11 +48,19 @@
             <x-staff-success-modal />
         </div>
     @endif
-    <form wire:submit.prevent="submit">
+    @if($admin)
+        <form wire:submit.prevent="addUser">
+    @else
+        <form wire:submit.prevent="submit">
+    @endif
         @csrf
         @if($showModal == true)
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <x-staff-targethours :showModal="$showModal"/>
+                @if($admin)
+                    <x-add-user :showModal="$showModal"/>
+                @else
+                    <x-staff-targethours :showModal="$showModal"/>
+                @endif
             </div>
         @endif
         <x-staff-table>
@@ -151,9 +158,21 @@
                 @endif
             </tbody>
         </x-staff-table>
-        @if($pagination !== 'all')
-            {{ $users->links() }}
-        @endif
+        <div class="flex items-center justify-end">
+            Staff per page: 
+            <select wire:model.live="pagination" class="w-auto min-w-[70px] text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="all">All</option>
+            </select>
+            <div>
+                @if($pagination !== 'all')
+                    {{ $users->links() }}
+                @endif
+            </div>
+        </div>
     </form>
 </div>
 
