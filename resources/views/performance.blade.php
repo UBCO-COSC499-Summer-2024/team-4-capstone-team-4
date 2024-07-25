@@ -4,9 +4,9 @@
     <div class="content">
         <h1>{{ $name }}'s Dashboard</h1>
             <div class="button-container">
-                <x-performance-export-button :id="$performance->instructor_id">
+                <x-dashboard-button href="{{ route('instructor-report', ['instructor_id' => $performance->instructor_id]) }}">
                     View Report
-                </x-performance-export-button>
+                </x-dashboard-button>
             </div>
             <div class="profile-container">
                 Profile Coming Soon...
