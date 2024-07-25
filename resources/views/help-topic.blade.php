@@ -1,6 +1,19 @@
 @php
     use App\Helpers\HtmlHelpers;
     use App\Helpers\LivewireHelpers;
+
+    $topics = json_decode(file_get_contents(resource_path('/json/help/index.json')), true);
+    $currentTopic = request()->route('topic');
+    $links = [];
+
+    foreach ($topics as $index => $topic) {
+        $links[] = [
+            'href' => route('help.topic', ['topic' => $topic['url']]),
+            'icon' => $topic['icon'],
+            'title' => $topic['title'],
+            'active' => $currentTopic === $topic['url'],
+        ];
+    }
 @endphp
 
 <x-app-layout>
@@ -16,11 +29,6 @@
         </h1>
 
         <livewire:help.hero />
-
-        @php
-            $currentTopic = request()->route('topic');
-            $topics = json_decode(file_get_contents(resource_path('/json/help/index.json')), true);
-        @endphp
 
         @forelse ($topics as $index => $topic)
             @php
@@ -45,4 +53,6 @@
             </div>
         @endforelse
     </div>
+
+    <x-link-bar :links="$links" />
 </x-app-layout>
