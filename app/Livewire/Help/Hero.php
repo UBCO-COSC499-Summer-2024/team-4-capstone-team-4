@@ -40,37 +40,67 @@ class Hero extends Component
         'clear-search-results' => 'clearSearchResults',
     ];
 
-    public function mount($cache = false) {
+    public function mount($cache = false)
+    {
         $this->hero_title = "Insight Help Center";
         $this->useCache = $cache;
 
         $this->allData = $this->useCache
-            ? Cache::remember('help_data_cache', now()->addSeconds(1), function () {
+            ? Cache::remember('help_data_cache', now()->addMinutes(60), function () { // Increased cache time for better performance
                 return $this->getAllData();
             })
             : $this->getAllData();
-
-        Log::debug('All data loaded', ['allData' => $this->allData]);
     }
 
     protected function getAllData()
     {
         $topics = json_decode(File::get(base_path('/resources/json/help/index.json')), true);
-        Log::debug('Topics inside cache callback', ['topics' => $topics]);
-
         $data = [];
+
         foreach ($topics as $index => $topic) {
             $path = base_path('/resources/json/help/pages/' . $topic['url'] . '.json');
             if (File::exists($path)) {
                 $topicData = json_decode(File::get($path), true);
-                $data[$topic['title']] = $this->replacePlaceholders($topicData);
-                Log::debug('Data inside cache callback', ['data' => $data]);
+                $data[$topic['title']] = $this->prepareTopicData($topicData, $topic['title']);
             }
         }
 
         $data['FAQ'] = json_decode(File::get(base_path('/resources/json/help/faq.json')), true);
         $data['FAQ'] = $this->replacePlaceholders($data['FAQ']);
         return $data;
+    }
+
+    // Prepare topic data for search
+    protected function prepareTopicData($topicData, $topicTitle)
+    {
+        $result = [];
+        foreach ($topicData as $section) {
+            // Add subtopic as a searchable item
+            $result[] = [
+                'type' => 'subtopic',
+                'title' => $section['subtopic'],
+                'content' => '', // You can add a brief description here if needed
+                'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topicTitle))]),
+                'tags' => [],
+            ];
+
+            // Add subsections
+            foreach ($section['subsections'] as $subsection) {
+                $result[] = [
+                    'type' => 'subsection',
+                    'title' => $subsection['heading'],
+                    'content' => $this->replacePlaceholders($subsection['content']),
+                    'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topicTitle)) . '#' . strtolower(str_replace(' ', '-', $subsection['heading']))]),
+                    'tags' => $subsection['tags'] ?? [],
+                ];
+            }
+
+            // Recursively add nested subtopics
+            if (isset($section['subtopics'])) {
+                $result = array_merge($result, $this->prepareTopicData($section['subtopics'], $topicTitle));
+            }
+        }
+        return $result;
     }
 
     public function clearSearchResults()
@@ -105,9 +135,7 @@ class Hero extends Component
 
     public function searchV2($q)
     {
-        Log::debug('searchV2 method called', ['query' => $q]); // Initial log
         try {
-            Log::info('Starting search', ['query' => $q]);
             $results = [];
 
             if ($this->useCache) {
@@ -121,18 +149,15 @@ class Hero extends Component
 
             Session::put('searchResults', $results);
             $this->dispatch('help-search-results', $results);
-            Log::info('Search results', ['results' => $results]);
             return $results;
 
         } catch (\Exception $e) {
-            Log::error('Exception during search', ['exception' => $e]);
             $this->dispatch('show-toast', [
                 'type' => 'error',
-                'message' => 'An error occurred while searching. Please try again later. ' . $e->getMessage(),
+                'message' => 'An error occurred while searching. Please try again later.',
             ]);
         }
     }
-
 
     protected function detectDorking($query)
     {
@@ -148,7 +173,6 @@ class Hero extends Component
 
     protected function performSearch($q)
     {
-        Log::debug('performSearch method called', ['query' => $q]); // Added log
         $this->searchQuery = strtolower($q);
 
         if ($this->detectDorking($q)) {
@@ -156,19 +180,15 @@ class Hero extends Component
         }
 
         $results = $this->recursiveSearch($this->allData, $this->searchQuery);
-
-        Log::info('Search results', ['results' => $results]);
         return $results;
     }
 
     protected function parseDorks($query)
     {
-        Log::debug('parseDorks method called', ['query' => $query]);
-
         $dorks = [
             'topics' => [],
             'tags' => [],
-            'exclude' => [] // Ensure this key is always present
+            'exclude' => [],
         ];
 
         foreach ($this->allowedDorks as $dork => $config) {
@@ -180,7 +200,6 @@ class Hero extends Component
             }
         }
 
-        Log::info('Parsed dorks', ['dorks' => $dorks]);
         return $dorks;
     }
 
@@ -190,6 +209,7 @@ class Hero extends Component
 
         foreach ($data as $topic => $items) {
             if ($topic === 'FAQ') {
+                // Handle FAQ search
                 foreach ($items as $faq) {
                     if (stripos($faq['question'], $query) !== false || stripos($faq['answer'], $query) !== false) {
                         $results[] = [
@@ -201,41 +221,24 @@ class Hero extends Component
                     }
                 }
             } else {
-                if (is_array($items)) {
-                    foreach ($items as $item) {
-                        if (is_array($item)) {
-                            if ($this->matchesDorks($item, $topic)) {
-                                $results[] = [
-                                    'topic' => $topic,
-                                    'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topic))]),
-                                    'content' => $item['content'] ?? 'No content available',
-                                    'tags' => $item['tags'] ?? [],
-                                ];
-                            }
-                            $nestedResults = $this->recursiveSearch($item, $query);
-                            $results = array_merge($results, $nestedResults);
-                        }
-                    }
-                } else {
-                    if (stripos($items, $query) !== false) {
+                // Handle topic/subsection search
+                foreach ($items as $item) {
+                    if ($this->matchesDorks($item, $topic)) {
                         $results[] = [
                             'topic' => $topic,
-                            'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topic))]),
-                            'content' => $items,
-                            'tags' => [],
+                            'url' => $item['url'], // Use the URL from prepared data
+                            'content' => $item['content'],
+                            'tags' => $item['tags'] ?? [],
                         ];
                     }
                 }
             }
         }
-
         return $results;
     }
 
-
     protected function matchesDorks($item, $topic)
     {
-        Log::debug('matchesDorks method called', ['item' => $item, 'topic' => $topic]);
         $title = strtolower($item['title'] ?? '');
         $content = strtolower($item['content'] ?? '');
         $tags = isset($item['tags']) ? array_map('strtolower', $item['tags']) : [];
@@ -259,10 +262,7 @@ class Hero extends Component
                 }
             }
         }
-
         $searchMatch = stripos($title, $this->searchQuery) !== false || stripos($content, $this->searchQuery) !== false;
-        Log::info('Search match', ['title' => $title, 'content' => $content, 'searchQuery' => $this->searchQuery, 'match' => $matches && $searchMatch]);
-
         return $matches && $searchMatch;
     }
 }

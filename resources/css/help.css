@@ -44,7 +44,9 @@
     padding: 0.5rem 1rem;
     border-radius: 20px;
     width: 100%;
-    outline: none;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+    outline: none !important;
+    border: none !important;
     font-size: 1.5rem;
     color: #555;
     /* background: rgba(255, 255, 255, 0.9); */
@@ -201,11 +203,11 @@
 }
 
 .hero, .main-topics, .faq {
-    margin: 0 0.5rem;
+    /* margin: 0 0.5rem; */
 }
 
 #help-search-results {
-    background: #fafafa;
+    /* background: #fafafa; */
     border-radius: 0.8rem;
     width: 100%;
     max-width: min(100%, 600px);
@@ -231,6 +233,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#help-search-results a {
+    display: inline-block !important;
+}
+
+.help-result-section {
+    margin: 0.25rem 0;
+    background: #fafafa;
+    border-radius: 0.8rem;
+    padding: 0.5rem;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.help-result-section h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.help-result-section p {
+    font-size: 1rem;
+    color: #333;
 }
 
 .subtopic h1,
