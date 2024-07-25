@@ -25,7 +25,7 @@
                 "subsections": [
                     {
                         "heading": "Subtopic Introduction",
-                        "content": "This is an introduction to test Subtopic.",
+                        "content": "This is an introduction to test Subtopic. <br />Testing Images {{ img.test }}",
                         "tags": [
                             "intro",
                             "test",
