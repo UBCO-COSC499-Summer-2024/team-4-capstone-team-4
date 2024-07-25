@@ -11,20 +11,4 @@
             @endforeach
         @endif
     </div>
-    {{-- Optional meta information
-    <div class="help-result-meta">
-        <span class="help-result-meta-item">
-            <span class="material-symbols-outlined">visibility</span>
-            <span class="help-result-meta-text">{{ $result['views'] ?? '0' }}</span>
-        </span>
-        <span class="help-result-meta-item">
-            <span class="material-symbols-outlined">thumb_up</span>
-            <span class="help-result-meta-text">{{ $result['likes'] ?? '0' }}</span>
-        </span>
-        <span class="help-result-meta-item">
-            <span class="material-symbols-outlined">thumb_down</span>
-            <span class="help-result-meta-text">{{ $result['dislikes'] ?? '0' }}</span>
-        </span>
-    </div>
-    --}}
 </div>

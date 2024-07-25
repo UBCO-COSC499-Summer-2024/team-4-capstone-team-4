@@ -124,6 +124,8 @@ class Hero extends Component
     public function clearSearchResults()
     {
         $this->searchResults = [];
+        //browser localstorage clear
+        $this->dispatch('clear-search-results');
         Session::forget('searchResults');
     }
 
@@ -244,6 +246,7 @@ class Hero extends Component
                 $results = $this->performSearch($q);
             }
 
+            // Session::put('searchResults', $results);
             Session::put('searchResults', $results);
             $this->dispatch('help-search-results', $results);
             return $results;

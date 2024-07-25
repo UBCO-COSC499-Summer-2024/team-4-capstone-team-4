@@ -1,14 +1,8 @@
 <section class="help-results">
-    @if (count($results) > 0)
-    {{-- @php
-        // dd($results);
-    @endphp --}}
+    @if (isset($results) && (count($results) > 0 || !empty($searchQuery)))
+        <h2 class="help-search-results-title">{{ __('Search Results') }}</h2>
         @foreach ($results as $index => $result)
             <livewire:templates.help-result-item :result="$result" :key="$index" />
         @endforeach
-    @else
-        <span class="empty">
-            {{ __('No results found.') }}
-        </span>
     @endif
 </section>

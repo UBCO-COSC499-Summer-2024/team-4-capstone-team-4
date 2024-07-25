@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Help;
 
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class Results extends Component
@@ -9,13 +10,25 @@ class Results extends Component
     public $results = [];
 
     protected $listeners = [
-        // 'updateResults' => 'setResults',
-        'search-results-updated' => 'setResults',
+        'search-results-updated' => 'updateResults',
+        'clear-search-results' => 'clearResults'
     ];
 
-    public function setResults($results)
+    public function mount()
     {
-        $this->results = $results;
+        $this->results = session('searchResults', []);
+    }
+
+    public function updateResults()
+    {
+        $this->results = session('searchResults', []);
+    }
+
+    public function clearResults()
+    {
+        $this->results = [];
+        // forget the session variable
+        // Session::forget('searchResults');
     }
 
     public function render()

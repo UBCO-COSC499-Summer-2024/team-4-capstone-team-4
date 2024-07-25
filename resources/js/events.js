@@ -1,6 +1,14 @@
 Livewire.on('help-search-results', function (results) {
     console.log('Search results updated:', results);
+    localStorage.setItem('searchResults', JSON.stringify(results));
     Livewire.dispatch('search-results-updated', results);
+});
+
+Livewire.on('clear-search-results', function () {
+    localStorage.removeItem('searchResults');
+    // clear from session storage
+    sessionStorage.removeItem('searchResults');
+    Livewire.dispatch('search-results-updated', []);
 });
 
 Livewire.on('show-toast', (data) => {

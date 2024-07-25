@@ -16,6 +16,8 @@ class HelpResultItem extends Component
 
     public function render()
     {
-        return view('livewire.templates.help-result-item');
+        return view('livewire.templates.help-result-item', [
+            'result' => $this->result,
+        ]);
     }
 }
