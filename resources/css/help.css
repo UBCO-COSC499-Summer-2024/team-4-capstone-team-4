@@ -75,8 +75,11 @@
     /* display: flex;
     flex-direction: column; */
     display: grid;
-    grid-template-columns: repeat(3, 240px);
-    grid-template-rows: 240px;
+    grid-template-columns: repeat(3, 220px);
+    /* grid-template-rows: 220px; */
+    height: fit-content;
+    width: auto;
+    /* align-items: center; */
     gap: 1em;
     padding: 1em;
     /* place-content: center; */
@@ -189,4 +192,13 @@
 
 .hero, .main-topics, .faq {
     margin: 0 0.5rem;
+}
+
+/* smaller screens */
+@media (max-width: 768px) {
+    .main-topics-list {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        /* grid-template-rows: 240px; */
+        /* width: 480px */
+    }
 }
