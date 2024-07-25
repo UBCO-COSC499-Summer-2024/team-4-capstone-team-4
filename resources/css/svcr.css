@@ -380,5 +380,5 @@ nav[aria-label="Pagination Navigation"] {
 
 .content-title-btn:hover {
     background: var(--primary-color);
-    border: none !important;
+    /* border: none !important; */
 }

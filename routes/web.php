@@ -38,6 +38,11 @@ Route::middleware([
     Route::get('/help', function () {
         return view('help');
     })->name('help');
+    Route::prefix('/help')->group(function () {
+        Route::get('/{topic}', function ($topic) {
+            return view('help');
+        })->name('help.topic');
+    });
     Route::get('/performance', function () {
         return view('performance');
     })->name('performance');
