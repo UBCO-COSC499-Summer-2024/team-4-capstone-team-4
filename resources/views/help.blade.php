@@ -9,7 +9,19 @@
                 </button>
             </div>
         </h1>
+
         <livewire:help.hero />
+
+        {{-- @php
+            $searchResults = session()->get('searchResults', []);
+        @endphp
+
+        @if (!empty($searchResults))
+            <div id="help-search-results">
+                <livewire:help.results :results="{{ json_encode($searchResults) }}" wire:key="{{time()}}" />
+            </div>
+        @endif --}}
+
         <livewire:help.main-topics />
         <livewire:help.f-a-q />
     </div>

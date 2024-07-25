@@ -16,7 +16,7 @@ class FAQ extends Component
 
     public function mount()
     {
-        $this->faqs = json_decode(file_get_contents(public_path('/json/help/faq.json')), true);
+        $this->faqs = json_decode(file_get_contents(base_path('/resources/json/help/faq.json')), true);
         $this->faqs = array_map([$this, 'replacePlaceholders'], $this->faqs);
     }
 

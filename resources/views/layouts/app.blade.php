@@ -15,7 +15,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/var.css', 'resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
-        'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/sidebar.js', 'resources/js/tabs.js',
+        'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/events.js', 'resources/js/sidebar.js', 'resources/js/tabs.js',
          'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js', 'resources/js/darkmode.js'])
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -77,108 +77,5 @@
             <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
             <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         @endif --}}
-        <script>
-            Livewire.on('show-toast', (data) => {
-                // it seems data is an array of objects
-                console.log(data);
-                data.forEach((toast) => {
-                    console.log(toast)
-                    Toastify({
-                        text: toast.message,
-                        selector: document.querySelector('main > .container'),
-                        newWindow: toast.destination ? true : false,
-                        duration: toast.duration ?? 5000,
-                        close: toast.close ?? true,
-                        gravity: toast.gravity ?? "bottom",
-                        position: toast.position ?? "right",
-                        className: toast.className ?? toast.class?? `toastify-${toast.type}`, // Optional styling
-                        stopOnFocus: toast.stopOnFocus ??  true,
-                        destination: toast.destination ?? null,
-                        ariaLive: toast.ariaLive ?? toast.aria ?? "polite", // `assertive` or `off`
-                    }).showToast();
-                });
-            });
-
-            Livewire.on('confirmDelete', (data) => {
-                data.forEach((item) => {
-                    if (confirm(item.message)) {
-                        if (item.model) {
-                            switch(item.model) {
-                                case 'svcr_item_delete':
-                                    Livewire.dispatch('svcr-item-delete', { id: item.id });
-                                    break;
-                                case 'sr_manage_delete':
-                                    Livewire.dispatch('svcr-manage-delete', { id: item.id });
-                                    break;
-                                case 'staff':
-                                    Livewire.dispatch('deleteStaff', { id: item.id });
-                                    break;
-                                case 'area':
-                                    Livewire.dispatch('deleteArea', { id: item.id });
-                                    break;
-                                case 'role':
-                                    Livewire.dispatch('deleteRole', { id: item.id });
-                                    break;
-                                case 'user':
-                                    Livewire.dispatch('deleteUser', { id: item.id });
-                                    break;
-                                case 'sr_role_assignment':
-                                    Livewire.dispatch('sr-remove-instructor', { id: item.id });
-                                    break;
-                                default:
-                                    console.log('Model not found');
-                            }
-                        } else {
-                            Livewire.dispatch('deleteServiceRole', { id: item.serviceRoleId});
-                        }
-                    }
-                })
-            });
-
-            Livewire.on('confirmArchive', (data) => {
-                data.forEach((item) => {
-                    if (confirm(item.message)) {
-                        switch(item.model) {
-                            case 'svcr_item_archive':
-                                Livewire.dispatch('svcr-item-archive', { id: item.id });
-                                break;
-                            case 'svcr_item_unarchive':
-                                Livewire.dispatch('svcr-item-unarchive', { id: item.id });
-                                break;
-                            case 'sr_manage_archive':
-                                Livewire.dispatch('svcr-manage-archive', { id: item.id });
-                                break;
-                            case 'sr_manage_unarchive':
-                                Livewire.dispatch('svcr-manage-unarchive', { id: item.id });
-                                break;
-                            case 'staff':
-                                Livewire.dispatch('archiveStaff', { id: item.id });
-                                break;
-                            case 'area':
-                                Livewire.dispatch('archiveArea', { id: item.id });
-                                break;
-                            case 'role':
-                                Livewire.dispatch('archiveRole', { id: item.id });
-                                break;
-                            case 'user':
-                                Livewire.dispatch('archiveUser', { id: item.id });
-                                break;
-                            case 'sr_role_assignment':
-                                Livewire.dispatch('sr-archive-instructor', { id: item.id });
-                                break;
-                            default:
-                                console.log('Model not found');
-                        }
-                    }
-                })
-            });
-
-            Livewire.on('batchDeleteServiceRoles', (data) => {
-                data = data[0];
-                if (confirm(data.message)) {
-                    Livewire.dispatch('deleteAllSelected');
-                }
-            });
-        </script>
     </body>
 </html>

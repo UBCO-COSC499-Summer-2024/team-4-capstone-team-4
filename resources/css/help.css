@@ -194,6 +194,36 @@
     margin: 0 0.5rem;
 }
 
+#help-search-results {
+    background: #ccc;
+    border-radius: 0.8rem;
+    width: 100%;
+    max-width: min(100%, 600px);
+    margin: 0 auto;
+    padding: 0.5rem;
+}
+
+#help-search-results .empty {
+    font-size: 1.2rem;
+    color: #777;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subtopic h1,
+.subtopic h2,
+.subtopic h3,
+.subtopic h4,
+.subtopic h5,
+.subtopic h6 {
+    font-size: revert;
+    font-weight: bold;
+}
+
 /* smaller screens */
 @media (max-width: 768px) {
     .main-topics-list {
