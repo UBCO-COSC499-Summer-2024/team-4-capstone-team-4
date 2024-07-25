@@ -40,7 +40,7 @@ class UploadFileForm extends Component
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.number"] = 'required|integer';
             $rules["rows.{$index}.section"] = 'required|string';
-            $rules["rows.{$index}.area"] = 'required|integer';
+            $rules["rows.{$index}.area_id"] = 'required|integer';
             $rules["rows.{$index}.session"] = 'required|string';
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
@@ -58,7 +58,7 @@ class UploadFileForm extends Component
         foreach ($this->rows as $index => $row) {
                 $messages["rows.{$index}.number.required"] = 'Please enter a course number';
                 $messages["rows.{$index}.section.required"] = 'Please enter a course section';
-                $messages["rows.{$index}.area.required"] = 'Please select a sub area';
+                $messages["rows.{$index}.area_id.required"] = 'Please select a sub area';
                 $messages["rows.{$index}.session.required"] = 'Please select a session';
                 $messages["rows.{$index}.term.required"] = 'Please select a term';
                 $messages["rows.{$index}.year.required"] = 'Please enter a year';
@@ -90,6 +90,7 @@ class UploadFileForm extends Component
     public function handleSubmit() {
         $this->validate();
 
+        dd($this->rows);
 
         $this->showModal = true;
 
