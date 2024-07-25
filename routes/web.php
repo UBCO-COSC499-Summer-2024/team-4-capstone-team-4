@@ -69,10 +69,6 @@ Route::middleware([
     })->name('import');
     Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file.show');
     Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
-    Route::get('/upload-file/form', function () {
-        return view('upload-file-form');
-    })->name('upload-file-form');
-    // Route::post('/upload-file-form', [UploadFileController::class, 'upload'])->name('upload.file.form');
     Route::get('/requests', function () {
         return view('svcrole.requests');
     })->name('service.requests');

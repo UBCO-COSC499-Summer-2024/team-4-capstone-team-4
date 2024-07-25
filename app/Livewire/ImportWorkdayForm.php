@@ -203,7 +203,8 @@ class ImportWorkdayForm extends Component
                     'year' => $row['year'], 
                     'enrolled' => $row['enrolled'], 
                     'dropped' => $row['dropped'], 
-                    'capacity' => $row['capacity'],        
+                    'capacity' => $row['capacity'], 
+                    'archived' => false,   
                 ]);
 
                 $this->rows = [
@@ -230,7 +231,7 @@ class ImportWorkdayForm extends Component
 
 
     public function render()
-    {
+    {   
         $areas = Area::all();
 
         return view('livewire.import-workday-form', [

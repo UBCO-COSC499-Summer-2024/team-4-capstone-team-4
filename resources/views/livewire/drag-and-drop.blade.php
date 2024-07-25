@@ -6,7 +6,7 @@
         <label for="file" class="drop-zone-label">
             <span class="material-symbols-outlined drop-zone-icon icon">cloud_upload</span>
             <span class="drop-zone-title">Drop files here or click to upload</span>
-            <input type="file" name="files[]" id="file" class="drop-zone-input" multiple>
+            <input type="file" name="files[]" accept=".csv" id="file" class="drop-zone-input" multiple>
         </label>
 
     <div class="drop-zone-content-files dnd-column">

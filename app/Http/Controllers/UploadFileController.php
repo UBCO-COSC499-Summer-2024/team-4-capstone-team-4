@@ -78,26 +78,26 @@ class UploadFileController extends Controller {
             // if ever expands to other departments, will need to convert the prefix to the full name based on the area table in the db.
 
             
-
+            if(array_key_exists("Area", $csvData)) {
             switch ($csvData['Area']) {
-                // cases for CMPS
-            case 'COSC':
-                $csvData['Area'] = 'Computer Science';
-                break;
-            case 'MATH':
-                $csvData['Area'] = 'Mathematics';
-                break;
-            case 'PHYS':
-                $csvData['Area'] = 'Physics';
-                break;
-            case 'STAT':
-                $csvData['Area'] = 'Statistics';
-                break;
-            default:
-                //code block
+                    // cases for CMPS
+                case 'COSC':
+                    $csvData['Area'] = 'Computer Science';
+                    break;
+                case 'MATH':
+                    $csvData['Area'] = 'Mathematics';
+                    break;
+                case 'PHYS':
+                    $csvData['Area'] = 'Physics';
+                    break;
+                case 'STAT':
+                    $csvData['Area'] = 'Statistics';
+                    break;
+                default:
+                    //code block
+                }
+
             }
-
-
             
             // dd($csvData);
         }
@@ -110,8 +110,9 @@ class UploadFileController extends Controller {
         $uploadedFiles = [];
      
         $request->validate([
-            'files.*' => 'required|file|mimes:csv,txt|max:2048',
+            'files.*' => 'required|file|mimes:csv|max:2048',
         ]);
+
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
