@@ -76,7 +76,7 @@
                         $areaPerformance = $area->areaPerformance->where('year', $year)->first();
                     @endphp
                     @if($courses->isNotEmpty())
-                        <h3> {{$araea->name}} </h3>
+                        <h3> {{$area->name}} </h3>
                         <table class="areaCourseTable w-full bg-white border border-gray-300 text-center">
                             <thead>
                                 <tr class="text-white bg-[#3b4779]">
@@ -114,10 +114,8 @@
                                     </tr>
                             </tbody>
                         </table>
-                    @else
-                        No courses found.
+                        <br>
                     @endif
-                    <br>
                 @endforeach
 
                 <br>
@@ -178,7 +176,7 @@
                                     @endforeach
                                 @else
                                     @for ($i = 1; $i <= 12; $i++)
-                                        <td class="border border-gray-300">-</td>
+                                        <td class="border border-gray-300">0</td>
                                     @endfor
                                 @endif
                                 <td class="border border-gray-300">{{ array_sum($areaHours) }}</td>
@@ -216,7 +214,6 @@
                     @endphp
                     @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())   
                         <h3>{{ $area->name }}</h3>
-                    @endif
                     <table class="areaPerfTable w-full bg-white border border-gray-300 text-center">
                         @if ($svcroles->isNotEmpty())
                             <thead>
@@ -288,6 +285,7 @@
                             </tbody>
                         @endif
                     </table>
+                    @endif
                     <br>
                 @endforeach
             @endif
