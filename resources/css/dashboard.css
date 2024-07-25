@@ -28,7 +28,7 @@
 
 .pages-item {
     margin-bottom: 0.5em;
-    background: var(--secondary-color);
+    background: rgb(59, 71, 121);
     border-radius: 1rem;
     padding: 1rem;
     display: flex;
@@ -64,5 +64,5 @@
 }
 
 .pages-item:hover .pages-link {
-    color: var(--secondary-color)
+    color: rgb(59, 71, 121);
 }
