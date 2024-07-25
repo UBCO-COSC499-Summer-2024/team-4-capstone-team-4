@@ -252,3 +252,11 @@ tbody td:last-child {
     border-color: rgb(59, 71, 121);
 }
 
+.bg-custom-green {
+    background-color: #28a745; /* or your custom green color code */
+}
+
+.border-custom-green {
+    border-color: #28a745; /* or your custom green color code */
+}
+
