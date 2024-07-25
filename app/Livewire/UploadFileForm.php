@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Area;
+use App\Models\CourseSection;
 use Livewire\Component;
 
 class UploadFileForm extends Component
@@ -90,10 +91,45 @@ class UploadFileForm extends Component
     public function handleSubmit() {
         $this->validate();
 
-        dd($this->rows);
+        // dd($this->rows);
+
+        foreach($this->rows as $row) {
+            $prefix = '';
+            // dd($row);
+            
+            switch ($row['area_id']) {
+                case 1:
+                    $prefix = 'COSC';
+                    break;
+                case 2:
+                    $prefix = 'MATH';
+                    break;
+                case 3:
+                    $prefix = 'PHYS';
+                    break;
+                case 4:
+                    $prefix = 'STAT';
+                    break;
+            }
+
+                // dd($row);
+
+                CourseSection::create([
+                    'prefix' => $prefix,
+                    'number' => $row['number'],
+                    'section' => $row['section'], 
+                    'area_id' => $row['area_id'], 
+                    'session' => $row['session'], 
+                    'term' => $row['term'], 
+                    'year' => $row['year'], 
+                    'enrolled' => $row['enrolled'], 
+                    'dropped' => $row['dropped'], 
+                    'capacity' => $row['capacity'],        
+                ]);
+            }
 
         $this->showModal = true;
-
+        
         session()->flash('success', $this->showModal);
     }
 
