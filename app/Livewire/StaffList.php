@@ -56,13 +56,12 @@ class StaffList extends Component
         $dept_id = null;
         
         if($user->hasRole('admin')){
-            $usersQuery->distinct()
-            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            $usersQuery->join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
             ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
             ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-            ->leftJoin('departments as areas_dept', 'areas.dept_id', '=', 'areas_dept.id') // aliasing departments table for areas
-            ->leftJoin('departments as user_dept', 'user_roles.department_id', '=', 'user_dept.id'); // aliasing departments table for user roles
+            ->leftJoin('departments as areas_dept', 'areas.dept_id', '=', 'areas_dept.id')
+            ->leftJoin('departments as user_dept', 'user_roles.department_id', '=', 'user_dept.id');
 
         }else{
             $dept_id = UserRole::find($user->id)->department_id;
@@ -106,29 +105,35 @@ class StaffList extends Component
             });
         }
 
-        //filter by roles if set
-        if(!empty($depts)){
-            $usersQuery->where(function ($queryBuilder) use ($depts){
-                $queryBuilder->whereHas('teaches.courseSection.area.department', function ($queryBuilder) use ($depts){
-                    $queryBuilder->whereIn('name', $depts);
-                })->orWhereHas('roles.department',  function ($queryBuilder) use ($depts){
-                    $queryBuilder->whereIn('name', $depts);
+        //filter by depts if set
+        if (!empty($depts)) {
+            $usersQuery->where(function ($queryBuilder) use ($depts) {
+                $queryBuilder->whereHas('teaches.courseSection.area.department', function ($query) use ($depts) {
+                    $query->whereIn('name', $depts);
+                })->orWhereHas('roles.department', function ($query) use ($depts) {
+                    $query->whereIn('name', $depts);
                 });
             });
         }
+        
         
         // Sort according to sort fields
         $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
             case 'dept':
-                $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
-                ->groupBy('users.id', 'departments.name')
-                ->orderBy('dept_name', $this->sortDirection);
+                $usersQuery->select('users.*', DB::raw("STRING_AGG(DISTINCT COALESCE(areas_dept.name, user_dept.name), ', ') AS department_name"), DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                                ->groupBy('users.id')
+                                ->orderBy('department_name', $this->sortDirection);
                 break;
             case 'role':
-                $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
-                ->groupBy('users.id', 'departments.name')
+                $usersQuery->select('users.*', DB::raw("STRING_AGG(DISTINCT COALESCE(areas_dept.name, user_dept.name), ', ') AS department_name"), DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                ->groupBy('users.id')
                 ->orderBy('roles_names', $this->sortDirection);
+                break;
+            case 'active':
+                $usersQuery->select('users.*', DB::raw("STRING_AGG(DISTINCT COALESCE(areas_dept.name, user_dept.name), ', ') AS department_name"), DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                ->groupBy('users.id')
+                ->orderBy('users.active', $this->sortDirection);
                 break;
             case 'area':
                 $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
@@ -146,9 +151,9 @@ class StaffList extends Component
                 break; 
             default: 
                 if ($user->hasRole('admin')) {
-                    $usersQuery->select('users.*', 'departments.name as dept_name', DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
-                                ->groupBy('users.id', 'departments.name')
-                                ->orderBy('firstname', $this->sortDirection);
+                    $usersQuery->select('users.*', DB::raw("STRING_AGG(DISTINCT COALESCE(areas_dept.name, user_dept.name), ', ') AS department_name"), DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
+                    ->groupBy('users.id')
+                    ->orderBy('firstname', $this->sortDirection);
                 } else {
                     $usersQuery->select('users.*', 'user_roles.id as instructor_id')
                                 ->orderBy('firstname', $this->sortDirection);

@@ -28,7 +28,10 @@
     </td> 
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">{{ $roles }}</div>
-    </td>    
+    </td>
+    <td class="px-6 py-4">
+        <div class="flex items-center justify-center h-full">{{ $active ? 'Active' : 'Inactive'}}</div>
+    </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
             <a wire:click="EditStaff"><span class="material-symbols-outlined text-gray-500" title="Edit">edit</span></a>

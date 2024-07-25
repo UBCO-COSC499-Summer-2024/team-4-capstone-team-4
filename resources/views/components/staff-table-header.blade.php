@@ -39,12 +39,12 @@
          <th scope="col" class="px-6 py-3 svcr-list-header-item">
              <div class="flex items-center px-1.5 py-2 text-sm">
                  Department
-                 <button wire:click="sort('area')">
-                     @if($sortField === 'area' && $sortDirection === 'asc')
+                 <button wire:click="sort('dept')">
+                     @if($sortField === 'dept' && $sortDirection === 'asc')
                          <span class="material-symbols-outlined">
                              arrow_drop_up
                          </span>
-                     @elseif($sortField === 'area' && $sortDirection === 'desc')
+                     @elseif($sortField === 'dept' && $sortDirection === 'desc')
                          <span class="material-symbols-outlined">
                              arrow_drop_down
                          </span>
@@ -65,6 +65,26 @@
                             arrow_drop_up
                         </span>
                     @elseif($sortField === 'role' && $sortDirection === 'desc')
+                        <span class="material-symbols-outlined">
+                            arrow_drop_down
+                        </span>
+                    @else
+                       <span class="material-symbols-outlined">
+                            unfold_more
+                        </span>
+                    @endif
+                </button>
+            </div>
+        </th>
+        <th scope="col" class="px-6 py-3 svcr-list-header-item">
+            <div class="flex items-center px-1.5 py-2 text-sm">
+                Active
+                <button wire:click="sort('active')">
+                    @if($sortField === 'active' && $sortDirection === 'asc')
+                        <span class="material-symbols-outlined">
+                            arrow_drop_up
+                        </span>
+                    @elseif($sortField === 'active' && $sortDirection === 'desc')
                         <span class="material-symbols-outlined">
                             arrow_drop_down
                         </span>

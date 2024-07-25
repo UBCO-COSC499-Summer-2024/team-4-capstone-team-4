@@ -62,11 +62,42 @@
                 @if(isset($users))
                     @foreach ($users as $user)
                         @if($admin)
+                            @php
+                                $roles = [];
+                                $user_roles = explode(', ', $user->roles_names);
+                                foreach($user_roles as $role){
+                                    switch($role){
+                                        case 'instructor':
+                                            if(!in_array('Instructor' ,$roles)){
+                                                $roles[] = 'Instructor';
+                                            }
+                                            break;
+                                        case 'dept_head':
+                                            if(!in_array('Department Head',$roles)){
+                                                $roles[] = 'Department Head';
+                                            }
+                                            break;
+                                        case 'dept_staff':
+                                            if(!in_array('Department Staff',$roles)){
+                                                $roles[] = 'Department Staff';
+                                            }
+                                            break;
+                                        case 'admin':
+                                            if(!in_array('Admin',$roles)){
+                                                $roles[] = 'Admin';
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            @endphp
                             <x-staff-table-row
                             fullname="{{ $user->firstname }} {{ $user->lastname }}"
                             email="{{ $user->email }}"
-                            dept="{{ $user->dept_name }}"
-                            roles="{{ $user->roles_names }}"
+                            dept="{{ $user->department_name}}"
+                            roles="{{ implode(', ', $roles) }}"
+                            active="{{ $user->active }}"
                             />
                         @else
                             @php
