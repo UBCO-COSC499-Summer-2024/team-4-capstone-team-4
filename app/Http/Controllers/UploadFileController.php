@@ -105,6 +105,28 @@ class UploadFileController extends Controller {
         return $csvData;
     }
 
+    private function readCSVByCol($file) {
+        $header = null;
+        $csvData = [];
+
+        if (($handle = fopen($file, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!array_filter($row)) {
+                    continue; // Skip empty rows
+                }
+
+                if (!$header) {
+                    $header = $row;
+                } else {
+                    $csvData[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+
+        return $csvData;
+    }
+
     public function upload(Request $request) {
         $finalCSVs = [];
         $uploadedFiles = [];
@@ -116,7 +138,11 @@ class UploadFileController extends Controller {
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
-            $csvData = $this->readCSV($filePath);
+            // $csvData = $this->readCSV($filePath);
+
+            // depending on CSV file format, you may need to adjust the readCSV function
+
+            $csvData = $this->readCSVByCol($filePath);
         
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
@@ -124,28 +150,55 @@ class UploadFileController extends Controller {
             ];
         }
 
+        // -- pulled straight from workday CSV format --
+
+        // foreach ($uploadedFiles as $uploadedFile) {
+        //     $trimCSV = [];
+        //     $trimCSV['File'] = $uploadedFile['fileName'];
+        //     foreach ($uploadedFile['csvData'] as $key => $value) {
+        //         switch ($key) {
+        //             case 'Area':
+        //             case 'Number':
+        //             case 'Section':
+        //             case 'Session':
+        //             case 'Term':
+        //             case 'Year':
+        //             case 'Session':
+        //             case 'Enrolled':
+        //             case 'Dropped':
+        //             case 'Capacity':
+        //                 $trimCSV[$key] = $value;
+        //                 break;
+        //         }
+        //     }
+        //     $finalCSVs[] = $trimCSV;
+        // }
+
+        // -- traditional csv format --
+
         foreach ($uploadedFiles as $uploadedFile) {
             $trimCSV = [];
             $trimCSV['File'] = $uploadedFile['fileName'];
-            foreach ($uploadedFile['csvData'] as $key => $value) {
-                switch ($key) {
-                    case 'Area':
-                    case 'Number':
-                    case 'Section':
-                    case 'Year':
-                    case 'Session':
-                    case 'Enrolled':
-                        $trimCSV[$key] = $value;
-                        break;
+            foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Area':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Session':
+                        case 'Enrolled':
+                        case 'Dropped':
+                        case 'Capacity':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
                 }
+                $finalCSVs[] = $trimCSV;
             }
-            $finalCSVs[] = $trimCSV;
         }
-
-        // dd($trimCSV);
-    
-
-        // dd($finalCSVs); 
 
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file');

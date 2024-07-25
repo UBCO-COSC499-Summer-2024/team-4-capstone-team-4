@@ -23,13 +23,16 @@ class UploadFileForm extends Component
                 'area_id' => $this->getAreaIdByName($finalCSV['Area'] ?? ''),
                 'number' => $finalCSV['Number'] ?? '',
                 'section' => $finalCSV['Section'] ?? '',
+                'session' => $finalCSV['Session'] ?? '',
+                'term' => $finalCSV['Term'] ?? '',
                 'year' => $finalCSV['Year'] ?? '',
                 'session' => $finalCSV['Session'] ?? '',
                 'enrolled' => $finalCSV['Enrolled'] ?? '',
+                'dropped' => $finalCSV['Dropped'] ?? '',
+                'capacity' => $finalCSV['Capacity'] ?? '',
                 // Add other fields as necessary
             ];
         }
-
 
         session()->forget('finalCSVs');
     }
@@ -129,7 +132,7 @@ class UploadFileForm extends Component
             }
 
         $this->showModal = true;
-        
+
         session()->flash('success', $this->showModal);
     }
 
