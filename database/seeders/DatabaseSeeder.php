@@ -108,6 +108,12 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_head',
         ]);
 
+        $headrole2 = UserRole::factory()->create([
+            'user_id' => $head->id,
+            'department_id' => null,
+            'role' => 'instructor',
+        ]);
+
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
@@ -130,7 +136,7 @@ class DatabaseSeeder extends Seeder
         ]);
         UserRole::factory()->create([
             'user_id' => $admin->id,
-            'department_id' => $dept->id,
+            'department_id' => null,
             'role' => 'admin',
         ]);
 
@@ -143,7 +149,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $instructorRole = UserRole::factory()->create([
             'user_id' => $instructor->id,
-            'department_id' => $dept->id,
+            'department_id' => null,
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
@@ -219,7 +225,7 @@ class DatabaseSeeder extends Seeder
 
             $role = UserRole::factory()->create([
                 'user_id' => $user->id,
-                'department_id' => $dept->id,
+                'department_id' => null,
                 'role' => 'instructor',
             ]);
 

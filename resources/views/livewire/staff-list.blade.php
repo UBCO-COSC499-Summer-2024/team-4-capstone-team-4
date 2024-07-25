@@ -21,7 +21,7 @@
                 </select>
             </div>
             @if($admin)
-                <x-staff-filter />
+                <x-admin-staff-filter />
             @else
                 @if($editMode)
                     <x-staff-filter />

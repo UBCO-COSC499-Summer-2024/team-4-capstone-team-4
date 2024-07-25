@@ -31,9 +31,9 @@
     </td>    
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Edit">description</span></a>
-            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Delete">description</span></a>
-            <a><span class="material-symbols-outlined hover:text-[#3b4779]" title="Send Reset Link">description</span></a>
+            <a wire:click="EditStaff"><span class="material-symbols-outlined text-gray-500" title="Edit">edit</span></a>
+            <a wire:click="DeleteStaff"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></a>
+            <a wire:click="SendReset"><span class="material-symbols-outlined text-gray-500" title="Send Reset Link">send</span></a>
         </div>
     </td>
 </tr>

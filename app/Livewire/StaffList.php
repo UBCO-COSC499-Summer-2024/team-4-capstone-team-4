@@ -54,11 +54,33 @@ class StaffList extends Component
 
         $user = Auth::user();
         $dept_id = null;
-        if($user->hasRoles(['dept_head', 'dept_staff'])){
+        
+        if($user->hasRole('admin')){
+            $usersQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('departments as areas_dept', 'areas.dept_id', '=', 'areas_dept.id') // aliasing departments table for areas
+            ->leftJoin('departments as user_dept', 'user_roles.department_id', '=', 'user_dept.id'); // aliasing departments table for user roles
+
+        }else{
             $dept_id = UserRole::find($user->id)->department_id;
-             //find all users that are instructors in the department
-            $usersQuery->whereHas('roles', function ($queryBuilder) {
-                $queryBuilder->where('role', 'instructor');
+            $year = $this->selectedYear;
+
+            $usersQuery->distinct()
+            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+            ->leftJoin('course_sections', function ($join) use ($year){
+                $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                     ->where('course_sections.year', '=', $year);
+            })
+            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $year) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
+            ->where('user_roles.role', 'instructor')  // Ensure the user is an instructor
+            ->where(function ($query) use ($dept_id) {
+                $query->where('areas.dept_id', $dept_id)  // Ensure the user belongs to the department
+                      ->orWhereNull('course_sections.id');  // Course section is optional
             });
         }
 
@@ -79,34 +101,22 @@ class StaffList extends Component
         }
         //filter by roles if set
         if(!empty($roles)){
-
+            $usersQuery->whereHas('roles', function ($queryBuilder) use ($roles){
+                $queryBuilder->whereIn('role', $roles);
+            });
         }
 
         //filter by roles if set
         if(!empty($depts)){
-
+            $usersQuery->where(function ($queryBuilder) use ($depts){
+                $queryBuilder->whereHas('teaches.courseSection.area.department', function ($queryBuilder) use ($depts){
+                    $queryBuilder->whereIn('name', $depts);
+                })->orWhereHas('roles.department',  function ($queryBuilder) use ($depts){
+                    $queryBuilder->whereIn('name', $depts);
+                });
+            });
         }
-
-        //join all the tables
-        if($user->hasRole('admin')){
-            $usersQuery->distinct()
-            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->join('departments', 'departments.id', '=', 'user_roles.department_id');
-        }else{
-            $currentYear = $this->selectedYear;
-            $usersQuery = $usersQuery->distinct()
-            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-            ->leftJoin('course_sections', function($join) use ($currentYear) {
-                $join->on('teaches.course_section_id', '=', 'course_sections.id')
-                    ->where('course_sections.year', '=', $currentYear);
-            })
-            ->orWhereNull('course_sections.id')
-            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-            ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
-            ->where('areas.dept_id', $dept_id);
-        }
-
+        
         // Sort according to sort fields
         $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
@@ -146,6 +156,7 @@ class StaffList extends Component
                 break;          
         }
 
+        //pagination
         switch ($this->pagination) {
             case 25:
                 $users = $usersQuery->paginate(25);
