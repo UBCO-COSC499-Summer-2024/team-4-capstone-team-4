@@ -108,6 +108,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_head',
         ]);
 
+        $headrole2 = UserRole::factory()->create([
+            'user_id' => $head->id,
+            'role' => 'instructor',
+        ]);
+
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
@@ -209,7 +214,7 @@ class DatabaseSeeder extends Seeder
         $this->updatePerformance2($extrahour, $dept);
 
         // Create courses and assign instructors to them    
-        $courses = CourseSection::factory(10)->create([
+        $courses = CourseSection::factory(50)->create([
             'year' => date('Y'),
         ]);
         foreach($courses as $course){

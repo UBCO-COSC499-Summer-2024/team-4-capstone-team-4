@@ -4,19 +4,30 @@
         <form id="login-form" class="form" method="POST" action="{{ route('login') }}">
             @csrf
 
-            <x-form-item>
-                <x-form-icon icon="Email"/>
-                <x-form-input type="text" id="email" name="email" placeholder="Email..." />
+            <x-form-item class="flex flex-col">
+                <div class="flex items-center">
+                    <x-form-icon icon="Email" class="mr-2"/>
+                    <x-form-input type="text" id="email" name="email" placeholder="Email..."/>
+                </div>
+                <x-input-error for="email" class="mt-2" />
             </x-form-item>
-            <x-form-item>
-                <x-form-icon icon="Password"/>
-                <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
+            <x-form-item class="flex flex-col">
+                <div class="flex items-center">
+                    <x-form-icon icon="Password" class="mr-2"/>
+                    <x-form-input type="password" id="password" name="password" placeholder="Password..."/>
+                </div>
+                <x-input-error for="password" class="mt-2" />
             </x-form-item>
             {{-- <x-form-item>
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
             </x-form-item> --}}
-
+            {{-- @php
+            $userRoles = auth()->user()->roles; 
+            @endphp      
+            @if ($userRoles->isEmpty())
+                <li style="color:red;">No valid role assigned to your account.</li>
+            @endif --}}
             <x-validation-errors/>
 
             <x-form-item>

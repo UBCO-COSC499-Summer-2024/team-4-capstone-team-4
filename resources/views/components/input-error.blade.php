@@ -1,5 +1,11 @@
 @props(['for'])
 
 @error($for)
-    <p {{ $attributes->merge(['class' => 'text-sm text-red-600']) }}>{{ $message }}</p>
+    @if($message !== "These credentials do not match our records.")
+        <p {{ $attributes->merge(['class' => 'font-normal text-base text-red-600']) }}>{{ $message }}</p>
+    @else
+        @if($for == 'password')
+            <p {{ $attributes->merge(['class' => 'font-normal text-base text-red-600']) }}>{{ $message }}</p>
+        @endif
+    @endif
 @enderror

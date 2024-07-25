@@ -57,9 +57,6 @@ Route::middleware([
     Route::get('/staff', function() {
         return view('staff');
     })->name('staff');
-    Route::get('/staff/edit', function() {
-        return view('staff-edit-mode');
-    })->name('staff.edit');
     Route::get('/leaderboard', function () {
         return view('leaderboard');
     })->name('leaderboard');
@@ -106,14 +103,28 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    CheckRole::class.':admin,dept_head,dept_staff',
+])->group(function () {
+    Route::get('/performance/{instructor_id}', [ChartController::class, 'showChart'])->name('performance');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    CheckRole::class.':admin,dept_head,dept_staff',
+])->group(function () {
+    Route::get('/dashboard/{switch}', [ChartController::class, 'showChart'])->name('switch-dashboard');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
 ])->prefix('/courses')->group(function () {
     Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
     Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-     Route::get('/edit', function(){
-        return view('staff-edit-mode');
-    })->name('courses.edit');
-
 });
 
 Route::middleware([
@@ -122,9 +133,6 @@ Route::middleware([
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff'
 ])->prefix('/staff')->group(function () {
-    Route::get('/edit', function(){
-        return view('staff-edit-mode');
-    })->name('staff.edit');
     Route::get('/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('staff.id');
 });
 
