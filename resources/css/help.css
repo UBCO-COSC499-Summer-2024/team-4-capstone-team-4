@@ -108,7 +108,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
+    font-size: 1rem !important;
     width: 100%;
     height: 100%;
     border-radius: 1rem;
@@ -188,6 +188,16 @@
     padding: 10px;
     border-radius: .5rem;
     background: #fafafa;
+}
+
+.accordion-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.accordion-content a:hover {
+    text-decoration: underline;
 }
 
 .hero, .main-topics, .faq {

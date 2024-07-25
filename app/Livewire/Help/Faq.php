@@ -9,8 +9,8 @@ class FAQ extends Component
     public $faqs;
     protected $placeholders = [
         'support' => [
-            'email' => 'insightatubc@gmail.com',
-            'phone' => '604-822-5555',
+            'email' => '<a href="mailto:insightatubc@gmail.com">insightatubc@gmail.com</a>',
+            'phone' => '<a href="tel:604-822-5555">604-822-5555</a>',
         ],
     ];
 

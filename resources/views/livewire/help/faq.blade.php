@@ -5,12 +5,12 @@
         @foreach ($faqs as $index => $faq)
             <div class="accordion-item">
                 <button class="accordion-header glass" type="button" aria-expanded="false" aria-controls="accordion-content-{{ $index }}">
-                    {{ $faq['question'] }}
+                    {!! $faq['question'] !!}
 
                     <span class="material-symbols-outlined icon">keyboard_arrow_down</span>
                 </button>
                 <div id="accordion-content-{{ $index }}" class="accordion-content glass" hidden>
-                    <p>{{ $faq['answer'] }}</p>
+                    <p>{!! $faq['answer'] !!}</p>
                 </div>
             </div>
         @endforeach
