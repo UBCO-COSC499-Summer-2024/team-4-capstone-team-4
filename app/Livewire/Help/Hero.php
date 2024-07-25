@@ -37,6 +37,7 @@ class Hero extends Component
     protected $useCache = false;
     protected $listeners = [
         'search' => 'searchV2',
+        'clear-search-results' => 'clearSearchResults',
     ];
 
     public function mount($cache = false) {
@@ -59,7 +60,7 @@ class Hero extends Component
 
         $data = [];
         foreach ($topics as $index => $topic) {
-            $path = base_path('/resources/json/help/' . $topic['url'] . '.json');
+            $path = base_path('/resources/json/help/pages/' . $topic['url'] . '.json');
             if (File::exists($path)) {
                 $topicData = json_decode(File::get($path), true);
                 $data[$topic['title']] = $this->replacePlaceholders($topicData);
@@ -70,6 +71,12 @@ class Hero extends Component
         $data['FAQ'] = json_decode(File::get(base_path('/resources/json/help/faq.json')), true);
         $data['FAQ'] = $this->replacePlaceholders($data['FAQ']);
         return $data;
+    }
+
+    public function clearSearchResults()
+    {
+        $this->searchResults = [];
+        Session::forget('searchResults');
     }
 
     protected function replacePlaceholders($item)
@@ -99,14 +106,13 @@ class Hero extends Component
     public function searchV2($q)
     {
         Log::debug('searchV2 method called', ['query' => $q]); // Initial log
-        // dd($this->allData);
         try {
             Log::info('Starting search', ['query' => $q]);
             $results = [];
 
             if ($this->useCache) {
                 $cacheKey = 'search_results_' . md5($q . $this->searchInFaqs);
-                $results = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($q) {
+                $results = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($q) {
                     return $this->performSearch($q);
                 });
             } else {
@@ -114,7 +120,7 @@ class Hero extends Component
             }
 
             Session::put('searchResults', $results);
-            $this->dispatch('helps-search-results', $results);
+            $this->dispatch('help-search-results', $results);
             Log::info('Search results', ['results' => $results]);
             return $results;
 
@@ -126,6 +132,7 @@ class Hero extends Component
             ]);
         }
     }
+
 
     protected function detectDorking($query)
     {
@@ -155,66 +162,76 @@ class Hero extends Component
     }
 
     protected function parseDorks($query)
-{
-    Log::debug('parseDorks method called', ['query' => $query]);
+    {
+        Log::debug('parseDorks method called', ['query' => $query]);
 
-    $dorks = [
-        'topics' => [],
-        'tags' => [],
-        'exclude' => [] // Ensure this key is always present
-    ];
+        $dorks = [
+            'topics' => [],
+            'tags' => [],
+            'exclude' => [] // Ensure this key is always present
+        ];
 
-    foreach ($this->allowedDorks as $dork => $config) {
-        foreach ($config['aliases'] as $alias) {
-            preg_match_all('/' . $alias . ':\s*"([^"]*)"/i', $query, $matches);
-            if (!empty($matches[1])) {
-                $dorks[$dork] = array_merge($dorks[$dork], array_map('trim', explode(',', $matches[1][0])));
+        foreach ($this->allowedDorks as $dork => $config) {
+            foreach ($config['aliases'] as $alias) {
+                preg_match_all('/' . $alias . ':\s*"([^"]*)"/i', $query, $matches);
+                if (!empty($matches[1])) {
+                    $dorks[$dork] = array_merge($dorks[$dork], array_map('trim', explode(',', $matches[1][0])));
+                }
             }
         }
+
+        Log::info('Parsed dorks', ['dorks' => $dorks]);
+        return $dorks;
     }
-
-    Log::info('Parsed dorks', ['dorks' => $dorks]);
-    return $dorks;
-}
-
-
 
     protected function recursiveSearch($data, $query)
     {
-        Log::debug('recursiveSearch method called', ['query' => $query]); // Added log
-        // dd($data);
         $results = [];
 
         foreach ($data as $topic => $items) {
-            // dd($items);
-            if (is_array($items)) {
-                foreach ($items as $item) {
-                    if (is_array($item)) {
-                        if ($this->matchesDorks($item, $topic)) {
-                            $results[] = [
-                                'topic' => $topic,
-                                'data' => $item,
-                            ];
-                        }
-                        // Recursive call for nested arrays
-                        $nestedResults = $this->recursiveSearch($item, $query);
-                        $results = array_merge($results, $nestedResults);
-                        Log::info('Nested results', ['results' => $nestedResults]);
+            if ($topic === 'FAQ') {
+                foreach ($items as $faq) {
+                    if (stripos($faq['question'], $query) !== false || stripos($faq['answer'], $query) !== false) {
+                        $results[] = [
+                            'topic' => 'FAQ',
+                            'url' => route('help'),
+                            'content' => "<section class='help-result-section'><h2>Question</h2><p>{$faq['question']}</p><h2>Answer</h2><p>{$faq['answer']}</p></section>",
+                            'tags' => $faq['tags'] ?? [],
+                        ];
                     }
                 }
             } else {
-                if (stripos($items, $query) !== false) {
-                    $results[] = [
-                        'topic' => $topic,
-                        'data' => $items,
-                    ];
-                    Log::info('Search results', ['results' => $results]);
+                if (is_array($items)) {
+                    foreach ($items as $item) {
+                        if (is_array($item)) {
+                            if ($this->matchesDorks($item, $topic)) {
+                                $results[] = [
+                                    'topic' => $topic,
+                                    'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topic))]),
+                                    'content' => $item['content'] ?? 'No content available',
+                                    'tags' => $item['tags'] ?? [],
+                                ];
+                            }
+                            $nestedResults = $this->recursiveSearch($item, $query);
+                            $results = array_merge($results, $nestedResults);
+                        }
+                    }
+                } else {
+                    if (stripos($items, $query) !== false) {
+                        $results[] = [
+                            'topic' => $topic,
+                            'url' => route('help.topic', ['topic' => strtolower(str_replace(' ', '-', $topic))]),
+                            'content' => $items,
+                            'tags' => [],
+                        ];
+                    }
                 }
             }
         }
 
         return $results;
     }
+
 
     protected function matchesDorks($item, $topic)
     {
@@ -248,5 +265,4 @@ class Hero extends Component
 
         return $matches && $searchMatch;
     }
-
 }

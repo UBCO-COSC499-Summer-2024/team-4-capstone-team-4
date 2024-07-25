@@ -12,17 +12,19 @@
 
         <livewire:help.hero />
 
-        {{-- @php
-            $searchResults = session()->get('searchResults', []);
+        @php
+            $searchResults = Session::get('searchResults');
         @endphp
 
         @if (!empty($searchResults))
             <div id="help-search-results">
-                <livewire:help.results :results="{{ json_encode($searchResults) }}" wire:key="{{time()}}" />
+                <h2 class="help-search-results-title">{{ __('Search Results') }}</h2>
+                @livewire('help.results', ['results' => $searchResults], key(time()))
+                {{-- <livewire:help.results :results="{{ json_encode($searchResults) }}" wire:key="{{time()}}" /> --}}
             </div>
-        @endif --}}
+        @endif
 
         <livewire:help.main-topics />
-        <livewire:help.f-a-q />
+        <livewire:help.faq />
     </div>
 </x-app-layout>

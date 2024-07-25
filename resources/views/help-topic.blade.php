@@ -18,25 +18,30 @@
         <livewire:help.hero />
 
         @php
+            $currentTopic = request()->route('topic');
             $topics = json_decode(file_get_contents(resource_path('/json/help/index.json')), true);
         @endphp
+
         @forelse ($topics as $index => $topic)
             @php
-                $path = resource_path('/json/help/'.$topic['url'].'.json');
+                $path = resource_path('/json/help/pages/'.$topic['url'].'.json');
                 if (!file_exists($path)) {
                     continue;
                 }
                 $data = json_decode(file_get_contents($path), true);
                 $componentName = 'help.' . $topic['url'];
             @endphp
-            @if (LivewireHelpers::componentExists($componentName))
-                @livewire($componentName, ['topic' => $topic, 'data' => $data], key($index))
-            @else
-                {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+
+            @if ($currentTopic === $topic['url'])
+                @if (LivewireHelpers::componentExists($componentName))
+                    @livewire($componentName, ['topic' => $topic, 'data' => $data], key($index))
+                @else
+                    {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+                @endif
             @endif
         @empty
-            <div class="content-main-topic">
-                <h2 class="content-main-topic-title">{{ __('No topics found') }}</h2>
+            <div class="p-4 bg-gray-100 rounded-lg shadow-md content-main-topic">
+                <h2 class="text-xl font-semibold content-main-topic-title">{{ __('No topics found') }}</h2>
             </div>
         @endforelse
     </div>

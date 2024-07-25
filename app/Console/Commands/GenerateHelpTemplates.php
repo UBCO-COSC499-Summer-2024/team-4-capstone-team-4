@@ -58,7 +58,7 @@ class GenerateHelpTemplates extends Command
         // Check if the topic exists
         if ($this->topicExists($topics, $topicArg)) {
             $this->info("Topic already exists: $topicArg");
-            $topicFilePath = resource_path("json/help/{$topicArg}.json");
+            $topicFilePath = resource_path("json/help/pages/{$topicArg}.json");
             if (!File::exists($topicFilePath)) {
                 $confirm = $this->ask("Help file does not exist for this topic. Do you want to generate one? (y/n)");
                 if (strtolower($confirm) !== 'y') {
@@ -95,7 +95,7 @@ class GenerateHelpTemplates extends Command
 
         foreach ($topics as $topic) {
             if ($topic['url'] === $topicArg) {
-                $topicFilePath = resource_path("json/help/{$topic['url']}.json");
+                $topicFilePath = resource_path("json/help/pages/{$topic['url']}.json");
                 if (File::exists($topicFilePath) && !$this->option('force')) {
                     $this->info("File already exists: $topicFilePath");
                     return;

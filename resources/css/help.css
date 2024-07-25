@@ -195,12 +195,21 @@
 }
 
 #help-search-results {
-    background: #ccc;
+    background: #fafafa;
     border-radius: 0.8rem;
     width: 100%;
     max-width: min(100%, 600px);
     margin: 0 auto;
     padding: 0.5rem;
+}
+
+.help-search-results-title {
+    font-size: 2em;
+    font-weight: bold;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #help-search-results .empty {
@@ -224,11 +233,22 @@
     font-weight: bold;
 }
 
+/* 1000px */
+@media (max-width: 1000px) {
+    #help-search-results {
+        max-width: min(100%, 80%);
+    }
+}
+
 /* smaller screens */
 @media (max-width: 768px) {
     .main-topics-list {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         /* grid-template-rows: 240px; */
         /* width: 480px */
+    }
+
+    #help-search-results {
+        max-width: 100%;
     }
 }

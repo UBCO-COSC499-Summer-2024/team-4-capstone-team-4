@@ -3,7 +3,7 @@
         {{-- <span class="material-symbols-outlined">{{ $result['icon'] }}</span> --}}
         <span class="help-result-title">{{ $result['topic'] }}</span>
     </a>
-    <p class="help-result-description">{{ $result['content'] ?? 'No description available' }}</p>
+    <p class="help-result-description">{!! $result['content'] ?? 'No description available' !!}</p>
     <div class="help-result-tags">
         @if (isset($result['tags']))
             @foreach ($result['tags'] as $tag)
@@ -11,7 +11,8 @@
             @endforeach
         @endif
     </div>
-    {{-- <div class="help-result-meta">
+    {{-- Optional meta information
+    <div class="help-result-meta">
         <span class="help-result-meta-item">
             <span class="material-symbols-outlined">visibility</span>
             <span class="help-result-meta-text">{{ $result['views'] ?? '0' }}</span>
@@ -24,5 +25,6 @@
             <span class="material-symbols-outlined">thumb_down</span>
             <span class="help-result-meta-text">{{ $result['dislikes'] ?? '0' }}</span>
         </span>
-    </div> --}}
+    </div>
+    --}}
 </div>

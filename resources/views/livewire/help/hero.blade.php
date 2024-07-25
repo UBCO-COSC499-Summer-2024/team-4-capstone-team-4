@@ -21,9 +21,18 @@
         searchInput.addEventListener('input', () => {
             const query = searchInput.value;
             console.log('Search query:', query);
-            @this.dispatch('search', {
-                'q': query
-            });
+            // if empty clear the searchResults session
+            const helpres = document.querySelector('#help-search-results');
+            if (query.length < 1) {
+                if (helpres) helpres.style.display = 'none';
+                @this.dispatch('clearSearchResults');
+                return;
+            } else {
+                if (helpres) helpres.style.display = 'block';
+                @this.dispatch('search', {
+                    'q': query
+                });
+            }
         });
     }
 </script>

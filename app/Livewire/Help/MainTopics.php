@@ -10,7 +10,7 @@ class MainTopics extends Component
 
     public function mount()
     {
-        $this->topics = json_decode(file_get_contents(base_path('/resources/json/help/index.json')), true);
+        $this->topics = json_decode(file_get_contents(resource_path('/json/help/index.json')), true);
     }
 
     public function render()

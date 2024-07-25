@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffEditModeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseDetailsController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\ServiceRoleController;
 use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Middleware\CheckRole;
@@ -39,9 +40,7 @@ Route::middleware([
         return view('help');
     })->name('help');
     Route::prefix('/help')->group(function () {
-        Route::get('/{topic}', function ($topic) {
-            return view('help-topic', ['topic' => $topic]);
-        })->name('help.topic');
+        Route::get('/{topic}', [HelpController::class, 'showHelpPage'])->name('help.topic');
     });
     Route::get('/performance', function () {
         return view('performance');
