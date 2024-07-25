@@ -70,7 +70,7 @@
                         Department Dashboard
                     </x-dashboard-button>
                     @endif
-                    <x-dashboard-button href="{{route('dept-report')}}">
+                    <x-dashboard-button href="{{route('instructor-report', ['instructor_id' => $performance->instructor_id])}}">
                         View Report
                     </x-dashboard-button>
                 </div>
