@@ -70,7 +70,7 @@
                         Department Dashboard
                     </x-dashboard-button>
                     @endif
-                    <x-dashboard-button href="{{route('dept-report')}}">
+                    <x-dashboard-button href="{{route('instructor-report', ['instructor_id' => $performance->instructor_id])}}">
                         View Report
                     </x-dashboard-button>
                 </div>
@@ -88,6 +88,16 @@
             <section class="dash-bottom">
                 <x-instructor-lists :assignmentCount="$assignmentCount" :chart2="$chart2" :chart3="$chart3"/>
             </section>
+        @elseif ($isAdmin)
+        <!-- Admin View -->
+        <h1 class="nos content-title">
+            <span class="content-title-text">Administrative Dashboard</span>
+        </h1>
+        <div class="content">
+            <h1 class="content-title">
+            </h1>
+            <livewire:admin-dashboard />
+    <   </div>
         @endif
     </div>
 </x-app-layout>
@@ -100,5 +110,4 @@
         window.location.search = params.toString();
     });
 </script>
-
 
