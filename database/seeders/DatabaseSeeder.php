@@ -108,6 +108,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_head',
         ]);
 
+        $headrole2 = UserRole::factory()->create([
+            'user_id' => $head->id,
+            'role' => 'instructor',
+        ]);
+
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
