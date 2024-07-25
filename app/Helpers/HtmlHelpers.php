@@ -17,7 +17,7 @@ class HtmlHelpers
                 $html .= '<div class="space-y-4">';
                 foreach ($subtopic['subsections'] as $subIndex => $subsection) {
                     $subsectionId = $subtopicId . '-subsection-' . $subIndex;
-                    $html .= '<div id="' . $subsectionId . '" class="p-4 border-l-4 border-blue-500 bg-gray-50">';
+                    $html .= '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
                     $html .= '<h4 class="mb-1 text-lg font-medium">' . htmlspecialchars($subsection['heading'] ?? 'No Heading') . '</h4>';
                     $html .= '<p class="mb-2">' . htmlspecialchars($subsection['content'] ?? 'No Content') . '</p>';
                     $html .= '<div class="flex flex-wrap gap-2">';
@@ -31,7 +31,7 @@ class HtmlHelpers
             }
 
             if (!empty($subtopic['subtopics'])) {
-                $html .= '<div class="ml-2">';
+                $html .= '<div class="">';
                 $html .= self::convertSubtopicsToHtml($subtopic['subtopics'], $subtopicId);
                 $html .= '</div>'; // Close subtopics div
             }
@@ -49,14 +49,14 @@ class HtmlHelpers
         foreach ($data as $index => $topic) {
             $subtopicId = 'subtopic-' . $index;
             $title = $mainTitle ?: ($topic['subtopic'] ?? 'No Subtopic');
-            $html .= '<section id="' . $subtopicId . '" class="p-4 mx-2 mb-4 bg-white border rounded-lg shadow-md">';
+            $html .= '<section id="' . $subtopicId . '" class="p-2 mx-1 mb-1 bg-white rounded-lg shadow-xs">';
             $html .= '<h2 class="mb-4 text-2xl font-bold">' . htmlspecialchars($title) . '</h2>';
 
             if (!empty($topic['subsections'])) {
                 $html .= '<div class="space-y-4">';
                 foreach ($topic['subsections'] as $subIndex => $subsection) {
                     $subsectionId = $subtopicId . '-subsection-' . $subIndex;
-                    $html .= '<div id="' . $subsectionId . '" class="p-4 border-l-4 border-blue-500 bg-gray-50">';
+                    $html .= '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
                     $html .= '<h3 class="mb-2 text-lg font-medium">' . htmlspecialchars($subsection['heading'] ?? 'No Heading') . '</h3>';
                     $html .= '<p class="mb-2">' . htmlspecialchars($subsection['content'] ?? 'No Content') . '</p>';
                     $html .= '<div class="flex flex-wrap gap-2">';
