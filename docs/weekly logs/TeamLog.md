@@ -7,25 +7,26 @@
 ## Features in the Project Plan Cycle:
 
 - Admin Staff Page 
-- Course Details Page - TAs, Admin
-- Import Page - File Upload (Validation)
+- Course Details Page - TAs
+- Import Page - File Upload 
 - Performance Page - Staff Profile
 - Help pages
 - Testing
 
 ## Associated Tasks from Project Board:
 
-![image of tasks](./tasks/todo1_july24_july25.png)
-![image of tasks](./tasks/todo2_july24_july25.png)
+![image of tasks](./tasks/todo_july24_july25.png)
 ![image of tasks](./tasks/inprogress_july24_july25.png)
+![image of tasks](./tasks/inprogress2_july24_july25.png)
 ![image of tasks](./tasks/inreview_july24_july25.png)
+![image of tasks](./tasks/inreview2_july24_july25.png)
 ![image of tasks](./tasks/done_july24_july25.png)
 
 ## Tasks for Next Cycle:
 
-![image of tasks](./tasks/todo1_july24_july25.png)
-![image of tasks](./tasks/todo2_july24_july25.png)
+![image of tasks](./tasks/todo_july24_july25.png)
 ![image of tasks](./tasks/inprogress_july24_july25.png)
+![image of tasks](./tasks/inprogress2_july24_july25.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -39,6 +40,7 @@
 ## Completed Tasks
 
 ![image of tasks](./tasks/inreview_july24_july25.png)
+![image of tasks](./tasks/inreview2_july24_july25.png)
 ![image of tasks](./tasks/done_july24_july25.png)
 
 ## In Progress Tasks / To do:
@@ -48,8 +50,8 @@
 
 ## Test Report / Testing Status:
 
-![image of test report](./testing/unit_test_july24_july25.png)
-![image of test report](./testing/feature_test_july24_july25.png)
+![image of test report](./testing/unit_test_july19_july23.png)
+![image of test report](./testing/feature_test_july19_july23.png)
 
 ## Overview:
 We started working on the admin pages as well as setting up template for help pages. The admin dashboard is ready and we are working on implementing admin functionalities on our main pages. The performance page for individual instructors is almost complete and is just missing the profile.
