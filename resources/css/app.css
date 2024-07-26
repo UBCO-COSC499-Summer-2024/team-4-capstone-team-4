@@ -359,7 +359,8 @@ h6 {
     align-items: center;
     font-size: 2rem;
     flex-direction: column;
-    text-transform: uppercase;
+    text-transform: uppe
+    rcase;
     gap: 1rem;
     font-weight: 600;
     color: var(--text-color);

@@ -10,6 +10,7 @@ use App\Http\Controllers\CourseDetailsController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\ServiceRoleController;
 use App\Http\Middleware\ApplyUserSettings;
+use App\Http\Controllers\UploadFileController;
 use App\Http\Middleware\CheckRole;
 use App\Models\ServiceRole;
 
@@ -79,6 +80,8 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
+    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file.show');
+    Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
     Route::get('/requests', function () {
         return view('svcrole.requests');
     })->name('service.requests');
@@ -127,6 +130,9 @@ Route::middleware([
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
     })->name('instructor-report');
+    Route::get('/preview', function () {
+        return view('preview');
+    })->name('preview');
 });
 
 Route::middleware([
