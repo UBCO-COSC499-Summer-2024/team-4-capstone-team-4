@@ -1,3 +1,90 @@
+## Cycle: July 24th - July 25th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_24_2024-07_25_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Complete testing for the Service Role Page
+  * #2: Continue debugging and refining new features
+  * #3: Implement additional features as per project requirements
+  * #4: Perform peer testing and gather feedback
+  * #5: Apply any necessary fixes and improvements based on peer testing feedback
+  * #6: Finalize troubleshooting and fully implement the PDF export feature
+  * #7: Develop Help Page Functionality 
+  * #8: Develop Help Page Search Functionality
+  * #9: Add Media Support in Help Pages
+  * #10: Resolve Merge Conflicts with feature-svcrole-manager branch
+  * #11: Address feedback and implement fixes from peer testing
+
+### Progress Update (since 07/24/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Complete testing for the Service Role Page</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Continue debugging and refining new features</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Implement additional features as per project requirements</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Perform peer testing and gather feedback</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Apply any necessary fixes and improvements based on peer testing feedback</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Finalize troubleshooting and fully implement the PDF export feature </td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Develop Help Page Functionality </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Develop Help Page Search Functionality </td>
+        <td>Complete </td>
+    </tr>
+    <tr>
+        <td>Add Media Support in Help Pages </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Resolve Merge Conflicts with feature-svcrole-manager branch </td>
+        <td>Complete</td>
+    </tr>
+     <tr>
+        <td>Address feedback and implement fixes from peer testing </td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle was very productive with substantial progress made on both the Service Role and Help Page features. 
+
+The Help Page functionality is now complete, including core features, search capabilities, and media support. Peer testing feedback was addressed and necessary fixes implemented, enhancing the user experience. 
+
+Work continues on finalizing the PDF export for Service Roles, with the primary focus remaining on resolving the persistent Browsershot errors.
+
+Testing of the Service Role page is ongoing. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+ * Complete testing for the Service Role Page
+ * **Finalize troubleshooting and fully implement the PDF export feature**
+ * Continue implementation of remaining project requirements 
+
+---
+
 ## Cycle: July 19th - July 23rd
 
 ### Timesheet
