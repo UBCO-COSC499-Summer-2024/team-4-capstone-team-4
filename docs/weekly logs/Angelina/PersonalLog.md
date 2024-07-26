@@ -1,5 +1,46 @@
 # Angelina's Personal Log 
 
+## Wednesday (7/24 - 7/25)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log724-725.png)
+
+### Current Tasks 
+ * #1: Configure View Report Button on Dashboard
+ * #2: Add Switch Button to Dashboard
+ * #3: Add Year Filtering to Dashboard
+ * #4: Troubleshoot Staff page
+ * #5: Create Admin Dashboard
+ * #6: Add Links to Admin Dashboard
+ * #7: Debug Chart Controller
+ * #8: Add Profile to Dashboard
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Dashboard Report Button   | Completed   |
+| Dashboard Switch Button   | Completed   |
+| Dashboard Year Filter     | Completed   |
+| Troubleshoot Staff Page   | Completed   |
+| Create Admin Dashboard    | Completed   |
+| Admin Dashboard Links     | Completed   |
+| Debug Chart Controller    | In Progress |
+| Dashboard Profile         | In Progress |
+
+### Cycle Goal Review 
+Added filtering by year to dashboard and discovered many bugs where chart controller failed to check for null values. Corrected these bugs and then added a switch button for department heads who also have an instructor role, so they might be able to view their own dashboard. Troubleshooted some staff list bugs with Catherine. Removed action to kick out admin user and created an admin dashboard. Linked the dashboard menu to the respective pages. 
+
+### Next Cycle Goals
+ * Add score calculation method to Performance Model
+ * Add Instructor Profile to Dashboard
+ * Add more links and messages to dashboard
+ * Correct leaderboard query
+ * Add year filter to leaderboard
+ * Testing, Testing, Testing
+
+---
+
 ## Friday (7/19 - 7/23)
 
 ### Timesheet
