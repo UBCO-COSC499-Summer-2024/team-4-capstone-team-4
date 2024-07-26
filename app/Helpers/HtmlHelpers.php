@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Helpers;
-
 class HtmlHelpers
 {
     protected static $placeholders = [
