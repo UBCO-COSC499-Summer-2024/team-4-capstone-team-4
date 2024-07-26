@@ -38,8 +38,8 @@
                 @endphp
                 @foreach($allRoles as $role)
                     <div class="flex items-center gap-1">
-                        <x-checkbox wire:model="selectedRoles{{$userid}}" id="role-{{ $role }}" name="role-{{ $role }}" value="{{ $role }}" checked/>
-                        <label for="role-{{ $role }}">{{ $role }}</label>
+                        <x-checkbox wire:model="selectedRoles{{$userid}}" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" :checked="in_array($role, $user_roles)"/>
+                        <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
                     </div>
                 @endforeach
             </div>
@@ -51,11 +51,11 @@
         @if($editMode)
             <div class="flex flex-col space-y-2">
                 <div class="flex items-center">
-                    <x-radio-button value="true" name="status" :checked="$active"/>
+                    <x-radio-button value="true" name="status{{$userid}}" :checked="$active"/>
                     <label for="active">Active</label>
                 </div>
                 <div class="flex items-center">
-                    <x-radio-button value="false" name="status" :checked="!$active"/>
+                    <x-radio-button value="false" name="status{{$userid}}" :checked="!$active"/>
                     <label for="inactive">Inactive</label>
                 </div>
             </div>
