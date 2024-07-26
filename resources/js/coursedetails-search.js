@@ -1,16 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('courseTableBody');
-    const instructorFilter = document.getElementById('instructorFilter'); // Get the instructor filter element
+    const areaFilter = document.getElementById('areaFilter'); // Correct ID for the area filter element
 
-    if (!searchInput || !tableBody) return;
+    if (!searchInput || !tableBody) {
+        console.error('Required elements are missing: searchInput or tableBody');
+        return;
+    }
+    
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
-    function fetchCourses(query, instructorId) {
+    function fetchCourses(query, areaId) {
         const url = new URL(courseDetailsRoute);
         url.searchParams.append('search', query);
-        if (instructorId) {
-            url.searchParams.append('instructor_id', instructorId);
+        if (areaId) {
+            url.searchParams.append('area_id', areaId);
         }
         fetch(url.toString(), {
             headers: {
@@ -32,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     row.innerHTML = `
                         <td class="px-6 py-4 whitespace-nowrap">${section.name}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.departmentName}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.instructorName}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.enrolled}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.dropped}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.capacity}</td>
@@ -50,13 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     searchInput.addEventListener('input', function () {
         const query = searchInput.value.trim();
-        const instructorId = instructorFilter.value; // Get the selected instructor ID
-        fetchCourses(query, instructorId);
+        const areaId = areaFilter ? areaFilter.value : null; // Check if areaFilter exists
+        fetchCourses(query, areaId);
     });
 
-    instructorFilter.addEventListener('change', function () {
-        const query = searchInput.value.trim();
-        const instructorId = instructorFilter.value;
-        fetchCourses(query, instructorId);
-    });
+    if (areaFilter) { // Check if areaFilter exists before adding event listener
+        areaFilter.addEventListener('change', function () {
+            const query = searchInput.value.trim();
+            const areaId = areaFilter.value;
+            fetchCourses(query, areaId);
+        });
+    }
 });

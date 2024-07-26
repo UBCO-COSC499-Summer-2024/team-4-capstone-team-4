@@ -25,7 +25,7 @@
                         <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-custom-green text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Save
                         </button>
-                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm" onclick="closeAssignModal()">
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm close-assign-modal-button">
                             Cancel
                         </button>
                     </div>
@@ -34,18 +34,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    function openAssignModal() {
-        console.log('Opening modal');
-        document.getElementById('assignModal').classList.remove('hidden');
-    }
-
-    function closeAssignModal() {
-        console.log('Closing modal');
-        document.getElementById('assignModal').classList.add('hidden');
-        // Explicitly reset the display style
-        document.getElementById('assignModal').style.display = 'none';
-    }
-</script>
- 
+</div>
+<!-- Ensure the correct path to your JS file -->
+<script src="{{ asset('js/coursedetails-modal.js') }}"></script>
