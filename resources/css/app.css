@@ -312,6 +312,36 @@ h6 {
     align-items: center;
 }
 
+.grid-sticky {
+    align-self: start;
+    position: sticky;
+    top: 0;
+}
+
+.grid-sticky-top {
+    align-self: start;
+    position: sticky;
+    top: 0;
+}
+
+.grid-sticky-bottom {
+    align-self: end;
+    position: sticky;
+    bottom: 0;
+}
+
+.grid-sticky-left {
+    align-self: start;
+    position: sticky;
+    left: 0;
+}
+
+.grid-sticky-right {
+    align-self: start;
+    position: sticky;
+    right: 0;
+}
+
 .content>h1,
 .content-title {
     font-size: 1.5rem;
