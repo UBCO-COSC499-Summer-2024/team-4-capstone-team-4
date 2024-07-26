@@ -7,9 +7,11 @@ use Livewire\Component;
 class DragAndDrop extends Component
 {
     protected $files;
+    public string $route;
 
-    public function mount() {
+    public function mount(string $route) {
         $this->files = collect();
+        $this->route = $route;
     }
 
     public function render()

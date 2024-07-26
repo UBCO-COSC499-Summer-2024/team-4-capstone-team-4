@@ -6,7 +6,7 @@ use App\Models\Area;
 use App\Models\CourseSection;
 use Livewire\Component;
 
-class UploadFileForm extends Component
+class UploadFileFormWorkday extends Component
 {
     public $rows = [];
     public $finalCSVs = [];
@@ -152,7 +152,7 @@ class UploadFileForm extends Component
         $areas = Area::all();
 
         // dd($this->finalCSVs);
-        return view('livewire.upload-file-form', [
+        return view('livewire.upload-file-form-workday', [
             'areas' => $areas,
         ]);
     }

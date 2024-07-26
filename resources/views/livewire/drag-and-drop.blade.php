@@ -1,7 +1,7 @@
 <section class="dnd-container">
     @vite(['resources/css/dnd.css'])
 
-    <form action="{{ route('upload.file') }}" method="post" enctype="multipart/form-data" class="drop-zone-form form drop-zone glass dnd-column">
+    <form action="{{ route($route) }}" method="post" enctype="multipart/form-data" class="drop-zone-form form drop-zone glass dnd-column">
         @csrf
         <label for="file" class="drop-zone-label">
             <span class="material-symbols-outlined drop-zone-icon icon">cloud_upload</span>

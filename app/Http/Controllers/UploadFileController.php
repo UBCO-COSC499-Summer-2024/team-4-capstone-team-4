@@ -9,9 +9,14 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadFileController extends Controller {
 
-    public function showUploadFile()
+    public function showUploadFileWorkday()
     {
-        return view('upload-file');
+        return view('upload-file-workday');
+    }
+
+    public function showUploadFileSei()
+    {
+        return view('upload-file-sei');
     }
 
     private function readCSV($filePath) {
@@ -127,7 +132,7 @@ class UploadFileController extends Controller {
         return $csvData;
     }
 
-    public function upload(Request $request) {
+    public function uploadWorkday(Request $request) {
         $finalCSVs = [];
         $uploadedFiles = [];
      
@@ -201,7 +206,7 @@ class UploadFileController extends Controller {
         }
 
         $request->session()->put('finalCSVs', $finalCSVs);
-        return redirect()->route('upload.file');
+        return redirect()->route('upload.file.show.workday');
 
         session()->flash('message', 'File uploaded successfully!');
         // session()->put('csvData', $csvData);
@@ -221,5 +226,9 @@ class UploadFileController extends Controller {
         // return redirect()->route('import');
     }
     
+
+    public function uploadSei(Request $request) {
+        dd('sei file!');
+    }
 }
 
