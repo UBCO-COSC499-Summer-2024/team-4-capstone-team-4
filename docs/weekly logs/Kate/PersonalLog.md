@@ -1,3 +1,121 @@
+## Friday (7/24 - 7/26)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_24_2024-07_26_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Upload File - Workday
+  * #2: Upload File - Sei
+  * #3: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Page - Extra Form Functionality / #312
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - UI / #339
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Read from Files / #359
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Read from Files / #465
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Import File - Drag and Drop / #187
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Select Multiple Files / #340
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Front & Backend Validation / #455
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Database Validation / #461
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Testing / #468
+        </td>
+        <!-- Status -->
+        <td>Todo
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Validaiton (sei) / #467
+        </td>
+        <!-- Status -->
+        <td>Todo
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Populate SEI Form / #466
+        </td>
+        <!-- Status -->
+        <td>Todo
+        </td>
+    </tr>
+     
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I added some extra feature to the manual import page (adding and deleting multple rows). I just have to figure out a UI for those features. I also completed a big chunk of the file upload functionality. It can read from the files and populate a form, I just need to work on validating the data to prevent errors and then sending that data to the db. I will then work on UI and testing to complete the import feature completely.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Upload file UI
+  * Upload file functionality
+  * Populate form from pulled data
+  * Submit populated form to db
+  * Testing
 ## Wednesday (7/19 - 7/24)
 
 ### Timesheet
@@ -59,13 +177,13 @@
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-I added some extra feature to the manual import page (adding and deleting multple rows). I just have to figure out a UI for those features. I also completed a big chunk of the file upload functionality. It can read from the files and populate a form, I just need to work on validating the data to prevent errors and then sending that data to the db. I will then work on UI and testing to complete the import feature completely.
+All CSV files can now be read from and the data structured appropriately. I am just working on validation to minimize errors when inserting data. Once that is complete, most of the feature will be done as I already have a templete I can use for the SEI upload file page. I plan to complete these tasks within the next couple of days and focus on testing for the next cycle. 
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle
-  * Upload file UI
-  * Upload file functionality
-  * Populate form from pulled data
+  * Populate sei form from pulled data
+  * Validate data (frontend, backend, db)
   * Submit populated form to db
+  * Delete rows
   * Testing
 
 ## Friday (7/17 - 7/19)
