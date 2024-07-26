@@ -78,7 +78,7 @@
         </th>
         <th scope="col" class="px-6 py-3 svcr-list-header-item">
             <div class="flex items-center px-1.5 py-2 text-sm">
-                Active
+                Status
                 <button wire:click="sort('active')">
                     @if($sortField === 'active' && $sortDirection === 'asc')
                         <span class="material-symbols-outlined">

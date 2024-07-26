@@ -14,7 +14,7 @@
                 @if($editMode)
                     <x-admin-staff-filter />
                     <x-staff-button-green wire:click="saveAdmin" id="staff-save" name="staff-save">Save</x-staff-button-green>
-                    <x-staff-button-red wire:click="delete" id="staff-exit" name="staff-exit">Delete</x-staff-button-red>
+                    <x-staff-button-red wire:click="confirmDelete" id="staff-exit" name="staff-exit">Delete</x-staff-button-red>
                     <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
                 @else
                     <x-admin-staff-filter />
@@ -63,6 +63,27 @@
                 @endif
             </div>
         @endif
+        @if($confirmDelete)
+            <x-confirmation-modal>
+                <x-slot name="title">
+                    {{ __('Delete User(s)') }}
+                </x-slot>
+        
+                <x-slot name="content">
+                    {{ __('Are you sure you would like to delete the user(s)?') }}
+                </x-slot>
+        
+                <x-slot name="footer">
+                    <x-staff-button-red wire:click="$set('confirmDelete', false)">
+                        {{ __('Cancel') }}
+                    </x-staff-button-red>
+        
+                    <x-staff-button-red class="ms-3" wire:click="delete">
+                        {{ __('Delete') }}
+                    </x-staff-button-red>
+                </x-slot>
+            </x-confirmation-modal>
+        @endif
         <x-staff-table>
             <x-staff-table-header :sortField="$sortField" :sortDirection="$sortDirection" :selectedYear="$selectedYear" :selectedMonth="$selectedMonth" />
             <tbody>
@@ -102,9 +123,11 @@
                             <x-staff-table-row
                             fullname="{{ $user->firstname }} {{ $user->lastname }}"
                             email="{{ $user->email }}"
-                            dept="{{ $user->department_name}}"
+                            dept="{{ $user->department_name == '' ? '-' : $user->department_name }}"
                             roles="{{ implode(', ', $roles) }}"
                             active="{{ $user->active }}"
+                            editMode="{{ $editMode }}"
+                            userid="{{ $user->id }}"
                             />
                         @else
                             @php

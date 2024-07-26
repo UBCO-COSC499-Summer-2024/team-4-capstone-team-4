@@ -42,6 +42,7 @@ class StaffList extends Component
     public $password;
     public $password_confirmation;
     public $user_roles = [];
+    public $confirmDelete = false;
 
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
@@ -119,12 +120,9 @@ class StaffList extends Component
 
         //filter by depts if set
         if (!empty($depts)) {
-            $usersQuery->where(function ($queryBuilder) use ($depts) {
-                $queryBuilder->whereHas('teaches.courseSection.area.department', function ($query) use ($depts) {
-                    $query->whereIn('name', $depts);
-                })->orWhereHas('roles.department', function ($query) use ($depts) {
-                    $query->whereIn('name', $depts);
-                });
+            $usersQuery->where(function ($query) use ($depts) {
+                $query->whereIn('areas_dept.name', $depts)
+                      ->orWhereIn('user_dept.name', $depts);
             });
         }
         
@@ -199,7 +197,8 @@ class StaffList extends Component
             'selectedYear'=>$this->selectedYear, 
             'selectedMonth'=>$this->selectedMonth, 
             'editMode'=>$this->editMode, 
-            'pagination' => $this->pagination
+            'pagination' => $this->pagination,
+            'confirmDelete' => $this->confirmDelete
         ]);
     }
 
@@ -239,8 +238,7 @@ class StaffList extends Component
         }
     }
 
-    public function submit()
-    {
+    public function submit(){
         $this->validate();
 
         $hours = $this->hours;
@@ -422,9 +420,36 @@ class StaffList extends Component
         
     }
 
-    // bulk delete
-    public function delete(){
-
+    public function confirmDelete(){
+        if(count($this->staffCheckboxes) > 0){
+            $this->confirmDelete = true;
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'No user selected.',
+                'type' => 'error'
+            ]); 
+        }
     }
 
+    // bulk delete
+    public function delete(){
+        $staff_checkboxes = $this->staffCheckboxes;
+
+        foreach($staff_checkboxes as $email){
+            $user = User::where('email', $email)->first();
+            try{
+                $user->delete();
+            }catch(Exception $e){
+                $this->dispatch('show-toast', [
+                    'message' => 'Failed to delete user(s):' . $e->getMessage(),
+                    'type' => 'error'
+                ]); 
+            }
+            $this->dispatch('show-toast', [
+                'message' => count($staff_checkboxes). ' user(s) deleted!',
+                'type' => 'success'
+            ]); 
+        }
+
+    }
 }

@@ -24,20 +24,51 @@
         </div>
     </td>
     <td class="px-6 py-4">
+        {{-- @if($editMode)
+        @else
+        @endif --}}
         <div class="flex items-center justify-center h-full">{{ $dept }}</div>
     </td> 
     <td class="px-6 py-4">
-        <div class="flex items-center justify-center h-full">{{ $roles }}</div>
+        @if($editMode)
+            <div class="flex flex-col">
+                @php
+                    $user_roles = explode(',', $roles);
+                    $allRoles = ['Instructor', 'Department Head', 'Department Staff', 'Admin'];
+                @endphp
+                @foreach($allRoles as $role)
+                    <div class="flex items-center gap-1">
+                        <x-checkbox wire:model="selectedRoles{{$userid}}" id="role-{{ $role }}" name="role-{{ $role }}" value="{{ $role }}" checked/>
+                        <label for="role-{{ $role }}">{{ $role }}</label>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="flex items-center justify-center h-full">{{ $roles }}</div>
+        @endif
     </td>
     <td class="px-6 py-4">
-        <div class="flex items-center justify-center h-full">
-            @if($active)
-                <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-            @else
-                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-            @endif
-            {{ $active ? 'Active' : 'Inactive'}}
-        </div>
+        @if($editMode)
+            <div class="flex flex-col space-y-2">
+                <div class="flex items-center">
+                    <x-radio-button value="true" name="status" :checked="$active"/>
+                    <label for="active">Active</label>
+                </div>
+                <div class="flex items-center">
+                    <x-radio-button value="false" name="status" :checked="!$active"/>
+                    <label for="inactive">Inactive</label>
+                </div>
+            </div>
+        @else
+            <div class="flex items-center justify-center h-full">
+                @if($active)
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                @else
+                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                @endif
+                {{ $active ? 'Active' : 'Inactive'}}
+            </div>
+        @endif
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
