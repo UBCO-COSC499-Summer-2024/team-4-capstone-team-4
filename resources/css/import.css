@@ -98,7 +98,7 @@ input[type="file"] {
 }
 
 .import-form-row {
-  @apply py-2 flex flex-row items-center border-b-2 border-gray-200 border-solid bg-white shadow-none;
+  @apply flex flex-row items-center py-2 bg-white border-b-2 border-gray-200 border-solid shadow-none;
 }
 
 .import-form-row div {

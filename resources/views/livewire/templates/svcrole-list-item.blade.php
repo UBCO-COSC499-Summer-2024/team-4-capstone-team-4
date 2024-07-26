@@ -16,7 +16,11 @@
 
     <td class="svcr-list-item-cell" data-column="name">
         <span x-show="!isEditing" class="svcr-list-item-title" x-cloak>
-            <x-link href="{{ route('svcroles.manage.id', $serviceRole->id) }}" title="{{ $serviceRole->name }}" />
+            <x-link
+                href="{{ route('svcroles.manage.id', $serviceRole->id) }}"
+                title="{{ $serviceRole->name }}"
+                class="hover:underline "
+            />
         </span>
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
                wire:model="srname"
@@ -75,16 +79,16 @@
     </td>
 
     <td class="svcr-list-item-cell" data-column="instructors">
-        <span class="svcr-list-item-title" x-cloak>
+        <span class="flex items-center justify-start svcr-list-item-title" x-cloak>
             @forelse ($serviceRole->instructors->take(1) as $instructor)
                 {{ $instructor->getName() }}@if (!$loop->last), @endif
             @empty
                 <span class="text-gray-400">No instructors</span>
             @endforelse
-            @if ($serviceRole->instructors->count() > 2)
-                <button class="text-blue-500 hover:text-blue-700" onclick="window.location='{{ route('svcroles.manage.id', $serviceRole->id) }}'">
-                    <span>More</span>
-                </button>
+            @if ($serviceRole->instructors->count() > 1)
+                <span class="gap-4 text-blue-500 cursor-pointer hover:text-blue-700 material-symbols-outlined icon" onclick="window.location='{{ route('svcroles.manage.id', $serviceRole->id) }}'"
+                    data-tippy-content="View more instructors"
+                >more</span>
             @endif
         </span>
     </td>
@@ -124,9 +128,15 @@
 
             <button class="svcr-list-item-action"
                     wire:click="confirmSArchive({{ $serviceRole->id }})">
-                <span class="material-symbols-outlined icon text-[#ea3030]" title="{{
-                    $serviceRole->archived ? 'Unarchive' : 'Archive'
-                }}">
+                <span
+                    class="material-symbols-outlined icon text-[#ea3030]"
+                {{
+                    $serviceRole->archived ? 'data-tippy-content=Unarchive' : 'data-tippy-content=Archive'
+                }}
+                    {{-- title="{{
+                        $serviceRole->archived ? 'Unarchive' : 'Archive'
+                    }}" --}}
+                >
                     @if (!$serviceRole->archived)
                         archive
                     @else

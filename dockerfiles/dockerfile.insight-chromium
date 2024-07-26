@@ -1,0 +1,19 @@
+# Use the linuxserver/chromium base image
+FROM linuxserver/chromium
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    ca-certificates \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Puppeteer
+RUN npm install puppeteer
+
+# Set Puppeteer executable path
+ENV PUPPETEER_EXECUTABLE_PATH='/usr/bin/chromium'
+
+# Keep the container running
+ENTRYPOINT ["tail", "-f", "/dev/null"]
