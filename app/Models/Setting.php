@@ -30,11 +30,12 @@ class Setting extends Model
     public function findSetting($name) {
         // search key or predefined settings
         //, 'auth_method', 'theme', 'timezone', 'locale', 'language', 'key', 'value'
-        if (in_array($name, ['auth_method', 'theme', 'timezone', 'locale', 'language'])) {
-            return $this->where('key', $name)->first();
+        $predefined = ['auth_method', 'theme', 'timezone', 'locale', 'language'];
+        if (in_array($name, $predefined)) {
+            return $this->where('user_id', auth()->id())->first()[$name];
         } else {
             // search custom which is a jsonb
-
+            return $this->where('user_id', auth()->id())->where('custom->' . $name, '!=', null)->first();
         }
     }
 

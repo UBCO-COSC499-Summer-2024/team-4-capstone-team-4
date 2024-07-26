@@ -52,7 +52,9 @@
             </div>
         @endif
         <div class="provider-list">
-            <x-link href="{{ route('auth.provider', 'google') }}" title="Google" class="auth-provider-link">
+            <x-link
+                href="{{ route('auth.provider', ['provider' => 'google']) }}"
+                title="Google" class="auth-provider-link">
                 <x-logos.google/>
             </x-link>
         </div>
