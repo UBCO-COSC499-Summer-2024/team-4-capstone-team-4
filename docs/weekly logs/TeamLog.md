@@ -34,8 +34,8 @@
 
 ## Times for Team/Individual
 
-![image of clockify report](./clockify/team_july24_july25.png)
-![image of clockify report](./clockify/individual_july24_july25.png)
+![image of clockify report](./clockify/team_july24_july26.png)
+![image of clockify report](./clockify/individual_july24_july26.png)
 
 ## Completed Tasks
 
