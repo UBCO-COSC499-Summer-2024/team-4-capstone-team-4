@@ -29,6 +29,9 @@
         </h1>
 
         <livewire:help.hero />
+        <div id="help-search-results">
+            @livewire('help.results', key(time()))
+        </div>
 
         @forelse ($topics as $index => $topic)
             @php
@@ -55,4 +58,24 @@
     </div>
 
     <x-link-bar :links="$links" />
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to display search results from localStorage
+            function displaySearchResults() {
+                const searchResults = localStorage.getItem('searchResults');
+                const container = document.getElementById('search-results-container');
+
+                if (searchResults) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+
+            // Display search results if available in localStorage
+            displaySearchResults();
+        });
+    </script>
+    @endpush
 </x-app-layout>
