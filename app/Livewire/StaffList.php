@@ -49,15 +49,13 @@ class StaffList extends Component
         'staffCheckboxes' => 'required|array|min:1',
     ];
 
-    public function mount()
-    {
+    public function mount(){
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
         $this->pagination = 10;
     }
 
-    public function render()
-    {
+    public function render(){
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
         $depts = $this->selectedDepts;
@@ -403,7 +401,15 @@ class StaffList extends Component
                 'role' => $role,
             ]);
         }
+        // Clear form fields and close modal
         $this->showModal = false; 
+        $this->firstname = '';
+        $this->lastname = '';
+        $this->email = '';
+        $this->password = '';
+        $this->password_confirmation = '';
+        $this->user_roles = [];
+
         $this->dispatch('show-toast', [
             'message' => 'New user ' .$this->firstname. ' ' .$this->lastname. ' created successfully',
             'type' => 'success'
@@ -425,7 +431,8 @@ class StaffList extends Component
         
     }
 
-    public function confirmDelete(){
+    public function check(){
+        //$this->confirmDelete = true;
         if(count($this->staffCheckboxes) > 0){
             $this->confirmDelete = true;
         }else{
@@ -450,11 +457,13 @@ class StaffList extends Component
                     'type' => 'error'
                 ]); 
             }
-            $this->dispatch('show-toast', [
-                'message' => count($staff_checkboxes). ' user(s) deleted!',
-                'type' => 'success'
-            ]); 
         }
 
+        $this->confirmDelete = false;
+
+        $this->dispatch('show-toast', [
+            'message' => count($staff_checkboxes). ' user(s) deleted!',
+            'type' => 'success'
+        ]); 
     }
 }
