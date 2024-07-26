@@ -32,11 +32,11 @@
                     @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12 ">
-                    <input type="text" placeholder="101" wire:model="rows.{{$index}}.number" class="import-form-input ">
+                    <input type="text" placeholder="ex. 101" wire:model="rows.{{$index}}.number" class="import-form-input ">
                     @error('rows.'.$index.'.number')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="text" placeholder="001" wire:model="rows.{{$index}}.section" class="import-form-input">
+                    <input type="text" placeholder="ex. 001" wire:model="rows.{{$index}}.section" class="import-form-input">
                     @error('rows.'.$index.'.section')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
@@ -57,19 +57,19 @@
                     @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-3/12">
-                    <input type="number" placeholder="2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="import-form-input">
+                    <input type="number" placeholder="ex. 2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="import-form-input">
                     @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="import-form-input">
+                    <input type="number" step="1" min="1" max="999" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="import-form-input" required>
                     @error('rows.'.$index.'.enrolled')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.dropped" class="import-form-input">
+                    <input type="number" step="1" min="0" max="999" placeholder="#" wire:model="rows.{{$index}}.dropped" class="import-form-input" required>
                     @error('rows.'.$index.'.dropped')<span class="import-error"> {{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.capacity" class="import-form-input">
+                    <input type="number" step="1" min="1" max="999" placeholder="#" wire:model="rows.{{$index}}.capacity" class="import-form-input" required>
                     @error('rows.'.$index.'.capacity')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-1/12 flex justify-center">
@@ -85,7 +85,15 @@
             @endforeach
         </div>
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="import-form-add-button">Add Row</button>
+         
+            <input type="number" step="1" min="0" max="999" placeholder="#" wire:model='rowAmount' class="text-black">
+            <button type="button" wire:click='addManyRows' class="import-form-add-button">Add Many</button>
+            <button type="button" wire:click='deleteManyRows' class="rounded-lg import-form-delete-button">Delete Many</button>
+        
+            <button type="button" wire:click="addRow" class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>    
+                Add Row
+            </button>
             <button type="submit" class="import-form-save-button">Save</button>
         </div>
     </form>
