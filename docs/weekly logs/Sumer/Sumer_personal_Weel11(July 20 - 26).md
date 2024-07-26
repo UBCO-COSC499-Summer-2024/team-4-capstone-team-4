@@ -195,3 +195,62 @@ Continued working on the course details page and updated logs. Created a button 
 
 - Continue working on functionalities, and troubleshooting. Make sure to complete the in-progress tasks.
 
+
+#### Wednesdat (7/24/2024)
+
+#### Current Tasks
+
+Features:
+- Continued working on the Course details page
+   - Troubleshooting for the course details page
+   - Changed the table structure
+   - Buttons fixing
+
+Communication Update:
+- Updated the logs for the week up to date
+
+#### Progress Update (till 7/24/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Communication Update (Logs Update)</td>
+        <td>Complete</td>
+    </tr>
+      <tr>
+        <td>Features: Course Details: Changed the table structure</td>
+        <td>Completed</td>
+      </tr>
+    <tr>
+        <td>Features: Course Details: Changed the instructor filter to area filter</td>
+        <td>Completed</td>
+      </tr>
+     <tr>
+        <td>Features: Course details: Troubleshooting: Fixing bugs for both tables</td>
+        <td>In progress</td>
+     </tr>
+       <tr>
+        <td>Features: Course Details: Troubleshooting: Button fixing</td>
+        <td>Completed</td>
+       </tr>
+        <tr>
+        <td>Features: Course Details: Assigning Functionality</td>
+        <td>In progress</td>
+       </tr>
+       
+    
+</table>
+
+#### Cycle Goal Review 
+
+Continued working on the course details page and updated logs. Changed the table structure so that the department head can see the names of the instructor as well. Then I changed the working of the filter so that the department head can filter with respect to the area and not by instructor name. Fixed the buttons on the department side. 
+
+#### Next Cycle Goals 
+
+- Continue working on functionalities, and troubleshooting. Make sure to complete the in-progress tasks. Continue working on fixing the bugs and completing the implementation of the functionalities to move on to testing.
+
+
+
