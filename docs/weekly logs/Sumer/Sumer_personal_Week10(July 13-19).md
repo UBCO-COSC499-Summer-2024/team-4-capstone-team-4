@@ -156,6 +156,10 @@ Continued working on the course details page and updated logs. Completed working
 
 
 
+## Cycle 18
+
+Clockify report [Click Here](https://app.clockify.me/reports/summary?start=2024-07-18T00:00:00.000Z&end=2024-07-19T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
+
 #### Thursday (7/18/2024)
 
 #### Current Tasks
