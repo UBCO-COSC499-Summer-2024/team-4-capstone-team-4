@@ -1,7 +1,7 @@
 @props(['showModal'])
 
 <div id="add-user-modal" tabindex="-1" aria-hidden="true" class="{{ $showModal ? '' : 'hidden' }} overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center">
-    <div class="relative p-4 w-full max-w-md">
+    <div class="relative p-4 w-full max-w-lg">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -41,7 +41,7 @@
                         <br>
 
                         <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Confirmation: </label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="ex. Password123">
+                        <input wire:model="password_confirmation" type="password" name="password_confirmation" id="password_confirmation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="ex. Password123">
                         <x-input-error for="password_confirmation" class="mt-2"/>
                         <br>
 

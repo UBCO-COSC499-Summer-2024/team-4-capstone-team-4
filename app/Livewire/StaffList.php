@@ -40,6 +40,7 @@ class StaffList extends Component
     public $lastname;
     public $email;
     public $password;
+    public $password_confirmation;
     public $user_roles = [];
 
     protected $rules = [
@@ -371,9 +372,10 @@ class StaffList extends Component
             'lastname' => $this->lastname,
             'email' => $this->email,
             'password' => $this->password,
+            'password_confirmation' => $this->password_confirmation,  // Add this line
             'user_roles' => $this->user_roles,
         ];
-        
+    
         Validator::make($data, [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -397,7 +399,13 @@ class StaffList extends Component
                 'department_id' => null,
                 'role' => $role,
             ]);
-        }  
+        }
+        $this->showModal = false; 
+        $this->dispatch('show-toast', [
+            'message' => 'New user ' .$this->firstname. ' ' .$this->lastname. ' created successfully',
+            'type' => 'success'
+        ]); 
+        
     }
 
     public function saveAdmin(){
