@@ -34,6 +34,8 @@ class UploadFileFormWorkday extends Component
             ];
         }
 
+        // dd($this->rows);
+
         session()->forget('finalCSVs');
     }
 
@@ -91,6 +93,20 @@ class UploadFileFormWorkday extends Component
         return $messages;
     }
 
+    public function deleteRow($row) {
+        $this->resetValidation();
+
+        unset($this->rows[$row]);
+        $this->rows = array_values($this->rows);
+    }
+
+    public function resetData()
+    {
+        session()->forget('finalCSVs');
+        $this->finalCSVs = [];
+        $this->rows = [];
+    }
+
     public function handleSubmit() {
         $this->validate();
 
@@ -133,7 +149,9 @@ class UploadFileFormWorkday extends Component
 
         $this->showModal = true;
 
+        $this->resetData();
         session()->flash('success', $this->showModal);
+
     }
 
     public function closeModal() {

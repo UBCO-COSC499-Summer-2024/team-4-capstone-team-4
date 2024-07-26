@@ -19,7 +19,7 @@ class UploadFileController extends Controller {
         return view('upload-file-sei');
     }
 
-    private function readCSV($filePath) {
+    private function readWorkdayCSV($filePath) {
         $csvData = [];
         $result = '';
         if (($handle = fopen($filePath, 'r')) !== false) {
@@ -110,11 +110,11 @@ class UploadFileController extends Controller {
         return $csvData;
     }
 
-    private function readCSVByCol($file) {
+    private function readWorkdayCSVByCol($filePath) {
         $header = null;
         $csvData = [];
 
-        if (($handle = fopen($file, 'r')) !== false) {
+        if (($handle = fopen($filePath, 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                 if (!array_filter($row)) {
                     continue; // Skip empty rows
@@ -143,11 +143,11 @@ class UploadFileController extends Controller {
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
-            // $csvData = $this->readCSV($filePath);
+            // $csvData = $this->readWorkdayCSV($filePath);
 
             // depending on CSV file format, you may need to adjust the readCSV function
 
-            $csvData = $this->readCSVByCol($filePath);
+            $csvData = $this->readWorkdayCSVByCol($filePath);
         
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
@@ -225,10 +225,73 @@ class UploadFileController extends Controller {
         // dd('File uploaded successfully!', $filePath);
         // return redirect()->route('import');
     }
+
+    public function readSeiCSV($filePath) {
+        $header = null;
+        $csvData = [];
+
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!array_filter($row)) {
+                    continue; // Skip empty rows
+                }
+
+                if (!$header) {
+                    $header = $row;
+                } else {
+                    $csvData[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+
+        return $csvData;
+    }
     
 
     public function uploadSei(Request $request) {
-        dd('sei file!');
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
+            $csvData = $this->readSeiCSV($filePath);
+        
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];
+            foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Course':
+                        case 'Q1':
+                        case 'Q2':
+                        case 'Q3':
+                        case 'Q4':
+                        case 'Q5':
+                        case 'Q6':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
+                }
+                $finalCSVs[] = $trimCSV;
+               
+            }
+        }
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.sei');
     }
 }
 
