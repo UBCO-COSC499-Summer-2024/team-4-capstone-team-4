@@ -1,3 +1,36 @@
+## Friday (7/24 - 7/26)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_24_2024-07_26_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Admin staff list
+  * #2: Admin - staff filter, sorting, search
+  * #3: Admin - create new user
+  * #4: Admin - activate/deactivate account
+  * #5: Admin - edit/delete user
+
+### Progress Update (since 7/19/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Admin staff list | Complete |
+| Admin - staff filter, sorting, search | In progress |
+| Admin - create new user | Complete |
+| Admin - activate/deactivate account | To do |
+| Admin - edit/delete user | In progress |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I finished pagination and started working on the admin staff page. I completed the add new using funtion and started working on editing user info and deleting user. Sorting and searching is working, have some issues with filtering but shouldn't be hard to fix. I had difficulties with querying the department and took way longer than expected.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Admin functionalities on staff page
+  * Start on help pages
+  * Refactor report layouts
+  
+
 ## Wednesday (7/19 - 7/24)
 
 ### Timesheet
