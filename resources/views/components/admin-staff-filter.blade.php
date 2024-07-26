@@ -46,7 +46,7 @@
         </ul>
         <div>
             <x-staff-button wire:click="filter">Filter</x-staff-button>
-            <x-staff-button wire:click="clearFilter">Clear</x-staff-button>
+            <x-staff-button wire:click="clearAdminFilter">Clear</x-staff-button>
         </div>
     </div>
 </div>

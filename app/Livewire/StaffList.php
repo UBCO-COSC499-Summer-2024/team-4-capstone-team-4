@@ -218,6 +218,11 @@ class StaffList extends Component
         $this->selectedAreas = [];
     }
 
+    public function clearAdminFilter(){
+        $this->selectedRoles = [];
+        $this->selectedDepts = [];
+    }
+
    /*  public function updatedSelectAll($value)
     {
         if ($value) {
