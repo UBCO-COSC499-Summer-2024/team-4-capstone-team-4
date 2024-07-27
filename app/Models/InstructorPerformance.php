@@ -187,4 +187,53 @@ class InstructorPerformance extends Model {
             ]);
         }
     }
+
+    /**
+     * Calculates the performance score for an instructor for a given year.
+     *
+     * This function calculates the total performance score based on the instructor's
+     * assigned roles and course sections taught during the specified year. The score
+     * considers the monthly service role hours, the number of course sections, and 
+     * the difference between the enrolled and dropped averages.
+     *
+     * @param int $instructor_id The ID of the instructor.
+     * @param int $currentYear The year for which the score is calculated.
+     * @return float The calculated performance score.
+     */
+    public function scoreCalculator($instructor_id, $currentYear) {
+        $roleHours = 0;
+        $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
+
+        foreach ($assignedRoles as $assignedRole) {
+            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->where('archived', false)->first();
+
+            if ($role) {
+                $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
+                $roleHours += $role->monthly_hours[$currentMonth];
+            }
+        }
+
+        $courseSections = 0;
+        $doubleCourses = 0;
+        $teaches = Teach::where('instructor_id', $instructor_id)->get();
+
+        foreach ($teaches as $teaching) {
+            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->where('archived', false)->first();
+            
+            if ($course) {
+                if ($course->term === '1-2') {
+                    $doubleCourses++;
+                }
+
+                else {
+                    $courseSections++;
+                }
+            }
+        }
+
+        $enrolled = InstructorPerformance::where('instructor_id', $instructor_id)->first()->enrolled_avg;
+        $dropped = InstructorPerformance::where('instructor_id', $instructor_id)->first()->dropped_avg;
+
+        return ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760; 
+    }
 }
