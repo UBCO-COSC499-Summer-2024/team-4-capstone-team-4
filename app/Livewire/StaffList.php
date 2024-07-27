@@ -43,6 +43,7 @@ class StaffList extends Component
     public $password_confirmation;
     public $user_roles = [];
     public $confirmDelete = false;
+    public $confirmAction;
 
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
@@ -196,7 +197,8 @@ class StaffList extends Component
             'selectedMonth'=>$this->selectedMonth, 
             'editMode'=>$this->editMode, 
             'pagination' => $this->pagination,
-            'confirmDelete' => $this->confirmDelete
+            'confirmDelete' => $this->confirmDelete,
+            'confirmAction' => $this->confirmAction
         ]);
     }
 
@@ -220,15 +222,6 @@ class StaffList extends Component
         $this->selectedRoles = [];
         $this->selectedDepts = [];
     }
-
-   /*  public function updatedSelectAll($value)
-    {
-        if ($value) {
-            $this->staffCheckboxes = $this->currentUsers->pluck('email')->toArray();
-        } else {
-            $this->staffCheckboxes = [];
-        }
-    } */
 
     public function showTargetModal(){
         if(count($this->staffCheckboxes) > 0){
@@ -422,19 +415,41 @@ class StaffList extends Component
     }
 
     //single edit
-    public function editStaff(){
+    public function editStaff($userid){
+        $user = User::find($userid);
 
     }
 
+    public function setDelete($userid){
+        $this->confirmDelete = true;
+        $this->confirmAction = 'deleteStaff('. $userid . ')';
+    }
+
     //single delete
-    public function deleteStaff(){
-        
+    public function deleteStaff($userid){
+        $user = User::find($userid);
+        $fullname = $user->firstname . ' ' . $user->lastname;
+        try{
+            $user->delete();
+        }catch(Exception $e){
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to delete user(s):' . $e->getMessage(),
+                'type' => 'error'
+            ]); 
+        }
+        $this->confirmDelete = false;
+
+        $this->dispatch('show-toast', [
+            'message' => 'User ' .$fullname. ' deleted!',
+            'type' => 'success'
+        ]);  
     }
 
     public function check(){
         //$this->confirmDelete = true;
         if(count($this->staffCheckboxes) > 0){
             $this->confirmDelete = true;
+            $this->confirmAction = 'delete';
         }else{
             $this->dispatch('show-toast', [
                 'message' => 'No user selected.',
@@ -460,6 +475,7 @@ class StaffList extends Component
         }
 
         $this->confirmDelete = false;
+        $this->staffCheckboxes = [];
 
         $this->dispatch('show-toast', [
             'message' => count($staff_checkboxes). ' user(s) deleted!',

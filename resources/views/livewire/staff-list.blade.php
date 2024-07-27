@@ -65,7 +65,7 @@
         @endif
         @if($confirmDelete)
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <x-confirm-delete :confirmDelete="$confirmDelete"/>
+                <x-confirm-delete :confirmDelete="$confirmDelete" :confirmAction="$confirmAction"/>
             </div>
         @endif
         <x-staff-table>
@@ -108,7 +108,7 @@
                             fullname="{{ $user->firstname }} {{ $user->lastname }}"
                             email="{{ $user->email }}"
                             dept="{{ $user->department_name == '' ? '-' : $user->department_name }}"
-                            roles="{{ implode(', ', $roles) }}"
+                            :roles="$roles"
                             active="{{ $user->active }}"
                             editMode="{{ $editMode }}"
                             userid="{{ $user->id }}"

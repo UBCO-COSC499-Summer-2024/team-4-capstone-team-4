@@ -33,31 +33,27 @@
         @if($editMode)
             <div class="flex flex-col">
                 @php
-                    $user_roles = explode(',', $roles);
                     $allRoles = ['Instructor', 'Department Head', 'Department Staff', 'Admin'];
                 @endphp
                 @foreach($allRoles as $role)
                     <div class="flex items-center gap-1">
-                        <x-checkbox wire:model="selectedRoles{{$userid}}" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" :checked="in_array($role, $user_roles)"/>
+                        <x-checkbox wire:model="selectedRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" :checked="in_array($role, $roles)"/>
                         <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
                     </div>
                 @endforeach
             </div>
         @else
-            <div class="flex items-center justify-center h-full">{{ $roles }}</div>
+            <div class="flex items-center justify-center h-full">{{ implode(', ', $roles) }}</div>
         @endif
     </td>
     <td class="px-6 py-4">
         @if($editMode)
-            <div class="flex flex-col space-y-2">
-                <div class="flex items-center">
-                    <x-radio-button value="true" name="status{{$userid}}" :checked="$active"/>
-                    <label for="active">Active</label>
-                </div>
-                <div class="flex items-center">
-                    <x-radio-button value="false" name="status{{$userid}}" :checked="!$active"/>
-                    <label for="inactive">Inactive</label>
-                </div>
+            <div class="flex items-center justify-center h-full">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}" {{$active ? 'checked' : ''}}>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    <span class="ms-3">Enabled</span>
+                </label>
             </div>
         @else
             <div class="flex items-center justify-center h-full">
@@ -66,15 +62,15 @@
                 @else
                     <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
                 @endif
-                {{ $active ? 'Active' : 'Inactive'}}
+                {{ $active ? 'Enabled' : 'Disabled'}}
             </div>
         @endif
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            <a wire:click="EditStaff"><span class="material-symbols-outlined text-gray-500" title="Edit">edit</span></a>
-            <a wire:click="DeleteStaff"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></a>
-            <a wire:click="SendReset"><span class="material-symbols-outlined text-gray-500" title="Send Reset Link">mail_lock</span></a>
+            <button wire:click="editStaff({{$userid}})"><span class="material-symbols-outlined text-gray-500" title="Edit">edit</span></button>
+            <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
+            <button wire:click="sendReset"><span class="material-symbols-outlined text-gray-500" title="Send Reset Link">mail_lock</span></button>
         </div>
     </td>
 </tr>
