@@ -32,7 +32,7 @@ class ChartController extends Controller {
      *
      * @return \Illuminate\View\View
      */
-    public function showChart(Request $request, $instructor_id = null, $name = null, $switch = null) {
+    public function showChart(Request $request, $instructor_id = null, $name = null, $switch = null, $year = null) {
         $currentMonth = date('F');
         $currentYear = date('Y');
         $userId = Auth::id();
@@ -40,10 +40,16 @@ class ChartController extends Controller {
         $chosenInstructor = $instructor_id ?: $request->query('instructor_id');
         $switch = $switch ?: $request->query('switch');
         $name = $name ?: $request->query('name');
+        $year = $year ?: $request->query('year');
         
         $isInstructor = false;
         $isDeptHead = false;
         $isDeptStaff = false;
+        $isAdmin =false;
+
+        if ($year) {
+            $currentYear = $year;
+        }
 
         if ($chosenInstructor) {
             $instructorRoleId = $chosenInstructor;
@@ -62,6 +68,11 @@ class ChartController extends Controller {
 
         else {
             $dept = null;
+
+            $adminRole = $userRoles->firstWhere('role', 'admin');
+            if ($adminRole) {
+                $isAdmin = true;
+            }
 
             $deptHeadRole = $userRoles->firstWhere('role', 'dept_head');
             if ($deptHeadRole) {
@@ -117,55 +128,26 @@ class ChartController extends Controller {
                     $this->createPerformance($area->id, "area", $currentYear);
                 }
 
-                $areaPerformances[] = $performance;
-                $totalHours[] = array_values(json_decode($performance->total_hours, true));
+                if ($performance) {
+                    $areaPerformances[] = $performance;
+                    $totalHours[] = array_values(json_decode($performance->total_hours, true));
+                }
             }
 
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
             $leaderboard = $this->leaderboardPrev($dept, $currentYear, false);
+            $deptYears = $this->getPerformanceYears($dept, true);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
             $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "DeptRolePieChart");
             $chart3 = $this->departmentPieChart($deptAssignmentCount[3], "Total Extra Hours by Area", "Extra Hours", "DeptExtraPieCHart");
             $chart4 = $this->departmentPieChart($deptAssignmentCount[5], "Total Course Sections by Area", "Course Sections", "DeptCoursePieChart");
 
-            if ($isInstructor) {
-                $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
-                    ->where('year', $currentYear)
-                    ->first();
-
-                if ($performance === null) {
-                    $this->createPerformance($instructorRoleId, "instructor", $currentYear);
-                    $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
-                    ->where('year', $currentYear)
-                    ->first();
-                }
-
-                $hasTarget = false;
-                if ($performance->target_hours !== null) {
-                    $hasTarget = true;
-                }
-
-                $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
-                $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
-
-                $chart5 = $this->instructorLineChart($performance, $hasTarget);
-                $chart6 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
-                $chart7 = $this->instructorPieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
-
-                if ($hasTarget) {
-                    $chart8 = $this->instructorProgressBar($performance, $currentMonth);
-                    
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'chart8', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget', 
-                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
-                } else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6', 'chart7', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
-                }
-            } else {
-                return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'deptAssignmentCount', 'deptPerformance', 'leaderboard'));
-            }
-        } elseif ($isInstructor) {
+            return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'deptYears', 'currentYear'));
+            
+        } 
+        
+        elseif ($isInstructor) {
             $performance = InstructorPerformance::where('instructor_id', $instructorRoleId)
                 ->where('year', $currentYear)
                 ->first();
@@ -184,6 +166,7 @@ class ChartController extends Controller {
 
             $assignmentCount = $this->countAssignments($instructorRoleId, $hasTarget, $currentYear, $currentMonth);
             $ranking = $this->getRank($instructorRoleId, $currentYear, $performance->score);
+            $years = $this->getPerformanceYears($instructorRoleId, false);
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
             $chart2 = $this->instructorPieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
@@ -193,29 +176,29 @@ class ChartController extends Controller {
                 $chart4 = $this->instructorProgressBar($performance, $currentMonth);
 
                 if ($chosenInstructor) {
-                    return view('performance', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance', 'name'));
+                    return view('performance', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'name', 'years', 'currentYear'));
                 }
 
                 else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                                'assignmentCount', 'ranking', 'performance'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'chart4', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'switch', 'years', 'currentYear'));
                 }
 
             } else {
 
                 if ($chosenInstructor) {
-                    return view('performance', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'ranking', 'performance', 'name'));
+                    return view('performance', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'name', 'years', 'currentYear'));
                 }
 
                 else {
-                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'hasTarget',
-                            'assignmentCount', 'ranking', 'performance'));
+                    return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin',
+                                'hasTarget', 'assignmentCount', 'ranking', 'performance', 'switch', 'years', 'currentYear'));
                 }
             }
         } else {
-            return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor'));
+            return view('dashboard', compact('currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin'));
         }
     }
 
@@ -289,7 +272,8 @@ class ChartController extends Controller {
                 $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
                     ->where('instructor_performance.year', $currentYear);
             })
-            ->where('areas.dept_id', $deptId);
+            ->where('areas.dept_id', $deptId)
+            ->where('course_sections.archived', false);
 
         if ($forRank) {
             $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
@@ -329,21 +313,29 @@ class ChartController extends Controller {
     private function getRank($instructorId, $currentYear, $score) {
         $deptIdsQuery = User::query();
         $deptIdsQuery->distinct()
-            ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
-            ->leftJoin('service_roles', 'role_assignments.service_role_id', '=', 'service_roles.id')
-            ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
-            ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
-                $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
-                    ->where('extra_hours.year', $currentYear);
-            })
-            ->where('user_roles.id', $instructorId)
-            ->where(function ($query) use ($currentYear) {
-                $query->where('course_sections.year', $currentYear)
-                    ->orWhere('extra_hours.year', $currentYear);
-            });
+        ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id')
+        ->leftJoin('service_roles', function ($join) {
+            $join->on('role_assignments.service_role_id', '=', 'service_roles.id')
+                ->where('service_roles.archived', false); 
+        })
+        ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
+        ->leftJoin('course_sections', function ($join) {
+            $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                ->where('course_sections.archived', false); 
+        })
+        ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+        ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+            $join->on('user_roles.id', '=', 'extra_hours.instructor_id')
+                ->where('extra_hours.year', $currentYear)
+                ->where('extra_hours.archived', false); 
+        })
+        ->where('user_roles.id', $instructorId)
+        ->where(function ($query) use ($currentYear) {
+            $query->where('course_sections.year', $currentYear)
+                ->orWhere('extra_hours.year', $currentYear);
+        });
+
 
         $deptIdsQuery->select('areas.dept_id', 'users.firstname', 'users.lastname');
 
@@ -380,9 +372,12 @@ class ChartController extends Controller {
         $areaRolesTotal = [];
 
         foreach ($areas as $area) {
-            $roles = ServiceRole::where('area_id', $area->id)->where('year', $currentYear)->get();
-            $areaRolesTotal[] = [$area->name, $roles->count()];
-            $deptRolesTotal += $roles->count();
+            $roles = ServiceRole::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
+
+            if ($roles) {
+                $areaRolesTotal[] = [$area->name, $roles->count()];
+                $deptRolesTotal += $roles->count();
+            }
         }
 
         $deptAssignmentCount[] = $deptRolesTotal;
@@ -392,9 +387,12 @@ class ChartController extends Controller {
         $areaExtrasTotal = [];
 
         foreach ($areas as $area) {
-            $extras = ExtraHour::where('area_id', $area->id)->where('year', $currentYear)->get();
-            $areaExtrasTotal[] = [$area->name, $extras->count()];
-            $deptExtrasTotal += $extras->count();
+            $extras = ExtraHour::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
+
+            if ($extras) {
+                $areaExtrasTotal[] = [$area->name, $extras->count()];
+                $deptExtrasTotal += $extras->count();
+            }
         }
 
         $deptAssignmentCount[] = $deptExtrasTotal;
@@ -404,9 +402,12 @@ class ChartController extends Controller {
         $areaCoursesTotal = [];
 
         foreach ($areas as $area) {
-            $courses = CourseSection::where('area_id', $area->id)->where('year', $currentYear)->get();
-            $areaCoursesTotal[] = [$area->name, $courses->count()];
-            $deptCoursesTotal += $courses->count();
+            $courses = CourseSection::where('area_id', $area->id)->where('year', $currentYear)->where('archived', false)->get();
+
+            if ($courses) {
+                $areaCoursesTotal[] = [$area->name, $courses->count()];
+                $deptCoursesTotal += $courses->count();
+            }
         }
 
         $deptAssignmentCount[] = $deptCoursesTotal;
@@ -435,9 +436,12 @@ class ChartController extends Controller {
         $assignedRoles = RoleAssignment::where('instructor_id', $instructorRoleId)->get();
 
         foreach ($assignedRoles as $assignedRole) {
-            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->first();
-            $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
-            $roleHoursTotal += $role->monthly_hours[$currentMonth];
+            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->where('archived', false)->first();
+
+            if ($role) {
+                $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
+                $roleHoursTotal += $role->monthly_hours[$currentMonth];
+            }
         }
 
         $assignmentCount[] = $serviceRoles;
@@ -445,11 +449,13 @@ class ChartController extends Controller {
         $extraHours = [];
         $extraHoursTotal = 0;
 
-        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->get();
+        $allExtraHours = ExtraHour::where('instructor_id', $instructorRoleId)->where('year', $currentYear)->where('month', date('n'))->where('archived', false)->get();
 
         foreach ($allExtraHours as $extraHrs) {
-            $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
-            $extraHoursTotal += $extraHrs->hours;
+            if ($extraHrs) {
+                $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
+                $extraHoursTotal += $extraHrs->hours;
+            }
         }
 
         $assignmentCount[] = $extraHours;
@@ -458,8 +464,10 @@ class ChartController extends Controller {
         $teaches = Teach::where('instructor_id', $instructorRoleId)->get();
 
         foreach ($teaches as $teaching) {
-            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->first();
-            $courseSections[] = $course->prefix . " " . $course->number;
+            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->where('archived', false)->first();
+            if ($course) {
+                $courseSections[] = $course->prefix . " " . $course->number;
+            }
         }
 
         $assignmentCount[] = $courseSections;
@@ -470,6 +478,27 @@ class ChartController extends Controller {
         }
 
         return $assignmentCount;
+    }
+
+    /**
+     * Retrieve the performance years for a department or an instructor.
+     *
+     * @param int $id The ID of the department or instructor.
+     * @param bool $isDept Flag to indicate if the ID belongs to a department (true) or an instructor (false).
+     * @return array An array of performance years.
+     */
+    private function getPerformanceYears($id, $isDept) {
+        if ($isDept) {
+            return DepartmentPerformance::where('dept_id', $id)
+                ->orderBy('year', 'desc')
+                ->pluck('year')
+                ->toArray();
+        } else {
+            return InstructorPerformance::where('instructor_id', $id)
+                ->orderBy('year', 'desc')
+                ->pluck('year')
+                ->toArray();
+        }
     }
 
     /**

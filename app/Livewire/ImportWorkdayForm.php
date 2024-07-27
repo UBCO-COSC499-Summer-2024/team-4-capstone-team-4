@@ -17,6 +17,7 @@ class ImportWorkdayForm extends Component
 
     public $showModal = false;
     public $courseExists = false;
+    public $rowAmount = 0;
 
     public function mount() {
         if(Session::has('workdayFormData')) {
@@ -95,12 +96,25 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
+    public function addManyRows() {
+        for($i=0; $i<$this->rowAmount; $i++) {
+            $this->addRow();
+        }
+    }
+
     public function deleteRow($row) {
         $this->resetValidation();
 
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
         Session::put('workdayFormData', $this->rows);
+    }
+
+    public function deleteManyRows() {
+        for($i=0; $i<$this->rowAmount; $i++) {
+            $count = count($this->rows);
+            $this->deleteRow($count-1);
+        }
     }
 
     protected function validateUniqueRows()
@@ -141,7 +155,6 @@ class ImportWorkdayForm extends Component
         foreach ($this->rows as $index => $row) {
             $prefix = '';
             // dd($row);
-
             
             switch ($row['area_id']) {
                 case 1:
@@ -190,7 +203,8 @@ class ImportWorkdayForm extends Component
                     'year' => $row['year'], 
                     'enrolled' => $row['enrolled'], 
                     'dropped' => $row['dropped'], 
-                    'capacity' => $row['capacity'],        
+                    'capacity' => $row['capacity'], 
+                    'archived' => false,   
                 ]);
 
                 $this->rows = [
@@ -217,7 +231,7 @@ class ImportWorkdayForm extends Component
 
 
     public function render()
-    {
+    {   
         $areas = Area::all();
 
         return view('livewire.import-workday-form', [
