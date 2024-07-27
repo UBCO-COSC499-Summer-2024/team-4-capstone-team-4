@@ -17,7 +17,7 @@
             @if($hasCourses)
             @foreach ($rows as $index => $row)
             <div class="import-form-row">
-                <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
+                <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                 <div class="w-6/12">
                     <select wire:model="rows.{{$index}}.cid" wire:change='checkDuplicate' class="import-form-select">
                         <option value="">Select Course Section</option>

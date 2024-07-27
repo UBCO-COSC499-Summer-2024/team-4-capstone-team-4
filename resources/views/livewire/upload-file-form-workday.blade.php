@@ -67,10 +67,10 @@
                     </div>
                     
                     <div class="w-2/12">       
-                        <input type="number" step="1" min="1" max="9999" 
+                        <input type="number" step="1" min="1" 
                                placeholder="Year" 
                                wire:model="rows.{{ $index }}.year" 
-                               class="import-form-input" required>
+                               class="import-form-input year-input" required>
                         @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
                     
@@ -124,3 +124,12 @@
         @endif
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentYear = new Date().getFullYear();
+        document.querySelectorAll('.year-input').forEach(input => {
+            input.setAttribute('max', currentYear);
+        });
+    });
+</script>

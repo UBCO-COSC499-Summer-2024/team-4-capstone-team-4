@@ -57,7 +57,7 @@
                     @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-3/12">
-                    <input type="number" placeholder="ex. 2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="import-form-input">
+                    <input type="number" placeholder="ex. 2024"  min="1901" step="1" wire:model="rows.{{$index}}.year" class="import-form-input year-input">
                     @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
@@ -131,3 +131,13 @@
         <div>hello</div>
     @endforeach --}}
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentYear = new Date().getFullYear();
+        document.querySelectorAll('.year-input').forEach(input => {
+            input.setAttribute('max', currentYear);
+        });
+    });
+</script>

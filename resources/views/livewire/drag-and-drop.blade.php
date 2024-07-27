@@ -27,7 +27,7 @@
         @endforelse --}}
     </div>
     <div class="flex flex-col justify-center items-center">
-        <button type="submit" class="max-w-fit import-form-add-button">Save</button>
+        <button type="submit" class="max-w-fit import-form-add-button disabled:opacity-50">Save</button>
     </div>
 </form>
 </section>
@@ -38,6 +38,9 @@
         const fileInput = document.querySelector('.drop-zone-input');
         const dropZoneTitle = document.querySelector('.drop-zone-title');
         const fileList = document.querySelector('.drop-zone-content-files');
+        const submitButton = document.querySelector('.import-form-add-button');
+
+        submitButton.disabled = true;
 
         // Drag and drop events
         dropZoneForm.addEventListener('dragover', (e) => {
@@ -90,6 +93,7 @@
                         // Optional: Remove the file from the input element's files list
                         const newFiles = Array.from(fileInput.files).filter(f => f.name !== file.name);
                         // Custom logic to update the input files list can be added here if needed
+                        updateSubmitButtonState();
                     });
 
                     const rightItems = document.createElement('div');
@@ -102,6 +106,8 @@
                     fileList.appendChild(fileItem);
                 }
             });
+
+            updateSubmitButtonState();
         }
 
         // Check for duplicate files by name and size
@@ -126,6 +132,11 @@
                 i++;
             }
             return `${bytes.toFixed(1)} ${units[i]}`;
+        }
+
+        function updateSubmitButtonState() {
+            const filesPresent = fileList.querySelectorAll('.drop-zone-content-file').length > 0;
+            submitButton.disabled = !filesPresent;
         }
     });
 </script>

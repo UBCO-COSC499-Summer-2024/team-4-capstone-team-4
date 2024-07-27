@@ -4,7 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Area;
 use App\Models\AreaPerformance;
-use App\Models\CourseSection;;
+use App\Models\CourseSection;
+use App\Models\Department;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Auth;
+
+;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
@@ -232,7 +237,11 @@ class ImportWorkdayForm extends Component
 
     public function render()
     {   
-        $areas = Area::all();
+
+        $user = Auth::user();
+        $dept_id = UserRole::find($user->id)->department_id;
+
+        $areas = Area::where('dept_id', $dept_id)->get();
 
         return view('livewire.import-workday-form', [
             'areas' => $areas,
