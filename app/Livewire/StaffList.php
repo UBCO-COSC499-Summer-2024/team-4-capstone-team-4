@@ -44,6 +44,9 @@ class StaffList extends Component
     public $user_roles = [];
     public $confirmDelete = false;
     public $confirmAction;
+    public $editUserId = null;
+    public $active = [];
+    public $selectedUserRoles = [];
 
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
@@ -198,7 +201,8 @@ class StaffList extends Component
             'editMode'=>$this->editMode, 
             'pagination' => $this->pagination,
             'confirmDelete' => $this->confirmDelete,
-            'confirmAction' => $this->confirmAction
+            'confirmAction' => $this->confirmAction,
+            'editUserId' => $this->editUserId
         ]);
     }
 
@@ -417,15 +421,29 @@ class StaffList extends Component
     //single edit
     public function editStaff($userid){
         $user = User::find($userid);
+        $fullname = $user->firstname . ' ' . $user->lastname;
+        $user_roles = UserRole::where('user_id', $user->id)->get();
+        $user->update([
+            'active' => $this->active
+        ]);
+        
+        $this->editUserId = null;
+        $this->dispatch('show-toast', [
+            'message' => 'User ' .$fullname. ' updated!',
+            'type' => 'success'
+        ]); 
 
     }
 
+    public function cancelStaff(){
+        $this->editUserId = null;
+    }
+
+    //single delete
     public function setDelete($userid){
         $this->confirmDelete = true;
         $this->confirmAction = 'deleteStaff('. $userid . ')';
     }
-
-    //single delete
     public function deleteStaff($userid){
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;

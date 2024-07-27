@@ -15,10 +15,10 @@
     </td>
     <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
         <div class="ps-3 min-w-0 flex-auto">
-            <div class="block hover:underline">
-                <p class="text-lg font-semibold leading-6 text-gray-900 hover:text-[#3b4779] transform hover:scale-101 transition duration-300">{{ $fullname }}</p>
+            <div class="block">
+                <p class="text-lg font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
             </div>
-            <div class="block mt-1 truncate text-base leading-5 text-gray-500 hover:text-[#3b4779] ">
+            <div class="block mt-1 truncate text-base leading-5 text-gray-500">
                 {{ $email }}
             </div>
         </div>
@@ -30,16 +30,23 @@
         <div class="flex items-center justify-center h-full">{{ $dept }}</div>
     </td> 
     <td class="px-6 py-4">
-        @if($editMode)
+        @if($editMode || $editUserId == $userid )
             <div class="flex flex-col">
                 @php
                     $allRoles = ['Instructor', 'Department Head', 'Department Staff', 'Admin'];
                 @endphp
                 @foreach($allRoles as $role)
-                    <div class="flex items-center gap-1">
-                        <x-checkbox wire:model="selectedRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" :checked="in_array($role, $roles)"/>
-                        <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
-                    </div>
+                    @if(in_array($role, $roles))
+                        <div class="flex items-center gap-1">
+                            <input type="checkbox" wire:model="selectedUserRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                            <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
+                        </div>
+                    @else
+                        <div class="flex items-center gap-1">
+                            <input type="checkbox" wire:model="selectedUserRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
+                        </div>
+                    @endif  
                 @endforeach
             </div>
         @else
@@ -47,10 +54,14 @@
         @endif
     </td>
     <td class="px-6 py-4">
-        @if($editMode)
+        @if($editMode || $editUserId == $userid )
             <div class="flex items-center justify-center h-full">
                 <label class="inline-flex items-center cursor-pointer">
-                    <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}" {{$active ? 'checked' : ''}}>
+                    @if($active)
+                        <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}" checked>
+                    @else
+                        <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}">
+                    @endif
                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                     <span class="ms-3">Enabled</span>
                 </label>
@@ -58,19 +69,27 @@
         @else
             <div class="flex items-center justify-center h-full">
                 @if($active)
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                    <div class="text-green-500">Enabled</div>
                 @else
-                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                    <div class="text-red-500">Disabled</div>
                 @endif
-                {{ $active ? 'Enabled' : 'Disabled'}}
             </div>
         @endif
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            <button wire:click="editStaff({{$userid}})"><span class="material-symbols-outlined text-gray-500" title="Edit">edit</span></button>
-            <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
-            <button wire:click="sendReset"><span class="material-symbols-outlined text-gray-500" title="Send Reset Link">mail_lock</span></button>
+            @if($editUserId == $userid)
+                <button wire:click="editStaff({{$userid}})"><span class="material-symbols-outlined text-gray-500" title="Save">save</span></button>
+                <button wire:click="cancelStaff"><span class="material-symbols-outlined text-red-500" title="Cancel">cancel</span></button>
+            @elseif($editMode)
+                <span class="material-symbols-outlined text-gray-400" title="Edit">edit</span>
+                <span class="material-symbols-outlined text-gray-400" title="Delete">delete</span>
+                <span class="material-symbols-outlined text-gray-400" title="Send Reset Link">mail_lock</span>
+            @else
+                <button wire:click="$set('editUserId', {{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Edit">edit</span></button>
+                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
+                <button wire:click="sendReset"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
+            @endif
         </div>
     </td>
 </tr>

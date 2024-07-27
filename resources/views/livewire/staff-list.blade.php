@@ -112,6 +112,7 @@
                             active="{{ $user->active }}"
                             editMode="{{ $editMode }}"
                             userid="{{ $user->id }}"
+                            editUserId="{{ $editUserId }}"
                             />
                         @else
                             @php
