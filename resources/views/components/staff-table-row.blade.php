@@ -24,30 +24,27 @@
         </div>
     </td>
     <td class="px-6 py-4">
-        {{-- @if($editMode)
-        @else
-        @endif --}}
         <div class="flex items-center justify-center h-full">{{ $dept }}</div>
     </td> 
     <td class="px-6 py-4">
         @if($editMode || $editUserId == $userid )
             <div class="flex flex-col">
-                @php
-                    $allRoles = ['Instructor', 'Department Head', 'Department Staff', 'Admin'];
-                @endphp
-                @foreach($allRoles as $role)
-                    @if(in_array($role, $roles))
-                        <div class="flex items-center gap-1">
-                            <input type="checkbox" wire:model="selectedUserRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
-                            <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
-                        </div>
-                    @else
-                        <div class="flex items-center gap-1">
-                            <input type="checkbox" wire:model="selectedUserRoles" name="role-{{ $role }}{{ $userid }}" value="{{ $role }}{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="role-{{ $role }}{{ $userid }}">{{ $role }}</label>
-                        </div>
-                    @endif  
-                @endforeach
+                <div class="flex items-center gap-1">
+                    <input type="checkbox" wire:model.defer="instructors" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="role-{{ $userid }}">Instructor</label>
+                </div>
+                <div class="flex items-center gap-1">
+                    <input type="checkbox" wire:model.defer="deptHeads" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="role-{{ $userid }}">Department Head</label>
+                </div>
+                <div class="flex items-center gap-1">
+                    <input type="checkbox" wire:model.defer="deptStaffs" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="role-{{ $userid }}">Department Staff</label>
+                </div>
+                <div class="flex items-center gap-1">
+                    <input type="checkbox" wire:model.defer="admins" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="role-{{ $userid }}">Admin</label>
+                </div>
             </div>
         @else
             <div class="flex items-center justify-center h-full">{{ implode(', ', $roles) }}</div>
@@ -57,11 +54,7 @@
         @if($editMode || $editUserId == $userid )
             <div class="flex items-center justify-center h-full">
                 <label class="inline-flex items-center cursor-pointer">
-                    @if($active)
-                        <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}" checked>
-                    @else
-                        <input wire:model="active" type="checkbox" value="{{$active}}" class="sr-only peer"  name="status{{$userid}}">
-                    @endif
+                    <input type="checkbox" wire:model.defer="enabledUsers" value="{{ $userid }}" class="sr-only peer"  name="status{{$userid}}">
                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                     <span class="ms-3">Enabled</span>
                 </label>

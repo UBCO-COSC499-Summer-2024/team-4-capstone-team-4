@@ -45,8 +45,11 @@ class StaffList extends Component
     public $confirmDelete = false;
     public $confirmAction;
     public $editUserId = null;
-    public $active = [];
-    public $selectedUserRoles = [];
+    public $enabledUsers = [];
+    public $instructors = [];
+    public $deptHeads = [];
+    public $deptStaffs = [];
+    public $admins = [];
 
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
@@ -57,6 +60,13 @@ class StaffList extends Component
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
         $this->pagination = 10;
+
+        $this->enabledUsers = User::where('active', true)->pluck('id')->toArray();
+        $this->instructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
+        $this->deptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
+        $this->deptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
+        $this->admins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
+
     }
 
     public function render(){
@@ -426,7 +436,7 @@ class StaffList extends Component
         $user->update([
             'active' => $this->active
         ]);
-        
+
         $this->editUserId = null;
         $this->dispatch('show-toast', [
             'message' => 'User ' .$fullname. ' updated!',
