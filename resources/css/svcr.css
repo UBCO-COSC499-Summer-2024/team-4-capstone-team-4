@@ -3,6 +3,7 @@
     width: 100%;
     border-collapse: separate;
     border: none;
+    border-spacing: revert;
     /* background: var(--svcr-table-bg); */ /* You can uncomment this line if you want the background color */
 }
 

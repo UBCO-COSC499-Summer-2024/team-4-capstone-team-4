@@ -222,7 +222,6 @@ class UploadFileController extends Controller {
             return redirect()->route('svcroles.add');
         } catch(\Exception $e) {
             // Handle the exception
-            dd($e->getMessage());
             return redirect()->route('svcroles.add');
         }
 

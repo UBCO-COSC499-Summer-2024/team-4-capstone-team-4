@@ -17,16 +17,33 @@
                 Monthly Hours
             </th>
             <th class="svcr-list-header-item">
-                Requires Update
+                <div class="flex flex-row items-center justify-start gap-2">
+                    Update
+                    {{-- tooltip --}}
+                    <span class="material-symbols-outlined icon" data-tippy-content="Activate this switch to update the service role. Otherwise, it will be ignored.">
+                        help
+                    </span>
+                </div>
             </th>
             <th class="svcr-list-header-item">
-                Actions
+                    {{-- actions icon --}}
+                    <div class="flex items-center justify-center">
+                        <span class="material-symbols-outlined icon">
+                            settings
+                        </span>
+                    </div>
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach($svcroles as $index => $svcrole)
+        @forelse($svcroles as $index => $svcrole)
             <livewire:templates.service-role-table-item :svcrole="$svcrole" :key="$svcrole['id']" :id="$svcrole['id']" />
-        @endforeach
+        @empty
+            <tr class="svcr-list-item empty">
+                <td class="svcr-list-item-cell empty" colspan="7">
+                    Click the "Add Row" button to add a new service role.
+                </td>
+            </tr>
+        @endforelse
     </tbody>
 </table>

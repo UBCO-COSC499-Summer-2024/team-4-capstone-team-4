@@ -10,9 +10,17 @@
     <h1 class="flex justify-between m-auto nos content-title">
         <span class="content-title-text w-fit">Add Service Role</span>
         <div class="content-title-btn-holder w-fit">
+            {{-- if viewMode is table show button for adding a row --}}
+            <button class="content-title-btn" @click="$dispatch('svcr-table-add-row');"
+                x-show="viewMode === 'table'"
+                x-cloak
+            >
+                <span class="button-title">Add Row</span>
+                <span class="material-symbols-outlined">add</span>
+            </button>
             <button class="content-title-btn" @click="
                 viewMode = viewMode === 'form' ? 'table' : 'form';
-                forceViewMode = viewMode; // Update forceViewMode
+                forceViewMode = viewMode;
             ">
                 <span class="button-title">Toggle View</span>
                 <span class="material-symbols-outlined">swap_horiz</span>
@@ -21,9 +29,14 @@
                 <span class="button-title">Import</span>
                 <span class="material-symbols-outlined">cloud_upload</span>
             </button>
-            <button class="content-title-btn" onclick="window.location.href='{{ route('svcroles') }}'">
+            {{-- <button class="content-title-btn" onclick="window.location.href='{{ route('svcroles') }}'">
                 <span class="button-title">See All</span>
                 <span class="material-symbols-outlined">visibility</span>
+            </button> --}}
+            {{-- save button --}}
+            <button class="content-title-btn" @click="$dispatch('svcr-table-save');">
+                <span class="button-title">Save</span>
+                <span class="material-symbols-outlined">save</span>
             </button>
         </div>
     </h1>
@@ -53,7 +66,7 @@
         </x-slot>
 
         <x-slot name="footer">
-            <x-button @click="showModal = false">
+            <x-button @click="showImportModal = false">
                 {{ __('Close') }}
             </x-button>
         </x-slot>

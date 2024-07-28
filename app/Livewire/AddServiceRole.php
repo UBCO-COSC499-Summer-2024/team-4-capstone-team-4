@@ -23,7 +23,7 @@ class AddServiceRole extends Component
             $this->formattedData = session('uploadedServiceRoles');
             $this->numItems = count($this->formattedData);
             $this->viewMode = 'table';
-            Session::forget('uploadedServiceRoles');
+            // Session::forget('uploadedServiceRoles');
         }
     }
 

@@ -17,7 +17,20 @@ class ServiceRoleTableItem extends Component
     public $original_area_name = '';
     public $isSaved = false;
     public $id;
-    public $monthly_hrs = [];
+    public $monthly_hrs = [
+        'January' => 0,
+        'February' => 0,
+        'March' => 0,
+        'April' => 0,
+        'May' => 0,
+        'June' => 0,
+        'July' => 0,
+        'August' => 0,
+        'September' => 0,
+        'October' => 0,
+        'November' => 0,
+        'December' => 0,
+    ];
 
     protected $rules = [
         'svcrole.name' => 'required|string|max:255',
@@ -26,6 +39,10 @@ class ServiceRoleTableItem extends Component
         'svcrole.area_id' => 'required|integer|exists:areas,id',
         'svcrole.monthly_hours.*' => 'required|integer|min:0|max:200',
         'svcrole.year' => 'required|integer|min:2021|max:2030',
+    ];
+
+    protected $listeners = [
+        'svcr-add-save-svcroles' => 'storeSvcrole',
     ];
 
     public function mount($svcrole) {
@@ -50,18 +67,46 @@ class ServiceRoleTableItem extends Component
         ]);
     }
 
-    public function storeSvcrole() {
+    public function deleteItem($id) {
+        $this->dispatch('svcr-add-table-delete-item', $id);
+    }
+
+    public function storeSvcrole($svcroles) {
+        // dd($svcroles);
+        $isFound = false;
+        foreach ($svcroles as $index => $svcrole) {
+            if ($svcrole['id'] == $this->id) {
+                $isFound = true;
+                break;
+            }
+        }
+        if (!$isFound) {
+            return;
+        }
         $audit_user = User::find(auth()->id())->getName();
         $operation = $this->requires_update ? 'UPDATE' : 'CREATE';
         $oldValue = null;
+        $svcrole['monthly_hours'] = json_encode($this->monthly_hrs);
         try {
             $this->validate();
             if ($this->requires_update) {
                 $existingServiceRole = ServiceRole::find('name', $this->svcrole->name)->where('area_id', $this->svcrole->area_id)->where('year', $this->svcrole->year)->first();
                 $oldValue = $existingServiceRole->getOriginal();
-                $existingServiceRole->update($this->svcrole->toArray());
+                $existingServiceRole->update([
+                    'name' => $this->svcrole['name'],
+                    'description' => $this->svcrole['description'],
+                    'area_id' => $this->svcrole['area_id'],
+                    'monthly_hours' => $this->svcrole['monthly_hours'],
+                    'year' => $this->svcrole['year'],
+                ]);
             } else {
-                ServiceRole::create($this->svcrole);
+                ServiceRole::create([
+                    'name' => $this->svcrole['name'],
+                    'description' => $this->svcrole['description'],
+                    'area_id' => $this->svcrole['area_id'],
+                    'monthly_hours' => $this->svcrole['monthly_hours'],
+                    'year' => $this->svcrole['year'],
+                ]);
             }
             $this->isSaved = true;
             $this->dispatch('show-toast', [
@@ -84,7 +129,7 @@ class ServiceRoleTableItem extends Component
             $this->isSaved = false;
             $this->dispatch('show-toast', [
                 'type' => 'error',
-                'message' => 'An error occurred while saving the service role.',
+                'message' => 'An error occurred while saving the service role.'. $e->getMessage(),
             ]);
             AuditLog::create([
                 'user_id' => auth()->id(),
