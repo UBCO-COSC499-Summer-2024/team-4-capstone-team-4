@@ -25,8 +25,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($svcroles as $svcrole)
-            <livewire:templates.service-role-table-item :svcrole="$svcrole" :key="time()" />
+        @foreach($svcroles as $index => $svcrole)
+            <livewire:templates.service-role-table-item :svcrole="$svcrole" :key="$svcrole['id']" :id="$svcrole['id']" />
         @endforeach
     </tbody>
 </table>

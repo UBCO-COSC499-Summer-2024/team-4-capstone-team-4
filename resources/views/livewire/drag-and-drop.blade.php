@@ -1,37 +1,19 @@
 <section class="dnd-container">
     @vite(['resources/css/dnd.css'])
 
-    <form action="{{ $action }}" method="post" enctype="multipart/form-data" class="drop-zone-form form drop-zone glass dnd-column">
+    <form
+        action="{{ route($action) }}"
+        method="post" enctype="multipart/form-data" class="drop-zone-form form drop-zone glass dnd-column">
         @csrf
         <label for="file" class="drop-zone-label">
             <span class="material-symbols-outlined drop-zone-icon icon">cloud_upload</span>
             <span class="drop-zone-title">Drop files here or click to upload</span>
             <input type="file" name="files[]" accept="{{ $accept }}" id="file"
-                class="drop-zone-input"
-                @if ($multiple) multiple @endif>
+                @if ($multiple) multiple @endif
+                class="drop-zone-input" />
         </label>
-        @error('files.*') <span class="error">{{ $message }}</span> @enderror
 
         <div class="drop-zone-content-files dnd-column">
-            {{-- @if(count($files))
-                @foreach($files as $index => $file)
-                    <div class="drop-zone-content-file form-item">
-                        <span class="file-name">{{ $file->getClientOriginalName() }}</span>
-                        <div class="right file-extras">
-                            <span class="file-size">
-                                {{ round($file->getSize() / 1024, 2) }} KB
-                            </span>
-                            <button wire:click="removeFile({{ $index }})" class="remove-file" type="button">
-                                <span class="material-symbols-outlined icon">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <div class="drop-zone-content-file">
-                    <span>No files uploaded</span>
-                </div>
-            @endif --}}
         </div>
         <div class="flex flex-col items-center justify-center">
             <button type="submit" class="max-w-fit import-form-add-button">Save</button>
@@ -73,7 +55,9 @@
 
         // Function to handle files
         function handleFiles(files) {
+            console.log(files);
             Array.from(files).forEach(file => {
+                console.log(file);
                 if (!isDuplicate(file)) {
                     const fileItem = document.createElement('div');
                     fileItem.classList.add('drop-zone-content-file', 'form-item');
@@ -135,4 +119,5 @@
             return `${bytes.toFixed(1)} ${units[i]}`;
         }
     });
+
 </script>

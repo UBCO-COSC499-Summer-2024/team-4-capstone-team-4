@@ -17,6 +17,7 @@ class ServiceRoleTableItem extends Component
     public $original_area_name = '';
     public $isSaved = false;
     public $id;
+    public $monthly_hrs = [];
 
     protected $rules = [
         'svcrole.name' => 'required|string|max:255',
@@ -28,15 +29,17 @@ class ServiceRoleTableItem extends Component
     ];
 
     public function mount($svcrole) {
+        // dd($svcrole);
         $this->svcrole = $svcrole;
         $this->areas = Area::all();
-        $this->requires_update = $svcrole->updateMe;
-        $this->original_area_name = $svcrole->original_area_name;
-        $this->id = $svcrole->id;
+        $this->requires_update = $svcrole['updateMe'];
+        $this->original_area_name = $svcrole['original_area_name'];
+        $this->id = $svcrole['id'];
         //  delete the original area name from the svcrole object as well as the updateMe flag
-        unset($this->svcrole->original_area_name);
-        unset($this->svcrole->updateMe);
-        unset($this->svcrole->id);
+        unset($this->svcrole['original_area_name']);
+        unset($this->svcrole['updateMe']);
+        unset($this->svcrole['id']);
+        $this->monthly_hrs = json_decode($svcrole['monthly_hours'], true);
     }
 
     public function render() {

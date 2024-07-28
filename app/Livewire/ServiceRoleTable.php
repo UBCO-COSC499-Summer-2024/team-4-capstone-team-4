@@ -9,7 +9,7 @@ class ServiceRoleTable extends Component
     public $svcroles;
 
     public function mount($svcroles = []) {
-        $this->svcroles = $svcroles;
+        $this->svcroles = count($svcroles) > 0 ? $svcroles['formattedData'] : $svcroles;
     }
 
     public function render()

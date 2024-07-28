@@ -49,7 +49,7 @@
         </x-slot>
 
         <x-slot name="content">
-            <livewire:drag-and-drop :action="route('upload.svcroles')" :accept="'csv, xlsx, xls, json'" :multiple="true"/>
+            <livewire:drag-and-drop :action="'upload.svcroles'" :accept="'.csv, .xlsx, .xls, .json'" :multiple="true" :externalHandler="false" />
         </x-slot>
 
         <x-slot name="footer">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\ServiceRole;
 use App\Models\TestModel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -179,41 +180,56 @@ class UploadFileController extends Controller {
 
     public function uploadSvcRoles(Request $request) {
         // Ensure that 'files' exists in the request
+        // dd($request);
         // dd($request->all());
-        $files = $request->file('files');
-        if (!$files) {
-            return response()->json(['error' => 'No files were uploaded.'], 400);
-        }
-        $request->validate([
-            'files.*' => 'required|file|mimes:csv,xlsx,xls,json|max:2048',
-        ]);
+        // Log::info($request->all());
+        // dd($request->file('files'));
+        // dd($files);
 
-        $uploadedFiles = [];
-        $formattedData = [];
+        try {
 
-        foreach ($files as $file) {
-            if($file->isValid()) {
-                $uploadedFiles[] = [
-                    'fileName' => $file->getClientOriginalName(),
-                    'fileExtension' => $file->getClientOriginalExtension(),
-                    'fileSize' => $file->getSize(),
-                ];
+            $request->validate([
+                'files.*' => 'required|file|mimes:csv,xlsx,xls,json|max:2048',
+            ]);
 
-                $fileData = $this->extractFileData($file);
+            $uploadedFiles = [];
+            $formattedData = [];
 
-                foreach ($fileData as $record) {
-                    $formattedData[] = $this->processRecord($record, count($formattedData) + 1);
+            foreach ($request->file('files') as $index => $file) {
+                if($file->isValid()) {
+                    $uploadedFiles[] = [
+                        'fileName' => $file->getClientOriginalName(),
+                        'fileExtension' => $file->getClientOriginalExtension(),
+                        'fileSize' => $file->getSize(),
+                    ];
+
+                    $fileData = $this->extractFileData($file);
+
+                    foreach ($fileData as $record) {
+                        $formattedData[] = $this->processRecord($record, count($formattedData) + 1);
+                    }
+                } else {
+                    // Handle invalid file
+                    // throw new \Exception("Invalid file: " . $file->getClientOriginalName());
                 }
-            } else {
-                // Handle invalid file
-                throw new \Exception("Invalid file: " . $file->getClientOriginalName());
             }
+
+            $request->session()->put('uploadedServiceRoles', [
+                'uploadedFiles' => $uploadedFiles,
+                'formattedData' => $formattedData,
+            ]);
+
+            return redirect()->route('svcroles.add');
+        } catch(\Exception $e) {
+            // Handle the exception
+            dd($e->getMessage());
+            return redirect()->route('svcroles.add');
         }
 
-        return response()->json([
-            'uploadedFiles' => $uploadedFiles,
-            'formattedData' => $formattedData,
-        ]);
+        // Session::put('uploadedServiceRoles', [
+        //     'uploadedFiles' => $uploadedFiles,
+        //     'formattedData' => $formattedData,
+        // ]);
     }
 
     private function extractFileData($file) {
@@ -247,8 +263,11 @@ class UploadFileController extends Controller {
         // Assuming your database columns are lowercase and use snake_case
 
         $areaName = $record['area'] ?? $record['area_id'] ?? $record['department'] ?? $record['dept'] ?? $record['department_id'] ?? $record['dept_id'];
-        $area = Area::where('name', $areaName)
-                    ->firstOrFail();
+        $area = Area::where('name', $areaName)->orWhere('id', $areaName)->first();
+        if (!$area) {
+            // set to default 1
+            $area = Area::find(1);
+        }
 
         $serviceRoleData = [
             'name' => $record['name'] ?? null,

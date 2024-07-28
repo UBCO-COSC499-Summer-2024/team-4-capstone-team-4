@@ -2,49 +2,32 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+// use Livewire\WithFileUploads;
 
 class DragAndDrop extends Component
 {
-    use WithFileUploads;
+    // use WithFileUploads;
     public $files;
     public $action;
     public $accept;
     public $multiple;
-    // public $uploadStatus = '';
+    public $externalHandler;
 
-    public function mount($action = null, $accept = '.csv', $multiple = true) {
+    public function mount($action = null, $accept = '.csv', $multiple = true, $externalHandler = true) {
         $this->files = collect();
-        $this->action = $action ?? route('upload.file');
+        $this->action = $action ?? 'upload.file';
         $this->accept = $accept;
         $this->multiple = $multiple;
-    }
-
-    public function onFilesUploaded($files) {
-        $this->files = array_merge($this->files, $files);
-    }
-
-    public function uploadFiles()
-    {
-        $this->validate([
-            'files.*' => 'required|file|mimes:csv,xlsx,xls,json|max:2048',
-        ]);
-
-        // $this->uploadStatus = 'Uploading...';
-    }
-
-    public function removeFile($index)
-    {
-        unset($this->files[$index]);
-        $this->files = array_values($this->files);
+        $this->externalHandler = $externalHandler;
     }
 
     public function render()
     {
         return view('livewire.drag-and-drop', [
             'files' => $this->files,
-            // 'uploadStatus' => $this->uploadStatus,
         ]);
     }
 }
