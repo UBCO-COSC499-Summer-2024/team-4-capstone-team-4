@@ -49,7 +49,7 @@
             <livewire:templates.service-role-table-item :svcrole="$svcrole" :key="$svcrole['id']" :id="$svcrole['id']" />
         @empty
             <tr class="svcr-list-item empty">
-                <td class="svcr-list-item-cell empty" colspan="7">
+                <td class="svcr-list-item-cell empty" colspan="9">
                     Click the "Add Row" button to add a new service role.
                 </td>
             </tr>
