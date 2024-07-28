@@ -1,25 +1,28 @@
 <tr class="svcr-list-item">
+    <td class="svcr-list-item-cell" data-column="id">
+        {{ $id }}
+    </td>
     <td class="svcr-list-item-cell" data-column="name">
-        <input type="text" class="form-input" wire:model="svcrole.name">
-        @error('svcrole.name') <span class="error">{{ $message }}</span> @enderror
+        <input type="text" class="form-input" wire:model="name">
+        @error('name') <span class="error">{{ $message }}</span> @enderror
     </td>
     <td class="svcr-list-item-cell" data-column="description">
-        <input type="text" class="form-input" wire:model="svcrole.description">
-        @error('svcrole.description') <span class="error">{{ $message }}</span> @enderror
+        <input type="text" class="form-input" wire:model="description">
+        @error('description') <span class="error">{{ $message }}</span> @enderror
     </td>
     <td class="svcr-list-item-cell" data-column="area">
-        <select class="form-select" wire:model="svcrole.area_id">
+        <select class="form-select" wire:model="area_id">
             <option value="">Select Area</option>
             @foreach ($areas as $area)
                 <option value="{{ $area->id }}">{{ $area->name }}</option>
             @endforeach
         </select>
-        @error('svcrole.area_id') <span class="error">{{ $message }}</span> @enderror
+        @error('area_id') <span class="error">{{ $message }}</span> @enderror
     </td>
     <td class="svcr-list-item-cell" data-column="year">
         <div class="form-group !max-w-20 !w-fit">
-            <input type="number" class="form-input !min-w-16 !w-fit" wire:model="svcrole.year">
-            @error('svcrole.year') <span class="error">{{ $message }}</span> @enderror
+            <input type="number" class="form-input !min-w-16 !w-fit" wire:model="year">
+            @error('year') <span class="error">{{ $message }}</span> @enderror
         </div>
     </td>
     <td class="svcr-list-item-cell" data-column="monthly_hours">
@@ -43,7 +46,13 @@
                 </div>
             @endforeach
         </div>
-        @error('svcrole.monthly_hours.*') <span class="error">{{ $message }}</span> @enderror
+        @error('monthly_hrs.*') <span class="error">{{ $message }}</span> @enderror
+    </td>
+    <td class="svcr-list-item-cell" data-column="archived">
+        <label class="switch">
+            <input type="checkbox" wire:model="archived">
+            <span class="slider round"></span>
+        </label>
     </td>
     <td class="svcr-list-item-cell" data-column="requires_update">
         <label class="switch">
@@ -53,7 +62,8 @@
     </td>
     <td class="svcr-list-item-cell" data-column="actions">
         <div class="svcr-list-item-actions">
-            <button class="svcr-list-item-action" data-action="delete"
+            <button class="svcr-list-item-action btn-danger" data-action="delete"
+                    data-tippy-content="Delete this row"
                     wire:click="deleteItem({{ $id }})"
                     @if ($isSaved) disabled @endif>
                 <span class="material-symbols-outlined">delete</span>

@@ -2,6 +2,9 @@
     <thead>
         <tr class="svcr-list-header">
             <th class="svcr-list-header-item">
+                ID
+            </th>
+            <th class="svcr-list-header-item">
                 Name
             </th>
             <th class="svcr-list-header-item">
@@ -18,15 +21,21 @@
             </th>
             <th class="svcr-list-header-item">
                 <div class="flex flex-row items-center justify-start gap-2">
+                    Archived
+                    <span class="material-symbols-outlined icon" data-tippy-content="Toggle this switch to archive/unarchive the service role.">
+                        help
+                    </span>
+                </div>
+            </th>
+            <th class="svcr-list-header-item">
+                <div class="flex flex-row items-center justify-start gap-2">
                     Update
-                    {{-- tooltip --}}
                     <span class="material-symbols-outlined icon" data-tippy-content="Activate this switch to update the service role. Otherwise, it will be ignored.">
                         help
                     </span>
                 </div>
             </th>
             <th class="svcr-list-header-item">
-                    {{-- actions icon --}}
                     <div class="flex items-center justify-center">
                         <span class="material-symbols-outlined icon">
                             settings

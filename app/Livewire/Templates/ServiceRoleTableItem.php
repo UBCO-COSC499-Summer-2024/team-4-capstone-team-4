@@ -17,6 +17,11 @@ class ServiceRoleTableItem extends Component
     public $original_area_name = '';
     public $isSaved = false;
     public $id;
+    public $name;
+    public $description;
+    public $area_id;
+    public $year;
+    public $archived;
     public $monthly_hrs = [
         'January' => 0,
         'February' => 0,
@@ -33,12 +38,12 @@ class ServiceRoleTableItem extends Component
     ];
 
     protected $rules = [
-        'svcrole.name' => 'required|string|max:255',
-        'svcrole.description' => 'required|string|max:255',
-        // validate area, id
-        'svcrole.area_id' => 'required|integer|exists:areas,id',
-        'svcrole.monthly_hours.*' => 'required|integer|min:0|max:200',
-        'svcrole.year' => 'required|integer|min:2021|max:2030',
+        'name' => 'required|string|max:255',
+        'description' => 'required|string|max:255',
+        'area_id' => 'required|integer|exists:areas,id',
+        'monthly_hrs.*' => 'required|integer|min:0|max:200',
+        'year' => 'required|integer|min:2021|max:2030',
+        'archived' => 'required|boolean',
     ];
 
     protected $listeners = [
@@ -52,6 +57,11 @@ class ServiceRoleTableItem extends Component
         $this->requires_update = $svcrole['updateMe'];
         $this->original_area_name = $svcrole['original_area_name'];
         $this->id = $svcrole['id'];
+        $this->name = $svcrole['name'];
+        $this->description = $svcrole['description'];
+        $this->area_id = $svcrole['area_id'];
+        $this->year = $svcrole['year'];
+        $this->archived = $svcrole['archived'];
         //  delete the original area name from the svcrole object as well as the updateMe flag
         unset($this->svcrole['original_area_name']);
         unset($this->svcrole['updateMe']);
@@ -72,7 +82,6 @@ class ServiceRoleTableItem extends Component
     }
 
     public function storeSvcrole($svcroles) {
-        // dd($svcroles);
         $isFound = false;
         foreach ($svcroles as $index => $svcrole) {
             if ($svcrole['id'] == $this->id) {
@@ -86,11 +95,20 @@ class ServiceRoleTableItem extends Component
         $audit_user = User::find(auth()->id())->getName();
         $operation = $this->requires_update ? 'UPDATE' : 'CREATE';
         $oldValue = null;
-        $svcrole['monthly_hours'] = json_encode($this->monthly_hrs);
+        $this->svcrole['monthly_hours'] = json_encode($this->monthly_hrs);
+        $this->svcrole['name'] = $this->name;
+        $this->svcrole['description'] = $this->description;
+        $this->svcrole['area_id'] = $this->area_id;
+        $this->svcrole['year'] = $this->year;
+        $this->svcrole['archived'] = $this->archived;
         try {
-            $this->validate();
+            $this->validate(); // Validate before any database operations
+
             if ($this->requires_update) {
-                $existingServiceRole = ServiceRole::find('name', $this->svcrole->name)->where('area_id', $this->svcrole->area_id)->where('year', $this->svcrole->year)->first();
+                $existingServiceRole = ServiceRole::where('name', $this->name)
+                    ->where('area_id', $this->area_id)
+                    ->where('year', $this->year)
+                    ->first();
                 $oldValue = $existingServiceRole->getOriginal();
                 $existingServiceRole->update([
                     'name' => $this->svcrole['name'],
@@ -98,6 +116,7 @@ class ServiceRoleTableItem extends Component
                     'area_id' => $this->svcrole['area_id'],
                     'monthly_hours' => $this->svcrole['monthly_hours'],
                     'year' => $this->svcrole['year'],
+                    'archived' => $this->svcrole['archived'],
                 ]);
             } else {
                 ServiceRole::create([
@@ -106,6 +125,7 @@ class ServiceRoleTableItem extends Component
                     'area_id' => $this->svcrole['area_id'],
                     'monthly_hours' => $this->svcrole['monthly_hours'],
                     'year' => $this->svcrole['year'],
+                    'archived' => $this->svcrole['archived'],
                 ]);
             }
             $this->isSaved = true;
@@ -123,6 +143,8 @@ class ServiceRoleTableItem extends Component
                 'action' => 'Success',
                 'description' => 'Imported Service Role has been saved successfully.',
             ]);
+            $this->svcrole['id'] = $this->id;
+            $this->dispatch('svcr-add-table-item-updated', $this->svcrole);
         } catch (\Illuminate\Validation\ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {

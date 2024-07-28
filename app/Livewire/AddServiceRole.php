@@ -17,14 +17,26 @@ class AddServiceRole extends Component
     public $formattedData = [];
     public $forceViewMode = false;
 
+    protected $listeners = [
+        'clear-imported' => 'clearImported',
+    ];
+
     public function mount($links = []) {
         $this->links = $links;
         if (Session::has('uploadedServiceRoles')) {
             $this->formattedData = session('uploadedServiceRoles');
             $this->numItems = count($this->formattedData);
             $this->viewMode = 'table';
-            // Session::forget('uploadedServiceRoles');
         }
+    }
+
+    public function clearImported() {
+        Session::forget('uploadedServiceRoles');
+        $this->uploadedFiles = [];
+        $this->formattedData = [];
+        $this->numItems = 0;
+        // $url = route('svcroles.add');
+        // return redirect($url);
     }
 
     public function render()

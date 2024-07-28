@@ -4,13 +4,12 @@
         numItems: @entangle('numItems'),
         showImportModal: @entangle('showImportModal'),
         forceViewMode: @entangle('forceViewMode'),
+        formattedData: @entangle('formattedData'),
     }"
     x-init="$nextTick(() => { showImportModal = false; })">
-    {{-- <div></div> --}}
     <h1 class="flex justify-between m-auto nos content-title">
         <span class="content-title-text w-fit">Add Service Role</span>
         <div class="content-title-btn-holder w-fit">
-            {{-- if viewMode is table show button for adding a row --}}
             <button class="content-title-btn" @click="$dispatch('svcr-table-add-row');"
                 x-show="viewMode === 'table'"
                 x-cloak

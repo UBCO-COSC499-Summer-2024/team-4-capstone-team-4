@@ -9,12 +9,14 @@ class ServiceRoleTable extends Component
     public $svcroles;
 
     protected $cachedSvcroles = [];
+    protected $updateCounter = 0;
 
     protected $listeners = [
         'svcr-table-add-row' => 'addRow',
         'svcr-add-table-delete-item' => 'deleteRow',
         'svcr-add-table-undo-delete' => 'undoDelete',
         'svcr-add-table-redo-delete' => 'redoDelete',
+        'svcr-add-table-item-updated' => 'itemSaved',
         'svcr-table-save' => 'saveSvcroles',
     ];
 
@@ -40,10 +42,10 @@ class ServiceRoleTable extends Component
             return $svcrole;
         }, $this->svcroles, array_keys($this->svcroles));
 
-        $this->dispatch('show-toast', [
-            'type' => 'info',
-            'message' => 'Row deleted',
-        ]);
+        // $this->dispatch('show-toast', [
+        //     'type' => 'info',
+        //     'message' => 'Row deleted',
+        // ]);
     }
 
     public function undoDelete() {
@@ -57,6 +59,7 @@ class ServiceRoleTable extends Component
     }
 
     public function saveSvcroles() {
+        $this->updateCounter = 0;
         $this->dispatch('svcr-add-save-svcroles', $this->svcroles);
     }
 
@@ -84,6 +87,33 @@ class ServiceRoleTable extends Component
             'original_area_name' => '',
             'id' => -1,
         ];
+    }
+
+    /**
+     * Once the item is saved, remove the item from the list
+     *
+     * @param array $svcrole
+     * @return void
+     */
+    public function itemSaved($svcrole) {
+        // Find the index of the item to remove
+        $indexToRemove = array_search($svcrole['id'], array_column($this->svcroles, 'id'));
+
+        // If the item exists in the list, remove it
+        if ($indexToRemove !== false) {
+            unset($this->svcroles[$indexToRemove]);
+            $this->svcroles = array_values($this->svcroles); // Reindex array
+
+            $this->updateCounter++;
+
+            if ($this->updateCounter == count($this->svcroles)) {
+                $this->dispatch('clear-imported');
+                $this->dispatch('show-toast', [
+                    'type' => 'success',
+                    'message' => 'Service roles saved',
+                ]);
+            }
+        }
     }
 
     public function render()
