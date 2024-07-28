@@ -47,7 +47,7 @@
                 </div>
             </div>
         @else
-            <div class="flex items-center justify-center h-full">{{ implode(', ', $roles) }}</div>
+            <div class="flex items-center justify-center h-full">{{ empty($roles) ? '-' : implode(', ', $roles) }}</div>
         @endif
     </td>
     <td class="px-6 py-4">

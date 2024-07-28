@@ -51,6 +51,12 @@ class StaffList extends Component
     public $deptStaffs = [];
     public $admins = [];
 
+    public $prevEnabledUsers = [];
+    public $prevInstructors = [];
+    public $prevDeptHeads = [];
+    public $prevDeptStaffs = [];
+    public $prevAdmins = [];
+
     protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
@@ -61,11 +67,12 @@ class StaffList extends Component
         $this->selectedMonth = date('F');
         $this->pagination = 10;
 
-        $this->enabledUsers = User::where('active', true)->pluck('id')->toArray();
-        $this->instructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
-        $this->deptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
-        $this->deptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
-        $this->admins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
+        $this->enabledUsers = $this->prevEnabledUsers = User::where('active', true)->pluck('id')->toArray();
+
+        $this->instructors = $this->prevInstructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
+        $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
+        $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
+        $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
 
     }
 
@@ -81,7 +88,7 @@ class StaffList extends Component
         $dept_id = null;
         
         if($user->hasRole('admin')){
-            $usersQuery->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            $usersQuery->leftJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
             ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
             ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
@@ -248,6 +255,7 @@ class StaffList extends Component
         }
     }
 
+    //add target hours
     public function submit(){
         $this->validate();
 
@@ -304,6 +312,7 @@ class StaffList extends Component
         $this->changedInput[$email] = $hours;
     }
 
+    //save edited target hours
     public function save()
     {   //validate input parameters
         //dd($this->changedInput);
@@ -424,97 +433,122 @@ class StaffList extends Component
         
     }
 
-    public function saveAdmin(){
+    //bulk edit
+    public function edit(){
+        // Determine changes for enabled status
+        $addedUsers = array_diff($this->enabledUsers, $this->prevEnabledUsers);
+        $removedUsers = array_diff($this->prevEnabledUsers, $this->enabledUsers);
+        $enabledCount = 0;
+        $disabledCount = 0;
+        // Update status
+        foreach($addedUsers as $userid){
+            $user = User::find($userid);
+            $user->update(['active' => true]);
+            $enabledCount++;
+        }
+        foreach($removedUsers as $userid){
+            $user = User::find($userid);
+            $user->update(['active' => false]);
+            $disabledCount++;
+        }
 
+        //Determines changes and make updates for each role
+        $instructorCounts = $this->updateRole('instructor', $this->instructors, $this->prevInstructors);
+        $headCounts = $this->updateRole( 'dept_head', $this->deptHeads, $this->prevDeptHeads);
+        $staffCounts = $this->updateRole('dept_staff', $this->deptStaffs, $this->prevDeptStaffs);
+        $adminCounts = $this->updateRole('admin', $this->admins, $this->prevAdmins);
+
+        //reset and send toast
+        $message = sprintf(
+            "%d users enabled, %d disabled.\n%d instructors added, %d removed.\n%d department heads added, %d removed.\n%d department staff added, %d removed.\n%d admins added, %d removed.",
+            $enabledCount, $disabledCount,
+            $instructorCounts[0], $instructorCounts[1],
+            $headCounts[0], $headCounts[1],
+            $staffCounts[0], $staffCounts[1],
+            $adminCounts[0], $adminCounts[1]
+        );
+
+        $this->editMode = false;
+        $this->dispatch('show-toast', [
+            'message' => $message,
+            'type' => 'success'
+        ]);
+    }
+
+    private function updateRole($role, $currentRoles, $previousRoles){
+        $addedRoles = array_diff($currentRoles, $previousRoles);
+        $removedRoles = array_diff($previousRoles, $currentRoles);
+        $addCount = 0;
+        $removeCount = 0;
+
+        foreach($addedRoles as $userid){
+            $user_roles = UserRole::where('user_id', $userid)->pluck('role');
+            if (!$user_roles->contains($role)) {
+                UserRole::create([
+                    'user_id' => $userid,
+                    'department_id' => null,
+                    'role' => $role,
+                ]);
+                $addCount++;
+            }
+        }
+
+        foreach($removedRoles as $userid){
+            $user_roles = UserRole::where('user_id', $userid)->pluck('role');
+            if ($user_roles->contains($role)) {
+                UserRole::where('user_id', $userid)->where('role', $role)->delete();
+            }
+            $removeCount++;
+        }
+
+        return [$addCount, $removeCount];
     }
 
     //single edit
-    public function editStaff($userid){
+    public function editStaff($userid) {
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;
-        $user_roles = UserRole::where('user_id', $user->id)->get();
+        $user_roles = UserRole::where('user_id', $user->id)->pluck('role');
         
-        //dd($this->enabledUsers);
-        //update status
-        if (in_array($userid, $this->enabledUsers)) {
-            $user->update(['active' => true]);
-        } else {
-            $user->update(['active' => false]);
+        // Update status
+        $user->update(['active' => in_array($userid, $this->enabledUsers)]);
+    
+        // Roles to check
+        $roles = [
+            'instructor' => $this->instructors,
+            'dept_head' => $this->deptHeads,
+            'dept_staff' => $this->deptStaffs,
+            'admin' => $this->admins
+        ];
+    
+        // Update roles
+        foreach ($roles as $role => $roleArray) {
+            $this->updateUserRole($user_roles, $userid, $role, $roleArray);
         }
-
-        //update roles
-        if(in_array($userid, $this->instructors)){
-            $instructor = $user_roles->where('role', 'instructor')->first();
-            if($instructor == null){
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'department_id' => null,
-                    'role' => 'instructor',
-                ]);
-            }
-        }else{
-            $instructor = $user_roles->where('role', 'instructor')->first();
-            if($instructor){
-                $instructor->delete();
-            }
-        }
-
-        if(in_array($userid, $this->deptHeads)){
-            $head = $user_roles->where('role', 'dept_head')->first();
-            if($head == null){
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'department_id' => null,
-                    'role' => 'dept_head',
-                ]);
-            }
-        }else{
-            $head = $user_roles->where('role', 'dept_head')->first();
-            if($head){
-                $head->delete();
-            }
-        }
-
-        if(in_array($userid, $this->deptStaffs)){
-            $staff = $user_roles->where('role', 'dept_staff')->first();
-            if($staff == null){
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'department_id' => null,
-                    'role' => 'dept_staff',
-                ]);
-            }
-        }else{
-            $staff = $user_roles->where('role', 'dept_staff')->first();
-            if($staff){
-                $staff->delete();
-            }
-        }
-
-        if(in_array($userid, $this->admins)){
-            $admin = $user_roles->where('role', 'admin')->first();
-            if($admin == null){
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'department_id' => null,
-                    'role' => 'admin',
-                ]);
-            }
-        }else{
-            $admin = $user_roles->where('role', 'admin')->first();
-            if($admin){
-                $admin->delete();
-            }
-        }
-
+    
         $this->editUserId = null;
         $this->dispatch('show-toast', [
-            'message' => 'User ' .$fullname. ' updated!',
+            'message' => 'User ' . $fullname . ' updated!',
             'type' => 'success'
-        ]); 
-
+        ]);
     }
-
+    
+    private function updateUserRole($user_roles, $userid, $role, $roleArray) {
+        if (in_array($userid, $roleArray)) {
+            if (!$user_roles->contains($role)) {
+                UserRole::create([
+                    'user_id' => $userid,
+                    'department_id' => null,
+                    'role' => $role,
+                ]);
+            }
+        } else {
+            if ($user_roles->contains($role)) {
+                UserRole::where('user_id', $userid)->where('role', $role)->delete();
+            }
+        }
+    }
+    
     public function cancelStaff(){
         $this->editUserId = null;
     }
@@ -573,6 +607,7 @@ class StaffList extends Component
         }
 
         $this->confirmDelete = false;
+        $this->editMode = false;
         $this->staffCheckboxes = [];
 
         $this->dispatch('show-toast', [

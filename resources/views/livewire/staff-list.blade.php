@@ -13,7 +13,7 @@
             @if($admin)
                 @if($editMode)
                     <x-admin-staff-filter />
-                    <x-staff-button-green wire:click="saveAdmin" id="staff-save" name="staff-save">Save</x-staff-button-green>
+                    <x-staff-button-green wire:click="edit" id="staff-save" name="staff-save">Save</x-staff-button-green>
                     <x-staff-button-red wire:click="check" id="staff-delete" name="staff-delete">Delete</x-staff-button-red>
                     <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
                 @else
