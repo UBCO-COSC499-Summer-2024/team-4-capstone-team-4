@@ -452,11 +452,20 @@ class StaffList extends Component
             $disabledCount++;
         }
 
+        //Update previous enabled to current enabled
+        $this->prevEnabledUsers = $this->enabledUsers;
+
         //Determines changes and make updates for each role
         $instructorCounts = $this->updateRole('instructor', $this->instructors, $this->prevInstructors);
         $headCounts = $this->updateRole( 'dept_head', $this->deptHeads, $this->prevDeptHeads);
         $staffCounts = $this->updateRole('dept_staff', $this->deptStaffs, $this->prevDeptStaffs);
         $adminCounts = $this->updateRole('admin', $this->admins, $this->prevAdmins);
+
+        // Update previous roles to current roles
+        $this->prevInstructors = $this->instructors;
+        $this->prevDeptHeads = $this->deptHeads;
+        $this->prevDeptStaffs = $this->deptStaffs;
+        $this->prevAdmins = $this->admins;
 
         //reset and send toast
         $message = sprintf(
