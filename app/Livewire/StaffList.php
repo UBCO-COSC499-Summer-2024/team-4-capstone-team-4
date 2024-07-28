@@ -433,9 +433,79 @@ class StaffList extends Component
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;
         $user_roles = UserRole::where('user_id', $user->id)->get();
-        $user->update([
-            'active' => $this->active
-        ]);
+        
+        //dd($this->enabledUsers);
+        //update status
+        if (in_array($userid, $this->enabledUsers)) {
+            $user->update(['active' => true]);
+        } else {
+            $user->update(['active' => false]);
+        }
+
+        //update roles
+        if(in_array($userid, $this->instructors)){
+            $instructor = $user_roles->where('role', 'instructor')->first();
+            if($instructor == null){
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => 'instructor',
+                ]);
+            }
+        }else{
+            $instructor = $user_roles->where('role', 'instructor')->first();
+            if($instructor){
+                $instructor->delete();
+            }
+        }
+
+        if(in_array($userid, $this->deptHeads)){
+            $head = $user_roles->where('role', 'dept_head')->first();
+            if($head == null){
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => 'dept_head',
+                ]);
+            }
+        }else{
+            $head = $user_roles->where('role', 'dept_head')->first();
+            if($head){
+                $head->delete();
+            }
+        }
+
+        if(in_array($userid, $this->deptStaffs)){
+            $staff = $user_roles->where('role', 'dept_staff')->first();
+            if($staff == null){
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => 'dept_staff',
+                ]);
+            }
+        }else{
+            $staff = $user_roles->where('role', 'dept_staff')->first();
+            if($staff){
+                $staff->delete();
+            }
+        }
+
+        if(in_array($userid, $this->admins)){
+            $admin = $user_roles->where('role', 'admin')->first();
+            if($admin == null){
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => 'admin',
+                ]);
+            }
+        }else{
+            $admin = $user_roles->where('role', 'admin')->first();
+            if($admin){
+                $admin->delete();
+            }
+        }
 
         $this->editUserId = null;
         $this->dispatch('show-toast', [
