@@ -105,14 +105,15 @@ class ServiceRoleTable extends Component
             $this->svcroles = array_values($this->svcroles); // Reindex array
 
             $this->updateCounter++;
+        }
 
-            if ($this->updateCounter == count($this->svcroles)) {
-                $this->dispatch('clear-imported');
-                $this->dispatch('show-toast', [
-                    'type' => 'success',
-                    'message' => 'Service roles saved',
-                ]);
-            }
+        if (count($this->svcroles) === 0 && $this->updateCounter > 0) {
+            $this->svcroles = [];
+            $this->dispatch('clear-imported');
+            $this->dispatch('show-toast', [
+                'type' => 'success',
+                'message' => 'Service roles saved',
+            ]);
         }
     }
 

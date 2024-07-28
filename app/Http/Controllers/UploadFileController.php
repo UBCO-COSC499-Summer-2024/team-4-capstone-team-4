@@ -224,11 +224,6 @@ class UploadFileController extends Controller {
             // Handle the exception
             return redirect()->route('svcroles.add');
         }
-
-        // Session::put('uploadedServiceRoles', [
-        //     'uploadedFiles' => $uploadedFiles,
-        //     'formattedData' => $formattedData,
-        // ]);
     }
 
     private function extractFileData($file) {

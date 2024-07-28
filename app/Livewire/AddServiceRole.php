@@ -35,6 +35,7 @@ class AddServiceRole extends Component
         $this->uploadedFiles = [];
         $this->formattedData = [];
         $this->numItems = 0;
+        $this->viewMode = 'form';
         // $url = route('svcroles.add');
         // return redirect($url);
     }
