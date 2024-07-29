@@ -4,23 +4,39 @@
     </td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="id">{{ $auditLog->id }}</td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="user">{{ $auditLog->user_id }} - {{ $auditLog->user_alt }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="action">{{ $auditLog->action }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="description">{{ $auditLog->description }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="schema">{{ $auditLog->table_name }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="operation">{{ $auditLog->operation_type }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="old_val">
-        <button onclick="document.getElementById('auditLogModal{{ $auditLog->id }}').style.display='block'">
-            <span class="material-symbols-outlined">
-                file_present
-            </span>
-        </button>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="action">
+        <div class="w-fit m-auto !text-center">
+            {{ $auditLog->action }}
+        </div>
     </td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="new_val">
-        <button onclick="document.getElementById('auditLogModal{{ $auditLog->id }}').style.display='block'">
-            <span class="material-symbols-outlined">
-                file_present
-            </span>
-        </button>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="description">{{ $auditLog->description }}</td>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="schema">
+        <div class="w-fit m-auto !text-center">
+            {{ $auditLog->table_name }}
+        </div>
+    </td>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="operation">
+        <div class="w-fit m-auto !text-center">
+            {{ $auditLog->operation_type }}
+        </div>
+    </td>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="old_val">
+        <div class="w-fit m-auto !text-center">
+            <button @click="@this.dispatch('preview-data', ['{{$auditLog->id}}', '{{$auditLog->old_value}}'])">
+                <span class="material-symbols-outlined">
+                    file_present
+                </span>
+            </button>
+        </div>
+    </td>
+    <td class="svcr-list-item-cell audit-log-table-item-cell m-auto !text-center" data-column="new_val">
+        <div class="w-fit m-auto !text-center">
+            <button @click="@this.dispatch('preview-data', ['{{$auditLog->id}}', '{{$auditLog->new_value}}'])">
+                <span class="material-symbols-outlined">
+                    file_present
+                </span>
+            </button>
+        </div>
     </td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="created">{{ $auditLog->created_at }}</td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="updated">{{ $auditLog->updated_at }}</td>

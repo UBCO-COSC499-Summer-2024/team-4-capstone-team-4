@@ -11,6 +11,17 @@
     border-radius: 50px;
 }
 
+.audit-log-table-item {
+}
+
+.audit-log-table-item-cell {
+    padding: 6px 12px;
+    border-radius: 50px;
+    /* color: #f0f0f0; */
+    font-weight: 600;
+    background: #f0f0f0 !important;
+}
+
 .filter {
     display: flex;
     gap: 6px;
@@ -120,4 +131,18 @@
     border-radius: 50%;
     cursor: pointer;
     gap: 6px;
+}
+
+pre.data-preview {
+    padding: 12px;
+    border-radius: 12px;
+    background: #f0f0f0;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    overflow: auto;
+    max-height: 300px;
 }

@@ -45,19 +45,32 @@ class AuditLogTable extends Component
         'change-perpage' => 'changePerpage',
         'change-search-query' => 'changeSearchQuery',
         'clear-filters' => 'clearFilters',
+        'preview-data' => 'previewData'
     ];
+
+    public $showDataPreviewModal = false;
+    public $showDataPreviewModalForId = null;
+    public $dataToPreview = null;
 
     public function mount() {
     }
 
-    public function clearFilters()
-    {
+    public function clearFilters() {
         $this->selectedFilter = [
             "Users" => [],
             "Actions" => [],
             "Schemas" => [],
             "Operations" => []
         ];
+    }
+
+    public function previewData($id, $data) {
+        $auditLog = AuditLog::find($id);
+        if ($auditLog) {
+            $this->showDataPreviewModal = true;
+            $this->showDataPreviewModalForId = $id;
+            $this->dataToPreview = json_decode(json_encode($data), JSON_PRETTY_PRINT);
+        }
     }
 
     public function updateFilter($category, $item, $isChecked) {
@@ -72,28 +85,23 @@ class AuditLogTable extends Component
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
-    public function changeSort($sort)
-    {
+    public function changeSort($sort) {
         $this->selectedSort = $sort;
     }
 
-    public function changeViewMode($mode)
-    {
+    public function changeViewMode($mode) {
         $this->viewMode = $mode;
     }
 
-    public function changePerpage($perpage)
-    {
+    public function changePerpage($perpage) {
         $this->perpage = $perpage;
     }
 
-    public function changeSearchQuery($query)
-    {
+    public function changeSearchQuery($query) {
         $this->searchQuery = $query;
     }
 
-    public function sortColumn($column)
-    {
+    public function sortColumn($column) {
         if ($this->selectedSort == $column) {
             $this->selectedSortOrder = $this->selectedSortOrder == 'asc' ? 'desc' : 'asc';
         } else {
@@ -102,8 +110,7 @@ class AuditLogTable extends Component
         }
     }
 
-    public function render()
-    {
+    public function render() {
         $query = AuditLog::query();
 
         if ($this->searchQuery) {
@@ -148,8 +155,7 @@ class AuditLogTable extends Component
         ]);
     }
 
-    private function getFilterColumn($category)
-    {
+    private function getFilterColumn($category) {
         switch ($category) {
             case 'Users':
                 // user_id and user_alt

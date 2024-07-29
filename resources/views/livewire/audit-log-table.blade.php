@@ -9,7 +9,16 @@
             this.selectedSortOrder = 'desc';
         }
         $wire.sortColumn(column);
-    }
+    },
+    selectAll: @entangle('selectAll').defer,
+    showDataPreviewModal: @entangle('showDataPreviewModal').defer,
+    showDataPreviewModalForId: @entangle('showDataPreviewModalForId').defer,
+    dataToPreview: @entangle('dataToPreview').defer,
+    closeDataPreviewModal() {
+        this.showDataPreviewModal = null;
+        this.showDataPreviewModalForId = null;
+        this.dataToPreview = null;
+    },
 }">
     <table class="svcr-table audit-logs-table">
         <thead>
@@ -76,4 +85,21 @@
             });
         });
     </script>
+    <x-dialog-modal wire:model.live="showDataPreviewModal" id="dataPreviewModal" @close="closeDataPreviewModal"
+        class="glass"
+        wire:key='dataPreviewModal' x-show="showDataPreviewModal" x-cloak>
+        {{-- title --}}
+        <x-slot name="title">
+            Data Preview
+        </x-slot>
+        <x-slot name="content">
+            <pre class="data-preview">{{ $dataToPreview }}</pre>
+        </x-slot>
+        <x-slot name="footer">
+            <x-button class="btn-secondary"
+                wire:click="showDataPreviewModal = false; showDataPreviewModalForId = null; dataToPreview = null;">
+                Close
+            </x-button>
+        </x-slot>
+    </x-dialog-modal>
 </div>

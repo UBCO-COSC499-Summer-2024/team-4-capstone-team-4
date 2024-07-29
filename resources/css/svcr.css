@@ -88,7 +88,8 @@
 }
 
 .svcr-list-header-item:first-child,
-.svcr-list-item td:first-child {
+.svcr-list-item td:first-child,
+.svcr-list-item [data-column="id"] {
     text-align: center;
 }
 
@@ -103,6 +104,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.svcr-table tfoot td {
+    padding: 8px 0;
 }
 
 /* smaller screens description should be 200px */
