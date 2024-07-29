@@ -11,14 +11,14 @@
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="old_val">
         <button onclick="document.getElementById('auditLogModal{{ $auditLog->id }}').style.display='block'">
             <span class="material-symbols-outlined">
-                visibility
+                file_present
             </span>
         </button>
     </td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="new_val">
         <button onclick="document.getElementById('auditLogModal{{ $auditLog->id }}').style.display='block'">
             <span class="material-symbols-outlined">
-                visibility
+                file_present
             </span>
         </button>
     </td>

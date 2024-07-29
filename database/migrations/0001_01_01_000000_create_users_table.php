@@ -213,9 +213,8 @@ return new class extends Migration
             $table->string('operation_type')->nullable();
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
-            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('timestamp')->useCurrent();
+            $table->timestamps();
         });
 
         // for pgaudit

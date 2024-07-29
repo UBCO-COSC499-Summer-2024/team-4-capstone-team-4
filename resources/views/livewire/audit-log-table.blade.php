@@ -1,28 +1,46 @@
+<div x-data="{
+    selectedSort: @entangle('selectedSort').defer,
+    selectedSortOrder: @entangle('selectedSortOrder').defer,
+    sortColumn(column) {
+        if (this.selectedSort === column) {
+            this.selectedSortOrder = this.selectedSortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.selectedSort = column;
+            this.selectedSortOrder = 'desc';
+        }
+        $wire.sortColumn(column);
+    }
+}">
 <table class="svcr-table audit-logs-table">
     <thead>
         <tr class="svcr-table-header svcr-list-header">
             <th class="svcr-table-header-item svcr-list-header-item" data-column="select">
-                <input type="checkbox" calss="form" wire:model="selectAll" />
+                <input type="checkbox" class="form" wire:model="selectAll" />
             </th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="id">ID</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="user">User</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="action">Action</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="description">Description</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="schema">Schema</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="operation">Operation</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="old_val">Old</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="new_val">New</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="created">Created</th>
-            <th class="svcr-table-header-item svcr-list-header-item" data-column="updated">Updated</th>
-            <th class="text-center svcr-table-header-item svcr-list-header-item" data-column="actions">Actions</th>
+            @foreach (['id' => 'ID', 'user_id' => 'User', 'action' => 'Action', 'description' => 'Description', 'table_name' => 'Schema', 'operation_type' => 'Operation', 'old_val' => 'Old', 'new_val' => 'New', 'created_at' => 'Created', 'updated_at' => 'Updated'] as $column => $label)
+                <th class="svcr-table-header-item svcr-list-header-item" data-column="{{ $column }}">
+                    <div class="svcr-table-th">
+                        <span class="svcr-table-th-text">{{ $label }}</span>
+                        <span class="audit-table-sort">
+                            <span @click="sortColumn('{{ $column }}')" class="material-symbols-outlined icon audit-sort-icon">
+                                @if ($selectedSort === $column)
+                                    @if ($selectedSortOrder === 'asc')
+                                        arrow_drop_up
+                                    @else
+                                        arrow_drop_down
+                                    @endif
+                                @else
+                                    unfold_more
+                                @endif
+                            </span>
+                        </span>
+                    </div>
+                </th>
+            @endforeach
+            <th class="text-center w-fit svcr-table-header-item svcr-list-header-item" data-column="actions">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @php
-
-        // $this->auditLogs = AuditLog::orderBy('timestamp', 'desc')->paginate($this->perpage, ['*'], 'page', $this->page);
-            $auditLogs = App\Models\AuditLog::orderBy('timestamp', 'desc')->paginate($this->perpage, ['*'], 'page', $this->page);
-        @endphp
         @forelse ($auditLogs as $auditLog)
             <livewire:templates.audit-log-table-item :auditLog="$auditLog" :key="$auditLog->id" />
         @empty
@@ -39,3 +57,4 @@
         </tr>
     </tfoot>
 </table>
+</div>
