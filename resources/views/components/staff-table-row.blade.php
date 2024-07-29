@@ -97,7 +97,7 @@
         <img class="h-14 w-14 flex-none rounded-full bg-gray-50" src="{{ $src }}" alt="">
         <div class="ps-3 min-w-0 flex-auto">
             <a href="{{ route('performance', ['instructor_id' => $instructorId, 'name' => $fullname]) }}" title="View Performance" class="block hover:underline">
-                <p class="text-lg font-semibold leading-6 text-gray-900 hover:text-[#3b4779] transform hover:scale-101 transition duration-300">{{ $fullname }}</p>
+                <p class="text-lg font-semibold leading-6 text-gray-900 hover:text-[#3b4779]">{{ $fullname }}</p>
             </a>
             <a href="mailto:{{ $email }}" title="Send Email" class="block mt-1 truncate text-base leading-5 text-gray-500 hover:text-[#3b4779] ">
                 {{ $email }}
