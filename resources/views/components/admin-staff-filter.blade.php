@@ -9,10 +9,10 @@
   
     <!-- Dropdown menu -->
     <div id="filterDropdown" class="hidden z-60 w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700 absolute top-full mt-2">
-        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+        <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
             Departments
         </h6>
-        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+        <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             @php
                 $depts =\App\Models\Department::all();
             @endphp
@@ -23,10 +23,11 @@
                 </li>
             @endforeach
         </ul>
-        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+        <br>
+        <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
             Roles
         </h6>
-        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+        <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                 <x-checkbox wire:model="selectedRoles" class="filter-checkbox" name="roles[]" value="instructor" />
                 Instructor
@@ -44,10 +45,11 @@
                 Admin
             </li>
         </ul>
-        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+        <br>
+        <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
             Status
         </h6>
-        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+        <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             <li class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                 <x-checkbox wire:model="selectedStatus" class="filter-checkbox" name="status[]" value="true" />
                 Enabled

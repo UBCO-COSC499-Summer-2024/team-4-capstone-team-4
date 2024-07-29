@@ -254,6 +254,7 @@ class StaffList extends Component
     public function clearAdminFilter(){
         $this->selectedRoles = [];
         $this->selectedDepts = [];
+        $this->selectedStatus = [];
     }
 
     public function showTargetModal(){
