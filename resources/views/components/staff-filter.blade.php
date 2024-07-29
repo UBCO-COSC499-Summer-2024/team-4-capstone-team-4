@@ -9,10 +9,10 @@
   
     <!-- Dropdown menu -->
     <div id="filterDropdown" class="hidden z-50 w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700 absolute top-full mt-2">
-        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+        <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
             Areas
         </h6>
-        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+        <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             @php
                 $user = Auth::user();
                 $dept_id = App\Models\UserRole::find($user->id)->department_id;

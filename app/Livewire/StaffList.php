@@ -194,10 +194,12 @@ class StaffList extends Component
                 if ($user->hasRole('admin')) {
                     $usersQuery->select('users.*', DB::raw("STRING_AGG(DISTINCT COALESCE(areas_dept.name, svc_dept.name, user_dept.name), ', ') AS department_name"), DB::raw("STRING_AGG(user_roles.role, ', ') AS roles_names"))
                     ->groupBy('users.id')
-                    ->orderBy('firstname', $this->sortDirection);
+                    ->orderBy('firstname', $this->sortDirection)
+                    ->orderBy('lastname', $this->sortDirection);
                 } else {
                     $usersQuery->select('users.*', 'user_roles.id as instructor_id')
-                                ->orderBy('firstname', $this->sortDirection);
+                                ->orderBy('firstname', $this->sortDirection)
+                                ->orderBy('lastname', $this->sortDirection);
                 }
                 break;          
         }
@@ -245,7 +247,7 @@ class StaffList extends Component
     }
 
     public function filter(){
-        $this->selectedAreas = $this->selectedAreas;
+        $this->render();
     }
     public function clearFilter(){
         $this->selectedAreas = [];
@@ -395,6 +397,7 @@ class StaffList extends Component
         $this->editMode = false;
     }
 
+    //add new user
     public function addUser(){
         
         $data = [
@@ -402,7 +405,7 @@ class StaffList extends Component
             'lastname' => $this->lastname,
             'email' => $this->email,
             'password' => $this->password,
-            'password_confirmation' => $this->password_confirmation,  // Add this line
+            'password_confirmation' => $this->password_confirmation, 
             'user_roles' => $this->user_roles,
         ];
     
