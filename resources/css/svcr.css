@@ -45,7 +45,8 @@
 }
 
 /* all checkboxes in svcr-table */
-#svcr-table input[type="checkbox"] {
+#svcr-table input[type="checkbox"],
+.svcr-table input[type="checkbox"] {
     /* display: none; */
     /* background: #fafafa; */
     border-radius: 50px;
@@ -147,6 +148,7 @@ nav[aria-label="Pagination Navigation"] {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     display: table-header-group;
+    vertical-align: middle;
 }
 
 /* .svcr-list-header {
