@@ -240,6 +240,7 @@ return new class extends Migration
             $table->string('session_user')->nullable();
             $table->text('security_label')->nullable();
             $table->jsonb('context')->nullable();
+            $table->timestamps();
         });
     }
 
