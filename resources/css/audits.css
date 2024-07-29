@@ -7,16 +7,16 @@
 }
 
 .audit-logs-section .toolbar {
-    padding: 8px;
-    border-radius: 50px;
+    /* padding: 8px; */
+    border-radius: 4px;
 }
 
 .audit-log-table-item {
 }
 
 .audit-log-table-item-cell {
-    padding: 6px 12px;
-    border-radius: 50px;
+    /* padding: 6px 12px; */
+    /* border-radius: 50px; */
     /* color: #f0f0f0; */
     font-weight: 600;
     background: #f0f0f0 !important;

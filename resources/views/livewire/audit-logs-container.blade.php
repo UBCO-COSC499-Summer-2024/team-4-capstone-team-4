@@ -38,7 +38,7 @@
     } --}}
 {{-- " --}}
 >
-    <section class="w-full audit-logs-section">
+    <section class="w-full audit-logs-section grid-sticky">
         {{-- grid, 2 columns normally but on smaller screens 1 column --}}
         <div class="grid grid-cols-1 toolbar md:grid-cols-2">
             <section class="flex w-full toolbar-section left">

@@ -109,7 +109,7 @@
     </h1>
 
     <div class="svcr-container">
-        <section class="grid grid-cols-1 toolbar md:grid-cols-2" id="svcr-toolbar" wire:key='toolbar'>
+        <section class="grid w-full grid-cols-1 toolbar md:grid-cols-2 grid-sticky" id="svcr-toolbar" wire:key='toolbar'>
             <section class="w-full toolbar-section left">
                 <div class="flex-grow toolbar-search-container">
                     <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
