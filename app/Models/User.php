@@ -79,7 +79,7 @@ class User extends Authenticatable {
         $lastInitial = isset($lastname[0]) ? strtoupper($lastname[0]) : '';
         return $firstInitial . $lastInitial;
     }
-    
+
     protected static function boot() {
         parent::boot();
         static::created(function ($user) {
@@ -102,6 +102,10 @@ class User extends Authenticatable {
 
     public function hasRoles($roles = []) {
         return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
+
+    public function hasOnlyRole($role) {
+        return $this->hasRoles([$role]) && $this->roles->count() === 1;
     }
 
     public function getName() {
