@@ -42,95 +42,100 @@ class StaffList extends Component
         $this->pagination = 10;
     }
 
-    public function render()
-    {
-        $query = $this->searchTerm;
-        $areas = $this->selectedAreas;
+    public function render(){
+    $query = $this->searchTerm;
+    $areas = $this->selectedAreas;
+    $year = $this->selectedYear;
 
-        $user = Auth::user();
-        $dept_id = UserRole::find($user->id)->department_id;
-      
-        $usersQuery = User::query();
-        //find all users that are instructors in the department
-        $usersQuery->whereHas('roles', function ($queryBuilder) {
-            $queryBuilder->where('role', 'instructor');
-        });
-        //apply search query if it is not empty
-        if(!empty($query)){
-            $usersQuery->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('firstname', 'ILIKE', "%{$query}%")
-                            ->orWhere('lastname', 'ILIKE', "%{$query}%")
-                            ->orWhere('email', 'ILIKE', "%{$query}%");
-            });
-        }
-        //dd($this->selectedAreas);
-        //filter for selectedAreas if set
-        if(!empty($areas)){
-            $usersQuery->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas){
-                $queryBuilder->whereIn('name', $areas);
-            });
-        }
-        //join all the tables
-        $currentYear = $this->selectedYear;
-        $usersQuery = $usersQuery->distinct()
+    $user = Auth::user();
+    $dept_id = UserRole::find($user->id)->department_id;
+
+    $usersQuery = User::query()
+        ->distinct()
         ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
         ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-        ->leftJoin('course_sections', function($join) use ($currentYear) {
+        ->leftJoin('course_sections', function ($join) use ($year){
             $join->on('teaches.course_section_id', '=', 'course_sections.id')
-                ->where('course_sections.year', '=', $currentYear);
+                 ->where('course_sections.year', '=', $year);
         })
-        ->orWhereNull('course_sections.id')
         ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
-        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $currentYear) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
-        ->where('areas.dept_id', $dept_id);
+        ->leftJoin(DB::raw("(SELECT * FROM instructor_performance WHERE year = $year) as instructor_performance"), 'user_roles.id', '=', 'instructor_performance.instructor_id')
+        ->where('user_roles.role', 'instructor')  // Ensure the user is an instructor
+        ->where(function ($query) use ($dept_id) {
+            $query->where('areas.dept_id', $dept_id)  // Ensure the user belongs to the department
+                  ->orWhereNull('course_sections.id');  // Course section is optional
+        });
 
-        // Sort according to sort fields
-        $currentMonth = $this->selectedMonth; 
-        switch ($this->sortField) {
-            case 'area':
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
-                ->groupBy('users.id', 'user_roles.id')          
-                            ->orderBy('area_names', $this->sortDirection);
-                break;
-            case 'total_hours':
-                //extract hours of the current month
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("CAST(instructor_performance.total_hours->>'$currentMonth' AS INTEGER) AS month_hours"))
-                           ->orderBy('month_hours', $this->sortDirection);
-                break;
-            case 'target_hours':
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id','instructor_performance.target_hours')
-                            ->orderBy('instructor_performance.target_hours', $this->sortDirection);
-                break;
-            case 'score' :
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id', 'instructor_performance.score')
-                            ->orderBy('instructor_performance.score', $this->sortDirection);
-                break;                
-            default: // by firstname
-                $usersQuery->select('users.*', 'user_roles.id as instructor_id')
-                           ->orderBy('firstname', $this->sortDirection);
-        }
-
-        switch ($this->pagination) {
-            case 25:
-                $users = $usersQuery->paginate(25);
-                break;
-            case 50:
-                $users = $usersQuery->paginate(50);
-                break;
-            case 100:
-                $users = $usersQuery->paginate(100);
-                break;
-            case 'all':
-                $users = $usersQuery->get();
-                break;
-            default: 
-                $users = $usersQuery->paginate(10);
-                break;
-        }
-        //$this->currentUsers = $users;
-        //dd($users);
-        return view('livewire.staff-list', ['users'=> $users, 'showModal'=> $this->showModal, 'selectedYear'=>$this->selectedYear, 'selectedMonth'=>$this->selectedMonth, 'editMode'=>$this->editMode, 'pagination' => $this->pagination]);
+    // Apply search query if it is not empty
+    if (!empty($query)) {
+        $usersQuery->where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('firstname', 'ILIKE', "%{$query}%")
+                         ->orWhere('lastname', 'ILIKE', "%{$query}%")
+                         ->orWhere('email', 'ILIKE', "%{$query}%");
+        });
     }
+
+    // Filter for selectedAreas if set
+    if (!empty($areas)) {
+        $usersQuery->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas) {
+            $queryBuilder->whereIn('name', $areas);
+        });
+    }
+
+    // Sort according to sort fields
+    $currentMonth = $this->selectedMonth; 
+    switch ($this->sortField) {
+        case 'area':
+            $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("STRING_AGG(areas.name, ', ') as area_names"))
+                       ->groupBy('users.id', 'user_roles.id')          
+                       ->orderBy('area_names', $this->sortDirection);
+            break;
+        case 'total_hours':
+            $usersQuery->select('users.*', 'user_roles.id as instructor_id', DB::raw("CAST(instructor_performance.total_hours->>'$currentMonth' AS INTEGER) AS month_hours"))
+                       ->orderBy('month_hours', $this->sortDirection);
+            break;
+        case 'target_hours':
+            $usersQuery->select('users.*', 'user_roles.id as instructor_id', 'instructor_performance.target_hours')
+                       ->orderBy('instructor_performance.target_hours', $this->sortDirection);
+            break;
+        case 'score':
+            $usersQuery->select('users.*', 'user_roles.id as instructor_id', 'instructor_performance.score')
+                       ->orderBy('instructor_performance.score', $this->sortDirection);
+            break;                
+        default: // by firstname
+            $usersQuery->select('users.*', 'user_roles.id as instructor_id')
+                       ->orderBy('firstname', $this->sortDirection);
+    }
+
+    // Pagination
+    switch ($this->pagination) {
+        case 25:
+            $users = $usersQuery->paginate(25);
+            break;
+        case 50:
+            $users = $usersQuery->paginate(50);
+            break;
+        case 100:
+            $users = $usersQuery->paginate(100);
+            break;
+        case 'all':
+            $users = $usersQuery->get();
+            break;
+        default: 
+            $users = $usersQuery->paginate(10);
+            break;
+    }
+
+    return view('livewire.staff-list', [
+        'users' => $users,
+        'showModal' => $this->showModal,
+        'selectedYear' => $this->selectedYear,
+        'selectedMonth' => $this->selectedMonth,
+        'editMode' => $this->editMode,
+        'pagination' => $this->pagination
+    ]);
+}
+
 
     public function sort($field){
         if ($this->sortField === $field) {

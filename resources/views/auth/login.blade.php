@@ -22,8 +22,13 @@
                 <x-form-icon icon="key"/>
                 <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
             </x-form-item> --}}
-
-          {{--   <x-validation-errors/> --}}
+            {{-- @php
+            $userRoles = auth()->user()->roles; 
+            @endphp      
+            @if ($userRoles->isEmpty())
+                <li style="color:red;">No valid role assigned to your account.</li>
+            @endif --}}
+            <x-validation-errors/>
 
             <x-form-item>
                 <span class="input-label"><x-link href="/forgot-password" title="{{ __('Forgot Password') }}" /></span>
@@ -47,7 +52,9 @@
             </div>
         @endif
         <div class="provider-list">
-            <x-link href="{{ route('auth.provider', 'google') }}" title="Google" class="auth-provider-link">
+            <x-link
+                href="{{ route('auth.provider', ['provider' => 'google']) }}"
+                title="Google" class="auth-provider-link">
                 <x-logos.google/>
             </x-link>
         </div>
