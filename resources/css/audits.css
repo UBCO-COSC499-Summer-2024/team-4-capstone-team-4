@@ -8,6 +8,7 @@
 
 .audit-logs-section .toolbar {
     padding: 8px;
+    border-radius: 50px;
 }
 
 .filter {
@@ -86,9 +87,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    gap: 6px;
+    /* gap: 6px; */
     width: 100%;
-    padding: 0 12px;
+    padding: 3px 12px;
 }
 
 .filter-items input[type="checkbox"] {
@@ -103,4 +104,20 @@
 .filter-category:hover .filter-toggle-icon,
 .filter-category:focus-within .filter-toggle-icon {
     transform: rotate(180deg);
+}
+
+.filter-clear-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1rem;
+    color: #999;
+    padding: 6px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 50%;
+    cursor: pointer;
+    gap: 6px;
 }

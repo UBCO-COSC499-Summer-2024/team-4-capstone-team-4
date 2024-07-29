@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\AuditLog;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class AuditLogsContainer extends Component {
@@ -13,11 +14,18 @@ class AuditLogsContainer extends Component {
         'Schemas' => [],
         'Operations' => []
     ];
-    public $selectedFilter = [];
+
+    public $selectedFilter = [
+        'Users' => [],
+        'Actions' => [],
+        'Schemas' => [],
+        'Operations' => []
+    ];
 
     protected $listeners = [
         'change-search-query' => 'updateSearch',
-        'clear-filters' => 'clearFilters'
+        'clear-filters' => 'clearFilters',
+        'change-filter' => 'updateFilter'
     ];
 
     public function mount() {
@@ -28,8 +36,27 @@ class AuditLogsContainer extends Component {
         $this->search = $value;
     }
 
+    public function updateFilter($category, $item, $isChecked) {
+        if ($isChecked) {
+            $this->selectedFilter[$category][] = $item;
+        } else {
+            $key = array_search($item, $this->selectedFilter[$category]);
+            if ($key !== false) {
+                unset($this->selectedFilter[$category][$key]);
+            }
+        }
+        $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
+        // dd($this->selectedFilter);
+        Log::info($this->selectedFilter);
+    }
+
     public function clearFilters() {
-        $this->selectedFilter = [];
+        $this->selectedFilter = [
+            'Users' => [],
+            'Actions' => [],
+            'Schemas' => [],
+            'Operations' => []
+        ];
     }
 
     public function populateFilters() {
@@ -53,6 +80,9 @@ class AuditLogsContainer extends Component {
     }
 
     public function render() {
-        return view('livewire.audit-logs-container');
+        return view('livewire.audit-logs-container', [
+            'filters' => $this->filters,
+            'selectedFilter' => $this->selectedFilter,
+        ]);
     }
 }

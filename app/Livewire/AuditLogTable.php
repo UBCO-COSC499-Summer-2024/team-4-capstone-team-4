@@ -22,12 +22,6 @@ class AuditLogTable extends Component
     ];
     public $selectedSort = 'id';
     public $selectedSortOrder = 'desc';
-    public $filters = [
-        "Users" => [],
-        "Actions" => [],
-        "Schemas" => [],
-        "Operations" => []
-    ];
     public $sort = [
         "ID" => "id",
         "User" => "user",
@@ -45,7 +39,7 @@ class AuditLogTable extends Component
     public $searchQuery = "";
 
     protected $listeners = [
-        'change-filter' => 'changeFilter',
+        'change-filter' => 'updateFilter',
         'change-sort' => 'changeSort',
         'change-view-mode' => 'changeViewMode',
         'change-perpage' => 'changePerpage',
@@ -53,9 +47,7 @@ class AuditLogTable extends Component
         'clear-filters' => 'clearFilters',
     ];
 
-    public function mount()
-    {
-        $this->populateFilters();
+    public function mount() {
     }
 
     public function clearFilters()
@@ -66,25 +58,23 @@ class AuditLogTable extends Component
             "Schemas" => [],
             "Operations" => []
         ];
-        $this->applyFilters();
     }
 
-    public function changeFilter($filter, $value, $checked)
-    {
-        if ($checked) {
-            $this->selectedFilter[$filter][] = $value;
+    public function updateFilter($category, $item, $isChecked) {
+        if ($isChecked) {
+            $this->selectedFilter[$category][] = $item;
         } else {
-            if (($key = array_search($value, $this->selectedFilter[$filter])) !== false) {
-                unset($this->selectedFilter[$filter][$key]);
+            $key = array_search($item, $this->selectedFilter[$category]);
+            if ($key !== false) {
+                unset($this->selectedFilter[$category][$key]);
             }
         }
-        $this->applyFilters();
+        $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
     public function changeSort($sort)
     {
         $this->selectedSort = $sort;
-        $this->applyFilters();
     }
 
     public function changeViewMode($mode)
@@ -95,39 +85,11 @@ class AuditLogTable extends Component
     public function changePerpage($perpage)
     {
         $this->perpage = $perpage;
-        $this->applyFilters();
     }
 
     public function changeSearchQuery($query)
     {
         $this->searchQuery = $query;
-        $this->applyFilters();
-    }
-
-    public function populateFilters()
-    {
-        $filters = [];
-
-        $userIds = AuditLog::select('user_id')
-            ->whereNotNull('user_id')
-            ->distinct()
-            ->get()
-            ->pluck('user_id');
-
-        $userAlts = AuditLog::select('user_alt')
-            ->whereNotNull('user_alt')
-            ->distinct()
-            ->get()
-            ->pluck('user_alt');
-
-        $combinedUsers = $userIds->merge($userAlts)->unique()->sort();
-
-        $filters['Users'] = $combinedUsers;
-        $filters['Actions'] = AuditLog::select('action')->distinct()->get()->pluck('action');
-        $filters['Schemas'] = AuditLog::select('table_name')->distinct()->get()->pluck('table_name');
-        $filters['Operations'] = AuditLog::select('operation_type')->distinct()->get()->pluck('operation_type');
-
-        $this->filters = $filters;
     }
 
     public function sortColumn($column)
@@ -140,28 +102,40 @@ class AuditLogTable extends Component
         }
     }
 
-    public function applyFilters()
-    {
-        // Moved the query building and pagination to the render method
-    }
-
     public function render()
     {
         $query = AuditLog::query();
 
         if ($this->searchQuery) {
             $query->where(function ($q) {
-                $q->where('user', 'like', '%' . $this->searchQuery . '%')
+                $q->where('user_id', 'like', '%' . $this->searchQuery . '%')
+                    ->orWhere('user_alt', 'like', '%' . $this->searchQuery . '%')
                     ->orWhere('action', 'like', '%' . $this->searchQuery . '%')
                     ->orWhere('description', 'like', '%' . $this->searchQuery . '%')
                     ->orWhere('table_name', 'like', '%' . $this->searchQuery . '%')
-                    ->orWhere('operation_type', 'like', '%' . $this->searchQuery . '%');
+                    ->orWhere('operation_type', 'like', '%' . $this->searchQuery . '%')
+                    ->orWhere('old_value', 'like', '%' . $this->searchQuery . '%')
+                    ->orWhere('new_value', 'like', '%' . $this->searchQuery . '%')
+                    ->orWhere('created_at', 'like', '%' . $this->searchQuery . '%')
+                    ->orWhere('updated_at', 'like', '%' . $this->searchQuery . '%');
             });
         }
 
         foreach ($this->selectedFilter as $category => $items) {
             if (!empty($items)) {
-                $query->whereIn($this->getFilterColumn($category), $items);
+                if ($category == 'Users') {
+                    $query->where(function ($q) use ($items) {
+                        foreach ($items as $item) {
+                            if (is_numeric($item)) {
+                                $q->orWhere('user_id', $item);
+                            } else {
+                                $q->orWhere('user_alt', $item);
+                            }
+                        }
+                    });
+                } else {
+                    $query->whereIn($this->getFilterColumn($category), $items);
+                }
             }
         }
 
@@ -178,7 +152,8 @@ class AuditLogTable extends Component
     {
         switch ($category) {
             case 'Users':
-                return 'user';
+                // user_id and user_alt
+                return ['user_id', 'user_alt'];
             case 'Actions':
                 return 'action';
             case 'Schemas':

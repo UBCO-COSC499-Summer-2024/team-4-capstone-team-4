@@ -1,6 +1,6 @@
 <tr class="audit-log-table-item svcr-list-item">
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="select">
-        <input type="checkbox" wire:model="selected" value="{{ $auditLog->id }}" />
+        <input type="checkbox" class="audit-item-check" wire:model="selected" value="{{ $auditLog->id }}" />
     </td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="id">{{ $auditLog->id }}</td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="user">{{ $auditLog->user_id }} - {{ $auditLog->user_alt }}</td>
