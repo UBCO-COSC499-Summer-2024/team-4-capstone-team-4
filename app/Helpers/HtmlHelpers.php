@@ -17,6 +17,9 @@ class HtmlHelpers
         'video' => [
             'sample' => '/media/video/sample.mp4',
         ],
+        'staff-dropdown-img' => [
+            'staff-dropdown' => '/media/images/staff-dropdown.png'
+        ]
     ];
 
     protected static $patterns = [

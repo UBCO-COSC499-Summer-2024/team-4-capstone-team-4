@@ -1,0 +1,100 @@
+[
+    {
+        "subtopic": "staff",
+        "subsections": [
+            {
+                "heading": "Introduction",
+                "content": "The staff page provides an overview of all the staff members associated with the department. This section includes basic information such as names, emails, and performance data.",
+                "tags": [
+                    "intro",
+                    "staff"
+                ]
+            },
+            {
+                "heading": "Details",
+                "content": "On the staff page you can: Search up staff members, Sort by the headings, Filter by area, Add target Hours, Edit or Remove Target Hours, View Instructor Reports",
+                "tags": [
+                    "details",
+                    "staff"
+                ]
+            }
+        ],
+        "subtopics": [
+            {
+                "subtopic": "Target Hours",
+                "subsections": [
+                    {
+                        "heading": "Add Target Hours",
+                        "content": "To add target hours, you first need to select at least one staff member. Then navigate to the action dropdown where you can click the 'Add Target Hours' link. {{ staff-dropdown-img.staff-dropdown }} This will bring up a popup that will allow you to put the target hours. Note: Target hours should be no greater then 2000.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "target hours"
+                        ]
+                    },
+                    {
+                        "heading": "Edit Target Hours",
+                        "content": "To edit target hours, you can click on the 'Edit mode' link from the drop down. This will make the target hours column editable. When done editing, click save. Note: Target hours should be no greater then 2000.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "target hours"
+                        ]
+                    },
+                    {
+                        "heading": "Remove Target Hours",
+                        "content": "To remove target hours, you can click on the 'Edit mode' link from the drop down. Then leave the input fields blank for the staff members you want to remove the target hours and click save.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "target hours"
+                        ]
+                    },
+                    {
+                        "heading": "Select Year",
+                        "content": "You can select the year you woukd like to view the insructor perfoamnce for by using the dropdown on the 'Target Hours' heading. Only years which have performanc data wil be shown.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "target hours"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "Instructor Performance",
+                "subsections": [
+                    {
+                        "heading": "Completed Hours",
+                        "content": "You can view the completed hours for the selected month for each instructors. You can select which month you would like to view.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "completed hours"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "Reports",
+                "subsections": [
+                    {
+                        "heading": "Instructor Report",
+                        "content": "",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "reports"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
