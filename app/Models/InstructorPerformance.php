@@ -141,8 +141,7 @@ class InstructorPerformance extends Model {
     public static function updatePerformance($instructor_id, $year) {
         self::updateInstructorSEIAvg($instructor_id, $year);
         self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
-
-
+        self::updateScore($instructor_id, $year);
     }
 
     public function updateTotalHours($hours = [])
@@ -192,15 +191,16 @@ class InstructorPerformance extends Model {
      * Calculates the performance score for an instructor for a given year.
      *
      * This function calculates the total performance score based on the instructor's
-     * assigned roles and course sections taught during the specified year. The score
+     * assigned roles and course sections taught during the specified year, and updates
+     * the score value accordingly in the database. The score
      * considers the monthly service role hours, the number of course sections, and 
      * the difference between the enrolled and dropped averages.
      *
      * @param int $instructor_id The ID of the instructor.
      * @param int $currentYear The year for which the score is calculated.
-     * @return float The calculated performance score.
+     * @return void
      */
-    public function scoreCalculator($instructor_id, $currentYear) {
+    public function updateScore($instructor_id, $currentYear) {
         $roleHours = 0;
         $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
 
@@ -234,6 +234,7 @@ class InstructorPerformance extends Model {
         $enrolled = InstructorPerformance::where('instructor_id', $instructor_id)->first()->enrolled_avg;
         $dropped = InstructorPerformance::where('instructor_id', $instructor_id)->first()->dropped_avg;
 
-        return ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760; 
+        $this->score = ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760;
+        $this->save(); 
     }
 }
