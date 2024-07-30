@@ -68,15 +68,15 @@
         </form>
         @endif
 
-        {{-- <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div class="text-white text-xl text-center m-80">Saving...</div>
-        </div> --}}
+        </div>
 
 
-        {{-- @if($showModal) 
+        @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <x-import-modal moreText="Upload Another File"/>
         </div>
-        @endif --}}
+        @endif
     </div>
 </div>
