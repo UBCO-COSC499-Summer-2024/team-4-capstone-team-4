@@ -153,8 +153,6 @@ class ImportWorkdayForm extends Component
     }
 
     public function handleSubmit() {
-        $dropped = 0;
-
         $this->courseExists = false;
 
         // dd($this->rows);
@@ -165,6 +163,7 @@ class ImportWorkdayForm extends Component
         }
     
         foreach ($this->rows as $index => $row) {
+            $dropped = 0;
             $prefix = '';
             // dd($row);
             

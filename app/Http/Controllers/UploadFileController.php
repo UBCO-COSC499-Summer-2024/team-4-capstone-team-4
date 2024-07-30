@@ -169,8 +169,10 @@ class UploadFileController extends Controller {
         //             case 'Term':
         //             case 'Year':
         //             case 'Session':
-        //             case 'Enrolled':
-        //             case 'Dropped':
+        //             case 'Room':
+        //             case 'Time':
+        //             case 'Enrolled Start':
+        //             case 'Enrolled End':
         //             case 'Capacity':
         //                 $trimCSV[$key] = $value;
         //                 break;
@@ -194,8 +196,10 @@ class UploadFileController extends Controller {
                         case 'Term':
                         case 'Year':
                         case 'Session':
-                        case 'Enrolled':
-                        case 'Dropped':
+                        case 'Room':
+                        case 'Time':
+                        case 'Enrolled Start':
+                        case 'Enrolled End':
                         case 'Capacity':
                             $trimCSV[$key] = $value;
                             break;
@@ -204,6 +208,8 @@ class UploadFileController extends Controller {
                 $finalCSVs[] = $trimCSV;
             }
         }
+
+        // dd($finalCSVs);
 
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.workday');

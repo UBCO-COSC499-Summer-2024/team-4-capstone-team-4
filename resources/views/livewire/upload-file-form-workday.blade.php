@@ -8,8 +8,10 @@
             <div class="w-2/12 text-center mx-2">Session</div>
             <div class="w-2/12 text-center mx-2">Term</div>
             <div class="w-2/12 text-center mx-2">Year</div>
-            <div class="w-2/12 text-center mx-2">Enrolled</div>
-            <div class="w-2/12 text-center mx-2">Dropped</div>
+            <div class="w-2/12 text-center mx-2">Room</div>
+            <div class="w-2/12 text-center mx-2">Time</div>
+            <div class="w-2/12 text-center mx-2">Enroll (Start)</div>
+            <div class="w-2/12 text-center mx-2">Enroll (End)</div>
             <div class="w-2/12 text-center mx-2">Capacity</div>
             <div class="w-1/12 text-center mx-2"></div>
         </div>
@@ -73,21 +75,37 @@
                                class="import-form-input year-input" required>
                         @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
+
+                    <div class="w-2/12">       
+                        <input type="text"
+                               placeholder="" 
+                               wire:model="rows.{{ $index }}.room" 
+                               class="import-form-input year-input" required>
+                        @error('rows.'.$index.'.room')<span class="import-error">{{ $message }}</span>@enderror
+                    </div>
+                    
+                    <div class="w-2/12">       
+                        <input type="text"
+                               placeholder="Year" 
+                               wire:model="rows.{{ $index }}.time" 
+                               class="import-form-input year-input" required>
+                        @error('rows.'.$index.'.time')<span class="import-error">{{ $message }}</span>@enderror
+                    </div>
                     
                     <div class="w-2/12">       
                         <input type="number" step="1" min="1" max="999" 
-                               placeholder="Enrolled" 
-                               wire:model="rows.{{ $index }}.enrolled" 
+                               placeholder="#" 
+                               wire:model="rows.{{ $index }}.enroll_start" 
                                class="import-form-input" required>
-                        @error('rows.'.$index.'.enrolled')<span class="import-error">{{ $message }}</span>@enderror
+                        @error('rows.'.$index.'.enroll_start')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="w-2/12">       
                         <input type="number" step="1" min="1" max="999" 
-                               placeholder="Dropped" 
-                               wire:model="rows.{{ $index }}.dropped" 
+                               placeholder="#" 
+                               wire:model="rows.{{ $index }}.enroll_end" 
                                class="import-form-input" required>
-                        @error('rows.'.$index.'.dropped')<span class="import-error">{{ $message }}</span>@enderror
+                        @error('rows.'.$index.'.enroll_end')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="w-2/12">       

@@ -26,9 +26,10 @@ class UploadFileFormWorkday extends Component
                 'session' => $finalCSV['Session'] ?? '',
                 'term' => $finalCSV['Term'] ?? '',
                 'year' => $finalCSV['Year'] ?? '',
-                'session' => $finalCSV['Session'] ?? '',
-                'enrolled' => $finalCSV['Enrolled'] ?? '',
-                'dropped' => $finalCSV['Dropped'] ?? '',
+                'room' => $finalCSV['Room'] ?? '',
+                'time' => $finalCSV['Time'] ?? '',
+                'enroll_start' => $finalCSV['Enrolled Start'] ?? '',
+                'enroll_end' => $finalCSV['Enrolled End'] ?? '',
                 'capacity' => $finalCSV['Capacity'] ?? '',
                 // Add other fields as necessary
             ];
@@ -50,9 +51,11 @@ class UploadFileFormWorkday extends Component
             $rules["rows.{$index}.session"] = 'required|string';
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
-            $rules["rows.{$index}.enrolled"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
-            $rules["rows.{$index}.dropped"] = 'required|integer|min:0|max:999';
-            $rules["rows.{$index}.capacity"] = 'required|integer|min:' . $row['enrolled'] . '|max:999';
+            $rules["rows.{$index}.room"] = 'required|string';
+            $rules["rows.{$index}.time"] = 'required|string';
+            $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
+            $rules["rows.{$index}.enroll_end"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
+            $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
         }
 
         return $rules;
@@ -68,26 +71,27 @@ class UploadFileFormWorkday extends Component
                 $messages["rows.{$index}.session.required"] = 'Please select a session';
                 $messages["rows.{$index}.term.required"] = 'Please select a term';
                 $messages["rows.{$index}.year.required"] = 'Please enter a year';
-                $messages["rows.{$index}.enrolled.required"] = 'Please enter # of enrolled';
-                $messages["rows.{$index}.dropped.required"] = 'Please enter # of dropped';
+                $messages["rows.{$index}.room.required"] = 'Please enter a room';
+                $messages["rows.{$index}.time.required"] = 'Please enter a time (military)';
+                $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
+                $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
 
-                // $messages["rows.{$index}.area.integer"] = 'Must be a number';
+                $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
                 $messages["rows.{$index}.year.integer"] = 'Must be a number';
                 $messages["rows.{$index}.enrolled.integer"] = 'Must be a number';
-                $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
                 $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
         
                 $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enrolled.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to Enrolled';
+                $messages["rows.{$index}.enroll_start.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.capacity.min"] = 'Must be greater 0';
     
                 $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enrolled.max"] = 'Must be lower than or equal to Capacity';
-                $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.enroll_start.max"] = 'Must be lower than or equal to Capacity';
+                $messages["rows.{$index}.enroll_end.max"] = 'Must be lower than or equal to Capacity';
                 $messages["rows.{$index}.capacity.max"] = 'Enter a number 1-999';
         }
         return $messages;
@@ -113,6 +117,7 @@ class UploadFileFormWorkday extends Component
         // dd($this->rows);
 
         foreach($this->rows as $row) {
+            $dropped = 0;
             $prefix = '';
             // dd($row);
             
@@ -133,6 +138,12 @@ class UploadFileFormWorkday extends Component
 
                 // dd($row);
 
+                if($row['enroll_start'] > $row['enroll_end']) {
+                    $dropped = $row['enroll_start'] - $row['enroll_end'];
+                } else {
+                    $dropped = 0;
+                }
+
                 CourseSection::create([
                     'prefix' => $prefix,
                     'number' => $row['number'],
@@ -141,8 +152,11 @@ class UploadFileFormWorkday extends Component
                     'session' => $row['session'], 
                     'term' => $row['term'], 
                     'year' => $row['year'], 
-                    'enrolled' => $row['enrolled'], 
-                    'dropped' => $row['dropped'], 
+                    'room' => $row['room'], 
+                    'time' => $row['time'], 
+                    'enroll_start' => $row['enroll_start'], 
+                    'enroll_end' => $row['enroll_end'], 
+                    'dropped' => $dropped, 
                     'capacity' => $row['capacity'],        
                 ]);
             }
