@@ -107,6 +107,13 @@ class UploadFileFormSei extends Component
         return;
     }
 
+    public function resetData()
+    {
+        session()->forget('finalCSVs');
+        $this->finalCSVs = [];
+        $this->rows = [];
+    }
+
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -131,7 +138,7 @@ class UploadFileFormSei extends Component
 
         // dd($duplicateIndices, $selectedCourses);
 
-        // Sessio::put('seiFormData', $this->rows);
+        // Session::put('seiFormData', $this->rows);
     }
 
     public function closeModal() {
@@ -157,18 +164,18 @@ class UploadFileFormSei extends Component
                 ]),
             ]);
 
-            $teach = Teach::where('course_section_id', $row['cid'])->first();
+            // $teach = Teach::where('course_section_id', $row['cid'])->first();
             
-            if($teach){
-                $instructor_id = $teach->instructor_id;   
-                $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
-                $dept_id = Area::where('id', $area_id)->pluck('dept_id');
-                $year = CourseSection::find($row['cid'])->year;         
+            // if($teach){
+            //     $instructor_id = $teach->instructor_id;   
+            //     $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
+            //     $dept_id = Area::where('id', $area_id)->pluck('dept_id');
+            //     $year = CourseSection::find($row['cid'])->year;         
                
-                InstructorPerformance::updatePerformance($instructor_id, $year);
-                AreaPerformance::updateAreaPerformance($area_id, $year);
-                DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
-            }
+            //     InstructorPerformance::updatePerformance($instructor_id, $year);
+            //     AreaPerformance::updateAreaPerformance($area_id, $year);
+            //     DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
+            // }
 
         }
 
