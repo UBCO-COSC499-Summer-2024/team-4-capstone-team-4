@@ -85,12 +85,83 @@
                 "subsections": [
                     {
                         "heading": "Instructor Report",
-                        "content": "",
+                        "content": "You can view the report of each instructor by clicking on the report icon in the report column. The report has information on the instructors courses, services roles and/or extra hours for the selected year. You can select a different year from the dropdown as along as a report for that year exists.",
                         "tags": [
                             "intro",
                             "staff",
                             "subtopic",
                             "reports"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "User Accounts",
+                "subsections": [
+                    {
+                        "heading": "Add new account",
+                        "content": "To add a new user account, you will need to click on the 'Add' button. A popup will be shown that will allow you to enter the user's full name, email and password. You may also select the roles for the user and then submit the form.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
+                        ]
+                    },
+                    {
+                        "heading": "Edit multiple accounts",
+                        "content": "To edit multiple accounts, you will need to click on the 'Edit' button. Then the roles and status fiel will become editable where you can toggle the neabled status and check or remove checks from the user's roles. When done, click 'Save'.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
+                        ]
+                    },
+                    {
+                        "heading": "Delete multiple accounts",
+                        "content": "To delete multiple, first select all the user accounts you would like to delete. Then click on the delete button which will bring a popup asking you to confirm. Once confirmed, the selected accounts will be deleted.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
+                        ]
+                    },
+                    {
+                        "heading": "Edit individual account",
+                        "content": "To edit an individual account, you can click on the edit icon on the user account you would like to edit. Then the roles and status field for that user will become editable. Once done, you can click on save icon to save.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
+                        ]
+                    },
+                    {
+                        "heading": "Delete individual account",
+                        "content": "To delete an individual account, you can click on the delete icon on the user account you would like to delete. Then a popup will appear, asking you to confirm. Once confirmed, the user account will be deleted.",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
+                        ]
+                    },
+                    {
+                        "heading": "Send Reset Link",
+                        "content": "To send a reset link to a user account, click on the send rest link icon...",
+                        "tags": [
+                            "intro",
+                            "staff",
+                            "subtopic",
+                            "admin",
+                            "user account"
                         ]
                     }
                 ]
