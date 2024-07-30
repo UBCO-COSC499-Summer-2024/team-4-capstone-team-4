@@ -12,7 +12,7 @@ class AuditLogController extends Controller
         $auditLogs = AuditLog::orderBy('timestamp', 'desc')->paginate(10);
         $viewMode = 'card';
 
-        return view('svcroles', [
+        return view('audits', [
             'auditLogs' => $auditLogs,
             'viewMode' => $viewMode,
         ]);
