@@ -32,6 +32,11 @@ class ExportReport extends Component
             abort(404, 'Instructor not found');
         }
 
+        //handle case where acount is disabled
+        if($instructor->user->active == false){
+            abort(404, 'Instructor account is disabled');
+        }
+
         $year = $this->year;
 
         $courses = $instructor->teaches()->whereHas('courseSection', function($query) {
