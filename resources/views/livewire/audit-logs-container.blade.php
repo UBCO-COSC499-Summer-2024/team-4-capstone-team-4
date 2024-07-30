@@ -10,39 +10,12 @@
             'Operations': []
         };
         this.search = '';
-        @this.call('clearFilters');
+        @this.dispatch('clear-filters');
     },
-    isSelectedFilter(category, item) {
-        {{-- console.log(this.selectedFilter[category], item);
-        console.log(this.selectedFilter[category]);
-        console.log(this.selectedFilter[category].includes(item));
-        console.log(this.selectedFilter); --}}
-        return this.selectedFilter[category].includes(item);
-    },
-    selectFilter(category, item) {
-        if (this.selectedFilter[category].includes(item)) {
-            this.selectedFilter[category] = this.selectedFilter[category].filter(i => i !== item);
-        } else {
-            this.selectedFilter[category].push(item);
-        }
-    },
-}"
-{{-- x-init="
-    if (!this.selectedFilter) {
-        this.selectedFilter = {
-            'Users': [],
-            'Actions': [],
-            'Schemas': [],
-            'Operations': []
-        };
-    } --}}
-{{-- " --}}
->
+}">
     <section class="w-full audit-logs-section grid-sticky">
-        {{-- grid, 2 columns normally but on smaller screens 1 column --}}
         <div class="grid grid-cols-1 toolbar md:grid-cols-2">
             <section class="flex w-full toolbar-section left">
-                {{-- search --}}
                 <div class="flex-grow toolbar-search-container">
                     <span class="material-symbols-outlined icon toolbar-search-icon">
                         search
@@ -50,9 +23,10 @@
                     <input id="toolbar-search"
                         class="flex-grow toolbar-search"
                         type="search" placeholder="Search..."
-                        x-on:input="search = $event.target.value; @this.dispatch('change-search-query', search)"
+                        x-on:input="search = $event.target.value; @this.dispatch('change-search-query', [search])"
                         />
-                    <span class="material-symbols-outlined icon toolbar-clear-search">
+                    <span class="material-symbols-outlined icon toolbar-clear-search"
+                        x-on:click="search = ''; @this.call('changeSearchQuery', '');">
                         clear
                     </span>
                 </div>
@@ -87,20 +61,32 @@
                                 </span>
                                 <div class="filter-items">
                                     @foreach ($filter as $item)
-                                        <div class="filter-item">
+                                        <div class="filter-item nos"
+                                            x-data="{
+                                                category: '{{ $category }}',
+                                                item: '{{ $item }}',
+                                                isChecked: selectedFilter['{{ $category }}'].includes('{{ $item }}'),
+                                                toggleCheck() {
+                                                    this.isChecked = !this.isChecked;
+                                                    if (this.isChecked) {
+                                                        selectedFilter[this.category].push(this.item);
+                                                    } else {
+                                                        selectedFilter[this.category] = selectedFilter[this.category].filter(i => i !== this.item);
+                                                    }
+                                                    @this.dispatch('change-filter', [this.category, this.item, this.isChecked]);
+                                                }
+                                            }"
+                                            x-on:click.stop="toggleCheck"
+                                        >
                                             <input type="checkbox"
                                                 id="{{ $category }}-{{ $item }}"
                                                 class="rounded-sm"
-                                                x-on:change="@this.dispatch('change-filter', ['{{ $category }}', '{{ $item }}', $event.target.checked]);
-                                                selectFilter('{{ $category }}', '{{ $item }}')"
-                                                {{-- x-bind:checked="selectedFilter['{{ $category }}'].includes('{{ $item }}')" --}}
-                                                @if ($selectedFilter[$category] && in_array($item, $selectedFilter[$category]))
-                                                    checked
-                                                @endif
+                                                x-on:click.stop
+                                                x-on:change.stop
+                                                x-bind:checked="isChecked"
+                                                disabled
                                             />
-                                            <span class="filter-item-text">
-                                                {{ $item }}
-                                            </span>
+                                            <span class="filter-item-text">{{ $item }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -129,10 +115,6 @@
             const clearSearch = document.querySelector('.toolbar-clear-search');
             const filterBtn = document.querySelector('.filter-btn');
             const filterClear = document.querySelector('.filter-clear');
-
-            // search.addEventListener('input', () => {
-            //     @this.dispatch('change-search-query', search.value);
-            // });
 
             clearSearch.addEventListener('click', () => {
                 search.value = '';

@@ -57,7 +57,7 @@
 }
 
 .filter-items-holder {
-    border-radius: 1rem;
+    border-radius: 0.25rem;
     display: none;
     flex-direction: column;
     justify-content: start;
@@ -98,9 +98,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    /* gap: 6px; */
+    gap: 4px;
     width: 100%;
-    padding: 3px 12px;
+    padding:3px;
 }
 
 .filter-items input[type="checkbox"] {
@@ -111,6 +111,23 @@
     background: var(--primary-color);
 }
 
+.filter-item {
+    border-radius: 50px;
+    width: 100%;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.filter-item {
+    background: #eaeaea;
+}
+
+.filter-item[data-checked="true"],
+.filter-item[data-selected="true"],
+.filter-item:hover {
+    background: #fafafa;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
 
 .filter-category:hover .filter-toggle-icon,
 .filter-category:focus-within .filter-toggle-icon {
