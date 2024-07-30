@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('acces_code')->nullable();
+            $table->boolean('active')->default(true);
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
@@ -43,7 +43,7 @@ return new class extends Migration
 
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
