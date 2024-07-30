@@ -14,7 +14,7 @@
             <button class="bg-white text-[#3b4779] border border-[#3b4779] px-3 py-2 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
                 onclick="location.href='{{ route('upload.file.show.workday') }}'">
                 <span class="material-symbols-outlined">upload</span>
-                Upload File
+                Upload File (Workday)
             </button>
         </div>
         @endif
@@ -23,7 +23,7 @@
             <button class="bg-white text-[#3b4779] border border-[#3b4779] px-3 py-2 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
                 onclick="location.href='{{ route('upload.file.show.sei') }}'">
                 <span class="material-symbols-outlined">upload</span>
-                Upload File
+                Upload File (SEI)
             </button>
         </div>
         @endif

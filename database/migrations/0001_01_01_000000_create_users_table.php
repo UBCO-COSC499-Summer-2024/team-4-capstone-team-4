@@ -90,13 +90,16 @@ return new class extends Migration
             $table->string('prefix');
             $table->string('number');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->integer('enrolled');
+            $table->integer('enroll_start');
+            $table->integer('enroll_end');
             $table->integer('dropped');
             $table->integer('capacity');
             $table->year('year');
             $table->string('term');
             $table->string('session');
             $table->string('section');
+            $table->string('room');
+            $table->string('time');
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });

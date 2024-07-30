@@ -50,12 +50,15 @@ protected $model=CourseSection::class;
             'number' => fake()->numberBetween(100, 500),
             'area_id' => $area_id,
             'year' => fake()->year(),
-            'enrolled' => fake()->numberBetween(10, 100),
+            'enroll_start' => fake()->numberBetween(10, 100),
+            'enroll_end' => fake()->numberBetween(10, 100),
             'dropped' => fake()->numberBetween(0, 20),
             'capacity' => fake()->numberBetween(10, 200),
             'term' => fake()->randomElement(['1', '2', '1-2']),
             'session' => fake()->randomElement(['W', 'S']),
             'section' => fake()->randomElement(['001', '002', '003']),
+            'room' => $this->faker->randomElement(['EME', 'FIP', 'ART', 'SCI', 'COM']) . ' ' . $this->faker->numberBetween(100, 500),
+            'time' => $this->faker->time('H:i'),
         ];
     }
     
