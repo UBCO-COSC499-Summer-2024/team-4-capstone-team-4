@@ -102,7 +102,7 @@
                                 @endphp
                                 <tr class="report-row">
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-[#3b4779] text-white px-2" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                                        <th class="border border-white border-l-gray-500 bg-[#3b4779] text-white px-2" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
                                     @endif
                                     <td class="report-cell">{{ $role->name }}</td>
                                     <td class="report-cell">{{ $role->year }}</td>
@@ -131,7 +131,7 @@
                                 @endphp
                                 <tr class="report-row">
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-[#3b4779] text-white px-2" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                                        <th class="border border-white border-l-gray-500 bg-[#3b4779] text-white px-2" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
                                     @endif
                                     <td class="report-cell">{{ $hours->name }}</td>
                                     <td class="report-cell">{{ $hours->year }}</td>

@@ -3,7 +3,7 @@
 
 @layer components {
 .report-table {
-    @apply border border-collapse w-full bg-white border border-gray-500 text-center
+    @apply border border-collapse w-full bg-white border-gray-500 text-center
 }
 
 .report-row {
