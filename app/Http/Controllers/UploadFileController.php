@@ -110,7 +110,7 @@ class UploadFileController extends Controller {
         return $csvData;
     }
 
-    private function readWorkdayCSVByCol($filePath) {
+    private function readCSV($filePath) {
         $header = null;
         $csvData = [];
 
@@ -143,11 +143,11 @@ class UploadFileController extends Controller {
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
-            // $csvData = $this->readWorkdayCSV($filePath);
 
             // depending on CSV file format, you may need to adjust the readCSV function
 
-            $csvData = $this->readWorkdayCSVByCol($filePath);
+            // $csvData = $this->readWorkdayCSV($filePath);
+            $csvData = $this->readCSV($filePath);
         
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
@@ -207,47 +207,7 @@ class UploadFileController extends Controller {
 
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.workday');
-
-        session()->flash('message', 'File uploaded successfully!');
-        // session()->put('csvData', $csvData);
-        // session()->put('trimCSV', $trimCSV);
-        session()->put('finalCSVs', $finalCSVs);
-
-
-        // return straight to
-        // return view('livewire.import-workday-form', [
-        //     'finalCSVs' => $finalCSVs,
-        // ]);
-
-
-        // Process the file as needed
-        // For demonstration, just dump the file path
-        // dd('File uploaded successfully!', $filePath);
-        // return redirect()->route('import');
     }
-
-    public function readSeiCSV($filePath) {
-        $header = null;
-        $csvData = [];
-
-        if (($handle = fopen($filePath, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-                if (!array_filter($row)) {
-                    continue; // Skip empty rows
-                }
-
-                if (!$header) {
-                    $header = $row;
-                } else {
-                    $csvData[] = array_combine($header, $row);
-                }
-            }
-            fclose($handle);
-        }
-
-        return $csvData;
-    }
-    
 
     public function uploadSei(Request $request) {
         $finalCSVs = [];
@@ -260,7 +220,7 @@ class UploadFileController extends Controller {
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
 
-            $csvData = $this->readSeiCSV($filePath);
+            $csvData = $this->readCSV($filePath);
         
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
@@ -274,7 +234,12 @@ class UploadFileController extends Controller {
             foreach ($uploadedFile['csvData'] as $csvData) {
                 foreach ($csvData as $key => $value) {
                     switch ($key) {
-                        case 'Course':
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
                         case 'Q1':
                         case 'Q2':
                         case 'Q3':
