@@ -81,7 +81,7 @@
             @else
                 <button wire:click="$set('editUserId', {{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Edit">edit</span></button>
                 <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
-                <button wire:click="sendReset"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
+                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
             @endif
         </div>
     </td>

@@ -12,6 +12,7 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Actions\Fortify\PasswordValidationRules;
+use Illuminate\Support\Facades\Password;
 
 class StaffList extends Component
 {
@@ -639,5 +640,29 @@ class StaffList extends Component
             'message' => count($staff_checkboxes). ' user(s) deleted!',
             'type' => 'success'
         ]); 
+    }
+
+    //send reset link to user
+    public function sendReset($userid){
+        $user = User::findOrFail($userid);
+
+        // Pass the credentials array with the key 'email'
+        $status = Password::sendResetLink(
+            ['email' => $user->email]
+        );
+
+        //send toast message for succes or failure
+        if ($status === Password::RESET_LINK_SENT){
+            $this->dispatch('show-toast', [
+                'message' => 'Reset link sent',
+                'type' => 'success'
+            ]);
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Falied to send reset link',
+                'type' => 'error'
+            ]);
+        }
+        
     }
 }
