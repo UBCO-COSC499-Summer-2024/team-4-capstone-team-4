@@ -55,11 +55,7 @@ class UserRole extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|null
      */
     public function department() {
-        if ($this->role === 'dept_head' || $this->role === 'dept_staff' || $this->role === 'instructor') {
-            return $this->belongsTo(Department::class);
-        }
-
-        return null; // Return null if the user is not an instructor or dept head or staff
+        return $this->belongsTo(Department::class);
     }
 
     /**
