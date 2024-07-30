@@ -1,5 +1,4 @@
 <div id="header-user">
-    <!-- <x-profile-preview /> -->
 
     <div class="">
         <x-dropdown align="right" width="48">
@@ -30,7 +29,6 @@
 
                 <div class="border-t border-gray-200"></div>
 
-                <!-- Account Management -->
                 <div class="block px-4 py-2 text-xs text-gray-400">
                     {{ __('Manage Account') }}
                 </div>
@@ -41,7 +39,6 @@
 
                 <div class="border-t border-gray-200"></div>
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
