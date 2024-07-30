@@ -2,19 +2,15 @@
     <div class="relative overflow-x-auto shadow-sm rounded-md">
         <div class="py-3 flex justify-between bg-[#3b4779] text-white">
             <div class="w-1/12 text-center mx-2">#</div>
-            <div class="w-4/12 text-center mx-2">Area</div>
-            <div class="w-2/12 text-center mx-2">Number</div>
-            <div class="w-2/12 text-center mx-2">Section</div>
-            <div class="w-2/12 text-center mx-2">Session</div>
-            <div class="w-2/12 text-center mx-2">Term</div>
-            <div class="w-2/12 text-center mx-2">Year</div>
-            <div class="w-2/12 text-center mx-2">Enrolled</div>
-            <div class="w-2/12 text-center mx-2">Dropped</div>
-            <div class="w-2/12 text-center mx-2">Capacity</div>
+            <div class="w-4/12 text-center mx-2">Course Section</div>
+            <div class="w-3/12 text-center mx-2">Q1</div>
+            <div class="w-3/12 text-center mx-2">Q2</div>
+            <div class="w-3/12 text-center mx-2">Q3</div>
+            <div class="w-3/12 text-center mx-2">Q4</div>
+            <div class="w-3/12 text-center mx-2">Q5</div>
+            <div class="w-3/12 text-center mx-2">Q6</div>
             <div class="w-1/12 text-center mx-2"></div>
         </div>
-
-        {{-- {{ $rows[$index]['area'] == $cours->name ? 'selected' : '' }} --}}
 
         @if (!empty($finalCSVs))
         <form wire:submit.prevent="handleSubmit" class="relative">
@@ -22,15 +18,15 @@
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-4/12">       
-                        <select wire:model="rows.{{ $index }}.area_id" class="import-form-select">
+                        <select wire:model="rows.{{ $index }}.cid" class="import-form-select">
                             <option value="">Select</option>
                             @foreach ($courses as $course)
-                                <option value="{{ $course->id }}">
+                                <option value="{{ $course->id }}" {{ $rows[$index]['cid'] == $course->id ? 'selected' : '' }}>
                                     {{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('rows.'.$index.'.area')<span class="import-error">{{ $message }}</span>@enderror
+                        @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
                     <div class="w-3/12">
                         <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q1" class="import-form-input">

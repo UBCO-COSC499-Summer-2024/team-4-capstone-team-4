@@ -27,7 +27,7 @@ class UploadFileFormSei extends Component
             ];
         }
 
-        // dd($this->rows);
+        // dd($this->rows);    
 
         session()->forget('finalCSVs');
     }
@@ -39,9 +39,13 @@ class UploadFileFormSei extends Component
             ->where('session', $session)
             ->where('term', $term)
             ->where('year', $year)
-            ->pluck('id');
+            ->pluck('id')
+            ->first();
 
-        return $course_id;
+        if($course_id != null) {
+            return $course_id;
+        }
+        return;
     }
 
     public function render()
