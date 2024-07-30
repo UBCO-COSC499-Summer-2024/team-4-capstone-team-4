@@ -138,10 +138,69 @@ class InstructorPerformance extends Model {
         return;
     }
 
+    /**
+     * Calculates the performance score for an instructor for a given year.
+     *
+     * This function calculates the total performance score based on the instructor's
+     * assigned roles and course sections taught during the specified year, and updates
+     * the score value accordingly in the database. The score
+     * considers the monthly service role hours, the number of course sections, and 
+     * the difference between the enrolled and dropped averages.
+     *
+     * @param int $instructor_id The ID of the instructor.
+     * @param int $currentYear The year for which the score is calculated.
+     * @return void
+     */
+    public static function updateScore($instructor_id, $currentYear) {
+        $roleHours = 0;
+        $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
+        $currentMonth = date('n'); 
+
+        foreach ($assignedRoles as $assignedRole) {
+            $role = ServiceRole::where('id', $assignedRole->service_role_id)
+                ->where('year', $currentYear)
+                ->where('archived', false)
+                ->first();
+
+            if ($role) {
+                $roleHours += $role->monthly_hours[$currentMonth];
+            }
+        }
+
+        $courseSections = 0;
+        $doubleCourses = 0;
+        $teaches = Teach::where('instructor_id', $instructor_id)->get();
+
+        foreach ($teaches as $teaching) {
+            $course = CourseSection::where('id', $teaching->course_section_id)
+                ->where('year', $currentYear)
+                ->where('archived', false)
+                ->first();
+
+            if ($course) {
+                if ($course->term === '1-2') {
+                    $doubleCourses++;
+                } else {
+                    $courseSections++;
+                }
+            }
+        }
+
+        $instructorPerformance = self::where('instructor_id', $instructor_id)->where('year', $currentYear)->first();
+        
+        if ($performance) {
+            $performance->update([
+                'score' => ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760,
+            ]);
+        }
+
+        return;
+    }
+
     public static function updatePerformance($instructor_id, $year) {
+        //self::updateScore($instructor_id, $year);
         self::updateInstructorSEIAvg($instructor_id, $year);
         self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
-        self::updateScore($instructor_id, $year);
     }
 
     public function updateTotalHours($hours = [])
@@ -187,54 +246,4 @@ class InstructorPerformance extends Model {
         }
     }
 
-    /**
-     * Calculates the performance score for an instructor for a given year.
-     *
-     * This function calculates the total performance score based on the instructor's
-     * assigned roles and course sections taught during the specified year, and updates
-     * the score value accordingly in the database. The score
-     * considers the monthly service role hours, the number of course sections, and 
-     * the difference between the enrolled and dropped averages.
-     *
-     * @param int $instructor_id The ID of the instructor.
-     * @param int $currentYear The year for which the score is calculated.
-     * @return void
-     */
-    public function updateScore($instructor_id, $currentYear) {
-        $roleHours = 0;
-        $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
-
-        foreach ($assignedRoles as $assignedRole) {
-            $role = ServiceRole::where('id', $assignedRole->service_role_id)->where('year', $currentYear)->where('archived', false)->first();
-
-            if ($role) {
-                $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[$currentMonth]];
-                $roleHours += $role->monthly_hours[$currentMonth];
-            }
-        }
-
-        $courseSections = 0;
-        $doubleCourses = 0;
-        $teaches = Teach::where('instructor_id', $instructor_id)->get();
-
-        foreach ($teaches as $teaching) {
-            $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->where('archived', false)->first();
-            
-            if ($course) {
-                if ($course->term === '1-2') {
-                    $doubleCourses++;
-                }
-
-                else {
-                    $courseSections++;
-                }
-            }
-        }
-
-        $enrolled = InstructorPerformance::where('instructor_id', $instructor_id)->first()->enrolled_avg;
-        $dropped = InstructorPerformance::where('instructor_id', $instructor_id)->first()->dropped_avg;
-
-        $this->score = ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760;
-        $this->save(); 
-    }
 }
