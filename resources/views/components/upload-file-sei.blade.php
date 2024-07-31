@@ -14,7 +14,7 @@
     <div>Download</div>
 </div> --}}
 
-<livewire:drag-and-drop route="upload.file.sei"/>
+<livewire:drag-and-drop :action="'upload.file.sei'"/>
 
 @if (session('finalCSVs'))
 <livewire:upload-file-form-sei :finalCSVs="session('finalCSVs')" />

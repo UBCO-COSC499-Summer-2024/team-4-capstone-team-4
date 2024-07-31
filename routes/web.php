@@ -43,9 +43,6 @@ Route::middleware([
     Route::prefix('/help')->group(function () {
         Route::get('/{topic}', [HelpController::class, 'showHelpPage'])->name('help.topic');
     });
-    Route::get('/performance', function () {
-        return view('performance');
-    })->name('performance');
     Route::get('/courses', function () {
         return view('courses');
     })->name('courses');
@@ -84,8 +81,9 @@ Route::middleware([
     Route::post('/upload-file/workday', [UploadFileController::class, 'uploadWorkday'])->name('upload.file.workday');
     Route::get('/upload-file/sei-data', [UploadFileController::class, 'showUploadFileSei'])->name('upload.file.show.sei');
     Route::post('/upload-file/sei-data', [UploadFileController::class, 'uploadSei'])->name('upload.file.sei');
+    Route::post('/upload/svcroles', [UploadFileController::class, 'uploadSvcRoles'])->name('upload.svcroles');
     Route::get('/requests', function () {
-        return view('svcrole.requests');
+        return view('service-requests');
     })->name('service.requests');
     Route::get('/audits', [AuditLogController::class, 'index'])->name('audits');
 });
@@ -143,7 +141,7 @@ Route::middleware([
     'verified',
     CheckRole::class.':admin,dept_head,dept_staff',
 ])->group(function () {
-    Route::get('/performance/{instructor_id}', [ChartController::class, 'showChart'])->name('performance.instructor');
+    Route::get('/performance/{instructor_id}', [ChartController::class, 'showChart'])->name('performance');
     Route::get('/dashboard/{switch}', [ChartController::class, 'showChart'])->name('switch-dashboard');
 });
 

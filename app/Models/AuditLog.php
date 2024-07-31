@@ -35,8 +35,7 @@ class AuditLog extends Model
         'timestamp',
     ];
 
-    public function audit($action, $description, $userId = null, $table = null, $op = null, $oldData = [], $newData = [])
-    {
+    public function audit($action, $description, $userId = null, $table = null, $op = null, $oldData = [], $newData = []) {
         $user = null;
         if ($userId) {
             $user = User::find($userId);
@@ -53,5 +52,9 @@ class AuditLog extends Model
             'new_value' => json_encode($newData),
             'timestamp' => now(),
         ]);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

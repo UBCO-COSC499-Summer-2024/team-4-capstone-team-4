@@ -10,7 +10,7 @@
     </button>
 </div>
 
-<livewire:drag-and-drop route="upload.file.workday"/>
+<livewire:drag-and-drop :action="'upload.file.workday'"/>
 
 @if (session('finalCSVs'))
 <livewire:upload-file-form-workday :finalCSVs="session('finalCSVs')" />

@@ -4,8 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Area;
+use App\Models\ServiceRole;
 use App\Models\TestModel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use League\Csv\Reader;
+use League\Csv\Statement;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 class UploadFileController extends Controller {
 
@@ -60,7 +70,7 @@ class UploadFileController extends Controller {
 
             if(array_key_exists('Academic Period', $csvData)) {
                 if($csvData["Academic Period"]) {
-         
+
                     if(preg_match('/^(\d{4}) (Summer|Winter)/' , $csvData["Academic Period"], $matches)) {
                         $csvData['Year'] = $matches[1];
                         if($matches[2] == 'Winter') {
@@ -71,18 +81,18 @@ class UploadFileController extends Controller {
                     }
                 }
             }
-            
+
             if(array_key_exists("Enrolled/Capacity", $csvData)) {
                 if($csvData["Enrolled/Capacity"]) {
                     if(preg_match('/^(\d+)\//', $csvData["Enrolled/Capacity"], $matches)) {
                         $csvData['Enrolled'] = $matches[1];
                     }
                 }
-    
+
             }
             // if ever expands to other departments, will need to convert the prefix to the full name based on the area table in the db.
 
-            
+
             if(array_key_exists("Area", $csvData)) {
             switch ($csvData['Area']) {
                     // cases for CMPS
@@ -103,7 +113,7 @@ class UploadFileController extends Controller {
                 }
 
             }
-            
+
             // dd($csvData);
         }
 
@@ -135,7 +145,7 @@ class UploadFileController extends Controller {
     public function uploadWorkday(Request $request) {
         $finalCSVs = [];
         $uploadedFiles = [];
-     
+
         $request->validate([
             'files.*' => 'required|file|mimes:csv|max:2048',
         ]);
@@ -143,12 +153,11 @@ class UploadFileController extends Controller {
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
-
             // depending on CSV file format, you may need to adjust the readCSV function
 
             // $csvData = $this->readWorkdayCSV($filePath);
             $csvData = $this->readCSV($filePath);
-        
+      
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
                 'csvData' => $csvData,
@@ -227,7 +236,7 @@ class UploadFileController extends Controller {
             $filePath = $file->getRealPath();
 
             $csvData = $this->readCSV($filePath);
-        
+
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
                 'csvData' => $csvData,
@@ -236,8 +245,9 @@ class UploadFileController extends Controller {
 
         foreach ($uploadedFiles as $uploadedFile) {
             $trimCSV = [];
-            $trimCSV['File'] = $uploadedFile['fileName'];
-            foreach ($uploadedFile['csvData'] as $csvData) {
+            $trimCSV['File'] = $uploadedFile['fileName'];     
+                   
+        foreach ($uploadedFile['csvData'] as $csvData) {
                 foreach ($csvData as $key => $value) {
                     switch ($key) {
                         case 'Prefix':
@@ -260,9 +270,149 @@ class UploadFileController extends Controller {
                
             }
         }
-
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.sei');
+    }
+
+    public function uploadSvcRoles(Request $request) {
+        // Ensure that 'files' exists in the request
+        // dd($request);
+        // dd($request->all());
+        // Log::info($request->all());
+        // dd($request->file('files'));
+        // dd($files);
+
+        try {
+
+            $request->validate([
+                'files.*' => 'required|file|mimes:csv,xlsx,xls,json|max:2048',
+            ]);
+
+            $uploadedFiles = [];
+            $formattedData = [];
+
+            foreach ($request->file('files') as $index => $file) {
+                if($file->isValid()) {
+                    $uploadedFiles[] = [
+                        'fileName' => $file->getClientOriginalName(),
+                        'fileExtension' => $file->getClientOriginalExtension(),
+                        'fileSize' => $file->getSize(),
+                    ];
+
+                    $fileData = $this->extractFileData($file);
+
+                    foreach ($fileData as $record) {
+                        $formattedData[] = $this->processRecord($record, count($formattedData) + 1);
+                    }
+                } else {
+                    // Handle invalid file
+                    // throw new \Exception("Invalid file: " . $file->getClientOriginalName());
+                }
+            }
+
+            $request->session()->put('uploadedServiceRoles', [
+                'uploadedFiles' => $uploadedFiles,
+                'formattedData' => $formattedData,
+            ]);
+
+            return redirect()->route('svcroles.add');
+        } catch(\Exception $e) {
+            // Handle the exception
+            return redirect()->route('svcroles.add');
+        }
+    }
+
+    private function extractFileData($file) {
+        $fileExtension = $file->getClientOriginalExtension();
+
+        if (in_array($fileExtension, ['xlsx', 'xls'])) {
+            $spreadsheet = IOFactory::load($file->getRealPath());
+            $worksheet = $spreadsheet->getActiveSheet();
+            $data = [];
+            foreach ($worksheet->getRowIterator() as $row) {
+                $rowData = [];
+                foreach ($row->getCellIterator() as $cell) {
+                    $rowData[] = $cell->getValue();
+                }
+                $data[] = $rowData;
+            }
+            return $data;
+        } elseif ($fileExtension === 'csv') {
+            $csv = Reader::createFromPath($file->getRealPath(), 'r');
+            $csv->setHeaderOffset(0); // Assuming the first row contains headers
+            return (new Statement())->offset(0)->process($csv);
+        } elseif ($fileExtension === 'json') {
+            return json_decode(file_get_contents($file->getRealPath()), true);
+        } else {
+            // Handle invalid file type
+            throw new \Exception("Unsupported file type: " . $fileExtension);
+        }
+    }
+
+    private function processRecord($record, $id) {
+        // Assuming your database columns are lowercase and use snake_case
+
+        $areaName = $record['area'] ?? $record['area_id'] ?? $record['department'] ?? $record['dept'] ?? $record['department_id'] ?? $record['dept_id'];
+        $area = Area::where('name', $areaName)->orWhere('id', $areaName)->first();
+        if (!$area) {
+            // set to default 1
+            $area = Area::find(1);
+        }
+
+        $serviceRoleData = [
+            'name' => $record['name'] ?? null,
+            'description' => $record['description'] ?? $record['desc'] ?? 'Default Description',
+            'year' => $record['year'] ?? date('Y'),
+            'monthly_hours' => $this->formatMonthlyHours($record),
+            'area_id' => $area->id,
+            'archived' => isset($record['archived']) ? (bool)$record['archived'] :
+                         (isset($record['archive']) ? (bool)$record['archive'] :
+                         (isset($record['active']) ? !(bool)$record['active'] : false)),
+        ];
+
+        // Check if a service role with the same name, area, and year already exists
+        $existingServiceRole = ServiceRole::where('name', $serviceRoleData['name'])
+                                            ->where('area_id', $serviceRoleData['area_id'])
+                                            ->where('year', $serviceRoleData['year'])
+                                            ->first();
+
+        $serviceRoleData['updateMe'] = $existingServiceRole ? true : false;
+        $serviceRoleData['original_area_name'] = $areaName;
+        $serviceRoleData['id'] = $id;
+
+        // Return the processed data (optional)
+        return $serviceRoleData;
+    }
+
+    private function formatMonthlyHours($record) {
+        $months = array_fill_keys([
+            'January', 'February', 'March', 'April',
+            'May', 'June', 'July', 'August',
+            'September', 'October', 'November', 'December'
+        ], 0);
+
+        $monthMappings = [
+            '/^jan(?:uary)?$/i' => 'January', '/^feb(?:ruary)?$/i' => 'February',
+            '/^mar(?:ch)?$/i' => 'March', '/^apr(?:il)?$/i' => 'April',
+            '/^may$/i' => 'May', '/^jun(?:e)?$/i' => 'June',
+            '/^jul(?:y)?$/i' => 'July', '/^aug(?:ust)?$/i' => 'August',
+            '/^sep(?:t(?:ember)?)?$/i' => 'September', '/^oct(?:ober)?$/i' => 'October',
+            '/^nov(?:ember)?$/i' => 'November', '/^dec(?:ember)?$/i' => 'December',
+            '/^1$/' => 'January', '/^2$/' => 'February', '/^3$/' => 'March',
+            '/^4$/' => 'April', '/^5$/' => 'May', '/^6$/' => 'June',
+            '/^7$/' => 'July', '/^8$/' => 'August', '/^9$/' => 'September',
+            '/^10$/' => 'October', '/^11$/' => 'November', '/^12$/' => 'December'
+        ];
+
+        foreach ($record as $key => $value) {
+            foreach ($monthMappings as $pattern => $month) {
+                if (preg_match($pattern, $key)) {
+                    $months[$month] = (int)$value;
+                    break;
+                }
+            }
+        }
+        return json_encode($months);
     }
 }
 

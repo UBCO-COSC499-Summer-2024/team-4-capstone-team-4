@@ -18,7 +18,7 @@
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-4/12">       
-                        <select wire:model="rows.{{ $index }}.cid" class="import-form-select">
+                        <select wire:model="rows.{{ $index }}.cid" wire:change='checkDuplicate' class="import-form-select">
                             <option value="">Select</option>
                             @foreach ($courses as $course)
                                 <option value="{{ $course->id }}" {{ $rows[$index]['cid'] == $course->id ? 'selected' : '' }}>
@@ -62,7 +62,7 @@
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" class="import-form-save-button">Save</button>
+                    <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >Save</button>
                 </div>
            
         </form>

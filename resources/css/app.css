@@ -111,6 +111,28 @@ header:not(:has(#header-misc)) {
     padding-right: 0.5rem;
 }
 
+.content-title-btn-holder {
+    width: fit-content;
+    gap: 6px;
+    display: inline-flex;
+}
+
+.content-title-btn {
+    width: fit-content;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.content-title-btn:hover {
+    background: var(--primary-color);
+    /* border: none !important; */
+}
+
 #header-misc form {
     width: 100%;
 }
@@ -581,6 +603,11 @@ h6 {
     .content>h1 button span[class*=title] {
     display: none;
     }
+
+    .content-title {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 }
 
 /* 480px */
@@ -673,4 +700,4 @@ a,
     position: absolute;
     top: 0;
     left: 0;
-  }
+}

@@ -4,4 +4,3 @@
         <x-upload-file-workday />
     </div>
   </x-app-layout>
-  

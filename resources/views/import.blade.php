@@ -5,4 +5,3 @@
     @livewire('import-tabs')
   </div>
 </x-app-layout>
- 

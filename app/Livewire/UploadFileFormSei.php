@@ -44,7 +44,7 @@ class UploadFileFormSei extends Component
         }
 
         // dd($this->rows);    
-
+        $this->checkDuplicate();
         session()->forget('finalCSVs');
     }
 
@@ -102,6 +102,7 @@ class UploadFileFormSei extends Component
 
     public function deleteRow($row) {
         $this->resetValidation();
+        $this->checkDuplicate();
 
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);

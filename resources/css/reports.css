@@ -1,0 +1,53 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+.report-table {
+    @apply border border-collapse w-full bg-white border-gray-500 text-center
+}
+
+.report-row {
+    border-radius: 0px;
+    overflow: auto;
+}
+
+.report-cell {
+    padding: 8px 11px;
+    @apply border border-gray-500
+}
+
+.report-head-cell{
+    padding: 8px 11px;
+}
+
+tbody tr.total-row td{
+    @apply font-bold bg-gray-400
+}
+
+tbody tr.subtotal-row td{
+    @apply font-bold bg-gray-300
+}
+
+tbody td:first-child.report-cell {
+    padding: 8px 11px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    @apply border border-gray-500
+}
+
+td:last-child.report-cell  {
+    padding: 8px 11px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    @apply border border-gray-500
+}
+
+.total-row {
+    @apply font-bold bg-gray-400
+}
+
+.subtotal-row {
+    @apply font-bold bg-gray-300
+}
+
+}

@@ -26,7 +26,7 @@ class ServiceRolesList extends Component
     public $selectedSort = '';
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
-    public $pageSize = 10;
+    public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
     protected $validExportOptions = [
@@ -55,7 +55,7 @@ class ServiceRolesList extends Component
         'selectedSort' => 'nullable|string',
         'selectedSortOrder' => 'nullable|string',
         'selectedGroup' => 'nullable|string',
-        'pageSize' => 'required|integer|min:1',
+        'pageSize' => 'required|integer|min:10',
     ];
 
     protected $listeners = [
