@@ -1,5 +1,40 @@
 # Angelina's Personal Log 
 
+## Friday (7/26 - 7/31)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log726-731.png)
+
+### Current Tasks 
+ * #1: Discuss and Distribute Final Issues
+ * #2: Add Score Method to Performance Model
+ * #3: Score Method Debugging
+ * #4: Correct Leaderboard Query
+ * #5: Backend Dashboard Area Filter
+ * #6: Front End Dashboard Area Filter
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Distribute Final Issues   | Completed   |
+| Add Score Method          | Completed   |
+| Debug Score Method        | In Progress |
+| Correct Leaderboard Query | Completed   |
+| Area Filter Back End      | Completed   |
+| Area Filter Front End     | Completed   |
+
+### Cycle Goal Review 
+Distributed final tasks among group members from client feedback and feature list. Added score method to instructor performance model and began debugging it as it is currently overwriting the other performance data. Correction fr this issue is still in progress. Added an area filter to the department dashboard and modified the chart controller and front end to accomodate data differences. Fixed the leaderboard query to account for service roles and extra hours.
+
+### Next Cycle Goals
+ * Cotinue debugging score calculation method
+ * Add more links and messages to dashboard
+ * Add year filter to leaderboard
+ * Testing, Testing, Testing
+
+---
+
 ## Wednesday (7/24 - 7/25)
 
 ### Timesheet
