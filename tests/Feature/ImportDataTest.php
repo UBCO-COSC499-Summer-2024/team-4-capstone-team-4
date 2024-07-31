@@ -74,8 +74,8 @@ class ImportDataTest extends TestCase
             ->assertSee('Session')
             ->assertSee('Term')
             ->assertSee('Year')
-            ->assertSee('Enrolled')
-            ->assertSee('Dropped')
+            ->assertSee('Enrolled (Start)')
+            ->assertSee('Enrolled (End)')
             ->assertSee('Capacity');
     }
 
@@ -106,8 +106,10 @@ class ImportDataTest extends TestCase
             ->set('rows.0.session', 'W')
             ->set('rows.0.term', '1')
             ->set('rows.0.year', 2024)
-            ->set('rows.0.enrolled', 30)
-            ->set('rows.0.dropped', 5)
+            ->set('rows.0.room', 'FIB200')
+            ->set('rows.0.time', '12:00')
+            ->set('rows.0.enroll_start', 30)
+            ->set('rows.0.enroll_end', 25)
             ->set('rows.0.capacity', 40)
             ->call('handleSubmit')
             ->assertHasNoErrors();
@@ -123,8 +125,10 @@ class ImportDataTest extends TestCase
             'session' => 'W',
             'term' => '1',
             'year' => 2024,
-            'enrolled' => 30,
-            'dropped' => 5,
+            'room' => 'FIB200',
+            'time' => '12:00',
+            'enroll_start' => 30,
+            'enroll_end' => 25,
             'capacity' => 40,
         ]);
     }
@@ -144,8 +148,10 @@ class ImportDataTest extends TestCase
             ->set('rows.0.session', '')
             ->set('rows.0.term', '')
             ->set('rows.0.year', '')
-            ->set('rows.0.enrolled', '')
-            ->set('rows.0.dropped', '')
+            ->set('rows.0.room', '')
+            ->set('rows.0.time', '')
+            ->set('rows.0.enroll_start', '')
+            ->set('rows.0.enroll_end', '')
             ->set('rows.0.capacity', '')
             ->call('handleSubmit')
             ->assertHasErrors([
@@ -155,8 +161,10 @@ class ImportDataTest extends TestCase
                 'rows.0.session' => 'required',
                 'rows.0.term' => 'required',
                 'rows.0.year' => 'required',
-                'rows.0.enrolled' => 'required',
-                'rows.0.dropped' => 'required',
+                'rows.0.room' => 'required',
+                'rows.0.time' => 'required',
+                'rows.0.enroll_start' => 'required',
+                'rows.0.enroll_end' => 'required',
                 'rows.0.capacity' => 'required',
             ]);
     }
@@ -184,7 +192,10 @@ class ImportDataTest extends TestCase
             'number' => '123',
             'area_id' => $area->id,
             'year' => 2010,
-            'enrolled' => 50,
+            'room' => 'FIB200',
+            'time' => '12:00',
+            'enroll_start' => 50,
+            'enroll_end' => 25,
             'dropped' => 5,
             'capacity' => 100,
             'term' => '2',
@@ -230,7 +241,10 @@ class ImportDataTest extends TestCase
             'number' => '123',
             'area_id' => $area->id,
             'year' => 2010,
-            'enrolled' => 50,
+            'room' => 'FIB200',
+            'time' => '12:00',
+            'enroll_start' => 50,
+            'enroll_end' => 25,
             'dropped' => 5,
             'capacity' => 100,
             'term' => '2',
