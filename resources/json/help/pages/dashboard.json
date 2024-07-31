@@ -1,34 +1,34 @@
 [
     {
-        "subtopic": "test",
+        "subtopic": "dashboard",
         "subsections": [
             {
                 "heading": "Introduction",
-                "content": "This is an introduction to test.",
+                "content": "This is an introduction to dashboard.",
                 "tags": [
                     "intro",
-                    "test"
+                    "dashboard"
                 ]
             },
             {
                 "heading": "Details",
-                "content": "These are the details of test.",
+                "content": "These are the details of dashboard.",
                 "tags": [
                     "details",
-                    "test"
+                    "dashboard"
                 ]
             }
         ],
         "subtopics": [
             {
-                "subtopic": "test Subtopic",
+                "subtopic": "dashboard Subtopic",
                 "subsections": [
                     {
                         "heading": "Subtopic Introduction",
-                        "content": "This is an introduction to test Subtopic. <br />Testing Images {{ img.test }}",
+                        "content": "This is an introduction to dashboard Subtopic.",
                         "tags": [
                             "intro",
-                            "test",
+                            "dashboard",
                             "subtopic"
                         ]
                     }

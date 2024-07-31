@@ -33,5 +33,10 @@
         "title": "Test",
         "url": "test",
         "icon": "help_outline"
+    },
+    {
+        "title": "{Dashboard}",
+        "url": "{Dashboard}",
+        "icon": "help_outline"
     }
 ]
