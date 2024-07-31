@@ -30,6 +30,7 @@
             </div>
             @endif
         </div>
+        
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
                 <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">
@@ -49,9 +50,7 @@
                                                 :courseCapacity="$section->capacity"
                                                 :sectionId="$section->id"
                                                 :seiData="$section->averageRating"
-                                                @if(in_array($userRole, ['admin', 'dept_head']))
-                                                    :instructorName="$section->instructorName"
-                                                @endif
+                                                :instructorName="$section->instructorName ?? ''"
                                             />
                                         @endforeach
                                     @else
@@ -67,10 +66,8 @@
                                     @if(isset($tas) && !empty($tas))
                                         @foreach ($tas as $ta)
                                             <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->name }}</td>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->rating }}</td>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->taCourses }}</td>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->instructorName }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->firstname }} {{ $ta->lastname }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">{{ $ta->email }}</td>
                                             </tr>
                                         @endforeach
                                     @else

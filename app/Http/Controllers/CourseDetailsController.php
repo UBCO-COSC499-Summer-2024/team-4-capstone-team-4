@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers;
 
 use App\Models\CourseSection;
@@ -26,7 +27,7 @@ class CourseDetailsController extends Controller
     
         Log::info('User Role:', ['role' => $userRole]);
         Log::info('Search Query:', ['query' => $query]);
-    
+        
         $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])
             ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
                 $queryBuilder->whereHas('teaches', function ($query) use ($user) {
@@ -75,21 +76,10 @@ class CourseDetailsController extends Controller
     
         $areas = Area::all(); 
     
-        $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-            ->get()
-            ->map(function ($ta) {
-                return (object)[
-                    'name' => $ta->name,
-                    'email' => $ta->email,
-                    'rating' => $ta->rating,
-                    'taCourses' => $ta->courseSections->map(function ($course) {
-                        return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-                    })->implode(', '),
-                    'instructorName' => $ta->courseSections->map(function ($course) {
-                        return $course->teaches->instructor->user->firstname . ' ' . $course->teaches->instructor->user->lastname;
-                    })->implode(', ')
-                ];
-            });
+        $tas = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->where('user_roles.role', 'instructor')
+            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
+            ->get();
     
         if ($request->ajax()) {
             return response()->json($courseSections);
@@ -98,10 +88,8 @@ class CourseDetailsController extends Controller
         $sortField = 'courseName';
         $sortDirection = 'asc';
     
-        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas','tas'));
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas'));
     }
-
-
 
     public function save(Request $request){
         $ids = $request->input('ids', []);

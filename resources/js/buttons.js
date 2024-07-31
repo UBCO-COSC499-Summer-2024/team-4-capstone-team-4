@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableEditing() {
             document.querySelectorAll('tbody tr').forEach(row => {
                 row.querySelectorAll('td').forEach((cell, index) => {
-                    if ([2, 3, 4].includes(index)) {
+                    if ([3, 4, 5].includes(index)) {
                         cell.setAttribute('contenteditable', 'true');
                         cell.classList.add('editable-highlight');
                     }
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const rows = document.querySelectorAll('tbody tr');
         rows.forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([2, 3, 4].includes(index)) {
+                if ([3, 4, 5].includes(index)) {
                     const value = cell.innerText.trim();
                     if (isNaN(value) || value === '') {
                         cell.classList.add('input-error');

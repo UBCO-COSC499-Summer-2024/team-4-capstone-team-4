@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const assignTAButton = document.getElementById('assignTAButton');
     const taSelect = document.getElementById('taSelect');
     const courseSelect = document.getElementById('courseSelect');
+    const assignModal = document.getElementById('assignModal');
 
     function openAssignModal() {
-        document.getElementById('assignModal').classList.remove('hidden');
-       
+        assignModal.classList.remove('hidden');
     }
 
     function closeAssignModal() {
-        document.getElementById('assignModal').classList.add('hidden');
+        assignModal.classList.add('hidden');
     }
-    
+
     function fetchAndPopulateSelect(url, selectElement) {
         fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -39,5 +39,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (assignTAButton) {
         assignTAButton.addEventListener('click', openAssignModal);
+    }
+
+    // Fetch data for TA and Courses and populate selects
+    if (taSelect && courseSelect) {
+        fetchAndPopulateSelect('/api/teaching-assistants', taSelect);
+        fetchAndPopulateSelect('/api/courses', courseSelect);
     }
 });

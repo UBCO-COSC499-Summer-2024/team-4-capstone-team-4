@@ -17,24 +17,28 @@
     function showTab(tabId, tabButtonId) {
         const coursesTable = document.getElementById('coursesTable');
         const taTable = document.getElementById('taTable');
+        const editButton = document.getElementById('editButton');
+        const createNewButton = document.getElementById('createNewButton');
+        const assignButton = document.getElementById('assignButton');
+        const assignTAButton = document.getElementById('assignTAButton');
+        const createNewTAButton = document.getElementById('createNewTAButton');
 
         if (tabId === 'coursesTable') {
             coursesTable.classList.remove('hidden');
             taTable.classList.add('hidden');
             editButton.style.display = 'block';
-            createNewButton.style.display='block';
-            assignButton.style.display='block';
-            assignTAButton.style.display='none';
-            createNewTAButton.style.display='none';
+            createNewButton.style.display = 'block';
+            assignButton.style.display = 'block';
+            assignTAButton.style.display = 'none';
+            createNewTAButton.style.display = 'none';
         } else {
             coursesTable.classList.add('hidden');
             taTable.classList.remove('hidden');
             editButton.style.display = 'none';
-            createNewButton.style.display='none';
-            assignButton.style.display='none';
-            assignTAButton.style.display='block';
-            createNewTAButton.style.displa='block';
-
+            createNewButton.style.display = 'none';
+            assignButton.style.display = 'none';
+            assignTAButton.style.display = 'block';
+            createNewTAButton.style.display = 'block';
         }
 
         document.querySelectorAll('button[data-tabs-target]').forEach(function (btn) {
@@ -51,4 +55,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         showTab('coursesTable', 'courses-tab');
     });
+
+    // Add event listener for assign button to handle routing
+    document.getElementById('assignButton').addEventListener('click', function() {
+        const route = this.getAttribute('data-route');
+        console.log('Navigating to route:', route);
+        document.location.href = route;
+    });
 </script>
+
