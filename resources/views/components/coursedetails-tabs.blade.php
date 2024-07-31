@@ -17,6 +17,7 @@
     function showTab(tabId, tabButtonId) {
         const activeTabInput = document.getElementById('activeTab');
         activeTabInput.value = tabId;
+        localStorage.setItem('activeTab', tabId);
 
         const coursesTable = document.getElementById('coursesTable');
         const taTable = document.getElementById('taTable');
@@ -58,11 +59,19 @@
         const activeTabButton = document.getElementById(tabButtonId);
         activeTabButton.classList.add('text-ubc-blue', 'border-tab-ubc-blue', 'font-bold');
         activeTabButton.classList.remove('text-gray-600-font-bold', 'border-gray-300');
+
+        // Update the URL to set page=1 if switching tabs
+        const url = new URL(window.location);
+        url.searchParams.set('page', 1);
+        window.history.pushState({}, '', url);
+
+        // Do not reload the page, let the server handle the new page state
+        // window.location.reload();
     }
 
     // Initialize the correct tab as active
     document.addEventListener('DOMContentLoaded', function () {
-        const activeTab = document.getElementById('activeTab').value;
+        const activeTab = localStorage.getItem('activeTab') || 'coursesTable';
         if (activeTab === 'taTable') {
             showTab('taTable', 'tas-tab');
         } else {
@@ -77,4 +86,3 @@
         document.location.href = route;
     });
 </script>
-

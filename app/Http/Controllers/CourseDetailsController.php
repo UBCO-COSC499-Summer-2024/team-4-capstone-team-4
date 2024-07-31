@@ -44,7 +44,7 @@ class CourseDetailsController extends Controller
                 $queryBuilder->where('area_id', $areaId);
             });
     
-        $courseSections = $courseSectionsQuery->paginate(5); // Apply pagination
+        $courseSections = $courseSectionsQuery->paginate(7); // Apply pagination
     
         $courseSections->getCollection()->transform(function ($section) {
             $seiData = $section->seiData()->first() ?? null;
@@ -78,7 +78,7 @@ class CourseDetailsController extends Controller
         $areas = Area::all(); 
     
         $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-        ->paginate(5) // Apply pagination for TAs
+        ->paginate(7) // Apply pagination for TAs
         ->through(function ($ta) {
             return (object)[
                 'name' => $ta->name,
@@ -103,10 +103,6 @@ class CourseDetailsController extends Controller
         return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab'));
     }
     
-    
-
-
-
     public function getTeachingAssistants()
     {
         $tas = TeachingAssistant::select('id', 'name')->get();
@@ -163,6 +159,20 @@ public function assignTA(Request $request)
     return response()->json($tas);
 }
 
+public function createTA(Request $request)
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'rating' => 'required|numeric|min:0|max:5',
+    ]);
+
+    $ta = new TeachingAssistant();
+    $ta->name = $validatedData['name'];
+    $ta->rating = $validatedData['rating'];
+    $ta->save();
+
+    return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
+}
     
 
 public function save(Request $request)

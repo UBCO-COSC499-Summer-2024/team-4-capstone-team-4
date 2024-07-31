@@ -95,5 +95,6 @@
     </div>
     <x-save-confirm />
     <x-save-details-message />
+    <x-create-ta-modal />
     <x-assign-ta-modal />
 </x-app-layout>
