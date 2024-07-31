@@ -1,3 +1,40 @@
+## Wednesday (7/26 - 7/31)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_26_2024-07_31_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Admin - staff filter, sorting, search
+  * #2: Admin - activate/deactivate account
+  * #3: Admin - edit/delete user
+  * #4: Admin - send reset password link
+  * #5: Fix reports styles (both instructor and dept)
+  * #6: Admin - make name and email editable
+  * #7: Help page for staff page
+  * #8: Testing - Admin Staff page
+
+### Progress Update (since 7/26/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Admin - staff filter, sorting, search | Complete |
+| Admin - activate/deactivate account | Complete |
+| Admin - edit/delete user | Complete |
+| Fix reports styles (both instructor and dept) | Complete |
+| Admin - make name and email editable | In progress |
+| Help page for staff page | In progress |
+| Testing - Admin Staff page | Complete |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I manage to basically finish all the main admin functionalities for the admin staff page. All I have left to make the name and email field editable as well. I have written tests for the admin staff page which all pass. I also fixed the styles for both the instructor and dept report to go back to original with some improvements. I started working on the help page for the staff page.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete editabe name and email field
+  * Complete help pages
+  * Prep for test-o-rama
+
 ## Friday (7/24 - 7/26)
 
 ### Timesheet
@@ -12,7 +49,7 @@ Clockify report
   * #4: Admin - activate/deactivate account
   * #5: Admin - edit/delete user
 
-### Progress Update (since 7/19/2024) 
+### Progress Update (since 7/24/2024) 
 |TASK/ISSUE |STATUS|
 | --------| -------|
 | Admin staff list | Complete |
