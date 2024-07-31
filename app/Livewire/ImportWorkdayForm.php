@@ -131,8 +131,7 @@ class ImportWorkdayForm extends Component
         }
     }
 
-    protected function validateUniqueRows()
-    {
+    protected function validateUniqueRows() {
         $uniqueCombinations = [];
 
         foreach ($this->rows as $index => $row) {
@@ -142,7 +141,8 @@ class ImportWorkdayForm extends Component
                 $row['section'],
                 $row['term'],
                 $row['session'],
-                $row['year']
+                $row['year'],
+                $row['room'],
             ]);
 
             if (in_array($combination, $uniqueCombinations)) {
@@ -202,6 +202,7 @@ class ImportWorkdayForm extends Component
                 ->where('term', $row['term'])
                 ->where('session', $row['session'])
                 ->where('section' , $row['section'])
+                ->where('room', $row['room'])
                 ->first();
 
             if ($course != null) {
@@ -221,6 +222,8 @@ class ImportWorkdayForm extends Component
 
         if($this->courseExists && !$this->userConfirms) {
             $this->showConfirmModal = true;
+        } else if (!$this->courseExists) {
+            $this->userConfirms = true;
         }
 
         if($this->userConfirms) {
@@ -231,7 +234,8 @@ class ImportWorkdayForm extends Component
                     'area_id' => $row['area_id'],
                     'year' => $row['year'],
                     'session' => $row['session'],
-                    'term' => $row['term'],     
+                    'term' => $row['term'], 
+                    'room' => $row['room'],    
                 ], 
                 [
                     'prefix' => $prefix,
@@ -264,11 +268,6 @@ class ImportWorkdayForm extends Component
                 session()->flash('success', $this->showModal);
             }
         }
-
-        // if (session()->has('success')) {
-        //     $this->showModal = true;
-        // }
-
     }
 
     public function closeModal() {

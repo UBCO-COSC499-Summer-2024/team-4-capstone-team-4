@@ -14,7 +14,7 @@
 
         @if (!empty($finalCSVs))
         <form wire:submit.prevent="handleSubmit" class="relative">
-            @foreach($finalCSVs as $index => $finalCSV)
+            @foreach($rows as $index => $row)
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-4/12">       
@@ -62,7 +62,7 @@
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" class="import-form-save-button">Upload</button>
+                    <button type="submit" class="import-form-save-button">Save</button>
                 </div>
            
         </form>

@@ -91,6 +91,13 @@ class UploadFileFormSei extends Component
         return $messages;
     }
 
+    public function deleteRow($row) {
+        $this->resetValidation();
+
+        unset($this->rows[$row]);
+        $this->rows = array_values($this->rows);
+    }
+
     public function getCourseIdByName($prefix, $number, $section, $session, $term, $year) {
         $course_id = CourseSection::where('prefix', $prefix)
             ->where('number', $number)

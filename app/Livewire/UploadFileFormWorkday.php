@@ -10,8 +10,12 @@ class UploadFileFormWorkday extends Component
 {
     public $rows = [];
     public $finalCSVs = [];
+    public $duplicateCourses = [];
 
     public $showModal = false;
+    public $showConfirmModal = false;
+    public $courseExists = false;
+    public $userConfirms = false;
 
     public function mount($finalCSVs)
     {
@@ -104,6 +108,45 @@ class UploadFileFormWorkday extends Component
         $this->rows = array_values($this->rows);
     }
 
+    protected function validateUniqueRows() {
+        $uniqueCombinations = [];
+
+        foreach ($this->rows as $index => $row) {
+            $combination = implode('-', [
+                $row['number'],
+                $row['area_id'],
+                $row['section'],
+                $row['term'],
+                $row['session'],
+                $row['year'],
+                $row['room'],
+            ]);
+
+            if (in_array($combination, $uniqueCombinations)) {
+                $this->addError("rows.{$index}.duplicate", 'This combination of fields has already been entered. Please create a different course');
+                return false;
+            }
+
+            $uniqueCombinations[] = $combination;
+        }
+
+        return true;
+    }
+
+    public function userConfirmDuplicate() {
+        $this->userConfirms = true;
+        $this->showConfirmModal = false;
+    }
+
+    public function closeModal() {
+        $this->showModal = false;
+    }
+
+
+    public function closeConfirmModal() {
+        $this->showConfirmModal = false;
+    }
+
     public function resetData()
     {
         session()->forget('finalCSVs');
@@ -112,11 +155,16 @@ class UploadFileFormWorkday extends Component
     }
 
     public function handleSubmit() {
+        // dd($this->rows, $this->duplicateCourses);
+        $this->courseExists = false;
+
         $this->validate();
 
-        // dd($this->rows);
+        if (!$this->validateUniqueRows()) {
+            return;
+        }
 
-        foreach($this->rows as $row) {
+        foreach($this->rows as $index => $row) {
             $dropped = 0;
             $prefix = '';
             // dd($row);
@@ -136,15 +184,47 @@ class UploadFileFormWorkday extends Component
                     break;
             }
 
-                // dd($row);
+            $course = CourseSection::where('prefix', $prefix)
+            ->where('number', $row['number'])
+            ->where('area_id', $row['area_id'])
+            ->where('year', $row['year'])
+            ->where('term', $row['term'])
+            ->where('session', $row['session'])
+            ->where('section' , $row['section'])
+            ->where('room', $row['room'])
+            ->first();
 
-                if($row['enroll_start'] > $row['enroll_end']) {
-                    $dropped = $row['enroll_start'] - $row['enroll_end'];
-                } else {
-                    $dropped = 0;
-                }
+            if ($course != null) {
+                $this->addError("rows.{$index}.exists", 'Warning: This course has already been created. Saving will overwrite the existing data. Delete or update the row to prevent this action');
+                $this->courseExists = true;
+                $this->duplicateCourses[] = $course;
+            }
 
-                CourseSection::create([
+            if($row['enroll_start'] > $row['enroll_end']) {
+                $dropped = $row['enroll_start'] - $row['enroll_end'];
+            } else {
+                $dropped = 0;
+            }
+        }
+
+        if($this->courseExists && !$this->userConfirms) {
+            $this->showConfirmModal = true;
+        } else if (!$this->courseExists) {
+            $this->userConfirms = true;
+        }
+
+        if($this->userConfirms) {
+            foreach($this->rows as $index => $row) {
+                CourseSection::updateOrCreate([
+                    'number' => $row['number'],
+                    'section' => $row['section'],
+                    'area_id' => $row['area_id'],
+                    'year' => $row['year'],
+                    'session' => $row['session'],
+                    'term' => $row['term'], 
+                    'room' => $row['room'],    
+                ], 
+                [
                     'prefix' => $prefix,
                     'number' => $row['number'],
                     'section' => $row['section'], 
@@ -156,22 +236,21 @@ class UploadFileFormWorkday extends Component
                     'time' => $row['time'], 
                     'enroll_start' => $row['enroll_start'], 
                     'enroll_end' => $row['enroll_end'], 
-                    'dropped' => $dropped, 
-                    'capacity' => $row['capacity'],        
+                    'dropped' => $dropped,
+                    'capacity' => $row['capacity'], 
+                    'archived' => false,  
                 ]);
+
+                $this->showModal = true;
+                $this->userConfirms = false;
+                $this->duplicateCourses = [];
+                $this->resetValidation();
+
+                $this->resetData();
+                session()->flash('success', $this->showModal);
             }
-
-        $this->showModal = true;
-
-        $this->resetData();
-        session()->flash('success', $this->showModal);
-
+        }
     }
-
-    public function closeModal() {
-        $this->showModal = false;
-    }
-
 
     public function getAreaIdByName($areaName)
     {

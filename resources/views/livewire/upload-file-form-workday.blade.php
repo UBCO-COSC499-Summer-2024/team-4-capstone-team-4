@@ -18,7 +18,7 @@
 
         @if (!empty($finalCSVs))
         <form wire:submit.prevent="handleSubmit" class="relative">
-            @foreach($finalCSVs as $index => $finalCSV)
+            @foreach($rows as $index => $row)
                 <div class="import-form-row">
                     <div class="w-1/12 text-center">{{ $index + 1 }}</div>
                     <div class="w-4/12">       
@@ -30,7 +30,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('rows.'.$index.'.area')<span class="import-error">{{ $message }}</span>@enderror
+                        @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
                     
                     <div class="w-2/12">       
@@ -120,11 +120,14 @@
                             <span class="material-symbols-outlined">delete</span>
                         </button>
                     </div>
-                </div>   
+                </div>
+                
+                @error('rows.'.$index.'.exists')<span class="import-error mx-2">{{ $message }}</span>@enderror
+                @error('rows.'.$index.'.duplicate')<span class="import-error mx-2">{{ $message }}</span>@enderror
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" class="import-form-save-button">Upload</button>
+                    <button type="submit" class="import-form-save-button">Save</button>
                 </div>
            
         </form>
@@ -138,6 +141,12 @@
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <x-import-modal moreText="Upload Another File"/>
+        </div>
+        @endif
+
+        @if($showConfirmModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-import-confirm-modal :duplicateCourses="$duplicateCourses" />
         </div>
         @endif
     </div>

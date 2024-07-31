@@ -27,7 +27,7 @@
         @endforelse --}}
     </div>
     <div class="flex flex-col justify-center items-center">
-        <button type="submit" class="max-w-fit import-form-add-button disabled:opacity-50">Save</button>
+        <button type="submit" class="max-w-fit import-form-add-button disabled:opacity-50">Upload</button>
     </div>
 </form>
 </section>
