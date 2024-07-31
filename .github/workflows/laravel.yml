@@ -11,6 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
+      APP_URL: "http://127.0.0.1:8000"
       DB_CONNECTION: pgsql
       DB_HOST: localhost
       DB_DATABASE: Insight
