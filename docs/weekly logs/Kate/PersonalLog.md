@@ -1,3 +1,112 @@
+## Friday (7/26 - 7/31)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_26_2024-07_31_2024.pdf)
+
+### Current Tasks
+  * #1: Upload File - Workday
+  * #2: Upload File - Sei
+  * #3: Testing
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Front & Backend Validation / #455
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Validaiton (sei) / #467
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Populate SEI Form / #466
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Database - Modify Enrollment / #482
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Add Room & Time of Day to Course Section / #484
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Course - Check for Duplicates / #481
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Check for Duplicates / #499
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Testing
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>TA Assignment - UI & CSV Import / #480
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>TA Rating System / #485
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The file upload functionality for the workday and sei data is complete, including the changes made to fit the requirements (calculating dropped and confirm overwrite courses). I will now be focusing on the ta assignment functionality which will include manual and csv assignment. I should be able to reference my other code which uses a similar structure. Everything is on track and I aim to complete these features this upcoming cycle.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Testing
+  * Ta Assign (manual)
+  * Ta Assign (csv)
+  * Ta Rating
+
 ## Friday (7/24 - 7/26)
 
 ### Timesheet
@@ -116,6 +225,7 @@ I added some extra feature to the manual import page (adding and deleting multpl
   * Populate form from pulled data
   * Submit populated form to db
   * Testing
+
 ## Wednesday (7/19 - 7/24)
 
 ### Timesheet
