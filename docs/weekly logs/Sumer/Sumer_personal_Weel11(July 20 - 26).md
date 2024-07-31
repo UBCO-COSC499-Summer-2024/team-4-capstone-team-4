@@ -246,11 +246,121 @@ Communication Update:
 
 #### Cycle Goal Review 
 
-Continued working on the course details page and updated logs. Changed the table structure so that the department head can see the names of the instructor as well. Then I changed the working of the filter so that the department head can filter with respect to the area and not by instructor name. Fixed the buttons on the department side. 
+Continued working on the course details page and updated logs. I changed the table structure so that the department head could see the names of the instructors as well. Then I changed the working of the filter so that the department head can filter with respect to the area and not by instructor name. Fixed the buttons on the department side. 
 
 #### Next Cycle Goals 
 
 - Continue working on functionalities, and troubleshooting. Make sure to complete the in-progress tasks. Continue working on fixing the bugs and completing the implementation of the functionalities to move on to testing.
+
+
+## Cycle 19
+
+Clockify report [Click Here](https://app.clockify.me/reports/summary?start=2024-07-25T00:00:00.000Z&end=2024-07-26T23:59:59.999Z&filterValuesData=%7B%22users%22:%5B%226657a665c1d0df08761294fb%22%5D,%22userAndGroup%22:%5B%5D%7D&filterOptions=%7B%22userAndGroup%22:%7B%22status%22:%22ACTIVE_WITH_PENDING%22%7D%7D)
+
+#### Thursday (7/25/2024)
+
+#### Current Tasks
+
+Features:
+- Updated logs for the day
+- Made the Assign Course modal
+  - Fixed the positioning of the modal
+- Populated the TA Table with correct data
+- Added a new column to the Course sections
+  - Adjusted the table accordingly
+
+#### Progress Update (till 7/25/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Communication Update (Logs Update)</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Features: Assign Course Modal Creation</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Features: Modal Positioning Fix</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Features: TA Table Data Population</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Features: Course Sections: New Column Addition</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Features: Course Sections: Table Adjustment</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review
+
+Updated the logs for the day and focused on enhancing the Course details page. Created the Assign Course modal and fixed its positioning for a better user experience. Ensured that the TA Table was populated with the correct data. Added a new column to the Course sections and adjusted the table layout accordingly to accommodate the changes.
+
+#### Next Cycle Goals
+
+- Continue refining the Course details page.
+- Work on any additional feedback from the team or peer reviews.
+- Maintain regular updates and log maintenance.
+
+
+#### Friday (7/26/2024)
+
+#### Current Tasks
+
+Features:
+- Conducted team brainstorming session
+  - Addressed issues in reference to the requirements set by our professor
+  - Created issues for the GitHub board based on the brainstorming session
+- Troubleshoot issues on the Course details page
+- Updated the logs for the day
+
+#### Progress Update (till 7/26/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Team Brainstorming Session</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Creating Issues for GitHub Board</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Course Details Page: Troubleshooting</td>
+        <td>In-progress</td>
+    </tr>
+    <tr>
+        <td>Communication Update (Logs Update)</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+#### Cycle Goal Review
+
+Facilitated a team brainstorming session to discuss and address issues based on the requirements set by our professor. Created corresponding issues for the GitHub board to keep track of the tasks. I focused on troubleshooting the course details page to resolve existing issues. Updated the logs to reflect the day's activities.
+
+#### Next Cycle Goals
+
+- Continue troubleshooting the Course details page.
+- Work on implementing fixes and new features based on the issues created from the brainstorming session.
+- Ensure regular communication updates and log maintenance.
+
+
+
 
 
 
