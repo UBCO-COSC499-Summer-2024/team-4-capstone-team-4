@@ -61,30 +61,30 @@ class InstructorPerformance extends Model {
         $courseCount = 0;
         $totalSumAverageScore = 0;
 
-       foreach($courses as $course => $course_id) {
-
-            $seiData = SeiData::where('course_section_id', $course_id)->get();
-
-            if(!$seiData->isEmpty()) {
+        foreach($courses as $course) {
+            if ($course) {
                 $courseCount++;
-            }
-            foreach($seiData as $data) {
-                $questionArray = json_decode($data->questions, true);
-                $averageScore = array_sum($questionArray) / count($questionArray);
-                $totalSumAverageScore += $averageScore;
+                $seiData = SeiData::where('course_section_id', $course)->get();
+
+                if ($seiData) {
+                    foreach($seiData as $data) {
+                        if ($data) {
+                            $questionArray = json_decode($data->questions, true);
+                            $averageScore = array_sum($questionArray) / count($questionArray);
+                            $totalSumAverageScore += $averageScore;
+                        }
+                    }
+                }
             }
         }
 
-        if($courseCount != 0) {
-            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
-            $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
-            if ($performance != null) {
-                $performance->update([
-                    'sei_avg' => $totalRoundedAvg,
-                ]);
-            }
+        $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+        if ($performance) {
+            $performance->update([
+                'sei_avg' => $totalRoundedAvg,
+            ]);
         }
-
         return;
     }
 
@@ -144,7 +144,7 @@ class InstructorPerformance extends Model {
      * This function calculates the total performance score based on the instructor's
      * assigned roles and course sections taught during the specified year, and updates
      * the score value accordingly in the database. The score
-     * considers the monthly service role hours, the number of course sections, and 
+     * considers the annual service role hours, the number of course sections, and 
      * the difference between the enrolled and dropped averages.
      *
      * @param int $instructor_id The ID of the instructor.
@@ -152,55 +152,48 @@ class InstructorPerformance extends Model {
      * @return void
      */
     public static function updateScore($instructor_id, $currentYear) {
-        $roleHours = 0;
-        $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
-        $currentMonth = date('F'); 
+        $performance = self::where('instructor_id', $instructor_id)->where('year', $currentYear)->first();
 
-        foreach ($assignedRoles as $assignedRole) {
-            $role = ServiceRole::where('id', $assignedRole->service_role_id)
-                ->where('year', $currentYear)
-                ->where('archived', false)
-                ->first();
+        if ($performance) {
+            $allHours[] = array_values(json_decode($performance->total_hours, true));
+            $roleHours = 0;
 
-            if ($role) {
-                $roleHours += $role->monthly_hours[$currentMonth];
+            foreach($allHours as $hours) {
+                $roleHours += $hours;
             }
-        }
 
-        $courseSections = 0;
-        $doubleCourses = 0;
-        $teaches = Teach::where('instructor_id', $instructor_id)->get();
+            $courseSections = 0;
+            $doubleCourses = 0;
+            $teaches = Teach::where('instructor_id', $instructor_id)->get();
 
-        foreach ($teaches as $teaching) {
-            $course = CourseSection::where('id', $teaching->course_section_id)
-                ->where('year', $currentYear)
-                ->where('archived', false)
-                ->first();
+            foreach ($teaches as $teaching) {
+                $course = CourseSection::where('id', $teaching->course_section_id)
+                    ->where('year', $currentYear)
+                    ->where('archived', false)
+                    ->first();
 
-            if ($course) {
-                if ($course->term === '1-2') {
-                    $doubleCourses++;
-                } else {
-                    $courseSections++;
+                if ($course) {
+                    if ($course->term === '1-2') {
+                        $doubleCourses++;
+                    } else {
+                        $courseSections++;
+                    }
                 }
             }
+            
+            if ($performance) {
+                $performance->update([
+                    'score' => ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled)) * $performance->sei_avg) / 8760,
+                ]);
+            }
         }
-
-        $instructorPerformance = self::where('instructor_id', $instructor_id)->where('year', $currentYear)->first();
-        
-        if ($performance) {
-            $performance->update([
-                'score' => ($roleHours + (((215 * $courseSections) + (530 * $doubleCourses)) * (($enrolled - $dropped) / $enrolled))) / 8760,
-            ]);
-        }
-
         return;
     }
 
     public static function updatePerformance($instructor_id, $year) {
-        //self::updateScore($instructor_id, $year);
-        self::updateInstructorSEIAvg($instructor_id, $year);
+        //self::updateInstructorSEIAvg($instructor_id, $year);
         self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
+
     }
 
     public function updateTotalHours($hours = [])
