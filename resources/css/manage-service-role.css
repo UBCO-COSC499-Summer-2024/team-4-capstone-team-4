@@ -1,0 +1,57 @@
+.svcrole-item {
+    display: grid;
+    grid-template-columns: minmax(auto, 100%) minmax(auto, 400px);
+    grid-row-start: 0;
+    grid-gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    /* justify-content: space-between; */
+    width: 100%;
+}
+
+.svcrole-item .svcr-item {
+    /* min-width: 300px; */
+    flex-grow: 1;
+    display: flex;
+}
+
+section#instructors {
+    min-width: 400px;
+}
+
+.svcrole-self {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.svcrole-item .svcr-card-item input[type="checkbox"] {
+    display: none;
+}
+
+.svcr-table th {
+    font-size: 1rem;
+}
+
+td.empty {
+    text-align: center;
+    padding: 1rem;
+}
+
+tr:has(td.empty:hover) {
+    background: none;
+}
+
+.bg-editing.svcrole-item {
+    background: initial;
+}
+
+.bg-default .form-input {
+    background: rgb(249 250 251 / 1) !important;
+}
+
+@media screen and (max-width: 1000px) {
+    .svcrole-item {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,152 @@
+/* .import-container {
+  margin: auto;
+}
+
+.import-container button{
+  background-color: lightblue;
+  padding: 5px 10px;
+}
+
+.import-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(240, 240, 240, 0.8);
+  padding: 100px;
+  max-width: fit-content;
+}
+
+.import-select {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.import-label {
+  margin-bottom: 5px;
+}
+
+.import-file {
+  margin-top: 20px;
+}
+
+.import-file-area {
+  border: 3px dashed black;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-file label {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="file"] {
+  display: none;
+}
+.import-file-input {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.drop-zone {
+  background-color: white;
+  padding: 100px;
+  border: 3px dashed slategrey;
+  text-align: center;
+}
+
+.drop-zone-hover {
+  background-color: lightgrey;
+  border: 5px solid slategray
+}
+
+
+.drop-zone-button {
+  background-color: lightgray;
+  text-align: center;
+  padding: 2px;
+}
+
+
+.drop-zone-button:hover {
+  background-color: grey;
+  text-align: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.drop-zone-file-name {
+  background-color: lightgray;
+  padding: 10px;
+
+} */
+
+
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+.import-nav-link {
+  @apply inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-500 hover:border-gray-300
+}
+
+.import-form-row {
+  @apply flex flex-row items-center py-2 bg-white border-b-2 border-gray-200 border-solid shadow-none;
+}
+
+.import-form-row div {
+  @apply mx-2;
+}
+
+.import-form-input {
+  @apply w-full bg-gray-50 border border-gray-300 border-solid text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block;
+}
+
+.import-form-row input:focus {
+  @apply border-none outline-none;
+}
+
+.import-form-select {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block w-full p-2;
+}
+
+.import-form-delete-button {
+  @apply p-2 flex items-center text-red-500 border-red-500 border rounded hover:bg-red-500 hover:text-white
+}
+
+.import-form-save-button {
+  @apply text-[#3B784F] hover:text-white border border-[#3B784F] hover:bg-[#3B784F] focus:ring-1 focus:outline-none focus:ring-[#3B784F] font-medium rounded-lg text-sm px-3 py-2 text-center me-1 mb-2;
+}
+
+.import-form-add-button {
+  @apply  text-[#3b4779] hover:text-white border border-[#3b4779] hover:bg-[#3b4779] focus:ring-1 focus:outline-none focus:ring-[#3b4779] font-medium rounded-lg text-sm px-3 py-2 text-center me-1 mb-2;
+}
+
+.import-error {
+  @apply text-red-500;
+}
+
+.assign-input {
+  @apply text-sm;
+}
+
+}
+
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.drag-drop-area p {
+  margin: 0;
+}

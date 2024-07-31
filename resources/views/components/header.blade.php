@@ -1,5 +1,5 @@
 <header>
     <x-header.brand />
     <x-header.misc />
-    <x-header.menu />
+    <livewire:header.menu />
 </header>

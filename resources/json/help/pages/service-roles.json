@@ -1,0 +1,39 @@
+[
+    {
+        "subtopic": "Service Roles",
+        "subsections": [
+            {
+                "heading": "Introduction",
+                "content": "This is an introduction to Service Roles.",
+                "tags": [
+                    "intro",
+                    "Service Roles"
+                ]
+            },
+            {
+                "heading": "Details",
+                "content": "These are the details of Service Roles.",
+                "tags": [
+                    "details",
+                    "Service Roles"
+                ]
+            }
+        ],
+        "subtopics": [
+            {
+                "subtopic": "Service Roles Subtopic",
+                "subsections": [
+                    {
+                        "heading": "Subtopic Introduction",
+                        "content": "This is an introduction to Service Roles Subtopic.",
+                        "tags": [
+                            "intro",
+                            "Service Roles",
+                            "subtopic"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

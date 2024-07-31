@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
+Use Faker\Generator as Faker;
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
-{
+class UserFactory extends Factory {
     /**
      * The current password being used by the factory.
      */
@@ -24,14 +25,14 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition():array{
         return [
             'firstname' => fake()->firstName(),
             'lastname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'active' => true,
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -43,8 +44,7 @@ class UserFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
-    public function unverified(): static
-    {
+    public function unverified(): static {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
@@ -53,8 +53,7 @@ class UserFactory extends Factory
     /**
      * Indicate that the user should have a personal team.
      */
-    public function withPersonalTeam(callable $callback = null): static
-    {
+    public function withPersonalTeam(callable $callback = null): static {
         if (! Features::hasTeamFeatures()) {
             return $this->state([]);
         }
@@ -62,7 +61,7 @@ class UserFactory extends Factory
         return $this->has(
             Team::factory()
                 ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name.'\'s Team',
+                    'name' => $user->firstname.'\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])
@@ -79,4 +78,5 @@ class UserFactory extends Factory
             'acces_code' => 'head',
         ]);
     }
-}
+    }
+

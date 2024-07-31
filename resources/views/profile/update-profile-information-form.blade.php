@@ -55,21 +55,21 @@
         <!-- First Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="firstname" value="{{ __('First Name') }}" />
-            <x-input id="firstname" type="text" class="mt-1 block w-full" wire:model="state.firstname" required autocomplete="firstname" />
+            <x-input id="firstname" type="text" class="mt-1 block w-full" wire:model.live="state.firstname" autocomplete="firstname" />
             <x-input-error for="firstname" class="mt-2" />
         </div>
 
         <!-- Last Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="lastname" value="{{ __('Last Name') }}" />
-            <x-input id="lastname" type="text" class="mt-1 block w-full" wire:model="state.lastname" required autocomplete="lastname" />
+            <x-input id="lastname" type="text" class="mt-1 block w-full" wire:model.live="state.lastname" autocomplete="lastname" />
             <x-input-error for="lastname" class="mt-2" />
         </div>
 
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required autocomplete="username" />
+            <x-input id="email" type="email" class="mt-1 block w-full" wire:model.live="state.email" autocomplete="username" />
             <x-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())

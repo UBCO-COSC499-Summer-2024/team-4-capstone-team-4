@@ -1,0 +1,37 @@
+[
+    {
+        "title": "Authentication",
+        "url": "authentication",
+        "icon": "shield"
+    },
+    {
+        "title": "Dashboard",
+        "url": "dashboard",
+        "icon": "dashboard"
+    },
+    {
+        "title": "Profile",
+        "url": "profile",
+        "icon": "person"
+    },
+    {
+        "title": "Staff",
+        "url": "staff",
+        "icon": "group"
+    },
+    {
+        "title": "Courses",
+        "url": "courses",
+        "icon": "library_books"
+    },
+    {
+        "title": "Service Roles",
+        "url": "service-roles",
+        "icon": "work_history"
+    },
+    {
+        "title": "Test",
+        "url": "test",
+        "icon": "help_outline"
+    }
+]

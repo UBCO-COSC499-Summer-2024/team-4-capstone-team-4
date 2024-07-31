@@ -1,12 +1,9 @@
-<x-app-layout class="settings-section">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+<x-app-layout>
+    <div class="content">
+        {{-- <h2 class="mx-auto text-xl font-semibold leading-tight text-gray-800 max-w-7xl sm:px-6 lg:px-8">
             {{ __('Profile') }}
-        </h2>
-    </x-slot>
-
-    <div>
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+        </h2> --}}
+        <div class="py-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
             @if (Laravel\Fortify\Features::canUpdateProfileInformation())
                 @livewire('profile.update-profile-information-form')
 
@@ -20,6 +17,17 @@
 
                 <x-section-border />
             @endif
+
+            {{-- <div class="mt-10 sm:mt-0">
+                @livewire('profile.auth-methods-update')
+                <x-profile.auth-methods-update :authMethods="$authMethods" />
+            </div> --}}
+
+            <div class="mt-10 sm:mt-0">
+                @livewire('profile.preferences')
+            </div>
+
+            <x-section-border />
 
             @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
                 <div class="mt-10 sm:mt-0">
