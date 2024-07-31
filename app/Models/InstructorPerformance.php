@@ -154,7 +154,7 @@ class InstructorPerformance extends Model {
     public static function updateScore($instructor_id, $currentYear) {
         $roleHours = 0;
         $assignedRoles = RoleAssignment::where('instructor_id', $instructor_id)->get();
-        $currentMonth = date('n'); 
+        $currentMonth = date('F'); 
 
         foreach ($assignedRoles as $assignedRole) {
             $role = ServiceRole::where('id', $assignedRole->service_role_id)
