@@ -5,10 +5,10 @@
         </div>
     </div>
     <div class="p-6 mt-2 mb-10 text-center">   
-        <p class="text-2xl font-bold mb-6">The Following Courses already exist and will be updated if confirmed</p>
+        <p class="text-2xl font-bold mb-6">The Following Courses Already Exist and Will be Updated if Confirmed</p>
         @if($duplicateCourses)
             @foreach($duplicateCourses as $course)
-                <p class="text-2xl">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</p>
+                <p class="text-xl">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</p>
             @endforeach
         @endif
         <div class="flex justify-center mt-6">
