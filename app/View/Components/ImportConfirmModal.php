@@ -22,6 +22,8 @@ class ImportConfirmModal extends Component
      */
     public function render(): View|Closure|string
     {
+
+        // dd($this->duplicateCourses);
         return view('components.import-confirm-modal', [
             'duplicateCourses' => $this->duplicateCourses,
         ]);
