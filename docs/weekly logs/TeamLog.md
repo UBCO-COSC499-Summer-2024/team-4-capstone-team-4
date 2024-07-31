@@ -2,6 +2,77 @@
 
 ## Date Range:
 
+- July 26 - July 30
+
+## Features in the Project Plan Cycle:
+- Admin Staff Page 
+- Course Details Page - TAs
+- Import Page - File Upload 
+- Performance Page - Staff Profile
+- Help pages
+- Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july26_july31.png)
+![image of tasks](./tasks/inprogress_july26_july31.png)
+![image of tasks](./tasks/inreview_july26_july31.png)
+![image of tasks](./tasks/done_july26_july31.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july26_july31.png)
+![image of tasks](./tasks/inprogress_july26_july31.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july26_july31.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july26_july31.png)
+![image of clockify report](./clockify/individual_july26_july31.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july26_july31.png)
+![image of tasks](./tasks/done_july26_july31.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july26_july31.png)
+![image of tasks](./tasks/inprogress_july26_july31.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_july26_july31.png)
+![image of test report](./testing/feature_test_july26_july31.png)
+
+## Overview:
+We started working on the admin pages as well as setting up template for help pages. The admin dashboard is ready and we are working on implementing admin functionalities on our main pages. The performance page for individual instructors is almost complete and is just missing the profile.
+
+## Goals for next cycle
+
+- Continue Testing
+- Complete file upload functionality
+- Complete help pages
+- Complete Admin pages
+- Complete staff profile
+- Complete course details page
+
+## What's left
+
+- Help pages
+- Admin pages
+- File upload functionality
+- Testing
+- CI
+- Individual Project Report
+- Dark Mode (optional)
+
+
+## Date Range:
+
 - July 24 - July 25
 
 ## Features in the Project Plan Cycle:
