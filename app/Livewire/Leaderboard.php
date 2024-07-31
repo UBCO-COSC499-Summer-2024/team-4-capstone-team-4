@@ -47,9 +47,22 @@ class Leaderboard extends Component {
         $currentYear = date('Y');
         $usersQuery = $usersQuery->distinct()
             ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id') // Corrected the column name
+            ->leftJoin('service_roles', function ($join) {
+                $join->on('role_assignments.service_role_id', '=', 'service_roles.id')
+                    ->where('service_roles.archived', false);
+            })
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('course_sections', function ($join) {
+                $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                    ->where('course_sections.archived', false);
+            })
             ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'extra_hours.instructor_id') 
+                    ->where('extra_hours.year', $currentYear)
+                    ->where('extra_hours.archived', false);
+            })
             ->leftJoin('instructor_performance', function ($join) use ($currentYear) {
                 $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
                     ->where('instructor_performance.year', $currentYear);

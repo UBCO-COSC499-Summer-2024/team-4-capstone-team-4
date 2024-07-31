@@ -11,6 +11,8 @@ class ExportReport extends Component
 {
     public $instructor_id;
     public $year;
+    
+    protected $listeners = ['pdfSaved' => 'handlePdfSaved'];
 
     public function mount($instructor_id)
     {
@@ -28,6 +30,11 @@ class ExportReport extends Component
         if (!$instructor) {
             // Handle the case when the instructor_id is not for instructor role
             abort(404, 'Instructor not found');
+        }
+
+        //handle case where acount is disabled
+        if($instructor->user->active == false){
+            abort(404, 'Instructor account is disabled');
         }
 
         $year = $this->year;
@@ -48,6 +55,27 @@ class ExportReport extends Component
     public function exportAsExcel(){
         $instructor = UserRole::findOrFail($this->instructor_id);
         $name = $instructor->user->firstname . " " . $instructor->user->lastname . "'s Report - " . $this->year;
-        return Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
+        $file = Excel::download(new InstructorReportExport($this->instructor_id, $this->year), $name.'.xlsx');
+        if($file){
+            $this->dispatch('show-toast', [
+                'message' => 'Excel '. $name.'.xlsx has been saved successfully!',
+                'type' => 'success'
+            ]);
+            return $file;
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to generate Excel '. $name.'.xlsx',
+                'type' => 'error'
+            ]);
+            return;
+        }
+    }
+
+    public function handlePdfSaved($fileName){
+        $this->dispatch('show-toast', [
+            'message' => 'PDF ' . $fileName . ' has been saved successfully!',
+            'type' => 'success'
+        ]); 
+        return;
     }
 }
