@@ -48,34 +48,42 @@ class InstructorPerformance extends Model {
     // other functions
 
     public static function updateInstructorSEIAvg($instructor_id, $year) {
-        $courseCount = 0;
-        $totalSumAverageScore = 0;
-
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
             $query->where('year', $year);
         })->pluck('course_section_id');
 
-        foreach($courses as $course) {
-            $seiData = SeiData::where('course_section_id', $course)->get();
+        if (count($courses) === 0) {
+            echo "No courses found for instructor ID: $instructor_id";
+            return;
+        }
 
-            if($seiData) {
-                foreach($seiData as $data) {
-                    $questionArray = json_decode($data->questions, true);
-                    $averageScore = array_sum($questionArray) / count($questionArray);
-                    $totalSumAverageScore += $averageScore;
-                }
+        $courseCount = 0;
+        $totalSumAverageScore = 0;
 
+       foreach($courses as $course => $course_id) {
+
+            $seiData = SeiData::where('course_section_id', $course_id)->get();
+
+            if(!$seiData->isEmpty()) {
                 $courseCount++;
+            }
+            foreach($seiData as $data) {
+                $questionArray = json_decode($data->questions, true);
+                $averageScore = array_sum($questionArray) / count($questionArray);
+                $totalSumAverageScore += $averageScore;
             }
         }
 
-        $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
-        $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
-        
-        $performance->update([
-        'sei_avg' => 5,
-        ]);
+        if($courseCount != 0) {
+            $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
+            $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
+            if ($performance != null) {
+                $performance->update([
+                    'sei_avg' => $totalRoundedAvg,
+                ]);
+            }
+        }
 
         return;
     }
