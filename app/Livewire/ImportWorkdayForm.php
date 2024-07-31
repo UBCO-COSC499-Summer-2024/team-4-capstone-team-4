@@ -48,7 +48,7 @@ class ImportWorkdayForm extends Component
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
             $rules["rows.{$index}.room"] = 'required|string';
-            $rules["rows.{$index}.term"] = 'required|string';
+            $rules["rows.{$index}.time"] = 'required|string';
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
@@ -292,7 +292,18 @@ class ImportWorkdayForm extends Component
     {   
 
         $user = Auth::user();
-        $dept_id = UserRole::find($user->id)->department_id;
+        $dept_id = null;
+
+        if ($user) {
+            $userRole = UserRole::where('user_id', $user->id)->first();
+            if ($userRole) {
+                $dept_id = $userRole->department_id;
+            } else {
+                // Handle the case where there is no UserRole for the user
+                // For example, you might want to log this or set a default value
+                $dept_id = null; // or any other appropriate action
+            }
+        }
 
         $areas = Area::where('dept_id', $dept_id)->get();
 
