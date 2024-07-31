@@ -23,15 +23,24 @@ class UploadFileFormSei extends Component
         $this->finalCSVs = $finalCSVs;
 
         foreach ($finalCSVs as $index => $finalCSV) {
-            $this->rows[$index] = [
-                'cid' => $this->getCourseIdByName($finalCSV['Prefix'], $finalCSV['Number'], $finalCSV['Section'], $finalCSV['Session'], $finalCSV['Term'], $finalCSV['Year']),
-                'q1' => $finalCSV['Q1'] ?? '',
-                'q2' => $finalCSV['Q2'] ?? '',
-                'q3' => $finalCSV['Q3'] ?? '',
-                'q4' => $finalCSV['Q4'] ?? '',
-                'q5' => $finalCSV['Q5'] ?? '',
-                'q6' => $finalCSV['Q6'] ?? '',
-            ];
+            $prefix = $finalCSV['Prefix'] ?? null;
+            $number = $finalCSV['Number'] ?? null;
+            $section = $finalCSV['Section'] ?? null;
+            $session = $finalCSV['Session'] ?? null;
+            $term = $finalCSV['Term'] ?? null;
+            $year = $finalCSV['Year'] ?? null;
+
+            if (isset($prefix, $number, $section, $session, $term, $year)) {
+                $this->rows[$index] = [
+                    'cid' => $this->getCourseIdByName($prefix, $number, $section, $session, $term, $year),
+                    'q1' => $finalCSV['Q1'] ?? '',
+                    'q2' => $finalCSV['Q2'] ?? '',
+                    'q3' => $finalCSV['Q3'] ?? '',
+                    'q4' => $finalCSV['Q4'] ?? '',
+                    'q5' => $finalCSV['Q5'] ?? '',
+                    'q6' => $finalCSV['Q6'] ?? '',
+                ];
+            }
         }
 
         // dd($this->rows);    
