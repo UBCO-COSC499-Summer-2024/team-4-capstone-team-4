@@ -49,27 +49,25 @@
 ![image of test report](./testing/feature_test_july26_july31.png)
 
 ## Overview:
-We started working on the admin pages as well as setting up template for help pages. The admin dashboard is ready and we are working on implementing admin functionalities on our main pages. The performance page for individual instructors is almost complete and is just missing the profile.
+We are continuing to work on the features from last cycle. Also with the addition of the requirments list, we have haad to make some changes to current system and database. Everything is covered on the project board and is actively being worked on.
 
 ## Goals for next cycle
 
 - Continue Testing
-- Complete file upload functionality
-- Complete help pages
+- Complete Help pages
 - Complete Admin pages
-- Complete staff profile
 - Complete course details page
+- Complete TA Assign Feature
 
 ## What's left
 
 - Help pages
-- Admin pages
-- File upload functionality
+- Course Details page
+- TA Assign page
 - Testing
 - CI
 - Individual Project Report
 - Dark Mode (optional)
-
 
 ## Date Range:
 
