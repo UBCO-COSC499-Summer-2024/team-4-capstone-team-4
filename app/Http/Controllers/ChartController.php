@@ -32,7 +32,7 @@ class ChartController extends Controller {
      *
      * @return \Illuminate\View\View
      */
-    public function showChart(Request $request, $instructor_id = null, $name = null, $switch = null, $year = null) {
+    public function showChart(Request $request, $instructor_id = null, $name = null, $switch = null, $year = null, $area = null) {
         $currentMonth = date('F');
         $currentYear = date('Y');
         $userId = Auth::id();
@@ -41,6 +41,7 @@ class ChartController extends Controller {
         $switch = $switch ?: $request->query('switch');
         $name = $name ?: $request->query('name');
         $year = $year ?: $request->query('year');
+        $area = $area ?: $request->query('area');
         
         $isInstructor = false;
         $isDeptHead = false;
@@ -134,9 +135,11 @@ class ChartController extends Controller {
                 }
             }
 
-            $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear);
-            $leaderboard = $this->leaderboardPrev($dept, $currentYear, false);
-            $deptYears = $this->getPerformanceYears($dept, true);
+            if ($area)
+
+            $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear, null);
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, false, null);
+            $deptYears = $this->getPerformanceYears($dept, true, null);
 
             $chart1 = $this->deptLineChart($dataLabels, $totalHours);
             $chart2 = $this->departmentPieChart($deptAssignmentCount[1], "Total Service Roles by Area", "Service Roles", "DeptRolePieChart");
@@ -261,23 +264,36 @@ class ChartController extends Controller {
      * @param boolean $forRank Defines if the user is getting the leaderboard for ranking purposes.
      * @return array An array containing the names and scores of instructors. 
      */
-    private function leaderboardPrev($deptId, $currentYear, $forRank) {
+    private function leaderboardPrev($deptId, $currentYear, $forRank, $area) {
         $usersQuery = User::query();
         $usersQuery->distinct()
             ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
+            ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id') // Corrected the column name
+            ->leftJoin('service_roles', function ($join) {
+                $join->on('role_assignments.service_role_id', '=', 'service_roles.id')
+                    ->where('service_roles.archived', false);
+            })
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
-            ->leftJoin('course_sections', 'teaches.course_section_id', '=', 'course_sections.id')
+            ->leftJoin('course_sections', function ($join) {
+                $join->on('teaches.course_section_id', '=', 'course_sections.id')
+                    ->where('course_sections.archived', false);
+            })
             ->leftJoin('areas', 'course_sections.area_id', '=', 'areas.id')
+            ->leftJoin('extra_hours', function ($join) use ($currentYear) {
+                $join->on('user_roles.id', '=', 'extra_hours.instructor_id') 
+                    ->where('extra_hours.year', $currentYear)
+                    ->where('extra_hours.archived', false);
+            })
             ->leftJoin('instructor_performance', function ($join) use ($currentYear) {
                 $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
                     ->where('instructor_performance.year', $currentYear);
             })
-            ->where('areas.dept_id', $deptId)
-            ->where('course_sections.archived', false);
+            ->where('areas.dept_id', $deptId);
 
         if ($forRank) {
-            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score')
-                ->orderBy('instructor_performance.score', 'desc');
+            $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score', 
+                                'service_roles.name as service_role_name', 'extra_hours.hours as extra_hours')
+                    ->orderBy('instructor_performance.score', 'desc');
         }
         
         else {
@@ -345,7 +361,7 @@ class ChartController extends Controller {
         $ranking = [];
 
         foreach ($deptIds as $dept) {
-            $leaderboard = $this->leaderboardPrev($dept, $currentYear, true);
+            $leaderboard = $this->leaderboardPrev($dept, $currentYear, true, null);
             $rank = array_search($name, array_column($leaderboard, 'name')) + 1;
             $standing = ($rank / count($leaderboard)) * 100;
             $rank = $this->addOrdinalSuffix($rank);
@@ -499,6 +515,24 @@ class ChartController extends Controller {
                 ->pluck('year')
                 ->toArray();
         }
+    }
+
+    /**
+     * Retrieve the areas for a department.
+     *
+     * @param int $id The ID of the department.
+     * @return array An array of area names and ids.
+     */
+
+    private function getAreas($id) {
+        $dept_areas = Area::where('dept_id', $id);
+        $areas = [];
+
+        foreach ($dept_areas as $area) {
+            $areas[] = ['name' => $area->name, 'id' => $area->id];
+        }
+
+        return $areas;
     }
 
     /**
