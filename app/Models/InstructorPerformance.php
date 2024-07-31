@@ -99,10 +99,10 @@ class InstructorPerformance extends Model {
         })->pluck('course_section_id');
 
         foreach($courses as $course) {
-            $courseSectionData = CourseSection::select('enrolled', 'dropped', 'capacity')->where('id', $course)->first();
+            $courseSectionData = CourseSection::select('enroll_end', 'dropped', 'capacity')->where('id', $course)->first();
 
             if($courseSectionData) {
-                $enrolled = $courseSectionData->enrolled;
+                $enrolled = $courseSectionData->enroll_end;
                 $dropped = $courseSectionData->dropped;
                 $capacity = $courseSectionData->capacity;
 
