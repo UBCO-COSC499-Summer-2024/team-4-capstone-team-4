@@ -1,0 +1,108 @@
+* {
+    --primary-drag-color: rgba(51,79,121,1);
+    --danger-color: rgba(220,53,69,1);
+    --danger-color-darker: rgba(200,35,51,1);
+}
+
+.dark {
+    --primary-drag-color: rgba(51,79,121,1);
+}
+
+.dnd-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.drop-zone-form {
+    border: 2px dashed var(--primary-drag-color);
+    border-radius: 8px;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px; /* Maximum width for better responsiveness */
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.drop-zone-form:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light background on hover */
+}
+
+.drop-zone-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.drop-zone-icon {
+    font-size: 48px;
+    color: var(--primary-drag-color);
+}
+
+.drop-zone-input {
+    display: none; /* Hide the default file input */
+}
+
+.drop-zone-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-drag-color);
+}
+
+.drop-zone-content-files {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.drop-zone-content-file {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.file-name {
+    font-weight: bold;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-size {
+    color: #666;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex: 1 0 auto;
+}
+
+.remove-file {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-file:hover {
+    background-color: var(--danger-color-darker);
+}

@@ -6,10 +6,10 @@
         <div class="flex items-center">
             <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="{{ $src }}" alt="">
             <div class="ps-3 min-w-0 flex-auto">
-                <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block">
+                <a href="{{ route('performance', ['instructor_id' => $instructorId, 'name' => $fullname]) }}" class="block">
                     <p class="text-sm font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
                 </a>
-                <a href="{{ route('instructor-report', ['instructor_id' => $instructorId]) }}" class="block mt-1 truncate text-xs leading-5 text-gray-500">
+                <a href="{{ route('performance', ['instructor_id' => $instructorId, 'name' => $fullname]) }}" class="block mt-1 truncate text-xs leading-5 text-gray-500">
                     {{ $email }}
                 </a>
             </div>

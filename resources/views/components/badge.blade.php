@@ -14,62 +14,62 @@
 
         .trophy-gold {
             color: gold;
-            background-color: rgba(255, 223, 0, 0.2);
-            border: 1px solid rgba(255, 223, 0, 1);
+            background: linear-gradient(45deg, #fcf8f0, #f8e9c8);
+            border: 3px outset gold;
         }
 
         .trophy-silver {
-            color: silver;
-            background-color: rgba(192, 192, 192, 0.1);
-            border: 1px solid rgba(192, 192, 192, 1);
+            color: rgb(135, 135, 135);
+            background: linear-gradient(45deg, #e1e1e1, #f3f3f3);
+            border: 3px outset #c0c0c0;
         }
 
         .trophy-bronze {
             color: #cd7f32;
-            background-color: rgba(205, 127, 50, 0.1);
-            border: 1px solid rgba(205, 127, 50, 0.5);
+            background: linear-gradient(45deg, #fff3e8, #fedab5);
+            border: 3px outset rgba(205, 127, 50, 0.5);
         }
 
         .badge-blue {
             color: #007bff; 
             background-color: rgba(0, 123, 255, 0.1);
-            border: 1px solid rgba(0, 123, 255, 0.5);
+            border: 3px solid rgba(0, 123, 255, 0.5);
         }
 
         .badge-red {
             color: #dc3545; 
             background-color: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.5);
+            border: 3px solid rgba(220, 53, 69, 0.5);
         }
 
         .badge-green {
             color: #28a745; 
             background-color: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.5);
+            border: 3px solid rgba(40, 167, 69, 0.5);
         }
 
         .badge-magenta {
             color: #c2185b; 
             background-color: rgba(194, 24, 91, 0.1);
-            border: 1px solid rgba(194, 24, 91, 0.5);
+            border: 3px solid rgba(194, 24, 91, 0.5);
         }
 
         .badge-purple {
             color: #6f42c1; 
             background-color: rgba(111, 66, 193, 0.1);
-            border: 1px solid rgba(111, 66, 193, 0.5);
+            border: 3px solid rgba(111, 66, 193, 0.5);
         }
 
         .badge-default {
             color: #fd7e14; 
             background-color: rgba(253, 126, 20, 0.1);
-            border: 1px solid rgba(253, 126, 20, 0.5);
+            border: 3px solid rgba(253, 126, 20, 0.5);
         }
 
         .custom-icon {
             font-size: 48px !important;
-            padding-left: 7px;
             padding-top: 6px;
+            padding-left: 5px;
         }
 
         .badge-desc {

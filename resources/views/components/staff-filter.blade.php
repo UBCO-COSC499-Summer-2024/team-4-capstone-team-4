@@ -1,5 +1,5 @@
 <div class="flex items-center justify-center p-4 relative">
-    <button id="filterButton" data-dropdown-toggle="dropdown" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+    <button id="filterButton" data-dropdown-toggle="dropdown" class="inline-flex items-center text-[#3b4779] bg-white border border-[#3b4779] focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
         <span class="sr-only">Filter</span>
         Filter by Area
         <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -9,10 +9,10 @@
   
     <!-- Dropdown menu -->
     <div id="filterDropdown" class="hidden z-50 w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700 absolute top-full mt-2">
-        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+        <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
             Areas
         </h6>
-        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+        <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             @php
                 $user = Auth::user();
                 $dept_id = App\Models\UserRole::find($user->id)->department_id;

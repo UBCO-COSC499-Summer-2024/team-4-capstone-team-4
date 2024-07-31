@@ -6,3 +6,18 @@
     </nav>
     <x-header.user />
 </section>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // toggles
+        const toggles = document.querySelectorAll('[type="toggle"]');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', function () {
+                if (toggle.dataset.page === 'dark-mode') {
+                    
+                }
+            });
+        });
+    });
+</script>
+@endpush

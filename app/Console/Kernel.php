@@ -8,7 +8,12 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        \App\Console\Commands\MakeService::class,
+        \App\Console\Commands\MakeService::class,\App\Console\Commands\GenerateHelpTemplates::class,
+    ];
+    protected $middlewareGroups = [
+        'web' => [
+            \App\Http\Middleware\ApplyUserSettings::class,
+        ],
     ];
     /**
      * Define the application's command schedule.

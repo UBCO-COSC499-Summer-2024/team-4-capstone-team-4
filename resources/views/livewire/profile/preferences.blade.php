@@ -56,7 +56,7 @@
                             <button class="flex items-center">
                                 {{-- <span>{{ __('Select theme') }}</span> --}}
                                 {{-- default from db --}}
-                                <span>{{ $theme }}</span>
+                                <span>{{ Str::ucfirst($theme) }}</span>
                                 <span >
                                     <span class="flex justify-center w-5 h-5 p-0 m-0 items center material-symbols-outlined icon">expand_more</span>
                                 </span>
@@ -69,14 +69,12 @@
                                     'light' => 'Light',
                                     'dark' => 'Dark'
                                 ];
-
                                 $selectedTheme = 'light';
                             @endphp
 
                             @foreach ($themes as $value => $label)
                                 <button
-                                wire:click="setTheme('{{ $value }}')" class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem"
-                                >
+                                wire:click="setTheme('{{ $value }}')" class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
                                     {{ $label }}
                                 </button>
                             @endforeach

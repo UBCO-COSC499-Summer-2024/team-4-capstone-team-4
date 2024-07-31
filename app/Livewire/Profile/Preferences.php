@@ -4,6 +4,7 @@ namespace App\Livewire\Profile;
 
 use App\Models\AuditLog;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ class Preferences extends Component
     public $language;
     public $theme;
     public $auth_method;
-    public $custom = [];
+    public $custom;
 
     protected $rules = [
         'settings.auth_method' => 'required',
@@ -24,7 +25,7 @@ class Preferences extends Component
         'settings.timezone' => 'required',
         'settings.locale' => 'required',
         'settings.language' => 'required',
-        'settings.custom' => 'array',
+        // 'settings.custom' => 'json',
     ];
 
     public function mount()
@@ -38,11 +39,7 @@ class Preferences extends Component
         if ($this->settings['custom'] === null) {
             $this->custom = [];
         } else {
-            if (is_array($this->settings['custom'])) {
-                $this->custom = $this->settings['custom'];
-            } else {
-                $this->custom = json_decode($this->settings['custom'], true);
-            }
+            $this->custom = is_string($this->settings['custom']) ? json_decode($this->settings['custom'], true) : $this->settings['custom'];
         }
     }
 
@@ -53,7 +50,7 @@ class Preferences extends Component
 
     public function savePreferences()
     {
-        $audit_user = User::find((int) auth()->user()->id);
+        $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
             $this->settings['timezone'] = $this->timezone;
@@ -67,6 +64,14 @@ class Preferences extends Component
                 'message' => 'Preferences saved successfully!',
                 'type' => 'success'
             ]);
+            session([
+                'timezone' => $this->timezone,
+                'locale' => $this->locale,
+                'language' => $this->language,
+                'theme' => $this->theme,
+            ]);
+            App::setLocale($this->locale);
+            Config::set('app.theme', $this->theme);
             AuditLog::create([
                 'user_id' => (int) auth()->user()->id,
                 'user_alt' => $audit_user,
@@ -77,6 +82,19 @@ class Preferences extends Component
                 'new_value' => json_encode($this->settings->getAttributes()),
                 'description' => $audit_user . ' updated their preferences',
             ]);
+            echo "<script>
+                    const newSettings = {
+                        locale: '{$this->locale}',
+                        theme: '{$this->theme}'
+                    };
+                    localStorage.setItem('userSettings', JSON.stringify(newSettings));
+
+                    // Dispatch a custom event to force localStorage sync across tabs
+                    const event = new Event('storage');
+                    event.key = 'userSettings';
+                    event.newValue = JSON.stringify(newSettings);
+                    window.dispatchEvent(event);
+                </script>";
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'Error saving preferences: ' . $e->getMessage(),
@@ -89,27 +107,31 @@ class Preferences extends Component
                 'operation_type' => 'UPDATE',
                 'description' => 'Error updating preferences for ' . $audit_user . '\n'. $e->getMessage(),
             ]);
+        } finally {
+            $url = route('profile.show');
+            header("Location: $url");
+            exit();
         }
     }
 
     public function setTimezone($timezone)
     {
-        $this->settings['timezone'] = $timezone;
+        $this->timezone = $timezone;
     }
 
     public function setLocale($locale)
     {
-        $this->settings['locale'] = $locale;
+        $this->locale = $locale;
     }
 
     public function setLanguage($language)
     {
-        $this->settings['language'] = $language;
+        $this->language = $language;
     }
 
     public function setTheme($theme)
     {
-        $this->settings['theme'] = $theme;
+        $this->theme = $theme;
     }
 
     // public function setAuthMethod($auth_method)

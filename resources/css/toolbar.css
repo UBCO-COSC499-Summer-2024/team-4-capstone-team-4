@@ -1,8 +1,8 @@
 .toolbar {
-    padding: 4px;
+    padding: 6px;
     border-radius: 4px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-    margin: 0 4px;
+    margin: 0;
     /* max-height: 40px; */
     display: inline-flex;
     justify-content: space-between;
@@ -171,7 +171,7 @@ h1 button icon {
 
 .toolbar button:hover,
 h1 button:hover {
-    background: rgba(30, 75, 250, 1);
+    background: #3b4779;
     color: #fff;
 }
 
@@ -210,7 +210,7 @@ h1 button {
 
 .toolbar-clear-search:hover {
     background: none !important;
-    color: rgba(30, 75, 250, 1) !important;
+    color: #3b4779 !important;
     font-weight: 600;
 }
 

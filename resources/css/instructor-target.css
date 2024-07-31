@@ -57,6 +57,8 @@
     justify-content: center;
     align-items: center;
     font-size: 24px;
+    position: relative;
+    border: 3px outset #c0c0c0;
 }
 
 .leaderboard-title {
@@ -135,20 +137,20 @@
 
 .trophy-gold {
     color: gold;
-    background-color: rgba(255, 223, 0, 0.2);
-    border: 1px solid rgba(255, 223, 0, 1);
+    background: linear-gradient(45deg, #fcf8f0, #f8e9c8);
+    border: 3px outset gold;
 }
 
 .trophy-silver {
-    color: silver;
-    background-color: rgba(192, 192, 192, 0.1);
-    border: 1px solid rgba(192, 192, 192, 1);
+    color: rgb(135, 135, 135);
+    background: linear-gradient(45deg, #e1e1e1, #f3f3f3);
+    border: 3px outset #c0c0c0;
 }
 
 .trophy-bronze {
     color: #cd7f32;
-    background-color: rgba(205, 127, 50, 0.1);
-    border: 1px solid rgba(205, 127, 50, 0.5);
+    background: linear-gradient(45deg, #fff3e8, #fedab5);
+    border: 3px outset rgba(205, 127, 50, 0.5);
 }
 
 .badge-blue {
@@ -208,12 +210,15 @@
     font-weight: bold;
 }
 
-
-
-
-
-
-
-
-
-
+.ldb-label {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: #333;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: fit-content;
+}

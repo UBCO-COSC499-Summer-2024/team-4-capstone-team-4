@@ -14,11 +14,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
-        'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/tabs.js',
-         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js','resources/js/coursedetails-modal.js'])
+        @vite(['resources/css/var.css', 'resources/css/app.css', 'resources/css/scrollbar.css', 'resources/css/form.css', 'resources/css/tabs.css', 'resources/css/toolbar.css', 'resources/css/switch.css', 'resources/css/toastify.css','resources/css/course-details.css',
+        'resources/css/calendar.css', 'resources/css/card.css', 'resources/css/dropdown.css', 'resources/css/import.css', 'resources/css/svcr.css', 'resources/js/app.js', 'resources/js/events.js', 'resources/js/sidebar.js', 'resources/js/tabs.js',
+         'resources/js/dropdown.js', 'resources/js/staff.js', 'resources/js/sortTable.js', 'resources/js/buttons.js','resources/js/coursedetails-search.js', 'resources/js/exportReport.js','resources/js/coursedetails-modal.js', 'resources/js/darkmode.js', 'resources/css/reports.css'])
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
         <!-- JSPDF Library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -32,7 +34,7 @@
         {{-- @toastifyCss --}}
         <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased {{ config('app.theme') === 'dark' ? 'dark' : '' }}">
         <x-header />
         <main>
             @php
@@ -44,12 +46,12 @@
                     ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
                     ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
                     ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
-                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Import'],
+                    ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Course Import'],
                 ]" />
             @else
                 <x-sidebar :items="[]" />
             @endif
-            <section class="container">
+            <section class="ins-container">
                 {{ $slot }}
             </section>
         </main>
@@ -57,108 +59,23 @@
         @livewireScripts
         {{-- @toastifyJs --}}
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        {{-- <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script> --}}
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://unpkg.com/tippy.js@6"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            Livewire.on('show-toast', (data) => {
-                // it seems data is an array of objects
-                console.log(data);
-                data.forEach((toast) => {
-                    console.log(toast)
-                    Toastify({
-                        text: toast.message,
-                        duration: 5000,
-                        close: true,
-                        gravity: "bottom",
-                        position: "right",
-                        className: `toastify-${toast.type}`, // Optional styling
-                        stopOnFocus: true,
-                        destination: toast.destination ? toast.destination : null,
-                    }).showToast();
-                });
-            });
-
-            Livewire.on('confirmDelete', (data) => {
-                data.forEach((item) => {
-                    if (confirm(item.message)) {
-                        if (item.model) {
-                            switch(item.model) {
-                                case 'svcr_item_delete':
-                                    Livewire.dispatch('svcr-item-delete', { id: item.id });
-                                    break;
-                                case 'sr_manage_delete':
-                                    Livewire.dispatch('svcr-manage-delete', { id: item.id });
-                                    break;
-                                case 'staff':
-                                    Livewire.dispatch('deleteStaff', { id: item.id });
-                                    break;
-                                case 'area':
-                                    Livewire.dispatch('deleteArea', { id: item.id });
-                                    break;
-                                case 'role':
-                                    Livewire.dispatch('deleteRole', { id: item.id });
-                                    break;
-                                case 'user':
-                                    Livewire.dispatch('deleteUser', { id: item.id });
-                                    break;
-                                case 'sr_role_assignment':
-                                    Livewire.dispatch('sr-remove-instructor', { id: item.id });
-                                    break;
-                                default:
-                                    console.log('Model not found');
-                            }
-                        } else {
-                            Livewire.dispatch('deleteServiceRole', { id: item.serviceRoleId});
-                        }
-                    }
-                })
-            });
-
-            Livewire.on('confirmArchive', (data) => {
-                data.forEach((item) => {
-                    if (confirm(item.message)) {
-                        switch(item.model) {
-                            case 'svcr_item_archive':
-                                Livewire.dispatch('svcr-item-archive', { id: item.id });
-                                break;
-                            case 'svcr_item_unarchive':
-                                Livewire.dispatch('svcr-item-unarchive', { id: item.id });
-                                break;
-                            case 'sr_manage_archive':
-                                Livewire.dispatch('svcr-manage-archive', { id: item.id });
-                                break;
-                            case 'sr_manage_unarchive':
-                                Livewire.dispatch('svcr-manage-unarchive', { id: item.id });
-                                break;
-                            case 'staff':
-                                Livewire.dispatch('archiveStaff', { id: item.id });
-                                break;
-                            case 'area':
-                                Livewire.dispatch('archiveArea', { id: item.id });
-                                break;
-                            case 'role':
-                                Livewire.dispatch('archiveRole', { id: item.id });
-                                break;
-                            case 'user':
-                                Livewire.dispatch('archiveUser', { id: item.id });
-                                break;
-                            case 'sr_role_assignment':
-                                Livewire.dispatch('sr-archive-instructor', { id: item.id });
-                                break;
-                            default:
-                                console.log('Model not found');
-                        }
-                    }
-                })
-            });
-
-            Livewire.on('batchDeleteServiceRoles', (data) => {
-                data = data[0];
-                if (confirm(data.message)) {
-                    Livewire.dispatch('deleteAllSelected');
-                }
-            })
-        </script>
+        <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7"></script>
+        @php
+            $isProduction = config('app.env') === 'production';
+        @endphp
+        {{-- @if ($isProduction)
+            <script src="https://unpkg.com/@popperjs/core@2"></script>
+            <script src="https://unpkg.com/tippy.js@6"></script>
+        @else
+            <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+            <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+        @endif --}}
     </body>
 </html>

@@ -5,11 +5,13 @@
 <div class="relative">
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm rounded-md">
+            @if($hasCourses)
             <div class="mt-4 flex justify-end space-x-2">
                 <button type="submit" class="import-form-save-button">Save</button>
             </div>
+            @endif
             <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">
-                <div class="w-10/12 text-left mx-2">Course</div>
+                <div class="w-10/12 text-left mx-2">Course Section</div>
                 <div class="w-8/12 text-left mx-2">Instructor</div>
                 <div class="w-5/12"></div>
             </div>
@@ -42,11 +44,11 @@
     </div>
 
     @if(!$hasCourses) 
-        <div class="flex flex-col items-center justify-center mt-10">
-            <div class="text-center text-4xl">No courses to Assign!</div>
-            <button class="bg-white text-green-500 border border-green-500 py-2 px-4 mx-2 my-5 rounded-lg hover:bg-green-500 hover:text-white" 
+        <div class="flex flex-col items-center justify-center mt-10 text-gray-500">
+            <div class="text-center text-4xl">Create a course section to assign it!</div>
+            <button class="bg-white text-[#3B784F] border border-[#3B784F] py-2 px-4 mx-2 my-5 rounded-lg hover:bg-[#3B784F] hover:text-white" 
             onclick="location.href='{{ route('import') }}'">
-                Create more
+                Create Course Section
             </button>
         </div>
     @endif

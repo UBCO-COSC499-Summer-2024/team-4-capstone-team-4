@@ -110,6 +110,12 @@ class DatabaseSeeder extends Seeder
             'role' => 'dept_head',
         ]);
 
+        $headrole2 = UserRole::factory()->create([
+            'user_id' => $head->id,
+            'department_id' => null,
+            'role' => 'instructor',
+        ]);
+
         // Create department staff
         $staff = User::factory()->create([
             'firstname' => 'Dept',
@@ -132,7 +138,7 @@ class DatabaseSeeder extends Seeder
         ]);
         UserRole::factory()->create([
             'user_id' => $admin->id,
-            'department_id' => $dept->id,
+            'department_id' => null,
             'role' => 'admin',
         ]);
 
@@ -145,7 +151,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $instructorRole = UserRole::factory()->create([
             'user_id' => $instructor->id,
-            'department_id' => $dept->id,
+            'department_id' => null,
             'role' => 'instructor',
         ]);
         InstructorPerformance::factory()->create([
@@ -191,6 +197,7 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($instructorRole->id, date('Y'));
         }
 
         // Creating Teaching Assistants
@@ -228,7 +235,7 @@ class DatabaseSeeder extends Seeder
         $this->updatePerformance2($extrahour, $dept);
 
         // Create courses and assign instructors to them    
-        $courses = CourseSection::factory(10)->create([
+        $courses = CourseSection::factory(50)->create([
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
@@ -242,7 +249,7 @@ class DatabaseSeeder extends Seeder
 
             $role = UserRole::factory()->create([
                 'user_id' => $user->id,
-                'department_id' => $dept->id,
+                'department_id' => null,
                 'role' => 'instructor',
             ]);
 
@@ -282,6 +289,7 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($role->id, date('Y'));
         }
 
         $svcroles = ServiceRole::factory(10)->create([
@@ -322,65 +330,84 @@ class DatabaseSeeder extends Seeder
 
     private function updatePerformance($instructor_id, $role, $dept){
         $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
-        $instructorPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($instructorPerformance, $role)),
-        ]);
+        if ($instructorPerformance) {
+            $instructorPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($instructorPerformance, $role)),
+            ]);
+        }
 
         $area_id = $role->area_id;
         $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
-        $areaPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($areaPerformance, $role)),
-        ]);
+        if ($areaPerformance) {
+            $areaPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($areaPerformance, $role)),
+            ]);
+        }
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
-        $deptPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($deptPerformance, $role)),
-        ]);
+        if ($deptPerformance) {
+            $deptPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($deptPerformance, $role)),
+            ]);
+        }
     }
 
     private function updatePerformance2($hours, $dept){
         $instructor_id  = $hours->instructor_id;
         $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
-        $instructorPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($instructorPerformance, $hours))
-        ]);
+        if ($instructorPerformance) {
+            $instructorPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($instructorPerformance, $hours))
+            ]);
+        }
 
         $area_id = $hours->area_id;
         $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
-        $areaPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($areaPerformance, $hours)),
-        ]);
+        if ($areaPerformance) {
+            $areaPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($areaPerformance, $hours)),
+            ]);
+        }
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
-        $deptPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($deptPerformance, $hours)),
-        ]);
-
+        if ($deptPerformance) {
+            $deptPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($deptPerformance, $hours)),
+            ]);
+        }
     }
 
     private function updateMonthlyHours($performance, $role){
-        $existingMonthlyHours = json_decode($performance->total_hours, true);
-        $updatedMonthlyHours = [
-            'January' => $existingMonthlyHours['January'] + $role->monthly_hours['January'],
-            'February' => $existingMonthlyHours['February'] + $role->monthly_hours['February'],
-            'March' => $existingMonthlyHours['March'] + $role->monthly_hours['March'],
-            'April' => $existingMonthlyHours['April'] + $role->monthly_hours['April'],
-            'May' => $existingMonthlyHours['May'] + $role->monthly_hours['May'],
-            'June' => $existingMonthlyHours['June'] + $role->monthly_hours['June'],
-            'July' => $existingMonthlyHours['July'] + $role->monthly_hours['July'],
-            'August' => $existingMonthlyHours['August'] + $role->monthly_hours['August'],
-            'September' => $existingMonthlyHours['September'] + $role->monthly_hours['September'],
-            'October' => $existingMonthlyHours['October'] + $role->monthly_hours['October'],
-            'November' => $existingMonthlyHours['November'] + $role->monthly_hours['November'],
-            'December' => $existingMonthlyHours['December'] + $role->monthly_hours['December'],
-        ];
+        $updatedMonthlyHours = null;
+
+        if ($performance && $role) {
+            $existingMonthlyHours = json_decode($performance->total_hours, true);
+            $updatedMonthlyHours = [
+                'January' => $existingMonthlyHours['January'] + $role->monthly_hours['January'],
+                'February' => $existingMonthlyHours['February'] + $role->monthly_hours['February'],
+                'March' => $existingMonthlyHours['March'] + $role->monthly_hours['March'],
+                'April' => $existingMonthlyHours['April'] + $role->monthly_hours['April'],
+                'May' => $existingMonthlyHours['May'] + $role->monthly_hours['May'],
+                'June' => $existingMonthlyHours['June'] + $role->monthly_hours['June'],
+                'July' => $existingMonthlyHours['July'] + $role->monthly_hours['July'],
+                'August' => $existingMonthlyHours['August'] + $role->monthly_hours['August'],
+                'September' => $existingMonthlyHours['September'] + $role->monthly_hours['September'],
+                'October' => $existingMonthlyHours['October'] + $role->monthly_hours['October'],
+                'November' => $existingMonthlyHours['November'] + $role->monthly_hours['November'],
+                'December' => $existingMonthlyHours['December'] + $role->monthly_hours['December'],
+            ];
+        }
 
         return  $updatedMonthlyHours;
     }
 
     private function updateExtraHours($performance, $hours){
-        $existingHours = json_decode($performance->total_hours, true);
-        $existingHours[date('F')] += $hours->hours;
+        $existingHours = null;
+
+        if ($performance && $hours) {
+            $existingHours = json_decode($performance->total_hours, true);
+            $existingHours[date('F')] += $hours->hours;
+        }
 
         return $existingHours;
     }
