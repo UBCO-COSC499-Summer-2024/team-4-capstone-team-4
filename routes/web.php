@@ -112,6 +112,14 @@ Route::middleware([
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
 });
 
+Route::get('/api/teaching-assistants', [CourseDetailsController::class, 'getTeachingAssistants']);
+Route::get('/api/instructors', [CourseDetailsController::class, 'getInstructors']);
+Route::get('/api/courses/instructor/{id}', [CourseDetailsController::class, 'getCoursesByInstructor']);
+Route::post('/api/assign-ta', [CourseDetailsController::class, 'assignTA'])->name('assignTA');
+Route::post('/api/assignTA', [CourseDetailsController::class, 'save'])->name('assignTA');
+
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

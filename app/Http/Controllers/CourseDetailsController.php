@@ -76,10 +76,21 @@ class CourseDetailsController extends Controller
     
         $areas = Area::all(); 
     
-        $tas = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
-            ->where('user_roles.role', 'instructor')
-            ->select('users.id', 'users.firstname', 'users.lastname', 'users.email')
-            ->get();
+        $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
+            ->get()
+            ->map(function ($ta) {
+                return (object)[
+                    'name' => $ta->name,
+                    'email' => $ta->email,
+                    'rating' => $ta->rating,
+                    'taCourses' => $ta->courseSections->map(function ($course) {
+                        return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+                    })->implode(', '),
+                    'instructorName' => $ta->courseSections->map(function ($course) {
+                        return $course->teaches->instructor->user->firstname . ' ' . $course->teaches->instructor->user->lastname;
+                    })->implode(', ')
+                ];
+            });
     
         if ($request->ajax()) {
             return response()->json($courseSections);
@@ -91,61 +102,115 @@ class CourseDetailsController extends Controller
         return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas'));
     }
 
-    public function save(Request $request){
-        $ids = $request->input('ids', []);
-        $courseNames = $request->input('courseNames', []);
-        $enrolledStudents = $request->input('enrolledStudents', []);
-        $droppedStudents = $request->input('droppedStudents', []);
-        $courseCapacities = $request->input('courseCapacities', []);
-
-        Log::info('Request Data:', [
-            'ids' => $ids,
-            'courseNames' => $courseNames,
-            'enrolledStudents' => $enrolledStudents,
-            'droppedStudents' => $droppedStudents,
-            'courseCapacities' => $courseCapacities,
-        ]);
-
-        $updatedSections = [];
-
-        $arrayLengths = [count($ids), count($courseNames), count($enrolledStudents), count($droppedStudents), count($courseCapacities)];
-        if (count(array_unique($arrayLengths)) !== 1) {
-            return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
-        }
-
-        for ($i = 0; $i < count($ids); $i++) {
-            if (!isset($courseNames[$i]) || !isset($enrolledStudents[$i]) || !isset($droppedStudents[$i]) || !isset($courseCapacities[$i])) {
-                Log::error('Missing array index', [
-                    'index' => $i,
-                    'courseNames' => $courseNames,
-                    'enrolledStudents' => $enrolledStudents,
-                    'droppedStudents' => $droppedStudents,
-                    'courseCapacities' => $courseCapacities,
-                ]);
-                continue;
-            }
-
-            $courseSection = CourseSection::find($ids[$i]);
-            if ($courseSection) {
-                $nameParts = explode(' ', $courseNames[$i]);
-                $courseSection->prefix = $nameParts[0];
-                $courseSection->number = $nameParts[1];
-                $courseSection->enrolled = (int)$enrolledStudents[$i];
-                $courseSection->dropped = (int)$droppedStudents[$i];
-                $courseSection->capacity = (int)$courseCapacities[$i];
-                $courseSection->save();
-
-                $updatedSections[] = $courseSection;
-            } else {
-                Log::error('Course section not found', ['id' => $ids[$i]]);
-            }
-        }
-
-        return response()->json([
-            'message' => 'Courses updated successfully.',
-            'updatedSections' => $updatedSections
-        ]);
+    public function getTeachingAssistants()
+    {
+        $tas = TeachingAssistant::select('id', 'name')->get();
+        return response()->json($tas);
     }
+
+public function getInstructors()
+{
+    $instructors = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        ->where('user_roles.role', 'instructor')
+        ->select('users.id', 'users.firstname', 'users.lastname')
+        ->get();
+
+    return response()->json($instructors);
+}
+
+public function getCoursesByInstructor($instructorId)
+{
+    $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+        $query->where('instructor_id', $instructorId);
+    })->get(['id', 'prefix', 'number', 'section', 'year', 'session', 'term']);
+
+    return response()->json($courses);
+}
+
+public function assignTA(Request $request)
+{
+    $taId = $request->input('ta_id');
+    $instructorId = $request->input('instructor_id');
+    $courseId = $request->input('course_id');
+
+    // Logic to assign the TA to the course
+    $courseSection = CourseSection::find($courseId);
+    if ($courseSection) {
+        $courseSection->teachingAssistants()->attach($taId);
+    }
+
+    // Fetch updated TA data
+    $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
+        ->get()
+        ->map(function ($ta) {
+            return (object)[
+                'name' => $ta->name,
+                'rating' => $ta->rating,
+                'taCourses' => $ta->courseSections->map(function ($course) {
+                    return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+                })->implode(', '),
+                'instructorName' => $ta->courseSections->map(function ($course) {
+                    return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+                })->implode(', ')
+            ];
+        });
+
+    return response()->json($tas);
+}
+
+    
+
+public function save(Request $request)
+{
+    $taIds = $request->input('ta_id', []);
+    $instructorIds = $request->input('instructor_id', []);
+    $courseIds = $request->input('course_id', []);
+
+    Log::info('Request Data:', [
+        'ta_ids' => $taIds,
+        'instructor_ids' => $instructorIds,
+        'course_ids' => $courseIds,
+    ]);
+
+    $arrayLengths = [count($taIds), count($instructorIds), count($courseIds)];
+    if (count(array_unique($arrayLengths)) !== 1) {
+        return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
+    }
+
+    for ($i = 0; $i < count($taIds); $i++) {
+        if (!isset($taIds[$i]) || !isset($instructorIds[$i]) || !isset($courseIds[$i])) {
+            Log::error('Missing array index', [
+                'index' => $i,
+                'ta_ids' => $taIds,
+                'instructor_ids' => $instructorIds,
+                'course_ids' => $courseIds,
+            ]);
+            continue;
+        }
+
+        // Logic to save the TA assignment
+        $courseSection = CourseSection::find($courseIds[$i]);
+        $teachingAssistant = TeachingAssistant::find($taIds[$i]);
+        $instructor = User::find($instructorIds[$i]);
+
+        if ($courseSection && $teachingAssistant && $instructor) {
+            // Assuming you have a pivot table or a model relationship to save this data
+            // Example:
+            $courseSection->teachingAssistants()->attach($teachingAssistant->id, [
+                'instructor_id' => $instructor->id
+            ]);
+        } else {
+            Log::error('Invalid data for TA assignment', [
+                'course_section' => $courseSection,
+                'teaching_assistant' => $teachingAssistant,
+                'instructor' => $instructor,
+            ]);
+        }
+    }
+
+    return response()->json(['message' => 'TAs assigned successfully.']);
+}
+
 
     private function calculateAverageRating($questionsJson){
         $questions = json_decode($questionsJson, true);
