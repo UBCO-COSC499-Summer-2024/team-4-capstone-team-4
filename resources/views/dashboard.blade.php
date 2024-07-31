@@ -6,7 +6,7 @@
             <!-- Department View with Switch -->
             <h1 class="nos content-title">
                 @if ($area && $area['id'] != null)
-                <span class="content-title-text">{{$area['name']}} Dashboard</span>
+                <span class="content-title-text">{{$areas[0]['name']}} {{$area['name']}} Dashboard</span>
                 @else
                 <span class="content-title-text">{{$areas[0]['name']}} Department Dashboard</span>
                 @endif
@@ -50,7 +50,7 @@
             <!-- Department View -->
             <h1 class="nos content-title">
                 @if ($area && $area['id'] != null)
-                <span class="content-title-text">{{$area['name']}} Dashboard</span>
+                <span class="content-title-text">{{$areas[0]['name']}} {{$area['name']}} Dashboard</span>
                 @else
                 <span class="content-title-text">{{$areas[0]['name']}} Department Dashboard</span>
                 @endif
