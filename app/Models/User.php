@@ -145,4 +145,12 @@ class User extends Authenticatable {
     public function createSettings() {
         return $this->settings()->create();
     }
+
+    public function approvals() {
+        return $this->hasMany(Approval::class, 'user_id');
+    }
+
+    public function approvalHistories() {
+        return $this->hasMany(ApprovalHistory::class, 'user_id');
+    }
 }

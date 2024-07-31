@@ -217,6 +217,47 @@ return new class extends Migration
             $table->timestamps();
         });
 
+
+        Schema::create('approval_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('approvals_required')->default(1);
+            $table->timestamps();
+        });
+
+        Schema::create('approval_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('approvals', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('approval_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
+            $table->text('details')->nullable();
+            $table->timestamp('requested_at')->useCurrent();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('rejected_at')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('rejected_by')->nullable()->constrained('user_roles')->cascadeOnDelete();
+            $table->boolean('active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('approval_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('approval_id')->constrained('approvals')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
+            $table->text('remarks')->nullable();
+            $table->timestamp('changed_at')->useCurrent();
+            $table->timestamps();
+        });
+
         // for pgaudit
         Schema::create('super_audits', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -266,6 +307,10 @@ return new class extends Migration
         Schema::dropIfExists('settings');
         Schema::dropIfExists('auth_methods');
         Schema::dropIfExists('super_audits');
+        Schema::dropIfExists('approval_histories');
+        Schema::dropIfExists('approvals');
+        Schema::dropIfExists('approval_statuses');
+        Schema::dropIfExists('approval_types');
         Schema::dropIfExists('user_roles');
         Schema::dropIfExists('areas');
         Schema::dropIfExists('departments');
