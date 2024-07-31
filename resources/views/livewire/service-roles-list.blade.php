@@ -23,6 +23,7 @@
         'sort' => true,
         'actions' => true,
     ];
+    $user = Auth::user();
 @endphp
 <div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
     <h1 class="nos content-title">
@@ -42,45 +43,82 @@
                 <span class="material-symbols-outlined icon">more_time</span>
                 <span>Add</span>
             </button>
+            {{-- <select id="viewModeDropdown" class="toolbar-dropdown">
+                @foreach ($viewModes as $value => $name)
+                    <option value="{{ $value }}"
+                            @if ($viewMode == $value) selected @endif
+                        >{{ $name }}</option>
+                @endforeach
+            </select>
+
+            <select id="pageModeDropdown" class="toolbar-dropdown">
+                @foreach ($pageModes as $value => $name)
+                    <option value="{{ $value }}"
+                            @if ($pageMode == $value) selected @endif
+                        >{{ $name }}</option>
+                @endforeach
+            </select> --}}
+            <x-dropdown align="right" width="32">
+                <x-slot name="trigger">
+                    <button class="content-title-btn">
+                        <span class="btn-title">
+                            View Mode
+                        </span>
+                        <span class="material-symbols-outlined icon">
+                            view_module
+                        </span>
+                    </button>
+                </x-slot>
+                <x-slot name="content">
+                    @foreach ($viewModes as $value => $name)
+                        <x-dropdown-link
+                            wire:click="changeViewMode('{{ $value }}')"
+                            class="{{
+                                $viewMode == $value ? 'active' : ''
+                            }}">
+                            {{ $name }}
+                        </x-dropdown-link>
+                    @endforeach
+                </x-slot>
+            </x-dropdown>
+
+            <x-dropdown align="right" width="48" align="right">
+                <x-slot name="trigger">
+                    <button class="content-title-btn">
+                        <span class="btn-title">
+                            Page Mode
+                        </span>
+                        <span class="material-symbols-outlined icon">
+                            view_list
+                        </span>
+                    </button>
+                </x-slot>
+                <x-slot name="content">
+                    @foreach ($pageModes as $value => $name)
+                        <x-dropdown-link
+                            wire:click="changePageMode('{{ $value }}')"
+                            class="{{
+                                $pageMode == $value ? 'active' : ''
+                            }}">
+                            {{ $name }}
+                        </x-dropdown-link>
+                    @endforeach
+                </x-slot>
+            </x-dropdown>
         </div>
     </h1>
 
     <div class="svcr-container">
-        <section class="toolbar" id="svcr-toolbar" wire:key='toolbar'>
-            <section class="toolbar-section">
-                <select id="viewModeDropdown" class="toolbar-dropdown">
-                    @foreach ($viewModes as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($viewMode == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select>
-
-                <select id="pageModeDropdown" class="toolbar-dropdown">
-                    @foreach ($pageModes as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($pageMode == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select>
-            </section>
-            <section class="toolbar-section">
-                <div class="toolbar-search-container">
+        <section class="grid w-full grid-cols-1 toolbar md:grid-cols-2 grid-sticky" id="svcr-toolbar" wire:key='toolbar'>
+            <section class="w-full toolbar-section left">
+                <div class="flex-grow toolbar-search-container">
                     <span class="material-symbols-outlined icon toolbar-search-icon">search</span>
-                    <input type="text" id="toolbar-search" placeholder="Search..." class="toolbar-search" wire:model="searchQuery" />
+                    <input type="text" id="toolbar-search" placeholder="Search..." class="flex-grow toolbar-search" wire:model="searchQuery" />
                     <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
                 </div>
-
-                {{-- <select id="searchCategoryDropdown" class="toolbar-dropdown">
-                    @foreach ($searchCategories as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($searchCategory == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select> --}}
             </section>
 
-            <section class="toolbar-section">
+            <section class="toolbar-section right">
                 <select id="filterDropdown" class="toolbar-dropdown">
                     @foreach ($filterBy as $value => $name)
                         <option value="{{ $value }}"
@@ -94,34 +132,6 @@
                     <input type="text" id="toolbar-filter-value" class="toolbar-search" placeholder="Filter Value" wire:model="filterValue" />
                     <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
                 </div>
-            </section>
-
-            {{-- <section class="toolbar-section">
-                <select id="sortDropdown" class="toolbar-dropdown">
-                    @foreach ($sortBy as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($selectedSort == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select>
-
-                <select id="sortOrderDropdown" class="toolbar-dropdown">
-                    @foreach ($sortOrder as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($selectedSortOrder == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select>
-            </section> --}}
-
-            <section class="toolbar-section">
-                {{-- <select id="groupDropdown" class="toolbar-dropdown">
-                    @foreach ($groupBy as $value => $name)
-                        <option value="{{ $value }}"
-                                @if ($selectedGroup == $value) selected @endif
-                            >{{ $name }}</option>
-                    @endforeach
-                </select> --}}
 
                 <select id="actionsDropdown" class="toolbar-dropdown">
                     <option>Bulk Actions</option>
@@ -138,11 +148,20 @@
         </section>
 
         <section class="svcr-items">
-            <table id="svcr-table" x-show="$wire.viewMode === 'table'">
+            <table id="svcr-table" x-show="$wire.viewMode === 'table'" class="svcrprose-table:">
                 <thead>
                     <tr class="svcr-list-header">
                         <th class="svcr-list-header-item">
                             <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
+                        </th>
+                        {{-- id --}}
+                        <th class="svcr-list-header-item w-fit">
+                            <div class="flex">
+                                Id
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="id" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
                         </th>
                         <th class="svcr-list-header-item">
                             <div class="flex">
@@ -184,11 +203,13 @@
                                 </div>
                             </div>
                         </th>
-                        <th class="svcr-list-header-item">
-                            <div class="flex">
-                                Manage
-                            </div>
-                        </th>
+                        @if(!$user->hasOnlyRole('instructor'))
+                            <th class="svcr-list-header-item">
+                                <div class="flex">
+                                    Manage
+                                </div>
+                            </th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -232,57 +253,36 @@
     document.addEventListener('DOMContentLoaded', function() {
         initializeToolbar();
         initElementActions();
-        initResize();
     });
     document.addEventListener('livewire:init', function() {
         initializeToolbar();
         initElementActions();
-        initResize();
     });
     document.addEventListener('livewire:load', function() {
         initializeToolbar();
         initElementActions();
-        initResize();
     });
     document.addEventListener('livewire:update', function() {
         initializeToolbar();
         initElementActions();
-        initResize();
     });
-    function initResize() {
-        function calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin) {
-            const itemsPerRow = Math.floor(screenWidth / (elementWidth + 2 * elementMargin));
-            const rowsPerScreen = Math.floor(screenHeight / (elementHeight + 2 * elementMargin));
-            const itemsPerScreen = itemsPerRow * rowsPerScreen;
 
-            return itemsPerScreen;
+    window.addEventListener('resize', function() {
+        if (window.innerWidth < 768) {
+            viewModeDropdown.value = 'card';
+            @this.set('viewMode', 'card');
+        } else {
+            viewModeDropdown.value = 'table';
+            @this.set('viewMode', 'table');
         }
+    });
 
-        // on screen <resize></resize>
-        window.addEventListener('resize', function() {
-            if (window.innerWidth < 768) {
-                viewModeDropdown.value = 'card';
-                @this.set('viewMode', 'card');
-            } else {
-                viewModeDropdown.value = 'table';
-                @this.set('viewMode', 'table');
-            }
+    function calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin) {
+        const itemsPerRow = Math.floor(screenWidth / (elementWidth + 2 * elementMargin));
+        const rowsPerScreen = Math.floor(screenHeight / (elementHeight + 2 * elementMargin));
+        const itemsPerScreen = itemsPerRow * rowsPerScreen;
 
-            // Example usage:
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight;
-            const element = document.querySelector('.svcr-table');
-            const elementWidth = element ? element.offsetWidth : 0;
-            const elementHeight = element ? element.offsetHeight : 0;
-            const elementMargin = element ? parseInt(window.getComputedStyle(element).marginRight) + parseInt(window.getComputedStyle(element).marginLeft) : 0;
-
-            const itemsPerScreen = calculatePaginationItems(screenWidth, screenHeight, elementWidth, elementHeight, elementMargin);
-            console.log(`Number of pagination items that fit on the screen: ${itemsPerScreen}`);
-            // @this.set('pageSize', itemsPerScreen);
-            @this.dispatch('changePageSize', {
-                'size': itemsPerScreen
-            });
-        });
+        return itemsPerScreen;
     }
 
     function initializeToolbar() {
@@ -356,23 +356,6 @@
                 updateSelectAll();
             });
         });
-
-        if (viewModeDropdown) {
-            viewModeDropdown.addEventListener('change', function(e) {
-                console.log(`viewMode: ${this.value}${e.target}`);
-                @this.set('viewMode', this.value);
-            });
-        }
-
-        if (pageModeDropdown) {
-            pageModeDropdown.addEventListener('change', function(e) {
-                console.log(e, this.value);
-                // @this.set('pageMode', this.value);
-                @this.dispatch('changePageMode', {
-                    'mode': this.value
-                })
-            });
-        }
 
         if (search) {
             search.addEventListener('input', function(e) {
