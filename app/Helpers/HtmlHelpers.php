@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+
 class HtmlHelpers
 {
     protected static $placeholders = [
@@ -18,8 +19,8 @@ class HtmlHelpers
             'sample' => '/media/video/sample.mp4',
         ],
         'staff-dropdown-img' => [
-            'staff-dropdown' => '/media/images/staff-dropdown.png'
-        ]
+            'staff-dropdown' => '/media/images/staff-dropdown.png',
+        ],
     ];
 
     protected static $patterns = [
@@ -37,8 +38,7 @@ class HtmlHelpers
         ],
     ];
 
-    public static function convertSubtopicsToHtml($subtopics, $prefix = 'subtopic')
-    {
+    public static function convertSubtopicsToHtml($subtopics, $prefix = 'subtopic') {
         $html = '';
 
         foreach ($subtopics as $index => $subtopic) {
@@ -49,16 +49,7 @@ class HtmlHelpers
             if (!empty($subtopic['subsections'])) {
                 $html .= '<div class="space-y-4">';
                 foreach ($subtopic['subsections'] as $subIndex => $subsection) {
-                    $subsectionId = $subtopicId . '-subsection-' . $subIndex;
-                    $html .= '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
-                    $html .= '<h4 class="mb-1 text-lg font-medium">' . self::replacePlaceholders(htmlspecialchars($subsection['heading'] ?? 'No Heading')) . '</h4>';
-                    $html .= '<p class="mb-2">' . self::replacePlaceholders(htmlspecialchars($subsection['content'] ?? 'No Content')) . '</p>';
-                    $html .= '<div class="flex flex-wrap gap-2">';
-                    foreach ($subsection['tags'] as $tag) {
-                        $html .= '<span class="px-2 py-1 text-sm text-blue-800 bg-blue-100 rounded-full">' . self::replacePlaceholders(htmlspecialchars($tag)) . '</span>';
-                    }
-                    $html .= '</div>'; // Close tags div
-                    $html .= '</div>'; // Close subsection div
+                    $html .= self::convertSubsectionsToHtml($subsection, $subtopicId . '-subsection-' . $subIndex);
                 }
                 $html .= '</div>'; // Close subsections div
             }
@@ -75,8 +66,30 @@ class HtmlHelpers
         return $html;
     }
 
-    public static function convertToJsonToHtml(array $data, string $mainTitle = '')
-    {
+    private static function convertSubsectionsToHtml($subsection, $prefix) {
+        $subsectionId = $prefix;
+        $html = '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
+        $html .= '<h4 class="mb-1 text-lg font-medium">' . self::replacePlaceholders(htmlspecialchars($subsection['heading'] ?? 'No Heading')) . '</h4>';
+        $html .= '<p class="mb-2">' . self::replacePlaceholders(htmlspecialchars($subsection['content'] ?? 'No Content')) . '</p>';
+        $html .= '<div class="flex flex-wrap gap-2">';
+        foreach ($subsection['tags'] as $tag) {
+            $html .= '<span class="px-2 py-1 text-sm text-blue-800 bg-blue-100 rounded-full">' . self::replacePlaceholders(htmlspecialchars($tag)) . '</span>';
+        }
+        $html .= '</div>'; // Close tags div
+
+        if (!empty($subsection['subsections'])) {
+            $html .= '<div class="space-y-4">';
+            foreach ($subsection['subsections'] as $subIndex => $nestedSubsection) {
+                $html .= self::convertSubsectionsToHtml($nestedSubsection, $subsectionId . '-subsection-' . $subIndex);
+            }
+            $html .= '</div>'; // Close nested subsections div
+        }
+
+        $html .= '</div>'; // Close subsection div
+        return $html;
+    }
+
+    public static function convertToJsonToHtml(array $data, string $mainTitle = '') {
         $html = '';
 
         foreach ($data as $index => $topic) {
@@ -88,18 +101,7 @@ class HtmlHelpers
             if (!empty($topic['subsections'])) {
                 $html .= '<div class="space-y-4">';
                 foreach ($topic['subsections'] as $subIndex => $subsection) {
-                    $subsectionId = $subtopicId . '-subsection-' . $subIndex;
-                    $html .= '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
-                    $html .= '<h3 class="mb-2 text-lg font-medium">' . self::replacePlaceholders(htmlspecialchars($subsection['heading'] ?? 'No Heading')) . '</h3>';
-                    $html .= '<p class="mb-2">' . self::replacePlaceholders(htmlspecialchars($subsection['content'] ?? 'No Content')) . '</p>';
-                    $html .= '<div class="flex flex-wrap gap-2">';
-                    if (!empty($subsection['tags'])) {
-                        foreach ($subsection['tags'] as $tag) {
-                            $html .= '<span class="px-2 py-1 text-sm text-blue-800 bg-blue-100 rounded-full">' . self::replacePlaceholders(htmlspecialchars($tag)) . '</span>';
-                        }
-                    }
-                    $html .= '</div>'; // Close tags div
-                    $html .= '</div>'; // Close subsection div
+                    $html .= self::convertSubsectionsToHtml($subsection, $subtopicId . '-subsection-' . $subIndex);
                 }
                 $html .= '</div>'; // Close subsections div
             }
@@ -118,31 +120,30 @@ class HtmlHelpers
         return $html;
     }
 
-    private static function replacePlaceholders($text)
-    {
+    private static function replacePlaceholders($text) {
         $patterns = [
             '/{{\s*img:\s*["\']?(.*?)["\']?\s*}}/' => function ($matches) {
-                return '<img src="' . htmlspecialchars($matches[1]) . '" alt="Image">';
+                $path = self::getNestedValueFromPath(self::$placeholders, 'img.' . $matches[1]);
+                return $path ? '<img src="' . htmlspecialchars($path) . '" alt="Image">' : '';
             },
             '/{{\s*img\.([a-zA-Z0-9_.]+)\s*}}/' => function ($matches) {
-                $propertyPath = $matches[1];
-                $path = self::getNestedValue(self::$placeholders['img'], $propertyPath);
+                $path = self::getNestedValueFromPath(self::$placeholders, 'img.' . $matches[1]);
                 return $path ? '<img src="' . htmlspecialchars($path) . '" alt="Image">' : '';
             },
             '/{{\s*audio:\s*["\']?(.*?)["\']?\s*}}/' => function ($matches) {
-                return '<audio controls><source src="' . htmlspecialchars($matches[1]) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                $path = self::getNestedValueFromPath(self::$placeholders, 'audio.' . $matches[1]);
+                return $path ? '<audio controls><source src="' . htmlspecialchars($path) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>' : '';
             },
             '/{{\s*audio\.([a-zA-Z0-9_.]+)\s*}}/' => function ($matches) {
-                $propertyPath = $matches[1];
-                $path = self::getNestedValue(self::$placeholders['audio'], $propertyPath);
+                $path = self::getNestedValueFromPath(self::$placeholders, 'audio.' . $matches[1]);
                 return $path ? '<audio controls><source src="' . htmlspecialchars($path) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>' : '';
             },
             '/{{\s*video:\s*["\']?(.*?)["\']?\s*}}/' => function ($matches) {
-                return '<video controls><source src="' . htmlspecialchars($matches[1]) . '" type="video/mp4">Your browser does not support the video element.</video>';
+                $path = self::getNestedValueFromPath(self::$placeholders, 'video.' . $matches[1]);
+                return $path ? '<video controls><source src="' . htmlspecialchars($path) . '" type="video/mp4">Your browser does not support the video element.</video>' : '';
             },
             '/{{\s*video\.([a-zA-Z0-9_.]+)\s*}}/' => function ($matches) {
-                $propertyPath = $matches[1];
-                $path = self::getNestedValue(self::$placeholders['video'], $propertyPath);
+                $path = self::getNestedValueFromPath(self::$placeholders, 'video.' . $matches[1]);
                 return $path ? '<video controls><source src="' . htmlspecialchars($path) . '" type="video/mp4">Your browser does not support the video element.</video>' : '';
             },
         ];
@@ -154,16 +155,15 @@ class HtmlHelpers
         return $text;
     }
 
-    private static function getNestedValue($array, $path)
-    {
+    private static function getNestedValueFromPath($array, $path) {
         $keys = explode('.', $path);
         foreach ($keys as $key) {
-            if (is_array($array) && array_key_exists($key, $array)) {
+            if (isset($array[$key])) {
                 $array = $array[$key];
             } else {
                 return null;
             }
         }
-        return $array;
+        return is_string($array) ? $array : null;
     }
 }
