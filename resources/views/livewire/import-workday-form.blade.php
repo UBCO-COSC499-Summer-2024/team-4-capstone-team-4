@@ -77,7 +77,7 @@
                     @error('rows.'.$index.'.enroll_start')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" step="1" min="1" max="999" placeholder="#" wire:model="rows.{{$index}}.enroll_end" class="import-form-input" required>
+                    <input type="number" step="1" min="0" max="999" placeholder="#" wire:model="rows.{{$index}}.enroll_end" class="import-form-input" required>
                     @error('rows.'.$index.'.enroll_end')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">

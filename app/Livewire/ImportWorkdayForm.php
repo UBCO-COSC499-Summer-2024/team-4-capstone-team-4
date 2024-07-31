@@ -50,7 +50,7 @@ class ImportWorkdayForm extends Component
             $rules["rows.{$index}.room"] = 'required|string';
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
-            $rules["rows.{$index}.enroll_end"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
+            $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
         }
 

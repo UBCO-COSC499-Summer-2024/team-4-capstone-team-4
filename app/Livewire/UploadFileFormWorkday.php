@@ -58,7 +58,7 @@ class UploadFileFormWorkday extends Component
             $rules["rows.{$index}.room"] = 'required|string';
             $rules["rows.{$index}.time"] = 'required|string';
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
-            $rules["rows.{$index}.enroll_end"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
+            $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
         }
 
@@ -89,7 +89,7 @@ class UploadFileFormWorkday extends Component
                 $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.enroll_start.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 1-999';
+                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 0-999';
                 $messages["rows.{$index}.capacity.min"] = 'Must be greater 0';
     
                 $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
