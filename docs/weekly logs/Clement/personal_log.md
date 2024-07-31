@@ -1,3 +1,107 @@
+## Cycle: July 26th - July 30th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_26_2024-07_30_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Complete testing for the Service Role Page
+  * #2: Continue debugging and refining new features
+  * #3: Implement additional features as per project requirements
+  * #4: Perform peer testing and gather feedback
+  * #5: Apply any necessary fixes and improvements based on peer testing feedback
+  * #6: Finalize troubleshooting and fully implement the PDF export feature by resolving the Browsershot errors 
+  * #7: Implement Audit Log feature - Sort, Search and Filter
+  * #8:  Implement Audit Log View - Table Design and Data Display
+  * #9: Implement Service Role Import Functionality 
+  * #10: Design and Implement Requests Page Structure 
+  * #11: Implement Approval Functionality and Unit Tests
+  * #12: Create Unit Tests, Seeders, and Factories for the Service Requests/Approvals Feature
+  * #13: Design the Front End for Service Requests/Approvals
+  * #14: Refine and Optimize Global Header Code and CSS Styling 
+
+### Progress Update (since 07/25/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Complete testing for the Service Role Page</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Continue debugging and refining new features</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Implement additional features as per project requirements</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Perform peer testing and gather feedback</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Apply any necessary fixes and improvements based on peer testing feedback</td>
+        <td>To Do</td>
+    </tr>
+    <tr>
+        <td>Finalize troubleshooting and fully implement the PDF export feature by resolving the Browsershot errors</td>
+        <td>Inprogress</td>
+    </tr>
+    <tr>
+        <td>Implement Audit Log feature - Sort, Search and Filter</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Audit Log View - Table Design and Data Display</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Service Role Import Functionality</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Design and Implement Requests Page Structure </td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Implement Approval Functionality and Unit Tests </td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Create Unit Tests, Seeders, and Factories for the Service Requests/Approvals Feature</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Design the Front End for Service Requests/Approvals</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Refine and Optimize Global Header Code and CSS Styling </td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle was highly productive with a balance of finalizing features and laying the groundwork for new ones. Resolving the Browsershot errors to deliver the PDF export feature is still underway. The Audit Log and Service Role Import functionalities were also completed this cycle.
+
+Significant progress was made on the Service Requests/Approvals feature, including foundational elements like unit tests, seeders, factories, and initial front-end design. Additionally, code optimization and refinement were done on global elements like the header and CSS styling. 
+
+Testing for the Service Role Page and gathering feedback through peer reviews remain ongoing tasks.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+* Complete testing for the Service Role Page
+* Conduct peer testing and gather feedback
+* Continue working on getting the PDF exporting working
+* Apply any necessary fixes and improvements based on feedback
+* **Continue front-end development for the Service Requests/Approvals feature**
+* **Progress development and testing of the approval functionality**
+* Begin implementation of remaining high-priority project requirements 
+
+---
+
 ## Cycle: July 24th - July 25th
 
 ### Timesheet
