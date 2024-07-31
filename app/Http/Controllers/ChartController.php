@@ -135,7 +135,11 @@ class ChartController extends Controller {
                 }
             }
 
-            if ($area)
+            if ($area) {
+                $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear, $area);
+                $leaderboard = $this->leaderboardPrev($dept, $currentYear, false, $area);
+                $deptYears = $this->getPerformanceYears($dept, true, $area);
+            }
 
             $deptAssignmentCount = $this->countDeptAssignments($areas, $currentYear, null);
             $leaderboard = $this->leaderboardPrev($dept, $currentYear, false, null);
@@ -261,6 +265,7 @@ class ChartController extends Controller {
      *
      * @param int $deptId The ID of the department for which to retrieve performances.
      * @param int $currentYear The current year.
+     * @param array $area An array containing the name and id of a selected area.
      * @param boolean $forRank Defines if the user is getting the leaderboard for ranking purposes.
      * @return array An array containing the names and scores of instructors. 
      */
@@ -289,6 +294,10 @@ class ChartController extends Controller {
                     ->where('instructor_performance.year', $currentYear);
             })
             ->where('areas.dept_id', $deptId);
+
+        if ($area) {
+            $usersQuery->where('areas.id', $area['id']);
+        }
 
         if ($forRank) {
             $usersQuery->select('users.firstname', 'users.lastname', 'instructor_performance.score', 
@@ -379,10 +388,54 @@ class ChartController extends Controller {
      *
      * @param array $areas An array of areas within the department.
      * @param int $currentYear The current year.
+     * @param array $area An array containing the name and id of a selected area.
      * @return array An array containing counts of service roles, extra hours, and course sections for the department and each area.
      */
-    private function countDeptAssignments($areas, $currentYear) {
+    private function countDeptAssignments($areas, $currentYear, $area) {
         $deptAssignmentCount = [];
+
+        if ($area) {
+            $serviceRoles = [];
+            $roleHoursTotal = 0;
+            $areaRoles = ServiceRole::where('area_id', $area['id'])->where('year', $currentYear)->where('archived', false)->get();
+
+            foreach ($areaRoles as $role) {
+                if ($role) {
+                    $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[date('F')]];
+                    $roleHoursTotal += $role->monthly_hours[date('F')];
+                }
+            }
+
+            $deptAssignmentCount[] = $roleHoursTotal;
+            $deptAssignmentCount[] = $serviceRoles;
+
+            $extraHours = [];
+            $extraHoursTotal = 0;
+            $allExtraHours = ExtraHour::where('area_id', $area['id'])->where('year', $currentYear)->where('month', date('n'))->where('archived', false)->get();
+
+            foreach ($allExtraHours as $extraHrs) {
+                if ($extraHrs) {
+                    $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
+                    $extraHoursTotal += $extraHrs->hours;
+                }
+            }
+
+            $deptAssignmentCount[] = $extraHoursTotal;
+            $deptAssignmentCount[] = $extraHours;
+
+            $courseSections = [];
+            $courses = CourseSection::where('area_id', $area['id'])->where('year', $currentYear)->where('archived', false)->get()->take(5);
+
+            foreach ($courses as $course) {
+                if ($course) {
+                    $courseSections[] = $course->prefix . " " . $course->number;
+                }
+            }
+
+            $deptAssignmentCount[] = $courseSections;
+
+            return $deptAssignmentCount;
+        }
 
         $deptRolesTotal = 0;
         $areaRolesTotal = [];
@@ -477,7 +530,7 @@ class ChartController extends Controller {
         $assignmentCount[] = $extraHours;
 
         $courseSections = [];
-        $teaches = Teach::where('instructor_id', $instructorRoleId)->get();
+        $teaches = Teach::where('instructor_id', $instructorRoleId)->get()->take(5);
 
         foreach ($teaches as $teaching) {
             $course = CourseSection::where('id', $teaching->course_section_id)->where('year', $currentYear)->where('archived', false)->first();
