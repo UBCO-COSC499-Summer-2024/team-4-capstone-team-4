@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 
 class StaffList extends Component
 {
@@ -23,7 +24,7 @@ class StaffList extends Component
     public $sortField = 'firstname'; // default 
     public $sortDirection = 'asc'; //default
     public $selectedAreas = [];
-    public $changedInput = [];
+    public $changedInput = []; //for target hours
     public $hours;
     public $staffCheckboxes = [];
     public $selectAll = false;
@@ -59,10 +60,107 @@ class StaffList extends Component
     public $prevDeptStaffs = [];
     public $prevAdmins = [];
 
-    protected $rules = [
+    public $firstnames = [];
+    public $lastnames = [];
+    public $emails = [];
+    public $changedFirstnames = [];
+    public $changedLastnames = [];
+    public $changedEmails = [];
+
+    /* protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
-    ];
+    ]; */
+
+    public function rules(){
+        $rules = [];
+        foreach($this->firstnames as $userid => $name){
+            $rules["firstnames.{$userid}"] = 'required|string|max:255';
+            $rules["lastnames.{$userid}"] = 'required|string|max:255';
+            $rules["emails.{$userid}"] = ['required', 'email:rfc,strict', 'max:255', Rule::unique('users', 'email')->ignore($userid)];
+        }
+
+        return $rules;
+    }
+
+    public function rules2($userid){
+        $rules = [];
+
+        $rules["firstnames.{$userid}"] = 'required|string|max:255';
+        $rules["lastnames.{$userid}"] = 'required|string|max:255';
+        $rules["emails.{$userid}"] = ['required', 'email:rfc,strict', 'max:255', Rule::unique('users', 'email')->ignore($userid)];
+
+        return $rules;
+    }
+
+    public function messages(){
+        $messages = [];
+        foreach ($this->firstnames as $userid => $name) {
+            $messages["firstnames.{$userid}.required"] = "The first name is required.";
+            $messages["firstnames.{$userid}.string"] = "The first name must be a string.";
+            $messages["firstnames.{$userid}.max"] = "The first name may not be greater than 255 characters.";
+    
+            $messages["lastnames.{$userid}.required"] = "The last name is required.";
+            $messages["lastnames.{$userid}.string"] = "The last name must be a string.";
+            $messages["lastnames.{$userid}.max"] = "The last name may not be greater than 255 characters.";
+    
+            $messages["emails.{$userid}.required"] = "The email is required.";
+            $messages["emails.{$userid}.email"] = "The email must be a valid email address.";
+            $messages["emails.{$userid}.max"] = "The email may not be greater than 255 characters.";
+            $messages["emails.{$userid}.unique"] = "The email is already taken.";
+        }
+    
+        return $messages;
+    }
+
+    public function messages2($userid){
+        $messages = [];
+        
+        $messages["firstnames.{$userid}.required"] = "The first name is required.";
+        $messages["firstnames.{$userid}.string"] = "The first name must be a string.";
+        $messages["firstnames.{$userid}.max"] = "The first name may not be greater than 255 characters.";
+
+        $messages["lastnames.{$userid}.required"] = "The last name is required.";
+        $messages["lastnames.{$userid}.string"] = "The last name must be a string.";
+        $messages["lastnames.{$userid}.max"] = "The last name may not be greater than 255 characters.";
+
+        $messages["emails.{$userid}.required"] = "The email is required.";
+        $messages["emails.{$userid}.email"] = "The email must be a valid email address.";
+        $messages["emails.{$userid}.max"] = "The email may not be greater than 255 characters.";
+        $messages["emails.{$userid}.unique"] = "The email is already taken.";
+    
+        return $messages;
+    }
+
+
+    /* public function validateSingleUser($userid) {
+        // Fetch the data for the specific user
+        $data = [
+            'firstnames.'.$userid => $this->firstnames[$userid],
+            'lastnames.'.$userid => $this->lastnames[$userid],
+            'emails.'.$userid => $this->emails[$userid],
+        ];
+        //dd($data);
+        //dd($this->firstnames[$userid], $this->lastnames[$userid], $this->emails[$userid]);
+
+        // Define the validation rules
+        $rules = [
+            'firstnames.'.$userid => 'required|string|max:255',
+            'lastnames.'.$userid => 'required|string|max:255',
+            'emails.'.$userid => [
+                'required',
+                'string',
+                'email:rfc,strict',
+                'max:255',
+                Rule::unique('users')->ignore($userid)
+            ]
+        ];
+
+        //Peform validation
+        Validator::make($data, $rules)->validate();
+    
+    } */
+
 
     //For setting values on intial render
     public function mount(){
@@ -76,6 +174,13 @@ class StaffList extends Component
         $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
         $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
         $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
+
+        $users = User::all();
+        foreach($users as $user){
+            $this->firstnames[$user->id] = $user->firstname;
+            $this->lastnames[$user->id] = $user->lastname;
+            $this->emails[$user->id] = $user->email;
+        }
 
     }
 
@@ -291,10 +396,17 @@ class StaffList extends Component
      */
     public function submit(){
         // Validate the form input
-        $this->validate();
-
         $hours = $this->hours;
         $staff_checkboxes = $this->staffCheckboxes;
+        $input = [
+            'hours' => $hours,
+            'staffCheckboxes' => $staff_checkboxes,
+        ];
+        Validator::make($input,[
+            'hours' => 'required|numeric|min:0|max:2000',
+            'staffCheckboxes' => 'required|array|min:1',
+        ])->validate();
+
 
         //Update target hours for each selected instructor
         foreach($staff_checkboxes as $email){
@@ -500,6 +612,27 @@ class StaffList extends Component
         $removedUsers = array_diff($this->prevEnabledUsers, $this->enabledUsers);
         $enabledCount = 0;
         $disabledCount = 0;
+
+        //Update name and email if changed
+        /* $userids= array_unique(array_merge($this->changedFirstnames, $this->changedLastnames, $this->changedEmails));
+        foreach($userids as $userid){
+            $this->validate($this->rulesForUserData($userid));
+        } */
+        $this->validate();
+
+        foreach($this->changedFirstnames as $userid => $firstname){
+            $user = User::find($userid);
+            $user->update(['firstname' => $firstname]);
+        }
+        foreach($this->changedLastnames as $userid => $lastname){
+            $user = User::find($userid);
+            $user->update(['lastname' => $lastname]);
+        }
+        foreach($this->changedEmails as $userid => $email){
+            $user = User::find($userid);
+            $user->update(['email' => $email]);
+        }
+
         // Update status
         foreach($addedUsers as $userid){
             $user = User::find($userid);
@@ -591,15 +724,72 @@ class StaffList extends Component
     /**
      * Edit a single staff member's details.
      *
-     * This method updates the active status and roles of a specific user.
+     * This method updates the name, email, active status and roles of a specific user.
      *
      * @param int $userid The ID of the user to edit.
      */
     public function editStaff($userid) {
+    
+        // Gather data to be validated
+        $data = [
+            "firstnames.{$userid}" => $this->firstnames[$userid],
+            "lastnames.{$userid}" => $this->lastnames[$userid],
+            "emails.{$userid}" => $this->emails[$userid],
+        ];
+        //dd($data);
+
+        $user_rules = [
+            "firstnames.{$userid}" => ['required','string','max:255'],
+            "lastnames.{$userid}" => ['required','string','max:255'],
+            "emails.{$userid}"  => ['required','string', 'email','max:255', Rule::unique('users', 'email')->ignore($userid)],
+        ];
+
+        $messages2 = [
+            "firstnames.{$userid}.required" => "The first name is required.",
+            "firstnames.{$userid}.string" => "The first name must be a string.",
+            "firstnames.{$userid}.max" => "The first name may not be greater than 255 characters.",
+    
+            "lastnames.{$userid}.required" => "The last name is required.",
+            "lastnames.{$userid}.string" => "The last name must be a string.",
+            "lastnames.{$userid}.max" => "The last name may not be greater than 255 characters.",
+    
+            "emails.{$userid}.required" => "The email is required.",
+            "emails.{$userid}.email" => "The email must be a valid email address.",
+            "emails.{$userid}.max" => "The email may not be greater than 255 characters.",
+            "emails.{$userid}.unique" => "The email is already taken.",
+        ];
+    
+        // Perform validation
+        $validator = Validator::make($data, $user_rules, $messages2);
+
+        if ($validator->fails()) {
+            dd($validator->errors());
+            //dd('hello');
+            //$this->addError("firstnames.{$userid}", "error");
+            //return;
+        }
+
         // Retreive user and their roles
         $user = User::find($userid);
-        $fullname = $user->firstname . ' ' . $user->lastname;
         $user_roles = UserRole::where('user_id', $user->id)->pluck('role');
+
+        // Update name and email if changed
+        //$this->validate($this->rulesForUserData($userid));
+        
+
+        if (isset($this->changedFirstnames[$userid])) {
+            $firstname = $this->changedFirstnames[$userid];
+            $user->update(['firstname'=> $firstname]);
+        }        
+        if (isset($this->changedLastnames[$userid])) {
+            $lastname = $this->changedLastnames[$userid];
+            $user->update(['lastname' => $lastname]);
+        }        
+        if (isset($this->changedEmails[$userid])) {
+            $email = $this->changedEmails[$userid];
+            $user->update(['email' => $email]);
+        }
+        
         
         // Update enabled status
         $user->update(['active' => in_array($userid, $this->enabledUsers)]);
@@ -619,6 +809,7 @@ class StaffList extends Component
     
         // Reset and show a success toast
         $this->editUserId = null;
+        $fullname = $user->firstname . ' ' . $user->lastname;
         $this->dispatch('show-toast', [
             'message' => 'User ' . $fullname . ' updated!',
             'type' => 'success'
@@ -658,7 +849,7 @@ class StaffList extends Component
         $this->editUserId = null;
     }
 
-    //single delete
+    // Shows delete confirmation modal and sets the action to be done if confirmed
     public function setDelete($userid){
         $this->confirmDelete = true;
         $this->confirmAction = 'deleteStaff('. $userid . ')';
@@ -773,5 +964,17 @@ class StaffList extends Component
             ]);
         }
         
+    }
+
+    public function updateFirstname($userid, $firstname){
+        $this->changedFirstnames[$userid] = $firstname;
+    }
+
+    public function updateLastname($userid, $lastname){
+        $this->changedLastnames[$userid] = $lastname;
+    }
+
+    public function updateEmail($userid, $email){
+        $this->changedEmails[$userid] = $email;
     }
 }

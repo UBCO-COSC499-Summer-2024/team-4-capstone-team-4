@@ -96,6 +96,8 @@
                             @endphp
                             <x-staff-table-row
                             fullname="{{ $user->firstname }} {{ $user->lastname }}"
+                            firstname="{{ $user->firstname }}"
+                            lastname="{{ $user->lastname }}"
                             email="{{ $user->email }}"
                             dept="{{ $user->department_name == '' ? '-' : $user->department_name }}"
                             :roles="$roles"
