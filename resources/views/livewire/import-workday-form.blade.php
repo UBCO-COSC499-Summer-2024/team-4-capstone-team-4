@@ -3,6 +3,8 @@
                     onclick="location.href='{{ route('upload-file') }}'">
                     Upload File
     </button> --}}
+    <div class="italic">*Enrolled (Start) = # of Enrolled at the start of term</div>
+    <div class="italic">*Enrolled (End) = # of Enrolled at the end of term</div>
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="py-3 flex justify-between bg-[#3b4779] text-white">
@@ -97,7 +99,10 @@
         <div class="mt-4 flex justify-end space-x-2">
          
             <input type="number" step="1" min="0" max="999" placeholder="#" wire:model='rowAmount' class="text-black">
-            <button type="button" wire:click='addManyRows' class="import-form-add-button">Add Many</button>
+            <button type="button" wire:click='addManyRows' class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>   
+                Add Many Rows
+            </button>
             {{-- <button type="button" wire:click='deleteManyRows' class="rounded-lg import-form-delete-button">Delete Many</button> --}}
         
             <button type="button" wire:click="addRow" class="import-form-add-button">
@@ -136,10 +141,17 @@
         </div> --}}
 
         @endif
-    {{-- @endif --}}
-    {{-- @foreach ($finalCSVs as $finalCSV)
-        <div>hello</div>
-    @endforeach --}}
+
+        @if($showConfirmModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            {{-- <x-import-modal moreText="Insert More"/> --}}
+            <div>
+                <button wire:click="userConfirmDuplicate">Confirm Duplicate?</button>
+                <button wire:click="closeConfirmModal">Close</button>
+            </div>
+        </div>
+        @endif
+
 </div>
 
 

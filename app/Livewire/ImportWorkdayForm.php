@@ -12,14 +12,18 @@ use Livewire\Attributes\Rule;
 use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\Framework\Constraint\IsTrue;
 
 class ImportWorkdayForm extends Component
 {
     #[Session]
     public $rows = [];
+    public $duplicateCourses = [];
 
     public $showModal = false;
+    public $showConfirmModal = false;
     public $courseExists = false;
+    public $userConfirms = false;
     public $rowAmount = 0;
 
     public function mount() {
@@ -142,7 +146,7 @@ class ImportWorkdayForm extends Component
             ]);
 
             if (in_array($combination, $uniqueCombinations)) {
-                $this->addError("rows.{$index}.duplicate", 'This combination of fields as already been entered. Please create a different course');
+                $this->addError("rows.{$index}.duplicate", 'This combination of fields has already been entered. Please create a different course');
                 return false;
             }
 
@@ -150,6 +154,15 @@ class ImportWorkdayForm extends Component
         }
 
         return true;
+    }
+
+    public function userConfirmDuplicate() {
+        $this->userConfirms = true;
+        $this->showConfirmModal = false;
+    }
+
+    public function closeConfirmModal() {
+        $this->showConfirmModal = false;
     }
 
     public function handleSubmit() {
@@ -192,7 +205,7 @@ class ImportWorkdayForm extends Component
                 ->first();
 
             if ($course != null) {
-                $this->addError("rows.{$index}.exists", 'This course has already been created. You can view it and edit it on the Courses page');
+                $this->addError("rows.{$index}.exists", 'Warning: This course has already been created. Saving will overwrite the existing data. Delete or update the row to prevent this action');
                 $this->courseExists = true;
             } else {
                
@@ -206,9 +219,21 @@ class ImportWorkdayForm extends Component
             
         }
 
-        if(!$this->courseExists) {
+        if($this->courseExists && !$this->userConfirms) {
+            $this->showConfirmModal = true;
+        }
+
+        if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
-                CourseSection::create([
+                CourseSection::updateOrCreate([
+                    'number' => $row['number'],
+                    'section' => $row['section'],
+                    'area_id' => $row['area_id'],
+                    'year' => $row['year'],
+                    'session' => $row['session'],
+                    'term' => $row['term'],     
+                ], 
+                [
                     'prefix' => $prefix,
                     'number' => $row['number'],
                     'section' => $row['section'], 
@@ -222,7 +247,7 @@ class ImportWorkdayForm extends Component
                     'enroll_end' => $row['enroll_end'], 
                     'dropped' => $dropped,
                     'capacity' => $row['capacity'], 
-                    'archived' => false,   
+                    'archived' => false,  
                 ]);
 
                 $this->rows = [
