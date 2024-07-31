@@ -54,7 +54,7 @@ class InstructorPerformance extends Model {
         })->pluck('course_section_id');
 
         if (count($courses) === 0) {
-            echo "No courses found for instructor ID: $instructor_id";
+            echo "No courses found for instructor ID: $instructor_id \n";
             return;
         }
 
@@ -138,11 +138,64 @@ class InstructorPerformance extends Model {
         return;
     }
 
+    /**
+     * Calculates the performance score for an instructor for a given year.
+     *
+     * This function calculates the total performance score based on the instructor's
+     * assigned roles and course sections taught during the specified year, and updates
+     * the score value accordingly in the database. The score
+     * considers the annual service role hours, the number of course sections, and 
+     * the difference between the enrolled and dropped averages.
+     *
+     * @param int $instructor_id The ID of the instructor.
+     * @param int $currentYear The year for which the score is calculated.
+     * @return void
+     */
+    public static function updateScore($instructor_id, $currentYear) {
+        $performance = self::where('instructor_id', $instructor_id)->where('year', $currentYear)->first();
+
+        if ($performance) {
+            $roleHours = array_sum(array_values(json_decode($performance->total_hours, true)));
+
+            $courseSections = 0;
+            $doubleCourses = 0;
+            $teaches = Teach::where('instructor_id', $instructor_id)->get();
+
+            foreach ($teaches as $teaching) {
+                $course = CourseSection::where('id', $teaching->course_section_id)
+                    ->where('year', $currentYear)
+                    ->where('archived', false)
+                    ->first();
+
+                if ($course) {
+                    if ($course->term === '1-2') {
+                        $doubleCourses++;
+                    } else {
+                        $courseSections++;
+                    }
+                }
+            }
+
+            if ($performance->enrolled_avg != 0) {
+                $enrol_efficiency = ($performance->enrolled_avg - $performance->dropped_avg) / $performance->enrolled_avg;
+            }
+            else {
+                $enrol_efficiency = 0;
+            }
+            
+            $weighted_courses = (215 * $courseSections) + (530 * $doubleCourses);
+            
+            $performance->update([
+                'score' => round((($roleHours + ($weighted_courses * $enrol_efficiency * $performance->sei_avg)) / 8760) * 1000),
+            ]);
+        }
+        return;
+    }
+
     public static function updatePerformance($instructor_id, $year) {
         self::updateInstructorSEIAvg($instructor_id, $year);
         self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
-
-
+        self::updateScore($instructor_id, $year);
     }
 
     public function updateTotalHours($hours = [])
