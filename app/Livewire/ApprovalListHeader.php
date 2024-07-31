@@ -10,6 +10,8 @@ class ApprovalListHeader extends Component
     public $type = 'all';
     public $selectedSort = 'id';
     public $selectedSortOrder = 'desc';
+    public $selectAll = false;
+    public $selectedItems = [];
 
     public $listeners = [
         'refresh-list' => 'refresh',

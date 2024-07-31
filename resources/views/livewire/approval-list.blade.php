@@ -1,16 +1,20 @@
 <div class="sreq-list" x-data="{
-    search: '',
+    search: @entangle('query').defer,
+    filters: @entangle('filters').defer,
     selectedFilter: @entangle('selectedFilter').defer,
-    sortColumn(column) {
-        if (column === this.selectedSort) {
-            this.selectedSortOrder = this.selectedSortOrder === 'asc' ? 'desc' : 'asc';
-        } else {
-            this.selectedSort = column;
-            this.selectedSortOrder = 'desc';
+    clearFilters() {
+        this.selectedFilter = {};
+        for (const category in this.filters) {
+            this.selectedFilter[category] = [];
         }
-        @this.call('sort-selected', this.selectedSort, this.selectedSortOrder);
-    }
+        this.search = '';
+        @this.call('clear-filters');
+    },
+    aptype: @entangle('type').defer,
 }">
+    <h1 class="my-2 font-bold context-title" style="font-size: revert">
+        <span class="content-title-text">{{ ucfirst($type) }} Approvals</span>
+    </h1>
     <section class="toolbar" id="toolbar">
         <section class="left toolbar-section">
             <div class="flex-grow toolbar-search-container">
@@ -42,7 +46,7 @@
                 <div class="filter-items-holder glass">
                     <button class="filter-clear-btn"
                         x-on:click="@this.dispatch('clear-filters')"
-                        x-show="Object.keys(selectedFilter).some(category => selectedFilter[category].length > 0)"
+                        x-show="selectedFilter?.length > 0 && Object.keys(selectedFilter).some(category => selectedFilter[category].length > 0)"
                         x-cloak>
                         <span class="btn-title">
                             Clear Filters
@@ -58,6 +62,9 @@
                             </span>
                             <div class="filter-items">
                                 @foreach ($filter as $item)
+                                    @php
+                                        dd($filters[$index], $item);
+                                    @endphp
                                     <div class="filter-item nos"
                                         x-data="{
                                             category: '{{ $category }}',
@@ -73,11 +80,17 @@
                                                 @this.dispatch('change-filter', [this.category, this.item, this.isChecked]);
                                             }
                                         }"
-                                        x-on:click="toggleCheck()">
-                                        <span x-text="item"></span>
-                                        <span x-show="isChecked" class="material-symbols-outlined icon filter-item-check">
-                                            check
-                                        </span>
+                                        x-on:click.stop="toggleCheck()"
+                                        >
+                                        <input type="checkbox"
+                                            id="{{ $category }}-{{ $item }}"
+                                            class="rounded-sm"
+                                            x-on:click.stop
+                                            x-on:change.stop
+                                            x-bind:checked="isChecked"
+                                            disabled
+                                        />
+                                        <span class="filter-item-text" x-text="'{{$item}}'"></span>
                                     </div>
                                 @endforeach
                             </div>
@@ -88,24 +101,26 @@
         </section>
     </section>
     <section class="w-full">
-        <livewire:approval-list-header :headers="$headers" :type="$type" />
-        <tbody>
-            @forelse ($approvals as $approval)
-                <livewire:templates.approval-list-item :approval="$approval" :key="$type.$approval->id" :type="$type" />
-            @empty
-                <tr class="svcr-list-item">
-                    <td class="svcr-list-item-cell" colspan="12">No approvals found.</td>
+        <table class="svcr-table">
+            <livewire:approval-list-header :headers="$headers" :type="$type" :key="'approval_list_header_{{ $type }}'" />
+            <tbody>
+                @forelse ($approvals as $approval)
+                    <livewire:templates.approval-list-item :approval="$approval" :type="$type" :key="'approval_list_item_{{ $approval->id }}'" />
+                @empty
+                    <tr class="svcr-list-item">
+                        <td class="svcr-list-item-cell" colspan="100%">No approvals found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+            <tfoot>
+                <tr class="svcr-table-footer">
+                    <td class="svcr-table-footer-item" colspan="100%">
+                        @if (count($approvals) > 0)
+                            {{ $approvals->links() }}
+                        @endif
+                    </td>
                 </tr>
-            @endforelse
-        </tbody>
-        <tfoot>
-            <tr class="svcr-table-footer">
-                <td class="svcr-table-footer-item" colspan="100%">
-                    @if ($approvals->count() > 0)
-                        {{ $approvals->links() }}
-                    @endif
-                </td>
-            </tr>
-        </tfoot>
+            </tfoot>
+        </table>
     </section>
 </div>

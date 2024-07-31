@@ -368,7 +368,7 @@
                                 <select class="form-select" id="instructor_id" wire:model="instructor_id" name="instructor_id">
                                     <option value="">Select Instructor</option>
                                     @foreach($allInstructors as $instructor)
-                                        <option value="{{ $instructor->user->id }}">{{ $instructor->user->getName() }}</option>
+                                        <option value="{{ $instructor->id }}">{{ $instructor->user->getName() }}</option>
                                     @endforeach
                                 </select>
                                 @error('instructor_id') <span class="error">{{ $message }}</span> @enderror

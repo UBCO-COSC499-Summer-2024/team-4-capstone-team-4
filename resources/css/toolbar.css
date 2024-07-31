@@ -52,13 +52,18 @@
 }
 
 .toolbar-section {
-    display: inline-flex;
+    display: flex;
     gap: 6px;
     width: fit-content;
     position: relative;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     /* padding: 0 6px; */
+}
+
+.toolbar-section.right {
+    justify-content: flex-end;
 }
 
 .toolbar-section-title {

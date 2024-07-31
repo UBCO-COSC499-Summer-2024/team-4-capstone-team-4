@@ -80,8 +80,7 @@ class ManageServiceRole extends Component
         'area_id' => 'required|exists:areas,id',
     ];
 
-    public function mount($serviceRoleId, $links = [])
-    {
+    public function mount($serviceRoleId, $links = []) {
         $this->fetchServiceRole($serviceRoleId);
         $this->links = $links;
         $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id;
@@ -121,8 +120,7 @@ class ManageServiceRole extends Component
         $this->extra_hours = $this->serviceRole->extraHours;
     }
 
-    public function fixMonthNames()
-    {
+    public function fixMonthNames() {
         // Decode the JSON string to an associative array
         // $monthlyHours = $this->serviceRole->monthly_hours;
         // if $this->serviceRole->monthly_hours is type of string then decode else leave as is
@@ -181,8 +179,7 @@ class ManageServiceRole extends Component
         $this->monthly_hours = $fullMonthNames;
     }
 
-    public function toggleEditMode($mode = null)
-    {
+    public function toggleEditMode($mode = null) {
         $this->isEditing = $mode ?? !$this->isEditing;
     }
 
@@ -234,8 +231,7 @@ class ManageServiceRole extends Component
         $this->getServiceRoleByYear($this->year);
     }
 
-    public function editServiceRole()
-    {
+    public function editServiceRole() {
         $this->toggleEditMode(true);
     }
 
@@ -342,19 +338,15 @@ class ManageServiceRole extends Component
         }
     }
 
-    public function showInstructorModal($instructorId = null)
-    {
-        $this->instructor_id = $instructorId;
+    public function showInstructorModal($instructorId = null) {
         $this->showInstructorModal = true;
     }
 
-    public function showExtraHourModal()
-    {
+    public function showExtraHourModal() {
         $this->showExtraHourModal = true;
     }
 
-    public function addExtraHour($extraHour)
-    {
+    public function addExtraHour($extraHour) {
         try {
             $extraHour = ExtraHour::create($extraHour);
             $this->dispatch('show-toast', [
@@ -375,8 +367,7 @@ class ManageServiceRole extends Component
         $this->showExtraHourModal = false;
     }
 
-    public function render()
-    {
+    public function render() {
         $this->fetchServiceRole($this->serviceRoleId);
         return view('livewire.manage-service-role', [
             'serviceRole' => $this->serviceRole,
@@ -398,7 +389,8 @@ class ManageServiceRole extends Component
             ];
             $this->validate($role_assignment_rules);
             // check for duplicates
-            $roleAssignment = RoleAssignment::where('instructor_id', $this->instructor_id)->where('service_role_id', $this->role)->first();
+            $instructorUserRole = UserRole::find('user_id', $this->instructor_id)->first();
+            $roleAssignment = RoleAssignment::where('instructor_id', $instructorUserRole->id)->where('service_role_id', $this->role)->first();
             if ($roleAssignment) {
                 $this->dispatch('show-toast', [
                     'message' => 'Instructor already assigned to this role.',
@@ -408,7 +400,7 @@ class ManageServiceRole extends Component
             }
             $roleAssignment = new RoleAssignment();
             $roleAssignment->assigner_id = $this->assigner_id;
-            $roleAssignment->instructor_id = $this->instructor_id;
+            $roleAssignment->instructor_id = $instructorUserRole->id;
             $roleAssignment->service_role_id = (int) $this->role;
             $roleAssignment->save();
             $this->instructors = $this->serviceRole->instructors;
@@ -417,7 +409,7 @@ class ManageServiceRole extends Component
                 'type' => 'success'
             ]);
             $this->showInstructorModal = false;
-            $instructorPerformance = InstructorPerformance::where('instructor_id', $this->instructor_id)->where('year', $this->year)->first();
+            $instructorPerformance = InstructorPerformance::where('instructor_id', $instructorUserRole->id)->where('year', $this->year)->first();
             if ($instructorPerformance) {
                 $instructorPerformance->updateTotalHours($this->monthly_hours);
                 $this->dispatch('show-toast', [
@@ -472,7 +464,8 @@ class ManageServiceRole extends Component
     public function removeInstructor($id) {
         $audit_user = User::find((int) auth()->id())->getName();
         try {
-            $roleAssignment = RoleAssignment::find($id)->where('service_role_id', $this->role)->first();
+            $instructorRole = UserRole::find('user_id', $id)->first();
+            $roleAssignment = RoleAssignment::find($instructorRole->id)->where('service_role_id', $this->role)->first();
             $roleAssignment->delete();
             $this->instructors = $this->serviceRole->instructors;
             $this->dispatch('show-toast', [

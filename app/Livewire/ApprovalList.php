@@ -13,7 +13,9 @@ class ApprovalList extends Component
     public $approvals = [];
     public $type = 'all';
     public $headers = [];
-    public $ignore_headers = [];
+    public $ignore_headers = [
+        'created_at', 'updated_at', 'status_id', 'approved_at', 'rejected_at', 'approved_by', 'rejected_by'
+    ];
     public $selectedFilter = [];
     public $selectedSort;
     public $filters = [];
@@ -27,12 +29,8 @@ class ApprovalList extends Component
     public $listeners = [
         'refresh-list' => 'refresh',
         'sort-selected' => 'sortSelected',
-        'filter-selected' => 'filterSelected',
-        'filter-cleared' => 'filterCleared',
-        'filter-cleared-all' => 'filterClearedAll',
-        'filter-applied' => 'filterApplied',
-        'filter-applied-all' => 'filterAppliedAll',
-        'filter-removed' => 'filterRemoved'
+        'change-filters' => 'updateFiltres',
+        'clear-filters' => 'clearFilters',
     ];
 
     public function mount($type) {
@@ -52,52 +50,111 @@ class ApprovalList extends Component
     }
 
     public function getHeaders() {
-        $approvalsNotEmpty = ($this->approvals !== [] || !empty($this->approvals) || count($this->approvals) > 0) && !is_null($this->approvals);
-        if ($approvalsNotEmpty) {
-            $this->headers = collect($this->approvals->first())->keys()->map(function ($header) {
-                return [
-                    'name' => $header,
-                    'sort' => null,
-                    'filter' => null,
-                    'type' => 'text',
-                    'label' => $header === 'id' ? 'ID' : str_replace(' ', '', ucwords(str_replace('_', ' ', $header)))
-                ];
-            })->reject(function ($header) {
-                return in_array($header['name'], $this->ignore_headers);
-            });
-        } else {
-            $this->headers = Approval::getColumns();
-            $this->headers = collect($this->headers)->map(function ($header) {
-                return [
-                    'name' => $header,
-                    'sort' => null,
-                    'filter' => null,
-                    'type' => 'text',
-                    'label' => $header === 'id' ? 'ID' : str_replace(' ', '', ucwords(str_replace('_', ' ', $header)))
-                ];
-            })->reject(function ($header) {
-                return in_array($header['name'], $this->ignore_headers);
-            });
-        }
+        $this->headers = Approval::getColumns();
+        $this->headers = collect($this->headers)->map(function ($header) {
+            return [
+                'name' => $header,
+                'sort' => null,
+                'filter' => null,
+                'type' => 'text',
+                'label' => $header === 'id' ? 'ID' : ucwords(str_replace('_', ' ', $header))
+            ];
+        })->reject(function ($header) {
+            if ($this->type === 'all') {
+                // remove status_id from the ignore_headers
+                $this->ignore_headers = array_diff($this->ignore_headers, ['status_id', 'approved_at', 'rejected_at', 'approved_by', 'rejected_by']);
+            }
+            return in_array($header['name'], $this->ignore_headers);
+        });
+    }
+
+    public function getProperColumn($column) {
+        return $column === 'ID' ? 'id' : strtolower(str_replace(' ', '_', $column));
     }
 
     public function getFilters() {
         $this->filters = $this->headers->map(function ($header) {
-            return [
-                'name' => $header['name'],
-                'type' => $header['type'],
-                'label' => $header['label'],
-                'value' => null
-            ];
+            $col = $this->getProperColumn($header['label']);
+            return [$header['label'] => Approval::select($col)->distinct()->get()->pluck($col)];
         })
         // ignore the timestamps
         ->reject(function ($filter) {
-            return in_array($filter['name'], ['created_at', 'updated_at']);
+            $key = key($filter);
+            return in_array($this->getProperColumn($key), ['created_at', 'updated_at', 'id', 'status_id']);
         });
+        // convert to key = value
+        $this->filters = $this->filters->mapWithKeys(function ($filter) {
+            return $filter;
+        });
+        foreach ($this->filters as $filter) {
+            $this->selectedFilter[key($filter)] = [];
+        }
     }
 
-    public function render()
-    {
-        return view('livewire.approval-list');
+    public function sortSelected($column, $order) {
+        $this->selectedSort = $column;
+        $this->selectedSortOrder = $order;
+    }
+
+    public function updateSearch($value) {
+        $this->query = $value;
+    }
+
+    public function refresh() {
+        $this->getApprovals();
+    }
+
+    public function clearFilters() {
+        $this->selectedFilter = [];
+        $this->getFilters();
+        foreach ($this->filters as $filter) {
+            $this->selectedFilter[$filter['label']] = [];
+        }
+    }
+
+    public function updateFiltres($category, $item, $isChecked) {
+        if ($this->selectedFilter[$category] === null) {
+            $this->selectedFilter[$category] = [];
+        }
+        if ($isChecked) {
+            $this->selectedFilter[$category][] = $item;
+        } else {
+            $key = array_search($item, $this->selectedFilter[$category]);
+            if ($key !== false) {
+                unset($this->selectedFilter[$category][$key]);
+            }
+        }
+        $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
+    }
+
+    public function render() {
+        $query = Approval::query();
+
+
+        // 'user_id', 'approval_type_id', 'status_id', 'approved_at', 'rejected_at', 'details', 'approved_by', 'active', 'rejected_by'
+        // with user, approval type, status, approved by -> user, rejected by -> user
+        if ($this->query) {
+            $query->where(function ($q) {
+                $q->where('user', 'like', '%'.$this->query.'%')
+                    ->orWhere('approval_type', 'like', '%'.$this->query.'%')
+                    ->orWhere('approved_by', 'like', '%'.$this->query.'%')
+                    ->orWhere('rejected_by', 'like', '%'.$this->query.'%')
+                    ->orWhere('details', 'like', '%'.$this->query.'%');
+            });
+        }
+
+        foreach($this->selectedFilter as $category => $items) {
+            if (!empty($items)) {
+                $query->whereIn($this->getProperColumn($category), $items);
+            }
+        }
+
+        $query->orderBy($this->selectedSort, $this->selectedSortOrder);
+
+        $approvals = $query->paginate($this->perPage);
+
+        return view('livewire.approval-list', [
+            'approvals' => $approvals
+        ]);
     }
 }

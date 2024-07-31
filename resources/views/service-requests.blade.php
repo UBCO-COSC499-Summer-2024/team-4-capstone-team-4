@@ -4,6 +4,6 @@
             <span class="content-title-text">{{ __('Service Requests') }}</span>
         </h1>
 
-        <livewire:approvals />
+        <livewire:approval-tabs />
     </div>
 </x-app-layout>
