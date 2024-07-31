@@ -45,7 +45,8 @@
 }
 
 /* all checkboxes in svcr-table */
-#svcr-table input[type="checkbox"] {
+#svcr-table input[type="checkbox"],
+.svcr-table input[type="checkbox"] {
     /* display: none; */
     /* background: #fafafa; */
     border-radius: 50px;
@@ -87,7 +88,8 @@
 }
 
 .svcr-list-header-item:first-child,
-.svcr-list-item td:first-child {
+.svcr-list-item td:first-child,
+.svcr-list-item [data-column="id"] {
     text-align: center;
 }
 
@@ -102,6 +104,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.svcr-table tfoot td {
+    padding: 8px 0;
 }
 
 /* smaller screens description should be 200px */
@@ -147,6 +153,7 @@ nav[aria-label="Pagination Navigation"] {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     display: table-header-group;
+    vertical-align: middle;
 }
 
 /* .svcr-list-header {
