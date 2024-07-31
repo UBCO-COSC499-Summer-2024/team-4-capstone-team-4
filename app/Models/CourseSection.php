@@ -75,4 +75,16 @@ class CourseSection extends Model {
         return $this->hasOne(Teach::class, 'course_section_id');
     }
 
+    public static function calculateDropped($enroll_start, $enroll_end) {
+        $dropped = 0;
+
+        if($enroll_start > $enroll_end) {
+            $dropped = $enroll_start - $enroll_end;
+        } else {
+            $dropped = 0;
+        }
+
+        return $dropped;
+    }
+
 }

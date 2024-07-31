@@ -182,7 +182,6 @@ class ImportWorkdayForm extends Component
         }
     
         foreach ($this->rows as $index => $row) {
-            $dropped = 0;
             $prefix = '';
             // dd($row);
             
@@ -216,14 +215,7 @@ class ImportWorkdayForm extends Component
                 $this->courseExists = true;
                 $this->duplicateCourses[] = $course;
             }
-
-            
-            if($row['enroll_start'] > $row['enroll_end']) {
-                $dropped = $row['enroll_start'] - $row['enroll_end'];
-            } else {
-                $dropped = 0;
-            }
-            
+        
         }
 
         if($this->courseExists && !$this->userConfirms) {
@@ -234,6 +226,7 @@ class ImportWorkdayForm extends Component
 
         if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
+                $dropped = 0;
                 $prefix = '';
             
                 switch ($row['area_id']) {
@@ -250,6 +243,8 @@ class ImportWorkdayForm extends Component
                         $prefix = 'STAT';
                         break;
                 }
+                
+                $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
 
                 CourseSection::updateOrCreate([
                     'number' => $row['number'],

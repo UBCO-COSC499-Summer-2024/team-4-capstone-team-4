@@ -166,9 +166,7 @@ class UploadFileFormWorkday extends Component
         }
 
         foreach($this->rows as $index => $row) {
-            $dropped = 0;
             $prefix = '';
-            // dd($row);
             
             switch ($row['area_id']) {
                 case 1:
@@ -200,12 +198,6 @@ class UploadFileFormWorkday extends Component
                 $this->courseExists = true;
                 $this->duplicateCourses[] = $course;
             }
-
-            if($row['enroll_start'] > $row['enroll_end']) {
-                $dropped = $row['enroll_start'] - $row['enroll_end'];
-            } else {
-                $dropped = 0;
-            }
         }
 
         if($this->courseExists && !$this->userConfirms) {
@@ -216,6 +208,7 @@ class UploadFileFormWorkday extends Component
 
         if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
+                $dropped = 0;
                 $prefix = '';
 
                 switch ($row['area_id']) {
@@ -232,6 +225,8 @@ class UploadFileFormWorkday extends Component
                         $prefix = 'STAT';
                         break;
                 }
+
+                $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
 
                 CourseSection::updateOrCreate([
                     'number' => $row['number'],
