@@ -207,9 +207,9 @@ class ImportWorkdayForm extends Component
             if ($course != null) {
                 $this->addError("rows.{$index}.exists", 'Warning: This course has already been created. Saving will overwrite the existing data. Delete or update the row to prevent this action');
                 $this->courseExists = true;
-            } else {
-               
+                $this->duplicateCourses[] = $course;
             }
+
             
             if($row['enroll_start'] > $row['enroll_end']) {
                 $dropped = $row['enroll_start'] - $row['enroll_end'];
@@ -257,6 +257,9 @@ class ImportWorkdayForm extends Component
                 Session::forget('workdayFormData');
 
                 $this->showModal = true;
+                $this->userConfirms = false;
+                $this->duplicateCourses = [];
+                $this->resetValidation();
 
                 session()->flash('success', $this->showModal);
             }
@@ -283,6 +286,7 @@ class ImportWorkdayForm extends Component
 
         return view('livewire.import-workday-form', [
             'areas' => $areas,
+            'duplicate_courses' => $this->duplicateCourses,
         ]);
 
         

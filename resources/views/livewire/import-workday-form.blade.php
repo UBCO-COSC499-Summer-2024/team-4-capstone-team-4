@@ -144,11 +144,7 @@
 
         @if($showConfirmModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            {{-- <x-import-modal moreText="Insert More"/> --}}
-            <div>
-                <button wire:click="userConfirmDuplicate">Confirm Duplicate?</button>
-                <button wire:click="closeConfirmModal">Close</button>
-            </div>
+            <x-import-confirm-modal :duplicateCourses="$duplicateCourses" />
         </div>
         @endif
 
