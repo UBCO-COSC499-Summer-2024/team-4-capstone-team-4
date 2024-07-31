@@ -211,4 +211,9 @@ class Approval extends Model
     public function approvedCount() {
         return $this->histories->where('status_id', ApprovalStatus::where('name', 'approved')->first()->id)->orWhere('status_id', ApprovalStatus::where('name', 'intermediate')->first()->id)->count() ?? 0;
     }
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
 }
