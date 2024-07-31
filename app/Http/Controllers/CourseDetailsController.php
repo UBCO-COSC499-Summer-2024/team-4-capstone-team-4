@@ -24,7 +24,7 @@ class CourseDetailsController extends Controller
         $userRole = $user->roles->first()->role ?? 'guest';
         $query = $request->input('search', '');
         $areaId = $request->input('area_id', null);
-        $activeTab = $request->input('activeTab', 'coursesTable'); // Get the active tab from the request
+        $activeTab = $request->input('activeTab'); // Get the active tab from the request
     
         Log::info('User Role:', ['role' => $userRole]);
         Log::info('Search Query:', ['query' => $query]);

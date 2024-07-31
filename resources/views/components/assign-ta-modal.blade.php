@@ -70,3 +70,114 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const assignTAButton = document.getElementById('assignTAButton');
+        const taSelect = document.getElementById('taSelect');
+        const instructorSelect = document.getElementById('instructorSelect');
+        const courseSelect = document.getElementById('courseSelect');
+        const assignModal = document.getElementById('assignModal');
+        const closeModalButtons = document.querySelectorAll('.close-assign-modal-button, .close-assign-modal');
+        const assignTAForm = document.getElementById('assignTAForm');
+        const addMoreButton = document.getElementById('addMoreButton');
+        const taAssignContainer = document.getElementById('taAssignContainer');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const okButton = document.getElementById('okButton');
+        const assignMoreButton = document.getElementById('assignMoreButton');
+
+        function openAssignModal() {
+            assignModal.classList.remove('hidden');
+            fetchAndPopulateSelect('/api/teaching-assistants', taSelect, item => item.name);
+            fetchAndPopulateSelect('/api/instructors', instructorSelect, item => `${item.firstname} ${item.lastname}`);
+        }
+
+        function closeAssignModal() {
+            assignModal.classList.add('hidden');
+        }
+
+        function fetchAndPopulateSelect(url, selectElement, formatDataFn = null) {
+            fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('Expected an array but did not receive one');
+                }
+                selectElement.innerHTML = '<option value="">Select an option</option>';
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = formatDataFn ? formatDataFn(item) : item.name;
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function fetchCoursesByInstructor(instructorId) {
+            const url = `/api/courses/instructor/${instructorId}`;
+            fetchAndPopulateSelect(url, courseSelect, item => `${item.prefix} ${item.number} ${item.section} - ${item.year}${item.session} ${item.term}`);
+        }
+
+        if (assignTAButton) {
+            assignTAButton.addEventListener('click', openAssignModal);
+        }
+
+        if (closeModalButtons.length > 0) {
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', closeAssignModal);
+            });
+        }
+
+        if (instructorSelect) {
+            instructorSelect.addEventListener('change', function() {
+                const instructorId = this.value;
+                if (instructorId) {
+                    fetchCoursesByInstructor(instructorId);
+                } else {
+                    courseSelect.innerHTML = '<option value="">Select a Course</option>';
+                }
+            });
+        }
+
+        addMoreButton.addEventListener('click', function() {
+            const newBlock = document.querySelector('.taAssignBlock').cloneNode(true);
+            taAssignContainer.appendChild(newBlock);
+        });
+
+        assignTAForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(assignTAForm);
+            fetch(assignTAForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                closeAssignModal();
+                confirmationModal.classList.remove('hidden');
+            })
+            .catch(error => console.error('Error submitting form:', error));
+        });
+
+        okButton.addEventListener('click', function() {
+            location.reload();
+        });
+
+        assignMoreButton.addEventListener('click', function() {
+            confirmationModal.classList.add('hidden');
+            openAssignModal();
+        });
+    });
+</script>
