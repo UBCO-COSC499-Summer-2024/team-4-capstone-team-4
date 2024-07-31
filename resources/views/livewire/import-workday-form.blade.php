@@ -3,8 +3,8 @@
                     onclick="location.href='{{ route('upload-file') }}'">
                     Upload File
     </button> --}}
-    <div class="italic">*Enrolled (Start) = # of Enrolled at the start of term</div>
-    <div class="italic">*Enrolled (End) = # of Enrolled at the end of term</div>
+    <div class="italic">*Enrolled (Start) = # of Enrolled the day after the last day to withdraw without a W Standing</div>
+    <div class="italic">*Enrolled (End) = # of Enrolled the day after the last day to withdraw with a W Standing</div>
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="py-3 flex justify-between bg-[#3b4779] text-white">
