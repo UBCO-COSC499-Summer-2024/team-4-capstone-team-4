@@ -260,3 +260,33 @@ tbody td:last-child {
     border-color: #28a745; /* or your custom green color code */
 }
 
+.pagination-btn {
+    padding: 8px 16px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    color: #3b4779;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pagination-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination-active {
+    background-color: #3b4779;
+    color: white;
+    font-weight: bold;
+    cursor: default;
+}
+
+.pagination-disabled {
+    color: #999;
+    cursor: not-allowed;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+

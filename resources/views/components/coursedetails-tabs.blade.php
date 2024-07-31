@@ -15,8 +15,13 @@
 
 <script>
     function showTab(tabId, tabButtonId) {
+        const activeTabInput = document.getElementById('activeTab');
+        activeTabInput.value = tabId;
+
         const coursesTable = document.getElementById('coursesTable');
         const taTable = document.getElementById('taTable');
+        const coursesPagination = document.getElementById('coursesPagination');
+        const tasPagination = document.getElementById('tasPagination');
         const editButton = document.getElementById('editButton');
         const createNewButton = document.getElementById('createNewButton');
         const assignButton = document.getElementById('assignButton');
@@ -26,6 +31,8 @@
         if (tabId === 'coursesTable') {
             coursesTable.classList.remove('hidden');
             taTable.classList.add('hidden');
+            coursesPagination.classList.remove('hidden');
+            tasPagination.classList.add('hidden');
             editButton.style.display = 'block';
             createNewButton.style.display = 'block';
             assignButton.style.display = 'block';
@@ -34,6 +41,8 @@
         } else {
             coursesTable.classList.add('hidden');
             taTable.classList.remove('hidden');
+            coursesPagination.classList.add('hidden');
+            tasPagination.classList.remove('hidden');
             editButton.style.display = 'none';
             createNewButton.style.display = 'none';
             assignButton.style.display = 'none';
@@ -51,9 +60,14 @@
         activeTabButton.classList.remove('text-gray-600-font-bold', 'border-gray-300');
     }
 
-    // Initialize the first tab as active
+    // Initialize the correct tab as active
     document.addEventListener('DOMContentLoaded', function () {
-        showTab('coursesTable', 'courses-tab');
+        const activeTab = document.getElementById('activeTab').value;
+        if (activeTab === 'taTable') {
+            showTab('taTable', 'tas-tab');
+        } else {
+            showTab('coursesTable', 'courses-tab');
+        }
     });
 
     // Add event listener for assign button to handle routing

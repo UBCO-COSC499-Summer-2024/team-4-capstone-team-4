@@ -35,12 +35,13 @@
             <div class="fixed-header">
                 <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">
                     @csrf
+                    <input type="hidden" id="activeTab" name="activeTab" value="{{ $activeTab }}">
                     <div class="overflow-auto max-h-[calc(100vh-200px)]">
                         <div id="tabContent">
-                            <table class="min-w-full divide-y divide-gray-200 svcr-table" id="coursesTable">
+                            <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'coursesTable' ? '' : 'hidden' }}" id="coursesTable">
                                 <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
                                 <tbody id="courseTableBody">
-                                    @if(isset($courseSections) && !empty($courseSections))
+                                    @if(isset($courseSections) && $courseSections->count())
                                         @foreach ($courseSections as $section)
                                             <x-coursedetails-table-row
                                                 :courseName="$section->name"
@@ -60,10 +61,10 @@
                                     @endif
                                 </tbody>
                             </table>
-                            <table class="min-w-full divide-y divide-gray-200 svcr-table hidden" id="taTable">
+                            <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'taTable' ? '' : 'hidden' }}" id="taTable">
                                 <x-coursedetails-ta-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                                 <tbody>
-                                    @if(isset($tas) && !empty($tas))
+                                    @if(isset($tas) && $tas->count())
                                         @foreach ($tas as $ta)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $ta->name }}</td>
@@ -80,8 +81,13 @@
                                     @endif
                                 </tbody>
                             </table>
-                            
                         </div>
+                    </div>
+                    <div id="coursesPagination" class="{{ $activeTab === 'coursesTable' ? '' : 'hidden' }}">
+                        {{ $courseSections->withQueryString()->links('components.coursedetails-pagination') }}
+                    </div>
+                    <div id="tasPagination" class="{{ $activeTab === 'taTable' ? '' : 'hidden' }}">
+                        {{ $tas->withQueryString()->links('components.coursedetails-pagination') }}
                     </div>
                 </form>
             </div>
