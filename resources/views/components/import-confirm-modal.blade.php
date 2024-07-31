@@ -1,8 +1,5 @@
 <div class="relative bg-white rounded-lg shadow-lg w-11/12 max-w-lg">
     <div class="relative p-2 bg-red-500 rounded-t-lg">
-        <button class="absolute text-white text-4xl font-bold right-3 top-1">
-            <span wire:click="closeConfirmModal" class="material-symbols-outlined">close</span>
-        </button>
         <div class="flex justify-center my-6">
             <span class="material-symbols-outlined text-white text-5xl">warning</span>
         </div>

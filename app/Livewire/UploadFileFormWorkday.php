@@ -145,6 +145,7 @@ class UploadFileFormWorkday extends Component
 
     public function closeConfirmModal() {
         $this->showConfirmModal = false;
+        $this->duplicateCourses = [];
     }
 
     public function resetData()
@@ -215,6 +216,23 @@ class UploadFileFormWorkday extends Component
 
         if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
+                $prefix = '';
+
+                switch ($row['area_id']) {
+                    case 1:
+                        $prefix = 'COSC';
+                        break;
+                    case 2:
+                        $prefix = 'MATH';
+                        break;
+                    case 3:
+                        $prefix = 'PHYS';
+                        break;
+                    case 4:
+                        $prefix = 'STAT';
+                        break;
+                }
+
                 CourseSection::updateOrCreate([
                     'number' => $row['number'],
                     'section' => $row['section'],
@@ -261,6 +279,9 @@ class UploadFileFormWorkday extends Component
     public function render()
     {
         $areas = Area::all();
+
+        // dd($areas);
+        // dd($this->rows, $this->finalCSVs);
 
         // dd($this->finalCSVs);
         return view('livewire.upload-file-form-workday', [

@@ -161,8 +161,14 @@ class ImportWorkdayForm extends Component
         $this->showConfirmModal = false;
     }
 
+    
+    public function closeModal() {
+        $this->showModal = false;
+    }
+
     public function closeConfirmModal() {
         $this->showConfirmModal = false;
+        $this->duplicateCourses = [];
     }
 
     public function handleSubmit() {
@@ -228,6 +234,23 @@ class ImportWorkdayForm extends Component
 
         if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
+                $prefix = '';
+            
+                switch ($row['area_id']) {
+                    case 1:
+                        $prefix = 'COSC';
+                        break;
+                    case 2:
+                        $prefix = 'MATH';
+                        break;
+                    case 3:
+                        $prefix = 'PHYS';
+                        break;
+                    case 4:
+                        $prefix = 'STAT';
+                        break;
+                }
+
                 CourseSection::updateOrCreate([
                     'number' => $row['number'],
                     'section' => $row['section'],
@@ -269,11 +292,6 @@ class ImportWorkdayForm extends Component
             }
         }
     }
-
-    public function closeModal() {
-        $this->showModal = false;
-    }
-
 
     public function render()
     {   
