@@ -48,43 +48,35 @@ class InstructorPerformance extends Model {
     // other functions
 
     public static function updateInstructorSEIAvg($instructor_id, $year) {
+        $courseCount = 0;
+        $totalSumAverageScore = 0;
+
         $courses = Teach::where('instructor_id', $instructor_id)
         ->whereHas('courseSection', function ($query) use ($year) {
             $query->where('year', $year);
         })->pluck('course_section_id');
 
-        if (count($courses) === 0) {
-            echo "No courses found for instructor ID: $instructor_id";
-            return;
-        }
-
-        $courseCount = 0;
-        $totalSumAverageScore = 0;
-
         foreach($courses as $course) {
-            if ($course) {
-                $courseCount++;
-                $seiData = SeiData::where('course_section_id', $course)->get();
+            $seiData = SeiData::where('course_section_id', $course)->get();
 
-                if ($seiData) {
-                    foreach($seiData as $data) {
-                        if ($data) {
-                            $questionArray = json_decode($data->questions, true);
-                            $averageScore = array_sum($questionArray) / count($questionArray);
-                            $totalSumAverageScore += $averageScore;
-                        }
-                    }
+            if($seiData) {
+                foreach($seiData as $data) {
+                    $questionArray = json_decode($data->questions, true);
+                    $averageScore = array_sum($questionArray) / count($questionArray);
+                    $totalSumAverageScore += $averageScore;
                 }
+
+                $courseCount++;
             }
         }
 
         $totalRoundedAvg = round($totalSumAverageScore/$courseCount, 1);
         $performance = self::where('instructor_id', $instructor_id)->where('year', $year)->first();
-        if ($performance) {
-            $performance->update([
-                'sei_avg' => $totalRoundedAvg,
-            ]);
-        }
+        
+        $performance->update([
+        'sei_avg' => 5,
+        ]);
+
         return;
     }
 
@@ -191,7 +183,7 @@ class InstructorPerformance extends Model {
     }
 
     public static function updatePerformance($instructor_id, $year) {
-        //self::updateInstructorSEIAvg($instructor_id, $year);
+        self::updateInstructorSEIAvg($instructor_id, $year);
         self::updateInstructorEnrollAndDropAvg($instructor_id, $year);
 
     }

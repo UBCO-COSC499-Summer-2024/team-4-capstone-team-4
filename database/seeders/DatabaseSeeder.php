@@ -192,6 +192,7 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($instructorRole->id, date('Y'));
         }
         // Add service roles for the example instructor
         $instructor_svcroles = ServiceRole::factory(3)->create([
@@ -265,6 +266,7 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($role->id, date('Y'));
         }
 
         $svcroles = ServiceRole::factory(10)->create([
