@@ -102,7 +102,7 @@ input[type="file"] {
 }
 
 .import-form-row div {
-  @apply mx-2;
+  @apply mx-[2px];
 }
 
 .import-form-input {
