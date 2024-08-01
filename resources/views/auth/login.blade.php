@@ -18,8 +18,9 @@
                 </div>
                 <x-input-error for="password" class="mt-2" />
             </x-form-item>
-            
-            <x-validation-errors/>
+            <x-form-item class="flex flex-col">
+                <x-validation-errors/>
+            </x-form-item>
 
             <x-form-item>
                 <span class="input-label"><x-link href="/forgot-password" title="{{ __('Forgot Password') }}" /></span>
