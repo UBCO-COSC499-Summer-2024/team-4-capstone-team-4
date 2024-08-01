@@ -13,13 +13,18 @@ $sidebarItems = [
 if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
 }
-if($user->hasRoles(['admin', 'dept_head'])) {
+if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     // audit logs
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
         ['icon' => 'work_history', 'href' => '/audits', 'title' => 'Audit Logs'],
+    ]);
+
+    if($user->hasRoles(['admin'])) {
+        $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin'],
     ]);
+    }
 }
 @endphp
 
