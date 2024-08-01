@@ -13,7 +13,7 @@ class Dashboard extends Component {
     public $slot;
 
     /**
-     * Mount the component with initial dat
+     * Mount the component with initial data
      * 
      * @param string $topic The topic for the dashboard
      * @param mixed $data The data related to the topic
