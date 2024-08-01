@@ -3,13 +3,14 @@
     width: 100%;
     border-collapse: separate;
     border: none;
-    /* background: rgb(107 114 128 / 1) */
+    border-spacing: revert;
+    /* background: var(--svcr-table-bg); */ /* You can uncomment this line if you want the background color */
 }
 
 .arrow-dir {
-    border-radius:20px;
+    border-radius: 20px;
     padding: 4px;
-    /* background: rgba(59,71,121,1); */
+    background: var(--arrow-dir-bg);
     gap: 0.25rem;
 }
 
@@ -20,7 +21,7 @@
 .arrow-dir .material-symbols-outlined {
     padding: 2px !important;
     border-radius: 50px;
-    color: rgba(59,71,171, 1);
+    color: var(--arrow-dir-icon-color);
     background: #fff;
     display: flex;
     justify-content: center;
@@ -44,7 +45,8 @@
 }
 
 /* all checkboxes in svcr-table */
-#svcr-table input[type="checkbox"] {
+#svcr-table input[type="checkbox"],
+.svcr-table input[type="checkbox"] {
     /* display: none; */
     /* background: #fafafa; */
     border-radius: 50px;
@@ -52,7 +54,7 @@
 
 .svcr-list-header {
     /* background: rgb(249 250 251 / 1); */
-    background: rgb(59, 71, 121);
+    background: var(--svcr-list-header-bg);
 }
 
 .card-view .svcrole-card {
@@ -81,17 +83,44 @@
     text-align: left;
     padding: 4px 8px;
     /* color: rgb(55 65 81 / 1); */
-    color: #fff;
+    color: var(--svcr-list-header-text);
     border-radius: 4px;
 }
 
 .svcr-list-header-item:first-child,
-.svcr-list-item td:first-child {
+.svcr-list-item td:first-child,
+.svcr-list-item [data-column="id"] {
     text-align: center;
 }
 
-.svcr-list-header-item:has(.svcr-list-item[data-column="description"]) {
-    width: 700px;
+.svcr-list-header-item:has(.svcr-list-item-cell[data-column*="description"]),
+.svcr-list-header-item:has(.svcr-list-item-cell[data-column*="desc"]) {
+    max-width: 450px;
+}
+
+.svcr-list-item-cell[data-column*="description"],
+.svcr-list-item-cell[data-column*="desc"] {
+    max-width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.svcr-table tfoot td {
+    padding: 8px 0;
+}
+
+/* smaller screens description should be 200px */
+@media (max-width: 768px) {
+    .svcr-list-header-item:has(.svcr-list-item-cell[data-column*="description"]),
+    .svcr-list-header-item:has(.svcr-list-item-cell[data-column*="desc"]) {
+    max-width: 200px;
+    }
+
+    .svcr-list-item-cell[data-column*="description"],
+    .svcr-list-item-cell[data-column*="desc"] {
+    max-width: 200px;
+    }
 }
 
 .list-header-actions {
@@ -108,11 +137,11 @@
 }
 
 .svcr-list-item:hover {
-    background: #f5f5f5;
+    background: var(--svcr-list-item-hover-bg);
 }
 
-.svcr-list-item:has(.svcr-list-item-cell > input[type="checkbox"]:checked) {
-    background: #f0f0f0;
+.svcr-list-item:has(.svcr-list-item-cell>input[type="checkbox"]:checked) {
+    background: var(--svcr-list-item-checked-bg);
 }
 
 nav[aria-label="Pagination Navigation"] {
@@ -124,6 +153,7 @@ nav[aria-label="Pagination Navigation"] {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     display: table-header-group;
+    vertical-align: middle;
 }
 
 /* .svcr-list-header {
@@ -170,14 +200,15 @@ nav[aria-label="Pagination Navigation"] {
     /* padding: 6px; */
     border-spacing: 6px;
     border-collapse: separate;
-    color: rgb(107 114 128 / 1);
+    color: var(--svcr-list-item-text);
+    background: var(--svcr-list-item-bg);
 }
 
 .svcr-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 6px;
+    /* gap: 12px; */
+    padding: 0 6px;
 }
 
 .svcr-container .toolbar {
@@ -186,7 +217,7 @@ nav[aria-label="Pagination Navigation"] {
 
 .svcr-container .svcr-items {
     position: relative;
-    height: 100% - 40px;
+    height: calc(100% - 40px);
 }
 
 .svcr-list-item-cell {
@@ -228,7 +259,7 @@ nav[aria-label="Pagination Navigation"] {
 
 #svcr-select-all:checked::before {
     content: "✓";
-    background-color:#3b4779;
+    background-color: #3b4779;
     opacity: 0;
     color: white;
 }
@@ -236,21 +267,32 @@ nav[aria-label="Pagination Navigation"] {
 #svcr-select-all[indeterminate]::before {
     content: "-";
     text-align: center;
-    line-height: 10px; /* Vertically center the "-" */
+    line-height: 10px;
+    /* Vertically center the "-" */
 }
 
-
-.svcr-list-header-item > div {
+.svcr-list-header-item>div {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 6px;
 }
 
-.svcr-list-header-item > div .material-symbols-outlined {
+.svcr-list-header-item>div .material-symbols-outlined {
     font-size: 1.2rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.add-svcrole-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 12px;
+    background: var(--add-svcrole-section-bg);
+    width: 100%;
 }

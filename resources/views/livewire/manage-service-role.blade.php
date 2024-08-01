@@ -36,27 +36,32 @@
             @endif
         </span>
 
-        <div class="flex right">
+        <div class="flex right content-title-btn-holder">
+            {{-- preview --}}
+            <button class="content-title-btn" x-on:click="window.location.href='{{ route('exports.pdf.preview', [ 'id' => $serviceRole->id ]) }}'" wire:loading.attr="disabled">
+                <span class="material-symbols-outlined icon">preview</span>
+                <span>Preview</span>
+            </button>
             @if(!$serviceRole->archived)
-                <button class="btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
+                <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
                     <span class="material-symbols-outlined icon">
                         edit
                     </span>
                     <span>Edit</span>
                 </button>
             @endif
-            <button class="btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
+            <button class="content-title-btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
                 <span class="material-symbols-outlined icon">close</span>
                 <span>Cancel</span>
             </button>
-            {{-- if user has admin role in roles --}}
+
             @if (auth()->user()->hasRoles(['admin']))
-                <button class="btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                     <span class="material-symbols-outlined icon">delete</span>
                     <span>Delete</span>
                 </button>
             @endif
-            <button class="btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+            <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
                     @if ($serviceRole->archived)
                         <span class="material-symbols-outlined icon">
                             unarchive
@@ -81,12 +86,35 @@
                 name="export"
                 :values="$exports"
             /> --}}
-                <select id="exportDropdown" title="Export" class="form-select">
+                {{-- <select id="exportDropdown" title="Export" class="form-select">
                     <option value="">Export</option>
                     @foreach ($exports as $fname => $format)
                         <option value="{{ $format }}">{{ $fname }}</option>
                     @endforeach
-                </select>
+                </select> --}}
+            <x-dropdown :align="'right'" :width='48'>
+                <x-slot name="trigger">
+                    <button class="flex items-center content-title-btn">
+                        <span class="material-symbols-outlined icon">file_download</span>
+                        <span>Export</span>
+                        <span class="material-symbols-outlined icon">arrow_drop_down</span>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    @foreach ($exports as $fname => $format)
+                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
+
+                        {{-- x-on:click="$dispatch('export-role', {
+                            'format': '{{$format}}'
+                        })" --}}
+                        x-on:click="window.location.href='{{ route('svcroles.export.id', ['eid' => $serviceRole->id, 'eformat' => $format]) }}'"
+                        role="menuitem">
+                            {{ $fname }}
+                        </button>
+                    @endforeach
+                </x-slot>
+            </x-dropdown>
         </div>
     </h1>
 
@@ -109,21 +137,26 @@
                         <div class="form-item">
                             <label class="form-item" for="name">Name</label>
                             <div class="grouped">
-                                <input class="form-input" type="text" id="name" wire:model="name" x-bind:disabled="!isEditing" value="{{ $name }}">
+                                <input class="form-input" type="text" id="name" wire:model="name"
+                                    placeholder="ex. Student Advisor"
+                                    x-bind:disabled="!isEditing" value="{{ $name }}">
                                 @error('name') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="grouped">
                             <label class="form-item" for="description">Description</label>
                             <div class="grouped">
-                                <textarea class="form-input" id="description" wire:model="description" x-bind:disabled="!isEditing" >{{ $description }}</textarea>
+                                <textarea class="form-input" id="description" wire:model="description"
+                                    placeholder="Brief Description..." x-bind:disabled="!isEditing" >{{ $description }}</textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="form-item">
                             <label class="form-item" for="year">Year</label>
                             <div class="grouped">
-                                <input class="form-input" type="number" id="year" wire:model="year" x-bind:disabled="!isEditing" value="{{ $year }}">
+                                <input class="form-input" type="number" id="year" wire:model="year"
+                                    placeholder="ex. {{ date('Y') }}"
+                                    x-bind:disabled="!isEditing" value="{{ $year }}">
                                 @error('year') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -141,10 +174,11 @@
                         </div>
 
                         <div class="form-item" x-show="isEditing" x-cloak>
-                            <button class="btn form-input" wire:loading.attr="disabled" id="save-service-role">
+                            {{-- <button type="button" class="form-input" wire:loading.attr="disabled" id="save-service-role">
                                 <span class="material-symbols-outlined icon">save</span>
                                 <span>Save</span>
-                             </button>
+                             </button> --}}
+                             <input type="submit" class="form-input" wire:loading.attr="disabled" id="save-service-role" value="Save">
                         </div>
                     </div>
 
@@ -154,14 +188,12 @@
                                 <label class="form-item" for="monthHours">Monthly Hours</label>
                                 <section class="calendar-header">
                                     <button type="button"
-                                        x-on:click="$wire.dispatch('dec-year')"
-                                        x-bind:disabled="!isEditing">
+                                        x-on:click="$dispatch('dec-year')">
                                         <span class="material-symbols-outlined icon">arrow_back</span>
                                     </button>
                                     <span id="year">{{ $year }}</span>
                                     <button type="button"
-                                        x-on:click="$wire.dispatch('inc-year')"
-                                        x-bind:disabled="!isEditing">
+                                        x-on:click="$dispatch('inc-year')">
                                         <span class="material-symbols-outlined icon">arrow_forward</span>
                                     </button>
                                 </section>
@@ -169,7 +201,7 @@
                                     @foreach ($monthly_hours as $month => $hours)
                                         <div class="month glass monthlyHour">
                                             <div>{{ $month }}</div>
-                                            <input type="number" id="monthly_hours_{{ $month }}" wire:model="monthly_hours.{{ $month }}" placeholder="Hrs" max="730" min="0" x-bind:disabled="!isEditing" value="{{ $hours }}">
+                                            <input type="number" id="monthly_hours_{{ $month }}" wire:model="monthly_hours.{{ $month }}" placeholder="Hrs" max="200" min="0" x-bind:disabled="!isEditing" value="{{ $hours }}">
                                         </div>
                                     @endforeach
                                 </section>
@@ -206,7 +238,7 @@
                         <tbody wire:model.live="instructors">
                             @php
                                 // paginate
-                                $sinstructors = $serviceRole->instructors()->paginate(5);
+                                $sinstructors = $serviceRole->instructors()->paginate(5, ['*'], 'instructors');
                             @endphp
                             @forelse ($sinstructors as $instructor)
                                 <tr class="svcr-list-item">
@@ -270,7 +302,7 @@
                                 // paginate
                                 $sextraHours = $serviceRole->extraHours();
                                 // add pagination after converting to relation instance
-                                $sextraHours = $sextraHours->paginate(5);
+                                $sextraHours = $sextraHours->paginate(5, ['*'], 'extraHours');
                             @endphp
                             @forelse ($sextraHours as $extraHour)
                                 <tr class="svcr-list-item">
@@ -377,8 +409,7 @@
         </x-dialog-modal>
     </div>
 </div>
-
-<script type="text/javascript">
+<script>
     document.addEventListener('DOMContentLoaded', initInstructorForm);
     document.addEventListener('livewire:init', initInstructorForm);
     document.addEventListener('livewire:load', initInstructorForm);

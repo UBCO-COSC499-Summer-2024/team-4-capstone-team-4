@@ -26,7 +26,7 @@ class ServiceRolesList extends Component
     public $selectedSort = '';
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
-    public $pageSize = 10;
+    public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
     protected $validExportOptions = [
@@ -55,7 +55,7 @@ class ServiceRolesList extends Component
         'selectedSort' => 'nullable|string',
         'selectedSortOrder' => 'nullable|string',
         'selectedGroup' => 'nullable|string',
-        'pageSize' => 'required|integer|min:1',
+        'pageSize' => 'required|integer|min:10',
     ];
 
     protected $listeners = [
@@ -181,32 +181,48 @@ class ServiceRolesList extends Component
             });
         }
 
+        if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
+            if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
+                $serviceRolesQuery->whereHas('area', function ($query) {
+                    $shortCodes = [
+                        'COSC' => 'Computer Science',
+                        'MATH' => 'Mathematics',
+                        'PHYS' => 'Physics',
+                        'STAT' => 'Statistics'
+                    ];
+
+                    $query->where('name', 'like', '%' . $this->filterValue . '%');
+                    foreach ($shortCodes as $shortCode => $areaName) {
+                        if (stripos($areaName, $this->filterValue) !== false) {
+                            $query->orWhere('name', 'like', '%' . $areaName . '%');
+                        }
+                    }
+                });
+            } else {
+                $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
+            }
+        }
+
         if (!empty($this->searchQuery)) {
             $searchableColumns = $this->getColumns(ServiceRole::class);
-            if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
-                if ($this->searchCategory === 'area_id' || $this->searchCategory === 'area') {
-                    $serviceRolesQuery->whereHas('area', function ($query) {
-                        $query->where('name', 'like', '%' . $this->searchQuery . '%');
-                    });
-                } else {
-                    $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
-                }
-            } else {
+            if(!empty($this->searchQuery)) {
                 $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
                     foreach ($searchableColumns as $column) {
                         $query->orWhere($column, 'like', '%' . $this->searchQuery . '%');
                     }
+                })
+                ->orWhereHas('instructors', function ($query) {
+                    $cols = $this->getColumns(User::class);
+                    $cols = array_intersect($cols, ['firstname', 'lastname', 'email']);
+                    $query->where(function ($query) use ($cols) {
+                        foreach ($cols as $col) {
+                            $query->orWhere($col, 'like', '%' . $this->searchQuery . '%');
+                        }
+                    });
+                })
+                ->orWhereHas('area', function ($query) {
+                    $query->where('name', 'like', '%' . $this->searchQuery . '%');
                 });
-            }
-        }
-
-        if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-            if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
-                $serviceRolesQuery->whereHas('area', function ($query) {
-                    $query->where('name', 'like', '%' . $this->filterValue . '%');
-                });
-            } else {
-                $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
             }
         }
 
@@ -218,7 +234,6 @@ class ServiceRolesList extends Component
                     $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
                                      ->orderBy('areas.name', $this->selectedSortOrder);
                 } else {
-                    // Handle other relations if needed
                     $serviceRolesQuery->orderBy(
                         ServiceRole::select($column)
                             ->from('service_roles')
@@ -529,6 +544,10 @@ class ServiceRolesList extends Component
                 'description' => "Exception: " . $e->getMessage(),
             ]);
         }
+        // reload
+        $url = route('svcroles');
+        header("Location: $url");
+        exit();
     }
 
 }

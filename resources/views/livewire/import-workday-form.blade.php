@@ -3,6 +3,8 @@
                     onclick="location.href='{{ route('upload-file') }}'">
                     Upload File
     </button> --}}
+    <div class="italic">*Enrolled (Start) = # of Enrolled the day after the last day to withdraw without a W Standing</div>
+    <div class="italic">*Enrolled (End) = # of Enrolled the day after the last day to withdraw with a W Standing</div>
     <form wire:submit.prevent="handleSubmit" class="relative">
         <div class="relative overflow-x-auto shadow-sm rounded-md">
             <div class="py-3 flex justify-between bg-[#3b4779] text-white">
@@ -13,8 +15,10 @@
                 <div class="w-2/12 text-center mx-2">Session</div>
                 <div class="w-2/12 text-center mx-2">Term</div>
                 <div class="w-3/12 text-center mx-2">Year</div>
-                <div class="w-2/12 text-center mx-2">Enrolled</div>
-                <div class="w-2/12 text-center mx-2">Dropped</div>
+                <div class="w-3/12 text-center mx-2">Room</div>
+                <div class="w-3/12 text-center mx-2">Time</div>
+                <div class="w-2/12 text-center mx-2">Enrolled (Start)</div>
+                <div class="w-2/12 text-center mx-2">Enrolled (End)</div>
                 <div class="w-2/12 text-center mx-2">Capacity</div>
                 <div class="w-1/12 text-center mx-2"></div>
             </div>
@@ -32,11 +36,11 @@
                     @error('rows.'.$index.'.area_id')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12 ">
-                    <input type="text" placeholder="101" wire:model="rows.{{$index}}.number" class="import-form-input ">
+                    <input type="text" placeholder="ex. 101" wire:model="rows.{{$index}}.number" class="import-form-input ">
                     @error('rows.'.$index.'.number')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="text" placeholder="001" wire:model="rows.{{$index}}.section" class="import-form-input">
+                    <input type="text" placeholder="ex. 001" wire:model="rows.{{$index}}.section" class="import-form-input">
                     @error('rows.'.$index.'.section')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
@@ -57,19 +61,27 @@
                     @error('rows.'.$index.'.term')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-3/12">
-                    <input type="number" placeholder="2024"  min="1901" max="2099" step="1" wire:model="rows.{{$index}}.year" class="import-form-input">
+                    <input type="number" placeholder="ex. 2024"  min="1901" step="1" wire:model="rows.{{$index}}.year" class="import-form-input year-input">
                     @error('rows.'.$index.'.year')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
-                <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.enrolled" class="import-form-input">
-                    @error('rows.'.$index.'.enrolled')<span class="import-error">{{ $message }}</span>@enderror
+                <div class="w-3/12">
+                    <input type="text" placeholder="ex. FIP200" wire:model="rows.{{$index}}.room" class="import-form-input year-input">
+                    @error('rows.'.$index.'.room')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="text" placeholder="ex. 14:00" wire:model="rows.{{$index}}.time" class="import-form-input year-input">
+                    @error('rows.'.$index.'.time')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.dropped" class="import-form-input">
-                    @error('rows.'.$index.'.dropped')<span class="import-error"> {{ $message }}</span>@enderror
+                    <input type="number" step="1" min="1" max="999" placeholder="#" wire:model="rows.{{$index}}.enroll_start" class="import-form-input" required>
+                    @error('rows.'.$index.'.enroll_start')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-2/12">
-                    <input type="number" placeholder="#" wire:model="rows.{{$index}}.capacity" class="import-form-input">
+                    <input type="number" step="1" min="0" max="999" placeholder="#" wire:model="rows.{{$index}}.enroll_end" class="import-form-input" required>
+                    @error('rows.'.$index.'.enroll_end')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-2/12">
+                    <input type="number" step="1" min="1" max="999" placeholder="#" wire:model="rows.{{$index}}.capacity" class="import-form-input" required>
                     @error('rows.'.$index.'.capacity')<span class="import-error">{{ $message }}</span>@enderror
                 </div>
                 <div class="w-1/12 flex justify-center">
@@ -85,7 +97,18 @@
             @endforeach
         </div>
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="import-form-add-button">Add Row</button>
+         
+            <input type="number" step="1" min="0" max="999" placeholder="#" wire:model='rowAmount' class="text-black">
+            <button type="button" wire:click='addManyRows' class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>   
+                Add Many Rows
+            </button>
+            {{-- <button type="button" wire:click='deleteManyRows' class="rounded-lg import-form-delete-button">Delete Many</button> --}}
+        
+            <button type="button" wire:click="addRow" class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>    
+                Add Row
+            </button>
             <button type="submit" class="import-form-save-button">Save</button>
         </div>
     </form>
@@ -118,8 +141,21 @@
         </div> --}}
 
         @endif
-    {{-- @endif --}}
-    {{-- @foreach ($finalCSVs as $finalCSV)
-        <div>hello</div>
-    @endforeach --}}
+
+        @if($showConfirmModal) 
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <x-import-confirm-modal :duplicateCourses="$duplicateCourses" />
+        </div>
+        @endif
+
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentYear = new Date().getFullYear();
+        document.querySelectorAll('.year-input').forEach(input => {
+            input.setAttribute('max', currentYear);
+        });
+    });
+</script>

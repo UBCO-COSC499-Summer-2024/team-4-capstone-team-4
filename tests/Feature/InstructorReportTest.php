@@ -225,4 +225,51 @@ class InstructorReportTest extends TestCase
        
     } 
 
+    /* public function test_user_can_export_report_as_pdf(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
+        $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
+        
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+
+        $instructor = User::factory()->create();
+        $instructorRole = UserRole::factory()->create([
+            'user_id' => $instructor->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+        //create performance for this year (2024)
+        InstructorPerformance::factory()->create([
+            'year' => date('Y'),
+            'instructor_id' => $instructorRole->id,
+        ]);
+        $course = CourseSection::factory()->create([
+            'year' => date('Y'),
+        ]);
+        Teach::factory()->create([
+            'course_section_id'=> $course->id,
+        ]);
+        SeiData::factory()->create([
+            'course_section_id'=> $course->id,
+        ]);
+
+        $name = $instructor->firstname . " " . $instructor->lastname . "'s Report - " . date('Y');
+
+        Livewire::test(ExportReport::class, ['instructor_id' => $instructorRole->id])
+        ->set('year', date('Y'))
+        //->dispatch('pdfSaved', $name.'.pdf')
+        ->call('handlePdfSaved', $name.'.pdf')
+        ->assertDispatched('show-toast', function ($event, $params) use ($name) {
+            //dd($params);
+            return $params[0]['message'] === 'PDF ' . $name . ' has been saved successfully!' &&
+                   $params[0]['type'] === 'success';
+        });
+       
+    }  */
+
 }

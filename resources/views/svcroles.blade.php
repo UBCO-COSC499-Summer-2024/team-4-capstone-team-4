@@ -5,13 +5,13 @@
         $links = [
             ['href' => route('svcroles'), 'title' => __('Dashboard'), 'icon' => 'group', 'active' => request()->is('svcroles')],
             ['href' => route('svcroles.add'), 'title' => __('Add Service Role'), 'icon' => 'add', 'active' => request()->is('svcroles/add')],
-            ['href' => route('svcroles.manage'), 'title' => __('Manage Service Roles'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
+            ['href' => route('svcroles.manage'), 'title' => __('Manage Role'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
         ];
     @endphp
 
     @if ($user->hasRoles(['dept_staff', 'dept_head', 'admin']))
         @if(request()->is('svcroles/add'))
-            @include('components.svcrole.add-svcrole')
+            <livewire:add-service-role :links="$links"/>
         @elseif(request()->is('svcroles/manage'))
             @php
                 $svcrId = 1;
@@ -42,10 +42,10 @@
                 :links="$links"
                 :serviceRoleId="$svcrId"
             />
-        @elseif(request()->is('svcroles/requests'))
+        {{-- @elseif(request()->is('svcroles/requests'))
             @include('components.svcrole.requests')
         @elseif(request()->is('svcroles/audit-logs'))
-            <livewire:audit-logs />
+            <livewire:audit-logs /> --}}
         @else
             <livewire:service-roles-list :links="$links"/>
         @endif

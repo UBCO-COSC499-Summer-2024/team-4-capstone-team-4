@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('acces_code')->nullable();
+            $table->boolean('active')->default(true);
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
@@ -43,7 +43,7 @@ return new class extends Migration
 
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
             $table->enum('role', ['instructor', 'dept_head', 'dept_staff', 'admin']);
             $table->timestamps();
@@ -90,13 +90,16 @@ return new class extends Migration
             $table->string('prefix');
             $table->string('number');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->integer('enrolled');
+            $table->integer('enroll_start');
+            $table->integer('enroll_end');
             $table->integer('dropped');
             $table->integer('capacity');
             $table->year('year');
             $table->string('term');
             $table->string('session');
             $table->string('section');
+            $table->string('room');
+            $table->string('time');
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });
@@ -213,9 +216,8 @@ return new class extends Migration
             $table->string('operation_type')->nullable();
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
-            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('timestamp')->useCurrent();
+            $table->timestamps();
         });
 
         // for pgaudit
@@ -241,6 +243,7 @@ return new class extends Migration
             $table->string('session_user')->nullable();
             $table->text('security_label')->nullable();
             $table->jsonb('context')->nullable();
+            $table->timestamps();
         });
     }
 

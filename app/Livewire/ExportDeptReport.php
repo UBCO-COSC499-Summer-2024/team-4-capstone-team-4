@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class ExportDeptReport extends Component
 {
     public $year;
+    protected $listeners = ['pdfSaved' => 'handlePdfSaved'];
 
     public function mount(){
         $this->year = date('Y');
@@ -43,6 +44,27 @@ class ExportDeptReport extends Component
 
         $name = $dept->name . " Department Report - " . $this->year;
         
-        return Excel::download(new DeptReportExport($this->year), $name.'.xlsx');
+        $file = Excel::download(new DeptReportExport($this->year), $name.'.xlsx');
+        if($file){
+            $this->dispatch('show-toast', [
+                'message' => 'Excel '. $name.'.xlsx has been saved successfully!',
+                'type' => 'success'
+            ]);
+            return $file;
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Failed to generate Excel '. $name.'.xlsx',
+                'type' => 'error'
+            ]);
+            return;
+        }
+    }
+
+    public function handlePdfSaved($fileName){
+        $this->dispatch('show-toast', [
+            'message' => 'PDF ' . $fileName . ' has been saved successfully!',
+            'type' => 'success'
+        ]); 
+        return;
     }
 }

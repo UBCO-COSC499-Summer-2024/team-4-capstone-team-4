@@ -1,0 +1,18 @@
+[
+    {
+        "question": "How do I reset my password?",
+        "answer": "To reset your password, click on the 'Forgot password' link on the login page and follow the instructions."
+    },
+    {
+        "question": "How do I contact support?",
+        "answer": "You can contact support by emailing {{ support.email }} or calling {{ support.phone }}."
+    },
+    {
+        "question": "Where can I find the user manual?",
+        "answer": "The user manual is available for download on the documentation page of our website."
+    },
+    {
+        "question": "Do images work?",
+        "answer": "They infact do, here is a test right now {{ img.test }} and another way to display them {{ img: /media/images/ihc_test_image.png }}"
+    }
+]

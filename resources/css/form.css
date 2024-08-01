@@ -1,3 +1,5 @@
+/* ... (Your existing styles) ... */
+
 [x-cloak] {
     display: none;
 }
@@ -27,10 +29,11 @@
 .auth-section h1,
 .auth-section .title {
     text-transform: uppercase;
-    color: #222;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 600;
 }
 
 .form-group {
@@ -40,7 +43,6 @@
     width: 100%;
     justify-content: flex-start;
 }
-
 
 .form-group:not([x-cloak]) {
     display: flex;
@@ -85,45 +87,70 @@
 
 .form-input {
     padding: 8px;
-    background-color: rgba(240, 240, 240, 0.9) !important;
+    background-color: var(--form-input-bg) !important;
     font-weight: 600;
     border-radius: 12px !important;
     min-height: 40px;
 }
 
-.form-input[type=text],
-.form-input[type=number],
-.form-input[type=email],
-.form-input[type=password] {
+.form-input[type="text"],
+.form-input[type="number"],
+.form-input[type="email"],
+.form-input[type="password"] {
     min-width: 300px;
 }
 
-
-.form-input[type=number] {
+.form-input[type="number"] {
     text-align: right;
 }
 
-.form-input[type=submit],
-.form-input[type=reset] {
+/* background: rgba(220, 250, 250, 0.6); */
+.form-input[type="submit"],
+.form-input[type="reset"] {
     border-radius: 12px !important;
-    font-weight: 1.2rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
     padding: 8px 16px;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-    background: rgba(220, 250, 250, 0.6);
+    border: 1px solid var(--secondary-color);
+    /* background: */
     cursor: pointer;
 }
 
-.form-input[type=submit]:hover,
-.form-input[type=reset]:hover {
+.form-input[type="submit"] {
+    /* background: rgba(59, 71, 121, 1) !important; */
+    /* background: #3B784F !important; */
+    background: var(--form-submit-bg) !important;
+    /* color: rgba(255, 255, 255, 1); */
+    color: var(--form-submit-color);
+    box-shadow: 0 4px 10px 0 rgba(59, 120, 79, 0.1) !important;
+}
+
+.form-input[type="reset"] {
+    background: var(--form-reset-bg) !important;
+    color: var(--form-reset-color);
+}
+
+.form-input[type="submit"]:hover {
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
-    background: rgba(220, 250, 250, 0.8);
+    /* background: rgba(220, 250, 250, 0.8); */
+    background: var(--form-submit-hover-bg) !important;
+    /* color: rgba(12, 35, 68, 1) ; */
+    color: var(--form-submit-hover-color);
+}
+
+.form-input[type="reset"]:hover {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    /* background: rgba(12, 35, 68, 1) !important; */
+    background: var(--form-reset-hover-bg) !important;
+    color: var(--form-reset-hover-color);
 }
 
 textarea.form-input {
     width: 100% !important;
     border: none;
     max-height: 200px;
+    field-sizing: content;
 }
 
 input {
@@ -138,11 +165,18 @@ input:active {
 }
 
 /* input radio */
-.form-input[type=radio] ,
-.form-input[type=checkbox] {
+.form-input[type="radio"],
+.form-input[type="checkbox"] {
     width: 20px;
     min-height: 20px !important;
     cursor: pointer;
+}
+
+.auth-container .form-input[type="checkbox"],
+.form-input[type="checkbox"] {
+    /* background-color: rgba(240, 240, 240, 0.9) !important; */
+    background-color: var(--form-checkbox-bg) !important;
+    color: var(--form-checkbox-color);
 }
 
 .form-text {
@@ -181,6 +215,7 @@ input:active {
     flex-direction: column;
     justify-content: start;
 }
+
 .horizontal.grouped .form-group .form-item {
     display: flex;
     gap: 8px;
@@ -190,6 +225,7 @@ input:active {
     justify-content: space-between;
     align-items: center;
 }
+
 .form-item:has(textarea) {
     display: flex;
     flex-direction: column;
@@ -220,7 +256,7 @@ select.form-select {
     padding-left: 16px;
     /* padding-right: 30px; */
     min-width: 200px;
-    background-color: rgba(240, 240, 240, 0.9);
+    background-color: var(--form-select-bg);
     font-weight: 600;
     border-radius: 16px !important;
     min-height: 30px;
@@ -230,18 +266,18 @@ select.form-select {
 /* under 1200px */
 @media (max-width: 1200px) {
     form {
-        width: 100%;
+    width: 100%;
     }
 
-    .form-input[type=text],
-    .form-input[type=number],
-    .form-input[type=email],
-    .form-input[type=password] {
-        min-width: 200px;
+    .form-input[type="text"],
+    .form-input[type="number"],
+    .form-input[type="email"],
+    .form-input[type="password"] {
+    min-width: 200px;
     }
 
     .horizontal.grouped {
-        flex-direction: column;
+    flex-direction: column;
     }
 }
 
@@ -249,5 +285,3 @@ select.form-select {
     background-color: #3b4779;
     color: white;
 }
-
-/* mobile screens */
