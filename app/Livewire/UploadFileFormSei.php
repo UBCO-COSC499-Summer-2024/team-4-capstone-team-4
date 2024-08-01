@@ -6,33 +6,46 @@ use App\Models\Area;
 use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\DepartmentPerformance;
+use App\Models\InstructorPerformance;
 use App\Models\SeiData;
 use App\Models\Teach;
-use App\Models\InstructorPerformance;
-use Livewire\Attributes\Rule;
-use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
-use Illuminate\Support\Facades\Session;
 
-use function PHPUnit\Framework\isEmpty;
-
-class ImportSeiForm extends Component
+class UploadFileFormSei extends Component
 {
     public $rows = [];
+    public $finalCSVs = [];
 
     public $isDuplicate = false;
     public $showModal = false;
-    public $hasCourses = false;
-    public $rowAmount = 0;
 
-    public function mount() {
-        if(Session::has('seiFormData')) {
-            $this->rows = Session::get('seiFormData');
-        } else {
-            $this->rows = [
-                ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
-            ];
+    public function mount($finalCSVs) {
+        $this->finalCSVs = $finalCSVs;
+
+        foreach ($finalCSVs as $index => $finalCSV) {
+            $prefix = $finalCSV['Prefix'] ?? null;
+            $number = $finalCSV['Number'] ?? null;
+            $section = $finalCSV['Section'] ?? null;
+            $session = $finalCSV['Session'] ?? null;
+            $term = $finalCSV['Term'] ?? null;
+            $year = $finalCSV['Year'] ?? null;
+
+            if (isset($prefix, $number, $section, $session, $term, $year)) {
+                $this->rows[$index] = [
+                    'cid' => $this->getCourseIdByName($prefix, $number, $section, $session, $term, $year),
+                    'q1' => $finalCSV['Q1'] ?? '',
+                    'q2' => $finalCSV['Q2'] ?? '',
+                    'q3' => $finalCSV['Q3'] ?? '',
+                    'q4' => $finalCSV['Q4'] ?? '',
+                    'q5' => $finalCSV['Q5'] ?? '',
+                    'q6' => $finalCSV['Q6'] ?? '',
+                ];
+            }
         }
+
+        // dd($this->rows);    
+        $this->checkDuplicate();
+        session()->forget('finalCSVs');
     }
 
     public function rules() {
@@ -87,6 +100,37 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
+    public function deleteRow($row) {
+        $this->resetValidation();
+        $this->checkDuplicate();
+
+        unset($this->rows[$row]);
+        $this->rows = array_values($this->rows);
+    }
+
+    public function getCourseIdByName($prefix, $number, $section, $session, $term, $year) {
+        $course_id = CourseSection::where('prefix', $prefix)
+            ->where('number', $number)
+            ->where('section', $section)
+            ->where('session', $session)
+            ->where('term', $term)
+            ->where('year', $year)
+            ->pluck('id')
+            ->first();
+
+        if($course_id != null) {
+            return $course_id;
+        }
+        return;
+    }
+
+    public function resetData()
+    {
+        session()->forget('finalCSVs');
+        $this->finalCSVs = [];
+        $this->rows = [];
+    }
+
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -111,33 +155,7 @@ class ImportSeiForm extends Component
 
         // dd($duplicateIndices, $selectedCourses);
 
-        Session::put('seiFormData', $this->rows);
-    }
-
-    public function addRow() {
-        $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
-        Session::put('seiFormData', $this->rows);
-    }
-
-    public function addManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
-            $this->addRow();
-        }
-    }
-
-    public function deleteRow($row) {
-        unset($this->rows[$row]);
-        $this->rows = array_values($this->rows);
-
-        $this->checkDuplicate();
-        Session::put('seiFormData', $this->rows);
-    }
-
-    public function deleteManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
-            $count = count($this->rows);
-            $this->deleteRow($count-1);
-        }
+        // Session::put('seiFormData', $this->rows);
     }
 
     public function closeModal() {
@@ -145,12 +163,10 @@ class ImportSeiForm extends Component
     }
 
     public function handleSubmit() {
-
         $this->checkDuplicate();
         
         $this->validate();
-    
-        
+
         foreach ($this->rows as $row) {
     
             SeiData::create([
@@ -165,38 +181,29 @@ class ImportSeiForm extends Component
                 ]),
             ]);
 
-            $teach = Teach::where('course_section_id', $row['cid'])->first();
+            // $teach = Teach::where('course_section_id', $row['cid'])->first();
             
-            if($teach){
-                $instructor_id = $teach->instructor_id;   
-                $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
-                $dept_id = Area::where('id', $area_id)->pluck('dept_id');
-                $year = CourseSection::find($row['cid'])->year;         
+            // if($teach){
+            //     $instructor_id = $teach->instructor_id;   
+            //     $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
+            //     $dept_id = Area::where('id', $area_id)->pluck('dept_id');
+            //     $year = CourseSection::find($row['cid'])->year;         
                
-                InstructorPerformance::updatePerformance($instructor_id, $year);
-                AreaPerformance::updateAreaPerformance($area_id, $year);
-                DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
-            }
+            //     InstructorPerformance::updatePerformance($instructor_id, $year);
+            //     AreaPerformance::updateAreaPerformance($area_id, $year);
+            //     DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
+            // }
 
         }
 
-        $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
-        ];
-        
-        Session::forget('seiFormData');
+        $this->showModal = true;
 
-        session()->flash('success', 'Successfully Created!');
-
-        if(session()->has('success')) {
-            $this->showModal = true;
-        }
-
+        $this->resetData();
+        session()->flash('success', $this->showModal);
     }
 
     public function render()
     {
-
         $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')
         ->select('course_sections.*')
@@ -208,14 +215,14 @@ class ImportSeiForm extends Component
         ->orderBy('course_sections.section')
         ->get();
 
-        if(!$courses->isEmpty()) {
-            $this->hasCourses = true;
-        } else {
-            $this->hasCourses = false;
-        }
+        // if(!$courses->isEmpty()) {
+        //     $this->hasCourses = true;
+        // } else {
+        //     $this->hasCourses = false;
+        // }
 
-        return view('livewire.import-sei-form', [
-            "courses" => $courses,
+        return view('livewire.upload-file-form-sei', [
+            'courses' => $courses,
         ]);
     }
 }

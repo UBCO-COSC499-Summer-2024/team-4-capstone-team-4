@@ -97,7 +97,7 @@ class DepartmentPerformance extends Model {
 
         foreach($courses as $course) {
 
-                $enrolled = $course->enrolled;
+                $enrolled = $course->enroll_end;
                 $dropped = $course->dropped;
                 $capacity = $course->capacity;
 
