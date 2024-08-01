@@ -1,39 +1,216 @@
 [
     {
-        "subtopic": "dashboard", 
+        "subtopic": "dashboard",
         "subsections": [
             {
                 "heading": "Introduction",
-                "content": "This is an introduction to dashboard.",
+                "content": "The Performance Dashboard is a comprehensive hub for viewing all performance data within Insight. It provides users with a valuable understanding of various metrics that track their performance.",
                 "tags": [
-                    "intro",
-                    "dashboard"
+                    "introduction",
+                    "overview"
                 ]
             },
             {
-                "heading": "Details",
-                "content": "These are the details of dashboard.",
+                "heading": "Reports",
+                "content": "Reports summarizing overall performance data for a specific instructor or department can be generated using the 'View Report' button in the top-right corner of the Dashboard.",
                 "tags": [
-                    "details",
-                    "dashboard"
+                    "reports",
+                    "summary"
                 ]
             }
         ],
         "subtopics": [
             {
-                "subtopic": "dashboard Subtopic",
+                "subtopic": "Metrics",
                 "subsections": [
                     {
-                        "heading": "Subtopic Introduction",
-                        "content": "This is an introduction to dashboard Subtopic.",
+                        "heading": "Course Metrics",
+                        "content": "Each course section in the Insight database has three associated metrics: Students Enrolled, Students Dropped, and the SEI Average.",
+                        "subsections": [
+                            {
+                                "heading": "SEI Average",
+                                "content": "The SEI Average (Student Experience Survey Average) is the average interpolated mean of student responses to the SEI Survey questions for all courses taught by an instructor, area, or department. These questions are ranked on a 5-point scale, with 5 being the highest score and 1 being the lowest.",
+                                "tags": [
+                                    "metrics",
+                                    "survey"
+                                ]
+                            },
+                            {
+                                "heading": "Enrolled Average",
+                                "content": "The Enrolled Average is the percentage of students enrolled at the end of the semester. It is calculated by dividing the number of enrolled students by the course capacity and multiplying by 100. [Ex. Formula: Enrolled Average (%) = (Enrolled Students / Course Capacity) * 100]",
+                                "tags": [
+                                    "metrics",
+                                    "enrollment"
+                                ]
+                            },
+                            {
+                                "heading": "Dropped Average",
+                                "content": "The Dropped Average is the percentage of students who have dropped a course (with a W standing). It is calculated by subtracting the number of students enrolled at the end of the semester from the number of students enrolled one day after the last day to withdraw without a W standing, dividing this value by the course capacity, and then multiplying by 100. [Ex. Formula: Dropped Average (%) = ((Initial Enrollment - End Enrollment) / Course Capacity) * 100]",
+                                "tags": [
+                                    "metrics",
+                                    "dropout"
+                                ]
+                            }
+                        ],
                         "tags": [
-                            "intro",
-                            "dashboard",
-                            "subtopic"
+                            "course",
+                            "metrics"
+                        ]
+                    },
+                    {
+                        "heading": "Service Hours",
+                        "content": "Instructors within a department complete service hours outside the classroom, tracked as Service Roles and Extra Hours.",
+                        "subsections": [
+                            {
+                                "heading": "Service Roles",
+                                "content": "Service Roles are duties assigned to instructors within a department, with a set number of work hours each month. These roles are displayed as donut charts on the dashboard.",
+                                "tags": [
+                                    "service",
+                                    "roles"
+                                ]
+                            },
+                            {
+                                "heading": "Extra Hours",
+                                "content": "Extra hours are additional service hours assigned to instructors, including meetings, conferences, and other events. These hours are also displayed as donut charts on the dashboard.",
+                                "tags": [
+                                    "service",
+                                    "extra"
+                                ]
+                            }
+                        ],
+                        "tags": [
+                            "service",
+                            "hours"
                         ]
                     }
+                ],
+                "tags": [
+                    "performance",
+                    "metrics"
+                ]
+            },
+            {
+                "subtopic": "Instructor Dashboard",
+                "subsections": [
+                    {
+                        "heading": "Charts",
+                        "content": "The Instructor Dashboard presents three charts for users without a set hours target and four charts for users with a set hours target.",
+                        "subsections": [
+                            {
+                                "heading": "Donut Charts",
+                                "content": "Donut charts display service roles and extra hours assigned to the instructor. Each colored segment represents a specific role or extra hours. Hover over the chart for specific hour values.",
+                                "tags": [
+                                    "charts",
+                                    "service"
+                                ]
+                            },
+                            {
+                                "heading": "Line Chart",
+                                "content": "The line chart tracks the total service hours assigned to the instructor each month over a year. Instructors with a target see a secondary line representing their target hours. Hover over the chart for specific hour values.",
+                                "tags": [
+                                    "charts",
+                                    "line"
+                                ]
+                            },
+                            {
+                                "heading": "Progress Bar (Target Only)",
+                                "content": "The progress bar displays if a target is assigned for the month. The blue portion shows completed hours, and the grey portion shows hours needed to reach the target. Hover over the bar for specific hour values.",
+                                "tags": [
+                                    "charts",
+                                    "progress"
+                                ]
+                            }
+                        ],
+                        "tags": [
+                            "charts",
+                            "dashboard"
+                        ]
+                    },
+                    {
+                        "heading": "Achievements",
+                        "content": "The Achievements section displays the instructor's current performance status, including score, rank, and badge. Refer to the Leaderboard Help page for more details.",
+                        "tags": [
+                            "achievements",
+                            "status"
+                        ]
+                    },
+                    {
+                        "heading": "Filtering",
+                        "content": "Use the 'Select Year' dropdown menu to filter data by year. If only one year is available, performance data for other years has yet to be added.",
+                        "tags": [
+                            "filtering",
+                            "year"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "instructor",
+                    "dashboard"
+                ]
+            },
+            {
+                "subtopic": "Department Dashboard",
+                "subsections": [
+                    {
+                        "heading": "Charts",
+                        "content": "The Department Dashboard presents four charts for the department as a whole and three charts if an area is specified.",
+                        "subsections": [
+                            {
+                                "heading": "Donut Charts",
+                                "content": "Donut charts display service roles and extra hours within the department. Each segment represents total service roles or extra hours in an area. If an area filter is applied, a top-five list of courses is shown. Hover over the charts for specific values.",
+                                "tags": [
+                                    "charts",
+                                    "service"
+                                ]
+                            },
+                            {
+                                "heading": "Line Chart",
+                                "content": "The line chart tracks total service hours within the department and its areas each month over a year. If an area filter is applied, only lines for the selected area and department are shown. Hover over the chart for specific hour values.",
+                                "tags": [
+                                    "charts",
+                                    "line"
+                                ]
+                            }
+                        ],
+                        "tags": [
+                            "charts",
+                            "dashboard"
+                        ]
+                    },
+                    {
+                        "heading": "Leaderboard",
+                        "content": "The Department Dashboard displays a preview of the Department Leaderboard, showing the top-five performers and their scores. If an area filter is applied, the leaderboard shows the top-five performers in that area. Refer to the Leaderboard Help page for more details.",
+                        "tags": [
+                            "leaderboard",
+                            "performance"
+                        ]
+                    },
+                    {
+                        "heading": "Filtering",
+                        "content": "Two filtering options are available: by department area and by year. Use the dropdown menus to filter the data. If only one option appears, additional data must be added to the database.",
+                        "tags": [
+                            "filtering",
+                            "options"
+                        ]
+                    },
+                    {
+                        "heading": "Switching Roles",
+                        "content": "Users with multiple roles (e.g., Department Head and Instructor) can switch between views using the 'Instructor View' or 'Department View' button in the top-right corner of the Dashboard.",
+                        "tags": [
+                            "roles",
+                            "switching"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "department",
+                    "dashboard"
                 ]
             }
+        ],
+        "tags": [
+            "performance",
+            "dashboard"
         ]
     }
 ]
