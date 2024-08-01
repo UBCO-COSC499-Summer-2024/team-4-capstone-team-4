@@ -79,7 +79,7 @@ class Preferences extends Component
                 'action' => 'update',
                 'table_name' => 'settings',
                 'operation_type' => 'UPDATE',
-                'old_value' => $oldValue,
+                'old_value' => json_encode($oldValue),
                 'new_value' => json_encode($this->settings->getAttributes()),
                 'description' => $audit_user . ' updated their preferences',
             ]);
