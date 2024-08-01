@@ -173,6 +173,16 @@ public function createTA(Request $request)
 
     return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
 }
+
+    public function exportPDF()
+    {
+        // Your PDF export logic here
+    }
+
+    public function exportCSV()
+    {
+        // Your CSV export logic here
+    }
     
 
 public function save(Request $request)

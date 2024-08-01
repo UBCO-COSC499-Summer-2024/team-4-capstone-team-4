@@ -3,7 +3,7 @@
 <thead class="sticky-header">
     <tr class="svcr-list-header">
         @foreach(['name' => 'Course Name', 'departmentName' => 'Area'] as $field => $label)
-            <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-8 text-left text-xs font-large text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
+            <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
                     <span>{{ $label }}</span>
                     <div class="ml-1 sort-icons">
@@ -13,7 +13,7 @@
             </th>
         @endforeach
         <!-- Always include the Instructor column -->
-        <th scope="col" class="sortable {{ $sortField === 'instructorName' ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-8 text-left text-xs font-large text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
+        <th scope="col" class="sortable {{ $sortField === 'instructorName' ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
             <div class="flex items-center">
                 <span>Instructor</span>
                 <div class="ml-1 sort-icons">
@@ -22,7 +22,7 @@
             </div>
         </th>
         @foreach(['enrolled' => 'Enrolled', 'dropped' => 'Dropped', 'capacity' => 'Capacity', 'averageRating' => 'SEI Data'] as $field => $label)
-            <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-8 text-left text-xs font-large text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
+            <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
                     <span>{{ $label }}</span>
                     <div class="ml-1 sort-icons">

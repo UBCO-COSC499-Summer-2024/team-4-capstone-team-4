@@ -152,7 +152,8 @@ Route::middleware([
     Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
     Route::post('/create-ta', [CourseDetailsController::class, 'createTA'])->name('createTA');
-
+    Route::get('/export/pdf', [CourseDetailsController::class, 'exportPDF'])->name('export.pdf');
+    Route::get('/export/csv', [CourseDetailsController::class, 'exportCSV'])->name('export.csv');
 });
 
 Route::get('/api/teaching-assistants', [CourseDetailsController::class, 'getTeachingAssistants']);
