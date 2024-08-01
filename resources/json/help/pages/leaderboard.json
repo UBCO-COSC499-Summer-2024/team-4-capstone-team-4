@@ -1,0 +1,39 @@
+[
+    {
+        "subtopic": "Leaderboard",
+        "subsections": [
+            {
+                "heading": "Introduction",
+                "content": "This is an introduction to Leaderboard.",
+                "tags": [
+                    "intro",
+                    "Leaderboard"
+                ]
+            },
+            {
+                "heading": "Details",
+                "content": "These are the details of Leaderboard.",
+                "tags": [
+                    "details",
+                    "Leaderboard"
+                ]
+            }
+        ],
+        "subtopics": [
+            {
+                "subtopic": "Leaderboard Subtopic",
+                "subsections": [
+                    {
+                        "heading": "Subtopic Introduction",
+                        "content": "This is an introduction to Leaderboard Subtopic.",
+                        "tags": [
+                            "intro",
+                            "Leaderboard",
+                            "subtopic"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
