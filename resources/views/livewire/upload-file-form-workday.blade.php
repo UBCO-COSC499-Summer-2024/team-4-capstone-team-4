@@ -137,10 +137,21 @@
             <div class="text-white text-xl text-center m-80">Saving...</div>
         </div>
 
-
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <x-import-modal moreText="Upload Another File"/>
+            {{-- temp --}}
+            <div class="absolute right-5 top-16 bg-blue-50 rounded-sm shadow-lg px-6 py-4 flex flex-col ">
+        
+                <div>You Can Now Assign Instructors!</div>
+                <div class="items-center justify-center text-center mt-2 p-2">
+                    <button class="bg-white text-[#3b4779] border border-[#3b4779] py-2 px-4 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
+                    onclick="location.href='{{ route('assign-courses') }}'">
+                    Assign
+                    </button>
+                </div>
+            
+            </div>
         </div>
         @endif
 

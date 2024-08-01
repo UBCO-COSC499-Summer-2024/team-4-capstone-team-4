@@ -135,11 +135,6 @@
             
             </div>
         </div>
-        {{-- <div>
-            <div>This is the toast text!</div>
-            <a href="{{ route('assign-courses') }}"></a>
-        </div> --}}
-
         @endif
 
         @if($showConfirmModal) 
