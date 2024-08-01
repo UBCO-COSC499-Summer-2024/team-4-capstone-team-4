@@ -99,7 +99,8 @@ return new class extends Migration
             $table->string('session');
             $table->string('section');
             $table->string('room');
-            $table->string('time');
+            $table->string('time_start');
+            $table->string('time_end');
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });
