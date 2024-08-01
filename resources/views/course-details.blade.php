@@ -1,6 +1,20 @@
 <x-app-layout>
     <div class="z-0 p-4 content">
-        <h1 class="mb-4 text-5xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+            @if($user->id < 4)
+                <div class="flex items-center space-x-2">
+                    <x-create-new-button id="createNewButton" />
+                    <x-assign-button id="assignButton" />
+                    <x-edit-button id="editButton" />
+                    <x-save-button id="saveButton" style="display: none;" />
+                    <x-cancel-button id="cancelButton" style="display: none;" />
+                    <x-create-ta-button id="createNewTAButton" style="display: none;" />
+                    <x-assign-ta-button id="assignTAButton" style="display: none;" />
+                </div>
+            @endif
+        </div>
+        
         <div class="flex items-center justify-between mb-4">
             <div class="flex-1 mr-4">
                 <x-coursedetails-tabs />
@@ -8,27 +22,21 @@
             </div>
             <x-coursedetails-exportButton />
             @if($user->id < 4)
-            <div class="flex items-center space-x-4">
-                @if(in_array($userRole, ['admin', 'dept_head']))
-                    <div class="filter-area">
-                        <select id="areaFilter" name="area_id" class="form-select">
-                            <option value="">Filter By Area</option>
-                            @foreach($areas as $area)
-                                <option value="{{ $area->id }}" {{ request('area_id') == $area->id ? 'selected' : '' }}>
-                                    {{ $area->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
-                <x-create-new-button id="createNewButton" />
-                <x-create-ta-button id="createNewTAButton" style="display: none;" />
-                <x-assign-ta-button id="assignTAButton" style="display: none;" />
-                <x-assign-button id="assignButton" />
-                <x-edit-button id="editButton" />
-                <x-save-button id="saveButton" style="display: none;" />
-                <x-cancel-button id="cancelButton" style="display: none;" />
-            </div>
+                <div class="flex items-center space-x-2">
+                    @if(in_array($userRole, ['admin', 'dept_head']))
+                        <div class="filter-area">
+                            <select id="areaFilter" name="area_id" class="form-select">
+                                <option value="">Filter By Area</option>
+                                @foreach($areas as $area)
+                                    <option value="{{ $area->id }}" {{ request('area_id') == $area->id ? 'selected' : '' }}>
+                                        {{ $area->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                    <x-coursedetails-deleteButton />
+                </div>
             @endif
         </div>
         
@@ -98,4 +106,5 @@
     <x-save-details-message />
     <x-create-ta-modal />
     <x-assign-ta-modal />
+    <x-sei-edit-modal :courses="$courses" />
 </x-app-layout>

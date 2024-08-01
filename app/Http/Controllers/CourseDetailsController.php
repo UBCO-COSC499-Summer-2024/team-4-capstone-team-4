@@ -101,8 +101,21 @@ class CourseDetailsController extends Controller
     
         $sortField = 'courseName';
         $sortDirection = 'asc';
+        $courses = CourseSection::all()->map(function ($section) {
+            return (object)[
+                'id' => $section->id,
+                'name' => sprintf('%s %s %s - %s%s %s',
+                    $section->prefix,
+                    $section->number,
+                    $section->section,
+                    $section->year,
+                    $section->session,
+                    $section->term
+                ),
+            ];
+        });
     
-        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab'));
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab','courses'));
     }
     
     public function getTeachingAssistants()
@@ -176,17 +189,23 @@ public function createTA(Request $request)
     return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
 }
 
-    public function exportPDF()
-    {
-        // Your PDF export logic here
-        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
-        $html = view('exports.pdf', compact('courseSections'))->render();
+public function exportPdf(Request $request)
+{
+    try {
+        $courseSections = CourseSection::all(); // Get the data to be exported
 
-        // Generate PDF
+        $html = view('pdf.course-sections', compact('courseSections'))->render(); // Create the HTML view for PDF
+
         $mpdf = new Mpdf();
         $mpdf->WriteHTML($html);
-        return response($mpdf->Output('courses.pdf', 'S'))->header('Content-Type', 'application/pdf');
+        $filename = 'course_sections.pdf';
+        $mpdf->Output($filename, 'D');
+
+    } catch (\Exception $e) {
+        Log::error('PDF export error: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to save PDF. Please try again.'], 500);
     }
+}
 
     public function exportCSV()
     {
@@ -204,6 +223,48 @@ public function createTA(Request $request)
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$csvFileName}");
     }
+    public function manageSeiData(Request $request, $courseId = null)
+    {
+        if ($request->isMethod('get')) {
+            Log::info('Fetching SEI data for course section ID:', ['courseId' => $courseId]);
+    
+            $seiData = SeiData::where('course_section_id', $courseId)->first();
+    
+            if ($seiData) {
+                Log::info('SEI data found:', ['seiData' => $seiData]);
+    
+                $questions = json_decode($seiData->questions, true);
+                Log::info('Decoded questions:', ['questions' => $questions]);
+    
+                // Add course_section_id to the response for completeness
+                $questions['course_section_id'] = $seiData->course_section_id;
+                return response()->json($questions);
+            }
+    
+            Log::warning('No SEI data found for course section ID:', ['courseId' => $courseId]);
+            return response()->json([]);
+        } elseif ($request->isMethod('post')) {
+            Log::info('Saving SEI data', ['requestData' => $request->all()]);
+    
+            $data = $request->all();
+    
+            foreach ($data['course_id'] as $index => $courseId) {
+                $questions = [];
+                for ($i = 1; $i <= 6; $i++) {
+                    $questions['q' . $i] = $data['q' . $i][$index] ?? null;
+                }
+    
+                SeiData::updateOrCreate(
+                    ['course_section_id' => $courseId],
+                    ['questions' => json_encode($questions)]
+                );
+            }
+    
+            Log::info('SEI data saved successfully');
+            return response()->json(['message' => 'SEI data saved successfully.']);
+        }
+    }
+    
     
 
 public function save(Request $request)

@@ -36,9 +36,28 @@
         }
     });
 
-    document.getElementById('exportPDF').addEventListener('click', function () {
-        exportTable('pdf');
-    });
+    document.getElementById('exportPdf').addEventListener('click', function() {
+    fetch('/export/pdf')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to save PDF. Please try again.');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'course_sections.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+});
+
 
     document.getElementById('exportCSV').addEventListener('click', function () {
         exportTable('csv');
