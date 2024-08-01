@@ -15,7 +15,7 @@
     </td>
     <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
         <div class="ps-3 min-w-0 flex-auto">
-            @if($editMode || $editUserId == $userid )
+            @if($editMode )
                 <input type="text" wire:model.lazy="firstnames.{{$userid}}" wire:change="updateFirstname('{{ $userid }}', $event.target.value)" class="border border-solid border-[#3b4779] bg-white rounded-lg mr-1" value="{{ $firstname }}"/>
                 {{-- <x-input-error for="firstnames.{{$userid}}"/> --}}
                 @error('firstnames.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
@@ -39,7 +39,7 @@
         <div class="flex items-center justify-center h-full">{{ $dept }}</div>
     </td> 
     <td class="px-6 py-4">
-        @if($editMode || $editUserId == $userid )
+        @if($editMode)
             <div class="flex flex-col">
                 <div class="flex items-center gap-1">
                     <input type="checkbox" wire:model.defer="instructors" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -63,7 +63,7 @@
         @endif
     </td>
     <td class="px-6 py-4">
-        @if($editMode || $editUserId == $userid )
+        @if($editMode)
             <div class="flex items-center justify-center h-full">
                 <label class="inline-flex items-center cursor-pointer">
                     <input type="checkbox" wire:model.defer="enabledUsers" value="{{ $userid }}" class="sr-only peer"  name="status{{$userid}}">
@@ -83,17 +83,12 @@
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            @if($editUserId == $userid)
-                <button wire:click="editStaff({{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Save">save</span></button>
-                <button wire:click="cancelStaff"><span class="material-symbols-outlined text-red-500" title="Cancel">cancel</span></button>
-            @elseif($editMode)
-                <span class="material-symbols-outlined text-gray-400" title="Edit">edit</span>
-                <span class="material-symbols-outlined text-gray-400" title="Delete">delete</span>
-                <span class="material-symbols-outlined text-gray-400" title="Send Reset Link">mail_lock</span>
+            @if($editMode)
+                <span class="material-symbols-outlined text-gray-400 text-xl" title="Delete">delete</span>
+                <span class="material-symbols-outlined text-gray-400 text-xl" title="Send Reset Link">mail_lock</span>
             @else
-                <button wire:click="$set('editUserId', {{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Edit">edit</span></button>
-                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
-                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
+                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500 text-xl" title="Delete">delete</span></button>
+                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779] text-xl" title="Send Reset Link">mail_lock</span></button>
             @endif
         </div>
     </td>
