@@ -46,15 +46,18 @@ protected $model=CourseSection::class;
         }
 
         $capacity = fake()->numberBetween(10, 200);
+        $enroll_start = fake()->numberBetween(10, $capacity - 1);
+        $enroll_end = fake()->numberBetween(0, $capacity - 1);
+        $dropped = CourseSection::calculateDropped($enroll_start, $enroll_end);
     
         return [
             'prefix' => $prefix,
             'number' => fake()->numberBetween(100, 500),
             'area_id' => $area_id,
             'year' => fake()->year(),
-            'enroll_start' => fake()->numberBetween(10, $capacity-1),
-            'enroll_end' => fake()->numberBetween(0, $capacity-1),
-            'dropped' => fake()->numberBetween(0, 20),
+            'enroll_start' => $enroll_start,
+            'enroll_end' => $enroll_end,
+            'dropped' => $dropped,
             'capacity' => $capacity,
             'term' => fake()->randomElement(['1', '2', '1-2']),
             'session' => fake()->randomElement(['W', 'S']),
