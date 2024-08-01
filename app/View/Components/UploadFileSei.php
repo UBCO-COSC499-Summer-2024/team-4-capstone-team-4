@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\svcrole;
+namespace App\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ManageSvcroles extends Component
+class UploadFileSei extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class ManageSvcroles extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.svcrole.manage-svcroles');
+        return view('components.upload-file-sei');
     }
 }

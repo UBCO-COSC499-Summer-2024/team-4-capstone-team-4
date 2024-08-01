@@ -21,6 +21,6 @@ class UploadFile extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.upload-file');
+        return view('components.upload-file-workday');
     }
 }

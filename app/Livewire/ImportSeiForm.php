@@ -87,9 +87,8 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
-    public function checkDuplicate()
-    {
-        $this->resetValidation(); // Reset any previous validation errors
+    public function checkDuplicate() {
+        $this->resetValidation();
         $selectedCourses = [];
         $duplicateIndices = [];
 
@@ -112,7 +111,6 @@ class ImportSeiForm extends Component
 
         // dd($duplicateIndices, $selectedCourses);
 
-        // Save form data to session
         Session::put('seiFormData', $this->rows);
     }
 
@@ -142,10 +140,14 @@ class ImportSeiForm extends Component
         }
     }
 
+    public function closeModal() {
+        $this->showModal = false;
+    }
+
     public function handleSubmit() {
 
         $this->checkDuplicate();
-        // dd($this->rows);
+        
         $this->validate();
     
         
@@ -191,12 +193,6 @@ class ImportSeiForm extends Component
         }
 
     }
-
-    
-    public function closeModal() {
-        $this->showModal = false;
-    }
-
 
     public function render()
     {

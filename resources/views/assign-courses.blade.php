@@ -1,5 +1,5 @@
 <x-app-layout>
-  <div class="content container mt-5">
+  <div class="mt-5 content">
     <h1>{{ __('Assign Instructors') }}</h1>
 
     @livewire('import-assign-course')

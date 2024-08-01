@@ -46,8 +46,7 @@ class SvcroleListItem extends Component
         'srarea_id' => 'required|exists:areas,id'
     ];
 
-    public function mount($serviceRoleId)
-    {
+    public function mount($serviceRoleId) {
         $serviceRole = ServiceRole::find($serviceRoleId);
         $this->serviceRole = $serviceRole;
         $this->areas = Area::all();
@@ -59,8 +58,7 @@ class SvcroleListItem extends Component
         $this->srarea_id = $this->serviceRole->area_id;
     }
 
-    public function toggleEditMode($data)
-    {
+    public function toggleEditMode($data) {
         // selected items is in the format of [id => boolean, id => boolean, ...]
         // print type of selectedItems
         $selectedItems = $data['selectedItems'];
@@ -76,8 +74,7 @@ class SvcroleListItem extends Component
         }
     }
 
-    public function deleteServiceRole($id)
-    {
+    public function deleteServiceRole($id) {
         try {
             // dd($id);
             if ($id == $this->serviceRole->id) {
@@ -148,42 +145,69 @@ class SvcroleListItem extends Component
         }
     }
 
-    public function editServiceRole()
-    {
+    public function editServiceRole() {
         $this->isEditing = true;
     }
 
-    public function saveServiceRole($id)
-    {
+    public function saveServiceRole($id) {
         if ($id !== $this->serviceRole->id) {
             return;
         }
-        // $this->validate([
-        //     'srname' => 'required',
-        //     'sryear' => 'required|integer',
-        //     'srdescription' => 'nullable',
-        //     'srarea_id' => 'required|exists:areas,id'
-        // ]);
 
-        // $this->serviceRole->save();
-        // $this->isEditing = false;
-
-        // // Optional: emit an event to the parent
-        // $this->dispatch('show-toast', [
-        //     'message' => 'Service Role updated successfully.',
-        //     'type' => 'success'
-        // ]);
         try {
             $this->validate();
 
             $audit_user = User::find((int) auth()->user()->id)->name;
             $oldValue = $this->serviceRole->getOriginal();
+
+            // Check if year has changed
+            if ($this->sryear !== $this->serviceRole->year) {
+                // Check if a ServiceRole with the new year already exists
+                $existingRole = ServiceRole::where('year', $this->sryear)
+                    ->where('area_id', $this->srarea_id)
+                    ->first();
+
+                if (!$existingRole) {
+                    // Create new ServiceRole if it doesn't exist
+                    $newServiceRole = ServiceRole::create([
+                        'name' => $this->srname,
+                        'year' => $this->sryear,
+                        'description' => $this->srdescription,
+                        'area_id' => $this->srarea_id,
+                        'archived' => false,
+                    ]);
+
+                    // Optionally: log creation
+                    AuditLog::create([
+                        'user_id' => (int) auth()->user()->id,
+                        'user_alt' => $audit_user,
+                        'action' => 'create',
+                        'table_name' => 'service_roles',
+                        'operation_type' => 'INSERT',
+                        'old_value' => null,
+                        'new_value' => json_encode($newServiceRole->getAttributes()),
+                        'description' => 'Service Role ' . $newServiceRole->name . ' created by ' . $audit_user,
+                    ]);
+
+                    $this->dispatch('show-toast', [
+                        'message' => 'Service Role created successfully.',
+                        'type' => 'success'
+                    ]);
+
+                    // Optionally: redirect or perform additional actions
+                    return;
+                }
+            }
+
+            // Update existing ServiceRole
             $this->serviceRole->name = $this->srname;
             $this->serviceRole->year = $this->sryear;
             $this->serviceRole->description = $this->srdescription;
             $this->serviceRole->area_id = $this->srarea_id;
             $this->serviceRole->save();
+
             $this->isEditing = false;
+
             $this->dispatch('show-toast', [
                 'message' => 'Service Role updated successfully.',
                 'type' => 'success'
@@ -215,8 +239,8 @@ class SvcroleListItem extends Component
         }
     }
 
-    public function confirmSDelete($serviceRoleId)
-    {
+
+    public function confirmSDelete($serviceRoleId) {
         $this->dispatch('confirmDelete', [
             'message' => 'Are you sure you want to delete this service role?',
             'id' => $serviceRoleId,
@@ -235,15 +259,13 @@ class SvcroleListItem extends Component
         ]);
     }
 
-    public function getFormattedAreasProperty()
-    {
+    public function getFormattedAreasProperty() {
         return $this->areas->mapWithKeys(function ($area) {
             return [$area->id => $area->name];
         })->toArray();
     }
 
-    public function render()
-    {
+    public function render() {
         return view('livewire.templates.svcrole-list-item', [
             'areas' => $this->areas, // Pass areas data to the view
         ]);
