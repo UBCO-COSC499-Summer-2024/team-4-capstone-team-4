@@ -572,6 +572,11 @@ class StaffList extends Component
             $user->update(['email' => $email]);
         }
 
+        $changedFirstnames = array_keys($this->changedFirstnames);
+        $changedLastnames = array_keys($this->changedLastnames);
+        $changedEmails = array_keys($this->changedEmails);
+        $editedCount = count(array_unique(array_merge($changedFirstnames, $changedLastnames, $changedEmails)));
+
         // Update status
         foreach($addedUsers as $userid){
             $user = User::find($userid);
@@ -600,14 +605,43 @@ class StaffList extends Component
         $this->prevAdmins = $this->admins;
 
         //Reset and send toast
-        $message = sprintf(
-            "%d users enabled, %d disabled.\n%d instructors added, %d removed.\n%d department heads added, %d removed.\n%d department staff added, %d removed.\n%d admins added, %d removed.",
-            $enabledCount, $disabledCount,
-            $instructorCounts[0], $instructorCounts[1],
-            $headCounts[0], $headCounts[1],
-            $staffCounts[0], $staffCounts[1],
-            $adminCounts[0], $adminCounts[1]
-        );
+        $messageParts = [];
+
+        if ($editedCount > 0) {
+            $messageParts[] = sprintf("%d user(s) information updated", $editedCount);
+        }
+        if ($enabledCount > 0) {
+            $messageParts[] = sprintf("%d user(s) enabled", $enabledCount);
+        }
+        if ($disabledCount > 0) {
+            $messageParts[] = sprintf("%d user(s) disabled", $disabledCount);
+        }
+        if ($instructorCounts[0] > 0 ) {
+            $messageParts[] = sprintf("%d instructor(s) added", $instructorCounts[0]);
+        }
+        if ($instructorCounts[1] > 0 ) {
+            $messageParts[] = sprintf("%d instructor(s) removed", $instructorCounts[1]);
+        }
+        if ($headCounts[0] > 0) {
+            $messageParts[] = sprintf("%d department head(s) added", $headCounts[0]);
+        }
+        if ($headCounts[1] > 0) {
+            $messageParts[] = sprintf("%d department head(s) removed", $headCounts[1]);
+        }
+        if ($staffCounts[0] > 0) {
+            $messageParts[] = sprintf("%d department staff(s) added", $staffCounts[0]);
+        }
+        if ($staffCounts[1] > 0) {
+            $messageParts[] = sprintf("%d department staff(s) removed", $staffCounts[1]);
+        }
+        if ($adminCounts[0] > 0) {
+            $messageParts[] = sprintf("%d admin(s) added", $adminCounts[0]);
+        }
+        if ($adminCounts[1] > 0) {
+            $messageParts[] = sprintf("%d admin(s) removed", $adminCounts[1]);
+        }
+
+        $message = implode("\n", $messageParts);
 
         $this->editMode = false;
         $this->dispatch('show-toast', [
