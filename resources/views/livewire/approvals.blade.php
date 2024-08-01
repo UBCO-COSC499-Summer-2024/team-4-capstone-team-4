@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full gap-4 px-2 service-requests-container" x-data="{
+<div class="service-requests-container" x-data="{
     viewMode: @entangle('viewMode'),
 }">
     <section class="z-50 toolbar" id="approval-toolbar">

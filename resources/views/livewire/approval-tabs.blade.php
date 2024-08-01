@@ -20,9 +20,9 @@
         @foreach ($tabs as $tab => $tabItem)
             @if ($activeTab === $tab)
                 @if (LivewireHelpers::componentExists($tabItem['component']))
-                @php
-                    $hasOptions = $tabItem['options'] !== [] || count($tabItem['options']) > 0 || !empty($tabItem['options']);
-                @endphp
+                    @php
+                        $hasOptions = $tabItem['options'] !== [] || count($tabItem['options']) > 0 || !empty($tabItem['options']);
+                    @endphp
                     @if($hasOptions)
                         @livewire($tabItem['component'], $tabItem['options'], key('panel_'.$tabItem['component']))
                     @else

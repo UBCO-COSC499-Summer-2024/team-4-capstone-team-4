@@ -91,9 +91,8 @@ class ApprovalList extends Component
         }
     }
 
-    public function sortSelected($column, $order) {
-        $this->selectedSort = $column;
-        $this->selectedSortOrder = $order;
+    public function sortSelected($column) {
+        $this->sortColumn($column);
     }
 
     public function updateSearch($value) {
@@ -127,6 +126,16 @@ class ApprovalList extends Component
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
+    public function sortColumn($column) {
+        if ($this->selectedSort === $column) {
+            $this->selectedSortOrder = $this->selectedSortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->selectedSort = $column;
+            $this->selectedSortOrder = 'desc';
+        }
+        $this->dispatch('sort-selected', [$this->selectedSort, $this->selectedSortOrder]);
+    }
+
     public function render() {
         $query = Approval::query();
 
@@ -149,7 +158,9 @@ class ApprovalList extends Component
             }
         }
 
-        $query->orderBy($this->selectedSort, $this->selectedSortOrder);
+        if (count($this->approvals) > 0) {
+            $query->orderBy($this->selectedSort, $this->selectedSortOrder);
+        }
 
         $approvals = $query->paginate($this->perPage);
 

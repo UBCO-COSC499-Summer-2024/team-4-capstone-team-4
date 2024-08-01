@@ -92,32 +92,15 @@ class Approval extends Model
         return $this->hasMany(ApprovalHistory::class);
     }
 
-    // check status of approval and also how many approvals required etc
+    /**
+     * Check the status of the approval.
+     *
+     * @return mixed
+     */
     public function checkStatus() {
-        $approvalType = $this->approvalType;
-        $histories = $this->histories;
-        $status = $this->status;
-        $approvedStatus = ApprovalStatus::where('name', 'approved')->first();
-        $rejectedStatus = ApprovalStatus::where('name', 'rejected')->first();
-        $intermediateStatus = ApprovalStatus::where('name', 'intermediate')->first();
-        $pendingStatus = ApprovalStatus::where('name', 'pending')->first();
-        $approvalsRequired = $approvalType->approvals_required;
-        $approvedCount = $histories->where('status_id', $approvedStatus->id)->count() ?? 0;
-        $rejectedCount = $histories->where('status_id', $rejectedStatus->id)->count() ?? 0;
-        $intermediateCount = $histories->where('status_id', $intermediateStatus->id)->count() ?? 0;
-        $approvalStatus = $pendingStatus->id;
-        if ($approvedCount >= $approvalsRequired) {
-            $approvalStatus = $approvedStatus->id;
-        } else if ($rejectedCount > 0) {
-            $approvalStatus = $rejectedStatus->id;
-        } else if ($intermediateCount > 0) {
-            $approvalStatus = $intermediateStatus->id;
-        }
-        if ($status->id != $approvalStatus) {
-            $this->status_id = $approvalStatus;
-            $this->save();
-        }
+        return $this->status->id;
     }
+
 
     public function requiredApprovals() {
         return $this->approvalType->approvals_required;
@@ -154,13 +137,7 @@ class Approval extends Model
         $this->status_id = $this->approvedCount() + 1 >= $this->approvalType->approvals_required ? $approvedStatus->id : $intermediateStatus->id;
         $this->save();
 
-        $history = new ApprovalHistory();
-        $history->approval_id = $this->id;
-        $history->status_id = $this->status_id;
-        $history->user_id = Auth::id();
-        $history->remarks = 'Approved';
-        $history->changed_at = now();
-        $history->save();
+        $this->logHistory($this->status_id, 'Approved');
 
         if ($this->status_id == $approvedStatus->id) {
             $this->finalizeApproval();
@@ -172,18 +149,12 @@ class Approval extends Model
         $this->status_id = $rejectedStatus->id;
         $this->save();
 
-        $history = new ApprovalHistory();
-        $history->approval_id = $this->id;
-        $history->status_id = $this->status_id;
-        $history->user_id = Auth::id();
-        $history->remarks = 'Rejected';
-        $history->changed_at = now();
-        $history->save();
-
         $this->rejected_at = now();
         $this->rejected_by = Auth::id();
         $this->active = false;
         $this->save();
+
+        $this->logHistory($this->status_id, 'Rejected');
     }
 
     public function cancel() {
@@ -191,13 +162,7 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
-        $history = new ApprovalHistory();
-        $history->approval_id = $this->id;
-        $history->status_id = $this->status_id;
-        $history->user_id = Auth::id();
-        $history->remarks = 'Cancelled';
-        $history->changed_at = now();
-        $history->save();
+        $this->logHistory($this->status_id, 'Cancelled');
     }
 
     public function finalizeApproval() {
@@ -206,14 +171,69 @@ class Approval extends Model
         $this->approved_by = Auth::id();
         $this->active = false;
         $this->save();
+
+        $this->logHistory($this->status_id, 'Finalized');
     }
 
     public function approvedCount() {
-        return $this->histories->where('status_id', ApprovalStatus::where('name', 'approved')->first()->id)->orWhere('status_id', ApprovalStatus::where('name', 'intermediate')->first()->id)->count() ?? 0;
+        // Count the number of approved approvals
+        $approvedCount = count($this->approvals()
+            ->whereHas('status', function($query) {
+                $query->where('name', 'approved');
+            }));
+
+        // Check if the number of required approvals has been reached
+        $requiredApprovals = $this->approvalType->approvals_required;
+
+        if ($approvedCount < $requiredApprovals) {
+            // If not, include intermediate approvals as well
+            $intermediateCount = count($this->approvals()
+                ->whereHas('status', function($query) {
+                    $query->where('name', 'intermediate');
+                }));
+
+            $result = [
+                'approved' => $approvedCount,
+                'intermediate' => $intermediateCount,
+                'total' => $approvedCount + $intermediateCount
+            ];
+
+            return $result['total'];
+        }
+
+        $result = [
+            'approved' => $approvedCount,
+            'intermediate' => 0,
+            'total' => $approvedCount
+        ];
+
+        return $result['total'];
     }
 
     public static function getColumns() {
         $self = new Self;
         return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
+
+    protected function logHistory($statusId, $remarks) {
+        $history = new ApprovalHistory();
+        $history->approval_id = $this->id;
+        $history->status_id = $statusId;
+        $history->user_id = Auth::id();
+        $history->remarks = $remarks;
+        $history->changed_at = now();
+        $history->save();
+
+        $audit_user = User::findOrFail(auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'user_alt' => $audit_user,
+            'action' => strtolower($remarks) . ' approval',
+            'description' => "$audit_user $remarks approval with ID: " . $this->id,
+            'old_value' => json_encode($this->getOriginal()),
+            'new_value' => json_encode($this->getAttributes()),
+            'operation_type' => 'UPDATE',
+            'table_name' => 'approvals'
+        ]);
     }
 }

@@ -119,12 +119,18 @@
     left: 5px;
     font-size: 1rem;
     color: #999;
-    padding: 6px;
+    font-weight: 600;
+    padding: 4px 12px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 50%;
+    border-radius: 50px;
     cursor: pointer;
+    background: #f0f0f0;
     gap: 6px;
+}
+
+.toolbar .filter-clear-btn .material-symbols-outlined {
+    font-weight: 600;
 }

@@ -88,7 +88,7 @@ class ApprovalTest extends TestCase
     public function test_can_check_approval_status()
     {
         $approval = Approval::factory()->create();
-        $this->assertIsArray($approval->checkStatus());
+        $this->assertIsInt($approval->checkStatus());
     }
 
     public function test_can_get_approval_approved_count()

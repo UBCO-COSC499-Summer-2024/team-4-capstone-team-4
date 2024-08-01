@@ -34,4 +34,9 @@ class ApprovalType extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
 }

@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 /* For the table headers and structure */
-th.editable {
+.course-details th.editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
     outline: none;
     cursor: pointer;
 }
 
-th.editable:focus {
+.course-details th.editable:focus {
     border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
-.editable {
+.course-details .editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
     outline: none;
 }
 
-.editable:focus {
+.course-details .editable:focus {
     border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
-.modal-dialog-centered {
+.course-details .modal-dialog-centered {
     display: flex;
     align-items: center;
     min-height: calc(100% - 1rem);
 }
 
-.modal-dialog-centered .modal-content {
+.course-details .modal-dialog-centered .modal-content {
     margin: auto;
 }
 
 /* Fixing the headers of the table */
-.fixed-header {
+.course-details .fixed-header {
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -50,25 +50,25 @@ th.editable:focus {
     margin-bottom: 6px;
 }
 
-.fixed-header .header-title {
+.course-details .fixed-header .header-title {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
 }
 
-.fixed-header .header-search {
+.course-details .fixed-header .header-search {
     flex: 1;
     display: flex;
     padding: 1px;
     border-radius: 4px;
 }
 
-.fixed-header .header-buttons {
+.course-details .fixed-header .header-buttons {
     display: flex;
     gap: 10px;
 }
 
-.sticky-header th {
+.course-details .sticky-header th {
     position: sticky;
     top: 0px;
     z-index: 500;
@@ -78,13 +78,13 @@ th.editable:focus {
 }
 
 /* Ensures the dropdown menu has a higher z-index than other elements */
-.dropdown-menu {
+.course-details .dropdown-menu {
     z-index: 1100;
 }
 
 /* Search bar */
-.search-bar,
-#searchInput {
+.course-details .search-bar,
+.course-details #searchInput {
     box-shadow: none;
     border: 1px solid #e0e0e0;
     outline: none;
@@ -97,12 +97,12 @@ th.editable:focus {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-#searchInput:focus {
+.course-details #searchInput:focus {
     border-color: #3b4779;
     box-shadow: 0 0 0 1px #3b4779;
 }
 
-#searchInput::placeholder {
+.course-details #searchInput::placeholder {
     color: #787878;
 }
 
@@ -125,7 +125,7 @@ th.editable:focus {
 }
 
 /* Highlighting the table in the edit mode */
-.editable-highlight {
+.course-details .editable-highlight {
     border: 1px solid #3b4779;
     background-color: #ffffff;
     padding: 15px;
@@ -151,23 +151,23 @@ th.editable:focus {
     box-shadow: 0 0 0 1px #3B784F;
 }
 /* For the error handling messages in the edit mode */
-.input-error {
+.course-details .input-error {
     border: 2px solid red;
     background-color: #ffe6e6;
 }
 
 /* Edit Mode Display for the table  */
-table {
+.course-details table {
     border-collapse: separate;
     border-spacing: 2px 12px;
 }
 
-tbody tr {
+.course-details tbody tr {
     border-radius: 8px;
     overflow: hidden;
 }
 
-tbody td {
+.course-details tbody td {
     padding: 12px 15px;
     background-color: #ffffff;
     border-top: 1px solid transparent;
@@ -175,19 +175,19 @@ tbody td {
     transition: background-color 0.1s, border-color 0.1s;
 }
 
-tbody td:first-child {
+.course-details tbody td:first-child {
     border-left: 1px solid rgb(255, 255, 255);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
 
-tbody td:last-child {
+.course-details tbody td:last-child {
     border-right: 1px solid rgb(255, 255, 255);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 /* For the Filter Icon */
-.form-select {
+.course-details .form-select {
     appearance: none;
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
@@ -199,22 +199,22 @@ tbody td:last-child {
     border: 2px solid #3b4779;
     background-color: #f8f8f8;
     transition: border-color 0.3s, box-shadow 0.3s;
-    width: 50%; 
-    max-width: 50%; 
+    width: 50%;
+    max-width: 50%;
     color: #3b4779;
 }
 
-.form-select:focus {
-    border-color: #3b4779; 
+.course-details .form-select:focus {
+    border-color: #3b4779;
     box-shadow: 0 0 0 1px #3b4779;
     outline: none;
 }
 
-.form-select::placeholder {
+.course-details .form-select::placeholder {
     color: #f8f8f8;
 }
 
-.filter-instructor {
+.course-details .filter-instructor {
     margin-top: 0rem;
 }
 

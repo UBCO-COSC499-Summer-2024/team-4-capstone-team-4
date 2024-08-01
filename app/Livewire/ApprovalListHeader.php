@@ -15,7 +15,6 @@ class ApprovalListHeader extends Component
 
     public $listeners = [
         'refresh-list' => 'refresh',
-        'sort-selected' => 'sortSelected',
     ];
 
     public function mount($headers, $type) {
@@ -30,7 +29,7 @@ class ApprovalListHeader extends Component
             $this->selectedSort = $column;
             $this->selectedSortOrder = 'desc';
         }
-        $this->dispatch('sort-selected', [$this->selectedSort, $this->selectedSortOrder, $this->type]);
+        $this->dispatch('sort-selected', [$this->selectedSort, $this->selectedSortOrder]);
     }
 
     public function render() {

@@ -12,7 +12,7 @@
                 <div class="svcr-list-th">
                     <span class="svcr-list-th-text">{{ $label }}</span>
                     <span class="audit-list-sort">
-                        <span @click="sortColumn('{{ $column }}')" class="material-symbols-outlined icon audit-sort-icon">
+                        <span wire:click="$dispatch('sort-selected', ['{{ $column }}'])" class="material-symbols-outlined icon audit-sort-icon">
                             @if ($selectedSort === $column)
                                 @if ($selectedSortOrder === 'asc')
                                     arrow_drop_up

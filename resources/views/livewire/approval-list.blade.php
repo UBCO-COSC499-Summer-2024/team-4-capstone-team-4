@@ -1,6 +1,8 @@
 <div class="sreq-list" x-data="{
     search: @entangle('query').defer,
     filters: @entangle('filters').defer,
+    selectedSort: @entangle('selectedSort').defer,
+    selectedSortOrder: @entangle('selectedSortOrder').defer,
     selectedFilter: @entangle('selectedFilter').defer,
     clearFilters() {
         this.selectedFilter = {};
@@ -9,6 +11,15 @@
         }
         this.search = '';
         @this.call('clear-filters');
+    },
+    sortColumn(column) {
+        if (this.selectedSort === column) {
+            this.selectedSortOrder = this.selectedSortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.selectedSort = column;
+            this.selectedSortOrder = 'asc';
+        }
+        @this.call('sortColumn', column);
     },
     aptype: @entangle('type').defer,
 }">
@@ -105,7 +116,7 @@
             <livewire:approval-list-header :headers="$headers" :type="$type" :key="'approval_list_header_{{ $type }}'" />
             <tbody>
                 @forelse ($approvals as $approval)
-                    <livewire:templates.approval-list-item :approval="$approval" :type="$type" :key="'approval_list_item_{{ $approval->id }}'" />
+                    <livewire:templates.approval-list-item :approval="$approval" :type="$type" :key="'approval_list_item_{{ $approval->id }}'" :headers="$headers" />
                 @empty
                     <tr class="svcr-list-item">
                         <td class="svcr-list-item-cell" colspan="100%">No approvals found.</td>

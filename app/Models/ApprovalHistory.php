@@ -62,4 +62,9 @@ class ApprovalHistory extends Model
     public function approval() {
         return $this->belongsTo(Approval::class);
     }
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
 }
