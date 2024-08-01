@@ -17,7 +17,7 @@ if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     // audit logs
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
-        ['icon' => 'browser_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
+        ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
     ]);
 
     if($user->hasRoles(['admin'])) {

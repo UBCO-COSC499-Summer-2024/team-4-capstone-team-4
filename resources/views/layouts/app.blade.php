@@ -34,7 +34,7 @@
         {{-- @toastifyCss --}}
         <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
     </head>
-    <body class="font-sans antialiased {{ config('app.theme') === 'dark' ? 'dark' : '' }}">
+    <body class="font-sans antialiased {{ Auth::user()->settings->theme === 'dark' ? 'dark' : '' }}">
         <x-header />
         <main>
             @php
