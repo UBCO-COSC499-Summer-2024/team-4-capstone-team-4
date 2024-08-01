@@ -53,6 +53,7 @@ class Preferences extends Component
         $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
+            $oldValue = $this->settings->getOriginal();
             $this->settings['timezone'] = $this->timezone;
             $this->settings['theme'] = $this->theme;
             $this->settings['locale'] = $this->locale;
@@ -78,23 +79,10 @@ class Preferences extends Component
                 'action' => 'update',
                 'table_name' => 'settings',
                 'operation_type' => 'UPDATE',
-                'old_value' => json_encode($this->settings->getOriginal()),
+                'old_value' => $oldValue,
                 'new_value' => json_encode($this->settings->getAttributes()),
                 'description' => $audit_user . ' updated their preferences',
             ]);
-            echo "<script>
-                    const newSettings = {
-                        locale: '{$this->locale}',
-                        theme: '{$this->theme}'
-                    };
-                    localStorage.setItem('userSettings', JSON.stringify(newSettings));
-
-                    // Dispatch a custom event to force localStorage sync across tabs
-                    const event = new Event('storage');
-                    event.key = 'userSettings';
-                    event.newValue = JSON.stringify(newSettings);
-                    window.dispatchEvent(event);
-                </script>";
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'Error saving preferences: ' . $e->getMessage(),
