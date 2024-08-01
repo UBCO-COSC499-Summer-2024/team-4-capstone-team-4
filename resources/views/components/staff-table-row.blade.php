@@ -7,7 +7,7 @@
 @endphp
 
 @if($admin)
-<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
     <td class="w-3 px-6 py-4">
         <div class="flex items-center justify-center h-full">
             <x-checkbox wire:model="staffCheckboxes" name="staff-checkboxes[]" value="{{ $email }}" class="staff-checkbox"/>
@@ -15,19 +15,31 @@
     </td>
     <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
         <div class="ps-3 min-w-0 flex-auto">
-            <div class="block">
-                <p class="text-lg font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
-            </div>
-            <div class="block mt-1 truncate text-base leading-5 text-gray-500">
-                {{ $email }}
-            </div>
+            @if($editMode )
+                <input type="text" wire:model.lazy="firstnames.{{$userid}}" wire:change="updateFirstname('{{ $userid }}', $event.target.value)" class="border border-solid border-[#3b4779] bg-white rounded-lg mr-1" value="{{ $firstname }}"/>
+                {{-- <x-input-error for="firstnames.{{$userid}}"/> --}}
+                @error('firstnames.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
+                <input type="text" wire:model.lazy="lastnames.{{$userid}}" wire:change="updateLastname('{{ $userid }}', $event.target.value)" class="border border-solid border-[#3b4779] bg-white  rounded-lg" value="{{ $lastname }}"/>
+                {{-- <x-input-error for="lastnames.{{ $userid }}"/> --}}
+                @error('lastnames.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
+                <input type="email" wire:model.lazy="emails.{{$userid}}" wire:change="updateEmail('{{ $userid }}', $event.target.value)" class="block mt-1 border border-solid border-[#3b4779] bg-white rounded-lg" value="{{ $email }}" />
+               {{--  <x-input-error for="emails.{{$userid}}"/> --}}
+               @error('emails.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
+            @else
+                <div class="block">
+                    <p class="text-lg font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
+                </div>
+                <div class="block mt-1 truncate text-base leading-5 text-gray-500">
+                    {{ $email }}
+                </div>
+            @endif
         </div>
     </td>
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">{{ $dept }}</div>
     </td> 
     <td class="px-6 py-4">
-        @if($editMode || $editUserId == $userid )
+        @if($editMode)
             <div class="flex flex-col">
                 <div class="flex items-center gap-1">
                     <input type="checkbox" wire:model.defer="instructors" value="{{ $userid }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -51,13 +63,17 @@
         @endif
     </td>
     <td class="px-6 py-4">
-        @if($editMode || $editUserId == $userid )
+        @if($editMode)
             <div class="flex items-center justify-center h-full">
                 <label class="inline-flex items-center cursor-pointer">
                     <input type="checkbox" wire:model.defer="enabledUsers" value="{{ $userid }}" class="sr-only peer"  name="status{{$userid}}">
                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                     <span class="ms-3">Enabled</span>
                 </label>
+                {{-- <label class="inline-flex items-center cursor-pointer switch">
+                    <input type="checkbox" wire:model.defer="enabledUsers" value="{{ $userid }}" name="status{{$userid}}">
+                    <span class="slider round">Enabled</span>
+                </label> --}}
             </div>
         @else
             <div class="flex items-center justify-center h-full">
@@ -71,17 +87,12 @@
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            @if($editUserId == $userid)
-                <button wire:click="editStaff({{$userid}})"><span class="material-symbols-outlined text-gray-500" title="Save">save</span></button>
-                <button wire:click="cancelStaff"><span class="material-symbols-outlined text-red-500" title="Cancel">cancel</span></button>
-            @elseif($editMode)
-                <span class="material-symbols-outlined text-gray-400" title="Edit">edit</span>
-                <span class="material-symbols-outlined text-gray-400" title="Delete">delete</span>
-                <span class="material-symbols-outlined text-gray-400" title="Send Reset Link">mail_lock</span>
+            @if($editMode)
+                <span class="material-symbols-outlined text-gray-400 text-xl" title="Delete">delete</span>
+                <span class="material-symbols-outlined text-gray-400 text-xl" title="Send Reset Link">mail_lock</span>
             @else
-                <button wire:click="$set('editUserId', {{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Edit">edit</span></button>
-                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
-                <button wire:click="sendReset"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
+                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500 text-xl" title="Delete">delete</span></button>
+                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779] text-xl" title="Send Reset Link">mail_lock</span></button>
             @endif
         </div>
     </td>
@@ -133,7 +144,7 @@
     </td>
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId, 'name' => $fullname]) }}"><span class="material-symbols-outlined hover:text-[#3b4779] transform hover:scale-110 transition duration-300" title="Report">description</span></a>
+            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId, 'name' => $fullname]) }}"><span class="material-symbols-outlined text-xl hover:text-[#3b4779]" title="Report">description</span></a>
         </div>
     </td>
 </tr>

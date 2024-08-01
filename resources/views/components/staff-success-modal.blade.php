@@ -10,11 +10,11 @@
     <div class="p-6 mt-2 mb-10 text-center">   
         <p class="text-lg font-light mb-6">Successfully Saved!</p>
         <div class="flex justify-center mt-6">
-            <button class="bg-white text-[#3D8B57] outline outline-[#3D8B57] py-2 px-4 mx-2 rounded-sm hover:bg-[#3D8B57] hover:text-white" 
+            <button class="bg-white text-[#3D8B57] border border-[#3D8B57] py-2 px-4 mx-2 rounded-lg hover:bg-[#3D8B57] hover:text-white" 
                     onclick="window.location.href = '{{ route('dashboard') }}'">
             Go to Dashboard
             </button>
-            <button class="bg-white text-[#3D8B57] outline outline-[#3D8B57] py-2 px-4 mx-2 rounded-sm hover:bg-[#3D8B57] hover:text-white" 
+            <button class="bg-white text-[#3D8B57] border border-[#3D8B57] py-2 px-4 mx-2 rounded-lg hover:bg-[#3D8B57] hover:text-white" 
                     wire:click="closeSuccessModal">
             Go to Staff
             </button>
