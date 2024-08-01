@@ -44,16 +44,18 @@ protected $model=CourseSection::class;
                 $area_id = $getOrCreateAreaId('Statistics');
                 break;
         }
+
+        $capacity = fake()->numberBetween(10, 200);
     
         return [
             'prefix' => $prefix,
             'number' => fake()->numberBetween(100, 500),
             'area_id' => $area_id,
             'year' => fake()->year(),
-            'enroll_start' => fake()->numberBetween(10, 100),
-            'enroll_end' => fake()->numberBetween(0, 100),
+            'enroll_start' => fake()->numberBetween(10, $capacity-1),
+            'enroll_end' => fake()->numberBetween(0, $capacity-1),
             'dropped' => fake()->numberBetween(0, 20),
-            'capacity' => fake()->numberBetween(10, 200),
+            'capacity' => $capacity,
             'term' => fake()->randomElement(['1', '2', '1-2']),
             'session' => fake()->randomElement(['W', 'S']),
             'section' => fake()->randomElement(['001', '002', '003']),
