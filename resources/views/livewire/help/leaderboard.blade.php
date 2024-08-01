@@ -1,3 +1,7 @@
-<div>
-    {{-- The whole world belongs to you. --}}
-</div>
+@php
+    use App\Helpers\HtmlHelpers;
+@endphp
+
+<section class="help-page">
+    {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'Leaderboard') !!}
+</section>
