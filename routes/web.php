@@ -77,8 +77,10 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
-    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file.show');
-    Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
+    Route::get('/upload-file/workday', [UploadFileController::class, 'showUploadFileWorkday'])->name('upload.file.show.workday');
+    Route::post('/upload-file/workday', [UploadFileController::class, 'uploadWorkday'])->name('upload.file.workday');
+    Route::get('/upload-file/sei-data', [UploadFileController::class, 'showUploadFileSei'])->name('upload.file.show.sei');
+    Route::post('/upload-file/sei-data', [UploadFileController::class, 'uploadSei'])->name('upload.file.sei');
     Route::post('/upload/svcroles', [UploadFileController::class, 'uploadSvcRoles'])->name('upload.svcroles');
     Route::get('/requests', function () {
         return view('service-requests');

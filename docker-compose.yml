@@ -19,7 +19,6 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
             BROWSERSHOT_REMOTE_URL: 'insight-chromium'
             PUPPETEER_CACHE_DIR: '/home/sail/.cache/puppeteer'
-            PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
             PUPPETEER_EXECUTABLE_PATH: '/root/.cache/puppeteer/chrome/linux-126.0.6478.182/chrome-linux64/chrome'
         volumes:
             - 'tmpfiles:/tmp'

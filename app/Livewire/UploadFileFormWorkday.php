@@ -3,37 +3,45 @@
 namespace App\Livewire;
 
 use App\Models\Area;
-use App\Models\AreaPerformance;
 use App\Models\CourseSection;
-use App\Models\Department;
-use App\Models\UserRole;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Rule;
-use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
-use Illuminate\Support\Facades\Session;
-use PHPUnit\Framework\Constraint\IsTrue;
 
-class ImportWorkdayForm extends Component
+class UploadFileFormWorkday extends Component
 {
-    #[Session]
     public $rows = [];
+    public $finalCSVs = [];
     public $duplicateCourses = [];
 
     public $showModal = false;
     public $showConfirmModal = false;
     public $courseExists = false;
     public $userConfirms = false;
-    public $rowAmount = 0;
 
-    public function mount() {
-        if(Session::has('workdayFormData')) {
-            $this->rows = Session::get('workdayFormData');
-        } else {
-            $this->rows = [
-                ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''],
+    public function mount($finalCSVs)
+    {
+        $this->finalCSVs = $finalCSVs;
+
+        foreach ($finalCSVs as $index => $finalCSV) {
+            $this->rows[$index] = [
+                'area' => $finalCSV['Area'] ?? '',
+                'area_id' => $this->getAreaIdByName($finalCSV['Area'] ?? ''),
+                'number' => $finalCSV['Number'] ?? '',
+                'section' => $finalCSV['Section'] ?? '',
+                'session' => $finalCSV['Session'] ?? '',
+                'term' => $finalCSV['Term'] ?? '',
+                'year' => $finalCSV['Year'] ?? '',
+                'room' => $finalCSV['Room'] ?? '',
+                'time' => $finalCSV['Time'] ?? '',
+                'enroll_start' => $finalCSV['Enrolled Start'] ?? '',
+                'enroll_end' => $finalCSV['Enrolled End'] ?? '',
+                'capacity' => $finalCSV['Capacity'] ?? '',
+                // Add other fields as necessary
             ];
         }
+
+        // dd($this->rows);
+
+        session()->forget('finalCSVs');
     }
 
     public function rules() {
@@ -68,52 +76,29 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.term.required"] = 'Please select a term';
                 $messages["rows.{$index}.year.required"] = 'Please enter a year';
                 $messages["rows.{$index}.room.required"] = 'Please enter a room';
-                $messages["rows.{$index}.time.required"] = 'Please enter a time';
+                $messages["rows.{$index}.time.required"] = 'Please enter a time (military)';
                 $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
 
                 $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
                 $messages["rows.{$index}.year.integer"] = 'Must be a number';
-                $messages["rows.{$index}.enroll_start.integer"] = 'Must be a number';
-                $messages["rows.{$index}.enroll_end.integer"] = 'Must be a number';
-                $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
+                $messages["rows.{$index}.enrolled.integer"] = 'Must be a number';
                 $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
         
                 $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.enroll_start.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to 1';
+                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 0-999';
+                $messages["rows.{$index}.capacity.min"] = 'Must be greater 0';
     
                 $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.enroll_start.max"] = 'Must be lower than or equal to Capacity';
                 $messages["rows.{$index}.enroll_end.max"] = 'Must be lower than or equal to Capacity';
-                $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
                 $messages["rows.{$index}.capacity.max"] = 'Enter a number 1-999';
         }
         return $messages;
-    }
-
-    public function updated($propertyName)
-    {
-        // Save form data to session
-        Session::put('workdayFormData', $this->rows);
-    }
-
-    public function addRow() {
-        $this->resetValidation();
-
-        $this->rows[] =   ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''];
-        Session::put('workdayFormData', $this->rows);
-    }
-
-    public function addManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
-            $this->addRow();
-        }
     }
 
     public function deleteRow($row) {
@@ -121,14 +106,6 @@ class ImportWorkdayForm extends Component
 
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
-        Session::put('workdayFormData', $this->rows);
-    }
-
-    public function deleteManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
-            $count = count($this->rows);
-            $this->deleteRow($count-1);
-        }
     }
 
     protected function validateUniqueRows() {
@@ -161,29 +138,35 @@ class ImportWorkdayForm extends Component
         $this->showConfirmModal = false;
     }
 
-    
     public function closeModal() {
         $this->showModal = false;
     }
+
 
     public function closeConfirmModal() {
         $this->showConfirmModal = false;
         $this->duplicateCourses = [];
     }
 
+    public function resetData()
+    {
+        session()->forget('finalCSVs');
+        $this->finalCSVs = [];
+        $this->rows = [];
+    }
+
     public function handleSubmit() {
+        // dd($this->rows, $this->duplicateCourses);
         $this->courseExists = false;
 
-        // dd($this->rows);
         $this->validate();
 
         if (!$this->validateUniqueRows()) {
             return;
         }
-    
-        foreach ($this->rows as $index => $row) {
+
+        foreach($this->rows as $index => $row) {
             $prefix = '';
-            // dd($row);
             
             switch ($row['area_id']) {
                 case 1:
@@ -201,21 +184,20 @@ class ImportWorkdayForm extends Component
             }
 
             $course = CourseSection::where('prefix', $prefix)
-                ->where('number', $row['number'])
-                ->where('area_id', $row['area_id'])
-                ->where('year', $row['year'])
-                ->where('term', $row['term'])
-                ->where('session', $row['session'])
-                ->where('section' , $row['section'])
-                ->where('room', $row['room'])
-                ->first();
+            ->where('number', $row['number'])
+            ->where('area_id', $row['area_id'])
+            ->where('year', $row['year'])
+            ->where('term', $row['term'])
+            ->where('session', $row['session'])
+            ->where('section' , $row['section'])
+            ->where('room', $row['room'])
+            ->first();
 
             if ($course != null) {
                 $this->addError("rows.{$index}.exists", 'Warning: This course has already been created. Saving will overwrite the existing data. Delete or update the row to prevent this action');
                 $this->courseExists = true;
                 $this->duplicateCourses[] = $course;
             }
-        
         }
 
         if($this->courseExists && !$this->userConfirms) {
@@ -228,7 +210,7 @@ class ImportWorkdayForm extends Component
             foreach($this->rows as $index => $row) {
                 $dropped = 0;
                 $prefix = '';
-            
+
                 switch ($row['area_id']) {
                     case 1:
                         $prefix = 'COSC';
@@ -243,7 +225,7 @@ class ImportWorkdayForm extends Component
                         $prefix = 'STAT';
                         break;
                 }
-                
+
                 $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
 
                 CourseSection::updateOrCreate([
@@ -272,46 +254,33 @@ class ImportWorkdayForm extends Component
                     'archived' => false,  
                 ]);
 
-                $this->rows = [
-                    ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''],
-                ];
-
-                Session::forget('workdayFormData');
-
                 $this->showModal = true;
                 $this->userConfirms = false;
                 $this->duplicateCourses = [];
                 $this->resetValidation();
 
+                $this->resetData();
                 session()->flash('success', $this->showModal);
             }
         }
     }
 
+    public function getAreaIdByName($areaName)
+    {
+        $area = Area::where('name', $areaName)->first();
+        return $area ? $area->id : null;
+    }
+
     public function render()
-    {   
+    {
+        $areas = Area::all();
 
-        $user = Auth::user();
-        $dept_id = null;
+        // dd($areas);
+        // dd($this->rows, $this->finalCSVs);
 
-        if ($user) {
-            $userRole = UserRole::where('user_id', $user->id)->first();
-            if ($userRole) {
-                $dept_id = $userRole->department_id;
-            } else {
-                // Handle the case where there is no UserRole for the user
-                // For example, you might want to log this or set a default value
-                $dept_id = null; // or any other appropriate action
-            }
-        }
-
-        $areas = Area::where('dept_id', $dept_id)->get();
-
-        return view('livewire.import-workday-form', [
+        // dd($this->finalCSVs);
+        return view('livewire.upload-file-form-workday', [
             'areas' => $areas,
-            'duplicate_courses' => $this->duplicateCourses,
         ]);
-
-        
     }
 }
