@@ -41,7 +41,7 @@
                                 <td class="report-cell">{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
                                 <td class="report-cell">Term {{ $course->courseSection->term }}</td>
                                 <td class="report-cell">{{ $course->courseSection->year }}</td>
-                                <td class="report-cell">{{ round($course->courseSection->enrolled * 100 / $capacity, 1) }}</td>
+                                <td class="report-cell">{{ round($course->courseSection->enroll_end * 100 / $capacity, 1) }}</td>
                                 <td class="report-cell">{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
                                 <td class="report-cell">{{ $sei ? $sei : '-' }}</td>
                             </tr>
