@@ -763,7 +763,7 @@ class StaffList extends Component
         $validator = Validator::make($data, $user_rules, $messages2);
 
         if ($validator->fails()) {
-            dd($validator->errors());
+            // dd($validator->errors());
             //dd('hello');
             //$this->addError("firstnames.{$userid}", "error");
             //return;

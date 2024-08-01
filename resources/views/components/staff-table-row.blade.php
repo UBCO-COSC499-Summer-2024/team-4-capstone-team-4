@@ -92,8 +92,8 @@
                 <span class="material-symbols-outlined text-gray-400" title="Send Reset Link">mail_lock</span>
             @else
                 <button wire:click="$set('editUserId', {{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Edit">edit</span></button>
-                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" title="Delete">delete</span></button>
-                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" title="Send Reset Link">mail_lock</span></button>
+                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500 transform hover:scale-110 transition duration-300"  style="font-size: 1.6rem;" title="Delete">delete</span></button>
+                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779] transform hover:scale-110 transition duration-300" style="font-size: 1.6rem" title="Send Reset Link">mail_lock</span></button>
             @endif
         </div>
     </td>
