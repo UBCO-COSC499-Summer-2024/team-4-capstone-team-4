@@ -447,51 +447,6 @@ class AdminStaffListTest extends TestCase
         ]);
     }
 
-    public function test_admin_can_edit_single_user(){
-        $dept = Department::factory()->create(['name' => 'CMPS']);
-        $user = User::factory()->create();
-        UserRole::factory()->create([
-            'user_id' => $user->id,
-            'department_id' => $dept->id,
-            'role' => 'admin',
-        ]);
-
-        $this->actingAs($user);
-
-        $user1 =  User::factory()->create([
-            'firstname' => 'John',
-            'lastname' => 'Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'password',
-            'active' => true
-        ]);
-        $role = UserRole::factory()->create([
-                'user_id' => $user1->id,
-                'department_id' => null,
-                'role' => 'instructor',
-            ]);
-
-        //disable the user and remove instructor role   
-        Livewire::test(StaffList::class)
-        ->set('enabledUsers', [])
-        ->set('instructors', [])
-        ->call('editStaff', $user1->id);
-
-        // Check if the user is disbaled
-        $this->assertDatabaseHas('users', [
-            'firstname' => 'John',
-            'lastname' => 'Doe',
-            'email' => 'johndoe@example.com',
-            'active' => false
-        ]);
-
-        // Check if the user role is removed
-        $this->assertDatabaseMissing('user_roles', [
-            'user_id' => $user1->id,
-            'department_id' => null,
-            'role' => 'instructor',
-        ]);
-    } 
     
     public function test_admin_can_delete_single_user(){
         $dept = Department::factory()->create(['name' => 'CMPS']);

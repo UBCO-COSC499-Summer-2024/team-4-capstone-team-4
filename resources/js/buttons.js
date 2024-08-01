@@ -2,9 +2,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const editButton = document.getElementById('editButton');
     const saveButton = document.getElementById('saveButton');
     const cancelButton = document.getElementById('cancelButton');
-    const table = document.querySelector('tbody');
+    const coursesTable = document.querySelector('#coursesTable tbody');
     const form = document.getElementById('editForm');
     const instructorFilter = document.getElementById('instructorFilter');
+    const courseDetailsTab = document.getElementById('courseDetailsTab');
+    const tasTab = document.getElementById('tasTab');
 
     function toggleButtonVisibility(buttonToHide, reverse = false) {
         const buttons = [editButton, saveButton, cancelButton];
@@ -20,25 +22,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function enableEditing() {
-            document.querySelectorAll('tbody tr').forEach(row => {
-                row.querySelectorAll('td').forEach((cell, index) => {
-                    if ([2, 3, 4].includes(index)) {
-                        cell.setAttribute('contenteditable', 'true');
-                        cell.classList.add('editable-highlight');
-                    }
-                });
+        document.querySelectorAll('#coursesTable tbody tr').forEach(row => {
+            row.querySelectorAll('td').forEach((cell, index) => {
+                if ([3, 4, 5].includes(index)) {
+                    cell.setAttribute('contenteditable', 'true');
+                    cell.classList.add('editable-highlight');
+                }
+            });
+        });
         toggleButtonVisibility(editButton);
-    });
-}
-
+    }
 
     function disableEditing() {
-        table.querySelectorAll('tr').forEach(row => {
+        coursesTable.querySelectorAll('tr').forEach(row => {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
                 cell.classList.remove('editable-highlight');
                 cell.classList.remove('input-error');
-
             });
         });
         toggleButtonVisibility(editButton, true);
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function validateInput() {
         let isValid = true;
-        const rows = document.querySelectorAll('tbody tr');
+        const rows = document.querySelectorAll('#coursesTable tbody tr');
         rows.forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([2, 3, 4].includes(index)) {
+                if ([3, 4, 5].includes(index)) {
                     const value = cell.innerText.trim();
                     if (isNaN(value) || value === '') {
                         cell.classList.add('input-error');
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function saveChanges() {
-
         if (!validateInput()) {
             alert('Please enter valid numeric values in the editable fields.');
             return;
@@ -73,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirmSave = confirm('Do you really want to save the changes?');
         if (!confirmSave) return;
 
-        const rows = document.querySelectorAll('tbody tr');
+        const rows = document.querySelectorAll('#coursesTable tbody tr');
         const formData = new FormData();
 
         rows.forEach(row => {
@@ -127,6 +126,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function checkTab() {
+        if (tasTab && tasTab.classList.contains('active')) {
+            editButton.style.display = 'none';
+            saveButton.style.display = 'none';
+            cancelButton.style.display = 'none';
+        } else {
+            editButton.style.display = 'block';
+        }
+    }
+
     if (editButton) {
         editButton.addEventListener('click', enableEditing);
     }
@@ -151,4 +160,12 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = url.toString();
         });
     }
+
+    if (courseDetailsTab && tasTab) {
+        courseDetailsTab.addEventListener('click', checkTab);
+        tasTab.addEventListener('click', checkTab);
+    }
+
+    // Initial check on page load
+    checkTab();
 });

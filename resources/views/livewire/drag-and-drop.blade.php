@@ -155,6 +155,11 @@
             }
             return `${bytes.toFixed(1)} ${units[i]}`;
         }
+
+        function updateSubmitButtonState() {
+            const filesPresent = fileList.querySelectorAll('.drop-zone-content-file').length > 0;
+            submitButton.disabled = !filesPresent;
+        }
     });
 
 </script>

@@ -12,9 +12,18 @@
         @if($activeTab === 'workday')
         <div class="absolute right-0 top-0">
             <button class="bg-white text-[#3b4779] border border-[#3b4779] px-3 py-2 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
-                onclick="location.href='{{ route('upload.file') }}'">
+                onclick="location.href='{{ route('upload.file.show.workday') }}'">
                 <span class="material-symbols-outlined">upload</span>
-                Upload File
+                Upload File (Workday)
+            </button>
+        </div>
+        @endif
+        @if($activeTab === 'sei')
+        <div class="absolute right-0 top-0">
+            <button class="bg-white text-[#3b4779] border border-[#3b4779] px-3 py-2 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
+                onclick="location.href='{{ route('upload.file.show.sei') }}'">
+                <span class="material-symbols-outlined">upload</span>
+                Upload File (SEI)
             </button>
         </div>
         @endif
