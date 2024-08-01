@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSelectAll();
 
     //filter dropdown
-    var filterButton = document.getElementById('filterButton');
+ /*    var filterButton = document.getElementById('filterButton');
     var filterDropdown = document.getElementById('filterDropdown');
     if (filterButton && filterDropdown) {
         filterButton.addEventListener('click', function() {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 filterDropdown.classList.add('hidden');
             }
         });
-    }
+    } */
 
 });
 document.addEventListener('livewire:init', initializeSelectAll);

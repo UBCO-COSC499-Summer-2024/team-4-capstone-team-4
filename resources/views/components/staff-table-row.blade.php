@@ -16,15 +16,43 @@
     <td class="flex items-center px-0 py-4 text-gray-900 whitespace-nowrap dark:text-white">
         <div class="ps-3 min-w-0 flex-auto">
             @if($editMode )
-                <input type="text" wire:model.lazy="firstnames.{{$userid}}" wire:change="updateFirstname('{{ $userid }}', $event.target.value)" class="border border-solid border-[#3b4779] bg-white rounded-lg mr-1" value="{{ $firstname }}"/>
-                {{-- <x-input-error for="firstnames.{{$userid}}"/> --}}
-                @error('firstnames.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
-                <input type="text" wire:model.lazy="lastnames.{{$userid}}" wire:change="updateLastname('{{ $userid }}', $event.target.value)" class="border border-solid border-[#3b4779] bg-white  rounded-lg" value="{{ $lastname }}"/>
-                {{-- <x-input-error for="lastnames.{{ $userid }}"/> --}}
-                @error('lastnames.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
-                <input type="email" wire:model.lazy="emails.{{$userid}}" wire:change="updateEmail('{{ $userid }}', $event.target.value)" class="block mt-1 border border-solid border-[#3b4779] bg-white rounded-lg" value="{{ $email }}" />
-               {{--  <x-input-error for="emails.{{$userid}}"/> --}}
-               @error('emails.'.$userid)<span class="import-error block">{{ $message }}</span>@enderror
+            <div class="flex flex-wrap mb-4">
+                <!-- Firstname Input and Error -->
+                <div class="w-full md:w-1/2 pr-2">
+                    <input type="text" 
+                           wire:model.lazy="firstnames.{{$userid}}" 
+                           wire:change="updateFirstname('{{ $userid }}', $event.target.value)" 
+                           class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
+                           value="{{ $firstname }}" />
+                    @error('firstnames.'.$userid)
+                        <span class="import-error text-red-500 block">{{ $message }}</span>
+                    @enderror
+                </div>
+            
+                <!-- Lastname Input and Error -->
+                <div class="w-full md:w-1/2 pl-2">
+                    <input type="text" 
+                           wire:model.lazy="lastnames.{{$userid}}" 
+                           wire:change="updateLastname('{{ $userid }}', $event.target.value)" 
+                           class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
+                           value="{{ $lastname }}" />
+                    @error('lastnames.'.$userid)
+                        <span class="import-error text-red-500 block">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <input type="email" 
+                       wire:model.lazy="emails.{{$userid}}" 
+                       wire:change="updateEmail('{{ $userid }}', $event.target.value)" 
+                       class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
+                       value="{{ $email }}" />
+                @error('emails.'.$userid)
+                    <span class="import-error text-red-500 block">{{ $message }}</span>
+                @enderror
+            </div>            
+
             @else
                 <div class="block">
                     <p class="text-lg font-semibold leading-6 text-gray-900">{{ $fullname }}</p>
