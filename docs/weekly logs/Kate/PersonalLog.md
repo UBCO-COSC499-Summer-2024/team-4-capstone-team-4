@@ -66,17 +66,27 @@
         <td>To Do
         </td>
     </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Complete Individual Report / #512
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-The file upload functionality for the workday and sei data is complete, including the changes made to fit the requirements (calculating dropped and confirm overwrite courses). I will now be focusing on the ta assignment functionality which will include manual and csv assignment. I should be able to reference my other code which uses a similar structure. Everything is on track and I aim to complete these features this upcoming cycle.
+File upload for workday and sei is complete. I am now working on, and will continue to work on in the last cycle, two more csv import features. I also have a solid foundation for my help pages and will add other topics as necessary. Documentation and testing are going to be targeted as soon as my functionality is complete. 
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle
   * Testing
-  * Ta Assign (manual)
   * Ta Assign (csv)
-  * Ta Rating
-
+  * Course Assign (csv)
+  * Documentation
+  * Audit Log Stuff
+  * Final Report
+    
 ## Wednesday (7/26 - 7/31)
 
 ### Timesheet
