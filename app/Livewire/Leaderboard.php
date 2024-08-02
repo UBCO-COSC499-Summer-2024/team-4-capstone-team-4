@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class Leaderboard extends Component {
 
     /**
-     * The selected areas for filtering the leaderboard.
+     * The selected areas and year for filtering the leaderboard.
      *
      * @var array
      */
