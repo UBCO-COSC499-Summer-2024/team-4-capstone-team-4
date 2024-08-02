@@ -57,8 +57,8 @@ class UploadFileFormWorkday extends Component
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
             $rules["rows.{$index}.room"] = 'required|string';
-            $rules["rows.{$index}.time_start"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):?([0-5]\d)$/'];
-            $rules["rows.{$index}.time_end"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):?([0-5]\d)$/'];
+            $rules["rows.{$index}.time_start"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):([0-5]\d)$/'];
+            $rules["rows.{$index}.time_end"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):([0-5]\d)$/'];
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
