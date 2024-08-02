@@ -44,3 +44,6 @@ Icon?
 
 # macOS Finder metadata
 .fseventsd
+
+# ignore all versions of .ppm
+*.ppm

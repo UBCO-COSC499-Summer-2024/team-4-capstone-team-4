@@ -8,14 +8,15 @@
     :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }"
     {{-- wire:key="svcrli-{{ $serviceRole->id }}" --}}
     >
-
-    <td class="svcr-list-item-cell w-fit" data-column="select">
-        <input type="checkbox" class="svcr-list-item-select"
-            id="svcr-select-{{ $serviceRole->id }}"
-            value="{{ $serviceRole->id }}"
-            wire:model.live="isSelected"
-        >
-    </td>
+    @if(!$user->hasOnlyRole('instructor'))
+        <td class="svcr-list-item-cell w-fit" data-column="select">
+            <input type="checkbox" class="svcr-list-item-select"
+                id="svcr-select-{{ $serviceRole->id }}"
+                value="{{ $serviceRole->id }}"
+                wire:model.live="isSelected"
+            >
+        </td>
+    @endif
 
     <td class="svcr-list-item-cell" data-column="id">
         <span class="svcr-list-item-title" x-cloak>
