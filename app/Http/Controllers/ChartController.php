@@ -431,17 +431,17 @@ class ChartController extends Controller {
 
         if ($area && $area['id'] != null) {
             $serviceRoles = [];
-            $roleHoursTotal = 0;
+            $rolesTotal = 0;
             $areaRoles = ServiceRole::where('area_id', $area['id'])->where('year', $currentYear)->where('archived', false)->get();
 
             foreach ($areaRoles as $role) {
                 if ($role) {
                     $serviceRoles[] = ['name' => $role->name, 'hours' => $role->monthly_hours[date('F')]];
-                    $roleHoursTotal += $role->monthly_hours[date('F')];
+                    $rolesTotal++;
                 }
             }
 
-            $deptAssignmentCount[] = $roleHoursTotal;
+            $deptAssignmentCount[] = $rolesTotal;
             $deptAssignmentCount[] = $serviceRoles;
 
             $extraHours = [];
@@ -451,7 +451,7 @@ class ChartController extends Controller {
             foreach ($allExtraHours as $extraHrs) {
                 if ($extraHrs) {
                     $extraHours[] = ['name' => $extraHrs->name, 'hours' => $extraHrs->hours];
-                    $extraHoursTotal += $extraHrs->hours;
+                    $extraHoursTotal++;
                 }
             }
 
