@@ -306,7 +306,7 @@ class ChartController extends Controller {
      */
     private function leaderboardPrev($deptId, $currentYear, $forRank, $area) {
         $usersQuery = User::query();
-        $usersQuery->distinct()
+        $usersQuery = $usersQuery->distinct()
             ->join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('role_assignments', 'user_roles.id', '=', 'role_assignments.instructor_id') // Corrected the column name
             ->leftJoin('service_roles', function ($join) {
@@ -328,7 +328,7 @@ class ChartController extends Controller {
                 $join->on('user_roles.id', '=', 'instructor_performance.instructor_id')
                     ->where('instructor_performance.year', $currentYear);
             })
-            ->where('areas.dept_id', $deptId);
+            ->where('areas.dept_id', $deptId)->whereNotNull('instructor_performance.score');
 
         if ($area && $area['id'] != null) {
             $usersQuery->where('areas.id', $area['id']);
