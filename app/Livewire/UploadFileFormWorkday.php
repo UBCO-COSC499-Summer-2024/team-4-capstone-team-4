@@ -57,8 +57,8 @@ class UploadFileFormWorkday extends Component
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
             $rules["rows.{$index}.room"] = 'required|string';
-            $rules["rows.{$index}.time_start"] = 'required|string';
-            $rules["rows.{$index}.time_end"] = 'required|string';
+            $rules["rows.{$index}.time_start"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):?([0-5]\d)$/'];
+            $rules["rows.{$index}.time_end"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):?([0-5]\d)$/'];
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
@@ -83,6 +83,9 @@ class UploadFileFormWorkday extends Component
                 $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
+
+                $messages['rows.*.time_start.regex'] = 'The start time must be in military time format (HHMM or HH:MM).';
+                $messages['rows.*.time_end.regex'] = 'The end time must be in military time format (HHMM or HH:MM).';
 
                 $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
                 $messages["rows.{$index}.year.integer"] = 'Must be a number';

@@ -6,6 +6,7 @@
         'Text' => 'text',
         'Print' => 'print'
     ];
+    $user = Auth::user();
 @endphp
 @vite('resources/css/manage-service-role.css')
 <div class="content"
@@ -36,86 +37,88 @@
             @endif
         </span>
 
-        <div class="flex right content-title-btn-holder">
-            {{-- preview --}}
-            <button class="content-title-btn" x-on:click="window.location.href='{{ route('exports.pdf.preview', [ 'id' => $serviceRole->id ]) }}'" wire:loading.attr="disabled">
-                <span class="material-symbols-outlined icon">preview</span>
-                <span>Preview</span>
-            </button>
-            @if(!$serviceRole->archived)
-                <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
-                    <span class="material-symbols-outlined icon">
-                        edit
-                    </span>
-                    <span>Edit</span>
+        @if(!$user->hasOnlyRole('instructor'))
+            <div class="flex right content-title-btn-holder">
+                {{-- preview --}}
+                <button class="content-title-btn" x-on:click="window.location.href='{{ route('exports.pdf.preview', [ 'id' => $serviceRole->id ]) }}'" wire:loading.attr="disabled">
+                    <span class="material-symbols-outlined icon">preview</span>
+                    <span>Preview</span>
                 </button>
-            @endif
-            <button class="content-title-btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
-                <span class="material-symbols-outlined icon">close</span>
-                <span>Cancel</span>
-            </button>
-
-            @if (auth()->user()->hasRoles(['admin']))
-                <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
-                    <span class="material-symbols-outlined icon">delete</span>
-                    <span>Delete</span>
-                </button>
-            @endif
-            <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
-                    @if ($serviceRole->archived)
+                @if(!$serviceRole->archived)
+                    <button class="content-title-btn" x-on:click="isEditing = !isEditing" wire:loading.attr="disabled" x-show="!isEditing" x-cloak>
                         <span class="material-symbols-outlined icon">
-                            unarchive
+                            edit
                         </span>
-                        <span>
-                            Unarchive
-                        </span>
-                    @else
-                        <span class="material-symbols-outlined icon">
-                            archive
-                        </span>
-                        <span>
-                            Archive
-                        </span>
-                    @endif
-            </button>
-            {{-- export --}}
-            {{-- <livewire:dropdown-element
-                title="Export"
-                id="exportDropdown"
-                pre-icon="file_download"
-                name="export"
-                :values="$exports"
-            /> --}}
-                {{-- <select id="exportDropdown" title="Export" class="form-select">
-                    <option value="">Export</option>
-                    @foreach ($exports as $fname => $format)
-                        <option value="{{ $format }}">{{ $fname }}</option>
-                    @endforeach
-                </select> --}}
-            <x-dropdown :align="'right'" :width='48'>
-                <x-slot name="trigger">
-                    <button class="flex items-center content-title-btn">
-                        <span class="material-symbols-outlined icon">file_download</span>
-                        <span>Export</span>
-                        <span class="material-symbols-outlined icon">arrow_drop_down</span>
+                        <span>Edit</span>
                     </button>
-                </x-slot>
+                @endif
+                <button class="content-title-btn" x-on:click="isEditing = false" wire:loading.attr="disabled" x-show="isEditing" x-cloak>
+                    <span class="material-symbols-outlined icon">close</span>
+                    <span>Cancel</span>
+                </button>
 
-                <x-slot name="content">
-                    @foreach ($exports as $fname => $format)
-                        <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
-
-                        {{-- x-on:click="$dispatch('export-role', {
-                            'format': '{{$format}}'
-                        })" --}}
-                        x-on:click="window.location.href='{{ route('svcroles.export.id', ['eid' => $serviceRole->id, 'eformat' => $format]) }}'"
-                        role="menuitem">
-                            {{ $fname }}
+                @if (auth()->user()->hasRoles(['admin']))
+                    <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-delete', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                        <span class="material-symbols-outlined icon">delete</span>
+                        <span>Delete</span>
+                    </button>
+                @endif
+                <button class="content-title-btn" x-on:click="$dispatch('confirm-manage-archive', { 'id': {{ $serviceRole->id }} })" wire:loading.attr="disabled">
+                        @if ($serviceRole->archived)
+                            <span class="material-symbols-outlined icon">
+                                unarchive
+                            </span>
+                            <span>
+                                Unarchive
+                            </span>
+                        @else
+                            <span class="material-symbols-outlined icon">
+                                archive
+                            </span>
+                            <span>
+                                Archive
+                            </span>
+                        @endif
+                </button>
+                {{-- export --}}
+                {{-- <livewire:dropdown-element
+                    title="Export"
+                    id="exportDropdown"
+                    pre-icon="file_download"
+                    name="export"
+                    :values="$exports"
+                /> --}}
+                    {{-- <select id="exportDropdown" title="Export" class="form-select">
+                        <option value="">Export</option>
+                        @foreach ($exports as $fname => $format)
+                            <option value="{{ $format }}">{{ $fname }}</option>
+                        @endforeach
+                    </select> --}}
+                <x-dropdown :align="'right'" :width='48'>
+                    <x-slot name="trigger">
+                        <button class="flex items-center content-title-btn">
+                            <span class="material-symbols-outlined icon">file_download</span>
+                            <span>Export</span>
+                            <span class="material-symbols-outlined icon">arrow_drop_down</span>
                         </button>
-                    @endforeach
-                </x-slot>
-            </x-dropdown>
-        </div>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        @foreach ($exports as $fname => $format)
+                            <button class="flex items-center justify-start w-full px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
+
+                            {{-- x-on:click="$dispatch('export-role', {
+                                'format': '{{$format}}'
+                            })" --}}
+                            x-on:click="window.location.href='{{ route('svcroles.export.id', ['eid' => $serviceRole->id, 'eformat' => $format]) }}'"
+                            role="menuitem">
+                                {{ $fname }}
+                            </button>
+                        @endforeach
+                    </x-slot>
+                </x-dropdown>
+            </div>
+        @endif
     </h1>
 
     {{-- <div class="horizontal groupd">
@@ -218,21 +221,29 @@
                 <div class="svcr-instructor-list form-group">
                     <h2 class="nos form-item content-title">
                         <span class="content-title-text">{{ __('Instructors') }}</span>
-                        <div class="flex justify-end">
-                            <button class="btn form-input" x-on:click="showInstructorModal = true" wire:loading.attr="disabled">
-                                <span class="material-symbols-outlined icon">person_add</span>
-                                <span>Assign Instructor</span>
-                            </button>
-                        </div>
+                        @if (!$user->hasOnlyRole('instructor'))
+                            <div class="right ustify-end rflex">
+                                <button class="btn form-input" x-on:click="showInstructorModal = true" wire:loading.attr="disabled">
+                                    <span class="material-symbols-outlined icon">person_add</span>
+                                    <span>Assign Instructor</span>
+                                </button>
+                            </div>
+                        @endif
                     </h2>
                     <table class="table svcr-table" id="svcr-table">
                         <thead>
                             <tr class="svcr-list-header">
                                 <th class="svcr-list-header-item">
-                                    <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
+                                    @if(!$user->hasOnlyRole('instructor'))
+                                        <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
+                                    @else
+                                        ID
+                                    @endif
                                 </th>
                                 <th class="text-left svcr-list-header-item">Name</th>
-                                <th class="svcr-list-header-item">Actions</th>
+                                @if (!$user->hasOnlyRole('instructor'))
+                                    <th class="svcr-list-header-item">Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody wire:model.live="instructors">
@@ -243,16 +254,22 @@
                             @forelse ($sinstructors as $instructor)
                                 <tr class="svcr-list-item">
                                     <td class="svcr-list-item-cell">
-                                        <input type="checkbox" class="svcr-list-item-select" id="svcr-select-{{ $instructor->id }}" />
+                                        @if (!$user->hasOnlyRole('instructor'))
+                                            <input type="checkbox" class="svcr-list-item-select" id="svcr-select-{{ $instructor->id }}" />
+                                        @else
+                                            {{ $instructor->id }}
+                                        @endif
                                     </td>
                                     <td class="svcr-list-item-cell">{{ $instructor->getName() }}</td>
-                                    <td class="svcr-list-item-cell">
-                                        <div class="flex justify-full j-end svcr-list-item-actions" style="justify-content: end;">
-                                            <button class="btn" x-on:click="$dispatch('confirm-remove-instructor', { id: {{ $instructor->id }} })" wire:loading.attr="disabled">
-                                                <span class="material-symbols-outlined icon">person_remove</span>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    @if (!$user->hasOnlyRole('instructor'))
+                                        <td class="svcr-list-item-cell">
+                                            <div class="flex justify-full j-end svcr-list-item-actions" style="justify-content: end;">
+                                                <button class="btn" x-on:click="$dispatch('confirm-remove-instructor', { id: {{ $instructor->id }} })" wire:loading.attr="disabled">
+                                                    <span class="material-symbols-outlined icon">person_remove</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr class="svcr-list-item nos">
@@ -294,7 +311,9 @@
                                 <th class="svcr-list-header-item">Hours</th>
                                 <th class="svcr-list-header-item">Description</th>
                                 <th class="svcr-list-header-item">Awarded to</th>
-                                <th class="text-right svcr-list-header-item">Actions</th>
+                                @if(!$user->hasOnlyRole('instructor'))
+                                    <th class="text-right svcr-list-header-item">Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody wire:model.live="extraHours">
@@ -322,13 +341,15 @@
                                             {{ $extraHour->instructor->user->getName() }}
                                         @endif
                                     </td>
-                                    <td class="svcr-list-item-cell">
-                                        <div class="flex justify-full j-end svcr-list-item-actions" style="justify-content: end;">
-                                            <button class="btn" x-on:click="$dispatch('confirm-extra-hour-delete', { id: {{ $extraHour->id }} })" wire:loading.attr="disabled">
-                                                <span class="material-symbols-outlined icon">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    @if(!$user->hasOnlyRole('instructor'))
+                                        <td class="svcr-list-item-cell">
+                                            <div class="flex justify-full j-end svcr-list-item-actions" style="justify-content: end;">
+                                                <button class="btn" x-on:click="$dispatch('confirm-extra-hour-delete', { id: {{ $extraHour->id }} })" wire:loading.attr="disabled">
+                                                    <span class="material-symbols-outlined icon">delete</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr class="svcr-list-item nos">
