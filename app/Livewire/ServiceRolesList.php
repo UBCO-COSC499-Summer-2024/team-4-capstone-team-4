@@ -211,7 +211,7 @@ class ServiceRolesList extends Component
         $serviceRolesQuery = ServiceRole::query();
         $user = $this->user;
         $userRole = $user->roles;
-        if (($userRole->contains('role', 'dept_head') || $userRole->contains('role', 'dept_staff')) && !$userRole->contains('role', 'admin')) {
+        if ($userRole->contains('role', 'dept_head') && !$userRole->contains('role', 'admin')) {
             $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
             // area then department
             $serviceRolesQuery->whereHas('area', function ($query) use ($deptId) {

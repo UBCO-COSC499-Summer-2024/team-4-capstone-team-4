@@ -19,7 +19,6 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
             BROWSERSHOT_REMOTE_URL: 'insight-chromium'
             PUPPETEER_CACHE_DIR: '/home/sail/.cache/puppeteer'
-            PUPPETEER_EXECUTABLE_PATH: '/root/.cache/puppeteer/chrome/linux-126.0.6478.182/chrome-linux64/chrome'
         volumes:
             - 'tmpfiles:/tmp'
             - '.:/var/www/html:cached'
@@ -43,7 +42,7 @@ services:
             context: ./dockerfiles
             dockerfile: dockerfile.insightdb
         ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
+            - '${FORWARD_DB_PORT:-5433}:5432'
         environment:
             PGPASSWORD: '${DB_PASSWORD:-secret}'
             POSTGRES_DB: '${DB_DATABASE}'
@@ -84,7 +83,7 @@ services:
         networks:
             - InsightNet
     insight-selenium:
-        image: 'selenium/standalone-chrome'
+        image: 'selenium/standalone-chromium'
         extra_hosts:
         - 'host.docker.internal:host-gateway'
         volumes:
