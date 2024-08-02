@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const areaFilter = document.getElementById('areaFilter'); // Correct ID for the area filter element
 
     if (!searchInput || !tableBody) {
-        console.error('Required elements are missing: searchInput or tableBody');
+        // console.error('Required elements are missing: searchInput or tableBody');
         return;
     }
-    
+
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
     function fetchCourses(query, areaId) {

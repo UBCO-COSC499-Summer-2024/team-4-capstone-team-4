@@ -32,7 +32,7 @@ class ExtraHourFactory extends Factory {
 
         return [
             'name' => $this->faker->randomElement(['Meeting', 'Committee', 'Conference']),
-            'description' => $this->faker->sentence,
+            'description' => $this->faker->text,
             'hours' => $this->faker->numberBetween(1, 160),
             'year'=> $this->faker->year(),
             'month' => $this->faker->numberBetween(1, 12),

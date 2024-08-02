@@ -20,7 +20,7 @@ class AuditLogFactory extends Factory
             'user_id' => $this->faker->numberBetween(1, 10),
             'user_alt' => $this->faker->userName,
             'action' => $this->faker->randomElement(['create', 'update', 'delete']),
-            'description' => $this->faker->sentence,
+            'description' => $this->faker->text,
             'table_name' => $this->faker->word,
             'operation_type' => $this->faker->randomElement(['insert', 'update', 'delete']),
             'old_value' => json_encode(['name' => 'Old Name']),

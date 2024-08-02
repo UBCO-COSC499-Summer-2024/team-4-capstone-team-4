@@ -145,7 +145,12 @@ class AuditLogTable extends Component
                 }
             }
         }
-
+        // if selected sort has old_ or new_ convert to old_value or new_value
+        if (strpos($this->selectedSort, 'old_') !== false) {
+            $this->selectedSort = 'old_value';
+        } elseif (strpos($this->selectedSort, 'new_') !== false) {
+            $this->selectedSort = 'new_value';
+        }
         $query->orderBy($this->selectedSort, $this->selectedSortOrder);
 
         $auditLogs = $query->paginate($this->perpage);
