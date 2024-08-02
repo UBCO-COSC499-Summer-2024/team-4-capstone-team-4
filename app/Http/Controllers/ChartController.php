@@ -169,8 +169,8 @@ class ChartController extends Controller {
                 $deptPerformance = AreaPerformance::where('area_id', $area['id'])->where('year', $currentYear)->first();
 
                 $chart1 = $this->deptLineChart($dataLabels, $totalHours);
-                $chart2 = $this->performancePieChart($deptAssignmentCount[1], $area['name'] . " Service Roles", "Hours", "AreaRolePieChart");
-                $chart3 = $this->performancePieChart($deptAssignmentCount[3], $area['name'] . " Extra Hours", "Hours", "AreaExtraPieCHart");
+                $chart2 = $this->performancePieChart(array_slice($deptAssignmentCount[1], 0, 5, true), $area['name'] . " Service Role Preview", "Hours", "AreaRolePieChart");
+                $chart3 = $this->performancePieChart(array_slice($deptAssignmentCount[3], 0, 5, true), $area['name'] . " Extra Hours Preview", "Hours", "AreaExtraPieCHart");
 
                 return view('dashboard', compact('chart1', 'chart2', 'chart3', 'currentMonth', 'userRoles', 'isDeptHead', 'isDeptStaff', 'isInstructor', 'isAdmin', 'deptAssignmentCount', 'deptPerformance', 'leaderboard', 'deptYears', 'currentYear', 'areas', 'area'));
             }
@@ -211,8 +211,8 @@ class ChartController extends Controller {
             $years = $this->getPerformanceYears($instructorRoleId, false);
 
             $chart1 = $this->instructorLineChart($performance, $hasTarget);
-            $chart2 = $this->performancePieChart($assignmentCount[0], "Service Roles", "Hours", "RolePieChart");
-            $chart3 = $this->performancePieChart($assignmentCount[1], "Extra Hours", "Hours", "ExtraPieChart");
+            $chart2 = $this->performancePieChart(array_slice($assignmentCount[0], 0, 5, true), "Service Roles Preview", "Hours", "RolePieChart");
+            $chart3 = $this->performancePieChart(array_slice($assignmentCount[1], 0, 5, true), "Extra Hours Preview", "Hours", "ExtraPieChart");
 
             if ($hasTarget) {
                 $chart4 = $this->instructorProgressBar($performance, $currentMonth);
@@ -988,24 +988,14 @@ class ChartController extends Controller {
             "rgba(249, 168, 37, 0.7)", 
             "rgba(241, 103, 69, 0.7)", 
             "rgba(124, 63, 88, 0.7)" ,
-            "rgba(255, 127, 14, 0.7)",
-            "rgba(44, 160, 44, 0.7)",
-            "rgba(214, 39, 40, 0.7)",  
-            "rgba(148, 103, 189, 0.7)",
-            "rgba(140, 86, 75, 0.7)",  
-            "rgba(127, 127, 127, 0.7)" 
+            "rgba(44, 160, 44, 0.7)"
         ];
         $borderColors = [
             "rgba(29, 154, 202, 0.7)", 
             "rgba(249, 168, 37, 0.7)", 
             "rgba(241, 103, 69, 0.7)", 
             "rgba(124, 63, 88, 0.7)",
-            "rgba(255, 127, 14, 0.7)",
-            "rgba(44, 160, 44, 0.7)",
-            "rgba(214, 39, 40, 0.7)",  
-            "rgba(148, 103, 189, 0.7)",
-            "rgba(140, 86, 75, 0.7)",  
-            "rgba(127, 127, 127, 0.7)"  
+            "rgba(44, 160, 44, 0.7)", 
         ];
 
         $labels = [];
