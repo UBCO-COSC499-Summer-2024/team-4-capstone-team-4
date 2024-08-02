@@ -83,15 +83,17 @@
                         "content": "The following applies to both the manual and file upload tables. The headers are listed from left to right. Area: Select one of the areas from the dropdown. Number: Three numbers representing the course number. Section: Three numbers representing the course section. Session: Select one of the options from the dropdown. Term: Select one of the options from the dropdown. Year: 4 numbers representing the year. Room: Three capital letters representing the abbreviated name of the building followed by three numbers representing the room number. Time: Both fields, representing the start and end time, must be a number in military time notation. Enrolled (Start): A number from 1-999. This must be lower than the capacity. Enrolled (End): A number from 0-999. This must be lower than the capacity. Capacity: A number from 1-999. This must be higher than Enrolled (Start) and Enrolled End).",
                         "tags": [
                             "import data",
+                            "manual input",
                             "file upload",
                             "workday"
                         ]
                     },
                     {
                         "heading": "SEI Data",
-                        "content": "After uploading a file, a populated table will appear with the contents found in the file. This is to ensure that all the data will be correctly inserted. If the table appears empty or is missing information, refer to the sample csv and ensure all headings are formatted correctly. At this stage, all the fields may be edited in case the data was pulled incorrectly. To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "content": "The following applies to both the manual and file upload tables. The headers are listed from left to right. Course Section: Select an existing course from the dropdown. The only course sections listed are those that do not have associated sei data. To edit these values, navigate to the Course Section Page. Q1(IM)-Q6(IM): A number from 1-5 representing the interpolated median for the corresponding question",
                         "tags": [
                             "import data",
+                            "manual input",
                             "file upload",
                             "sei"
                         ]
