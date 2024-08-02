@@ -55,16 +55,14 @@ class ServiceRole extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function userRoles()
-    {
+    public function userRoles() {
         return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'instructor_id')
                     ->where('role', 'instructor')
                     ->withPivot('assigner_id')
                     ->withTimestamps();
     }
 
-    public function roleAssignments()
-    {
+    public function roleAssignments() {
         return $this->hasMany(RoleAssignment::class);
     }
 
@@ -73,11 +71,10 @@ class ServiceRole extends Model {
     }
 
     public function instructors() {
-        // list of instructors assigned to this service role
-        return $this->belongsToMany(User::class, 'role_assignments', 'service_role_id', 'instructor_id')
-                    ->whereHas('roles', function ($query) {
-                        $query->where('role', 'instructor');
-                    });
+        return $this->belongsToMany(UserRole::class, 'role_assignments', 'service_role_id', 'instructor_id')
+                    ->where('role', 'instructor')
+                    ->withPivot('assigner_id')
+                    ->withTimestamps();
     }
 
     public function areaPerformance() {
@@ -125,15 +122,43 @@ class ServiceRole extends Model {
         return $extra_hours;
     }
 
-    public function extraHours()
-    {
+    public function extraHours($hideArchived = false) {
+        // return $this->hasManyThrough(
+        //     ExtraHour::class,
+        //     UserRole::class,
+        //     'department_id', // Foreign key on UserRole table
+        //     'instructor_id', // Foreign key on ExtraHour table
+        //     'area_id', // Local key on ServiceRole table (adjust if necessary)
+        //     'id' // Local key on UserRole table
+        // );
         return $this->hasManyThrough(
-            ExtraHour::class,
-            UserRole::class,
-            'department_id', // Foreign key on UserRole table
+            ExtraHour::class, // The model to retrieve
+            RoleAssignment::class, // The intermediate model
+            'service_role_id', // Foreign key on RoleAssignment table
             'instructor_id', // Foreign key on ExtraHour table
-            'area_id', // Local key on ServiceRole table (adjust if necessary)
-            'id' // Local key on UserRole table
-        );
+            'id', // Local key on ServiceRole table
+            'instructor_id' // Local key on RoleAssignment table
+        )
+        ->where('extra_hours.area_id', $this->area_id) // Filter by area_id from the ServiceRole
+        ->where('extra_hours.year', $this->year) // Filter by year from the ServiceRole
+        ->where('extra_hours.archived', $hideArchived); // Optionally filter out archived extra hours
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'service_roles',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 }

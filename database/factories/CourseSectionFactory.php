@@ -58,7 +58,8 @@ protected $model=CourseSection::class;
             'session' => fake()->randomElement(['W', 'S']),
             'section' => fake()->randomElement(['001', '002', '003']),
             'room' => $this->faker->randomElement(['EME', 'FIP', 'ART', 'SCI', 'COM']) . ' ' . $this->faker->numberBetween(100, 500),
-            'time' => $this->faker->time('H:i'),
+            'time_start' => $this->faker->time('H:i'),
+            'time_end' => $this->faker->time('H:i'),
         ];
     }
     
