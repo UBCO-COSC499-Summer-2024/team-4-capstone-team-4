@@ -154,10 +154,9 @@ class SvcroleListItem extends Component
             return;
         }
 
+        $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
-
-            $audit_user = User::find((int) auth()->user()->id)->name;
             $oldValue = $this->serviceRole->getOriginal();
 
             // Check if year has changed
@@ -230,7 +229,7 @@ class SvcroleListItem extends Component
             ]);
             AuditLog::create([
                 'user_id' => (int) auth()->user()->id,
-                'user_alt' => auth()->user()->name,
+                'user_alt' => $audit_user,
                 'action' => 'update',
                 'table_name' => 'service_roles',
                 'operation_type' => 'UPDATE',
