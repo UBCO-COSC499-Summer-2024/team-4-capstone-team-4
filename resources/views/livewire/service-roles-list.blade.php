@@ -312,27 +312,27 @@
         let rows = document.querySelectorAll('.svcr-list-item');
         const selectedItems = {};
 
-        const updateSelectAll = () => {
-            checkboxes = document.querySelectorAll('.svcr-list-item-select');
-            const totalCheckboxes = checkboxes.length;
-            const checkedCheckboxes = document.querySelectorAll('.svcr-list-item-select:checked').length;
-
-            checkAll.checked = checkedCheckboxes === totalCheckboxes;
-            checkAll.indeterminate = checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes;
-
-            checkboxes.forEach(function (checkbox) {
-                selectedItems[checkbox.value] = checkbox.checked;
-            });
-
-            // Dispatch updateSelectedItems to Livewire for each checkbox
-            checkboxes.forEach(function (checkbox) {
-                Livewire.dispatch('handleItemSelected', checkbox.value, checkbox.checked);
-            });
-        }
-
-        updateSelectAll();
-
         if (checkAll) {
+            const updateSelectAll = () => {
+                checkboxes = document.querySelectorAll('.svcr-list-item-select');
+                const totalCheckboxes = checkboxes.length;
+                const checkedCheckboxes = document.querySelectorAll('.svcr-list-item-select:checked').length;
+
+                checkAll.checked = checkedCheckboxes === totalCheckboxes;
+                checkAll.indeterminate = checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes;
+
+                checkboxes.forEach(function (checkbox) {
+                    selectedItems[checkbox.value] = checkbox.checked;
+                });
+
+                // Dispatch updateSelectedItems to Livewire for each checkbox
+                checkboxes.forEach(function (checkbox) {
+                    Livewire.dispatch('handleItemSelected', checkbox.value, checkbox.checked);
+                });
+            }
+
+            updateSelectAll();
+
             checkAll.addEventListener('change', function (e) {
                 const isChecked = e.target.checked;
                 checkboxes.forEach(function (checkbox) {
