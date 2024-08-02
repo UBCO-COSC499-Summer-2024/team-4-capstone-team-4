@@ -174,7 +174,7 @@ class HtmlHelpers {
             }
 
             if (!empty($topic['subtopics'])) {
-                $html .= '<div class="mt-2">';
+                $html .= '<div class="flex flex-col gap-2 mt-2">';
                 foreach ($topic['subtopics'] as $subIndex => $subtopic) {
                     $html .= self::convertSubtopicsToHtml([$subtopic], $subtopic['subtopic'] ?? 'No Subtopic');
                 }
