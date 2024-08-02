@@ -90,13 +90,17 @@ return new class extends Migration
             $table->string('prefix');
             $table->string('number');
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
-            $table->integer('enrolled');
+            $table->integer('enroll_start');
+            $table->integer('enroll_end');
             $table->integer('dropped');
             $table->integer('capacity');
             $table->year('year');
             $table->string('term');
             $table->string('session');
             $table->string('section');
+            $table->string('room');
+            $table->string('time_start');
+            $table->string('time_end');
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });
@@ -181,18 +185,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        Schema::create('settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
-            $table->string('auth_method')->nullable()->default('email-password');
-            $table->string('theme')->nullable()->default('light');
-            $table->string('timezone')->nullable()->default(date_default_timezone_get());
-            $table->string('locale')->nullable()->default('en');
-            $table->string('language')->nullable()->default('en');
-            $table->jsonb('custom')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('auth_methods', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
@@ -200,6 +192,18 @@ return new class extends Migration
             $table->string('provider_id');
             $table->string('token')->nullable();
             $table->string('avatar')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('settings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('auth_method_id')->nullable()->constrained('auth_methods')->cascadeOnDelete();
+            $table->string('theme')->nullable()->default('light');
+            $table->string('timezone')->nullable()->default(date_default_timezone_get());
+            $table->string('locale')->nullable()->default('en');
+            $table->string('language')->nullable()->default('en');
+            $table->jsonb('custom')->nullable();
             $table->timestamps();
         });
 
@@ -213,9 +217,49 @@ return new class extends Migration
             $table->string('operation_type')->nullable();
             $table->jsonb('old_value')->nullable();
             $table->jsonb('new_value')->nullable();
-            $table->timestamp('timestamp')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('timestamp')->useCurrent();
+            $table->timestamps();
+        });
+
+
+        Schema::create('approval_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('approvals_required')->default(1);
+            $table->timestamps();
+        });
+
+        Schema::create('approval_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('approvals', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('approval_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
+            $table->text('details')->nullable();
+            $table->timestamp('requested_at')->useCurrent();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('rejected_at')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('user_roles')->cascadeOnDelete();
+            $table->foreignId('rejected_by')->nullable()->constrained('user_roles')->cascadeOnDelete();
+            $table->boolean('active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('approval_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('approval_id')->constrained('approvals')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
+            $table->text('remarks')->nullable();
+            $table->timestamp('changed_at')->useCurrent();
+            $table->timestamps();
         });
 
         // for pgaudit
@@ -241,6 +285,7 @@ return new class extends Migration
             $table->string('session_user')->nullable();
             $table->text('security_label')->nullable();
             $table->jsonb('context')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -266,6 +311,10 @@ return new class extends Migration
         Schema::dropIfExists('settings');
         Schema::dropIfExists('auth_methods');
         Schema::dropIfExists('super_audits');
+        Schema::dropIfExists('approval_histories');
+        Schema::dropIfExists('approvals');
+        Schema::dropIfExists('approval_statuses');
+        Schema::dropIfExists('approval_types');
         Schema::dropIfExists('user_roles');
         Schema::dropIfExists('areas');
         Schema::dropIfExists('departments');

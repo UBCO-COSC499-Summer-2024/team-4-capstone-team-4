@@ -24,7 +24,7 @@ class RoleAssignment extends Model {
      * @var array
      */
     protected $fillable = [
-        'role_id', 'assigner_id', 'instructor_id',
+        'service_role_id', 'assigner_id', 'instructor_id',
     ];
 
     /**
@@ -57,7 +57,7 @@ class RoleAssignment extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function role() {    
+    public function role() {
         return $this->belongsTo(ServiceRole::class);
     }
 
@@ -89,5 +89,23 @@ class RoleAssignment extends Model {
     public function extraHours()
     {
         return $this->hasManyThrough(ExtraHour::class, UserRole::class, 'id', 'instructor_id', 'instructor_id', 'id');
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'role_assignments',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 }

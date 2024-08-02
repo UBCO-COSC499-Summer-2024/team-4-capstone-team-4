@@ -3,10 +3,10 @@
         <span class="content-title-text">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}'s Report</span>
     </h1>
     <div>
-        <div class="flex justify-between items-center">
-            <div>
+        <div class="flex justify-end items-center">
+            <div class="mr-2">
                 <label for="year">Select Year:</label>
-                <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
                         $allPerformances = $instructor->instructorPerformances->sortBy('year');
                     @endphp
@@ -17,18 +17,18 @@
             </div>
             <x-report-dropdown/>
         </div>
-        <div id="exportContent">
+        <div id="exportContent" class="ml-2">
             <h2 class="font-bold">Courses Performance</h2>
             @if ($courses->isNotEmpty())
-                <table id="courseTable" class="w-full bg-white border border-gray-300 text-center">
+                <table id="courseTable" class="report-table">
                     <thead>    
                         <tr class="text-white bg-[#3b4779]">
-                            <th>Course Section</th>
-                            <th>Term</th>
-                            <th>Year</th>
-                            <th>Enrolled (%)</th>
-                            <th>Dropped (%)</th>
-                            <th>SEI Average (IM)</th>
+                            <th class="report-head-cell">Course Section</th>
+                            <th class="report-head-cell">Term</th>
+                            <th class="report-head-cell">Year</th>
+                            <th class="report-head-cell">Enrolled (%)</th>
+                            <th class="report-head-cell">Dropped (%)</th>
+                            <th class="report-head-cell">SEI Average (IM)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,21 +37,21 @@
                                 $sei = \App\Models\SeiData::calculateSEIAverage($course->courseSection->id);
                                 $capacity = $course->courseSection->capacity;
                             @endphp
-                            <tr>
-                                <td class="border border-gray-300">{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
-                                <td class="border border-gray-300">Term {{ $course->courseSection->term }}</td>
-                                <td class="border border-gray-300">{{ $course->courseSection->year }}</td>
-                                <td class="border border-gray-300">{{ round($course->courseSection->enrolled * 100 / $capacity, 1) }}</td>
-                                <td class="border border-gray-300">{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
-                                <td class="border border-gray-300">{{ $sei ? $sei : '-' }}</td>
+                            <tr class="report-row">
+                                <td class="report-cell">{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
+                                <td class="report-cell">Term {{ $course->courseSection->term }}</td>
+                                <td class="report-cell">{{ $course->courseSection->year }}</td>
+                                <td class="report-cell">{{ round($course->courseSection->enroll_end * 100 / $capacity, 1) }}</td>
+                                <td class="report-cell">{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
+                                <td class="report-cell">{{ $sei ? $sei : '-' }}</td>
                             </tr>
                         @endforeach
                         @if ($performance)
-                            <tr class="font-bold bg-gray-400">
-                                <td colspan="3">Total Average</td>
-                                <td class="border border-gray-300">{{ $performance->enrolled_avg }}</td>
-                                <td class="border border-gray-300">{{ $performance->dropped_avg }}</td>
-                                <td class="border border-gray-300">{{ $performance->sei_avg }}</td>
+                            <tr class="report-row total-row">
+                                <td class="report-cell" colspan="3">Total Average</td>
+                                <td class="report-cell">{{ $performance->enrolled_avg }}</td>
+                                <td class="report-cell">{{ $performance->dropped_avg }}</td>
+                                <td class="report-cell">{{ $performance->sei_avg }}</td>
                             </tr>
                         @endif
                     </tbody>
@@ -78,16 +78,16 @@
                 ];
             @endphp
             @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
-                <table id="performanceTable" class="w-full bg-white border border-gray-300 text-center">
+                <table id="performanceTable" class="report-table">
                     <thead>
                         <tr class="text-white bg-[#3b4779]">
-                            <th></th>
-                            <th>Name</th>
-                            <th>Year</th>
+                            <th class="report-head-cell"></th>
+                            <th class="report-head-cell">Name</th>
+                            <th class="report-head-cell">Year</th>
                             @foreach ($subtotalHours as $month => $hours)
-                                <th>{{ substr($month, 0, 3) }} Hrs</th>
+                                <th class="report-head-cell">{{ substr($month, 0, 3) }}</th>
                             @endforeach
-                            <th>Total Hrs</th>
+                            <th class="report-head-cell">Total Hrs</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,24 +100,24 @@
                                     }
                                     $rowcount++;
                                 @endphp
-                                <tr>
+                                <tr class="report-row">
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
+                                        <th class="border border-white border-l-gray-500 bg-[#3b4779] text-white px-2" rowspan="{{ count($svcroles) + 1 }}">Service Roles</th>
                                     @endif
-                                    <td class="border border-gray-300">{{ $role->name }}</td>
-                                    <td class="border border-gray-300">{{ $role->year }}</td>
+                                    <td class="report-cell">{{ $role->name }}</td>
+                                    <td class="report-cell">{{ $role->year }}</td>
                                     @foreach ($subtotalHours as $month => $value)
-                                        <td class="border border-gray-300">{{ $hours[$month] }}</td>
+                                        <td class="report-cell">{{ $hours[$month] }}</td>
                                     @endforeach
-                                    <td class="border border-gray-300">{{ array_sum($hours) }}</td>
+                                    <td class="report-cell">{{ array_sum($hours) }}</td>
                                 </tr>
                             @endforeach
-                            <tr class="font-bold bg-gray-300">
-                                <td colspan="2">Subtotal</td>
+                            <tr class="report-row subtotal-row">
+                                <td class="report-cell" colspan="2">Subtotal</td>
                                 @foreach ($subtotalHours as $month => $value)
-                                    <td class="border border-gray-300">{{ $value }}</td>
+                                    <td class="report-cell">{{ $value }}</td>
                                 @endforeach
-                                <td class="border border-gray-300">{{ array_sum($subtotalHours) }}</td>
+                                <td class="report-cell">{{ array_sum($subtotalHours) }}</td>
                             </tr> 
                         @endif 
 
@@ -129,39 +129,39 @@
                                     $rowcount++;
                                     $extraHoursSubtotal[\DateTime::createFromFormat('!m', $hours->month)->format('F')] += $hours->hours;
                                 @endphp
-                                <tr>
+                                <tr class="report-row">
                                     @if($rowcount == 1)
-                                        <th class="border border-white bg-[#3b4779] text-white" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
+                                        <th class="border border-white border-l-gray-500 bg-[#3b4779] text-white px-2" rowspan="{{ $extraHours->count() + 1 }}">Extra Hours</th>
                                     @endif
-                                    <td class="border border-gray-300">{{ $hours->name }}</td>
-                                    <td class="border border-gray-300">{{ $hours->year }}</td>
+                                    <td class="report-cell">{{ $hours->name }}</td>
+                                    <td class="report-cell">{{ $hours->year }}</td>
                                     @foreach ($extraHoursSubtotal as $month => $value)
-                                        <td class="border border-gray-300">{{ \DateTime::createFromFormat('!m', $hours->month)->format('F') == $month ? $hours->hours : '-' }}</td>
+                                        <td class="report-cell">{{ \DateTime::createFromFormat('!m', $hours->month)->format('F') == $month ? $hours->hours : '-' }}</td>
                                     @endforeach
-                                    <td class="border border-gray-300">{{ $hours->hours }}</td>
+                                    <td class="report-cell">{{ $hours->hours }}</td>
                                 </tr>
                             @endforeach
-                            <tr class="font-bold bg-gray-300">
-                                <td colspan="2">Subtotal</td>
+                            <tr class="report-row subtotal-row">
+                                <td class="report-cell" colspan="2">Subtotal</td>
                                 @foreach ($extraHoursSubtotal as $month => $value)
-                                    <td class="border border-gray-300">{{ $value }}</td>
+                                    <td class="report-cell">{{ $value }}</td>
                                 @endforeach
-                                <td class="border border-gray-300">{{ array_sum($extraHoursSubtotal) }}</td>
+                                <td class="report-cell">{{ array_sum($extraHoursSubtotal) }}</td>
                             </tr>
                         @endif
 
-                        <tr class="border-b border-white font-bold bg-gray-400">
-                            <td colspan="3">Total</td>
+                        <tr class="report-row border-b border-white total-row">
+                            <td class="report-cell" colspan="3">Total</td>
                             @foreach ($subtotalHours as $month => $value)
-                                <td class="border border-gray-300">{{ $value + $extraHoursSubtotal[$month] }}</td>
+                                <td class="report-cell">{{ $value + $extraHoursSubtotal[$month] }}</td>
                             @endforeach
-                            <td class="border border-gray-300">{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
+                            <td class="report-cell">{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
                         </tr> 
-                        <tr class="font-bold bg-gray-400">
+                        <tr class="report-row total-row">
                             @if ($performance)
-                                <td class="border border-gray-300" colspan="3">Target Hours</td>
-                                <td class="border border-gray-300" colspan="12">{{  round($performance->target_hours/12) }}</td>
-                                <td class="border border-gray-300">{{  $performance->target_hours }}</td>
+                                <td class="report-cell" colspan="3">Target Hours</td>
+                                <td class="report-cell" colspan="12">{{  round($performance->target_hours/12) }}</td>
+                                <td class="report-cell">{{  $performance->target_hours }}</td>
                             @endif
                         </tr>
                     </tbody>

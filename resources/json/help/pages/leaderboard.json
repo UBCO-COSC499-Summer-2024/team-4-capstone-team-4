@@ -1,0 +1,134 @@
+[
+    {
+        "subtopic": "Leaderboard",
+        "subsections": [
+            {
+                "heading": "Introduction",
+                "content": "The Leaderboard ranks instructors within a department based on their scores, from highest to lowest. The instructor with the highest score is placed first.",
+                "tags": [
+                    "introduction",
+                    "leaderboard"
+                ]
+            },
+            {
+                "heading": "Score Calculation",
+                "content": "Instructor scores are calculated using a custom function based on Insight performance metrics. The calculation involves the following steps: 1) Enrollment Efficiency: Calculated by subtracting the dropped average from the enrolled average, then dividing by the enrolled average. [Formula: enrollment_efficiency = (enrolled_average - dropped_average) / enrolled_average]. 2) Weighted Course Sections: Each course section is assigned a weight based on its duration and the approximate hours an instructor spends teaching the course each term. Single-term courses are assigned a weight of 215, and double-term courses are assigned a weight of 530. 3) Score Component: The enrollment efficiency value is multiplied by the total number of weighted course sections and the SEI Average of the instructor. 4) Service Hours: Add the total completed service hours for the year and divide by the average number of hours in a year (8,760). 5) Final Score: Multiply the result by 1,000 and round to an integer. The score is updated each time performance data is added to the database. [Formula: final_score = ((enrollment_efficiency * total_weighted_course_sections * SEI_Average) + total_service_hours) / 8760 * 1000]",
+                "tags": [
+                    "score",
+                    "calculation",
+                    "leaderboard"
+                ]
+            },
+            {
+                "heading": "Filtering",
+                "content": "The Leaderboard can be filtered by department area to display specific ranks for users within a particular area of the department.",
+                "tags": [
+                    "filtering",
+                    "leaderboard"
+                ]
+            }
+        ],
+        "subtopics": [
+            {
+                "subtopic": "Leaderboard Badges",
+                "subsections": [
+                    {
+                        "heading": "Golden Champ",
+                        "content": "1st Place: You’re at the top of your game! This badge is awarded to the highest-ranking individual.",
+                        "tags": [
+                            "gold",
+                            "trophy",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Silver Star",
+                        "content": "2nd Place: Almost there, keep pushing! This badge is awarded to the second-highest ranking individual.",
+                        "tags": [
+                            "silver",
+                            "trophy",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Bronze Boss",
+                        "content": "3rd Place: Great job, you’re on the podium! This badge is awarded to the third-highest ranking individual.",
+                        "tags": [
+                            "bronze",
+                            "trophy",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Top 5% Wonder",
+                        "content": "Top 5%: You’re one of the elite few! This badge is awarded to those who rank in the top 5%.",
+                        "tags": [
+                            "top 5%",
+                            "elite",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Elite Top 10%",
+                        "content": "Top 10%: You’re in the top tier! This badge is awarded to those who rank in the top 10%.",
+                        "tags": [
+                            "top 10%",
+                            "elite",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Top 25% Dynamo",
+                        "content": "Top 25%: Strong performance! This badge is awarded to those who rank in the top 25%.",
+                        "tags": [
+                            "top 25%",
+                            "strong",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Top 50% Hero",
+                        "content": "Top 50%: You’re in the upper half! This badge is awarded to those who rank in the top 50%.",
+                        "tags": [
+                            "top 50%",
+                            "upper half",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Top 75% Achiever",
+                        "content": "Top 75%: You’re making progress! This badge is awarded to those who rank in the top 75%.",
+                        "tags": [
+                            "top 75%",
+                            "progress",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    },
+                    {
+                        "heading": "Keep Climbing",
+                        "content": "Keep Climbing! Greatness awaits! This badge is awarded to those who are working towards higher rankings.",
+                        "tags": [
+                            "keep climbing",
+                            "progress",
+                            "badge",
+                            "leaderboard"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "badges",
+                    "leaderboard"
+                ]
+            }
+        ],
+        "tags": [
+            "badges",
+            "leaderboard"
+        ]  
+    }
+]

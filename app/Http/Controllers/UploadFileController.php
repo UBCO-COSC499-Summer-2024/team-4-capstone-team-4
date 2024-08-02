@@ -19,12 +19,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 class UploadFileController extends Controller {
 
-    public function showUploadFile()
+    public function showUploadFileWorkday()
     {
-        return view('upload-file');
+        return view('upload-file-workday');
     }
 
-    private function readCSV($filePath) {
+    public function showUploadFileSei()
+    {
+        return view('upload-file-sei');
+    }
+
+    private function readWorkdayCSV($filePath) {
         $csvData = [];
         $result = '';
         if (($handle = fopen($filePath, 'r')) !== false) {
@@ -115,7 +120,29 @@ class UploadFileController extends Controller {
         return $csvData;
     }
 
-    public function upload(Request $request) {
+    private function readCSV($filePath) {
+        $header = null;
+        $csvData = [];
+
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!array_filter($row)) {
+                    continue; // Skip empty rows
+                }
+
+                if (!$header) {
+                    $header = $row;
+                } else {
+                    $csvData[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+
+        return $csvData;
+    }
+
+    public function uploadWorkday(Request $request) {
         $finalCSVs = [];
         $uploadedFiles = [];
 
@@ -126,6 +153,90 @@ class UploadFileController extends Controller {
 
         foreach ($request->file('files') as $file) {
             $filePath = $file->getRealPath();
+            // depending on CSV file format, you may need to adjust the readCSV function
+
+            // $csvData = $this->readWorkdayCSV($filePath);
+            $csvData = $this->readCSV($filePath);
+      
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        // -- pulled straight from workday CSV format --
+
+        // foreach ($uploadedFiles as $uploadedFile) {
+        //     $trimCSV = [];
+        //     $trimCSV['File'] = $uploadedFile['fileName'];
+        //     foreach ($uploadedFile['csvData'] as $key => $value) {
+        //         switch ($key) {
+        //             case 'Area':
+        //             case 'Number':
+        //             case 'Section':
+        //             case 'Session':
+        //             case 'Term':
+        //             case 'Year':
+        //             case 'Session':
+        //             case 'Room':
+        //             case 'Time Start':
+        //             case 'Time End':
+        //             case 'Enrolled Start':
+        //             case 'Enrolled End':
+        //             case 'Capacity':
+        //                 $trimCSV[$key] = $value;
+        //                 break;
+        //         }
+        //     }
+        //     $finalCSVs[] = $trimCSV;
+        // }
+
+        // -- traditional csv format --
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];
+            foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Area':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Session':
+                        case 'Room':
+                        case 'Time Start':
+                        case 'Time End':
+                        case 'Enrolled Start':
+                        case 'Enrolled End':
+                        case 'Capacity':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
+                }
+                $finalCSVs[] = $trimCSV;
+            }
+        }
+
+        // dd($finalCSVs);
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.workday');
+    }
+
+    public function uploadSei(Request $request) {
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
             $csvData = $this->readCSV($filePath);
 
             $uploadedFiles[] = [
@@ -136,46 +247,33 @@ class UploadFileController extends Controller {
 
         foreach ($uploadedFiles as $uploadedFile) {
             $trimCSV = [];
-            $trimCSV['File'] = $uploadedFile['fileName'];
-            foreach ($uploadedFile['csvData'] as $key => $value) {
-                switch ($key) {
-                    case 'Area':
-                    case 'Number':
-                    case 'Section':
-                    case 'Year':
-                    case 'Session':
-                    case 'Enrolled':
-                        $trimCSV[$key] = $value;
-                        break;
+            $trimCSV['File'] = $uploadedFile['fileName'];     
+                   
+        foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Q1':
+                        case 'Q2':
+                        case 'Q3':
+                        case 'Q4':
+                        case 'Q5':
+                        case 'Q6':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
                 }
+                $finalCSVs[] = $trimCSV;
+               
             }
-            $finalCSVs[] = $trimCSV;
         }
-
-        // dd($trimCSV);
-
-
-        // dd($finalCSVs);
-
         $request->session()->put('finalCSVs', $finalCSVs);
-        return redirect()->route('upload.file');
-
-        Session::flash('message', 'File uploaded successfully!');
-        // Session::put('csvData', $csvData);
-        // Session::put('trimCSV', $trimCSV);
-        Session::put('finalCSVs', $finalCSVs);
-
-
-        // return straight to
-        // return view('livewire.import-workday-form', [
-        //     'finalCSVs' => $finalCSVs,
-        // ]);
-
-
-        // Process the file as needed
-        // For demonstration, just dump the file path
-        // dd('File uploaded successfully!', $filePath);
-        // return redirect()->route('import');
+        return redirect()->route('upload.file.show.sei');
     }
 
     public function uploadSvcRoles(Request $request) {

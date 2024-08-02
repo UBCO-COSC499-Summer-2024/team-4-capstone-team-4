@@ -77,8 +77,10 @@ Route::middleware([
     Route::get('/import', function () {
         return view('import');
     })->name('import');
-    Route::get('/upload-file', [UploadFileController::class, 'showUploadFile'])->name('upload.file.show');
-    Route::post('/upload-file', [UploadFileController::class, 'upload'])->name('upload.file');
+    Route::get('/upload-file/workday', [UploadFileController::class, 'showUploadFileWorkday'])->name('upload.file.show.workday');
+    Route::post('/upload-file/workday', [UploadFileController::class, 'uploadWorkday'])->name('upload.file.workday');
+    Route::get('/upload-file/sei-data', [UploadFileController::class, 'showUploadFileSei'])->name('upload.file.show.sei');
+    Route::post('/upload-file/sei-data', [UploadFileController::class, 'uploadSei'])->name('upload.file.sei');
     Route::post('/upload/svcroles', [UploadFileController::class, 'uploadSvcRoles'])->name('upload.svcroles');
     Route::get('/requests', function () {
         return view('service-requests');
@@ -104,8 +106,6 @@ Route::middleware([
     })->name('svcroles.manage.id');
     Route::get('/manage/{eid}/exports/{eformat}', [ServiceRoleController::class, 'export'])
         ->name('svcroles.export.id');
-    Route::get('/course-details', [CourseDetailsController::class, 'show'])->name('course-details');
-    Route::post('/course-details/save', [CourseDetailsController::class, 'save'])->name('course-details.save');
     // test route for exports.pdf.servicerole
     Route::get('/manage/{id}/preview', function ($id) {
         $serviceRole = ServiceRole::find($id ?? 1)->load('area', 'instructors', 'extraHours');
@@ -151,17 +151,16 @@ Route::middleware([
     Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
     Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
+    Route::post('/create-ta', [CourseDetailsController::class, 'createTA'])->name('createTA');
+    Route::get('/export/pdf', [CourseDetailsController::class, 'exportPDF'])->name('export.pdf');
+    Route::get('/export/csv', [CourseDetailsController::class, 'exportCSV'])->name('export.csv');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    ApplyUserSettings::class,
-    CheckRole::class.':admin,dept_head,dept_staff'
-])->prefix('/staff')->group(function () {
-    Route::get('/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('staff.id');
-});
+    Route::get('/api/teaching-assistants', [CourseDetailsController::class, 'getTeachingAssistants']);
+    Route::get('/api/instructors', [CourseDetailsController::class, 'getInstructors']);
+    Route::get('/api/courses/instructor/{id}', [CourseDetailsController::class, 'getCoursesByInstructor']);
+    Route::post('/api/assign-ta', [CourseDetailsController::class, 'assignTA'])->name('assignTA');
+    Route::post('/api/assignTA', [CourseDetailsController::class, 'save'])->name('assignTA');
 
 Route::middleware([
     'auth:sanctum',

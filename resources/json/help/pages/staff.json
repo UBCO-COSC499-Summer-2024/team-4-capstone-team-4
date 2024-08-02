@@ -25,7 +25,7 @@
                 "subsections": [
                     {
                         "heading": "Add Target Hours",
-                        "content": "To add target hours, you first need to select at least one staff member. Then navigate to the action dropdown where you can click the 'Add Target Hours' link. {{ img: staff-dropdown-image.staff-dropdown }} This will bring up a popup that will allow you to put the target hours. Note: Target hours should be no greater then 2000.",
+                        "content": "To add target hours, you first need to select at least one staff member. Then navigate to the action dropdown where you can click the 'Add Target Hours' link. This will bring up a popup that will allow you to put the target hours. Note: Target hours should be no greater then 2000.",
                         "tags": [
                             "intro",
                             "staff",

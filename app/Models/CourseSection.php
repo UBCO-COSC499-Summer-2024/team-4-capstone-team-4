@@ -25,7 +25,7 @@ class CourseSection extends Model {
      * @var array
      */
     protected $fillable = [
-        'prefix', 'number', 'area_id', 'enrolled', 'dropped', 'capacity', 'year', 'term', 'session', 'section'
+        'prefix', 'number', 'area_id', 'enroll_start', 'enroll_end', 'dropped', 'capacity', 'year', 'term', 'session', 'section', 'room', 'time_start', 'time_end'
     ];
 
     /**
@@ -73,6 +73,18 @@ class CourseSection extends Model {
      */
     public function teaches() {
         return $this->hasOne(Teach::class, 'course_section_id');
+    }
+
+    public static function calculateDropped($enroll_start, $enroll_end) {
+        $dropped = 0;
+
+        if($enroll_start > $enroll_end) {
+            $dropped = $enroll_start - $enroll_end;
+        } else {
+            $dropped = 0;
+        }
+
+        return $dropped;
     }
 
 }

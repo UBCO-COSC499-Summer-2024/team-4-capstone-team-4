@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Approval;
+use App\Models\ApprovalStatus;
+use App\Models\ApprovalType;
 use App\Models\AreaPerformance;
 use App\Models\Department;
 use App\Models\Area;
@@ -16,6 +19,8 @@ use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
+use App\Models\TeachingAssistant;
+use App\Models\Assist;
 
 class DatabaseSeeder extends Seeder
 {
@@ -192,6 +197,21 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($instructorRole->id, date('Y'));
+        }
+
+        // Creating Teaching Assistants
+        $teachingAssistants = TeachingAssistant::factory(10)->create();
+
+    // Assign TAs to courses
+        $courseSections = CourseSection::all();
+        foreach ($courseSections as $courseSection) {
+            $ta = $teachingAssistants->random();
+            Assist::create([
+                'course_section_id' => $courseSection->id,
+                'ta_id' => $ta->id,
+                'rating' => fake()->numberBetween(1, 5) + fake()->randomFloat(2, 0, 0.99),
+            ]);
         }
         // Add service roles for the example instructor
         $instructor_svcroles = ServiceRole::factory(3)->create([
@@ -214,11 +234,12 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->updatePerformance2($extrahour, $dept);
 
-        // Create courses and assign instructors to them    
+        // Create courses and assign instructors to them
         $courses = CourseSection::factory(50)->create([
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
+            
             $user = User::factory()->create(
                 ['password' => 'password']
             );
@@ -265,6 +286,7 @@ class DatabaseSeeder extends Seeder
                     'q6' => fake()->numberBetween(1,5),
                 ]),
             ]);
+            InstructorPerformance::updatePerformance($role->id, date('Y'));
         }
 
         $svcroles = ServiceRole::factory(10)->create([
@@ -280,90 +302,121 @@ class DatabaseSeeder extends Seeder
             ]);
             $this->updatePerformance($instructor_id, $role, $dept);
             InstructorPerformance::updatePerformance($instructor_id, date('Y'));
-        } 
+        }
 
         $extrahours = ExtraHour::factory(5)->create([
             'year' => date('Y'),
             'month' => 7,
             'assigner_id' => $headrole->id,
         ]);
-        
+
         foreach ($extrahours as $hours){
             $this->updatePerformance2($hours, $dept);
-            InstructorPerformance::updatePerformance($instructor_id, date('Y')); 
-        } 
-        
+            InstructorPerformance::updatePerformance($instructor_id, date('Y'));
+        }
+
         //Update area and dept performance
         foreach ($areas as $area){
             AreaPerformance::updateAreaPerformance($area->id, date('Y'));
         }
         $depts = Department::all();
         foreach ($depts as $dept){
-            DepartmentPerformance::updateDepartmentPerformance($dept->id, date('Y')); 
+            DepartmentPerformance::updateDepartmentPerformance($dept->id, date('Y'));
         }
+
+        // approvals
+        ApprovalStatus::create(['name' => 'pending', 'description' => 'Approval is pending']);
+        ApprovalStatus::create(['name' => 'approved', 'description' => 'Approval is approved']);
+        ApprovalStatus::create(['name' => 'rejected', 'description' => 'Approval is rejected']);
+        ApprovalStatus::create(['name' => 'cancelled', 'description' => 'Approval is cancelled']);
+        ApprovalStatus::create(['name' => 'intermediate', 'description' => 'Awaiting other approvals']);
+
+        ApprovalType::create(['name' => 'service_role', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'extra_hour', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'registration', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'service_request', 'approvals_required' => 1]);
     }
 
     private function updatePerformance($instructor_id, $role, $dept){
         $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
-        $instructorPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($instructorPerformance, $role)),
-        ]);
+        if ($instructorPerformance) {
+            $instructorPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($instructorPerformance, $role)),
+            ]);
+        }
 
         $area_id = $role->area_id;
         $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
-        $areaPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($areaPerformance, $role)),
-        ]);
+        if ($areaPerformance) {
+            $areaPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($areaPerformance, $role)),
+            ]);
+        }
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
-        $deptPerformance->update([
-            'total_hours' => json_encode($this->updateMonthlyHours($deptPerformance, $role)),
-        ]);
+        if ($deptPerformance) {
+            $deptPerformance->update([
+                'total_hours' => json_encode($this->updateMonthlyHours($deptPerformance, $role)),
+            ]);
+        }
     }
 
     private function updatePerformance2($hours, $dept){
         $instructor_id  = $hours->instructor_id;
         $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id)->where('year', date('Y'))->first();
-        $instructorPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($instructorPerformance, $hours))
-        ]);
+        if ($instructorPerformance) {
+            $instructorPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($instructorPerformance, $hours))
+            ]);
+        }
 
         $area_id = $hours->area_id;
         $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', date('Y'))->first();
-        $areaPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($areaPerformance, $hours)),
-        ]);
+        if ($areaPerformance) {
+            $areaPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($areaPerformance, $hours)),
+            ]);
+        }
 
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', date('Y'))->first();
-        $deptPerformance->update([
-            'total_hours' => json_encode($this->updateExtraHours($deptPerformance, $hours)),
-        ]);
-
+        if ($deptPerformance) {
+            $deptPerformance->update([
+                'total_hours' => json_encode($this->updateExtraHours($deptPerformance, $hours)),
+            ]);
+        }
     }
 
     private function updateMonthlyHours($performance, $role){
-        $existingMonthlyHours = json_decode($performance->total_hours, true);
-        $updatedMonthlyHours = [
-            'January' => $existingMonthlyHours['January'] + $role->monthly_hours['January'],
-            'February' => $existingMonthlyHours['February'] + $role->monthly_hours['February'],
-            'March' => $existingMonthlyHours['March'] + $role->monthly_hours['March'],
-            'April' => $existingMonthlyHours['April'] + $role->monthly_hours['April'],
-            'May' => $existingMonthlyHours['May'] + $role->monthly_hours['May'],
-            'June' => $existingMonthlyHours['June'] + $role->monthly_hours['June'],
-            'July' => $existingMonthlyHours['July'] + $role->monthly_hours['July'],
-            'August' => $existingMonthlyHours['August'] + $role->monthly_hours['August'],
-            'September' => $existingMonthlyHours['September'] + $role->monthly_hours['September'],
-            'October' => $existingMonthlyHours['October'] + $role->monthly_hours['October'],
-            'November' => $existingMonthlyHours['November'] + $role->monthly_hours['November'],
-            'December' => $existingMonthlyHours['December'] + $role->monthly_hours['December'],
-        ];
+        $updatedMonthlyHours = null;
+
+        if ($performance && $role) {
+            $existingMonthlyHours = json_decode($performance->total_hours, true);
+            $updatedMonthlyHours = [
+                'January' => $existingMonthlyHours['January'] + $role->monthly_hours['January'],
+                'February' => $existingMonthlyHours['February'] + $role->monthly_hours['February'],
+                'March' => $existingMonthlyHours['March'] + $role->monthly_hours['March'],
+                'April' => $existingMonthlyHours['April'] + $role->monthly_hours['April'],
+                'May' => $existingMonthlyHours['May'] + $role->monthly_hours['May'],
+                'June' => $existingMonthlyHours['June'] + $role->monthly_hours['June'],
+                'July' => $existingMonthlyHours['July'] + $role->monthly_hours['July'],
+                'August' => $existingMonthlyHours['August'] + $role->monthly_hours['August'],
+                'September' => $existingMonthlyHours['September'] + $role->monthly_hours['September'],
+                'October' => $existingMonthlyHours['October'] + $role->monthly_hours['October'],
+                'November' => $existingMonthlyHours['November'] + $role->monthly_hours['November'],
+                'December' => $existingMonthlyHours['December'] + $role->monthly_hours['December'],
+            ];
+        }
 
         return  $updatedMonthlyHours;
     }
 
     private function updateExtraHours($performance, $hours){
-        $existingHours = json_decode($performance->total_hours, true);
-        $existingHours[date('F')] += $hours->hours;
+        $existingHours = null;
+
+        if ($performance && $hours) {
+            $existingHours = json_decode($performance->total_hours, true);
+            $existingHours[date('F')] += $hours->hours;
+        }
 
         return $existingHours;
     }

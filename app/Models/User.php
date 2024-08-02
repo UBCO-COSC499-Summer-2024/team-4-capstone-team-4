@@ -80,7 +80,7 @@ class User extends Authenticatable {
         $lastInitial = isset($lastname[0]) ? strtoupper($lastname[0]) : '';
         return $firstInitial . $lastInitial;
     }
-    
+
     protected static function boot() {
         parent::boot();
         static::created(function ($user) {
@@ -103,6 +103,10 @@ class User extends Authenticatable {
 
     public function hasRoles($roles = []) {
         return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
+
+    public function hasOnlyRole($role) {
+        return $this->hasRoles([$role]) && $this->roles->count() === 1;
     }
 
     public function getName() {
@@ -141,5 +145,31 @@ class User extends Authenticatable {
 
     public function createSettings() {
         return $this->settings()->create();
+    }
+
+    public function approvals() {
+        return $this->hasMany(Approval::class, 'user_id');
+    }
+
+    public function approvalHistories() {
+        return $this->hasMany(ApprovalHistory::class, 'user_id');
+    }
+
+    public function roleAssignments() {
+        // role_assignments with instructor_id through user_roles (you can use $this->instructor)
+        $instructorRole = $this->instructor();
+        if ($instructorRole) {
+            return $this->hasMany(RoleAssignment::class, 'instructor_id')->where('instructor_id', $instructorRole->id);
+        }
+        return null;
+    }
+
+    public function instructor() {
+        return $this->roles()->where('role', 'instructor')->first();
+    }
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
     }
 }

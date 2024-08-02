@@ -9,7 +9,9 @@ use Livewire\WithPagination;
 use App\Models\Area;
 use App\Models\AuditLog;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ServiceRolesList extends Component
@@ -26,9 +28,10 @@ class ServiceRolesList extends Component
     public $selectedSort = '';
     public $selectedSortOrder = 'asc';
     public $selectedGroup = '';
-    public $pageSize = 10;
+    public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
+    public $user = null;
     protected $validExportOptions = [
         'csv', 'xlsx', 'pdf', 'text', 'print'
     ];
@@ -55,7 +58,7 @@ class ServiceRolesList extends Component
         'selectedSort' => 'nullable|string',
         'selectedSortOrder' => 'nullable|string',
         'selectedGroup' => 'nullable|string',
-        'pageSize' => 'required|integer|min:1',
+        'pageSize' => 'required|integer|min:10',
     ];
 
     protected $listeners = [
@@ -88,6 +91,7 @@ class ServiceRolesList extends Component
 
     public function mount($links = []) {
         $this->links = $links;
+        $this->user = User::find(auth()->user()->id);
     }
 
     public function handleToolbarUpdate($data)
@@ -151,17 +155,51 @@ class ServiceRolesList extends Component
         return $this->items->pluck('id')->toArray();
     }
 
+    public function mapColumns($columns) {
+        // to the actual column names
+        // area => area_id, etc
+        $mappedColumns = [];
+        foreach ($columns as $column) {
+            if ($column === 'area') {
+                $mappedColumns[] = 'area_id';
+            } else {
+                $mappedColumns[] = $column;
+            }
+        }
+        return $mappedColumns;
+    }
+
     public function getColumns($modelOrTable) {
+        // /elseif (is_object($modelOrTable) && $modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
+        //     return $modelOrTable->getConnection()->getSchemaBuilder()->getColumnListing($modelOrTable->getTable());
+        // } elseif (is_string($modelOrTable) && class_exists($modelOrTable)) {
+        //     $model = new $modelOrTable;
+        //     return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
+        // } else {
+        //     throw new \InvalidArgumentException('Invalid argument passed to getColumns. Must be a model instance, model class name, or table name.');
+        // }
+        // if $modelOrTable is a stirng, convert to model instance, if not model instance, throw exception
+        // then check if it has the method getColumns, if not, get it the hard way
+        $model = null;
         if (is_string($modelOrTable) && str_contains($modelOrTable, '.')) {
             [$table] = explode('.', $modelOrTable, 2);
-            return DB::getSchemaBuilder()->getColumnListing($table);
-        } elseif (is_object($modelOrTable) && $modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
-            return $modelOrTable->getConnection()->getSchemaBuilder()->getColumnListing($modelOrTable->getTable());
-        } elseif (is_string($modelOrTable) && class_exists($modelOrTable)) {
-            $model = new $modelOrTable;
-            return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
-        } else {
+            $model = $table;
+        } elseif (!is_object($modelOrTable) || !$modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
             throw new \InvalidArgumentException('Invalid argument passed to getColumns. Must be a model instance, model class name, or table name.');
+        } else {
+            $model = $modelOrTable;
+        }
+
+        if ($model === null) {
+            // Log model not found exception
+            Log::error('Model not found for getColumns method.');
+            return;
+        }
+
+        if (method_exists($model, 'getColumns')) {
+            return $model::getColumns();
+        } else {
+            return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
         }
     }
 
@@ -171,7 +209,7 @@ class ServiceRolesList extends Component
 
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
-        $user = auth()->user();
+        $user = $this->user;
         $userRole = $user->roles;
         if (($userRole->contains('role', 'dept_head') || $userRole->contains('role', 'dept_staff')) && !$userRole->contains('role', 'admin')) {
             $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
@@ -241,10 +279,13 @@ class ServiceRolesList extends Component
                         $this->selectedSortOrder
                     );
                 }
+                // $serviceRolesQuery->orderByRelation($relation, $column, $this->selectedSortOrder);
 
             } else {
                 $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
             }
+        } else {
+            $serviceRolesQuery->latest();
         }
 
         if (!empty($this->selectedGroup)) {
@@ -255,6 +296,21 @@ class ServiceRolesList extends Component
             } else {
                 $serviceRolesQuery->groupBy($this->selectedGroup, 'service_roles.id');
             }
+        }
+
+        // if user_role is only instructor don't show archived. put the roles they are assigned to (via role_assignments) to the top.
+        // if user_role is dept_head or dept_staff, show archived.
+        if ($this->user->hasOnlyRole('instructor')) {
+            $serviceRolesQuery->where('archived', false);
+        }
+
+        // push role_assignments instructor_id service_roles to the top of the list
+        if ($this->user->instructor()) {
+            $instructorId = $this->user->instructor()->id;
+            $serviceRolesQuery->leftJoin('role_assignments', 'service_roles.id', '=', 'role_assignments.service_role_id')
+                ->select('service_roles.*', DB::raw('CASE WHEN role_assignments.instructor_id = ' . $instructorId . ' THEN 1 ELSE 0 END AS is_instructor_role'))
+                ->orderBy('is_instructor_role', 'desc')
+                ->orderBy('service_roles.name');
         }
 
         $serviceRoles = $this->pageMode === 'pagination'
