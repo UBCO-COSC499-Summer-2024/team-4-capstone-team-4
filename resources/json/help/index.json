@@ -40,7 +40,7 @@
         "icon": "leaderboard"
     },
     {
-        "title": "ImportData",
+        "title": "Import Data",
         "url": "import-data",
         "icon": "upload_file"
     }

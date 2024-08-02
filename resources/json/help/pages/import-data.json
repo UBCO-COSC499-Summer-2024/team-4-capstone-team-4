@@ -4,32 +4,72 @@
         "subsections": [
             {
                 "heading": "Introduction",
-                "content": "This is an introduction to ImportData.",
+                "content": "The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system.",
                 "tags": [
                     "intro",
-                    "ImportData"
+                    "import data"
                 ]
             },
             {
-                "heading": "Details",
-                "content": "These are the details of ImportData.",
+                "heading": "Duplicate Course Entries",
+                "content": "The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system.",
                 "tags": [
-                    "details",
-                    "ImportData"
+                    "intro",
+                    "import data"
+                ]
+            },
+            {
+                "heading": "Late Student Exception",
+                "content": "The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system.",
+                "tags": [
+                    "intro",
+                    "import data"
                 ]
             }
         ],
         "subtopics": [
             {
-                "subtopic": "ImportData Subtopic",
+                "subtopic": "Manual Input - Functionality / Navigation",
                 "subsections": [
                     {
-                        "heading": "Subtopic Introduction",
-                        "content": "This is an introduction to ImportData Subtopic.",
+                        "heading": "Add Course Sections (Workday)",
+                        "content": "Clicking on \"Add Row\" will create a new entry to fill out. To add multiple rows at once, enter the number of rows you want in the input next to the buttons below the table and click \"Add Many Rows\" To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
                         "tags": [
-                            "intro",
-                            "ImportData",
-                            "subtopic"
+                            "import data",
+                            "manual input",
+                            "workday"
+                        ]
+                    },
+                    {
+                        "heading": "Add SEI Data",
+                        "content": "Clicking on \"Add Row\" will create a new entry to fill out. To add multiple rows at once, enter the number of rows you want in the input next to the buttons below the table and click \"Add Many Rows\" To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "manual input",
+                            "sei"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "File Upload - Functionality / Navigation",
+                "subsections": [
+                    {
+                        "heading": "Upload Workday File",
+                        "content": "After uploading a file, a populated table will appear with the contents found in the file. This is to ensure that all the data will be correctly inserted. If the table appears empty or is missing information, refer to the sample csv and ensure all headings are formatted correctly. At this stage, all the fields may be edited in case the data was pulled incorrectly. To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "file upload",
+                            "workday"
+                        ]
+                    },
+                    {
+                        "heading": "Upload SEI Data",
+                        "content": "After uploading a file, a populated table will appear with the contents found in the file. This is to ensure that all the data will be correctly inserted. If the table appears empty or is missing information, refer to the sample csv and ensure all headings are formatted correctly. At this stage, all the fields may be edited in case the data was pulled incorrectly. To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "file upload",
+                            "sei"
                         ]
                     }
                 ]

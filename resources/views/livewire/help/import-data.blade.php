@@ -1,3 +1,7 @@
-<div>
-    {{-- The best athlete wants his opponent at his best. --}}
-</div>
+@php
+    use App\Helpers\HtmlHelpers;
+@endphp
+
+<section class="help-page">
+    {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'Import Data') !!}
+</section>
