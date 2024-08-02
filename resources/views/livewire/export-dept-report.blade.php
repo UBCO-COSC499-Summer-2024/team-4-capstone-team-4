@@ -17,7 +17,7 @@
             </div>
             <x-report-dropdown/>
         </div>
-        <div id="exportDeptContent">
+        <div id="exportDeptContent" class="ml-2">
             @if ($areas->isNotEmpty())
                 <h2 class="font-bold">Courses Performance</h2>
                 <h3>Summary</h3>

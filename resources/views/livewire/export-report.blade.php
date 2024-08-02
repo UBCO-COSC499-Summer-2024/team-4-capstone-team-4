@@ -17,7 +17,7 @@
             </div>
             <x-report-dropdown/>
         </div>
-        <div id="exportContent">
+        <div id="exportContent" class="ml-2">
             <h2 class="font-bold">Courses Performance</h2>
             @if ($courses->isNotEmpty())
                 <table id="courseTable" class="report-table">
