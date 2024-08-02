@@ -48,24 +48,33 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValid = true;
         const rows = document.querySelectorAll('#coursesTable tbody tr');
         rows.forEach(row => {
-            row.querySelectorAll('td').forEach((cell, index) => {
-                if ([3, 4, 5].includes(index)) {
-                    const value = cell.innerText.trim();
-                    if (isNaN(value) || value === '') {
-                        cell.classList.add('input-error');
-                        isValid = false;
-                    } else {
-                        cell.classList.remove('input-error');
-                    }
-                }
-            });
+            const enrolledCell = row.children[3];
+            const capacityCell = row.children[5];
+            const enrolledValue = parseInt(enrolledCell.innerText.trim());
+            const capacityValue = parseInt(capacityCell.innerText.trim());
+
+            if (isNaN(enrolledValue) || isNaN(capacityValue) || enrolledValue > capacityValue) {
+                enrolledCell.classList.add('input-error');
+                capacityCell.classList.add('input-error');
+                isValid = false;
+            } else {
+                enrolledCell.classList.remove('input-error');
+                capacityCell.classList.remove('input-error');
+            }
         });
         return isValid;
     }
 
+    function showErrorModal(message) {
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.innerText = message;
+        errorModal.classList.remove('hidden');
+    }
+
     function saveChanges() {
         if (!validateInput()) {
-            alert('Please enter valid numeric values in the editable fields.');
+            showErrorModal('Capacity cannot be less than enrolled students.');
             return;
         }
 

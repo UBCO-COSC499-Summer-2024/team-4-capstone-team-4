@@ -107,4 +107,5 @@
     <x-create-ta-modal />
     <x-assign-ta-modal />
     <x-sei-edit-modal :courses="$courses" />
+    <x-error-modal />
 </x-app-layout>
