@@ -14,19 +14,23 @@ $sidebarItems = [
 if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
 }
+
+if(!$user->hasOnlyRole('admin')) {
+    $sidebarItems = array_merge($sidebarItems, [
+        ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+    ]);
+}
+if(!$user->hasOnlyRole('dept_staff')) {
+    $sidebarItems = array_merge($sidebarItems, [
+        ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
+    ]);
+}
 if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     // audit logs
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
-        ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
         ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin', 'target' => '_blank'],
     ]);
-
-    if(!$user->hasOnlyRole('admin')) {
-        $sidebarItems = array_merge($sidebarItems, [
-            ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
-        ]);
-    }
 }
 @endphp
 
