@@ -1,3 +1,118 @@
+## Cycle: July 31st - August 1st
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_07_31_2024-08_01_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implementing Feature Requests
+    * View own service roles at the top first
+    * Auto Filters should be displayed as a 2 x N grid
+    * Complete Approvals 
+    * Fix archive not being found in new row 
+    * Change confirmation modals to match Kate's popups
+    * Fixed audit_user not showing for audit logging 
+    * Change to use instructor_role_id rather than instructor user id for role assignments and performance data in service role page. 
+    * Updated Html Helpers to read subsections recursively 
+    * HTML Helpers Works with multiple media formats 
+    * Fix filter-clear-button border-radius 
+    * Hide save button on form view in add service role page 
+    * Hide archived roles from svcroles dashboard unless user has the correct access 
+    * hide bell icon 
+    * Change UI to proper UI colors 
+    * Fixed help stuff
+
+### Progress Update (since 07/31/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Implementing Feature Requests</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>View own service roles at the top first</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Auto Filters should be displayed as a 2 x N grid </td>
+        <td>Cancelled</td>
+    </tr>
+    <tr>
+        <td>Complete Approvals </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fix archive not being found in new row </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Change confirmation modals to match Kate's popups</td>
+        <td>To Do - Next Cycle</td>
+    </tr>
+    <tr>
+        <td>Fixed audit_user not showing for audit logging </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Change to use instructor_role_id rather than instructor user id for role assignments and performance data in service role page. </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Updated Html Helpers to read subsections recursively </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>HTML Helpers Works with multiple media formats </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fix filter-clear-button border-radius </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Hide save button on form view in add service role page </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Hide archived roles from svcroles dashboard unless user has the correct access </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>hide bell icon </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Change UI to proper UI colors </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fixed help stuff</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle was primarily dedicated to tackling a list of feature requests. Significant progress was made, with the majority of requests successfully implemented. Notable accomplishments include improvements to service role visibility, approvals functionality, audit logging, and UI enhancements. 
+
+One feature request regarding auto-filters display was cancelled, and the task of aligning confirmation modals with the desired design has been moved to the next cycle due to time constraints. 
+
+The implementation of the Export PDF feature has been shifted to the next cycle to allow for dedicated focus.
+
+Overall, the process is progressing efficiently, and the team is effectively addressing user feedback and refining the application's functionality. 
+
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+* Finish implementing remaining feature requests.
+* **Prioritize changing confirmation modals to match the new design standards.**
+* **Complete the implementation of the Export PDF feature.**
+* Conduct thorough testing of all implemented features. 
+* Begin work on any new high-priority tasks. 
+
+---
+
 ## Cycle: July 26th - July 30th
 
 ### Timesheet
