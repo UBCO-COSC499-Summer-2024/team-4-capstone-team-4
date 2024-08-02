@@ -11,15 +11,6 @@
                 ]
             },
             {
-                "heading": "Score Calculation",
-                "content": "Instructor scores are calculated using a custom function based on Insight performance metrics. The calculation involves the following steps: 1) Enrollment Efficiency: Calculated by subtracting the dropped average from the enrolled average, then dividing by the enrolled average. [Formula: enrollment_efficiency = (enrolled_average - dropped_average) / enrolled_average]. 2) Weighted Course Sections: Each course section is assigned a weight based on its duration and the approximate hours an instructor spends teaching the course each term. Single-term courses are assigned a weight of 215, and double-term courses are assigned a weight of 530. 3) Score Component: The enrollment efficiency value is multiplied by the total number of weighted course sections and the SEI Average of the instructor. 4) Service Hours: Add the total completed service hours for the year and divide by the average number of hours in a year (8,760). 5) Final Score: Multiply the result by 1,000 and round to an integer. The score is updated each time performance data is added to the database. [Formula: final_score = ((enrollment_efficiency * total_weighted_course_sections * SEI_Average) + total_service_hours) / 8760 * 1000]",
-                "tags": [
-                    "score",
-                    "calculation",
-                    "leaderboard"
-                ]
-            },
-            {
                 "heading": "Filtering",
                 "content": "The Leaderboard can be filtered by department area to display specific ranks for users within a particular area of the department.",
                 "tags": [
@@ -29,6 +20,62 @@
             }
         ],
         "subtopics": [
+            {
+                "subtopic": "Score Calculation",
+                "content": "Instructor scores are calculated using a custom function based on Insight performance metrics. The calculation involves the following steps:",
+                "subsections": [
+                    {
+                        "heading": "Step 1:",
+                        "content": "Enrollment & Dropped Scalers: Calculated by dividing the dropped average percentage by 100 and dividing the dropped average percentage by 100 and adding 1, both of these will be used to scale the course section value (see step 2). [Formula: enrolled_scaler = (enrolled_average / 100) + 1], [Formula: dropped_scaler = dropped_average / 100].",
+                        "tags": [
+                            "score",
+                            "calculation",
+                            "step 1"
+                        ]
+                    },
+                    {
+                        "heading": "Step 2:",
+                        "content": "Weighted Course Sections: Each course section is assigned a weight based on its duration and the approximate hours an instructor spends teaching the course each term. Single-term courses are assigned a weight of 215, and double-term courses are assigned a weight of 530.",
+                        "tags": [
+                            "score",
+                            "calculation",
+                            "step 2"
+                        ]
+                    },
+                    {
+                        "heading": "Step 3:",
+                        "content": "Course Component: The enrolled and dropped scalers are multiplied by the total number of weighted course sections and the SEI Average of the instructor. [Formula: course_performance = enrolled_scaler * dropped_scaler * (215 * num_course + 530 * num_double_course) * sei_average].",
+                        "tags": [
+                            "score",
+                            "calculation",
+                            "step 3"
+                        ]
+                    },
+                    {
+                        "heading": "Step 4:",
+                        "content": "Service Hours: Add the total completed service hours for the year and divide by the average number of hours in a year (8,760). [Formula: (service_hours + course_performance) / 8760].",
+                        "tags": [
+                            "score",
+                            "calculation",
+                            "step 4"
+                        ]
+                    },
+                    {
+                        "heading": "Step 5:",
+                        "content": "Final Score: Multiply the result by 1,000 and round to an integer. The score is updated each time performance data is added to the database. [Formula: final_score = (service_hours + course_performance) / 8760 * 1000].",
+                        "tags": [
+                            "score",
+                            "calculation",
+                            "step 5"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "score",
+                    "calculation",
+                    "leaderboard"
+                ]
+            },
             {
                 "subtopic": "Leaderboard Badges",
                 "subsections": [
