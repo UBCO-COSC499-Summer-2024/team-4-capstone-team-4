@@ -1,6 +1,85 @@
 ## Friday (7/26 - 7/31)
 
 ### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_31_2024-08_2_2024.pdf)
+
+### Current Tasks
+  * #1: TA Assign - CSV
+  * #2: Course Assign - CSV
+  * #3: Testing
+  * #4: Documentation
+  * #5: Help Pages
+    
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Testing / #468
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Complete Feature Testing / #518
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Documentation for Import Pages / #560
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>TA Assignment - UI & CSV Import / #480
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Course Assignment - CSV Import / #561
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Data - Add Audit / #563
+        </td>
+        <!-- Status -->
+        <td>To Do
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The file upload functionality for the workday and sei data is complete, including the changes made to fit the requirements (calculating dropped and confirm overwrite courses). I will now be focusing on the ta assignment functionality which will include manual and csv assignment. I should be able to reference my other code which uses a similar structure. Everything is on track and I aim to complete these features this upcoming cycle.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Testing
+  * Ta Assign (manual)
+  * Ta Assign (csv)
+  * Ta Rating
+
+## Wednesday (7/26 - 7/31)
+
+### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_26_2024-07_31_2024.pdf)
 
 ### Current Tasks
