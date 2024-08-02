@@ -17,12 +17,12 @@ if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     // audit logs
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
-        ['icon' => 'work_history', 'href' => '/audits', 'title' => 'Audit Logs'],
+        ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
     ]);
 
     if($user->hasRoles(['admin'])) {
         $sidebarItems = array_merge($sidebarItems, [
-        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin'],
+        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin', 'target' => '_blank'],
     ]);
     }
 }
@@ -30,7 +30,7 @@ if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
 
 <aside class="sidebar glass" id="sidebar">
     @foreach($sidebarItems as $item)
-        <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" />
+        <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" target="{{ $item['target'] ?? '' }}" />
     @endforeach
 
     <!-- bottom -->

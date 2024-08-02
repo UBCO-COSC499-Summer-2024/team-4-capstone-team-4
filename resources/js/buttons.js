@@ -137,11 +137,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkTab() {
         if (tasTab && tasTab.classList.contains('active')) {
-            editButton.style.display = 'none';
-            saveButton.style.display = 'none';
-            cancelButton.style.display = 'none';
+            if (editButton) {
+                editButton.style.display = 'none';
+            }
+            if (saveButton) {
+                saveButton.style.display = 'none';
+            }
+            if (cancelButton) {
+                cancelButton.style.display = 'none';
+            }
         } else {
-            editButton.style.display = 'block';
+            if (editButton) {
+                editButton.style.display = 'block';
+            }
         }
     }
 

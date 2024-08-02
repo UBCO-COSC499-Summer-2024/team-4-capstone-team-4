@@ -41,7 +41,7 @@
                 </div>
             @endif
         </div>
-        
+
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
                 <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">

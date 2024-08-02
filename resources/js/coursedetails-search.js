@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const paginationContainer = document.getElementById('pagination');
 
     if (!searchInput || !tableBody) {
-        console.error('Required elements are missing: searchInput or tableBody');
+        // console.error('Required elements are missing: searchInput or tableBody');
         return;
     }
-    
+
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
     function fetchCourses(query, areaId, page = 1) {
