@@ -1,3 +1,37 @@
+## Friday (7/31 - 8/2)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_07_31_2024-08_02_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Admin - make name and email editable
+  * #2: Help page for staff page
+  * #3: Prevent disbaled accounts from logging in
+  * #4: Style update and bug fixes for staff page
+  * #5: Fixing svc roles hours in reports
+  * #6: Task list for test-o-rama
+
+### Progress Update (since 7/31/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Admin - make name and email editable | Complete |
+| Help page for staff page | In progress |
+| Prevent disbaled accounts from logging in | Complete |
+| Style update and bug fixes for staff page| Complete |
+| Fixing svc roles hours in reports | Complete |
+| Task list for test-o-rama | Complete |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I completed making the name and email editable, though is took longer than expected as I was having chanllnegs with validation. I managed to implement functionality to prevent disabled users from logging in. I also fixed an error on the reports to do with service role hours. I updated some styles on the staff page and fixed bug with header z-index. I also prepared the task list for the test-o-rama.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Help pages
+  * Implement feedback from test-o-rama
+  * Individual Report
+
 ## Wednesday (7/26 - 7/31)
 
 ### Timesheet
