@@ -118,12 +118,11 @@ class CourseDetailsController extends Controller
     return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab','courses'));
 }
 
-    
-    public function getTeachingAssistants()
-    {
-        $tas = TeachingAssistant::select('id', 'name')->get();
-        return response()->json($tas);
-    }
+public function getTeachingAssistants()
+{
+    $tas = TeachingAssistant::select('id', 'name')->get();
+    return response()->json($tas);
+}
 
 public function getInstructors()
 {
@@ -146,34 +145,48 @@ public function getCoursesByInstructor($instructorId)
 
 public function assignTA(Request $request)
 {
-    $taId = $request->input('ta_id');
-    $instructorId = $request->input('instructor_id');
-    $courseId = $request->input('course_id');
+    $taIds = $request->input('ta_id');
+    $instructorIds = $request->input('instructor_id');
+    $courseIds = $request->input('course_id');
 
-    // Logic to assign the TA to the course
-    $courseSection = CourseSection::find($courseId);
-    if ($courseSection) {
-        $courseSection->teachingAssistants()->attach($taId);
+    // Ensure that each array has the same length
+    $count = count($taIds);
+    if ($count !== count($instructorIds) || $count !== count($courseIds)) {
+        return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
+    }
+
+    for ($i = 0; $i < $count; $i++) {
+        $taId = $taIds[$i];
+        $instructorId = $instructorIds[$i];
+        $courseId = $courseIds[$i];
+
+        // Logic to assign the TA to the course
+        $courseSection = CourseSection::find($courseId);
+        if ($courseSection) {
+            $courseSection->teachingAssistants()->syncWithoutDetaching([$taId => ['rating' => 0]]); // Use syncWithoutDetaching to avoid duplications
+        }
     }
 
     // Fetch updated TA data
     $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
         ->get()
         ->map(function ($ta) {
-            return (object)[
+            return (object)[[
                 'name' => $ta->name,
                 'rating' => $ta->rating,
                 'taCourses' => $ta->courseSections->map(function ($course) {
                     return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-                })->implode(', '),
+                })->unique()->implode(', '), // Ensure unique courses
                 'instructorName' => $ta->courseSections->map(function ($course) {
-                    return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
-                })->implode(', ')
-            ];
+                    $instructor = optional($course->teaches->instructor->user);
+                    return $instructor->firstname . ' ' . $instructor->lastname;
+                })->unique()->implode(', ') // Ensure unique instructors
+            ]];
         });
 
     return response()->json($tas);
 }
+
 
 public function createTA(Request $request)
 {

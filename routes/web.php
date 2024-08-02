@@ -150,19 +150,19 @@ Route::middleware([
 ])->prefix('/courses')->group(function () {
     Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
     Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
-    Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
     Route::post('/create-ta', [CourseDetailsController::class, 'createTA'])->name('createTA');
     Route::get('/export/pdf', [CourseDetailsController::class, 'exportPDF'])->name('export.pdf');
     Route::get('/export/csv', [CourseDetailsController::class, 'exportCSV'])->name('export.csv');
     Route::post('/sei/edit', [CourseDetailsController::class, 'edit'])->name('sei.edit');
     Route::match(['get', 'post'], '/sei/{courseId?}', [CourseDetailsController::class, 'manageSeiData'])->name('sei.manage');
+    Route::post('/assign-ta', [CourseDetailsController::class, 'assignTA'])->name('assignTA');
 
 });
 
     Route::get('/api/teaching-assistants', [CourseDetailsController::class, 'getTeachingAssistants']);
     Route::get('/api/instructors', [CourseDetailsController::class, 'getInstructors']);
     Route::get('/api/courses/instructor/{id}', [CourseDetailsController::class, 'getCoursesByInstructor']);
-    Route::post('/api/assign-ta', [CourseDetailsController::class, 'assignTA'])->name('assignTA');
+    
 
 Route::middleware([
     'auth:sanctum',
