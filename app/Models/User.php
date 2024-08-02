@@ -154,4 +154,22 @@ class User extends Authenticatable {
     public function approvalHistories() {
         return $this->hasMany(ApprovalHistory::class, 'user_id');
     }
+
+    public function roleAssignments() {
+        // role_assignments with instructor_id through user_roles (you can use $this->instructor)
+        $instructorRole = $this->instructor();
+        if ($instructorRole) {
+            return $this->hasMany(RoleAssignment::class, 'instructor_id')->where('instructor_id', $instructorRole->id);
+        }
+        return null;
+    }
+
+    public function instructor() {
+        return $this->roles()->where('role', 'instructor')->first();
+    }
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
 }

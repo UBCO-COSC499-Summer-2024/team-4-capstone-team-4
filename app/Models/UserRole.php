@@ -128,4 +128,8 @@ class UserRole extends Model {
         return null; // Return null if the user is not an instructor
     }
 
+    public function getName() {
+        return $this->user->getName();
+    }
+
 }

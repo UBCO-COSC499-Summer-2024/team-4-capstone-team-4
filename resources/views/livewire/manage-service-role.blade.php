@@ -238,7 +238,7 @@
                         <tbody wire:model.live="instructors">
                             @php
                                 // paginate
-                                $sinstructors = $serviceRole->instructors()->paginate(5, ['*'], 'instructors');
+                                $sinstructors = $serviceRole->instructors()->paginate(5, ['*'], 'ins_pg')->appends(Arr::except(request()->query(), 'ins_pg'));
                             @endphp
                             @forelse ($sinstructors as $instructor)
                                 <tr class="svcr-list-item">
@@ -368,7 +368,7 @@
                                 <select class="form-select" id="instructor_id" wire:model="instructor_id" name="instructor_id">
                                     <option value="">Select Instructor</option>
                                     @foreach($allInstructors as $instructor)
-                                        <option value="{{ $instructor->id }}">{{ $instructor->user->getName() }}</option>
+                                        <option value="{{ $instructor->id }}">{{ $instructor->getName() }}</option>
                                     @endforeach
                                 </select>
                                 @error('instructor_id') <span class="error">{{ $message }}</span> @enderror

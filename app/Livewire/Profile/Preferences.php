@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use App\Models\AuditLog;
+use App\Models\AuthMethod;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -17,14 +18,15 @@ class Preferences extends Component
     public $language;
     public $theme;
     public $auth_method;
+    public $auth_method_id;
     public $custom;
 
     protected $rules = [
-        'settings.auth_method' => 'required',
         'settings.theme' => 'required',
         'settings.timezone' => 'required',
         'settings.locale' => 'required',
         'settings.language' => 'required',
+        'settings.auth_method_id' => 'required|exists:auth_methods,id',
         // 'settings.custom' => 'json',
     ];
 
@@ -35,7 +37,8 @@ class Preferences extends Component
         $this->locale = $this->settings['locale'];
         $this->theme = $this->settings['theme'];
         $this->language = $this->settings['language'];
-        $this->auth_method = $this->settings['auth_method'];
+        $this->auth_method_id = $this->settings['auth_method_id'];
+        $this->auth_method = AuthMethod::find($this->auth_method_id);
         if ($this->settings['custom'] === null) {
             $this->custom = [];
         } else {
@@ -58,7 +61,7 @@ class Preferences extends Component
             $this->settings['theme'] = $this->theme;
             $this->settings['locale'] = $this->locale;
             $this->settings['language'] = $this->language;
-            $this->settings['auth_method'] = $this->auth_method;
+            $this->settings['auth_method_id'] = $this->auth_method->id;
             $this->settings['custom'] = json_encode($this->custom);
             $this->settings->save();
             $this->dispatch('show-toast', [
@@ -92,6 +95,7 @@ class Preferences extends Component
                 'user_id' => (int) auth()->user()->id,
                 'user_alt' => $audit_user,
                 'action' => 'error',
+                'table_name' => 'settings',
                 'operation_type' => 'UPDATE',
                 'description' => 'Error updating preferences for ' . $audit_user . '\n'. $e->getMessage(),
             ]);

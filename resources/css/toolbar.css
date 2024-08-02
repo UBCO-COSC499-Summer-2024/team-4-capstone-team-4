@@ -51,6 +51,11 @@
     margin-right: 4px;
 }
 
+[aria-current="page"] {
+    background: var(--primary-color);
+    color: var(--text-color);
+}
+
 .toolbar-section {
     display: flex;
     gap: 6px;
