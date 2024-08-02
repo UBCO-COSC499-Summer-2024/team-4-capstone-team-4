@@ -177,17 +177,14 @@ class InstructorPerformance extends Model {
                 }
             }
 
-            if ($performance->enrolled_avg != 0) {
-                $enrol_efficiency = ($performance->enrolled_avg - $performance->dropped_avg) / $performance->enrolled_avg;
-            }
-            else {
-                $enrol_efficiency = 0;
-            }
+            $scale_enrolled = ($performance->enrolled_avg / 100) + 1;
+            
+            $scale_dropped = ($performance->dropped_avg / 100);
 
             $weighted_courses = (215 * $courseSections) + (530 * $doubleCourses);
 
             $performance->update([
-                'score' => round((($roleHours + ($weighted_courses * $enrol_efficiency * $performance->sei_avg)) / 8760) * 1000),
+                'score' => round((($roleHours + ($weighted_courses * $scale_enrolled * $scale_dropped * $performance->sei_avg)) / 8760) * 1000),
             ]);
         }
         return;

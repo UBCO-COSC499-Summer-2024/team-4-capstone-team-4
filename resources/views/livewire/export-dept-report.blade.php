@@ -3,8 +3,8 @@
         <span class="content-title-text">{{$dept->name}} Department Report</span>
     </h1>
     <div>
-        <div class="flex justify-between items-center">
-            <div>
+        <div class="flex justify-end items-center">
+            <div class="mr-2">
                 <label for="year">Select Year:</label>
                 <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
@@ -17,19 +17,19 @@
             </div>
             <x-report-dropdown/>
         </div>
-        <div id="exportDeptContent">
+        <div id="exportDeptContent" class="ml-2">
             @if ($areas->isNotEmpty())
                 <h2 class="font-bold">Courses Performance</h2>
                 <h3>Summary</h3>
                 <table id="courseTable" class="report-table">
                     <thead>    
                         <tr class="text-white bg-[#3b4779]">
-                            <th class="report-head-cell" class="report-head-cell">Sub area</th>
-                            <th class="report-head-cell" class="report-head-cell">No. of Instructors</th>
-                            <th class="report-head-cell" class="report-head-cell">No. of Course Sections</th>
-                            <th class="report-head-cell" class="report-head-cell">Enrolled (%)</th>
-                            <th class="report-head-cell" class="report-head-cell">Dropped (%)</th>
-                            <th class="report-head-cell" class="report-head-cell">SEI Average (IM)</th>
+                            <th class="report-head-cell">Sub area</th>
+                            <th class="report-head-cell">No. of Instructors</th>
+                            <th class="report-head-cell">No. of Course Sections</th>
+                            <th class="report-head-cell">Enrolled (%)</th>
+                            <th class="report-head-cell">Dropped (%)</th>
+                            <th class="report-head-cell">SEI Average (IM)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,13 +80,13 @@
                         <table class="areaCourseTable report-table">
                             <thead>
                                 <tr class="text-white bg-[#3b4779]">
-                                    <th class="report-head-cell" class="report-head-cell">Course Section</th>
-                                    <th class="report-head-cell" class="report-head-cell">Term</th>
-                                    <th class="report-head-cell" class="report-head-cell">Year</th>
-                                    <th class="report-head-cell" class="report-head-cell">Instructor</th>
-                                    <th class="report-head-cell" class="report-head-cell">Enrolled (%)</th>
-                                    <th class="report-head-cell" class="report-head-cell">Dropped (%)</th>
-                                    <th class="report-head-cell" class="report-head-cell">SEI Average (IM)</th>
+                                    <th class="report-head-cell">Course Section</th>
+                                    <th class="report-head-cell">Term</th>
+                                    <th class="report-head-cell">Year</th>
+                                    <th class="report-head-cell">Instructor</th>
+                                    <th class="report-head-cell">Enrolled (%)</th>
+                                    <th class="report-head-cell">Dropped (%)</th>
+                                    <th class="report-head-cell">SEI Average (IM)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,7 +101,7 @@
                                         <td class="report-cell">Term {{ $course->term }}</td>
                                         <td class="report-cell">{{ $course->year }}</td>
                                         <td class="report-cell">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}</td>
-                                        <td class="report-cell">{{ round($course->enrolled * 100 / $capacity, 1) }}</td>
+                                        <td class="report-cell">{{ round($course->enroll_end * 100 / $capacity, 1) }}</td>
                                         <td class="report-cell">{{ round($course->dropped * 100 / $capacity, 1) }}</td>
                                         <td class="report-cell">{{ $sei ? $sei : '-' }}</td>
                                     </tr>
@@ -134,19 +134,19 @@
                             $totalExtraHours = 0;
                         @endphp
                         <tr class="text-white bg-[#3b4779]">
-                            <th class="report-head-cell" class="report-head-cell">Sub area</th>
-                            <th class="report-head-cell" class="report-head-cell">No. of Service Roles</th>
-                            <th class="report-head-cell" class="report-head-cell">No. of Extra Hrs</th>
+                            <th class="report-head-cell">Sub area</th>
+                            <th class="report-head-cell">No. of Service Roles</th>
+                            <th class="report-head-cell">No. of Extra Hrs</th>
                             @if(!empty($deptHours))
                                 @foreach ($deptHours as $month => $hours)
-                                    <th class="report-head-cell" class="report-head-cell">{{ substr($month, 0, 3) }} Hrs</th>
+                                    <th class="report-head-cell">{{ substr($month, 0, 3) }}</th>
                                 @endforeach
                             @else
                                 @for ($i = 1; $i <= 12; $i++)
-                                    <th class="report-head-cell" class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
+                                    <th class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
                                 @endfor
                             @endif
-                            <th class="report-head-cell" class="report-head-cell">Total Hrs</th>
+                            <th class="report-head-cell">Total Hrs</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -206,30 +206,20 @@
                     @php
                         $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                         $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
-                        if($areaPerformance){
-                            $areaHours = json_decode($areaPerformance->total_hours, true);
-                        }else{
-                            $areaHours = [];
-                        }
                     @endphp
                     @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())   
                         <h3>{{ $area->name }}</h3>
                     <table class="areaPerfTable report-table">
                         @if ($svcroles->isNotEmpty())
+                            <p><i>Note: The monthly hours is the sum of the total hours worked by each instructor in that service role.</i></p>
                             <thead>
                                 <tr class="text-white bg-[#3b4779]">
-                                    <th class="report-head-cell" class="report-head-cell">Service Role</th>
-                                    <th class="report-head-cell" class="report-head-cell">Instructors</th>
-                                    @if(!empty($areaHours))
-                                        @foreach ($areaHours as $month => $hours)
-                                            <th class="report-head-cell" class="report-head-cell">{{ substr($month, 0, 3) }} Hrs</th>
-                                        @endforeach
-                                    @else
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <th class="report-head-cell" class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
-                                        @endfor
-                                    @endif
-                                    <th class="report-head-cell" class="report-head-cell">Total Hrs</th>
+                                    <th class="report-head-cell">Service Role</th>
+                                    <th class="report-head-cell">Instructors</th>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <th class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }}</th>
+                                    @endfor
+                                    <th class="report-head-cell">Total Hrs</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -241,23 +231,26 @@
                                                 $instructors = $svcRole->instructors;
                                             @endphp
                                             @if ($instructors)
-                                                @foreach ($instructors as $instructor)
-                                                    {{ $instructor->firstname }} {{ $instructor->lastname }}<br>
-                                                @endforeach
+                                                {{ $instructors->pluck('firstname', 'lastname')->map(function($lastname, $firstname) {
+                                                    return $firstname . ' ' . $lastname;
+                                                })->implode(', ') }}                                            
                                             @else
                                                 -
                                             @endif
                                         </td>
-                                        @if(!empty($areaHours))
-                                            @foreach ($areaHours as $month => $hours)
-                                                <td class="report-cell">{{ $hours }}</td>
+                                        @php
+                                            $svcHours = $svcRole->monthly_hours;
+                                        @endphp
+                                        @if(!empty($svcHours))
+                                            @foreach ($svcHours as $month => $hours)
+                                                <td class="report-cell">{{ $hours * count($instructors)}}</td>
                                             @endforeach
                                         @else
                                             @for ($i = 1; $i <= 12; $i++)
                                                 <td class="report-cell">-</td>
                                             @endfor
                                         @endif
-                                        <td class="report-cell">{{ array_sum($areaHours)}}</td>
+                                        <td class="report-cell">{{ array_sum($svcHours) * count($instructors)}}</td>
                                     </tr>
                                 @endforeach
                         @endif
