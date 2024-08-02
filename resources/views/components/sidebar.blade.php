@@ -4,7 +4,8 @@ $user = auth()->user();
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
     // ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Course Sections']
+    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Course Sections'],
+    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
 ];
@@ -18,12 +19,13 @@ if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
         ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
-    ]);
-
-    if($user->hasRoles(['admin'])) {
-        $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin', 'target' => '_blank'],
     ]);
+
+    if(!$user->hasOnlyRole('admin')) {
+        $sidebarItems = array_merge($sidebarItems, [
+            ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+        ]);
     }
 }
 @endphp

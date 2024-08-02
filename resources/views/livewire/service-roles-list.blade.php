@@ -29,20 +29,22 @@
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
         <div class="flex gap-2 right content-title-btn-holder">
-            <button class="content-title-btn" onClick="window.location.href='{{ route('svcroles.add') }}'">
-                <span class="button-title">Create New</span>
-                <span class="material-symbols-outlined">add</span>
-            </button>
-            <button class="content-title-btn" id="svcr-extra-hours-add"
-                    title="Add Extra Hours"
-                    x-on:click="
-                        $dispatch('open-modal', {
-                            'component': 'extra-hour-form'
-                        });
-                    ">
-                <span class="material-symbols-outlined icon">more_time</span>
-                <span>Add</span>
-            </button>
+            @if(!$user->hasOnlyRole('instructor'))
+                <button class="content-title-btn" onClick="window.location.href='{{ route('svcroles.add') }}'">
+                    <span class="button-title">Create New</span>
+                    <span class="material-symbols-outlined">add</span>
+                </button>
+                <button class="content-title-btn" id="svcr-extra-hours-add"
+                        title="Add Extra Hours"
+                        x-on:click="
+                            $dispatch('open-modal', {
+                                'component': 'extra-hour-form'
+                            });
+                        ">
+                    <span class="material-symbols-outlined icon">more_time</span>
+                    <span>Add</span>
+                </button>
+            @endif
             {{-- <select id="viewModeDropdown" class="toolbar-dropdown">
                 @foreach ($viewModes as $value => $name)
                     <option value="{{ $value }}"
@@ -133,12 +135,14 @@
                     <span class="material-symbols-outlined icon toolbar-clear-search">close</span>
                 </div>
 
-                <select id="actionsDropdown" class="toolbar-dropdown">
-                    <option>Bulk Actions</option>
-                    @foreach ($actions as $value => $name)
-                        <option value="{{ $value }}">{{ $name }}</option>
-                    @endforeach
-                </select>
+                @if(!$user->hasOnlyRole('instructor'))
+                    <select id="actionsDropdown" class="toolbar-dropdown">
+                        <option>Bulk Actions</option>
+                        @foreach ($actions as $value => $name)
+                            <option value="{{ $value }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                @endif
 
                 <button class="toolbar-button"
                     x-on:click="window.location.href = window.location.href;">
@@ -151,9 +155,11 @@
             <table id="svcr-table" x-show="$wire.viewMode === 'table'" class="svcrprose-table:">
                 <thead>
                     <tr class="svcr-list-header">
-                        <th class="svcr-list-header-item">
-                            <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
-                        </th>
+                        @if(!$user->hasOnlyRole('instructor'))
+                            <th class="svcr-list-header-item">
+                                <input type="checkbox" class="svcr-list-item-select" id="svcr-select-all" />
+                            </th>
+                        @endif
                         {{-- id --}}
                         <th class="svcr-list-header-item w-fit">
                             <div class="flex">
