@@ -21,8 +21,6 @@
 
         const coursesTable = document.getElementById('coursesTable');
         const taTable = document.getElementById('taTable');
-        const coursesPagination = document.getElementById('coursesPagination');
-        const tasPagination = document.getElementById('tasPagination');
         const editButton = document.getElementById('editButton');
         const createNewButton = document.getElementById('createNewButton');
         const assignButton = document.getElementById('assignButton');
@@ -32,8 +30,6 @@
         if (tabId === 'coursesTable') {
             coursesTable.classList.remove('hidden');
             taTable.classList.add('hidden');
-            coursesPagination.classList.remove('hidden');
-            tasPagination.classList.add('hidden');
             editButton.style.display = 'block';
             createNewButton.style.display = 'block';
             assignButton.style.display = 'block';
@@ -42,8 +38,6 @@
         } else {
             coursesTable.classList.add('hidden');
             taTable.classList.remove('hidden');
-            coursesPagination.classList.add('hidden');
-            tasPagination.classList.remove('hidden');
             editButton.style.display = 'none';
             createNewButton.style.display = 'none';
             assignButton.style.display = 'none';
@@ -59,17 +53,8 @@
         const activeTabButton = document.getElementById(tabButtonId);
         activeTabButton.classList.add('text-ubc-blue', 'border-tab-ubc-blue', 'font-bold');
         activeTabButton.classList.remove('text-gray-600-font-bold', 'border-gray-300');
-
-        // Update the URL to set page=1 if switching tabs
-        const url = new URL(window.location);
-        url.searchParams.set('page', 1);
-        window.history.pushState({}, '', url);
-
-        // Do not reload the page, let the server handle the new page state
-        // window.location.reload();
     }
 
-    // Initialize the correct tab as active
     document.addEventListener('DOMContentLoaded', function () {
         const activeTab = localStorage.getItem('activeTab') || 'coursesTable';
         if (activeTab === 'taTable') {
@@ -79,7 +64,6 @@
         }
     });
 
-    // Add event listener for assign button to handle routing
     document.getElementById('assignButton').addEventListener('click', function() {
         const route = this.getAttribute('data-route');
         console.log('Navigating to route:', route);

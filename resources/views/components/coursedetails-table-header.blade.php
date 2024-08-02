@@ -21,7 +21,7 @@
                 </div>
             </div>
         </th>
-        @foreach(['enrolled' => 'Enrolled', 'dropped' => 'Dropped', 'capacity' => 'Capacity', 'averageRating' => 'SEI Data'] as $field => $label)
+        @foreach(['enrolled' => 'Enrolled', 'dropped' => 'Dropped', 'capacity' => 'Capacity', 'room' => 'Room', 'timings' => 'Timings', 'averageRating' => 'SEI Data'] as $field => $label)
             <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
                     <span>{{ $label }}</span>

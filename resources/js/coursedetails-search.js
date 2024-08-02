@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td class="px-6 py-4 whitespace-nowrap">${section.enrolled}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.dropped}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.capacity}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.room}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.timings}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.averageRating}</td>
                     `;
                     tableBody.appendChild(row);

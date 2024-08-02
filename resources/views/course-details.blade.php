@@ -41,7 +41,7 @@
                 </div>
             @endif
         </div>
-
+        
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
                 <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">
@@ -52,7 +52,7 @@
                             <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'coursesTable' ? '' : 'hidden' }}" id="coursesTable">
                                 <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
                                 <tbody id="courseTableBody">
-                                    @if(isset($courseSections) && $courseSections->count())
+                                    @if($courseSections->count())
                                         @foreach ($courseSections as $section)
                                             <x-coursedetails-table-row
                                                 :courseName="$section->name"
@@ -60,6 +60,8 @@
                                                 :enrolledStudents="$section->enrolled"
                                                 :droppedStudents="$section->dropped"
                                                 :courseCapacity="$section->capacity"
+                                                :room="$section->room"
+                                                :timings="$section->timings"
                                                 :sectionId="$section->id"
                                                 :seiData="$section->averageRating"
                                                 :instructorName="$section->instructorName ?? ''"
@@ -75,7 +77,7 @@
                             <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'taTable' ? '' : 'hidden' }}" id="taTable">
                                 <x-coursedetails-ta-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                                 <tbody>
-                                    @if(isset($tas) && $tas->count())
+                                    @if($tas->count())
                                         @foreach ($tas as $ta)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $ta->name }}</td>
@@ -93,12 +95,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div id="coursesPagination" class="{{ $activeTab === 'coursesTable' ? '' : 'hidden' }}">
-                        {{ $courseSections->withQueryString()->links('components.coursedetails-pagination') }}
-                    </div>
-                    <div id="tasPagination" class="{{ $activeTab === 'taTable' ? '' : 'hidden' }}">
-                        {{ $tas->withQueryString()->links('components.coursedetails-pagination') }}
                     </div>
                 </form>
             </div>

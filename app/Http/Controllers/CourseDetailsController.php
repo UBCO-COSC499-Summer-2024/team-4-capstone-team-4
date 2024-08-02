@@ -16,207 +16,152 @@ use Mpdf\Mpdf;
 class CourseDetailsController extends Controller
 {
     public function show(Request $request, User $user)
-{
-    $authenticatedUser = $request->user();
-
-    if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
-        abort(403, 'Unauthorized access.');
-    }
-
-    $userRole = $user->roles->first()->role ?? 'guest';
-    $query = $request->input('search', '');
-    $areaId = $request->input('area_id', null);
-    $activeTab = $request->input('activeTab'); // Get the active tab from the request
-
-    Log::info('User Role:', ['role' => $userRole]);
-    Log::info('Search Query:', ['query' => $query]);
+    {
+        $authenticatedUser = $request->user();
     
-    $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user'])
-        ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
-            $queryBuilder->whereHas('teaches', function ($query) use ($user) {
-                $query->where('instructor_id', $user->id);
+        if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
+            abort(403, 'Unauthorized access.');
+        }
+    
+        $userRole = $user->roles->first()->role ?? 'guest';
+        $query = $request->input('search', '');
+        $areaId = $request->input('area_id', null);
+        $activeTab = $request->input('activeTab'); // Get the active tab from the request
+    
+        Log::info('User Role:', ['role' => $userRole]);
+        Log::info('Search Query:', ['query' => $query]);
+        
+        $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user'])
+            ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
+                $queryBuilder->whereHas('teaches', function ($query) use ($user) {
+                    $query->where('instructor_id', $user->id);
+                });
+            })
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($q) use ($query) {
+                    $q->whereRaw('LOWER(prefix || \' \' || number || \' \' || section || \' - \' || year || session || \' \' || term) LIKE ?', ['%' . strtolower($query) . '%']);
+                });
+            })
+            ->when($areaId, function ($queryBuilder) use ($areaId) {
+                $queryBuilder->where('area_id', $areaId);
             });
-        })
-        ->when($query, function ($queryBuilder) use ($query) {
-            $queryBuilder->where(function ($q) use ($query) {
-                $q->whereRaw('LOWER(prefix || \' \' || number || \' \' || section || \' - \' || year || session || \' \' || term) LIKE ?', ['%' . strtolower($query) . '%']);
-            });
-        })
-        ->when($areaId, function ($queryBuilder) use ($areaId) {
-            $queryBuilder->where('area_id', $areaId);
-        });
-
-    $courseSections = $courseSectionsQuery->paginate(7); // Apply pagination
-
-    $courseSections->getCollection()->transform(function ($section) {
-        $seiData = $section->seiData()->first() ?? null;
-        $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-
-        $formattedName = sprintf('%s %s %s - %s%s %s',
-            $section->prefix,
-            $section->number,
-            $section->section,
-            $section->year,
-            $section->session,
-            $section->term
-        );
-
-        $instructorName = optional($section->teaches->instructor->user)->firstname . ' ' . optional($section->teaches->instructor->user)->lastname;
-
-        return (object)[
-            'id' => $section->id,
-            'name' => $formattedName,
-            'departmentName' => $section->area->name ?? 'Unknown',
-            'instructorName' => $instructorName,
-            'enrolled' => $section->enroll_end,  // Use enroll_end here
-            'dropped' => $section->dropped,
-            'capacity' => $section->capacity,
-            'averageRating' => $averageRating,
-        ];
-    });
-
-    Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-
-    $areas = Area::all(); 
-
-    $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-    ->paginate(7) // Apply pagination for TAs
-    ->through(function ($ta) {
-        return (object)[
-            'name' => $ta->name,
-            'email' => $ta->email,
-            'rating' => $ta->rating,
-            'taCourses' => $ta->courseSections->map(function ($course) {
-                return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-            })->implode(', '),
-            'instructorName' => $ta->courseSections->map(function ($course) {
-                return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
-            })->implode(', ')
-        ];
-    });
-
-    if ($request->ajax()) {
-        return response()->json($courseSections);
-    }
-
-    $sortField = 'courseName';
-    $sortDirection = 'asc';
-    $courses = CourseSection::all()->map(function ($section) {
-        return (object)[
-            'id' => $section->id,
-            'name' => sprintf('%s %s %s - %s%s %s',
+    
+        $courseSections = $courseSectionsQuery->get(); // Get all records
+    
+        $courseSections->transform(function ($section) {
+            $seiData = $section->seiData()->first() ?? null;
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+    
+            $formattedName = sprintf('%s %s %s - %s%s %s',
                 $section->prefix,
                 $section->number,
                 $section->section,
                 $section->year,
                 $section->session,
                 $section->term
-            ),
-        ];
-    });
-
-    return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab','courses'));
-}
-
-public function getTeachingAssistants(Request $request)
-{
-    $user = $request->user();
-
-    if ($user->roles->first()->role === 'instructor') {
-        // Fetch TAs assigned to the courses taught by this instructor
-        $tas = TeachingAssistant::whereHas('courseSections.teaches', function ($query) use ($user) {
-            $query->where('instructor_id', $user->id);
-        })->get();
-    } else {
-        // Fetch all TAs for other roles
-        $tas = TeachingAssistant::all();
-    }
-
-    $taData = $tas->map(function ($ta) {
-        return (object)[
-            'id' => $ta->id,
-            'name' => $ta->name,
-            'rating' => $ta->rating,
-            'taCourses' => $ta->courseSections->map(function ($course) {
-                return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-            })->unique()->implode(', '), // Ensure unique courses
-            'instructorName' => $ta->courseSections->map(function ($course) {
-                $instructor = optional($course->teaches->instructor->user);
-                return $instructor->firstname . ' ' . $instructor->lastname;
-            })->unique()->implode(', ') // Ensure unique instructors
-        ];
-    });
-
-    return response()->json($taData);
-}
-
-
-
-
-
-public function getInstructors()
-{
-    $instructors = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
-        ->where('user_roles.role', 'instructor')
-        ->select('users.id', 'users.firstname', 'users.lastname')
-        ->get();
-
-    return response()->json($instructors);
-}
-
-public function getCoursesByInstructor($instructorId)
-{
-    $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
-        $query->where('instructor_id', $instructorId);
-    })->get(['id', 'prefix', 'number', 'section', 'year', 'session', 'term']);
-
-    return response()->json($courses);
-}
-
-public function assignTA(Request $request)
-{
-    $taIds = $request->input('ta_id');
-    $instructorIds = $request->input('instructor_id');
-    $courseIds = $request->input('course_id');
-
-    // Ensure that each array has the same length
-    $count = count($taIds);
-    if ($count !== count($instructorIds) || $count !== count($courseIds)) {
-        return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
-    }
-
-    for ($i = 0; $i < $count; $i++) {
-        $taId = $taIds[$i];
-        $instructorId = $instructorIds[$i];
-        $courseId = $courseIds[$i];
-
-        // Logic to assign the TA to the course
-        $courseSection = CourseSection::find($courseId);
-        if ($courseSection) {
-            $courseSection->teachingAssistants()->syncWithoutDetaching([$taId => ['rating' => 0]]); // Use syncWithoutDetaching to avoid duplications
-        }
-    }
-
-    // Fetch updated TA data
-    $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-        ->get()
-        ->map(function ($ta) {
-            return (object)[[
-                'name' => $ta->name,
-                'rating' => $ta->rating,
-                'taCourses' => $ta->courseSections->map(function ($course) {
-                    return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-                })->unique()->implode(', '), // Ensure unique courses
-                'instructorName' => $ta->courseSections->map(function ($course) {
-                    $instructor = optional($course->teaches->instructor->user);
-                    return $instructor->firstname . ' ' . $instructor->lastname;
-                })->unique()->implode(', ') // Ensure unique instructors
-            ]];
+            );
+    
+            $instructorName = optional($section->teaches->instructor->user)->firstname . ' ' . optional($section->teaches->instructor->user)->lastname;
+            $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
+    
+            return (object)[
+                'id' => $section->id,
+                'name' => $formattedName,
+                'departmentName' => $section->area->name ?? 'Unknown',
+                'instructorName' => $instructorName,
+                'enrolled' => $section->enroll_end,
+                'room' => $section->room,
+                'timings' => $timings,
+                'dropped' => $section->dropped,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
         });
+    
+        Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
+    
+        $areas = Area::all(); 
+    
+        $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
+            ->get() // Get all records
+            ->map(function ($ta) {
+                return (object)[
+                    'name' => $ta->name,
+                    'email' => $ta->email,
+                    'rating' => $ta->rating,
+                    'taCourses' => $ta->courseSections->map(function ($course) {
+                        return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+                    })->implode(', '),
+                    'instructorName' => $ta->courseSections->map(function ($course) {
+                        return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+                    })->implode(', ')
+                ];
+            });
+    
+        $sortField = 'courseName';
+        $sortDirection = 'asc';
+        $courses = CourseSection::all();
+    
+        return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas', 'activeTab', 'courses'));
+    }
+    
+    
+    
+//     public function getTeachingAssistants()
+//     {
+//         $tas = TeachingAssistant::select('id', 'name')->get();
+//         return response()->json($tas);
+//     }
 
-    return response()->json($tas);
-}
+// public function getInstructors()
+// {
+//     $instructors = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+//         ->where('user_roles.role', 'instructor')
+//         ->select('users.id', 'users.firstname', 'users.lastname')
+//         ->get();
 
+//     return response()->json($instructors);
+// }
+
+// public function getCoursesByInstructor($instructorId)
+// {
+//     $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+//         $query->where('instructor_id', $instructorId);
+//     })->get(['id', 'prefix', 'number', 'section', 'year', 'session', 'term']);
+
+//     return response()->json($courses);
+// }
+
+// public function assignTA(Request $request)
+// {
+//     $taId = $request->input('ta_id');
+//     $instructorId = $request->input('instructor_id');
+//     $courseId = $request->input('course_id');
+
+//     // Logic to assign the TA to the course
+//     $courseSection = CourseSection::find($courseId);
+//     if ($courseSection) {
+//         $courseSection->teachingAssistants()->attach($taId);
+//     }
+
+//     // Fetch updated TA data
+//     $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
+//         ->get()
+//         ->map(function ($ta) {
+//             return (object)[
+//                 'name' => $ta->name,
+//                 'rating' => $ta->rating,
+//                 'taCourses' => $ta->courseSections->map(function ($course) {
+//                     return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+//                 })->implode(', '),
+//                 'instructorName' => $ta->courseSections->map(function ($course) {
+//                     return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+//                 })->implode(', ')
+//             ];
+//         });
+
+//     return response()->json($tas);
+// }
 
 public function createTA(Request $request)
 {
@@ -233,23 +178,17 @@ public function createTA(Request $request)
     return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
 }
 
-public function exportPdf(Request $request)
-{
-    try {
-        $courseSections = CourseSection::all(); // Get the data to be exported
+    public function exportPDF()
+    {
+        // Your PDF export logic here
+        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
+        $html = view('exports.pdf', compact('courseSections'))->render();
 
-        $html = view('pdf.course-sections', compact('courseSections'))->render(); // Create the HTML view for PDF
-
+        // Generate PDF
         $mpdf = new Mpdf();
         $mpdf->WriteHTML($html);
-        $filename = 'course_sections.pdf';
-        $mpdf->Output($filename, 'D');
-
-    } catch (\Exception $e) {
-        Log::error('PDF export error: ' . $e->getMessage());
-        return response()->json(['error' => 'Failed to save PDF. Please try again.'], 500);
+        return response($mpdf->Output('courses.pdf', 'S'))->header('Content-Type', 'application/pdf');
     }
-}
 
     public function exportCSV()
     {
@@ -267,48 +206,6 @@ public function exportPdf(Request $request)
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$csvFileName}");
     }
-    public function manageSeiData(Request $request, $courseId = null)
-    {
-        if ($request->isMethod('get')) {
-            Log::info('Fetching SEI data for course section ID:', ['courseId' => $courseId]);
-    
-            $seiData = SeiData::where('course_section_id', $courseId)->first();
-    
-            if ($seiData) {
-                Log::info('SEI data found:', ['seiData' => $seiData]);
-    
-                $questions = json_decode($seiData->questions, true);
-                Log::info('Decoded questions:', ['questions' => $questions]);
-    
-                // Add course_section_id to the response for completeness
-                $questions['course_section_id'] = $seiData->course_section_id;
-                return response()->json($questions);
-            }
-    
-            Log::warning('No SEI data found for course section ID:', ['courseId' => $courseId]);
-            return response()->json([]);
-        } elseif ($request->isMethod('post')) {
-            Log::info('Saving SEI data', ['requestData' => $request->all()]);
-    
-            $data = $request->all();
-    
-            foreach ($data['course_id'] as $index => $courseId) {
-                $questions = [];
-                for ($i = 1; $i <= 6; $i++) {
-                    $questions['q' . $i] = $data['q' . $i][$index] ?? null;
-                }
-    
-                SeiData::updateOrCreate(
-                    ['course_section_id' => $courseId],
-                    ['questions' => json_encode($questions)]
-                );
-            }
-    
-            Log::info('SEI data saved successfully');
-            return response()->json(['message' => 'SEI data saved successfully.']);
-        }
-    }
-    
     
 
 public function save(Request $request)
