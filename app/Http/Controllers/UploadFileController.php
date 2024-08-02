@@ -179,7 +179,8 @@ class UploadFileController extends Controller {
         //             case 'Year':
         //             case 'Session':
         //             case 'Room':
-        //             case 'Time':
+        //             case 'Time Start':
+        //             case 'Time End':
         //             case 'Enrolled Start':
         //             case 'Enrolled End':
         //             case 'Capacity':
@@ -206,7 +207,8 @@ class UploadFileController extends Controller {
                         case 'Year':
                         case 'Session':
                         case 'Room':
-                        case 'Time':
+                        case 'Time Start':
+                        case 'Time End':
                         case 'Enrolled Start':
                         case 'Enrolled End':
                         case 'Capacity':
