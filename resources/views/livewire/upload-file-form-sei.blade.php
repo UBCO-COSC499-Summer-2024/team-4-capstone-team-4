@@ -62,7 +62,10 @@
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >Save</button>
+                    <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >
+                        <span class="material-symbols-outlined">save</span>
+                        Save
+                    </button>
                 </div>
            
         </form>
