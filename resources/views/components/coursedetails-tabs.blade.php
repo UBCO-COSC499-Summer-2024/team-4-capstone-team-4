@@ -1,12 +1,12 @@
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
         <li class="me-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg text-ubc-blue border-ubc-blue font-bold" id="courses-tab" data-tabs-target="#courses" type="button" role="tab" aria-controls="courses" aria-selected="true" onclick="showTab('coursesTable', 'courses-tab')">
+            <button class="inline-block p-6 border-b-2 rounded-t-lg ubc-text-blue ubc-border-blue ubc-font-bold text-lg" id="courses-tab" data-tabs-target="#courses" type="button" role="tab" aria-controls="courses" aria-selected="true" onclick="showTab('coursesTable', 'courses-tab')">
                 Course Details
             </button>
         </li>
         <li class="me-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg text-gray-600 border-gray-300 font-bold" id="tas-tab" data-tabs-target="#tas" type="button" role="tab" aria-controls="tas" aria-selected="false" onclick="showTab('taTable', 'tas-tab')">
+            <button class="inline-block p-6 border-b-2 rounded-t-lg ubc-text-gray ubc-border-gray ubc-font-bold text-lg" id="tas-tab" data-tabs-target="#tas" type="button" role="tab" aria-controls="tas" aria-selected="false" onclick="showTab('taTable', 'tas-tab')">
                 TAs
             </button>
         </li>
@@ -67,6 +67,6 @@
     document.getElementById('assignButton').addEventListener('click', function() {
         const route = this.getAttribute('data-route');
         console.log('Navigating to route:', route);
-        document.location.href = route;
+        document.location.href = "/assign-courses";
     });
 </script>

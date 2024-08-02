@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 /* For the table headers and structure */
-.course-details th.editable {
+.header-editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
     outline: none;
     cursor: pointer;
 }
 
-.course-details th.editable:focus {
+.header-editable:focus {
     border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
-.course-details .editable {
+.cell-editable {
     background-color: #f0f0f0;
     border: 1px dashed #ccc;
     outline: none;
 }
 
-.course-details .editable:focus {
+.cell-editable:focus {
     border: 1px solid #3b4779;
     background-color: #e9f7fe;
 }
 
-.course-details .modal-dialog-centered {
+.modal-centered {
     display: flex;
     align-items: center;
     min-height: calc(100% - 1rem);
 }
 
-.course-details .modal-dialog-centered .modal-content {
+.modal-centered .modal-content {
     margin: auto;
 }
 
 /* Fixing the headers of the table */
-.course-details .fixed-header {
+.fixed-table-header {
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -50,25 +50,25 @@
     margin-bottom: 6px;
 }
 
-.course-details .fixed-header .header-title {
+.fixed-table-header .header-title {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
 }
 
-.course-details .fixed-header .header-search {
+.fixed-table-header .header-search {
     flex: 1;
     display: flex;
     padding: 1px;
     border-radius: 4px;
 }
 
-.course-details .fixed-header .header-buttons {
+.fixed-table-header .header-buttons {
     display: flex;
     gap: 10px;
 }
 
-.course-details .sticky-header th {
+.sticky-header th {
     position: sticky;
     top: 0px;
     z-index: 500;
@@ -78,13 +78,13 @@
 }
 
 /* Ensures the dropdown menu has a higher z-index than other elements */
-.course-details .dropdown-menu {
+.dropdown-zindex {
     z-index: 1100;
 }
 
 /* Search bar */
-.course-details .search-bar,
-.course-details #searchInput {
+.search-bar,
+.input-search {
     box-shadow: none;
     border: 1px solid #e0e0e0;
     outline: none;
@@ -97,17 +97,17 @@
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.course-details #searchInput:focus {
+.input-search:focus {
     border-color: #3b4779;
     box-shadow: 0 0 0 1px #3b4779;
 }
 
-.course-details #searchInput::placeholder {
+.input-search::placeholder {
     color: #787878;
 }
 
 /* Custom blue color for the table */
-.custom-ubc-blue {
+.ubc-blue {
     color: rgb(59, 71, 121);
     border-color: rgb(59, 71, 121);
     background-color: transparent;
@@ -116,28 +116,34 @@
     transition: color 0.25s;
 }
 
-.custom-ubc-blue:hover {
+.ubc-blue:hover {
     background-color: rgb(59, 71, 121);
     color: white;
 }
 
-.custom-ubc-blue:focus {
+.ubc-blue:focus {
     border-color: rgb(59, 71, 121);
     box-shadow: 0 0 0 1px rgb(59, 71, 121);
 }
 
 /* Highlighting the table in the edit mode */
-.course-details .editable-highlight {
-    border: 1px solid #3b4779;
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
+.edit-highlight {
+    border: 2px solid #3b4779; /* Custom blue border */
+    background-color: #ffffff; /* Light blue background */
+    padding: 8px; /* Adjusted padding */
+    border-radius: 4px; /* Adjusted border radius */
     transition: background-color 0.3s, border-color 0.3s;
     cursor: text;
 }
 
- /* Custom green color for the buttons */
-.custom-green {
+/* For the error handling messages in the edit mode */
+.error-input {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+/* Custom green color for the buttons */
+.btn-green {
     color: #3B784F;
     border-color: #3B784F;
     background-color: transparent;
@@ -146,17 +152,17 @@
     transition: color 0.25s;
 }
 
-.custom-green:hover {
+.btn-green:hover {
     background-color: #3B784F;
     color: white;
 }
 
-.custom-green:focus {
+.btn-green:focus {
     border-color: #3B784F;
     box-shadow: 0 0 0 1px #3B784F;
 }
 
-.custom-red {
+.btn-red {
     color: #E3342F;
     border-color: #E3342F;
     background-color: transparent;
@@ -165,34 +171,28 @@
     transition: color 0.25s;
 }
 
-.custom-red:hover {
+.btn-red:hover {
     background-color: #E3342F;
     color: white;
 }
 
-.custom-red:focus {
+.btn-red:focus {
     border-color: #E3342F;
     box-shadow: 0 0 0 1px #E3342F;
 }
 
-/* For the error handling messages in the edit mode */
-.course-details .input-error {
-    border: 2px solid red;
-    background-color: #ffe6e6;
-}
-
-/* Edit Mode Display for the table  */
-.course-details table {
+/* Edit Mode Display for the table */
+.custom-table {
     border-collapse: separate;
     border-spacing: 2px 12px;
 }
 
-.course-details tbody tr {
+.custom-table tr {
     border-radius: 8px;
     overflow: hidden;
 }
 
-.course-details tbody td {
+.custom-table td {
     padding: 12px 15px;
     background-color: #ffffff;
     border-top: 1px solid transparent;
@@ -200,19 +200,20 @@
     transition: background-color 0.1s, border-color 0.1s;
 }
 
-.course-details tbody td:first-child {
+.custom-table td:first-child {
     border-left: 1px solid rgb(255, 255, 255);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
 
-.course-details tbody td:last-child {
+.custom-table td:last-child {
     border-right: 1px solid rgb(255, 255, 255);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
+
 /* For the Filter Icon */
-.course-details .form-select {
+.filter-select {
     appearance: none;
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
@@ -229,38 +230,38 @@
     color: #3b4779;
 }
 
-.course-details .form-select:focus {
+.filter-select:focus {
     border-color: #3b4779;
     box-shadow: 0 0 0 1px #3b4779;
     outline: none;
 }
 
-.course-details .form-select::placeholder {
+.filter-select::placeholder {
     color: #f8f8f8;
 }
 
-.course-details .filter-instructor {
+.instructor-filter {
     margin-top: 0rem;
 }
 
-.text-ubc-blue {
+.text-ubc {
     color: rgb(59, 71, 121);
     font-size: large;
 }
 
-.border-tab-ubc-blue {
+.border-ubc {
     border-color: rgb(59, 71, 121);
 }
 
-.bg-custom-green {
+.bg-green {
     background-color: #28a745; /* or your custom green color code */
 }
 
-.border-custom-green {
+.border-green {
     border-color: #28a745; /* or your custom green color code */
 }
 
-.pagination-btn {
+.page-btn {
     padding: 8px 16px;
     margin: 0 2px;
     border: 1px solid #ddd;
@@ -269,88 +270,77 @@
     cursor: pointer;
 }
 
-.pagination-btn:hover {
+.page-btn:hover {
     background-color: #f0f0f0;
 }
 
-.pagination-active {
+.page-active {
     background-color: #3b4779;
     color: white;
     font-weight: bold;
     cursor: default;
 }
 
-.pagination-disabled {
+.page-disabled {
     color: #999;
     cursor: not-allowed;
 }
 
-.font-bold {
+.bold-text {
     font-weight: bold;
 }
 
-/* Add styles for the SEI edit button */
+/* General tab styles */
+#default-tab button {
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+#default-tab button:hover {
+    background-color: rgba(59, 71, 121, 0.2); /* Darker blue background with some transparency */
+    border-color: rgb(59, 71, 121); /* Custom UBC blue border */
+    color: rgb(59, 71, 121); /* Custom UBC blue text */
+}
+
+/* Active tab styles */
+#default-tab .text-ubc {
+    color: rgb(59, 71, 121);
+    font-size: large;
+}
+
+#default-tab .border-ubc {
+    border-color: rgb(59, 71, 121);
+}
+
+/* Hover styles for tabs */
+#default-tab button:hover {
+    background-color: rgba(59, 71, 121, 0.2); /* Darker blue background with some transparency */
+    color: rgb(59, 71, 121);  /* Custom UBC blue */
+}
+
+
+/* Existing button styles for reference */
 .edit-sei-button {
     background-color: #3b4779; /* Custom UBC blue color */
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
     font-size: 12px;
-    border: 1px solid white; 
+    border: 2px solid white;
+    display: inline-block; /* Adjust the display to inline-block */
+    margin: 2px; /* Adjust margin to make it fit better */
 }
 
 .edit-sei-button:hover {
-    background-color: #28335a;
+    background-color: white; /* Change background to white */
+    color: #3b4779; /* Change text color to custom UBC blue */
+    border-color: #3b4779; /* Change border color to custom UBC blue */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.sei-hidden {
-    display: none;
+.edit-sei-button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+    border-color: #ccc;
 }
-
-
-#seiEditModal .bg-custom-green {
-    background-color: #28a745;
-}
-
-#seiEditModal .text-white {
-    color: white;
-}
-
-#seiEditModal .bg-white {
-    background-color: white;
-}
-
-#seiEditModal .text-gray-700 {
-    color: #4a5568;
-}
-
-#seiEditModal .rounded-md {
-    border-radius: 0.375rem;
-}
-
-#seiEditModal .shadow-sm {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-#seiEditModal .hover\:bg-blue-700:hover {
-    background-color: #2b6cb0;
-}
-
-#seiEditModal .hover\:bg-green-700:hover {
-    background-color: #2f855a;
-}
-
-#seiEditModal .font-bold {
-    font-weight: 700;
-}
-
-.input-bordered {
-    border: 2px solid rgb(168, 168, 168);
-    border-radius: 5px;
-    padding: 5px;
-}
-
-

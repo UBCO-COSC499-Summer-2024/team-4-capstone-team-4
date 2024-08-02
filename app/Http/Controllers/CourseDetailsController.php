@@ -115,61 +115,61 @@ class CourseDetailsController extends Controller
     
     
     
-//     public function getTeachingAssistants()
-//     {
-//         $tas = TeachingAssistant::select('id', 'name')->get();
-//         return response()->json($tas);
-//     }
+    public function getTeachingAssistants()
+    {
+        $tas = TeachingAssistant::select('id', 'name')->get();
+        return response()->json($tas);
+    }
 
-// public function getInstructors()
-// {
-//     $instructors = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
-//         ->where('user_roles.role', 'instructor')
-//         ->select('users.id', 'users.firstname', 'users.lastname')
-//         ->get();
+public function getInstructors()
+{
+    $instructors = User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        ->where('user_roles.role', 'instructor')
+        ->select('users.id', 'users.firstname', 'users.lastname')
+        ->get();
 
-//     return response()->json($instructors);
-// }
+    return response()->json($instructors);
+}
 
-// public function getCoursesByInstructor($instructorId)
-// {
-//     $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
-//         $query->where('instructor_id', $instructorId);
-//     })->get(['id', 'prefix', 'number', 'section', 'year', 'session', 'term']);
+public function getCoursesByInstructor($instructorId)
+{
+    $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+        $query->where('instructor_id', $instructorId);
+    })->get(['id', 'prefix', 'number', 'section', 'year', 'session', 'term']);
 
-//     return response()->json($courses);
-// }
+    return response()->json($courses);
+}
 
-// public function assignTA(Request $request)
-// {
-//     $taId = $request->input('ta_id');
-//     $instructorId = $request->input('instructor_id');
-//     $courseId = $request->input('course_id');
+public function assignTA(Request $request)
+{
+    $taId = $request->input('ta_id');
+    $instructorId = $request->input('instructor_id');
+    $courseId = $request->input('course_id');
 
-//     // Logic to assign the TA to the course
-//     $courseSection = CourseSection::find($courseId);
-//     if ($courseSection) {
-//         $courseSection->teachingAssistants()->attach($taId);
-//     }
+    // Logic to assign the TA to the course
+    $courseSection = CourseSection::find($courseId);
+    if ($courseSection) {
+        $courseSection->teachingAssistants()->attach($taId);
+    }
 
-//     // Fetch updated TA data
-//     $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-//         ->get()
-//         ->map(function ($ta) {
-//             return (object)[
-//                 'name' => $ta->name,
-//                 'rating' => $ta->rating,
-//                 'taCourses' => $ta->courseSections->map(function ($course) {
-//                     return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-//                 })->implode(', '),
-//                 'instructorName' => $ta->courseSections->map(function ($course) {
-//                     return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
-//                 })->implode(', ')
-//             ];
-//         });
+    // Fetch updated TA data
+    $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
+        ->get()
+        ->map(function ($ta) {
+            return (object)[
+                'name' => $ta->name,
+                'rating' => $ta->rating,
+                'taCourses' => $ta->courseSections->map(function ($course) {
+                    return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+                })->implode(', '),
+                'instructorName' => $ta->courseSections->map(function ($course) {
+                    return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+                })->implode(', ')
+            ];
+        });
 
-//     return response()->json($tas);
-// }
+    return response()->json($tas);
+}
 
 public function createTA(Request $request)
 {

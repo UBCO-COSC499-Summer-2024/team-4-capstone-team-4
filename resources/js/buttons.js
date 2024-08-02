@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
             row.querySelectorAll('td').forEach((cell, index) => {
                 if ([3, 4, 5].includes(index)) {
                     cell.setAttribute('contenteditable', 'true');
-                    cell.classList.add('editable-highlight');
+                    cell.classList.add('edit-highlight');
                 }
             });
         });
@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
         coursesTable.querySelectorAll('tr').forEach(row => {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
-                cell.classList.remove('editable-highlight');
-                cell.classList.remove('input-error');
+                cell.classList.remove('edit-highlight');
+                cell.classList.remove('error-input');
             });
         });
         toggleButtonVisibility(editButton, true);
@@ -48,33 +48,24 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValid = true;
         const rows = document.querySelectorAll('#coursesTable tbody tr');
         rows.forEach(row => {
-            const enrolledCell = row.children[3];
-            const capacityCell = row.children[5];
-            const enrolledValue = parseInt(enrolledCell.innerText.trim());
-            const capacityValue = parseInt(capacityCell.innerText.trim());
-
-            if (isNaN(enrolledValue) || isNaN(capacityValue) || enrolledValue > capacityValue) {
-                enrolledCell.classList.add('input-error');
-                capacityCell.classList.add('input-error');
-                isValid = false;
-            } else {
-                enrolledCell.classList.remove('input-error');
-                capacityCell.classList.remove('input-error');
-            }
+            row.querySelectorAll('td').forEach((cell, index) => {
+                if ([3, 4, 5].includes(index)) {
+                    const value = cell.innerText.trim();
+                    if (isNaN(value) || value === '') {
+                        cell.classList.add('error-input');
+                        isValid = false;
+                    } else {
+                        cell.classList.remove('error-input');
+                    }
+                }
+            });
         });
         return isValid;
     }
 
-    function showErrorModal(message) {
-        const errorModal = document.getElementById('errorModal');
-        const errorMessage = document.getElementById('errorMessage');
-        errorMessage.innerText = message;
-        errorModal.classList.remove('hidden');
-    }
-
     function saveChanges() {
         if (!validateInput()) {
-            showErrorModal('Capacity cannot be less than enrolled students.');
+            alert('Please enter valid numeric values in the editable fields.');
             return;
         }
 
@@ -87,9 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
         rows.forEach(row => {
             formData.append('ids[]', row.getAttribute('data-id'));
             formData.append('courseNames[]', row.children[0]?.innerText.trim().split(' - ')[0] || '');
-            formData.append('enrolledStudents[]', row.children[2]?.innerText.trim() || '');
-            formData.append('droppedStudents[]', row.children[3]?.innerText.trim() || '');
-            formData.append('courseCapacities[]', row.children[4]?.innerText.trim() || '');
+            formData.append('enrolledStudents[]', row.children[3]?.innerText.trim() || '');
+            formData.append('droppedStudents[]', row.children[4]?.innerText.trim() || '');
+            formData.append('courseCapacities[]', row.children[5]?.innerText.trim() || '');
         });
 
         console.log('Form Data:', Array.from(formData.entries()));
@@ -117,9 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                     if (row) {
                         row.children[0].innerText = `${updatedSection.prefix} ${updatedSection.number} ${updatedSection.section} - ${updatedSection.year}${updatedSection.session} ${updatedSection.term}`;
-                        row.children[2].innerText = updatedSection.enrolled;
-                        row.children[3].innerText = updatedSection.dropped;
-                        row.children[4].innerText = updatedSection.capacity;
+                        row.children[3].innerText = updatedSection.enrolled;
+                        row.children[4].innerText = updatedSection.dropped;
+                        row.children[5].innerText = updatedSection.capacity;
                     }
                 });
 

@@ -1,12 +1,13 @@
 <x-app-layout>
     <div class="z-0 p-4 content">
         <div class="flex items-center justify-between mb-4">
-            <h1 id="headerTitle" class="text-2xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+            <h1 id="headerTitle" class="text-3xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
             @if($user->id < 4)
                 <div class="flex items-center space-x-2">
                     <x-create-new-button id="createNewButton" />
                     <x-assign-button id="assignButton" />
                     @if(in_array($userRole, ['admin', 'dept_head', 'dept_staff']))
+                        <link rel="stylesheet" href="resources/css/course-details.css">
                         <x-edit-button id="editButton" />
                     @endif
                     <x-save-button id="saveButton" style="display: none;" />
