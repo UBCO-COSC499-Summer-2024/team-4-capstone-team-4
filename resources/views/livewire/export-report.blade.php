@@ -3,8 +3,8 @@
         <span class="content-title-text">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}'s Report</span>
     </h1>
     <div>
-        <div class="flex justify-between items-center">
-            <div>
+        <div class="flex justify-end items-center">
+            <div class="mr-2">
                 <label for="year">Select Year:</label>
                 <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
@@ -85,7 +85,7 @@
                             <th class="report-head-cell">Name</th>
                             <th class="report-head-cell">Year</th>
                             @foreach ($subtotalHours as $month => $hours)
-                                <th class="report-head-cell">{{ substr($month, 0, 3) }} Hrs</th>
+                                <th class="report-head-cell">{{ substr($month, 0, 3) }}</th>
                             @endforeach
                             <th class="report-head-cell">Total Hrs</th>
                         </tr>
