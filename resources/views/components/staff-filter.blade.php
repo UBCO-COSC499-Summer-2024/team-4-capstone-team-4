@@ -23,7 +23,7 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="hidden z-50 w-56 p-3 bg-white rounded-lg shadow-lg dark:bg-gray-700 absolute top-full mt-2 ring-1 ring-black ring-opacity-5 max-h-64 overflow-y-scroll">
+        class="z-50 w-56 p-3 bg-white rounded-lg shadow-lg dark:bg-gray-700 absolute top-full mt-2 ring-1 ring-black ring-opacity-5 max-h-64 overflow-y-scroll">
         <h6 class="mb-1 text-sm font-bold text-gray-900 dark:text-white">Areas</h6>
         <ul class="space-y-1 text-sm" aria-labelledby="dropdownDefault">
             @php
