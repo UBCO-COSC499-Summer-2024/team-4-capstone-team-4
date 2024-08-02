@@ -1,7 +1,7 @@
 ## Friday (7/26 - 7/31)
 
 ### Timesheet
-![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_31_2024-08_2_2024.pdf)
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_31_2024-08_02_2024.pdf)
 
 ### Current Tasks
   * #1: TA Assign - CSV
