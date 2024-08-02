@@ -109,6 +109,10 @@ input[type="file"] {
   @apply w-full bg-gray-50 border border-gray-300 border-solid text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block;
 }
 
+.import-form-number-input {
+  @apply bg-gray-50 border border-gray-300 border-solid text-gray-900 text-sm rounded-lg focus:ring-[#3b4779] block;
+}
+
 .import-form-row input:focus {
   @apply border-none outline-none;
 }
