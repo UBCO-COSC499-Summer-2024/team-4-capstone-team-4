@@ -69,6 +69,9 @@ class CourseDetailsController extends Controller
                 $instructorName = $section->teaches->instructor->user->getName();
             }
 
+
+            $timings=sprintf('%s - %s', $section->time_start, $section->time_end);
+
             return (object)[
                 'id' => $section->id,
                 'name' => $formattedName,
@@ -76,6 +79,8 @@ class CourseDetailsController extends Controller
                 'instructorName' => $instructorName,
                 'enrolled' => $section->enroll_end,
                 'dropped' => $section->dropped,
+                'room'=>$section->room,
+                'timings'=>$timings,
                 'capacity' => $section->capacity,
                 'averageRating' => $averageRating,
             ];
