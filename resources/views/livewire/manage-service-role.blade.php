@@ -2,9 +2,9 @@
     $exports = [
         'CSV' => 'csv',
         'Excel' => 'xlsx',
-        'PDF' => 'pdf',
-        'Text' => 'text',
-        'Print' => 'print'
+        // 'PDF' => 'pdf',
+        // 'Text' => 'text',
+        // 'Print' => 'print'
     ];
     $user = Auth::user();
 @endphp
