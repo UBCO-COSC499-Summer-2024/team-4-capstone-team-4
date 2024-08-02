@@ -30,7 +30,8 @@
                         "tags": [
                             "score",
                             "calculation",
-                            "step 1"
+                            "step 1",
+                            "leaderboard"
                         ]
                     },
                     {
@@ -39,7 +40,8 @@
                         "tags": [
                             "score",
                             "calculation",
-                            "step 2"
+                            "step 2",
+                            "leaderboard"
                         ]
                     },
                     {
@@ -48,7 +50,8 @@
                         "tags": [
                             "score",
                             "calculation",
-                            "step 3"
+                            "step 3",
+                            "leaderboard"
                         ]
                     },
                     {
@@ -57,7 +60,8 @@
                         "tags": [
                             "score",
                             "calculation",
-                            "step 4"
+                            "step 4",
+                            "leaderboard"
                         ]
                     },
                     {
@@ -66,7 +70,8 @@
                         "tags": [
                             "score",
                             "calculation",
-                            "step 5"
+                            "step 5",
+                            "leaderboard"
                         ]
                     }
                 ],
