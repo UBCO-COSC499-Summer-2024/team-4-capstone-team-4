@@ -2,6 +2,75 @@
 
 ## Date Range:
 
+- July 31 - August 2
+
+## Features in the Project Plan Cycle:
+- Admin Staff Page 
+- Course Details Page - TAs
+- Import Page - File Upload 
+- Performance Page - Staff Profile
+- Help pages
+- Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_july31_aug2.png)
+![image of tasks](./tasks/inprogress_july31_aug2.png)
+![image of tasks](./tasks/done_july31_aug2.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_july31_aug2.png)
+![image of tasks](./tasks/inprogress_july31_aug2.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_july31_aug2.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_july31_aug2.png)
+![image of clockify report](./clockify/individual_july31_aug2.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/inreview_july31_aug2.png)
+![image of tasks](./tasks/done_july31_aug2.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_july31_aug2.png)
+![image of tasks](./tasks/inprogress_july31_aug2.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_july31_aug2.png)
+![image of test report](./testing/feature_test_july31_aug2.png)
+
+## Overview:
+We have continued to work on the functionality needed to complete the requirements as the course is coming to an end. We have prepared everything necessary for the test event coming up which includes more features than the last event. In the final cycle, we will be finishing up our last tasks, testing in detail all our pages and functions, and completing our individual reports.
+
+## Goals for next cycle
+- Conducting Final Testing
+- Complete Help pages
+- Complete Admin pages
+- Complete course details page
+- Complete TA Assign Feature
+- Complete Assign Courses Feature
+- Complete Documentation
+
+## What's left
+- Help pages
+- Course Details page
+- TA Assign page + CSV
+- Course assign CSV
+- Testing
+- CI
+- Individual Project Report
+- Dark Mode (optional)
+
+## Date Range:
+
 - July 26 - July 30
 
 ## Features in the Project Plan Cycle:
