@@ -74,7 +74,7 @@ class CourseDetailsController extends Controller
                 'name' => $formattedName,
                 'departmentName' => $section->area->name ?? 'Unknown',
                 'instructorName' => $instructorName,
-                'enrolled' => $section->enrolled,
+                'enrolled' => $section->enroll_end,
                 'dropped' => $section->dropped,
                 'capacity' => $section->capacity,
                 'averageRating' => $averageRating,
