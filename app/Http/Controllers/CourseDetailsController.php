@@ -118,11 +118,41 @@ class CourseDetailsController extends Controller
     return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab','courses'));
 }
 
-public function getTeachingAssistants()
+public function getTeachingAssistants(Request $request)
 {
-    $tas = TeachingAssistant::select('id', 'name')->get();
-    return response()->json($tas);
+    $user = $request->user();
+
+    if ($user->roles->first()->role === 'instructor') {
+        // Fetch TAs assigned to the courses taught by this instructor
+        $tas = TeachingAssistant::whereHas('courseSections.teaches', function ($query) use ($user) {
+            $query->where('instructor_id', $user->id);
+        })->get();
+    } else {
+        // Fetch all TAs for other roles
+        $tas = TeachingAssistant::all();
+    }
+
+    $taData = $tas->map(function ($ta) {
+        return (object)[
+            'id' => $ta->id,
+            'name' => $ta->name,
+            'rating' => $ta->rating,
+            'taCourses' => $ta->courseSections->map(function ($course) {
+                return $course->prefix . ' ' . $course->number . ' ' . $course->section;
+            })->unique()->implode(', '), // Ensure unique courses
+            'instructorName' => $ta->courseSections->map(function ($course) {
+                $instructor = optional($course->teaches->instructor->user);
+                return $instructor->firstname . ' ' . $instructor->lastname;
+            })->unique()->implode(', ') // Ensure unique instructors
+        ];
+    });
+
+    return response()->json($taData);
 }
+
+
+
+
 
 public function getInstructors()
 {

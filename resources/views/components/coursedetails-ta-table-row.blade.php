@@ -1,6 +1,6 @@
-<tr data-id="{{ $taId }}">
-    <td class="px-6 py-4 whitespace-nowrap">{{ $taName }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $instructorName }}</td>    
-    <td class="px-6 py-4 whitespace-nowrap">{{ $courseName }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $taRating }}</td>
+<tr data-id="{{ $ta->id }}">
+    <td class="px-6 py-4 whitespace-nowrap">{{ $ta->name }}</td>
+    <td class="px-6 py-4 whitespace-nowrap">{{ $ta->instructorName }}</td>    
+    <td class="px-6 py-4 whitespace-nowrap">{{ $ta->taCourses }}</td>
+    <td class="px-6 py-4 whitespace-nowrap">{{ $ta->rating }}</td>
 </tr>

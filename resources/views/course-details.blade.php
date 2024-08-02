@@ -1,12 +1,14 @@
 <x-app-layout>
     <div class="z-0 p-4 content">
         <div class="flex items-center justify-between mb-4">
-            <h1 class="text-2xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+            <h1 id="headerTitle" class="text-2xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
             @if($user->id < 4)
                 <div class="flex items-center space-x-2">
                     <x-create-new-button id="createNewButton" />
-                    <x-assign-button id="assignButton" />
-                    <x-edit-button id="editButton" />
+                    @if(in_array($userRole, ['admin', 'dept_head', 'dept_staff']))
+                        <x-assign-button id="assignButton" />
+                        <x-edit-button id="editButton" />
+                    @endif
                     <x-save-button id="saveButton" style="display: none;" />
                     <x-cancel-button id="cancelButton" style="display: none;" />
                     <x-create-ta-button id="createNewTAButton" style="display: none;" />
@@ -18,23 +20,23 @@
         <div class="flex items-center justify-between mb-4">
             <div class="flex-1 mr-4">
                 <x-coursedetails-tabs />
-                <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                @if(in_array($userRole, ['dept_head', 'dept_staff', 'admin']))
+                    <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                @endif
             </div>
-            <x-coursedetails-exportButton />
-            @if($user->id < 4)
+            @if(in_array($userRole, ['dept_head', 'dept_staff', 'admin']))
+                <x-coursedetails-exportButton />
                 <div class="flex items-center space-x-2">
-                    @if(in_array($userRole, ['admin', 'dept_head']))
-                        <div class="filter-area">
-                            <select id="areaFilter" name="area_id" class="form-select">
-                                <option value="">Filter By Area</option>
-                                @foreach($areas as $area)
-                                    <option value="{{ $area->id }}" {{ request('area_id') == $area->id ? 'selected' : '' }}>
-                                        {{ $area->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endif
+                    <div class="filter-area">
+                        <select id="areaFilter" name="area_id" class="form-select">
+                            <option value="">Filter By Area</option>
+                            @foreach($areas as $area)
+                                <option value="{{ $area->id }}" {{ request('area_id') == $area->id ? 'selected' : '' }}>
+                                    {{ $area->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <x-coursedetails-deleteButton />
                 </div>
             @endif
