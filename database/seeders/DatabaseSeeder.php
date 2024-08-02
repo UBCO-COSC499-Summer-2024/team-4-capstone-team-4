@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Approval;
+use App\Models\ApprovalStatus;
+use App\Models\ApprovalType;
 use App\Models\AreaPerformance;
 use App\Models\Department;
 use App\Models\Area;
@@ -16,6 +19,8 @@ use App\Models\RoleAssignment;
 use App\Models\ExtraHour;
 use App\Models\DepartmentPerformance;
 use Illuminate\Database\Seeder;
+use App\Models\TeachingAssistant;
+use App\Models\Assist;
 
 class DatabaseSeeder extends Seeder
 {
@@ -194,6 +199,20 @@ class DatabaseSeeder extends Seeder
             ]);
             InstructorPerformance::updatePerformance($instructorRole->id, date('Y'));
         }
+
+        // Creating Teaching Assistants
+        $teachingAssistants = TeachingAssistant::factory(10)->create();
+
+    // Assign TAs to courses
+        $courseSections = CourseSection::all();
+        foreach ($courseSections as $courseSection) {
+            $ta = $teachingAssistants->random();
+            Assist::create([
+                'course_section_id' => $courseSection->id,
+                'ta_id' => $ta->id,
+                'rating' => fake()->numberBetween(1, 5) + fake()->randomFloat(2, 0, 0.99),
+            ]);
+        }
         // Add service roles for the example instructor
         $instructor_svcroles = ServiceRole::factory(3)->create([
             'year' => date('Y'),
@@ -215,11 +234,12 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->updatePerformance2($extrahour, $dept);
 
-        // Create courses and assign instructors to them    
+        // Create courses and assign instructors to them
         $courses = CourseSection::factory(50)->create([
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
+            
             $user = User::factory()->create(
                 ['password' => 'password']
             );
@@ -282,27 +302,39 @@ class DatabaseSeeder extends Seeder
             ]);
             $this->updatePerformance($instructor_id, $role, $dept);
             InstructorPerformance::updatePerformance($instructor_id, date('Y'));
-        } 
+        }
 
         $extrahours = ExtraHour::factory(5)->create([
             'year' => date('Y'),
             'month' => 7,
             'assigner_id' => $headrole->id,
         ]);
-        
+
         foreach ($extrahours as $hours){
             $this->updatePerformance2($hours, $dept);
-            InstructorPerformance::updatePerformance($instructor_id, date('Y')); 
-        } 
-        
+            InstructorPerformance::updatePerformance($instructor_id, date('Y'));
+        }
+
         //Update area and dept performance
         foreach ($areas as $area){
             AreaPerformance::updateAreaPerformance($area->id, date('Y'));
         }
         $depts = Department::all();
         foreach ($depts as $dept){
-            DepartmentPerformance::updateDepartmentPerformance($dept->id, date('Y')); 
+            DepartmentPerformance::updateDepartmentPerformance($dept->id, date('Y'));
         }
+
+        // approvals
+        ApprovalStatus::create(['name' => 'pending', 'description' => 'Approval is pending']);
+        ApprovalStatus::create(['name' => 'approved', 'description' => 'Approval is approved']);
+        ApprovalStatus::create(['name' => 'rejected', 'description' => 'Approval is rejected']);
+        ApprovalStatus::create(['name' => 'cancelled', 'description' => 'Approval is cancelled']);
+        ApprovalStatus::create(['name' => 'intermediate', 'description' => 'Awaiting other approvals']);
+
+        ApprovalType::create(['name' => 'service_role', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'extra_hour', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'registration', 'approvals_required' => 1]);
+        ApprovalType::create(['name' => 'service_request', 'approvals_required' => 1]);
     }
 
     private function updatePerformance($instructor_id, $role, $dept){

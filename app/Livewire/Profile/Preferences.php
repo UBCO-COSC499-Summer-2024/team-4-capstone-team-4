@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use App\Models\AuditLog;
+use App\Models\AuthMethod;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -17,14 +18,15 @@ class Preferences extends Component
     public $language;
     public $theme;
     public $auth_method;
+    public $auth_method_id;
     public $custom;
 
     protected $rules = [
-        'settings.auth_method' => 'required',
         'settings.theme' => 'required',
         'settings.timezone' => 'required',
         'settings.locale' => 'required',
         'settings.language' => 'required',
+        'settings.auth_method_id' => 'required|exists:auth_methods,id',
         // 'settings.custom' => 'json',
     ];
 
@@ -35,7 +37,8 @@ class Preferences extends Component
         $this->locale = $this->settings['locale'];
         $this->theme = $this->settings['theme'];
         $this->language = $this->settings['language'];
-        $this->auth_method = $this->settings['auth_method'];
+        $this->auth_method_id = $this->settings['auth_method_id'];
+        $this->auth_method = AuthMethod::find($this->auth_method_id);
         if ($this->settings['custom'] === null) {
             $this->custom = [];
         } else {
@@ -53,11 +56,12 @@ class Preferences extends Component
         $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
+            $oldValue = $this->settings->getOriginal();
             $this->settings['timezone'] = $this->timezone;
             $this->settings['theme'] = $this->theme;
             $this->settings['locale'] = $this->locale;
             $this->settings['language'] = $this->language;
-            $this->settings['auth_method'] = $this->auth_method;
+            $this->settings['auth_method_id'] = $this->auth_method->id;
             $this->settings['custom'] = json_encode($this->custom);
             $this->settings->save();
             $this->dispatch('show-toast', [
@@ -78,23 +82,10 @@ class Preferences extends Component
                 'action' => 'update',
                 'table_name' => 'settings',
                 'operation_type' => 'UPDATE',
-                'old_value' => json_encode($this->settings->getOriginal()),
+                'old_value' => json_encode($oldValue),
                 'new_value' => json_encode($this->settings->getAttributes()),
                 'description' => $audit_user . ' updated their preferences',
             ]);
-            echo "<script>
-                    const newSettings = {
-                        locale: '{$this->locale}',
-                        theme: '{$this->theme}'
-                    };
-                    localStorage.setItem('userSettings', JSON.stringify(newSettings));
-
-                    // Dispatch a custom event to force localStorage sync across tabs
-                    const event = new Event('storage');
-                    event.key = 'userSettings';
-                    event.newValue = JSON.stringify(newSettings);
-                    window.dispatchEvent(event);
-                </script>";
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'Error saving preferences: ' . $e->getMessage(),
@@ -104,6 +95,7 @@ class Preferences extends Component
                 'user_id' => (int) auth()->user()->id,
                 'user_alt' => $audit_user,
                 'action' => 'error',
+                'table_name' => 'settings',
                 'operation_type' => 'UPDATE',
                 'description' => 'Error updating preferences for ' . $audit_user . '\n'. $e->getMessage(),
             ]);

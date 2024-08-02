@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\UserRole;
+use Illuminate\Support\Facades\DB;
 
 class InstructorPerformance extends Model {
     use HasFactory;
@@ -99,10 +100,10 @@ class InstructorPerformance extends Model {
         })->pluck('course_section_id');
 
         foreach($courses as $course) {
-            $courseSectionData = CourseSection::select('enrolled', 'dropped', 'capacity')->where('id', $course)->first();
+            $courseSectionData = CourseSection::select('enroll_end', 'dropped', 'capacity')->where('id', $course)->first();
 
             if($courseSectionData) {
-                $enrolled = $courseSectionData->enrolled;
+                $enrolled = $courseSectionData->enroll_end;
                 $dropped = $courseSectionData->dropped;
                 $capacity = $courseSectionData->capacity;
 
@@ -144,7 +145,7 @@ class InstructorPerformance extends Model {
      * This function calculates the total performance score based on the instructor's
      * assigned roles and course sections taught during the specified year, and updates
      * the score value accordingly in the database. The score
-     * considers the annual service role hours, the number of course sections, and 
+     * considers the annual service role hours, the number of course sections, and
      * the difference between the enrolled and dropped averages.
      *
      * @param int $instructor_id The ID of the instructor.
@@ -182,9 +183,9 @@ class InstructorPerformance extends Model {
             else {
                 $enrol_efficiency = 0;
             }
-            
+
             $weighted_courses = (215 * $courseSections) + (530 * $doubleCourses);
-            
+
             $performance->update([
                 'score' => round((($roleHours + ($weighted_courses * $enrol_efficiency * $performance->sei_avg)) / 8760) * 1000),
             ]);
@@ -198,8 +199,8 @@ class InstructorPerformance extends Model {
         self::updateScore($instructor_id, $year);
     }
 
-    public function updateTotalHours($hours = [])
-    {
+    public function updateTotalHours($hours = []) {
+        $oldValue = json_encode($this->getAttributes());
         $totalHours = json_decode($this->total_hours, true);
         foreach ($hours as $month => $hour) {
             if ($month <= date('n')) {
@@ -209,10 +210,46 @@ class InstructorPerformance extends Model {
 
         $this->total_hours = json_encode($totalHours);
         $this->save();
+        $newValue = json_encode($this->getAttributes());
+        $this->audit('update hours', ['new_value' => $newValue, 'old_value' => $oldValue, 'operation_type' => 'UPDATE'], 'Hours updated in instructor performance data.');
+    }
+
+    public function removeHours($hours = []) {
+        $oldValue = json_encode($this->getAttributes());
+        $totalHours = json_decode($this->total_hours, true);
+        foreach ($hours as $month => $hour) {
+            if ($month <= date('n')) {
+                $totalHours[$month] -= $hour;
+            }
+        }
+
+        $this->total_hours = json_encode($totalHours);
+        $this->save();
+        $newValue = json_encode($this->getAttributes());
+        $this->audit('update hours', ['new_value' => $newValue, 'old_value' => $oldValue, 'operation_type' => 'UPDATE'], 'Hours removed from instructor performance data.');
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'instructor_performance',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 
     public function addHours($month, $hour) {
         try {
+            DB::beginTransaction();
             $totalHours = json_decode($this->total_hours, true);
             if (is_numeric($month)) {
                 $month = date('F', mktime(0, 0, 0, $month, 1));
@@ -220,24 +257,11 @@ class InstructorPerformance extends Model {
             $totalHours[$month] += $hour;
             $this->total_hours = json_encode($totalHours);
             $this->save();
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => 'System',
-                'action' => 'update',
-                'table_name' => 'instructor_performance',
-                'operation_type' => 'UPDATE',
-                'old_value' => json_encode($this->getOriginal()),
-                'new_value' => json_encode($this->getAttributes()),
-                'description' => 'System added hours to instructor performance data',
-            ]);
+            $this->audit('update hours', ['new_value' => json_encode($this->getAttributes()), 'operation_type' => 'UPDATE'], 'Hours added to instructor performance data.');
+            DB::commit();
         } catch (\Exception $e) {
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => 'System',
-                'action' => 'update',
-                'operation_type' => 'UPDATE',
-                'description' => 'Failed to add hours to instructor performance data.\n' . $e->getMessage(),
-            ]);
+            DB::rollBack();
+            $this->audit('error', ['operation_type' => 'UPDATE'], 'Failed to add hours to instructor performance data.\n' . $e->getMessage());
         }
     }
 }

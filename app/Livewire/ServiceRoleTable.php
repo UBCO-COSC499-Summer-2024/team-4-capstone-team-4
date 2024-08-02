@@ -83,6 +83,7 @@ class ServiceRoleTable extends Component
                 'November' => 0,
                 'December' => 0,
             ]),
+            'archived' => false,
             'updateMe' => false,
             'original_area_name' => '',
             'id' => -1,

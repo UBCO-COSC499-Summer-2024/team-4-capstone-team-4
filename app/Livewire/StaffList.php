@@ -12,6 +12,8 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Actions\Fortify\PasswordValidationRules;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 
 class StaffList extends Component
 {
@@ -22,7 +24,7 @@ class StaffList extends Component
     public $sortField = 'firstname'; // default 
     public $sortDirection = 'asc'; //default
     public $selectedAreas = [];
-    public $changedInput = [];
+    public $changedInput = []; //for target hours
     public $hours;
     public $staffCheckboxes = [];
     public $selectAll = false;
@@ -58,11 +60,52 @@ class StaffList extends Component
     public $prevDeptStaffs = [];
     public $prevAdmins = [];
 
-    protected $rules = [
+    public $firstnames = [];
+    public $lastnames = [];
+    public $emails = [];
+    public $changedFirstnames = [];
+    public $changedLastnames = [];
+    public $changedEmails = [];
+
+    /* protected $rules = [
         'hours' => 'required|numeric|min:0|max:2000',
         'staffCheckboxes' => 'required|array|min:1',
-    ];
+    ]; */
 
+    //rules for user data
+    public function rules(){
+        $rules = [];
+        foreach($this->firstnames as $userid => $name){
+            $rules["firstnames.{$userid}"] = 'required|string|max:255';
+            $rules["lastnames.{$userid}"] = 'required|string|max:255';
+            $rules["emails.{$userid}"] = ['required', 'email:rfc,strict', 'max:255', Rule::unique('users', 'email')->ignore($userid)];
+        }
+
+        return $rules;
+    }
+
+    //validation messages fro user data
+    public function messages(){
+        $messages = [];
+        foreach ($this->firstnames as $userid => $name) {
+            $messages["firstnames.{$userid}.required"] = "The first name is required.";
+            $messages["firstnames.{$userid}.string"] = "The first name must be a string.";
+            $messages["firstnames.{$userid}.max"] = "The first name may not be greater than 255 characters.";
+    
+            $messages["lastnames.{$userid}.required"] = "The last name is required.";
+            $messages["lastnames.{$userid}.string"] = "The last name must be a string.";
+            $messages["lastnames.{$userid}.max"] = "The last name may not be greater than 255 characters.";
+    
+            $messages["emails.{$userid}.required"] = "The email is required.";
+            $messages["emails.{$userid}.email"] = "The email must be a valid email address.";
+            $messages["emails.{$userid}.max"] = "The email may not be greater than 255 characters.";
+            $messages["emails.{$userid}.unique"] = "The email is already taken.";
+        }
+    
+        return $messages;
+    }
+
+    //For setting values on intial render
     public function mount(){
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
@@ -75,8 +118,23 @@ class StaffList extends Component
         $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
         $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
 
+        $users = User::all();
+        foreach($users as $user){
+            $this->firstnames[$user->id] = $user->firstname;
+            $this->lastnames[$user->id] = $user->lastname;
+            $this->emails[$user->id] = $user->email;
+        }
+
     }
 
+    /**
+     * Render the staff list view with filtered and sorted user data.
+     *
+     * This method builds a query to fetch users based on various filters such as search terms, selected areas, departments,
+     * roles, and status. It also handles sorting and pagination of the results.
+     *
+     * @return \Illuminate\View\View The rendered view of the staff list.
+     */
     public function render(){
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
@@ -86,9 +144,11 @@ class StaffList extends Component
 
         $usersQuery = User::query();
 
+        // Get the current authenticated user
         $user = Auth::user();
         $dept_id = null;
         
+        //join tables depending on user role
         if($user->hasRole('admin')){
             $usersQuery->leftJoin('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->leftJoin('teaches', 'user_roles.id', '=', 'teaches.instructor_id')
@@ -131,7 +191,7 @@ class StaffList extends Component
                              ->orWhereRaw("CONCAT(firstname, ' ', lastname) ILIKE ?", ["%{$query}%"]);
             });
         }        
-        //dd($this->selectedAreas);
+       
         //filter for selectedAreas if set
         if(!empty($areas)){
             $usersQuery->whereHas('teaches.courseSection.area', function ($queryBuilder) use ($areas){
@@ -158,7 +218,7 @@ class StaffList extends Component
             $usersQuery->whereIn('active', $status);
         }
         
-        // Sort according to sort fields
+        // Sort according to selected sort field
         $currentMonth = $this->selectedMonth; 
         switch ($this->sortField) {
             case 'dept':
@@ -223,7 +283,7 @@ class StaffList extends Component
                 break;
         }
         
-        //dd($users);
+        // Return the rendered view with data 
         return view('livewire.staff-list', [
             'users'=> $users, 
             'showModal'=> $this->showModal, 
@@ -237,6 +297,7 @@ class StaffList extends Component
         ]);
     }
 
+    //set the selected sort field
     public function sort($field){
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
@@ -270,13 +331,27 @@ class StaffList extends Component
         }
     }
 
-    //add target hours
+    /**
+     * Submit the target hours for selected staff members.
+     *
+     * This method validates the input, updates the target hours for each selected instructor,
+     * and handles the case where performance records need to be created.
+     */
     public function submit(){
-        $this->validate();
-
+        // Validate the form input
         $hours = $this->hours;
         $staff_checkboxes = $this->staffCheckboxes;
+        $input = [
+            'hours' => $hours,
+            'staffCheckboxes' => $staff_checkboxes,
+        ];
+        Validator::make($input,[
+            'hours' => 'required|numeric|min:0|max:2000',
+            'staffCheckboxes' => 'required|array|min:1',
+        ])->validate();
 
+
+        //Update target hours for each selected instructor
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
             $instructor = $user->roles->where('role', 'instructor')->first();
@@ -284,6 +359,7 @@ class StaffList extends Component
             if ($performance) {
                 $performance->update(['target_hours' => $hours]);
             } else {
+                //Create performance if doesn't exist
                 InstructorPerformance::factory()->create([
                     'score' => 0,
                     'total_hours' => json_encode([
@@ -310,11 +386,13 @@ class StaffList extends Component
             }
         }
 
+        //Reset
         $this->selectAll = false;
         $this->staffCheckboxes = [];
         $this->hours = '';
-        //session()->flash('success', 'Target hours added successfully.');
         $this->showModal = false;
+
+        // Show success modal
         $this->showSuccessModal = true;
         session()->flash('showSuccessModal', $this->showSuccessModal);   
     }
@@ -323,14 +401,19 @@ class StaffList extends Component
         $this->showSuccessModal = false;
     }
 
+    //Keeps track of edited target hours in edit mode
     public function update($email, $hours){
         $this->changedInput[$email] = $hours;
     }
 
-    //save edited target hours
-    public function save()
-    {   //validate input parameters
-        //dd($this->changedInput);
+    /**
+     * Save the edited target hours for staff members.
+     *
+     * This method validates the input, updates the target hours for only the staff members that have been changed,
+     * and handles the case where performance records need to be created.
+     */
+    public function save(){   
+        //Validate input parameters
         foreach ($this->changedInput as $email => $hours) {
             if(!empty($hours)){
                 if (!is_numeric($hours) || $hours < 0) {
@@ -351,7 +434,7 @@ class StaffList extends Component
                 $this->changedInput[$email] = null;
             }
         }
-        //update database with target hours
+        //Update database with target hours
         foreach ($this->changedInput as $email => $hours) {
             $user = User::where('email', $email)->first();
             if ($user) {
@@ -360,6 +443,7 @@ class StaffList extends Component
                 if ($performance) {
                     $performance->update(['target_hours' => $hours]);
                 } else {
+                    //Create performance if doesn't exist
                     InstructorPerformance::factory()->create([
                         'score' => 0,
                         'total_hours' => json_encode([
@@ -386,9 +470,13 @@ class StaffList extends Component
                 }
             }
         }
+
+        //Reset
         $this->selectAll = false;
         $this->staffCheckboxes = [];
         $this->editMode = false;
+
+        //Show success modal
         $this->showSuccessModal = true;
         session()->flash('showSuccessModal', $this->showSuccessModal); 
     }
@@ -397,9 +485,14 @@ class StaffList extends Component
         $this->editMode = false;
     }
 
-    //add new user
+    /**
+     * Add a new user with the specified roles.
+     *
+     * This method handles the creation of a new user, including validation of the input data,
+     * creation of the user record and assignment of roles.
+     */
     public function addUser(){
-        
+        //Fetch inputted data
         $data = [
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
@@ -409,6 +502,7 @@ class StaffList extends Component
             'user_roles' => $this->user_roles,
         ];
     
+        //Validate inputted data
         Validator::make($data, [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -425,7 +519,7 @@ class StaffList extends Component
             'password' => Hash::make($this->password),
         ]);
 
-        // Create the user role(s)
+        // Assign the selected roles to the new user
         foreach($this->user_roles as $role){
             UserRole::create([
                 'user_id' => $user->id,
@@ -442,6 +536,7 @@ class StaffList extends Component
         $this->password_confirmation = '';
         $this->user_roles = [];
 
+        //Send success toast
         $this->dispatch('show-toast', [
             'message' => 'New user ' .$this->firstname. ' ' .$this->lastname. ' created successfully',
             'type' => 'success'
@@ -449,13 +544,39 @@ class StaffList extends Component
         
     }
 
-    //bulk edit
+     /**
+     * Bulk edit
+     *
+     * This method allows for mutiple users accounts to be edited, specifically their enabled status and user roles.
+     */
     public function edit(){
         // Determine changes for enabled status
         $addedUsers = array_diff($this->enabledUsers, $this->prevEnabledUsers);
         $removedUsers = array_diff($this->prevEnabledUsers, $this->enabledUsers);
         $enabledCount = 0;
         $disabledCount = 0;
+
+        //Update name and email if changed
+        $this->validate();
+
+        foreach($this->changedFirstnames as $userid => $firstname){
+            $user = User::find($userid);
+            $user->update(['firstname' => $firstname]);
+        }
+        foreach($this->changedLastnames as $userid => $lastname){
+            $user = User::find($userid);
+            $user->update(['lastname' => $lastname]);
+        }
+        foreach($this->changedEmails as $userid => $email){
+            $user = User::find($userid);
+            $user->update(['email' => $email]);
+        }
+
+        $changedFirstnames = array_keys($this->changedFirstnames);
+        $changedLastnames = array_keys($this->changedLastnames);
+        $changedEmails = array_keys($this->changedEmails);
+        $editedCount = count(array_unique(array_merge($changedFirstnames, $changedLastnames, $changedEmails)));
+
         // Update status
         foreach($addedUsers as $userid){
             $user = User::find($userid);
@@ -483,15 +604,44 @@ class StaffList extends Component
         $this->prevDeptStaffs = $this->deptStaffs;
         $this->prevAdmins = $this->admins;
 
-        //reset and send toast
-        $message = sprintf(
-            "%d users enabled, %d disabled.\n%d instructors added, %d removed.\n%d department heads added, %d removed.\n%d department staff added, %d removed.\n%d admins added, %d removed.",
-            $enabledCount, $disabledCount,
-            $instructorCounts[0], $instructorCounts[1],
-            $headCounts[0], $headCounts[1],
-            $staffCounts[0], $staffCounts[1],
-            $adminCounts[0], $adminCounts[1]
-        );
+        //Reset and send toast
+        $messageParts = [];
+
+        if ($editedCount > 0) {
+            $messageParts[] = sprintf("%d user(s) information updated", $editedCount);
+        }
+        if ($enabledCount > 0) {
+            $messageParts[] = sprintf("%d user(s) enabled", $enabledCount);
+        }
+        if ($disabledCount > 0) {
+            $messageParts[] = sprintf("%d user(s) disabled", $disabledCount);
+        }
+        if ($instructorCounts[0] > 0 ) {
+            $messageParts[] = sprintf("%d instructor(s) added", $instructorCounts[0]);
+        }
+        if ($instructorCounts[1] > 0 ) {
+            $messageParts[] = sprintf("%d instructor(s) removed", $instructorCounts[1]);
+        }
+        if ($headCounts[0] > 0) {
+            $messageParts[] = sprintf("%d department head(s) added", $headCounts[0]);
+        }
+        if ($headCounts[1] > 0) {
+            $messageParts[] = sprintf("%d department head(s) removed", $headCounts[1]);
+        }
+        if ($staffCounts[0] > 0) {
+            $messageParts[] = sprintf("%d department staff(s) added", $staffCounts[0]);
+        }
+        if ($staffCounts[1] > 0) {
+            $messageParts[] = sprintf("%d department staff(s) removed", $staffCounts[1]);
+        }
+        if ($adminCounts[0] > 0) {
+            $messageParts[] = sprintf("%d admin(s) added", $adminCounts[0]);
+        }
+        if ($adminCounts[1] > 0) {
+            $messageParts[] = sprintf("%d admin(s) removed", $adminCounts[1]);
+        }
+
+        $message = implode("\n", $messageParts);
 
         $this->editMode = false;
         $this->dispatch('show-toast', [
@@ -500,12 +650,25 @@ class StaffList extends Component
         ]);
     }
 
+    /**
+     * Update user roles by adding or removing roles based on the current and previous role assignments.
+     *
+     * This method compares the current roles with the previous roles and updates the UserRole model accordingly.
+     * It keeps track of how many roles were added and removed.
+     *
+     * @param string $role The role to update.
+     * @param array $currentRoles An array of user IDs representing the current role assignments.
+     * @param array $previousRoles An array of user IDs representing the previous role assignments.
+     * @return array An array containing the count of added and removed roles.
+     */
     private function updateRole($role, $currentRoles, $previousRoles){
+        // Calculate roles that have been added and removed
         $addedRoles = array_diff($currentRoles, $previousRoles);
         $removedRoles = array_diff($previousRoles, $currentRoles);
         $addCount = 0;
         $removeCount = 0;
 
+        // Iterate over the added roles and create new UserRole entries if they don't already exist
         foreach($addedRoles as $userid){
             $user_roles = UserRole::where('user_id', $userid)->pluck('role');
             if (!$user_roles->contains($role)) {
@@ -518,6 +681,7 @@ class StaffList extends Component
             }
         }
 
+        // Iterate over the removed roles and delete the corresponding UserRole entries if they exist
         foreach($removedRoles as $userid){
             $user_roles = UserRole::where('user_id', $userid)->pluck('role');
             if ($user_roles->contains($role)) {
@@ -526,66 +690,34 @@ class StaffList extends Component
             $removeCount++;
         }
 
+        // Return the count of added and removed roles
         return [$addCount, $removeCount];
-    }
-
-    //single edit
-    public function editStaff($userid) {
-        $user = User::find($userid);
-        $fullname = $user->firstname . ' ' . $user->lastname;
-        $user_roles = UserRole::where('user_id', $user->id)->pluck('role');
-        
-        // Update status
-        $user->update(['active' => in_array($userid, $this->enabledUsers)]);
-    
-        // Roles to check
-        $roles = [
-            'instructor' => $this->instructors,
-            'dept_head' => $this->deptHeads,
-            'dept_staff' => $this->deptStaffs,
-            'admin' => $this->admins
-        ];
-    
-        // Update roles
-        foreach ($roles as $role => $roleArray) {
-            $this->updateUserRole($user_roles, $userid, $role, $roleArray);
-        }
-    
-        $this->editUserId = null;
-        $this->dispatch('show-toast', [
-            'message' => 'User ' . $fullname . ' updated!',
-            'type' => 'success'
-        ]);
-    }
-    
-    private function updateUserRole($user_roles, $userid, $role, $roleArray) {
-        if (in_array($userid, $roleArray)) {
-            if (!$user_roles->contains($role)) {
-                UserRole::create([
-                    'user_id' => $userid,
-                    'department_id' => null,
-                    'role' => $role,
-                ]);
-            }
-        } else {
-            if ($user_roles->contains($role)) {
-                UserRole::where('user_id', $userid)->where('role', $role)->delete();
-            }
-        }
     }
     
     public function cancelStaff(){
         $this->editUserId = null;
     }
 
-    //single delete
+    // Shows delete confirmation modal and sets the action to be done if confirmed
     public function setDelete($userid){
         $this->confirmDelete = true;
         $this->confirmAction = 'deleteStaff('. $userid . ')';
     }
+
+    /**
+     * Delete a staff member.
+     *
+     * This method deletes a user from the database and handles any exceptions
+     * that may occur during the deletion process.
+     *
+     * @param int $userid The ID of the user to delete.
+     */
     public function deleteStaff($userid){
+        //Retrieve user
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;
+
+        //Attempt to detelet user
         try{
             $user->delete();
         }catch(Exception $e){
@@ -594,6 +726,8 @@ class StaffList extends Component
                 'type' => 'error'
             ]); 
         }
+
+        //Reset and send toast message
         $this->confirmDelete = false;
 
         $this->dispatch('show-toast', [
@@ -602,8 +736,8 @@ class StaffList extends Component
         ]);  
     }
 
+    // Checks if any users have been selected before processing delete action
     public function check(){
-        //$this->confirmDelete = true;
         if(count($this->staffCheckboxes) > 0){
             $this->confirmDelete = true;
             $this->confirmAction = 'delete';
@@ -615,12 +749,20 @@ class StaffList extends Component
         }
     }
 
-    // bulk delete
+    /**
+     * Bulk delete
+     *
+     * This method deletes multiple users from the database and handles any exceptions
+     * that may occur during the deletion process.
+     *
+     */
     public function delete(){
+        //Retrieve users
         $staff_checkboxes = $this->staffCheckboxes;
 
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
+            //Attempt to delete the users
             try{
                 $user->delete();
             }catch(Exception $e){
@@ -631,6 +773,7 @@ class StaffList extends Component
             }
         }
 
+        //Reset and show toast message
         $this->confirmDelete = false;
         $this->editMode = false;
         $this->staffCheckboxes = [];
@@ -639,5 +782,48 @@ class StaffList extends Component
             'message' => count($staff_checkboxes). ' user(s) deleted!',
             'type' => 'success'
         ]); 
+    }
+
+    /**
+     * Send a password reset link to the user's email.
+     *
+     * This method sends a password reset link to the user's email,
+     * and displays a toast notification indicating success or failure.
+     *
+     * @param int $userid The ID of the user to send the reset link to.
+     */
+    public function sendReset($userid){
+        $user = User::findOrFail($userid);
+
+        // Pass the credentials array with the key 'email'
+        $status = Password::sendResetLink(
+            ['email' => $user->email]
+        );
+
+        //Send toast message for succes or failure
+        if ($status === Password::RESET_LINK_SENT){
+            $this->dispatch('show-toast', [
+                'message' => 'Reset link sent',
+                'type' => 'success'
+            ]);
+        }else{
+            $this->dispatch('show-toast', [
+                'message' => 'Falied to send reset link',
+                'type' => 'error'
+            ]);
+        }
+        
+    }
+
+    public function updateFirstname($userid, $firstname){
+        $this->changedFirstnames[$userid] = $firstname;
+    }
+
+    public function updateLastname($userid, $lastname){
+        $this->changedLastnames[$userid] = $lastname;
+    }
+
+    public function updateEmail($userid, $email){
+        $this->changedEmails[$userid] = $email;
     }
 }

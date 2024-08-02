@@ -18,17 +18,9 @@
                 </div>
                 <x-input-error for="password" class="mt-2" />
             </x-form-item>
-            {{-- <x-form-item>
-                <x-form-icon icon="key"/>
-                <x-form-input type="text" id="access_code" name="access_code" placeholder="Access Code..."/>
-            </x-form-item> --}}
-            {{-- @php
-            $userRoles = auth()->user()->roles; 
-            @endphp      
-            @if ($userRoles->isEmpty())
-                <li style="color:red;">No valid role assigned to your account.</li>
-            @endif --}}
-            <x-validation-errors/>
+            <x-form-item class="flex flex-col">
+                <x-validation-errors/>
+            </x-form-item>
 
             <x-form-item>
                 <span class="input-label"><x-link href="/forgot-password" title="{{ __('Forgot Password') }}" /></span>
