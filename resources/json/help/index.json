@@ -38,5 +38,10 @@
         "title": "Leaderboard",
         "url": "leaderboard",
         "icon": "leaderboard"
+    },
+    {
+        "title": "ImportData",
+        "url": "import-data",
+        "icon": "upload_file"
     }
 ]
