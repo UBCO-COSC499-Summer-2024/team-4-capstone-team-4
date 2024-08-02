@@ -184,6 +184,16 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
+        Schema::create('auth_methods', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('provider');
+            $table->string('provider_id');
+            $table->string('token')->nullable();
+            $table->string('avatar')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
@@ -193,16 +203,6 @@ return new class extends Migration
             $table->string('locale')->nullable()->default('en');
             $table->string('language')->nullable()->default('en');
             $table->jsonb('custom')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('auth_methods', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('provider');
-            $table->string('provider_id');
-            $table->string('token')->nullable();
-            $table->string('avatar')->nullable();
             $table->timestamps();
         });
 
