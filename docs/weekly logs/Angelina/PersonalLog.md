@@ -1,5 +1,41 @@
 # Angelina's Personal Log 
 
+## Wednesday (8/1 - 8/2)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log81-82.png)
+
+### Current Tasks 
+ * #1: Debug Score Method
+ * #2: Add Year Filter to Leaderboard
+ * #3: Debug Report Rendering
+ * #4: Change Permissions such that Instructors May Access their Reports
+ * #5: Begin Indivual Report
+ * #6: Distribute Issues from Test-O-Rama
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Debug Score Method        | Completed   |
+| Year Filter Leaderboard   | Completed   |
+| Debug Report Rendering    | Completed   |
+| Change Report Permissions | Completed   |
+| Begin Individual Report   | In Progress |
+| Distribute Test Issues    | Completed   |
+
+### Cycle Goal Review 
+Distributed final tasks among group members from client feedback and feature list. Added score method to instructor performance model and began debugging it as it is currently overwriting the other performance data. Correction fr this issue is still in progress. Added an area filter to the department dashboard and modified the chart controller and front end to accomodate data differences. Fixed the leaderboard query to account for service roles and extra hours.
+
+### Next Cycle Goals
+ * Add more links and messages to Dashboard
+ * Testing, Testing, Testing
+ * Continue Individual Report
+ * Add Filler to Dashboards with Blank Values
+ * Add Dropdown to Performance Dashboard
+
+---
+
 ## Friday (7/26 - 7/31)
 
 ### Timesheet
@@ -13,6 +49,8 @@ Clockify report
  * #4: Correct Leaderboard Query
  * #5: Backend Dashboard Area Filter
  * #6: Front End Dashboard Area Filter
+ * #7: Add Year Filter to Leaderboard
+ * #8: Prepare for Test-O-Rama
 
 ### Progress Update 
 | **TASK/ISSUE #**          | **STATUS**  |
@@ -23,9 +61,11 @@ Clockify report
 | Correct Leaderboard Query | Completed   |
 | Area Filter Back End      | Completed   |
 | Area Filter Front End     | Completed   |
+| Year Filter Leaderboard   | In-Progress |
+| Test-O-Rama Preparation   | Completed   |
 
 ### Cycle Goal Review 
-Distributed final tasks among group members from client feedback and feature list. Added score method to instructor performance model and began debugging it as it is currently overwriting the other performance data. Correction fr this issue is still in progress. Added an area filter to the department dashboard and modified the chart controller and front end to accomodate data differences. Fixed the leaderboard query to account for service roles and extra hours.
+Distributed final tasks among group members from client feedback and feature list. Added score method to instructor performance model and began debugging it as it is currently overwriting the other performance data. Correction fr this issue is still in progress. Added an area filter to the department dashboard and modified the chart controller and front end to accomodate data differences. Fixed the leaderboard query to account for service roles and extra hours. Began adding year filter to leaderboard. Prepare for Test-O-Rama.
 
 ### Next Cycle Goals
  * Cotinue debugging score calculation method
