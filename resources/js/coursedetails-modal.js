@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (assignTAButton) {
         assignTAButton.addEventListener('click', openAssignModal);
     } else {
-        console.error('assignTAButton is null');
+        // console.error('assignTAButton is null');
     }
 
     if (closeModalButtons.length > 0) {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', closeAssignModal);
         });
     } else {
-        console.error('closeModalButtons are null or empty');
+        // console.error('closeModalButtons are null or empty');
     }
 
     if (instructorSelect) {
@@ -92,9 +92,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     } else {
-        console.error('instructorSelect is null');
+        // console.error('instructorSelect is null');
     }
-    
+
+    if (!assignTAForm) {
+        // console.error('assignTAForm is null');
+        return;
+    }
+
     assignTAForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(assignTAForm);
@@ -115,10 +120,16 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error submitting form:', error));
     });
 
-    okButton.addEventListener('click', function() {
-        closeConfirmationModal();
-        location.reload();
-    });
+    if (okButton) {
+        okButton.addEventListener('click', function() {
+            closeConfirmationModal();
+            location.reload();
+        });
+    }
+
+    if (!assignMoreButton) {
+        return;
+    }
 
     assignMoreButton.addEventListener('click', function() {
         closeConfirmationModal();

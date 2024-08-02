@@ -31,7 +31,8 @@ class UploadFileFormWorkday extends Component
                 'term' => $finalCSV['Term'] ?? '',
                 'year' => $finalCSV['Year'] ?? '',
                 'room' => $finalCSV['Room'] ?? '',
-                'time' => $finalCSV['Time'] ?? '',
+                'time_start' => $finalCSV['Time Start'] ?? '',
+                'time_end' => $finalCSV['Time End'] ?? '',
                 'enroll_start' => $finalCSV['Enrolled Start'] ?? '',
                 'enroll_end' => $finalCSV['Enrolled End'] ?? '',
                 'capacity' => $finalCSV['Capacity'] ?? '',
@@ -56,7 +57,8 @@ class UploadFileFormWorkday extends Component
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
             $rules["rows.{$index}.room"] = 'required|string';
-            $rules["rows.{$index}.time"] = 'required|string';
+            $rules["rows.{$index}.time_start"] = 'required|string';
+            $rules["rows.{$index}.time_end"] = 'required|string';
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
@@ -76,7 +78,8 @@ class UploadFileFormWorkday extends Component
                 $messages["rows.{$index}.term.required"] = 'Please select a term';
                 $messages["rows.{$index}.year.required"] = 'Please enter a year';
                 $messages["rows.{$index}.room.required"] = 'Please enter a room';
-                $messages["rows.{$index}.time.required"] = 'Please enter a time (military)';
+                $messages["rows.{$index}.time_start.required"] = 'Please enter a time (military)';
+                $messages["rows.{$index}.time_end.required"] = 'Please enter a time (military)';
                 $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
@@ -246,7 +249,8 @@ class UploadFileFormWorkday extends Component
                     'term' => $row['term'], 
                     'year' => $row['year'], 
                     'room' => $row['room'], 
-                    'time' => $row['time'], 
+                    'time_start' => $row['time_start'], 
+                    'time_end' => $row['time_end'], 
                     'enroll_start' => $row['enroll_start'], 
                     'enroll_end' => $row['enroll_end'], 
                     'dropped' => $dropped,

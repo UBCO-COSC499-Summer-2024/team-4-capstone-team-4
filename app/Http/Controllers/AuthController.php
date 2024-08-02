@@ -44,7 +44,7 @@ class AuthController extends Controller
             $name = explode(' ', $socialiteUser->getName() ?? '');
             $firstname = $name[0] ?? '';
             $lastname = $name[1] ?? '';
-        
+
             if (!$user) {
                 $user = User::create([
                     'firstname' => $firstname,
@@ -55,14 +55,22 @@ class AuthController extends Controller
                     'profile_photo_path' => $socialiteUser->getAvatar() ?? null,
                 ]);
 
-                AuthMethod::create([
+                $authmethods = AuthMethod::create([
                     'user_id' => $user->id,
                     'provider' => $provider,
                     'provider_id' => $socialiteUser->getId(),
                     'token' => $socialiteUser->token,
                     'avatar' => $socialiteUser->getAvatar() ?? null,
                 ]);
-                
+
+                $user->settings()->create([
+                    'theme' => 'light',
+                    'locale' => 'en',
+                    'language' => 'en',
+                    'timezone' => 'UTC',
+                    'auth_method_id' => $authmethods->id,
+                ]);
+
             } else {
                 AuthMethod::updateOrCreate([
                     'user_id' => $user->id,
@@ -78,8 +86,14 @@ class AuthController extends Controller
                         'profile_photo_path' => $socialiteUser->getAvatar() ?? null,
                     ]);
                 }
+
+                $user->settings()->updateOrCreate([
+                    'user_id' => $user->id,
+                ], [
+                    'auth_method_id' => $user->authmethods->where('provider', $provider)->first()->id,
+                ]);
             }
-        
+
             Auth::login($user, true);
             return redirect()->intended('/dashboard');
         } catch(\Exception $e) {

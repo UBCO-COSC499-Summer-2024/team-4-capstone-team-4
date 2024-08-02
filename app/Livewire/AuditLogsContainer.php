@@ -46,8 +46,6 @@ class AuditLogsContainer extends Component {
             }
         }
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
-        // dd($this->selectedFilter);
-        Log::info($this->selectedFilter);
     }
 
     public function clearFilters() {

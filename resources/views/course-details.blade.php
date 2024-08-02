@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="z-0 p-4 content">
+    <div class="z-0 p-4 content course-details">
         <h1 class="mb-4 text-5xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
         <div class="flex items-center justify-between mb-4">
             <div class="flex-1 mr-4">
                 <x-coursedetails-tabs />
-                <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="block p-2 text-sm text-gray-900 rounded-lg search-bar w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
             </div>
             <x-coursedetails-exportButton />
             @if($user->id < 4)
@@ -31,7 +31,7 @@
             </div>
             @endif
         </div>
-        
+
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
                 <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">

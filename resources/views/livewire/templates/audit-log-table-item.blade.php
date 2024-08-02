@@ -9,7 +9,7 @@
             {{ $auditLog->action }}
         </div>
     </td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="description">{{ $auditLog->description }}</td>
+    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="description" data-tippy-content="{{$auditLog->description}}">{{ $auditLog->description }}</td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="schema">
         <div class="w-fit m-auto !text-center">
             {{ $auditLog->table_name }}
