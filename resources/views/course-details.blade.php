@@ -5,8 +5,8 @@
             @if($user->id < 4)
                 <div class="flex items-center space-x-2">
                     <x-create-new-button id="createNewButton" />
+                    <x-assign-button id="assignButton" />
                     @if(in_array($userRole, ['admin', 'dept_head', 'dept_staff']))
-                        <x-assign-button id="assignButton" />
                         <x-edit-button id="editButton" />
                     @endif
                     <x-save-button id="saveButton" style="display: none;" />
