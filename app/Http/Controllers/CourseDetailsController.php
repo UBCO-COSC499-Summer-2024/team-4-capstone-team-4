@@ -140,8 +140,7 @@ public function getCoursesByInstructor($instructorId)
     return response()->json($courses);
 }
 
-public function assignTA(Request $request)
-{
+public function assignTA(Request $request){
     $taId = $request->input('ta_id');
     $instructorId = $request->input('instructor_id');
     $courseId = $request->input('course_id');
@@ -171,8 +170,7 @@ public function assignTA(Request $request)
     return response()->json($tas);
 }
 
-public function createTA(Request $request)
-{
+public function createTA(Request $request){
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'rating' => 'required|numeric|min:0|max:5',

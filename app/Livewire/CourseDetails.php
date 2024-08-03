@@ -110,28 +110,12 @@ class CourseDetails extends Component
         });
 
         $areas = Area::all();
-
-        $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
-            ->get() // Get all records
-            ->map(function ($ta) {
-                return (object)[
-                    'name' => $ta->name,
-                    'email' => $ta->email,
-                    'rating' => $ta->rating,
-                    'taCourses' => $ta->courseSections->map(function ($course) {
-                        return $course->prefix . ' ' . $course->number . ' ' . $course->section;
-                    })->implode(', '),
-                    'instructorName' => $ta->courseSections->map(function ($course) {
-                        return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
-                    })->implode(', ')
-                ];
-            });
     
-        $sortField = 'courseName';
-        $sortDirection = 'asc';
+        $sortField = $this->sortField;
+        $sortDirection = $this->sortDirection;
         $courses = CourseSection::all();
     
-        return view('livewire.course-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas', 'courses'));
+        return view('livewire.course-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'courses'));
     }
 
     private function calculateAverageRating($questionsJson){
@@ -145,4 +129,32 @@ class CourseDetails extends Component
         }
         return 0;
     }
+
+    public function exportPDF(){
+        // Your PDF export logic here
+        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
+        $html = view('exports.pdf', compact('courseSections'))->render();
+
+        // Generate PDF
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+        return response($mpdf->Output('courses.pdf', 'S'))->header('Content-Type', 'application/pdf');
+    }
+
+    public function exportCSV(){
+        // Your CSV export logic here
+        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
+
+        // Convert data to CSV format
+        $csvData = "Course Name,Area,Instructor,Enrolled,Dropped,Capacity,SEI Data\n";
+        foreach ($courseSections as $section) {
+            $csvData .= "{$section->name},{$section->area->name},{$section->teaches->instructor->user->name},{$section->enrolled},{$section->dropped},{$section->capacity},{$section->averageRating}\n";
+        }
+
+        $csvFileName = 'courses.csv';
+        return response($csvData)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', "attachment; filename={$csvFileName}");
+    }
+
 }

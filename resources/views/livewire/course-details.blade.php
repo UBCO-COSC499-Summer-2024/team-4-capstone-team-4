@@ -7,7 +7,7 @@
 @endphp
 
 <div class="relative overflow-x-auto sm:rounded-lg">
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center mb-2">
         <div>
             <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
         </div>
