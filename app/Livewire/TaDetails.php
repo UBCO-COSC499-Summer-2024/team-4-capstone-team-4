@@ -40,7 +40,7 @@ class TaDetails extends Component
 
         $areas = Area::all();
 
-        $tasQuery = TeachingAssistant::with(['area', 'courseSections.teaches.instructor.user'])
+        $tasQuery = TeachingAssistant::with(['courseSections.area', 'courseSections.teaches.instructor.user'])
         ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
             $queryBuilder->whereHas('teaches', function ($query) use ($user) {
                 $query->where('instructor_id', $user->roles->where('role', 'instructor')->first()->id);
@@ -52,7 +52,9 @@ class TaDetails extends Component
             });
         })
         ->when($areaId, function ($queryBuilder) use ($areaId) {
-            $queryBuilder->where('area_id', $areaId);
+            $queryBuilder->whereHas('courseSections', function ($query) use ($areaId) {
+                $query->where('area_id', $areaId);
+            });
         });
 
         //pagination

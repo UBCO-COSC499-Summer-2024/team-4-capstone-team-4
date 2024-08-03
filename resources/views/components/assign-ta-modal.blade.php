@@ -7,7 +7,7 @@
                 <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">Assign TA to a Course</h3>
             </div>
             <div class="bg-white p-6">
-                <form id="assignTAForm" method="POST" action="{{ route('assignTA') }}">
+                <form id="assignTAForm">
                     @csrf
                     <div id="taAssignContainer">
                         <div class="taAssignBlock flex space-x-4">

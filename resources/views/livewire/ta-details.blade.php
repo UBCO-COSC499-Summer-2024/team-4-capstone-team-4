@@ -74,5 +74,6 @@
             </div>
         </form>
     </div>
+    <x-create-ta-modal />
 </div>
 

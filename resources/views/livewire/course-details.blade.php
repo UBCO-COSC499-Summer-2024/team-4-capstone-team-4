@@ -31,8 +31,6 @@
 
                 <x-save-button id="saveButton" style="display: none;" />
                 <x-cancel-button id="cancelButton" style="display: none;" />
-                <x-create-ta-button id="createNewTAButton" style="display: none;" />
-                <x-assign-ta-button id="assignTAButton" style="display: none;" />
             </div>
         @endif
     </div>

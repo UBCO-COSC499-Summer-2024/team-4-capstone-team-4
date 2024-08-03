@@ -8,7 +8,7 @@
                 <button onclick="closeSeiModal()" class="text-white font-bold">&times;</button>
             </div>
             <div class="bg-white p-6">
-                <form id="seiEditForm" method="POST" action="{{ route('sei.manage') }}">
+                <form id="seiEditForm">
                     @csrf
                     <div id="seiDataRows">
                         <div class="grid grid-cols-6 gap-4 mb-4">

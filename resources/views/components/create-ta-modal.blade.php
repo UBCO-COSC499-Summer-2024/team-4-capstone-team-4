@@ -7,7 +7,7 @@
                 <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">Create New TA</h3>
             </div>
             <div class="bg-white p-6">
-                <form id="createTAForm" method="POST" action="{{ route('createTA') }}">
+                <form id="createTAForm">
                     @csrf
                     <div id="taFieldsContainer">
                         <div class="taFieldsBlock flex space-x-4 mb-4">
