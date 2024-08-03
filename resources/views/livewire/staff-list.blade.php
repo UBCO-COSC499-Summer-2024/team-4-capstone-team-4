@@ -28,7 +28,8 @@
                     <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
                 @else
                     <x-staff-filter />
-                    <x-staff-dropdown :selectedYear="$selectedYear" :selectedMonth="$selectedMonth"/>
+                    <x-staff-button id="add-target-hours" wire:click="showTargetModal">Add Targets</x-staff-button>
+                    <x-staff-button id="edit-target-hours" wire:click="$set('editMode', true)">Edit Targets</x-staff-button>
                 @endif
             @endif
         </div>
