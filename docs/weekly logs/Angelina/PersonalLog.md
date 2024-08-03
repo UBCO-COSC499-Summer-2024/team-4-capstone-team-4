@@ -4,7 +4,7 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log82-87.jpeg)
+![Clockify report](./clockifylogs/log82-87.png)
 
 ### Current Tasks 
  * #1: Distribute Issues from Test-O-Rama
@@ -37,7 +37,7 @@ Distributed final tasks among group members from client feedback and feature lis
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log731-81.jpeg)
+![Clockify report](./clockifylogs/log731-81.jpg)
 
 ### Current Tasks 
  * #1: Debug Score Method
@@ -81,7 +81,7 @@ Debugged score method it as it was overwriting the other performance data. Found
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log726-730.png)
+![Clockify report](./clockifylogs/log726-730.jpg)
 
 ### Current Tasks 
  * #2: Add Score Method to Performance Model
