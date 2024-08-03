@@ -143,7 +143,7 @@ Route::middleware([
     Route::get('/dashboard/{switch}', [ChartController::class, 'showChart'])->name('switch-dashboard');
 });
 
-Route::middleware([
+/* Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
@@ -158,7 +158,7 @@ Route::middleware([
     Route::match(['get', 'post'], '/sei/{courseId?}', [CourseDetailsController::class, 'manageSeiData'])->name('sei.manage');
     Route::post('/assign-ta', [CourseDetailsController::class, 'assignTA'])->name('assignTA');
 
-});
+}); */
 
     Route::get('/api/teaching-assistants', [CourseDetailsController::class, 'getTeachingAssistants']);
     Route::get('/api/instructors', [CourseDetailsController::class, 'getInstructors']);
@@ -175,4 +175,15 @@ Route::middleware([
     Route::get('/dept-report', function () {
         return view('dept-report');
     })->name('dept-report');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    ApplyUserSettings::class,
+])->group(function () {
+    Route::get('/courses', function () {
+        return view('courses');
+    })->name('courses');
 });

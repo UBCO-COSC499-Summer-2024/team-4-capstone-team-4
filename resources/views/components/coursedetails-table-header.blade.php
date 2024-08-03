@@ -1,4 +1,4 @@
-@props(['sortField', 'sortDirection', 'userRole'])
+@props(['sortField', 'sortDirection'])
 
 <thead class="sticky-header">
     <tr class="svcr-list-header">
@@ -25,9 +25,9 @@
             <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
                     <span>{{ $label }}</span>
-                    @if($field === 'averageRating' && !in_array($userRole, ['instructor']))
+                    {{-- @if($field === 'averageRating' && !in_array($userRole, ['instructor']))
                         <x-sei-edit-button :userRole="$userRole" />
-                    @endif
+                    @endif --}}
                     <div class="ml-1 sort-icons">
                         <span class="material-symbols-outlined sort-icon {{ $sortField === $field && $sortDirection === 'asc' ? 'active' : '' }}" data-field="{{ $field }}" data-direction="{{ $sortDirection }}">{{ $sortDirection === 'asc' ? 'arrow_drop_up' : 'arrow_drop_down' }}</span>
                     </div>
