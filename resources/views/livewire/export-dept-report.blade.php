@@ -83,6 +83,8 @@
                                     <th class="report-head-cell">Course Section</th>
                                     <th class="report-head-cell">Term</th>
                                     <th class="report-head-cell">Year</th>
+                                    <th class="report-head-cell">Room</th>
+                                    <th class="report-head-cell">Times</th>
                                     <th class="report-head-cell">Instructor</th>
                                     <th class="report-head-cell">Enrolled (%)</th>
                                     <th class="report-head-cell">Dropped (%)</th>
@@ -100,6 +102,8 @@
                                         <td class="report-cell">{{ $course->prefix }}{{ $course->number }}  {{ $course->section }}</td>
                                         <td class="report-cell">Term {{ $course->term }}</td>
                                         <td class="report-cell">{{ $course->year }}</td>
+                                        <td class="report-cell">{{ $course->room }}</td>
+                                        <td class="report-cell">{{ $course->time_start }} - {{ $course->time_end }}</td>
                                         <td class="report-cell">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}</td>
                                         <td class="report-cell">{{ round($course->enroll_end * 100 / $capacity, 1) }}</td>
                                         <td class="report-cell">{{ round($course->dropped * 100 / $capacity, 1) }}</td>
@@ -107,7 +111,7 @@
                                     </tr>
                                 @endforeach
                                     <tr class="total-row">
-                                        <td class="report-cell" colspan="4">Total</td>
+                                        <td class="report-cell" colspan="6">Total</td>
                                         <td class="report-cell">{{ $areaPerformance ? $areaPerformance->enrolled_avg : '-'}}</td>
                                         <td class="report-cell">{{ $areaPerformance ? $areaPerformance->dropped_avg : '-'}}</td>
                                         <td class="report-cell">{{ $areaPerformance ? $areaPerformance->sei_avg : '-'}}</td>
@@ -143,7 +147,7 @@
                                 @endforeach
                             @else
                                 @for ($i = 1; $i <= 12; $i++)
-                                    <th class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }} Hrs </th>
+                                    <th class="report-head-cell">{{ substr(DateTime::createFromFormat('!m', $i)->format('F'), 0, 3) }}</th>
                                 @endfor
                             @endif
                             <th class="report-head-cell">Total Hrs</th>
