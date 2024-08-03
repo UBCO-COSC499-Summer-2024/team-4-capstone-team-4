@@ -2,7 +2,7 @@
     <h1 class="hero-title">
         {{ $hero_title }}
     </h1>
-    <div class="hero-search">
+    {{-- <div class="hero-search">
         <input
             type="text"
             class="hero-search-input glass"
@@ -18,5 +18,5 @@
             })"
             x-on:keydown.enter="@this.call('searchV2', search)"
         />
-    </div>
+    </div> --}}
 </section>

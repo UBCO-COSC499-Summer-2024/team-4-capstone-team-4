@@ -29,9 +29,9 @@
         </h1>
 
         <livewire:help.hero />
-        <div id="help-search-results">
+        {{-- <div id="help-search-results">
             @livewire('help.results', key(time()))
-        </div>
+        </div> --}}
 
         @forelse ($topics as $index => $topic)
             @php

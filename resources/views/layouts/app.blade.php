@@ -43,9 +43,7 @@
 
             @if($user && $user->hasRoles(['admin', 'dept_head', 'dept_staff']))
                 <x-sidebar :items="[
-                    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
                     ['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
-                    ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
                     ['icon' => 'upload_file', 'href' => '/import', 'title' => 'Course Import'],
                 ]" />
             @else

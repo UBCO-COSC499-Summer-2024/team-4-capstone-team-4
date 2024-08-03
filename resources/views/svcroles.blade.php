@@ -1,16 +1,35 @@
 <x-app-layout>
     @php
-        $user = auth()->user();
+        $user = Auth::user();
         $userRoles = $user->roles()->pluck('role')->toArray();
         $links = [
             ['href' => route('svcroles'), 'title' => __('Dashboard'), 'icon' => 'group', 'active' => request()->is('svcroles')],
-            ['href' => route('svcroles.add'), 'title' => __('Add Service Role'), 'icon' => 'add', 'active' => request()->is('svcroles/add')],
-            ['href' => route('svcroles.manage'), 'title' => __('Manage Role'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
         ];
+
+        if(!$user->hasOnlyRole('instructor')) {
+            $links = array_merge($links, [
+                ['href' => route('svcroles.add'), 'title' => __('Add Service Role'), 'icon' => 'add', 'active' => request()->is('svcroles/add')],
+            ]);
+        }
+
+        $links = array_merge($links, [
+            ['href' => route('svcroles.manage'), 'title' => __('Manage Role'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
+        ]);
+
+        function goToDash() {
+            $url = route('svcroles');
+            header("Location: $url");
+            exit();
+        }
     @endphp
 
-    @if ($user->hasRoles(['dept_staff', 'dept_head', 'admin']))
+    @if ($user->hasRoles(['instructor', 'dept_staff', 'dept_head', 'admin']))
         @if(request()->is('svcroles/add'))
+            @php
+                if ($user->hasOnlyRole('instructor')) {
+                    goToDash();
+                }
+            @endphp
             <livewire:add-service-role :links="$links"/>
         @elseif(request()->is('svcroles/manage'))
             @php
@@ -51,9 +70,7 @@
         @endif
     @else
         @php
-            $url = route('dashboard');
-            header("Location: $url");
-            exit();
+            goToDash();
         @endphp
     @endif
 </x-app-layout>

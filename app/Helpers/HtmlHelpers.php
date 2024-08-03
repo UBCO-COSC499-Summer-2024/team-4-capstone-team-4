@@ -122,7 +122,7 @@ class HtmlHelpers {
      */
     private static function convertSubsectionsToHtml($subsection, $prefix) {
         $subsectionId = $prefix;
-        $html = '<div id="' . $subsectionId . '" class="p-2 border-l-4 border-blue-500 bg-gray-50">';
+        $html = '<div id="' . $subsectionId . '" class="p-2 border-l-4 bg-gray-50" style="border-color: var(--secondary-color)">';
         $html .= '<h4 class="mb-1 text-lg font-medium">' . self::replacePlaceholders(htmlspecialchars($subsection['heading'] ?? 'No Heading')) . '</h4>';
         $html .= '<p class="mb-2">' . self::replacePlaceholders(htmlspecialchars($subsection['content'] ?? 'No Content')) . '</p>';
         $html .= '<div class="flex flex-wrap gap-2">';
@@ -174,7 +174,7 @@ class HtmlHelpers {
             }
 
             if (!empty($topic['subtopics'])) {
-                $html .= '<div class="mt-2">';
+                $html .= '<div class="flex flex-col gap-2 mt-2">';
                 foreach ($topic['subtopics'] as $subIndex => $subtopic) {
                     $html .= self::convertSubtopicsToHtml([$subtopic], $subtopic['subtopic'] ?? 'No Subtopic');
                 }
