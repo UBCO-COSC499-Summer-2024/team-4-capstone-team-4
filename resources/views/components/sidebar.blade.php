@@ -4,7 +4,8 @@ $user = auth()->user();
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
     // ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Course Sections']
+    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Course Sections'],
+    ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],
 ];
@@ -13,24 +14,29 @@ $sidebarItems = [
 if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
 }
+
+if(!$user->hasOnlyRole('admin')) {
+    $sidebarItems = array_merge($sidebarItems, [
+        ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+    ]);
+}
+if(!$user->hasOnlyRole('dept_staff')) {
+    $sidebarItems = array_merge($sidebarItems, [
+        ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
+    ]);
+}
 if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
     // audit logs
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
-        ['icon' => 'work_history', 'href' => '/audits', 'title' => 'Audit Logs'],
+        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin', 'target' => '_blank'],
     ]);
-
-    if($user->hasRoles(['admin'])) {
-        $sidebarItems = array_merge($sidebarItems, [
-        ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin'],
-    ]);
-    }
 }
 @endphp
 
 <aside class="sidebar glass" id="sidebar">
     @foreach($sidebarItems as $item)
-        <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" />
+        <x-sidebar-item icon="{{ $item['icon'] }}" href="{{ $item['href'] }}" title="{{ $item['title'] }}" target="{{ $item['target'] ?? '' }}" />
     @endforeach
 
     <!-- bottom -->

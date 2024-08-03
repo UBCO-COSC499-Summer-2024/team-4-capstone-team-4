@@ -1,11 +1,9 @@
 <x-app-layout>
-    <div class="content coming-soon">
+    <div class="content">
         <h1 class="content-title nos">
             <span class="content-title-text">{{ __('Service Requests') }}</span>
         </h1>
 
-        <section>
-            COMING SOON
-        </section>
+        <livewire:approval-tabs />
     </div>
 </x-app-layout>

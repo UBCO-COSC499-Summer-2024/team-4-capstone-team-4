@@ -96,7 +96,9 @@
                                     @php
                                         $sei = \App\Models\SeiData::calculateSEIAverage($course->id);
                                         $capacity = $course->capacity;
-                                        $instructor = \App\Models\UserRole::find($course->teaches->instructor_id);
+                                        if ($course->teaches) {
+                                            $instructor = \App\Models\UserRole::find($course->teaches->instructor_id);
+                                        }
                                     @endphp
                                     <tr>
                                         <td class="report-cell">{{ $course->prefix }}{{ $course->number }}  {{ $course->section }}</td>

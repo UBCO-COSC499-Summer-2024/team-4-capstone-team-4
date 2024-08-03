@@ -1,19 +1,19 @@
 <div>
     <div class="relative overflow-x-auto shadow-sm rounded-md">
         <div class="py-3 flex justify-between bg-[#3b4779] text-white">
-            <div class="w-1/12 text-center mx-2">#</div>
-            <div class="w-4/12 text-center mx-2">Area</div>
-            <div class="w-2/12 text-center mx-2">Number</div>
-            <div class="w-2/12 text-center mx-2">Section</div>
-            <div class="w-2/12 text-center mx-2">Session</div>
-            <div class="w-2/12 text-center mx-2">Term</div>
-            <div class="w-2/12 text-center mx-2">Year</div>
-            <div class="w-2/12 text-center mx-2">Room</div>
-            <div class="w-2/12 text-center mx-2">Time</div>
-            <div class="w-2/12 text-center mx-2">Enroll (Start)</div>
-            <div class="w-2/12 text-center mx-2">Enroll (End)</div>
-            <div class="w-2/12 text-center mx-2">Capacity</div>
-            <div class="w-1/12 text-center mx-2"></div>
+            <div class="w-1/12 text-center mx-1">#</div>
+            <div class="w-4/12 text-center mx-1">Area</div>
+            <div class="w-2/12 text-center mx-1">Number</div>
+            <div class="w-2/12 text-center mx-1">Section</div>
+            <div class="w-2/12 text-center mx-1">Session</div>
+            <div class="w-2/12 text-center mx-1">Term</div>
+            <div class="w-2/12 text-center mx-1">Year</div>
+            <div class="w-2/12 text-center mx-1">Room</div>
+            <div class="w-5/12 text-center mx-1">Time</div>
+            <div class="w-2/12 text-center mx-1">Enroll (Start)</div>
+            <div class="w-2/12 text-center mx-1">Enroll (End)</div>
+            <div class="w-2/12 text-center mx-1">Capacity</div>
+            <div class="w-1/12 text-center mx-1"></div>
         </div>
 
         @if (!empty($finalCSVs))
@@ -84,14 +84,18 @@
                         @error('rows.'.$index.'.room')<span class="import-error">{{ $message }}</span>@enderror
                     </div>
                     
-                    <div class="w-2/12">       
-                        <input type="text"
-                               placeholder="Year" 
-                               wire:model="rows.{{ $index }}.time" 
-                               class="import-form-input year-input" required>
-                        @error('rows.'.$index.'.time')<span class="import-error">{{ $message }}</span>@enderror
+                    <div class="w-5/12 flex flex-row items-center justify-center">
+                        <div>
+                            <input type="text" placeholder="ex. 11:00" wire:model="rows.{{$index}}.time_start" class="import-form-input year-input">
+                            @error('rows.'.$index.'.time_start')<span class="import-error">{{ $message }}</span>@enderror
+                        </div>
+                        <div class="text-md text-black">to</div>
+                        <div>
+                            <input type="text" placeholder="ex. 14:30" wire:model="rows.{{$index}}.time_end" class="import-form-input year-input">
+                            @error('rows.'.$index.'.time_end')<span class="import-error">{{ $message }}</span>@enderror
+                        </div>
                     </div>
-                    
+
                     <div class="w-2/12">       
                         <input type="number" step="1" min="1" max="999" 
                                placeholder="#" 
@@ -127,7 +131,10 @@
                 @endforeach
 
                 <div class="mt-4 flex justify-end space-x-2">
-                    <button type="submit" class="import-form-save-button">Save</button>
+                    <button type="submit" class="import-form-save-button">
+                        <span class="material-symbols-outlined">save</span>
+                        Save
+                    </button>
                 </div>
            
         </form>
@@ -137,10 +144,21 @@
             <div class="text-white text-xl text-center m-80">Saving...</div>
         </div>
 
-
         @if($showModal) 
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <x-import-modal moreText="Upload Another File"/>
+            {{-- temp --}}
+            <div class="absolute right-5 top-16 bg-blue-50 rounded-sm shadow-lg px-6 py-4 flex flex-col ">
+        
+                <div>You Can Now Assign Instructors!</div>
+                <div class="items-center justify-center text-center mt-2 p-2">
+                    <button class="bg-white text-[#3b4779] border border-[#3b4779] py-2 px-4 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
+                    onclick="location.href='{{ route('assign-courses') }}'">
+                    Assign
+                    </button>
+                </div>
+            
+            </div>
         </div>
         @endif
 

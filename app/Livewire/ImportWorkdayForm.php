@@ -31,7 +31,7 @@ class ImportWorkdayForm extends Component
             $this->rows = Session::get('workdayFormData');
         } else {
             $this->rows = [
-                ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''],
+                ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''],
             ];
         }
     }
@@ -48,7 +48,8 @@ class ImportWorkdayForm extends Component
             $rules["rows.{$index}.term"] = 'required|string';
             $rules["rows.{$index}.year"] = 'required|integer';
             $rules["rows.{$index}.room"] = 'required|string';
-            $rules["rows.{$index}.time"] = 'required|string';
+            $rules["rows.{$index}.time_start"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):([0-5]\d)$/'];
+            $rules["rows.{$index}.time_end"] = ['required', 'string', 'regex:/^([0-1]?\d|2[0-3]):([0-5]\d)$/'];
             $rules["rows.{$index}.enroll_start"] = 'required|integer|min:1|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.enroll_end"] = 'required|integer|min:0|max:' . $row['capacity'] . '';
             $rules["rows.{$index}.capacity"] = 'required|integer|min:1|max:999';
@@ -68,10 +69,14 @@ class ImportWorkdayForm extends Component
                 $messages["rows.{$index}.term.required"] = 'Please select a term';
                 $messages["rows.{$index}.year.required"] = 'Please enter a year';
                 $messages["rows.{$index}.room.required"] = 'Please enter a room';
-                $messages["rows.{$index}.time.required"] = 'Please enter a time';
+                $messages["rows.{$index}.time_start.required"] = 'Please enter a time';
+                $messages["rows.{$index}.time_end.required"] = 'Please enter a time';
                 $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
                 $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
+
+                $messages['rows.*.time_start.regex'] = 'The start time must be in military time format (HHMM or HH:MM).';
+                $messages['rows.*.time_end.regex'] = 'The end time must be in military time format (HHMM or HH:MM).';
 
                 $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
                 $messages["rows.{$index}.year.integer"] = 'Must be a number';
@@ -106,7 +111,7 @@ class ImportWorkdayForm extends Component
     public function addRow() {
         $this->resetValidation();
 
-        $this->rows[] =   ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''];
+        $this->rows[] =   ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''];
         Session::put('workdayFormData', $this->rows);
     }
 
@@ -264,7 +269,8 @@ class ImportWorkdayForm extends Component
                     'term' => $row['term'], 
                     'year' => $row['year'], 
                     'room' => $row['room'], 
-                    'time' => $row['time'], 
+                    'time_start' => $row['time_start'], 
+                    'time_end' => $row['time_end'], 
                     'enroll_start' => $row['enroll_start'], 
                     'enroll_end' => $row['enroll_end'], 
                     'dropped' => $dropped,
@@ -273,7 +279,7 @@ class ImportWorkdayForm extends Component
                 ]);
 
                 $this->rows = [
-                    ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time' => ''],
+                    ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''],
                 ];
 
                 Session::forget('workdayFormData');

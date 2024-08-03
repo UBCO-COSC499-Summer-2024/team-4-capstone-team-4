@@ -20,7 +20,7 @@ class ExportDeptReport extends Component
         $this->year = date('Y');
     }
 
-    public function render(){
+    public function render() {
         $year = $this->year;
 
         $user = Auth::user();

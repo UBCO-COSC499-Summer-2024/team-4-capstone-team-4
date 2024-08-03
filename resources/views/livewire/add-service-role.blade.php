@@ -33,7 +33,7 @@
                 <span class="material-symbols-outlined">visibility</span>
             </button> --}}
             {{-- save button --}}
-            <button class="content-title-btn" @click="$dispatch('svcr-table-save');">
+            <button class="content-title-btn" @click="$dispatch('svcr-table-save');" x-show="viewMode === 'table'" x-cloak>
                 <span class="button-title">Save</span>
                 <span class="material-symbols-outlined">save</span>
             </button>
