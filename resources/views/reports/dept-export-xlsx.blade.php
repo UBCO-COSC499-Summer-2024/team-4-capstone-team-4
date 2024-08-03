@@ -154,7 +154,7 @@
                 <th style="font-weight:bold;">Num. of Service Roles</th>
                 <th style="font-weight:bold;">Num. of Extra Hours</th>
                 @foreach ($deptHours as $month => $hours)
-                    <th style="font-weight:bold;">{{ substr($month, 0, 3) }} Hours</th>
+                    <th style="font-weight:bold;">{{ substr($month, 0, 3) }}</th>
                 @endforeach
                 <th style="font-weight:bold;">Total Hours</th>
             </tr>
@@ -209,11 +209,14 @@
                     $areaHours = json_decode($areaPerformance->total_hours, true);
                 @endphp
                 @if ($svcroles->isNotEmpty())
+                    <tr> 
+                        <td style="font-style: italic">Note: The monthly hours is the sum of the total hours worked by each instructor in that service role.</td>
+                    </tr>
                     <tr>
                         <th style="font-weight:bold;">Service Role</th>
                         <th style="font-weight:bold;">Instructors</th>
                         @foreach ($areaHours as $month => $hours)
-                            <th style="font-weight:bold;">{{ substr($month, 0, 3) }} Hours</th>
+                            <th style="font-weight:bold;">{{ substr($month, 0, 3) }}</th>
                         @endforeach
                         <th style="font-weight:bold;">Total Hours</th>
                     </tr>
@@ -225,9 +228,9 @@
                                     $instructors = $svcRole->instructors;
                                 @endphp
                                 @if ($instructors)
-                                    @foreach ($instructors as $instructor)
-                                        {{ $instructor->firstname }} {{ $instructor->lastname }}<br>
-                                    @endforeach
+                                    {{ $instructors->pluck('firstname', 'lastname')->map(function($lastname, $firstname) {
+                                        return $firstname . ' ' . $lastname;
+                                    })->implode(', ') }}  
                                 @else
                                     -
                                 @endif

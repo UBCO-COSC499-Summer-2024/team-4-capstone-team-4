@@ -200,6 +200,13 @@ header:not(:has(#header-misc)) {
     background-color: var(--primary-color);
 }
 
+#header-auth .menu-item:hover {
+    background: var(--secondary-color);
+    color: #fff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+}
+
 /* Main Styles */
 main {
     display: flex;

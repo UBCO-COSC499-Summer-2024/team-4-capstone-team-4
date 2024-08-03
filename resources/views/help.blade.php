@@ -12,9 +12,9 @@
 
         <livewire:help.hero />
 
-        <div id="help-search-results">
+        {{-- <div id="help-search-results">
             @livewire('help.results', key(time()))
-        </div>
+        </div> --}}
 
         <livewire:help.main-topics />
         <livewire:help.faq />

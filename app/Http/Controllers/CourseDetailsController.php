@@ -18,19 +18,19 @@ class CourseDetailsController extends Controller
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user();
-    
+
         if (!$authenticatedUser || ($authenticatedUser->id !== $user->id && !$authenticatedUser->hasRoles(['admin', 'dept_head']))) {
             abort(403, 'Unauthorized access.');
         }
-    
+
         $userRole = $user->roles->first()->role ?? 'guest';
         $query = $request->input('search', '');
         $areaId = $request->input('area_id', null);
         $activeTab = $request->input('activeTab'); // Get the active tab from the request
-    
+
         Log::info('User Role:', ['role' => $userRole]);
         Log::info('Search Query:', ['query' => $query]);
-        
+
         $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user'])
             ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
                 $queryBuilder->whereHas('teaches', function ($query) use ($user) {
@@ -45,13 +45,13 @@ class CourseDetailsController extends Controller
             ->when($areaId, function ($queryBuilder) use ($areaId) {
                 $queryBuilder->where('area_id', $areaId);
             });
-    
+
         $courseSections = $courseSectionsQuery->paginate(7); // Apply pagination
-    
+
         $courseSections->getCollection()->transform(function ($section) {
             $seiData = $section->seiData()->first() ?? null;
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
-    
+
             $formattedName = sprintf('%s %s %s - %s%s %s',
                 $section->prefix,
                 $section->number,
@@ -60,25 +60,31 @@ class CourseDetailsController extends Controller
                 $section->session,
                 $section->term
             );
-    
-            $instructorName = optional($section->teaches->instructor->user)->firstname . ' ' . optional($section->teaches->instructor->user)->lastname;
-    
+
+            // $instructorName = optional($section->teaches->instructor->user)->firstname . ' ' . optional($section->teaches->instructor->user)->lastname;
+            // if no instructor is assigned, display 'No Instructors'
+            if (empty($section->teaches)) {
+                $instructorName = 'No Instructors';
+            } else {
+                $instructorName = $section->teaches->instructor->user->getName();
+            }
+
             return (object)[
                 'id' => $section->id,
                 'name' => $formattedName,
                 'departmentName' => $section->area->name ?? 'Unknown',
                 'instructorName' => $instructorName,
-                'enrolled' => $section->enrolled,
+                'enrolled' => $section->enroll_end,
                 'dropped' => $section->dropped,
                 'capacity' => $section->capacity,
                 'averageRating' => $averageRating,
             ];
         });
-    
+
         Log::info('Fetched Course Sections:', ['count' => $courseSections->count(), 'data' => $courseSections]);
-    
-        $areas = Area::all(); 
-    
+
+        $areas = Area::all();
+
         $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
         ->paginate(7) // Apply pagination for TAs
         ->through(function ($ta) {
@@ -94,17 +100,17 @@ class CourseDetailsController extends Controller
                 })->implode(', ')
             ];
         });
-    
+
         if ($request->ajax()) {
             return response()->json($courseSections);
         }
-    
+
         $sortField = 'courseName';
         $sortDirection = 'asc';
-    
+
         return view('course-details', compact('courseSections', 'userRole', 'user', 'sortField', 'sortDirection', 'areaId', 'areas', 'tas','activeTab'));
     }
-    
+
     public function getTeachingAssistants()
     {
         $tas = TeachingAssistant::select('id', 'name')->get();
@@ -204,7 +210,7 @@ public function createTA(Request $request)
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$csvFileName}");
     }
-    
+
 
 public function save(Request $request)
 {
