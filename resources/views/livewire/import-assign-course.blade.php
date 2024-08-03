@@ -3,11 +3,18 @@
 @endphp
 
 <div class="relative">
-    <form wire:submit.prevent="handleSubmit" class="relative">
-        <div class="relative overflow-x-auto shadow-sm rounded-md">
+    <button class="import-form-add-button" onclick="location.href='{{ route('upload.file.show.assign.courses') }}'">
+        <span class="material-symbols-outlined">upload</span>
+        Upload CSV File to Assign
+    </button>
+    <form wire:submit.prevent="handleSubmit">
+        <div class="overflow-x-auto shadow-sm rounded-md">
             @if($hasCourses)
-            <div class="mt-4 flex justify-end space-x-2">
-                <button type="submit" class="import-form-save-button">Save</button>
+            <div class="absolute top-0 right-0 space-x-2">
+            <button type="submit" class="import-form-save-button">
+                <span class="material-symbols-outlined">save</span>
+                Save
+            </button>
             </div>
             @endif
             <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">

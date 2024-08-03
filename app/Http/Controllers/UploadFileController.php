@@ -28,6 +28,16 @@ class UploadFileController extends Controller {
     {
         return view('upload-file-sei');
     }
+    
+    public function showUploadFileAssignCourses()
+    {
+        return view('upload-file-assign-courses');
+    }
+
+    public function showUploadFileAssignTas()
+    {
+        return view('upload-file-assign-tas');
+    }
 
     private function readWorkdayCSV($filePath) {
         $csvData = [];
@@ -274,6 +284,10 @@ class UploadFileController extends Controller {
         }
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.sei');
+    }
+
+    public function uploadAssignCourses(Request $request) {
+        dd('post assign courses');
     }
 
     public function uploadSvcRoles(Request $request) {

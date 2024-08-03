@@ -1,6 +1,6 @@
-@php
+{{-- @php
     $finalCSVs = session('finalCSVs', []);
-@endphp
+@endphp --}}
 
 <div class="absolute left-0 top-10">
     <button class="bg-white text-[#3b4779] border border-[#3b4779] px-3 py-2 mx-2 rounded-lg hover:bg-[#3b4779] hover:text-white" 
@@ -10,8 +10,8 @@
     </button>
 </div>
 
-<livewire:drag-and-drop :action="'upload.file.sei'"/>
+<livewire:drag-and-drop :action="'upload.file.assign.courses'"/>
 
-@if (session('finalCSVs'))
+{{-- @if (session('finalCSVs'))
 <livewire:upload-file-form-sei :finalCSVs="session('finalCSVs')" />
-@endif
+@endif --}}
