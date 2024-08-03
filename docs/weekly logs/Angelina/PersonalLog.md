@@ -4,7 +4,7 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log82-87.png)
+![Clockify report](./clockifylogs/log82-87.jpeg)
 
 ### Current Tasks 
  * #1: Distribute Issues from Test-O-Rama
@@ -37,7 +37,7 @@ Distributed final tasks among group members from client feedback and feature lis
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log731-81.png)
+![Clockify report](./clockifylogs/log731-81.jpeg)
 
 ### Current Tasks 
  * #1: Debug Score Method
