@@ -123,7 +123,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
     ApplyUserSettings::class,
-    CheckRole::class.':admin,dept_head,dept_staff',
+    CheckRole::class.':admin,dept_head,dept_staff,instructor',
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
