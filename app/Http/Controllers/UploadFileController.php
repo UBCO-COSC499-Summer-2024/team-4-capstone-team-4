@@ -287,7 +287,51 @@ class UploadFileController extends Controller {
     }
 
     public function uploadAssignCourses(Request $request) {
-        dd('post assign courses');
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
+            $csvData = $this->readCSV($filePath);
+
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];     
+                   
+        foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Room':
+                        case 'Instructor':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
+                }
+                $finalCSVs[] = $trimCSV;
+               
+            }
+        }
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.assign.courses');
+
     }
 
     public function uploadSvcRoles(Request $request) {
