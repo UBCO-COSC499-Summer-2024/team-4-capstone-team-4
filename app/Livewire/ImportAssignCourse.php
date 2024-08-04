@@ -20,6 +20,8 @@ class ImportAssignCourse extends Component
     public $showModal = false;
     public $hasCourses = false;
 
+    public $instructorSearch='';
+
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
@@ -162,6 +164,11 @@ class ImportAssignCourse extends Component
 
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->where('role', 'instructor')
+            ->where(function ($query) {
+                $query->whereRaw('LOWER(users.firstname) LIKE ?', ["%{$this->instructorSearch}%"])
+                    ->orWhereRaw('LOWER(users.lastname) LIKE ?', ["%{$this->instructorSearch}%"])
+                    ->orWhereRaw('LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE ?', ["%{$this->instructorSearch}%"]);
+            })
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();

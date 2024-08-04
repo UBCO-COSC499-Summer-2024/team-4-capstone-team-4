@@ -60,4 +60,6 @@
             </div>
         @endif
     @endif
+
+    <x-custom-search-select :availableInstructors="$availableInstructors"/>
 </div>
