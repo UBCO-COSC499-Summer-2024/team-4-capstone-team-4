@@ -48,14 +48,15 @@ class UploadFileFormAssignCourses extends Component
                         $finalCSV['Term'] == $assignment['term']
                     ){
                         $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
+                        $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id');
+                        $this->assignments[$index]['instructor_id'] = $instructor_id;
                     }
-                    $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id');
-                    $this->assignments[$index]['instructor_id'] = $instructor_id;
+
                 
                 }
 
             }
-        dd($this->assignments);
+        // dd($this->assignments);
 
     }
 

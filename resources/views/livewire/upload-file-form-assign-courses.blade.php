@@ -19,27 +19,34 @@
                 <div class="w-5/12"></div>
             </div>
             @if($finalCSVs)
-                @foreach($assignments as $index => $assignment)   
+                @foreach($assignments as $index => $assignment)  
+                {{-- {{ dd($assignments[$index]['instructor'], $availableInstructors ) }}  --}}
                 <div class="import-form-row">
                     @php
                         // $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
 
                         $courseId = $assignment['course_section_id'] ?? null;
                         $course = $courseId ? $availableCourses->firstWhere('id', $courseId) : null;
+                        // dd($course);
                     @endphp
                     @if($course)
                     <div class="w-10/12 text-left text-sm">
                         <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                     </div>
                     <div class="w-8/12 text-center">
-                        <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
+                        {{-- <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
                             <option value="">Select Instructor</option>
                             @foreach($availableInstructors as $instructor)
                                     <option value="{{ $instructor->id }}" {{ $assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}" ? 'selected' : '' }}>
                                         {{ $instructor->firstname }} {{ $instructor->lastname }}
                                     </option>              
                             @endforeach
-                        </select>   
+                        </select>    --}}
+                        @foreach($availableInstructors as $instructor)
+                            @if($assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}")
+                            <div>{{$instructor->firstname}}{{$instructor->lastname}}</div>
+                            @endif
+                        @endforeach
                     </div>
                     <div class="w-5/12"></div>
                     @endif
