@@ -19,6 +19,9 @@ class UploadFileFormAssignCourses extends Component
 
     public $showModal = false;
 
+    public $instructorSearch='';
+    public $selectedInstructorId = '';
+
     public function mount($finalCSVs) {
         $this->finalCSVs = $finalCSVs;
 
@@ -38,8 +41,8 @@ class UploadFileFormAssignCourses extends Component
         })->toArray();
 
         // dd($this->assignments, $this->finalCSVs);
+        foreach($this->assignments as $index => $assignment) {
             foreach($this->finalCSVs as $finalCSV) {
-                foreach($this->assignments as $index => $assignment) {
                     if( $finalCSV['Prefix'] == $assignment['prefix'] &&
                         $finalCSV['Number'] == $assignment['number'] &&
                         $finalCSV['Section'] == $assignment['section'] &&
@@ -48,11 +51,17 @@ class UploadFileFormAssignCourses extends Component
                         $finalCSV['Term'] == $assignment['term']
                     ){
                         $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
+                        // dd(User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id'));
                         $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id');
-                        $this->assignments[$index]['instructor_id'] = $instructor_id;
-                    }
-
-                
+                        $instructors = $this->getAvailableInstructors();
+                        // dd($instructors);
+                        foreach($instructors as $instructor) {
+                            if("{$instructor->firstname} {$instructor->lastname}" == $finalCSV['Instructor']) {
+                                //get user id
+                                $this->assignments[$index]['instructor_id'] = $instructor->id;
+                            }
+                        }   
+                    }                
                 }
 
             }
@@ -215,6 +224,11 @@ class UploadFileFormAssignCourses extends Component
 
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->where('role', 'instructor')
+            // ->where(function ($query) {
+            //     $query->whereRaw('LOWER(users.firstname) LIKE ?', ["%{$this->instructorSearch}%"])
+            //         ->orWhereRaw('LOWER(users.lastname) LIKE ?', ["%{$this->instructorSearch}%"])
+            //         ->orWhereRaw('LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE ?', ["%{$this->instructorSearch}%"]);
+            // })
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();
@@ -224,6 +238,8 @@ class UploadFileFormAssignCourses extends Component
     {
         // dd($this->assignments, $this->finalCSVs);
         // dd($this->getAvailableCourses());
+
+        // dd($this->getAvailableInstructors());
 
         return view('livewire.upload-file-form-assign-courses', [
             'availableCourses' => $this->getAvailableCourses(),

@@ -5,12 +5,14 @@
 <div class="relative">
     <form wire:submit.prevent="handleSubmit">
         <div class="overflow-x-auto shadow-sm rounded-md">
-
-            <div class="flex justify-end space-x-2">
-            <button type="submit" class="import-form-save-button">
-                <span class="material-symbols-outlined">save</span>
-                Save
-            </button>
+            <div class="flex justify-between items-center">
+                <div class="italic">*Note: Not all courses need to be assigned to save</div>
+                <div class="flex justify-end space-x-2">
+                <button type="submit" class="import-form-save-button">
+                    <span class="material-symbols-outlined">save</span>
+                    Save
+                </button>
+                </div>
             </div>
 
             <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">
@@ -34,19 +36,31 @@
                         <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                     </div>
                     <div class="w-8/12 text-center">
-                        {{-- <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
+                        <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
                             <option value="">Select Instructor</option>
                             @foreach($availableInstructors as $instructor)
-                                    <option value="{{ $instructor->id }}" {{ $assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}" ? 'selected' : '' }}>
+                                @if($assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}")
+                                    <option value="{{ $instructor->id }}">
                                         {{ $instructor->firstname }} {{ $instructor->lastname }}
-                                    </option>              
+                                    </option>  
+                                @else
+                                    <option value="{{ $instructor->id }}">
+                                        {{ $instructor->firstname }} {{ $instructor->lastname }}
+                                    </option> 
+                                @endif
                             @endforeach
-                        </select>    --}}
+                        </select>  
                         @foreach($availableInstructors as $instructor)
                             @if($assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}")
-                            <div>{{$instructor->firstname}}{{$instructor->lastname}}</div>
+                                <div class="text-green-500">Instructor Found!</div>
                             @endif
-                        @endforeach
+                        @endforeach 
+                        
+                            {{-- <x-custom-search-select :availableInstructors="$availableInstructors" 
+                            :selectedInstructorId="$assignments[$index]['instructor_id']"
+                            :selectedInstructorName="$assignments[$index]['instructor']"/>
+                            <p> Selected instructor: {{ $selectedInstructorId }}</p> --}}
+
                     </div>
                     <div class="w-5/12"></div>
                     @endif
@@ -77,4 +91,7 @@
             </div>
         @endif
     @endif
+
 </div>
+
+
