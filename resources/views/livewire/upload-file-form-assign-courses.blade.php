@@ -3,10 +3,6 @@
 @endphp
 
 <div class="relative">
-    {{-- <button class="import-form-add-button" onclick="location.href='{{ route('upload.file.show.assign.courses') }}'">
-        <span class="material-symbols-outlined">upload</span>
-        Upload CSV File to Assign
-    </button> --}}
     <form wire:submit.prevent="handleSubmit">
         <div class="overflow-x-auto shadow-sm rounded-md">
 
@@ -26,8 +22,12 @@
                 @foreach($assignments as $index => $assignment)   
                 <div class="import-form-row">
                     @php
-                        $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
+                        // $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
+
+                        $courseId = $assignment['course_section_id'] ?? null;
+                        $course = $courseId ? $availableCourses->firstWhere('id', $courseId) : null;
                     @endphp
+                    @if($course)
                     <div class="w-10/12 text-left text-sm">
                         <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                     </div>
@@ -42,6 +42,7 @@
                         </select>   
                     </div>
                     <div class="w-5/12"></div>
+                    @endif
                 </div>
             @endforeach
             @endif
