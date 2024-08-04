@@ -5,9 +5,9 @@
         wire:model.live="instructorSearch" 
         x-model="selectedInstructorName" type="text" 
         placeholder="Select an instructor..." 
-        class="rounded-md" 
+        class="rounded-md w-full border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" 
         @click="open = !open" @focus="open = true" @input="open = true">
-    <div class="flex items-center justify-center" @click="open = !open">
+    <div class="flex items-center justify-center mr-2" @click="open = !open">
         <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
         </svg>
