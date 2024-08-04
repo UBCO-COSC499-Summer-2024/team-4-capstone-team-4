@@ -10,7 +10,7 @@
     <form wire:submit.prevent="handleSubmit">
         <div class="overflow-x-auto shadow-sm rounded-md">
 
-            <div class="absolute top-0 right-0 space-x-2">
+            <div class="flex justify-end space-x-2">
             <button type="submit" class="import-form-save-button">
                 <span class="material-symbols-outlined">save</span>
                 Save
@@ -23,26 +23,7 @@
                 <div class="w-5/12"></div>
             </div>
             @if($finalCSVs)
-                {{-- @foreach($assignments as $index => $assignment)
-                    <div class="import-form-row">
-                        @php
-                            $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
-                        @endphp
-                        <div class="w-10/12 text-left text-sm">
-                            <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
-                        </div>
-                        <div class="w-8/12 text-center">
-                            <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
-                                <option value="">Select Instructor</option>
-                                @foreach($availableInstructors as $instructor)
-                                    <option value="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
-                                @endforeach
-                            </select>   
-                        </div>
-                        <div class="w-5/12"></div>
-                    </div>
-                @endforeach --}}
-                @foreach($assignments as $index => $assignment)
+                @foreach($assignments as $index => $assignment)   
                 <div class="import-form-row">
                     @php
                         $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
@@ -54,7 +35,9 @@
                         <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
                             <option value="">Select Instructor</option>
                             @foreach($availableInstructors as $instructor)
-                                <option value="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
+                                    <option value="{{ $instructor->id }}" {{ $assignments[$index]['instructor'] == "{$instructor->firstname} {$instructor->lastname}" ? 'selected' : '' }}>
+                                        {{ $instructor->firstname }} {{ $instructor->lastname }}
+                                    </option>              
                             @endforeach
                         </select>   
                     </div>

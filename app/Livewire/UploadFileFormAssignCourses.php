@@ -19,10 +19,36 @@ class UploadFileFormAssignCourses extends Component
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
                 'course_section_id' => $course->id,
-                'instructor_id' => null,
+                'prefix' => $course->prefix,
+                'number' => $course->number,
+                'section' => $course->section,
+                'year' => $course->year,
+                'session' => $course->session,
+                'term' => $course->term,
+                'instructor_id' => '',
+                'instructor' => '',
                 'year' => $course->year,
             ];
         })->toArray();
+
+        foreach($finalCSVs as $index => $finalCSV) {
+            foreach($this->assignments as $assignment) {
+                if( $finalCSV['Prefix'] == $assignment['prefix'] &&
+                    $finalCSV['Number'] == $assignment['number'] &&
+                    $finalCSV['Section'] == $assignment['section'] &&
+                    $finalCSV['Year'] == $assignment['year'] &&
+                    $finalCSV['Session'] == $assignment['session'] &&
+                    $finalCSV['Term'] == $assignment['term']
+                ){
+                    $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
+                }
+
+                $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->pluck('id');
+                $this->assignments[$index]['instructor_id'] = $instructor_id;
+            }
+
+        }
+        // dd($this->assignments);
     }
 
     public function getAvailableCourses() {
@@ -65,6 +91,8 @@ class UploadFileFormAssignCourses extends Component
 
     public function render()
     {
+        // dd($this->assignments, $this->finalCSVs);
+
         return view('livewire.upload-file-form-assign-courses', [
             'availableCourses' => $this->getAvailableCourses(),
             'availableInstructors' => $this->getAvailableInstructors(),
