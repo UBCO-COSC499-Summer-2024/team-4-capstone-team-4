@@ -75,10 +75,12 @@ class Area extends Model {
         $courses = self::getCourseSections($area_id, $year);
         $instructors = collect();
 
-        foreach($courses as $course){
-            $instructor = UserRole::find($course->teaches->instructor_id);
-            if ($instructor) {
-                $instructors->push($instructor);
+        foreach($courses as $course) {
+            if ($course->teaches) {
+                $instructor = UserRole::find($course->teaches->instructor_id);
+                if ($instructor) {
+                    $instructors->push($instructor);
+                }
             }
         }
         $uniqueInstructors = $instructors->unique('id');
