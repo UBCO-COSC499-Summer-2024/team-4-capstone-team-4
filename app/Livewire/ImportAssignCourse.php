@@ -166,9 +166,9 @@ class ImportAssignCourse extends Component
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->where('role', 'instructor')
             ->where(function ($query) {
-                $query->whereRaw('LOWER(users.firstname) LIKE ?', ["%{$this->instructorSearch}%"])
-                    ->orWhereRaw('LOWER(users.lastname) LIKE ?', ["%{$this->instructorSearch}%"])
-                    ->orWhereRaw('LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE ?', ["%{$this->instructorSearch}%"]);
+                $query->whereRaw('users.firstname ILIKE ?', ["%{$this->instructorSearch}%"])
+                      ->orWhereRaw('users.lastname ILIKE ?', ["%{$this->instructorSearch}%"])
+                      ->orWhereRaw('CONCAT(users.firstname, \' \', users.lastname) ILIKE ?', ["%{$this->instructorSearch}%"]);
             })
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
