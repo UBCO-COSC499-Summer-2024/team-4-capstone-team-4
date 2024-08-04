@@ -62,4 +62,5 @@
     @endif
 
     <x-custom-search-select :availableInstructors="$availableInstructors"/>
+    <p> Selected instructor: {{ $selectedInstructorId }}</p>
 </div>

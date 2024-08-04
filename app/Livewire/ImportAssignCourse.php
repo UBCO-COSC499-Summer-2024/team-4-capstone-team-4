@@ -21,6 +21,7 @@ class ImportAssignCourse extends Component
     public $hasCourses = false;
 
     public $instructorSearch='';
+    public $selectedInstructorId = '';
 
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
