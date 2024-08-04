@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\InstructorPerformance;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
@@ -357,7 +358,9 @@ class StaffList extends Component
             $instructor = $user->roles->where('role', 'instructor')->first();
             $performance = $instructor->instructorPerformances()->where('year', $this->selectedYear)->first();
             if ($performance) {
+                $oldTarget = $performance->target_hours;
                 $performance->update(['target_hours' => $hours]);
+                $performance->log_audit('Update target hours', ['operation_type' => 'UPDATE', 'old_value' => $oldTarget, 'new_value' => $hours], 'Target hours updated for instructor id '. $instructor->id);
             } else {
                 //Create performance if doesn't exist
                 InstructorPerformance::factory()->create([
@@ -383,6 +386,7 @@ class StaffList extends Component
                     'year' => $this->selectedYear,
                     'instructor_id' => $instructor->id,
                 ]); 
+                InstructorPerformance::audit('Added target hours', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id ' . $instructor->id);
             }
         }
 
@@ -441,7 +445,9 @@ class StaffList extends Component
                 $instructor = $user->roles->where('role', 'instructor')->first();
                 $performance = $instructor->instructorPerformances()->where('year', $this->selectedYear)->first();
                 if ($performance) {
+                    $oldTarget = $performance->target_hours;
                     $performance->update(['target_hours' => $hours]);
+                    $performance->log_audit('Update target hours', ['operation_type' => 'UPDATE', 'old_value' => $oldTarget, 'new_value' => $hours], 'Target hours updated for instructor id '. $instructor->id);
                 } else {
                     //Create performance if doesn't exist
                     InstructorPerformance::factory()->create([
@@ -466,7 +472,8 @@ class StaffList extends Component
                         'dropped_avg'=> 0,
                         'year' => $this->selectedYear,
                         'instructor_id' => $instructor->id,
-                    ]);           
+                    ]); 
+                    InstructorPerformance::udit('Added target hours', ['operation_type' => 'UPDATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id '. $instructor->id);          
                 }
             }
         }
@@ -518,14 +525,16 @@ class StaffList extends Component
             'email' => $this->email,
             'password' => Hash::make($this->password),
         ]);
+        $user->log_audit('Added new user', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => $user->id], 'New user '. $user->firstname . ' ' . $user->lastname . ' created successfully');
 
         // Assign the selected roles to the new user
         foreach($this->user_roles as $role){
-            UserRole::create([
+            $userrole = UserRole::create([
                 'user_id' => $user->id,
                 'department_id' => null,
                 'role' => $role,
             ]);
+            $userrole->log_audit('Added new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New user role '. $user->firstname . ' ' . $user->lastname . ' created successfully');
         }
         // Clear form fields and close modal
         $this->showModal = false; 
@@ -561,15 +570,21 @@ class StaffList extends Component
 
         foreach($this->changedFirstnames as $userid => $firstname){
             $user = User::find($userid);
+            $oldname = $user->firstname;
             $user->update(['firstname' => $firstname]);
+            $user->log_audit('Update user firstname', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldname), 'new_value' => json_encode($firstname)], 'User ' .$user->id. ' firstname changed successfully');
         }
         foreach($this->changedLastnames as $userid => $lastname){
             $user = User::find($userid);
+            $oldname = $user->lastname;
             $user->update(['lastname' => $lastname]);
+            $user->log_audit('Update user lastname', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldname), 'new_value' => json_encode($lastname)], 'User ' .$user->id. ' lastname changed successfully');
         }
         foreach($this->changedEmails as $userid => $email){
             $user = User::find($userid);
+            $oldemail = $user->email;
             $user->update(['email' => $email]);
+            $user->log_audit('Update user email', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldemail), 'new_value' => json_encode($email)], 'User ' .$user->id. ' email changed successfully');
         }
 
         $changedFirstnames = array_keys($this->changedFirstnames);
@@ -581,11 +596,13 @@ class StaffList extends Component
         foreach($addedUsers as $userid){
             $user = User::find($userid);
             $user->update(['active' => true]);
+            $user->log_audit('Activate account', ['operation_type' => 'UPDATE', 'old_value' => 'false', 'new_value' => 'true'], 'User ' .$user->id. ' account activated successfully');
             $enabledCount++;
         }
         foreach($removedUsers as $userid){
             $user = User::find($userid);
             $user->update(['active' => false]);
+            $user->log_audit('Deactivate account', ['operation_type' => 'UPDATE', 'old_value' => 'true', 'new_value' => 'false'], 'User ' .$user->id. ' account deactivated successfully');
             $disabledCount++;
         }
 
@@ -677,6 +694,7 @@ class StaffList extends Component
                     'department_id' => null,
                     'role' => $role,
                 ]);
+                UserRole::audit('Add new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New role added for user ' .$userid. ' ');
                 $addCount++;
             }
         }
@@ -686,6 +704,7 @@ class StaffList extends Component
             $user_roles = UserRole::where('user_id', $userid)->pluck('role');
             if ($user_roles->contains($role)) {
                 UserRole::where('user_id', $userid)->where('role', $role)->delete();
+                UserRole::audit('Remove user role', ['operation_type' => 'DELETE', 'old_value' => json_encode($role), 'new_value' => null], 'Role removed for user ' .$userid);
             }
             $removeCount++;
         }
@@ -720,11 +739,13 @@ class StaffList extends Component
         //Attempt to detelet user
         try{
             $user->delete();
+            $user->log_audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => null], 'User ' .$userid.' deleted successfully');
         }catch(Exception $e){
             $this->dispatch('show-toast', [
                 'message' => 'Failed to delete user(s):' . $e->getMessage(),
                 'type' => 'error'
             ]); 
+            User::audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => $userid], 'Failed to delete user ' .$userid);
         }
 
         //Reset and send toast message
@@ -762,14 +783,17 @@ class StaffList extends Component
 
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
+            $userid = $user->id;
             //Attempt to delete the users
             try{
                 $user->delete();
+                $user->log_audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => null], 'User ' .$userid.' deleted successfully');
             }catch(Exception $e){
                 $this->dispatch('show-toast', [
                     'message' => 'Failed to delete user(s):' . $e->getMessage(),
                     'type' => 'error'
                 ]); 
+                User::audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => $userid], 'Failed to delete user ' .$userid);
             }
         }
 
