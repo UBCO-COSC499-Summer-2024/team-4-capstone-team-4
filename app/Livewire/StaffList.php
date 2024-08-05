@@ -46,6 +46,8 @@ class StaffList extends Component
     public $password;
     public $password_confirmation;
     public $user_roles = [];
+    public $deptId = null;
+
     public $confirmDelete = false;
     public $confirmAction;
     public $editUserId = null;
@@ -507,6 +509,7 @@ class StaffList extends Component
             'password' => $this->password,
             'password_confirmation' => $this->password_confirmation, 
             'user_roles' => $this->user_roles,
+            'deptId' => $this->deptId
         ];
     
         //Validate inputted data
@@ -516,6 +519,7 @@ class StaffList extends Component
             'email' => ['required', 'string', 'email:rfc,strict', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'user_roles' => ['required', 'array', 'min:1'],
+            'deptId' => ['nullable','numeric']
         ])->validate();
 
         // Create a new user
@@ -529,21 +533,30 @@ class StaffList extends Component
 
         // Assign the selected roles to the new user
         foreach($this->user_roles as $role){
-            $userrole = UserRole::create([
-                'user_id' => $user->id,
-                'department_id' => null,
-                'role' => $role,
-            ]);
+            if($role == "dept_staff" || $role == "dept_head" || $role == "admin"){
+                $userrole = UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => $this->deptId,
+                    'role' => $role,
+                ]);
+            }else{
+                $userrole = UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => $role,
+                ]);
+            }
             $userrole->log_audit('Added new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New user role '. $user->firstname . ' ' . $user->lastname . ' created successfully');
         }
         // Clear form fields and close modal
-        $this->showModal = false; 
         $this->firstname = '';
         $this->lastname = '';
         $this->email = '';
         $this->password = '';
         $this->password_confirmation = '';
         $this->user_roles = [];
+        $this->deptId = null;
+        $this->showModal = false; 
 
         //Send success toast
         $this->dispatch('show-toast', [
@@ -801,6 +814,7 @@ class StaffList extends Component
         $this->confirmDelete = false;
         $this->editMode = false;
         $this->staffCheckboxes = [];
+        $this->selectAll = false;
 
         $this->dispatch('show-toast', [
             'message' => count($staff_checkboxes). ' user(s) deleted!',

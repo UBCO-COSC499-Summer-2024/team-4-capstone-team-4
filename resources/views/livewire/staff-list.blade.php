@@ -48,7 +48,7 @@
         @if($showModal == true)
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                 @if($admin)
-                    <x-add-user :showModal="$showModal"/>
+                    <x-add-user :showModal="$showModal" :user_roles="$user_roles"/>
                 @else
                     <x-staff-targethours :showModal="$showModal"/>
                 @endif
