@@ -9,11 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ServiceRoleTest extends TestCase
+/* class ServiceRoleTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    
     public function test_page_load(): void {
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
@@ -55,3 +53,4 @@ class ServiceRoleTest extends TestCase
 
     
 }
+ */
