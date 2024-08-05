@@ -150,4 +150,8 @@ class UserRole extends Model {
         self::audit($action, $details, $description);
     }
 
+    public static function instructors() {
+        return self::where('role', 'instructor')->get();
+    }
+
 }

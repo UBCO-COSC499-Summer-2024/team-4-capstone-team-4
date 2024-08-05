@@ -109,6 +109,10 @@ class User extends Authenticatable {
         return $this->hasRoles([$role]) && $this->roles->count() === 1;
     }
 
+    public function hasEitherOnlyRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->count() === count($roles);
+    }
+
     public function getName() {
         try {
             return $this->firstname . ' ' . $this->lastname;

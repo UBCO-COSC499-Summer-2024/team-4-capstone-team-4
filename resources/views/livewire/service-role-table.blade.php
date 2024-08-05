@@ -11,6 +11,9 @@
                 Description
             </th>
             <th class="svcr-list-header-item">
+                Room
+            </th>
+            <th class="svcr-list-header-item">
                 Area
             </th>
             <th class="svcr-list-header-item">
