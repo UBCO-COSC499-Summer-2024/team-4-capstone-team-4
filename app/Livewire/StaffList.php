@@ -110,6 +110,8 @@ class StaffList extends Component
 
     //For setting values on intial render
     public function mount(){
+        $this->resetValidation();
+
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
         $this->pagination = 10;
@@ -139,6 +141,8 @@ class StaffList extends Component
      * @return \Illuminate\View\View The rendered view of the staff list.
      */
     public function render(){
+        $this->resetValidation();
+
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
         $depts = $this->selectedDepts;
@@ -549,13 +553,8 @@ class StaffList extends Component
             $userrole->log_audit('Added new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New user role '. $user->firstname . ' ' . $user->lastname . ' created successfully');
         }
         // Clear form fields and close modal
-        $this->firstname = '';
-        $this->lastname = '';
-        $this->email = '';
-        $this->password = '';
-        $this->password_confirmation = '';
-        $this->user_roles = [];
-        $this->deptId = null;
+        $this->reset();
+        $this->resetValidation();
         $this->showModal = false; 
 
         //Send success toast
