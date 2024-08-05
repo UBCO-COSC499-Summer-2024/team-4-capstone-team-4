@@ -21,6 +21,34 @@
                     </div>
                 </div>
                 <div class="form-item">
+                    <label class="form-item" for="room">Room</label>
+                    <div class="grouped">
+                        <div x-show="isEditing" x-cloak class="flex items-center justify-start gap-2">
+                            <input type="text" class="form-input !min-w-8 !max-w-16"
+                                id="roomB"
+                                wire:model.live="roomB"
+                                placeholder="LIB"
+                                value="{{ $roomB }}"
+                                x-cloak>
+                            <input type="text" class="form-input !min-w-8 !max-w-16"
+                                id="roomN"
+                                wire:model.live="roomN"
+                                placeholder="123"
+                                value="{{ $roomN }}"
+                                x-cloak>
+                            <input type="text" class="form-input !min-w-8 !max-w-12"
+                                id="roomS"
+                                wire:model.live="roomS"
+                                placeholder="B"
+                                value="{{ $roomS }}"
+                                x-cloak>
+                        </div>
+                        @error('roomB') <span class="error">{{ $message }}</span> @enderror
+                        @error('roomN') <span class="error">{{ $message }}</span> @enderror
+                        @error('roomS') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+                <div class="form-item">
                     <div class="form-item" for="year">Year</div>
                     <div class="grouped">
                         <input class="form-input !min-w-fit" type="number" id="year" wire:model="year" value="{{ $year }}"

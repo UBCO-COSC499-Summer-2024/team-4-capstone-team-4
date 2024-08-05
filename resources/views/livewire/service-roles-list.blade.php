@@ -210,6 +210,14 @@
                         </th>
                         <th class="svcr-list-header-item">
                             <div class="flex">
+                                Room
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="room" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
                                 Instructors
                                 <div class="ml-1 sort-icons">
                                     <span class="material-symbols-outlined sort-icon " data-field="instructors" data-direction="asc">unfold_more</span>

@@ -3,15 +3,37 @@
         {{ $id }}
     </td>
     <td class="svcr-list-item-cell" data-column="name">
-        <input type="text" class="form-input" wire:model="name">
+        <input type="text" class="svcr-list-item-edit" wire:model="name" placeholder="ex. Student Advisor">
         @error('name') <span class="error">{{ $message }}</span> @enderror
     </td>
     <td class="svcr-list-item-cell" data-column="description">
-        <input type="text" class="form-input" wire:model="description">
+        <input type="text" class="svcr-list-item-edit" wire:model="description" placeholder="Write something...">
         @error('description') <span class="error">{{ $message }}</span> @enderror
     </td>
+    <td class="svcr-list-item-cell" data-column="room">
+        <div class="flex items-center justify-start gap-2">
+            <input type="text" class="svcr-list-item-edit !min-w-8 !max-w-20"
+                wire:model="room"
+                hidden
+                value="{{ $room }}"
+                x-cloak>
+            <input type="text" class="svcr-list-item-edit !min-w-8 !max-w-12"
+                wire:model="roomB"
+                placeholder="LIB"
+                value="{{ $roomB }}">
+            <input type="text" class="svcr-list-item-edit !min-w-8 !max-w-12"
+                wire:model="roomN"
+                placeholder="123"
+                value="{{ $roomN }}">
+            <input type="text" class="svcr-list-item-edit !min-w-4 !max-w-8"
+                wire:model="roomS"
+                placeholder="B"
+                value="{{ $roomS }}">
+        </div>
+        @error('room') <span class="error">{{ $message }}</span> @enderror
+    </td>
     <td class="svcr-list-item-cell" data-column="area">
-        <select class="form-select" wire:model="area_id">
+        <select class="svcr-list-item-edit" wire:model="area_id">
             <option value="">Select Area</option>
             @foreach ($areas as $area)
                 <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -21,7 +43,7 @@
     </td>
     <td class="svcr-list-item-cell" data-column="year">
         <div class="form-group !max-w-20 !w-fit">
-            <input type="number" class="form-input !min-w-16 !w-fit" wire:model="year">
+            <input type="number" class="svcr-list-item-edit !min-w-16 !w-fit" wire:model="year" placeholder="ex. {{date('Y')}}">
             @error('year') <span class="error">{{ $message }}</span> @enderror
         </div>
     </td>
@@ -38,7 +60,7 @@
                 <div class="form-group">
                     <input type="number" min="0" max="200"
                         id="monthly-hours-{{ $id }}-{{ $month }}"
-                        class="form-input !min-w-10 !max-w-16"
+                        class="svcr-list-item-edit !min-w-10 !max-w-16"
                         data-tippy-content="{{ $month }}"
                         wire:model="monthly_hrs.{{ $month }}"
                         value="{{ (int) $hour }}">

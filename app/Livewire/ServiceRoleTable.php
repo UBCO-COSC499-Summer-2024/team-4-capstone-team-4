@@ -33,11 +33,13 @@ class ServiceRoleTable extends Component
 
     public function deleteRow($id) {
         $this->cachedSvcroles = $this->svcroles;
-        $this->svcroles = array_values(array_filter($this->svcroles, function($svcrole) use ($id) {
-            return $svcrole['id'] != $id;
-        }));
+        // don't delete the first row, delete the actual row
+        $this->svcroles = array_filter($this->svcroles, function ($svcrole) use ($id) {
+            return $svcrole['id'] !== $id;
+        });
 
-        $this->svcroles = array_map(function($svcrole, $index) {
+        // remap the ids
+        $this->svcroles = array_map(function ($svcrole, $index) {
             $svcrole['id'] = $index + 1;
             return $svcrole;
         }, $this->svcroles, array_keys($this->svcroles));
@@ -83,6 +85,7 @@ class ServiceRoleTable extends Component
                 'November' => 0,
                 'December' => 0,
             ]),
+            'room' => '',
             'archived' => false,
             'updateMe' => false,
             'original_area_name' => '',

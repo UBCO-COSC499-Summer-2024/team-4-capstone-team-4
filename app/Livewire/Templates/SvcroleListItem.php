@@ -23,6 +23,10 @@ class SvcroleListItem extends Component
     public $isSelected = false;
     public $formattedAreas;
     public $audit_user;
+    public $srroom; // concatenated room string (LIB 101 A)
+    public $roomB; // room building short code (LIB)
+    public $roomN; // room number (101)
+    public $roomS; // room suffix (A)
 
     // You might need to pass areas from the parent component
     // or fetch them in this component's mount() method
@@ -44,7 +48,8 @@ class SvcroleListItem extends Component
         'srname' => 'required',
         'sryear' => 'required|integer',
         'srdescription' => 'nullable',
-        'srarea_id' => 'required|exists:areas,id'
+        'srarea_id' => 'required|exists:areas,id',
+        'srroom' => 'nullable|string|max:255',
     ];
 
     public function mount($serviceRoleId) {
@@ -57,7 +62,16 @@ class SvcroleListItem extends Component
         $this->sryear = $this->serviceRole->year;
         $this->srdescription = $this->serviceRole->description;
         $this->srarea_id = $this->serviceRole->area_id;
+        $this->srroom = $this->serviceRole->room;
+        $this->roomB = $this->serviceRole->getRoom()['building'];
+        $this->roomN = $this->serviceRole->getRoom()['number'];
+        $this->roomS = $this->serviceRole->getRoom()['suffix'];
         $this->audit_user = User::find((int) auth()->user()->id)->getName();
+    }
+
+    public function concatRoom() {
+        $this->srroom = $this->roomB . ($this->roomN ? ' ' . $this->roomN : '') . ($this->roomS ? ' ' . $this->roomS : '');
+        $this->srroom = trim($this->srroom);
     }
 
     public function toggleEditMode($data) {
@@ -146,6 +160,7 @@ class SvcroleListItem extends Component
         }
 
         try {
+            $this->concatRoom();
             $this->validate();
             $oldValue = $this->serviceRole->getOriginal();
 
@@ -163,7 +178,8 @@ class SvcroleListItem extends Component
                         'year' => $this->sryear,
                         'description' => $this->srdescription,
                         'area_id' => $this->srarea_id,
-                        'archived' => false,
+                        'archived' => $this->serviceRole->archived,
+                        'room' => $this->srroom,
                     ]);
                     ServiceRole::audit('create', [
                         'new_value' => json_encode($newServiceRole->getAttributes()),
@@ -184,6 +200,7 @@ class SvcroleListItem extends Component
             $this->serviceRole->year = $this->sryear;
             $this->serviceRole->description = $this->srdescription;
             $this->serviceRole->area_id = $this->srarea_id;
+            $this->serviceRole->room = $this->srroom;
             $this->serviceRole->save();
 
             $this->isEditing = false;

@@ -134,7 +134,7 @@
 
     <div class="svcrole-item" :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
         <section id="about-role" class="svcr-item">
-            <form id="service-role-update-form" class="form svcr-item-form">
+            <form id="service-role-update-form" class="form svcr-item-form" wire:key="service-role-update-form">
                 <div class="horizontal grouped w-fit">
                     <div class="form-group svcrole-self">
                         <div class="form-item">
@@ -152,6 +152,38 @@
                                 <textarea class="form-input" id="description" wire:model="description"
                                     placeholder="Brief Description..." x-bind:disabled="!isEditing" >{{ $description }}</textarea>
                                 @error('description') <span class="error">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-item" for="room">Room</label>
+                            <div class="grouped">
+                                <input type="text" class="form-input text-end" id="room"
+                                    placeholder="ex. LIB 123 B"
+                                    x-show="!isEditing"
+                                    x-bind:disabled="true" value="{{ trim($roomB . ' ' . $roomN . ' ' . $roomS) ?? 'Not Assgined' }}">
+                                <div x-show="isEditing" x-cloak class="flex items-center justify-start gap-2">
+                                    <input type="text" class="form-input !min-w-8 !max-w-16"
+                                        id="roomB"
+                                        wire:model.live="roomB"
+                                        placeholder="LIB"
+                                        value="{{ $roomB }}"
+                                        x-cloak>
+                                    <input type="text" class="form-input !min-w-8 !max-w-16"
+                                        id="roomN"
+                                        wire:model.live="roomN"
+                                        placeholder="123"
+                                        value="{{ $roomN }}"
+                                        x-cloak>
+                                    <input type="text" class="form-input !min-w-8 !max-w-12"
+                                        id="roomS"
+                                        wire:model.live="roomS"
+                                        placeholder="B"
+                                        value="{{ $roomS }}"
+                                        x-cloak>
+                                </div>
+                                @error('roomB') <span class="error">{{ $message }}</span> @enderror
+                                @error('roomN') <span class="error">{{ $message }}</span> @enderror
+                                @error('roomS') <span class="error">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="form-item">
@@ -177,11 +209,11 @@
                         </div>
 
                         <div class="form-item" x-show="isEditing" x-cloak>
-                            {{-- <button type="button" class="form-input" wire:loading.attr="disabled" id="save-service-role">
+                            <button type="submit" class="form-input" wire:loading.attr="disabled" id="save-service-role" value="Save">
                                 <span class="material-symbols-outlined icon">save</span>
                                 <span>Save</span>
-                             </button> --}}
-                             <input type="submit" class="form-input" wire:loading.attr="disabled" id="save-service-role" value="Save">
+                            </button>
+                             {{-- <input type="submit" class="form-input" wire:loading.attr="disabled" id="save-service-role" value="Save"> --}}
                         </div>
                     </div>
 
@@ -429,109 +461,128 @@
             </x-slot>
         </x-dialog-modal>
     </div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', initInstructorForm);
-    document.addEventListener('livewire:init', initInstructorForm);
-    document.addEventListener('livewire:load', initInstructorForm);
-    document.addEventListener('livewire:update', initInstructorForm);
+    <script>
+        document.addEventListener('DOMContentLoaded', initInstructorForm);
+        document.addEventListener('livewire:init', initInstructorForm);
+        document.addEventListener('livewire:load', initInstructorForm);
+        document.addEventListener('livewire:update', initInstructorForm);
 
-    document.addEventListener('DOMContentLoaded', initServiceRoleForm);
-    document.addEventListener('livewire:init', initServiceRoleForm);
-    document.addEventListener('livewire:load', initServiceRoleForm);
-    document.addEventListener('livewire:update', initServiceRoleForm);
+        document.addEventListener('DOMContentLoaded', initServiceRoleForm);
+        document.addEventListener('livewire:init', initServiceRoleForm);
+        document.addEventListener('livewire:load', initServiceRoleForm);
+        document.addEventListener('livewire:update', initServiceRoleForm);
 
-    document.addEventListener('DOMContentLoaded', handleExport);
-    document.addEventListener('livewire:init', handleExport);
-    document.addEventListener('livewire:load', handleExport);
-    document.addEventListener('livewire:update', handleExport);
+        document.addEventListener('DOMContentLoaded', handleExport);
+        document.addEventListener('livewire:init', handleExport);
+        document.addEventListener('livewire:load', handleExport);
+        document.addEventListener('livewire:update', handleExport);
 
-    function handleExport() {
-        if (document.querySelector('#exportDropdown.initialized')) return;
-        const exportDropdown = document.getElementById('exportDropdown');
-        if (!exportDropdown) return;
-        exportDropdown.classList.add('initialized');
-        // exportDropdown.addEventListener('dropdown-item-selected', function (e) {
-        exportDropdown.addEventListener('change', function (e) {
-            // const value = e.detail.value;
-            const value = exportDropdown.value;
-            @this.dispatch('export-role', { 'format': value });
-        });
-    }
-
-    function initInstructorForm() {
-        if (document.querySelector('.instructor-form-init')) return;
-        const form = document.getElementById('instructor-form');
-        if (!form) return;
-        form.classList.add('instructor-form-init');
-        const instructor_id = document.querySelector('#instructor_id');
-        const role = document.querySelector('#roles_list');
-        const saveButton = document.querySelector('#save-instructor');
-
-        instructor_id.addEventListener('change', function () {
-            @this.set('instructor_id', instructor_id.value);
-        });
-        role.addEventListener('change', function () {
-            @this.set('role', role.value);
-        });
-        saveButton.addEventListener('click', function (e) {
-            console.log(e);
-            e.preventDefault();
-            @this.dispatch('save-instructor');
-        });
-    }
-
-    function initServiceRoleForm() {
-        if (document.querySelector('.service-role-form-init')) return;
-        const form = document.getElementById('service-role-update-form');
-        if (!form) return;
-        form.classList.add('service-role-form-init');
-        const name = document.querySelector('#name');
-        const description = document.querySelector('#description');
-        const year = document.querySelector('#year');
-        const area_id = document.querySelector('#area_id');
-        const monthlyHours = document.querySelectorAll('.monthlyHour input');
-        const saveSRButton = document.querySelector('#save-service-role');
-
-
-        if (name) {
-            name.addEventListener('change', function () {
-                @this.set('name', name.value);
+        function handleExport() {
+            if (document.querySelector('#exportDropdown.initialized')) return;
+            const exportDropdown = document.getElementById('exportDropdown');
+            if (!exportDropdown) return;
+            exportDropdown.classList.add('initialized');
+            // exportDropdown.addEventListener('dropdown-item-selected', function (e) {
+            exportDropdown.addEventListener('change', function (e) {
+                // const value = e.detail.value;
+                const value = exportDropdown.value;
+                @this.dispatch('export-role', { 'format': value });
             });
         }
-        if (description) {
-            description.addEventListener('change', function () {
-                const value = description.value ?? description.textContent;
-                @this.set('description', value);
+
+        function initInstructorForm() {
+            if (document.querySelector('.instructor-form-init')) return;
+            const form = document.getElementById('instructor-form');
+            if (!form) return;
+            form.classList.add('instructor-form-init');
+            const instructor_id = document.querySelector('#instructor_id');
+            const role = document.querySelector('#roles_list');
+            const saveButton = document.querySelector('#save-instructor');
+
+            instructor_id.addEventListener('change', function () {
+                @this.set('instructor_id', instructor_id.value);
             });
-        }
-        if (year) {
-            year.addEventListener('change', function () {
-                // this is a select
-                const value = year.options[year.selectedIndex].value;
-                @this.set('year', value);
+            role.addEventListener('change', function () {
+                @this.set('role', role.value);
             });
-        }
-        if (area_id) {
-            area_id.addEventListener('change', function () {
-                // this is a select
-                const value = area_id.options[area_id.selectedIndex].value;
-                @this.set('area_id', value);
-            });
-        }
-        if (monthlyHours) {
-            monthlyHours.forEach(month => {
-                month.addEventListener('change', function () {
-                    const monthId = month.id.split('_')[2];
-                    @this.set(`monthly_hours.${monthId}`, month.value);
-                });
-            });
-        }
-        if (saveSRButton) {
-            saveSRButton.addEventListener('click', function (e) {
+            saveButton.addEventListener('click', function (e) {
+                console.log(e);
                 e.preventDefault();
-                @this.dispatch('update-role');
+                @this.dispatch('save-instructor');
             });
         }
-    }
-</script>
+
+        function initServiceRoleForm() {
+            if (document.querySelector('.service-role-form-init')) return;
+            const form = document.getElementById('service-role-update-form');
+            if (!form) return;
+            form.classList.add('service-role-form-init');
+            const name = document.querySelector('#name');
+            const description = document.querySelector('#description');
+            const year = document.querySelector('#year');
+            const area_id = document.querySelector('#area_id');
+            const monthlyHours = document.querySelectorAll('.monthlyHour input');
+            const saveSRButton = document.querySelector('#save-service-role');
+            const roomB = document.querySelector('#roomB');
+            const roomN = document.querySelector('#roomN');
+            const roomS = document.querySelector('#roomS');
+
+
+            if (name) {
+                name.addEventListener('change', function () {
+                    @this.set('name', name.value);
+                });
+            }
+            if (description) {
+                description.addEventListener('change', function () {
+                    const value = description.value ?? description.textContent;
+                    @this.set('description', value);
+                });
+            }
+            if (year) {
+                year.addEventListener('change', function () {
+                    // this is a select
+                    const value = year.options[year.selectedIndex].value;
+                    @this.set('year', value);
+                });
+            }
+            if (area_id) {
+                area_id.addEventListener('change', function () {
+                    // this is a select
+                    const value = area_id.options[area_id.selectedIndex].value;
+                    @this.set('area_id', value);
+                });
+            }
+            if (monthlyHours) {
+                monthlyHours.forEach(month => {
+                    month.addEventListener('change', function () {
+                        const monthId = month.id.split('_')[2];
+                        @this.set(`monthly_hours.${monthId}`, month.value);
+                    });
+                });
+            }
+            if (roomB) {
+                roomB.addEventListener('change', function () {
+                    @this.set('roomB', roomB.value);
+                });
+            }
+            if (roomN) {
+                roomN.addEventListener('change', function () {
+                    @this.set('roomN', roomN.value);
+                });
+            }
+            if (roomS) {
+                roomS.addEventListener('change', function () {
+                    @this.set('roomS', roomS.value);
+                });
+            }
+            if (saveSRButton) {
+                saveSRButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    @this.dispatch('update-role');
+                    @this.call('refresh');
+                });
+            }
+        }
+    </script>
+</div>

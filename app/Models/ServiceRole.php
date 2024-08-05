@@ -169,15 +169,15 @@ class ServiceRole extends Model {
         $suffix = null;
         if ($room) {
             // explode either by space or hyphen or underscore
-            $parts = preg_split('/[\s-_]/', $room);
-            $building = $parts[0];
-            $room_number = $parts[1];
+            $parts = preg_split('/[-\s_]/', $room);
+            $building = $parts[0] ?? null;
+            $room_number = $parts[1] ?? null;
             $suffix = $parts[2] ?? null;
         }
         return [
             'room' => $room,
             'building' => $building,
-            'room_number' => $room_number,
+            'number' => $room_number,
             'suffix' => $suffix,
         ];
     }

@@ -40,8 +40,7 @@ class ExtraHour extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function assigner()
-    {
+    public function assigner() {
         return $this->belongsTo(UserRole::class, 'assigner_id')->where('role', 'dept_head')
                                                                  ->orWhere('role', 'dept_staff');
     }
@@ -51,8 +50,7 @@ class ExtraHour extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function instructor()
-    {
+    public function instructor() {
         return $this->belongsTo(UserRole::class, 'instructor_id')->where('role', 'instructor');
     }
 
@@ -61,8 +59,7 @@ class ExtraHour extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function area()
-    {
+    public function area() {
         return $this->belongsTo(Area::class, 'area_id');
     }
 
