@@ -301,21 +301,24 @@
     color: rgb(59, 71, 121); /* Custom UBC blue text */
 }
 
-/* Active tab styles */
-#default-tab .text-ubc {
-    color: rgb(59, 71, 121);
-    font-size: large;
+nav a.import-nav-link {
+    padding: 0.5rem 1rem;
+    border-bottom-width: 2px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    color: #6b7280; /* Gray color for inactive tabs */
+    border-bottom: 2px solid transparent; /* Default border color for inactive tabs */
 }
 
-#default-tab .border-ubc {
-    border-color: rgb(59, 71, 121);
+nav a.import-nav-link:hover {
+    color: #3b4779;
+    border-bottom-color: #3b4779;
 }
 
-/* Hover styles for tabs */
-#default-tab button:hover {
-    background-color: rgba(59, 71, 121, 0.2); /* Darker blue background with some transparency */
-    color: rgb(59, 71, 121);  /* Custom UBC blue */
+nav a.import-nav-link.active {
+    color: #3b4779;
+    border-bottom-color: #3b4779;
 }
+
 
 
 /* Existing button styles for reference */

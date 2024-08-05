@@ -28,7 +28,6 @@
                 <x-assign-button id="assignButton" />
                 <x-edit-button id="editButton" />
                 <x-coursedetails-deleteButton />
-
                 <x-save-button id="saveButton" style="display: none;" />
                 <x-cancel-button id="cancelButton" style="display: none;" />
             </div>
