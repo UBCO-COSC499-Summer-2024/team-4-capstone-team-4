@@ -685,10 +685,12 @@ class StaffList extends Component
         $message = implode("\n", $messageParts);
 
         $this->editMode = false;
-        $this->dispatch('show-toast', [
-            'message' => $message,
-            'type' => 'success'
-        ]);
+        if($message !== ''){
+            $this->dispatch('show-toast', [
+                'message' => $message,
+                'type' => 'success'
+            ]);
+        }
 
         $this->initializeUserData();
     }
