@@ -91,6 +91,7 @@
 .svcr-list-item td:first-child,
 .svcr-list-item [data-column="id"] {
     text-align: center;
+    width: fit-content;
 }
 
 .svcr-list-header-item:has(.svcr-list-item-cell[data-column*="description"]),

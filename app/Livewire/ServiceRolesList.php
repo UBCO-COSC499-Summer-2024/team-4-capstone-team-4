@@ -9,13 +9,13 @@ use Livewire\WithPagination;
 use App\Models\Area;
 use App\Models\AuditLog;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ServiceRolesList extends Component
-{
+class ServiceRolesList extends Component {
     use WithPagination;
     public $links = [];
     // public $columns = [];
@@ -31,6 +31,7 @@ class ServiceRolesList extends Component
     public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
+    public $showAssignInstructorModal = false;
     public $user = null;
     protected $validExportOptions = [
         'csv', 'xlsx', 'pdf', 'text', 'print'
@@ -87,6 +88,7 @@ class ServiceRolesList extends Component
         'toolbarUpdated' => 'handleToolbarUpdate',
         'applyActions' => 'handleApplyActions',
         'filtersReset' => 'resetFilters', // For resetting filters
+        'select-service-role' => 'selectServiceRole',
     ];
 
     public function mount($links = []) {
@@ -94,8 +96,7 @@ class ServiceRolesList extends Component
         $this->user = User::find(auth()->user()->id);
     }
 
-    public function handleToolbarUpdate($data)
-    {
+    public function handleToolbarUpdate($data) {
         // Log or debug if needed
         // logger('Toolbar Updated:', $data);
 
@@ -108,8 +109,16 @@ class ServiceRolesList extends Component
         $this->render();
     }
 
-    public function handleApplyActions($selectedActions)
-    {
+    public function selectServiceRole($id) {
+        // $this->selectedItems = [$id => true];
+        if (array_key_exists($id, $this->selectedItems)) {
+            $this->selectedItems[$id] = !$this->selectedItems[$id];
+        } else {
+            $this->selectedItems[$id] = true;
+        }
+    }
+
+    public function handleApplyActions($selectedActions) {
         // // Log or debug if needed
         // logger('Applying Actions:', $selectedActions, 'to items:', $this->selectedItems);
 
@@ -317,11 +326,30 @@ class ServiceRolesList extends Component
             ? $serviceRolesQuery->with('area')->paginate($this->pageSize)
             : $serviceRolesQuery->with('area')->get();
 
+        // selectedItems update
+        foreach ($serviceRoles as $serviceRole) {
+            if (array_key_exists($serviceRole->id, $this->selectedItems)) {
+                $serviceRole->selected = $this->selectedItems[$serviceRole->id];
+            } else {
+                $serviceRole->selected = false;
+            }
+        }
+
+        // instructors
+        // all service_roles
+
+        $instructors = UserRole::where('role', 'instructor')->get();
+        $areas = Area::all();
+        $allSvcroles = ServiceRole::all();
+
         return view('livewire.service-roles-list', [
             'serviceRoles' => $serviceRoles,
             'links' => $this->links,
             'viewMode' => $this->viewMode,
             'pageMode' => $this->pageMode,
+            'instructors' => $instructors,
+            'areas' => $areas,
+            'allSvcroles' => $allSvcroles,
         ]);
     }
 
@@ -399,8 +427,8 @@ class ServiceRolesList extends Component
         $this->reset(['searchQuery', 'searchCategory', 'selectedFilter', 'filterValue', 'selectedSort', 'selectedSortOrder', 'selectedGroup', 'pageSize']);
     }
 
-    public function performAction($action, $items) {
-        $this->selectedItems = $items;
+    public function performAction($action) {
+        // $this->selectedItems = $items;
 
         switch ($action) {
             case 'delete':
@@ -418,7 +446,7 @@ class ServiceRolesList extends Component
                 $this->toggleEdit();
                 break;
             case 'archive':
-                $this->archive($items);
+                $this->archive();
                 break;
             default:
                 break;
@@ -459,8 +487,7 @@ class ServiceRolesList extends Component
         $this->toast('Selected service roles saved successfully!', 'success');
     }
 
-    public function exportSelected()
-    {
+    public function exportSelected() {
         // You'll need a package like "maatwebsite/excel" for exporting
 
         // Assuming you have the package installed and configured:
@@ -475,21 +502,20 @@ class ServiceRolesList extends Component
         $this->dispatch('show-toast', ['message' => $msg, 'type' => $type]);
     }
 
-    public function openModal($component)
-    {
+    public function openModal($component) {
         if ($component === 'extra-hour-form') {
             $this->openExtraHourForm();
+        } else if ($component === 'assign-instructor') {
+            $this->showAssignInstructorModal = true;
         }
     }
 
-    public function openExtraHourForm()
-    {
+    public function openExtraHourForm() {
         $this->showExtraHourForm = true;
     }
 
-    public function closeModal()
-    {
-        $this->reset(['showExtraHourForm']);
+    public function closeModal() {
+        $this->reset(['showExtraHourForm', 'showAssignInstructorModal']);
     }
 
     public function export($as, $options) {
@@ -534,27 +560,33 @@ class ServiceRolesList extends Component
         ]);
     }
 
-    public function archive($selectedIds) {
-        DB::beginTransaction();
-
+    public function archive() {
+        $selectedIds = $this->selectedItems;
+        dd($selectedIds);
         try {
+            DB::beginTransaction();
             $archivedCount = 0;
             $errors = [];
-            $changes = []; // Array to store old and new values
+            $oldValues = [];
+            $newValues = [];
 
             foreach ($selectedIds as $id => $selected) {
                 if ($selected === true) {
                     $serviceRole = ServiceRole::find((int)$id);
+                    dd($serviceRole);
 
                     if ($serviceRole) {
-                        $changes[] = [
-                            'service_role_id' => $serviceRole->id,
-                            'old_value' => $serviceRole->getOriginal(), // Get original attributes
-                            'new_value' => array_merge($serviceRole->getOriginal(), ['archived' => !$serviceRole->archived]),
-                        ];
+                        $oldValue = $serviceRole->getOriginal();
+                        $isArchived = $serviceRole->archived;
+                        $update = $serviceRole->update(['archived' => !$isArchived]);
+                        dd($update);
 
-                        if ($serviceRole->update(['archived' => !$serviceRole->archived])) {
+                        if ($update) {
                             $archivedCount++;
+                            $newValue = $serviceRole->getAttributes();
+
+                            $oldValues[$serviceRole->id] = $oldValue;
+                            $newValues[$serviceRole->id] = $newValue;
                         } else {
                             $errors[] = $serviceRole->name;
                         }
@@ -566,44 +598,27 @@ class ServiceRolesList extends Component
 
             $this->toast('Successfully ' . ($archivedCount ? 'archived ' . $archivedCount . ' service roles' : 'updated service roles'), 'success');
 
-            // Log the bulk operation details along with changes
-            AuditLog::create([
-                'user_id' => (int)auth()->user()->id,
-                'user_alt' => User::find((int) auth()->user()->id)->getName(),
-                'action' => 'bulk_archive_service_roles',
-                'table_name' => 'service_roles',
-                'description' => "Archived {$archivedCount} service roles.",
-                'old_value' => !empty($changes) ? json_encode($changes) : null, // Store changes for potential restoration
-            ]);
+            // Prepare audit log data
+            $changes = [
+                'operation_type' => 'UPDATE',
+                'old_value' => json_encode($oldValues),
+                'new_value' => json_encode($newValues),
+            ];
+
+            // Create a single audit log entry
+            ServiceRole::audit('bulk archive', $changes, $this->user->getName() . " archived {$archivedCount} service roles.");
 
             // Log any errors encountered
             if (!empty($errors)) {
-                AuditLog::create([
-                    'user_id' => (int) auth()->user()->id,
-                    'user_alt' => auth()->user()->name,
-                    'action' => 'bulk_archive_service_roles_errors',
-                    'table_name' => 'service_roles',
-                    'description' => "Errors archiving service roles: " . implode(', ', $errors),
-                ]);
+                ServiceRole::audit('bulk archive errors', ['operation_type' => 'UPDATE'], $this->user->getName() . " encountered errors while archiving service roles: " . implode(', ', $errors));
             }
 
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback the transaction on error
             $this->toast('An error occurred: ' . $e->getMessage(), 'error');
-
-            // Log the exception
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => auth()->user()->name,
-                'action' => 'bulk_archive_service_roles_exception',
-                'table_name' => 'service_roles',
-                'description' => "Exception: " . $e->getMessage(),
-            ]);
+            ServiceRole::audit('bulk archive exception', ['operation_type' => 'UPDATE'], $this->user->getName() . " encountered an exception while archiving service roles: " . $e->getMessage());
         }
-        // reload
-        $url = route('svcroles');
-        header("Location: $url");
-        exit();
     }
+
 
 }

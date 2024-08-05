@@ -56,6 +56,7 @@ return new class extends Migration
             $table->integer('hours');
             $table->year('year');
             $table->integer('month');
+            $table->string('room')->nullable();
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
@@ -69,6 +70,7 @@ return new class extends Migration
             $table->text('description')->nullable()->default('Default Description');
             $table->year('year')->default(date('Y'));
             $table->json('monthly_hours');
+            $table->string('room')->nullable();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
             $table->boolean('archived')->default(false);

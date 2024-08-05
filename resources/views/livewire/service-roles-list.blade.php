@@ -25,14 +25,17 @@
     ];
     $user = Auth::user();
 @endphp
-<div class="content" x-data="{ showExtraHourForm: @entangle('showExtraHourForm') }">
+<div class="content" x-data="{
+    showExtraHourForm: @entangle('showExtraHourForm'),
+    showAssignInstructorModal: @entangle('showAssignInstructorModal'),
+}">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
         <div class="flex gap-2 right content-title-btn-holder">
             @if(!$user->hasOnlyRole('instructor'))
                 <button class="content-title-btn" onClick="window.location.href='{{ route('svcroles.add') }}'">
-                    <span class="button-title">Create New</span>
-                    <span class="material-symbols-outlined">add</span>
+                    <span class="material-symbols-outlined">work_history</span>
+                    <span class="button-title btn-title">New/Import</span>
                 </button>
                 <button class="content-title-btn" id="svcr-extra-hours-add"
                         title="Add Extra Hours"
@@ -42,32 +45,33 @@
                             });
                         ">
                     <span class="material-symbols-outlined icon">more_time</span>
-                    <span>Add</span>
+                    <span class="button-title btn-title">Add Service Time</span>
+                </button>
+
+                {{-- assign instructor --}}
+                <button class="content-title-btn" id="svcr-assign-instructor"
+                        title="Assign Instructor"
+                        x-on:click="
+                            $dispatch('open-modal', {
+                                'component': 'assign-instructor'
+                            });
+                        ">
+                    <span class="material-symbols-outlined icon">people</span>
+                    <span>Assign</span>
                 </button>
             @endif
-            {{-- <select id="viewModeDropdown" class="toolbar-dropdown">
-                @foreach ($viewModes as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($viewMode == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select>
 
-            <select id="pageModeDropdown" class="toolbar-dropdown">
-                @foreach ($pageModes as $value => $name)
-                    <option value="{{ $value }}"
-                            @if ($pageMode == $value) selected @endif
-                        >{{ $name }}</option>
-                @endforeach
-            </select> --}}
             <x-dropdown align="right" width="32">
                 <x-slot name="trigger">
                     <button class="content-title-btn">
+                        <span class="material-symbols-outlined icon">
+                            view_module
+                        </span>
                         <span class="btn-title">
                             View Mode
                         </span>
                         <span class="material-symbols-outlined icon">
-                            view_module
+                            expand_more
                         </span>
                     </button>
                 </x-slot>
@@ -87,11 +91,14 @@
             <x-dropdown align="right" width="48" align="right">
                 <x-slot name="trigger">
                     <button class="content-title-btn">
+                        <span class="material-symbols-outlined icon">
+                            view_list
+                        </span>
                         <span class="btn-title">
                             Page Mode
                         </span>
                         <span class="material-symbols-outlined icon">
-                            view_list
+                            expand_more
                         </span>
                     </button>
                 </x-slot>
@@ -203,6 +210,14 @@
                         </th>
                         <th class="svcr-list-header-item">
                             <div class="flex">
+                                Room
+                                <div class="ml-1 sort-icons">
+                                    <span class="material-symbols-outlined sort-icon " data-field="room" data-direction="asc">unfold_more</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="svcr-list-header-item">
+                            <div class="flex">
                                 Instructors
                                 <div class="ml-1 sort-icons">
                                     <span class="material-symbols-outlined sort-icon " data-field="instructors" data-direction="asc">unfold_more</span>
@@ -254,6 +269,8 @@
 
     @include('components.link-bar', ['links' => $links])
     <livewire:extra-hour-form :key="'extraHourForm'.time()" :showExtraHourForm="$showExtraHourForm" x-show="showExtraHourForm" x-cloak/>
+    {{-- assign instructor --}}
+    <livewire:components.assign-instructor-modal :key="'assignInstructorModal'.time()" :showAssignInstructorModal="$showAssignInstructorModal" x-show="showAssignInstructorModal" x-cloak/>
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -324,11 +341,6 @@
                 checkboxes.forEach(function (checkbox) {
                     selectedItems[checkbox.value] = checkbox.checked;
                 });
-
-                // Dispatch updateSelectedItems to Livewire for each checkbox
-                checkboxes.forEach(function (checkbox) {
-                    Livewire.dispatch('handleItemSelected', checkbox.value, checkbox.checked);
-                });
             }
 
             updateSelectAll();
@@ -338,7 +350,6 @@
                 checkboxes.forEach(function (checkbox) {
                     checkbox.checked = isChecked;
                     selectedItems[checkbox.value] = isChecked;
-                    @this.dispatch('handleItemSelected', checkbox.value, isChecked);
                 });
                 updateSelectAll();
             });
@@ -437,10 +448,7 @@
                     return acc;
                 }, {});
                 // console.log(sendItems);
-                @this.dispatch('performAction', {
-                    'action': this.value,
-                    'items': sendItems
-                });
+                @this.dispatch('performAction', { 'action': this.value });
             });
         }
     }

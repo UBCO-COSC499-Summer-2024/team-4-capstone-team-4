@@ -132,4 +132,8 @@ class UserRole extends Model {
         return $this->user->getName();
     }
 
+    public static function instructors() {
+        return self::where('role', 'instructor')->get();
+    }
+
 }

@@ -5,9 +5,9 @@
     @endif
     @if(isset($title))
         @if(isset($class))
-            <span class="{{ $class }}-title">{{ $title }}</span>
+            <span class="{{ $class }}-title">{!! str_replace('&amp;', '&', $title) !!}</span>
         @else
-            <span class="link-title">{{ $title }}</span>
+            <span class="link-title">{!! str_replace('&amp;', '&', $title) !!}</span>
         @endif
     @endif
 </a>
