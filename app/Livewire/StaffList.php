@@ -116,19 +116,7 @@ class StaffList extends Component
         $this->selectedMonth = date('F');
         $this->pagination = 10;
 
-        $this->enabledUsers = $this->prevEnabledUsers = User::where('active', true)->pluck('id')->toArray();
-
-        $this->instructors = $this->prevInstructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
-        $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
-        $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
-        $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
-
-        $users = User::all();
-        foreach($users as $user){
-            $this->firstnames[$user->id] = $user->firstname;
-            $this->lastnames[$user->id] = $user->lastname;
-            $this->emails[$user->id] = $user->email;
-        }
+        $this->initializeUserData();
 
     }
 
@@ -498,6 +486,22 @@ class StaffList extends Component
         $this->editMode = false;
     }
 
+    public function initializeUserData(){
+    
+        $this->enabledUsers = $this->prevEnabledUsers = User::where('active', true)->pluck('id')->toArray();
+        $this->instructors = $this->prevInstructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
+        $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
+        $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
+        $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
+    
+        $users = User::all();
+        foreach($users as $user){
+            $this->firstnames[$user->id] = $user->firstname;
+            $this->lastnames[$user->id] = $user->lastname;
+            $this->emails[$user->id] = $user->email;
+        }
+    }
+
     /**
      * Add a new user with the specified roles.
      *
@@ -563,7 +567,13 @@ class StaffList extends Component
             'message' => 'New user ' .$this->firstname. ' ' .$this->lastname. ' created successfully',
             'type' => 'success'
         ]); 
+
+        $this->initializeUserData();
         
+    }
+
+    public function getAllUsers(){
+
     }
 
      /**
@@ -678,6 +688,8 @@ class StaffList extends Component
             'message' => $message,
             'type' => 'success'
         ]);
+
+        $this->initializeUserData();
     }
 
     /**
