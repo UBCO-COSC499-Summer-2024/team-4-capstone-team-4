@@ -98,7 +98,8 @@
     --svcr-list-item-hover-bg: #4b5563;
     --svcr-list-item-checked-bg: #374151;
     --svcr-list-item-text: rgb(158 164 173 / 1);
-    --svcr-list-item-bg: rgba(59, 71, 121, 1);
+    /* --svcr-list-item-bg: rgba(59, 71, 121, 1); */
+    --svcr-list-item-bg: rgb(31 41 55 / 1);
 
     --form-input-bg: rgba(50, 50, 50, 0.9);
     --form-submit-bg: #fff;

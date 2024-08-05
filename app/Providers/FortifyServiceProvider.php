@@ -38,7 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->input(Fortify::username()))->first();
-    
+
             // Check if the user exists and password is correct
             if ($user && Hash::check($request->input('password'), $user->password)) {
                 // Check if the user is disabled
@@ -47,10 +47,17 @@ class FortifyServiceProvider extends ServiceProvider
                         Fortify::username() => ['This account is disabled.'],
                     ]);
                 }
-    
+
                 return $user;
             }
-    
+
+            // if user is approved
+            if ($user && $user->approved) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => ['Your account is not yet approved.'],
+                ]);
+            }
+
             // Return null if authentication fails
             return null;
         });
