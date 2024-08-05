@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Assist;
 use App\Models\CourseSection;
 use App\Models\Teach;
 use App\Models\TeachingAssistant;
@@ -74,6 +75,34 @@ class UploadFileFormAssignTas extends Component
     public function getAvailableTas()
     {
         return TeachingAssistant::get();
+    }
+
+    public function handleSubmit() {
+        // dd($this->assignments);
+
+        foreach($this->assignments as $assignment) {
+            if(isset($assignment['ta_id']) || $assignment['ta_id'] != null) {
+                Assist::create([
+                    'course_section_id' => $assignment['course_section_id'],
+                    'ta_id' => (int) $assignment['ta_id'],
+                    'rating' => 0
+                ]);
+            }
+        }
+
+        $this->finalCSVs = [];
+        $this->assignments = [];
+        $this->mount($this->finalCSVs);
+
+        session()->flash('success', 'Instructors assigned successfully!');
+
+        if(session()->has('success')) {
+            $this->showModal = true;
+        }
+    }
+
+    public function closeModal() {
+        $this->showModal = false;
     }
 
     public function render()

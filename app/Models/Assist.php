@@ -23,7 +23,7 @@ class Assist extends Model {
      * @var array
      */
     protected $fillable = [
-        'cid', 'taid', 'rating',
+        'course_section_id', 'ta_id', 'rating',
     ];
 
     /**
@@ -42,7 +42,7 @@ class Assist extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function courseSection() {
-        return $this->belongsTo(CourseSection::class, 'course_id');
+        return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
 
     /**
