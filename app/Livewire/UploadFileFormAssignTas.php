@@ -23,6 +23,14 @@ class UploadFileFormAssignTas extends Component
         // dd($this->finalCSVs);
 
         foreach ($this->finalCSVs as $finalCSV) {
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term'];
+
+             foreach ($requiredKeys as $key) {
+                if (!isset($finalCSV[$key])) {
+                    continue 2;
+                    }
+            }
+
             $course = CourseSection::where('prefix', $finalCSV['Prefix'])
                 ->where('number', $finalCSV['Number'])
                 ->where('section', $finalCSV['Section'])
@@ -35,15 +43,15 @@ class UploadFileFormAssignTas extends Component
                 foreach ($finalCSV['TAs'] as $ta) {
                     $ta_id = TeachingAssistant::where("name", $ta)->value('id');
                     $this->assignments[] = [
-                        'course_section_id' => $course->id,
-                        'prefix' => $course->prefix,
-                        'number' => $course->number,
-                        'section' => $course->section,
-                        'year' => $course->year,
-                        'session' => $course->session,
-                        'term' => $course->term,
-                        'ta_id' => $ta_id,
-                        'ta' => $ta,
+                        'course_section_id' => $course->id ?? '',
+                        'prefix' => $course->prefix ?? '',
+                        'number' => $course->number ?? '',
+                        'section' => $course->section ?? '',
+                        'year' => $course->year ?? '',
+                        'session' => $course->session ?? '',
+                        'term' => $course->term ?? '',
+                        'ta_id' => $ta_id ?? '',
+                        'ta' => $ta ?? '',
                     ];
                 }
             }
@@ -58,6 +66,14 @@ class UploadFileFormAssignTas extends Component
         // $assignedCourseIds = Teach::pluck('course_section_id');
 
         foreach ($this->finalCSVs as $finalCSV) {
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term'];
+
+             foreach ($requiredKeys as $key) {
+                if (!isset($finalCSV[$key])) {
+                    continue 2;
+                    }
+            }
+
             $course = CourseSection::where('prefix', $finalCSV['Prefix'])
                 ->where('number', $finalCSV['Number'])
                 ->where('section', $finalCSV['Section'])

@@ -27,22 +27,30 @@ class UploadFileFormAssignCourses extends Component
 
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
-                'course_section_id' => $course->id,
-                'prefix' => $course->prefix,
-                'number' => $course->number,
-                'section' => $course->section,
-                'year' => $course->year,
-                'session' => $course->session,
-                'term' => $course->term,
+                'course_section_id' => $course->id ?? '',
+                'prefix' => $course->prefix ?? '',
+                'number' => $course->number ?? '',
+                'section' => $course->section ?? '',
+                'year' => $course->year ?? '',
+                'session' => $course->session ?? '',
+                'term' => $course->term ?? '',
                 'instructor_id' => '',
                 'instructor' => '',
-                'year' => $course->year,
+                'year' => $course->year ?? '',
             ];
         })->toArray();
 
         // dd($this->assignments, $this->finalCSVs);
         foreach($this->assignments as $index => $assignment) {
             foreach($this->finalCSVs as $finalCSV) {
+                $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term', 'Instructor'];
+
+                foreach ($requiredKeys as $key) {
+                    if (!isset($finalCSV[$key])) {
+                        continue 2;
+                        }
+                }
+
                     if( $finalCSV['Prefix'] == $assignment['prefix'] &&
                         $finalCSV['Number'] == $assignment['number'] &&
                         $finalCSV['Section'] == $assignment['section'] &&
@@ -198,6 +206,13 @@ class UploadFileFormAssignCourses extends Component
   
         foreach($this->finalCSVs as $finalCSV) {
             // dd($coursesFromCSV);
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term'];
+
+             foreach ($requiredKeys as $key) {
+                if (!isset($finalCSV[$key])) {
+                    continue 2;
+                    }
+            }
 
             $course = CourseSection::whereNotIn('id', $assignedCourseIds)
                 ->where('prefix', $finalCSV['Prefix'])
