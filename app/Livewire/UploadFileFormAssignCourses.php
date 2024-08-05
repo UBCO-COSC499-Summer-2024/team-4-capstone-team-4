@@ -197,7 +197,6 @@ class UploadFileFormAssignCourses extends Component
 
   
         foreach($this->finalCSVs as $finalCSV) {
-            $coursesFromCSV = "{$finalCSV['Prefix']} {$finalCSV['Number']} {$finalCSV['Section']} - {$finalCSV['Year']}{$finalCSV['Session']}{$finalCSV['Term']}";
             // dd($coursesFromCSV);
 
             $course = CourseSection::whereNotIn('id', $assignedCourseIds)

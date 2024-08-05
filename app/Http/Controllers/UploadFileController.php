@@ -354,10 +354,11 @@ class UploadFileController extends Controller {
         }
 
         foreach ($uploadedFiles as $uploadedFile) {
-            $trimCSV = [];
-            $trimCSV['File'] = $uploadedFile['fileName'];     
-                   
-        foreach ($uploadedFile['csvData'] as $csvData) {
+            foreach ($uploadedFile['csvData'] as $csvData) {
+                $trimCSV = [];
+                $trimCSV['File'] = $uploadedFile['fileName'];
+                $trimCSV['TAs'] = [];
+    
                 foreach ($csvData as $key => $value) {
                     switch ($key) {
                         case 'Prefix':
@@ -367,24 +368,23 @@ class UploadFileController extends Controller {
                         case 'Term':
                         case 'Year':
                         case 'Room':
-                            $temp[$key] = $value;
+                            $trimCSV[$key] = $value;
                             break;
                         case 'TAs': // Single column with delimiters
-                            $temp['TAs'] = explode(';', $value);
+                            $trimCSV['TAs'] = explode(';', $value);
                             break;
                         default: // Separate columns for each TA
                             if (strpos($key, 'TA') === 0 && !empty($value)) {
-                                $temp['TAs'][] = $value;
+                                $trimCSV['TAs'][] = $value;
                             }
                             break;
                     }
                 }
-                $trimCSV[] = $temp;
-               
+                $finalCSVs[] = $trimCSV;
             }
-            $finalCSVs[] = $trimCSV;
         }
-        dd($finalCSVs);
+
+        // dd($finalCSVs);
 
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.assign.tas');

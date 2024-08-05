@@ -13,5 +13,5 @@
 <livewire:drag-and-drop :action="'upload.file.assign.tas'"/>
 
 @if (session('finalCSVs'))
-<livewire:upload-file-form-assign-courses :finalCSVs="session('finalCSVs')" />
+<livewire:upload-file-form-assign-tas :finalCSVs="session('finalCSVs')" />
 @endif
