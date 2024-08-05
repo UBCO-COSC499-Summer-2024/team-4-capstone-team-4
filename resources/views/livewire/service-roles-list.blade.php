@@ -35,7 +35,7 @@
             @if(!$user->hasOnlyRole('instructor'))
                 <button class="content-title-btn" onClick="window.location.href='{{ route('svcroles.add') }}'">
                     <span class="material-symbols-outlined">work_history</span>
-                    <span class="button-title btn-title">Create New</span>
+                    <span class="button-title btn-title">New/Import</span>
                 </button>
                 <button class="content-title-btn" id="svcr-extra-hours-add"
                         title="Add Extra Hours"
