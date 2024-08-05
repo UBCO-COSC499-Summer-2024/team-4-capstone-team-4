@@ -42,7 +42,7 @@ class InstructorReportTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_instructor_report_page_cannot_be_accessed_by_instructor(): void{
+    public function test_instructor_can_access_own_report(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
         $instructorRole = UserRole::factory()->create([
@@ -52,6 +52,21 @@ class InstructorReportTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get('/instructor-report/'.$instructorRole->id);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_instructor_cannot_access_others_reports(): void{
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $instructorRole2 = UserRole::factory()->create([
+            'user_id' => $user2->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+
+        $response = $this->actingAs($user)->get('/instructor-report/'.$instructorRole2->id);
 
         $response->assertStatus(403);
     }
