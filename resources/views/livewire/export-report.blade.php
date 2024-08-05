@@ -26,6 +26,8 @@
                             <th class="report-head-cell">Course Section</th>
                             <th class="report-head-cell">Term</th>
                             <th class="report-head-cell">Year</th>
+                            <th class="report-head-cell">Room</th>
+                            <th class="report-head-cell">Times</th>
                             <th class="report-head-cell">Enrolled (%)</th>
                             <th class="report-head-cell">Dropped (%)</th>
                             <th class="report-head-cell">SEI Average (IM)</th>
@@ -41,6 +43,8 @@
                                 <td class="report-cell">{{ $course->courseSection->prefix }}{{ $course->courseSection->number }}  {{ $course->courseSection->section }}</td>
                                 <td class="report-cell">Term {{ $course->courseSection->term }}</td>
                                 <td class="report-cell">{{ $course->courseSection->year }}</td>
+                                <td class="report-cell">{{ $course->courseSection->room }}</td>
+                                <td class="report-cell">{{ $course->courseSection->time_start }} - {{ $course->courseSection->time_end }}</td>
                                 <td class="report-cell">{{ round($course->courseSection->enroll_end * 100 / $capacity, 1) }}</td>
                                 <td class="report-cell">{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
                                 <td class="report-cell">{{ $sei ? $sei : '-' }}</td>
@@ -48,7 +52,7 @@
                         @endforeach
                         @if ($performance)
                             <tr class="report-row total-row">
-                                <td class="report-cell" colspan="3">Total Average</td>
+                                <td class="report-cell" colspan="5">Total Average</td>
                                 <td class="report-cell">{{ $performance->enrolled_avg }}</td>
                                 <td class="report-cell">{{ $performance->dropped_avg }}</td>
                                 <td class="report-cell">{{ $performance->sei_avg }}</td>

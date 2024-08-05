@@ -27,6 +27,8 @@
                 <th style="font-weight:bold;">Course Section</th>
                 <th style="font-weight:bold;">Term</th>
                 <th style="font-weight:bold;">Year</th>
+                <th style="font-weight:bold;">Room</th>
+                <th style="font-weight:bold;">Times</th>
                 <th style="font-weight:bold;">Enrolled (%)</th>
                 <th style="font-weight:bold;">Dropped (%)</th>
                 <th style="font-weight:bold;">SEI Average (IM)</th>
@@ -42,6 +44,8 @@
                     <td>{{ $course->courseSection->prefix }}{{ $course->courseSection->number }} {{ $course->courseSection->section }}</td>
                     <td>Term {{ $course->courseSection->term }}</td>
                     <td>{{ $course->courseSection->year }}</td>
+                    <td>{{ $course->courseSection->room }}</td>
+                    <td>{{ $course->courseSection->time_start }} - {{ $course->courseSection->time_end }}</td>
                     <td>{{ round($course->courseSection->enrolled * 100 / $capacity, 1) }}</td>
                     <td>{{ round($course->courseSection->dropped * 100 / $capacity, 1) }}</td>
                     <td>{{ $sei ?? '-' }}</td>
@@ -96,7 +100,7 @@
                 <th style="font-weight:bold;">Name</th>
                 <th style="font-weight:bold;">Year</th>
                 @foreach ($subtotalHours as $month => $hours)
-                    <th style="font-weight:bold;">{{ substr($month, 0, 3) }} Hours</th>
+                    <th style="font-weight:bold;">{{ substr($month, 0, 3) }}</th>
                 @endforeach
                 <th style="font-weight:bold;">Total Hours</th>
             </tr>
