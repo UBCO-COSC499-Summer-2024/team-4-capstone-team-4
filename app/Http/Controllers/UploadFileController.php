@@ -334,6 +334,62 @@ class UploadFileController extends Controller {
 
     }
 
+    public function uploadAssignTas(Request $request) {
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
+            $csvData = $this->readCSV($filePath);
+
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];     
+                   
+        foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Room':
+                            $temp[$key] = $value;
+                            break;
+                        case 'TAs': // Single column with delimiters
+                            $temp['TAs'] = explode(';', $value);
+                            break;
+                        default: // Separate columns for each TA
+                            if (strpos($key, 'TA') === 0 && !empty($value)) {
+                                $temp['TAs'][] = $value;
+                            }
+                            break;
+                    }
+                }
+                $trimCSV[] = $temp;
+               
+            }
+            $finalCSVs[] = $trimCSV;
+        }
+        dd($finalCSVs);
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.assign.tas');
+    }
+
     public function uploadSvcRoles(Request $request) {
         // Ensure that 'files' exists in the request
         // dd($request);
