@@ -132,7 +132,7 @@
         </div>
     </div> --}}
 
-    <div class="svcrole-item" :class="{ 'bg-default': !isEditing, 'bg-editing': isEditing }">
+    <div class="svcrole-item" :class="{ 'bg-default': !$isEditing, 'bg-editing': $isEditing }">
         <section id="about-role" class="svcr-item">
             <form id="service-role-update-form" class="form svcr-item-form" wire:key="service-role-update-form">
                 <div class="horizontal grouped w-fit">
@@ -160,6 +160,7 @@
                                 <input type="text" class="form-input text-end" id="room"
                                     placeholder="ex. LIB 123 B"
                                     x-show="!isEditing"
+                                    x-cloak
                                     x-bind:disabled="true" value="{{ trim($roomB . ' ' . $roomN . ' ' . $roomS) ?? 'Not Assgined' }}">
                                 <div x-show="isEditing" x-cloak class="flex items-center justify-start gap-2">
                                     <input type="text" class="form-input !min-w-8 !max-w-16"
