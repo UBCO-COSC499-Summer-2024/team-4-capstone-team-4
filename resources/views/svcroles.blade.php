@@ -15,19 +15,13 @@
         $links = array_merge($links, [
             ['href' => route('svcroles.manage'), 'title' => __('Manage Role'), 'icon' => 'visibility', 'active' => request()->is('svcroles/manage')]
         ]);
-
-        function goToDash() {
-            $url = route('svcroles');
-            header("Location: $url");
-            exit();
-        }
     @endphp
 
     @if ($user->hasRoles(['instructor', 'dept_staff', 'dept_head', 'admin']))
         @if(request()->is('svcroles/add'))
             @php
                 if ($user->hasOnlyRole('instructor')) {
-                    goToDash();
+                    echo redirect()->action([App\Http\Controllers\ServiceRoleController::class, 'goToDash']);
                 }
             @endphp
             <livewire:add-service-role :links="$links"/>
@@ -61,16 +55,12 @@
                 :links="$links"
                 :serviceRoleId="$svcrId"
             />
-        {{-- @elseif(request()->is('svcroles/requests'))
-            @include('components.svcrole.requests')
-        @elseif(request()->is('svcroles/audit-logs'))
-            <livewire:audit-logs /> --}}
         @else
             <livewire:service-roles-list :links="$links"/>
         @endif
     @else
         @php
-            goToDash();
+            abort(401);
         @endphp
     @endif
 </x-app-layout>
