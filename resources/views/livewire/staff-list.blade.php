@@ -17,8 +17,8 @@
                     <x-staff-button-red wire:click="exit" id="staff-exit" name="staff-exit">Cancel</x-staff-button-red>
                 @else
                     <x-admin-staff-filter />
-                    <x-staff-button wire:click="$set('showModal', true)"  name="add-user" name="add-user">Add</x-staff-button>
-                    <x-staff-button wire:click="$set('editMode', true)"  name="add-user" name="add-user">Edit</x-staff-button>
+                    <x-staff-button wire:click="showAddModal"  name="add-user" name="add-user">Add</x-staff-button>
+                    <x-staff-button wire:click="$set('editMode', true)"  name="edit-user" name="edit-user">Edit</x-staff-button>
                     <x-staff-button-red wire:click="check" id="staff-delete" name="staff-delete">Delete</x-staff-button-red>
                 @endif
             @else

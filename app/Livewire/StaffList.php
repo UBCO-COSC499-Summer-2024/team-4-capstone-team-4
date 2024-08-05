@@ -110,7 +110,7 @@ class StaffList extends Component
 
     //For setting values on intial render
     public function mount(){
-        $this->resetValidation();
+        //$this->resetValidation();
 
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
@@ -141,7 +141,7 @@ class StaffList extends Component
      * @return \Illuminate\View\View The rendered view of the staff list.
      */
     public function render(){
-        $this->resetValidation();
+        //$this->resetValidation();
 
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
@@ -505,6 +505,7 @@ class StaffList extends Component
      * creation of the user record and assignment of roles.
      */
     public function addUser(){
+        //$this->resetValidation();
         //Fetch inputted data
         $data = [
             'firstname' => $this->firstname,
@@ -744,6 +745,7 @@ class StaffList extends Component
      * @param int $userid The ID of the user to delete.
      */
     public function deleteStaff($userid){
+        //$this->resetValidation();
         //Retrieve user
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;
@@ -790,6 +792,7 @@ class StaffList extends Component
      *
      */
     public function delete(){
+        //$this->resetValidation();
         //Retrieve users
         $staff_checkboxes = $this->staffCheckboxes;
 
@@ -862,5 +865,11 @@ class StaffList extends Component
 
     public function updateEmail($userid, $email){
         $this->changedEmails[$userid] = $email;
+    }
+
+    public function showAddModal(){
+        $this->reset();
+        $this->resetValidation();
+        $this->showModal = true;
     }
 }
