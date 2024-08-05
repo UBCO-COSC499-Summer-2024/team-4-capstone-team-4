@@ -129,6 +129,7 @@ class StaffList extends Component
      * @return \Illuminate\View\View The rendered view of the staff list.
      */
     public function render(){
+        $this->initializeUserData();
         //$this->resetValidation();
 
         $query = $this->searchTerm;

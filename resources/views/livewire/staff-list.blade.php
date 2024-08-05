@@ -19,7 +19,7 @@
                     <x-admin-staff-filter />
                     <x-staff-button wire:click="showAddModal"  name="add-user" name="add-user">Add</x-staff-button>
                     <x-staff-button wire:click="$set('editMode', true)"  name="edit-user" name="edit-user">Edit</x-staff-button>
-                    <x-staff-button-red wire:click="check" id="staff-delete" name="staff-delete">Delete</x-staff-button-red>
+                    <x-staff-button-red wire:click="check" id="staff-delete" name="staff-delete">Delete Selected</x-staff-button-red>
                 @endif
             @else
                 @if($editMode)
