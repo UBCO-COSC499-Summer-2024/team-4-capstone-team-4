@@ -22,6 +22,7 @@ class SvcroleListItem extends Component
     public $isEditing = false;
     public $isSelected = false;
     public $formattedAreas;
+    public $audit_user;
 
     // You might need to pass areas from the parent component
     // or fetch them in this component's mount() method
@@ -56,6 +57,7 @@ class SvcroleListItem extends Component
         $this->sryear = $this->serviceRole->year;
         $this->srdescription = $this->serviceRole->description;
         $this->srarea_id = $this->serviceRole->area_id;
+        $this->audit_user = User::find((int) auth()->user()->id)->getName();
     }
 
     public function toggleEditMode($data) {
@@ -100,7 +102,6 @@ class SvcroleListItem extends Component
     }
 
     public function archiveServiceRole($id) {
-        $audit_user = User::find((int) auth()->user()->id)->name;
         try {
             if ($id !== $this->serviceRole->id) {
                 return;
@@ -110,38 +111,28 @@ class SvcroleListItem extends Component
                 $this->validate();
                 $isArchived = $serviceRole->archived;
                 $serviceRole->archived = !$isArchived;
+                $oldValue = $this->serviceRole->getOriginal();
                 $serviceRole->save();
-
-                AuditLog::create([
-                    'user_id' => (int) auth()->user()->id,
-                    'user_alt' => $audit_user,
-                    'action' => 'archive',
-                    'table_name' => 'service_roles',
-                    'operation_type' => 'UPDATE',
-                    'old_value' => json_encode($serviceRole->getOriginal()),
+                ServiceRole::audit('archive', [
+                    'old_value' => json_encode($oldValue),
                     'new_value' => json_encode($serviceRole->getAttributes()),
-                    'description' => 'Service Role ' . $serviceRole->name . ' ' . ($isArchived ? 'unarchived' : 'archived') . ' by ' . $audit_user,
-                ]);
+                ], 'Service Role ' . $serviceRole->name . ' ' . ($isArchived ? 'unarchived' : 'archived') . ' by ' . $this->audit_user);
                 $this->dispatch('show-toast', [
                     'message' => 'Service role ' . ($isArchived ? 'unarchived' : 'archived') . ' successfully!',
                     'type' => 'success'
                 ]);
             } else {
-                throw new \Exception('Service Role not found');
+                $this->dispatch('show-toast', [
+                    'message' => 'Service Role not found.',
+                    'type' => 'error'
+                ]);
             }
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'An error occurred',
                 'type' => 'error'
             ]);
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => auth()->user()->name,
-                'action' => 'archive',
-                'table_name' => 'service_roles',
-                'operation_type' => 'UPDATE',
-                'description' => $e->getMessage(),
-            ]);
+            ServiceRole::audit('archive error', ['operation_type' => 'UPDATE'], $this->audit_user . ' encountered an error while archiving a service role: ' . $e->getMessage());
         }
     }
 
@@ -154,7 +145,6 @@ class SvcroleListItem extends Component
             return;
         }
 
-        $audit_user = User::find((int) auth()->user()->id)->getName();
         try {
             $this->validate();
             $oldValue = $this->serviceRole->getOriginal();
@@ -175,18 +165,9 @@ class SvcroleListItem extends Component
                         'area_id' => $this->srarea_id,
                         'archived' => false,
                     ]);
-
-                    // Optionally: log creation
-                    AuditLog::create([
-                        'user_id' => (int) auth()->user()->id,
-                        'user_alt' => $audit_user,
-                        'action' => 'create',
-                        'table_name' => 'service_roles',
-                        'operation_type' => 'INSERT',
-                        'old_value' => null,
+                    ServiceRole::audit('create', [
                         'new_value' => json_encode($newServiceRole->getAttributes()),
-                        'description' => 'Service Role ' . $newServiceRole->name . ' created by ' . $audit_user,
-                    ]);
+                    ], 'Service Role ' . $newServiceRole->name . ' created by ' . $this->audit_user);
 
                     $this->dispatch('show-toast', [
                         'message' => 'Service Role created successfully.',
@@ -211,30 +192,16 @@ class SvcroleListItem extends Component
                 'message' => 'Service Role updated successfully.',
                 'type' => 'success'
             ]);
-
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => $audit_user,
-                'action' => 'update',
-                'table_name' => 'service_roles',
-                'operation_type' => 'UPDATE',
+            ServiceRole::audit('update', [
                 'old_value' => json_encode($oldValue),
                 'new_value' => json_encode($this->serviceRole->getAttributes()),
-                'description' => 'Service Role ' . $this->serviceRole->name . ' updated by ' . $audit_user,
-            ]);
+            ], 'Service Role ' . $this->serviceRole->name . ' updated by ' . $this->audit_user);
         } catch (\Exception $e) {
             $this->dispatch('show-toast', [
                 'message' => 'An error occurred',
                 'type' => 'error'
             ]);
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => $audit_user,
-                'action' => 'update',
-                'table_name' => 'service_roles',
-                'operation_type' => 'UPDATE',
-                'description' => $e->getMessage(),
-            ]);
+            ServiceRole::audit('update error', ['operation_type' => 'UPDATE'], $this->audit_user . ' encountered an error while updating a service role: ' . $e->getMessage());
         }
     }
 

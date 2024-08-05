@@ -85,7 +85,7 @@
                                             }
                                         }"
                                         x-on:click="toggleCheck()">
-                                        <span class="filter-item-text">
+                                        <span class="filter-item-text" data-text="{{$item}}">
                                             {{ $item }}
                                         </span>
                                         <span class="material-symbols-outlined icon filter-item-icon"

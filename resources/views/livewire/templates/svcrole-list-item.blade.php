@@ -14,6 +14,7 @@
                 id="svcr-select-{{ $serviceRole->id }}"
                 value="{{ $serviceRole->id }}"
                 wire:model.live="isSelected"
+                wire:change="$dispatch('select-service-role', [{{ $serviceRole->id }}])"
             >
         </td>
     @endif
