@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Event\Telemetry\System;
 
 class Approval extends Model
 {
@@ -235,5 +236,23 @@ class Approval extends Model
             'operation_type' => 'UPDATE',
             'table_name' => 'approvals'
         ]);
+    }
+
+    public static function audit($action, $details, $description) {
+        $audit_user = User::findOrFail(auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => auth()->user()->id ?? null,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'description' => $description,
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'table_name' => 'approvals'
+        ]);
+    }
+
+    public function log_audit($action, $details, $description) {
+        self::audit($action, $details, $description);
     }
 }

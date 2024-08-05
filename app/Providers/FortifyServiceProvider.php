@@ -48,14 +48,14 @@ class FortifyServiceProvider extends ServiceProvider
                     ]);
                 }
 
-                return $user;
-            }
+                // if user is not approved
+                if (!$user->approved) {
+                    throw ValidationException::withMessages([
+                        Fortify::email() => ['This account is not approved.'],
+                    ]);
+                }
 
-            // if user is approved
-            if ($user && $user->approved) {
-                throw ValidationException::withMessages([
-                    Fortify::username() => ['Your account is not yet approved.'],
-                ]);
+                return $user;
             }
 
             // Return null if authentication fails
