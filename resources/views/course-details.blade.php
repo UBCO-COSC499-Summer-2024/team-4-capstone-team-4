@@ -9,7 +9,10 @@
             <x-coursedetails-exportButton />
             @if($user->id < 4)
             <div class="flex items-center space-x-4">
-                @if(in_array($userRole, ['admin', 'dept_head']))
+                @php
+                    $user = Auth::user();
+                @endphp
+                @if($user->hasRoles(['admin', 'dept_head']))
                     <div class="filter-area">
                         <select id="areaFilter" name="area_id" class="form-select">
                             <option value="">Filter By Area</option>

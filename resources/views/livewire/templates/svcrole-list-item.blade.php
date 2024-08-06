@@ -14,6 +14,7 @@
                 id="svcr-select-{{ $serviceRole->id }}"
                 value="{{ $serviceRole->id }}"
                 wire:model.live="isSelected"
+                wire:change="$dispatch('select-service-role', [{{ $serviceRole->id }}])"
             >
         </td>
     @endif
@@ -86,6 +87,35 @@
         <input x-show="isEditing" type="text" class="svcr-list-item-edit"
                wire:model="srdescription"
                x-cloak value="{{ $srdescription }}">
+    </td>
+
+    <td class="svcr-list-item-cell" data-column="room">
+        <span class="svcr-list-item-title" x-cloak x-show="!isEditing">
+            {{ $serviceRole->room ? $serviceRole->room : 'Not Assigned' }}
+        </span>
+        <div x-show="isEditing" x-cloak class="flex items-center justify-start gap-2">
+            {{-- roomB / roomN / roomS input in an inline flex --}}
+            <input type="text" class="svcr-list-item-edit !min-w-8 !max-w-20"
+                wire:model="srroom"
+                hidden
+                value="{{ $srroom }}"
+                x-cloak>
+            <input type="text" class="svcr-list-item-edit !min-w-12 !max-w-16"
+                wire:model="roomB"
+                placeholder="LIB"
+                value="{{ $roomB }}"
+                x-cloak>
+            <input type="text" class="svcr-list-item-edit !min-w-12 !max-w-16"
+                wire:model="roomN"
+                placeholder="123"
+                value="{{ $roomN }}"
+                x-cloak>
+            <input type="text" class="svcr-list-item-edit !min-w-4 !max-w-8"
+                wire:model="roomS"
+                placeholder="B"
+                value="{{ $roomS }}"
+                x-cloak>
+        </div>
     </td>
 
     <td class="svcr-list-item-cell" data-column="instructors">

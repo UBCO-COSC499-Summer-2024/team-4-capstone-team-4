@@ -98,10 +98,6 @@
                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                     <span class="ms-3">Enabled</span>
                 </label>
-                {{-- <label class="inline-flex items-center cursor-pointer switch">
-                    <input type="checkbox" wire:model.defer="enabledUsers" value="{{ $userid }}" name="status{{$userid}}">
-                    <span class="slider round">Enabled</span>
-                </label> --}}
             </div>
         @else
             <div class="flex items-center justify-center h-full">
@@ -115,13 +111,8 @@
     </td>     
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            @if($editMode)
-                <span class="material-symbols-outlined text-gray-400 text-xl" title="Delete">delete</span>
-                <span class="material-symbols-outlined text-gray-400 text-xl" title="Send Reset Link">mail_lock</span>
-            @else
-                <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500 text-xl" title="Delete">delete</span></button>
-                <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779] text-xl" title="Send Reset Link">mail_lock</span></button>
-            @endif
+            <button wire:click="setDelete({{$userid}})"><span class="material-symbols-outlined text-red-500" style="font-size: 1.875rem;" title="Delete">delete</span></button>
+            <button wire:click="sendReset({{$userid}})"><span class="material-symbols-outlined text-[#3b4779]" style="font-size: 1.875rem;" title="Send Reset Link">mail_lock</span></button>
         </div>
     </td>
 </tr>
@@ -172,7 +163,7 @@
     </td>
     <td class="px-6 py-4">
         <div class="flex items-center justify-center h-full">
-            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId, 'name' => $fullname]) }}"><span class="material-symbols-outlined text-xl hover:text-[#3b4779]" title="Report">description</span></a>
+            <a href="{{ route('instructor-report', ['instructor_id' => $instructorId, 'name' => $fullname]) }}"><span class="material-symbols-outlined text-3xl hover:text-[#3b4779]" title="Report">description</span></a>
         </div>
     </td>
 </tr>

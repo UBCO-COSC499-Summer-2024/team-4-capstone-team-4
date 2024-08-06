@@ -26,7 +26,7 @@ class Preferences extends Component
         'settings.timezone' => 'required',
         'settings.locale' => 'required',
         'settings.language' => 'required',
-        'settings.auth_method_id' => 'required|exists:auth_methods,id',
+        // 'settings.auth_method_id' => 'required|exists:auth_methods,id',
         // 'settings.custom' => 'json',
     ];
 

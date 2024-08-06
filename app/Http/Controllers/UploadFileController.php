@@ -167,7 +167,7 @@ class UploadFileController extends Controller {
 
             // $csvData = $this->readWorkdayCSV($filePath);
             $csvData = $this->readCSV($filePath);
-      
+
             $uploadedFiles[] = [
                 'fileName' => $file->getClientOriginalName(),
                 'csvData' => $csvData,
@@ -239,7 +239,7 @@ class UploadFileController extends Controller {
     public function uploadSei(Request $request) {
         $finalCSVs = [];
         $uploadedFiles = [];
-     
+
         $request->validate([
             'files.*' => 'required|file|mimes:csv|max:2048',
         ]);
@@ -257,8 +257,8 @@ class UploadFileController extends Controller {
 
         foreach ($uploadedFiles as $uploadedFile) {
             $trimCSV = [];
-            $trimCSV['File'] = $uploadedFile['fileName'];     
-                   
+            $trimCSV['File'] = $uploadedFile['fileName'];
+
         foreach ($uploadedFile['csvData'] as $csvData) {
                 foreach ($csvData as $key => $value) {
                     switch ($key) {
@@ -279,7 +279,7 @@ class UploadFileController extends Controller {
                     }
                 }
                 $finalCSVs[] = $trimCSV;
-               
+
             }
         }
         $request->session()->put('finalCSVs', $finalCSVs);
@@ -496,6 +496,7 @@ class UploadFileController extends Controller {
             'year' => $record['year'] ?? date('Y'),
             'monthly_hours' => $this->formatMonthlyHours($record),
             'area_id' => $area->id,
+            'room' => $record['room'] ?? null,
             'archived' => isset($record['archived']) ? (bool)$record['archived'] :
                          (isset($record['archive']) ? (bool)$record['archive'] :
                          (isset($record['active']) ? !(bool)$record['active'] : false)),

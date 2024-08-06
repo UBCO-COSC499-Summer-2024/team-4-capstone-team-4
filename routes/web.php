@@ -13,6 +13,7 @@ use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Middleware\CheckRole;
 use App\Models\ServiceRole;
+use App\Http\Middleware\CheckReportAccess;
 
 // Auth routes
 
@@ -128,6 +129,7 @@ Route::middleware([
     'verified',
     ApplyUserSettings::class,
     CheckRole::class.':admin,dept_head,dept_staff,instructor',
+    CheckReportAccess::class
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);
