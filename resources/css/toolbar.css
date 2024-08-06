@@ -1,18 +1,20 @@
 .toolbar {
-    padding: 4px;
-    border-radius: 50px;
+    padding: 6px;
+    border-radius: 4px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-    margin: 4px;
+    margin: 0;
     /* max-height: 40px; */
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
     gap: 6px;
-    background: rgba(50, 50, 50, 0.9);
+    /* background: rgba(50, 50, 50, 0.9); */
+    background: var(--svcr-list-header-bg);
     color: #999;
     flex-wrap: nowrap;
     position: sticky;
     flex: 1;
+    width: 100%;
     /* overflow-x: auto; */
 }
 
@@ -29,20 +31,44 @@
     color: #999;
 }
 
+* {
+    /* "rgba(37, 41, 150, 0.31)",
+    "rgba(29, 154, 202, 0.31)",
+    "rgba(249, 168, 37, 0.31)",
+    "rgba(241, 103, 69, 0.31)",
+    "rgba(124, 63, 88, 0.31)" ,
+    "rgba(255, 127, 14, 0.31)",
+    "rgba(44, 160, 44, 0.31)",
+    "rgba(214, 39, 40, 0.31)",
+    "rgba(148, 103, 189, 0.31)",
+    "rgba(140, 86, 75, 0.31)",
+    "rgba(127, 127, 127, 0.31)" */
+}
+
 .mini-toolbar.right,
 .right {
     margin-left: auto;
     margin-right: 4px;
 }
 
+[aria-current="page"] {
+    background: var(--primary-color);
+    color: var(--text-color);
+}
+
 .toolbar-section {
-    display: inline-flex;
+    display: flex;
     gap: 6px;
     width: fit-content;
     position: relative;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     /* padding: 0 6px; */
+}
+
+.toolbar-section.right {
+    justify-content: flex-end;
 }
 
 .toolbar-section-title {
@@ -126,7 +152,6 @@ h1 button {
     padding: 4px;
     border-radius: 16px;
     border: none;
-    outline: none !important;
     background: #fff;
     font-size: 14px;
     cursor: pointer;
@@ -157,7 +182,7 @@ h1 button icon {
 
 .toolbar button:hover,
 h1 button:hover {
-    background: rgba(30, 75, 250, 1);
+    background: #3b4779;
     color: #fff;
 }
 
@@ -196,17 +221,30 @@ h1 button {
 
 .toolbar-clear-search:hover {
     background: none !important;
-    color: rgba(30, 75, 250, 1) !important;
+    color: #3b4779 !important;
     font-weight: 600;
+}
+
+@media screen and (max-wiidth: 1000px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: start;
+        padding: 8px;
+        border-radius: 12px;
+        /* max-height: unset;
+        overflow: unset;
+        overflow-x: auto;
+        width: fit-content;
+        box-sizing: border-box;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1); */
+    }
 }
 
 @media (max-width: 768px) { /* Adjust max-width as needed */
     .toolbar {
         display: none;
-        /* flex-direction: column; */
         align-items: end;
-        padding: 8px;
-        border-radius: 50px;
+        margin-bottom: 0.5rem;
         max-height: unset;
         overflow: unset;
         /* overflow-x: auto; */
@@ -246,4 +284,42 @@ h1 button {
     .toolbar select {
         flex: 1;
     }
+}
+
+.assign-ins-dropdown {
+    flex: 1 0 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: #dfdfdf;
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.assign-ins-dropdown:last-child {
+    align-items: end;
+}
+
+.assign-ins-dropdown > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.assign-ins-dropdown > div > div > button {
+    padding: 6px;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100% !important;
+}
+
+/* hover */
+
+.assign-ins-dropdown > div > div > button:hover {
+    background: #3b4779;
+    color: #fff;
 }

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Insight'),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,6 +121,8 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
-    ]
+    ],
+    'theme' => env('APP_THEME', 'light'),
+
 
 ];

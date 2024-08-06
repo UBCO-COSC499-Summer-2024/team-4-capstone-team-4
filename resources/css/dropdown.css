@@ -121,7 +121,7 @@ dropdown-item:hover {
 
 dropdown-item[active] {
     /* background-color: ; */
-    color: #007bff !important;
+    color: #3b4779 !important;
 }
 
 :host .dropdown-button {

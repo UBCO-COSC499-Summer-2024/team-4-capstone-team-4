@@ -2,15 +2,20 @@
 
 namespace App\Livewire;
 
+use App\Exports\SvcroleExport;
 use App\Models\ServiceRole;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Area;
+use App\Models\AuditLog;
 use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
-class ServiceRolesList extends Component
-{
+class ServiceRolesList extends Component {
     use WithPagination;
     public $links = [];
     // public $columns = [];
@@ -26,7 +31,11 @@ class ServiceRolesList extends Component
     public $pageSize = 20;
     public $selectedItems = [];
     public $showExtraHourForm = false;
-    public $serviceRoleIdForModal; // To store the serviceRoleId
+    public $showAssignInstructorModal = false;
+    public $user = null;
+    protected $validExportOptions = [
+        'csv', 'xlsx', 'pdf', 'text', 'print'
+    ];
     protected $queryString = [
         'viewMode' => ['except' => 'table'],
         'pageMode' => ['except' => 'pagination'],
@@ -50,7 +59,7 @@ class ServiceRolesList extends Component
         'selectedSort' => 'nullable|string',
         'selectedSortOrder' => 'nullable|string',
         'selectedGroup' => 'nullable|string',
-        'pageSize' => 'required|integer|min:1',
+        'pageSize' => 'required|integer|min:10',
     ];
 
     protected $listeners = [
@@ -72,22 +81,22 @@ class ServiceRolesList extends Component
         'open-modal' => 'openModal',
         'closeModal' => 'closeModal',
         'performAction' => 'performAction',
-        'deleteSelected' => 'deleteSelected',
+        'deleteAllSelected' => 'deleteSelected',
         'saveSelected' => 'saveSelected',
         'exportSelected' => 'exportSelected',
         'selectItem' => 'handleItemSelected',
         'toolbarUpdated' => 'handleToolbarUpdate',
         'applyActions' => 'handleApplyActions',
         'filtersReset' => 'resetFilters', // For resetting filters
-        'update-modal-id' => 'updateModalId',
+        'select-service-role' => 'selectServiceRole',
     ];
 
     public function mount($links = []) {
         $this->links = $links;
+        $this->user = User::find(auth()->user()->id);
     }
 
-    public function handleToolbarUpdate($data)
-    {
+    public function handleToolbarUpdate($data) {
         // Log or debug if needed
         // logger('Toolbar Updated:', $data);
 
@@ -100,8 +109,16 @@ class ServiceRolesList extends Component
         $this->render();
     }
 
-    public function handleApplyActions($selectedActions)
-    {
+    public function selectServiceRole($id) {
+        // $this->selectedItems = [$id => true];
+        if (array_key_exists($id, $this->selectedItems)) {
+            $this->selectedItems[$id] = !$this->selectedItems[$id];
+        } else {
+            $this->selectedItems[$id] = true;
+        }
+    }
+
+    public function handleApplyActions($selectedActions) {
         // // Log or debug if needed
         // logger('Applying Actions:', $selectedActions, 'to items:', $this->selectedItems);
 
@@ -147,17 +164,51 @@ class ServiceRolesList extends Component
         return $this->items->pluck('id')->toArray();
     }
 
+    public function mapColumns($columns) {
+        // to the actual column names
+        // area => area_id, etc
+        $mappedColumns = [];
+        foreach ($columns as $column) {
+            if ($column === 'area') {
+                $mappedColumns[] = 'area_id';
+            } else {
+                $mappedColumns[] = $column;
+            }
+        }
+        return $mappedColumns;
+    }
+
     public function getColumns($modelOrTable) {
+        // /elseif (is_object($modelOrTable) && $modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
+        //     return $modelOrTable->getConnection()->getSchemaBuilder()->getColumnListing($modelOrTable->getTable());
+        // } elseif (is_string($modelOrTable) && class_exists($modelOrTable)) {
+        //     $model = new $modelOrTable;
+        //     return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
+        // } else {
+        //     throw new \InvalidArgumentException('Invalid argument passed to getColumns. Must be a model instance, model class name, or table name.');
+        // }
+        // if $modelOrTable is a stirng, convert to model instance, if not model instance, throw exception
+        // then check if it has the method getColumns, if not, get it the hard way
+        $model = null;
         if (is_string($modelOrTable) && str_contains($modelOrTable, '.')) {
             [$table] = explode('.', $modelOrTable, 2);
-            return DB::getSchemaBuilder()->getColumnListing($table);
-        } elseif (is_object($modelOrTable) && $modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
-            return $modelOrTable->getConnection()->getSchemaBuilder()->getColumnListing($modelOrTable->getTable());
-        } elseif (is_string($modelOrTable) && class_exists($modelOrTable)) {
-            $model = new $modelOrTable;
-            return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
-        } else {
+            $model = $table;
+        } elseif (!is_object($modelOrTable) || !$modelOrTable instanceof \Illuminate\Database\Eloquent\Model) {
             throw new \InvalidArgumentException('Invalid argument passed to getColumns. Must be a model instance, model class name, or table name.');
+        } else {
+            $model = $modelOrTable;
+        }
+
+        if ($model === null) {
+            // Log model not found exception
+            Log::error('Model not found for getColumns method.');
+            return;
+        }
+
+        if (method_exists($model, 'getColumns')) {
+            return $model::getColumns();
+        } else {
+            return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
         }
     }
 
@@ -167,58 +218,69 @@ class ServiceRolesList extends Component
 
     public function render() {
         $serviceRolesQuery = ServiceRole::query();
-
-        // if area requested in filter/sort/category/group, use the area id for each item and do the action based on area name and or description and or id.
-
-        if (!empty($this->searchQuery)) {
-            $searchableColumns = $this->getColumns(ServiceRole::class);
-            if (!empty($this->searchCategory) && in_array($this->searchCategory, $searchableColumns)) {
-                $serviceRolesQuery->where($this->searchCategory, 'like', '%' . $this->searchQuery . '%');
-            } else {
-                $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
-                    foreach ($searchableColumns as $column) {
-                        $query->orWhere($column, 'like', '%' . $this->searchQuery . '%');
-                    }
-                });
-            }
+        $user = $this->user;
+        $userRole = $user->roles;
+        if ($userRole->contains('role', 'dept_head') && !$userRole->contains('role', 'admin')) {
+            $deptId = $userRole->where('role', 'dept_head')->first()->department_id;
+            // area then department
+            $serviceRolesQuery->whereHas('area', function ($query) use ($deptId) {
+                $query->where('dept_id', $deptId);
+            });
         }
 
-        // if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-        //     $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
-        // }
         if (!empty($this->selectedFilter) && !empty($this->filterValue)) {
-            if ($this->selectedFilter === 'area') {
-                // If filtering by 'area', query the Area model
-                $area = Area::find($this->filterValue);
+            if ($this->selectedFilter === 'area' || $this->selectedFilter === 'area_id') {
+                $serviceRolesQuery->whereHas('area', function ($query) {
+                    $shortCodes = [
+                        'COSC' => 'Computer Science',
+                        'MATH' => 'Mathematics',
+                        'PHYS' => 'Physics',
+                        'STAT' => 'Statistics'
+                    ];
 
-                // Check if the area exists
-                if ($area) {
-                    $serviceRolesQuery->where('area_id', $area->id);
-                } else {
-                    // Handle the case where the area doesn't exist
-                    // You might want to log this or display an error message
-                    $serviceRolesQuery->where('area_id', null); // Or any other logic
-                }
+                    $query->where('name', 'like', '%' . $this->filterValue . '%');
+                    foreach ($shortCodes as $shortCode => $areaName) {
+                        if (stripos($areaName, $this->filterValue) !== false) {
+                            $query->orWhere('name', 'like', '%' . $areaName . '%');
+                        }
+                    }
+                });
             } else {
-                // If filtering by other columns of ServiceRole
                 $serviceRolesQuery->where($this->selectedFilter, $this->filterValue);
             }
         }
 
-        // if (!empty($this->selectedSort)) {
-        //     $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
-        // }
+        if (!empty($this->searchQuery)) {
+            $searchableColumns = $this->getColumns(ServiceRole::class);
+            if(!empty($this->searchQuery)) {
+                $serviceRolesQuery->where(function ($query) use ($searchableColumns) {
+                    foreach ($searchableColumns as $column) {
+                        $query->orWhere($column, 'like', '%' . $this->searchQuery . '%');
+                    }
+                })
+                ->orWhereHas('instructors', function ($query) {
+                    $cols = $this->getColumns(User::class);
+                    $cols = array_intersect($cols, ['firstname', 'lastname', 'email']);
+                    $query->where(function ($query) use ($cols) {
+                        foreach ($cols as $col) {
+                            $query->orWhere($col, 'like', '%' . $this->searchQuery . '%');
+                        }
+                    });
+                })
+                ->orWhereHas('area', function ($query) {
+                    $query->where('name', 'like', '%' . $this->searchQuery . '%');
+                });
+            }
+        }
 
         if (!empty($this->selectedSort)) {
             if (str_contains($this->selectedSort, '.')) {
                 [$relation, $column] = explode('.', $this->selectedSort);
 
-                // Handle sorting by 'area.name' specifically
                 if ($relation === 'area' && $column === 'name') {
                     $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
                                      ->orderBy('areas.name', $this->selectedSortOrder);
                 } else {
-                    // Handle other relations if needed
                     $serviceRolesQuery->orderBy(
                         ServiceRole::select($column)
                             ->from('service_roles')
@@ -226,25 +288,68 @@ class ServiceRolesList extends Component
                         $this->selectedSortOrder
                     );
                 }
+                // $serviceRolesQuery->orderByRelation($relation, $column, $this->selectedSortOrder);
 
             } else {
                 $serviceRolesQuery->orderBy($this->selectedSort, $this->selectedSortOrder);
             }
+        } else {
+            $serviceRolesQuery->latest();
         }
 
         if (!empty($this->selectedGroup)) {
-            $serviceRolesQuery->groupBy($this->selectedGroup, 'id');
+            if ($this->selectedGroup === 'area' || $this->selectedGroup === 'area_id') {
+                $serviceRolesQuery->join('areas', 'service_roles.area_id', '=', 'areas.id')
+                ->select('service_roles.*', 'areas.name as area_name', 'areas.id as area_id')
+                ->groupBy('areas.id', 'areas.name', 'service_roles.id');
+            } else {
+                $serviceRolesQuery->groupBy($this->selectedGroup, 'service_roles.id');
+            }
+        }
+
+        // if user_role is only instructor don't show archived. put the roles they are assigned to (via role_assignments) to the top.
+        // if user_role is dept_head or dept_staff, show archived.
+        if ($this->user->hasOnlyRole('instructor')) {
+            $serviceRolesQuery->where('archived', false);
+        }
+
+        // push role_assignments instructor_id service_roles to the top of the list
+        if ($this->user->instructor()) {
+            $instructorId = $this->user->instructor()->id;
+            $serviceRolesQuery->leftJoin('role_assignments', 'service_roles.id', '=', 'role_assignments.service_role_id')
+                ->select('service_roles.*', DB::raw('CASE WHEN role_assignments.instructor_id = ' . $instructorId . ' THEN 1 ELSE 0 END AS is_instructor_role'))
+                ->orderBy('is_instructor_role', 'desc')
+                ->orderBy('service_roles.name');
         }
 
         $serviceRoles = $this->pageMode === 'pagination'
             ? $serviceRolesQuery->with('area')->paginate($this->pageSize)
             : $serviceRolesQuery->with('area')->get();
 
+        // selectedItems update
+        foreach ($serviceRoles as $serviceRole) {
+            if (array_key_exists($serviceRole->id, $this->selectedItems)) {
+                $serviceRole->selected = $this->selectedItems[$serviceRole->id];
+            } else {
+                $serviceRole->selected = false;
+            }
+        }
+
+        // instructors
+        // all service_roles
+
+        $instructors = UserRole::where('role', 'instructor')->get();
+        $areas = Area::all();
+        $allSvcroles = ServiceRole::all();
+
         return view('livewire.service-roles-list', [
             'serviceRoles' => $serviceRoles,
             'links' => $this->links,
             'viewMode' => $this->viewMode,
             'pageMode' => $this->pageMode,
+            'instructors' => $instructors,
+            'areas' => $areas,
+            'allSvcroles' => $allSvcroles,
         ]);
     }
 
@@ -322,8 +427,8 @@ class ServiceRolesList extends Component
         $this->reset(['searchQuery', 'searchCategory', 'selectedFilter', 'filterValue', 'selectedSort', 'selectedSortOrder', 'selectedGroup', 'pageSize']);
     }
 
-    public function performAction($action, $items) {
-        $this->selectedItems = $items;
+    public function performAction($action) {
+        // $this->selectedItems = $items;
 
         switch ($action) {
             case 'delete':
@@ -340,6 +445,9 @@ class ServiceRolesList extends Component
             case 'edit':
                 $this->toggleEdit();
                 break;
+            case 'archive':
+                $this->archive();
+                break;
             default:
                 break;
         }
@@ -349,19 +457,22 @@ class ServiceRolesList extends Component
         // Implement your logic to enable editing for selected items
         // so each item has a livewire in SvcroleCardItem or SvcroleListItem and have a property called isEditing and a method called editServiceRole and saveServiceRole
 
-        $this->dispatch('toggleEditMode', [
-            'selectedItesm' => $this->selectedItems
+        $this->dispatch('toggle-edit-mode', [
+            'selectedItems' => $this->selectedItems
         ]);
     }
 
     public function deleteSelected() {
         if (count($this->selectedItems) > 0) {
-            foreach ($this->selectedItems as $serviceRoleId) {
-                $this->dispatch('svcr-item-delete', [
-                    'id' => $serviceRoleId
-                ]);
+            foreach ($this->selectedItems as $id => $selected) {
+                if ($selected) {
+                    $this->dispatch('svcr-item-delete', $id);
+                }
             }
-            $this->render();
+            $url = route('svcroles');
+            header("Location: $url");
+            exit();
+            // $this->render();
         } else {
             $this->dispatch('show-toast', [
                 'message' => 'No items selected.',
@@ -376,8 +487,7 @@ class ServiceRolesList extends Component
         $this->toast('Selected service roles saved successfully!', 'success');
     }
 
-    public function exportSelected()
-    {
+    public function exportSelected() {
         // You'll need a package like "maatwebsite/excel" for exporting
 
         // Assuming you have the package installed and configured:
@@ -392,28 +502,123 @@ class ServiceRolesList extends Component
         $this->dispatch('show-toast', ['message' => $msg, 'type' => $type]);
     }
 
-    public function openModal($component, $arguments)
-    {
-        $svcrId = $arguments['serviceRoleId'];
-        $this->serviceRoleIdForModal = $svcrId;
+    public function openModal($component) {
         if ($component === 'extra-hour-form') {
             $this->openExtraHourForm();
+        } else if ($component === 'assign-instructor') {
+            $this->showAssignInstructorModal = true;
         }
     }
 
-    public function openExtraHourForm()
-    {
+    public function openExtraHourForm() {
         $this->showExtraHourForm = true;
     }
 
-    public function closeModal()
-    {
-        $this->reset(['showExtraHourForm']);
-        $this->serviceRoleIdForModal = null;
+    public function closeModal() {
+        $this->reset(['showExtraHourForm', 'showAssignInstructorModal']);
     }
 
-    public function updateModalId($data) {
-        $id = $data['id'];
-        $this->serviceRoleIdForModal = $id;
+    public function export($as, $options) {
+        if (!in_array($as, $this->validExportOptions)) {
+            $this->toast('Invalid export format.', 'error');
+            return;
+        }
+
+        if ($as === 'print') {
+            $this->toast('Printig not implemented yet.', 'info');
+            return;
+        }
+
+        $selectedIds = array_keys(array_filter($this->selectedItems));
+
+        if (empty($selectedIds) && !isset($options['all']) && !isset($options['allExcept'])) {
+            $this->toast('No items selected.', 'warning');
+            return;
+        }
+
+        if (isset($options['all']) && $options['all']) {
+            $serviceRoles = ServiceRole::all();
+        } elseif (isset($options['selected']) && $options['selected']) {
+            $serviceRoles = ServiceRole::whereIn('id', $selectedIds)->get();
+        } elseif (isset($options['allExcept']) && is_array($options['allExcept'])) {
+            $serviceRoles = ServiceRole::whereNotIn('id', $options['allExcept'])->get();
+        }
+
+        if ($as === 'csv' || $as === 'xlsx') {
+            return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.' . $as);
+        }
+
+        if ($as === 'pdf') {
+            return Excel::download(new SvcroleExport($serviceRoles), 'service_roles.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        }
+
+        // Assuming you have the package installed and configured:
+        return response()->streamDownload(function () use ($as) {
+            // echo (new \App\Exports\ServiceRolesExport($this->items))->download('service_roles.' . $as)->getFile()->getContent();
+        }, 'service_roles.' . $as, [
+            'Content-Type' => 'text/' . $as,
+        ]);
     }
+
+    public function archive() {
+        $selectedIds = $this->selectedItems;
+        dd($selectedIds);
+        try {
+            DB::beginTransaction();
+            $archivedCount = 0;
+            $errors = [];
+            $oldValues = [];
+            $newValues = [];
+
+            foreach ($selectedIds as $id => $selected) {
+                if ($selected === true) {
+                    $serviceRole = ServiceRole::find((int)$id);
+                    dd($serviceRole);
+
+                    if ($serviceRole) {
+                        $oldValue = $serviceRole->getOriginal();
+                        $isArchived = $serviceRole->archived;
+                        $update = $serviceRole->update(['archived' => !$isArchived]);
+                        dd($update);
+
+                        if ($update) {
+                            $archivedCount++;
+                            $newValue = $serviceRole->getAttributes();
+
+                            $oldValues[$serviceRole->id] = $oldValue;
+                            $newValues[$serviceRole->id] = $newValue;
+                        } else {
+                            $errors[] = $serviceRole->name;
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            $this->toast('Successfully ' . ($archivedCount ? 'archived ' . $archivedCount . ' service roles' : 'updated service roles'), 'success');
+
+            // Prepare audit log data
+            $changes = [
+                'operation_type' => 'UPDATE',
+                'old_value' => json_encode($oldValues),
+                'new_value' => json_encode($newValues),
+            ];
+
+            // Create a single audit log entry
+            ServiceRole::audit('bulk archive', $changes, $this->user->getName() . " archived {$archivedCount} service roles.");
+
+            // Log any errors encountered
+            if (!empty($errors)) {
+                ServiceRole::audit('bulk archive errors', ['operation_type' => 'UPDATE'], $this->user->getName() . " encountered errors while archiving service roles: " . implode(', ', $errors));
+            }
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback the transaction on error
+            $this->toast('An error occurred: ' . $e->getMessage(), 'error');
+            ServiceRole::audit('bulk archive exception', ['operation_type' => 'UPDATE'], $this->user->getName() . " encountered an exception while archiving service roles: " . $e->getMessage());
+        }
+    }
+
+
 }

@@ -30,6 +30,7 @@ class User extends Authenticatable {
         'lastname',
         'email',
         'password',
+        'active'
     ];
 
     /**
@@ -80,6 +81,13 @@ class User extends Authenticatable {
         return $firstInitial . $lastInitial;
     }
 
+    protected static function boot() {
+        parent::boot();
+        static::created(function ($user) {
+            $user->createSettings();
+        });
+    }
+
     /**
      * Define a one-to-many relationship with UserRole model.
      *
@@ -95,6 +103,14 @@ class User extends Authenticatable {
 
     public function hasRoles($roles = []) {
         return $this->roles->whereIn('role', $roles)->isNotEmpty();
+    }
+
+    public function hasOnlyRole($role) {
+        return $this->hasRoles([$role]) && $this->roles->count() === 1;
+    }
+
+    public function hasEitherOnlyRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->count() === count($roles);
     }
 
     public function getName() {
@@ -125,5 +141,57 @@ class User extends Authenticatable {
     public function instructorPerformances(){
         return $this->hasManyThrough(InstructorPerformance::class, UserRole::class, 'user_id', 'instructor_id', 'id', 'id')
                     ->where('user_roles.role', 'instructor');
+    }
+
+    public function settings() {
+        return $this->hasOne(Setting::class, 'user_id');
+    }
+
+    public function createSettings() {
+        return $this->settings()->create();
+    }
+
+    public function approvals() {
+        return $this->hasMany(Approval::class, 'user_id');
+    }
+
+    public function approvalHistories() {
+        return $this->hasMany(ApprovalHistory::class, 'user_id');
+    }
+
+    public function roleAssignments() {
+        // role_assignments with instructor_id through user_roles (you can use $this->instructor)
+        $instructorRole = $this->instructor();
+        if ($instructorRole) {
+            return $this->hasMany(RoleAssignment::class, 'instructor_id')->where('instructor_id', $instructorRole->id);
+        }
+        return null;
+    }
+
+    public function instructor() {
+        return $this->roles()->where('role', 'instructor')->first();
+    }
+
+    public static function getColumns() {
+        $self = new Self;
+        return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'users',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 }

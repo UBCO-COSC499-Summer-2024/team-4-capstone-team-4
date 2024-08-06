@@ -19,6 +19,8 @@ class CheckRole
     {
         // Check user role
         //dd($roles);
+        $user = $request->user();
+
         if ($request->user()->hasRoles($roles)) {
             return $next($request);
         }

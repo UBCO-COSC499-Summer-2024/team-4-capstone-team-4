@@ -14,7 +14,6 @@ use App\Models\CourseSection;
 use App\Models\Teach;
 use Livewire\Livewire;
 use App\Livewire\StaffList;
-use App\Livewire\StaffListEditMode;
 
 class StaffListTest extends TestCase
 {
@@ -34,20 +33,6 @@ class StaffListTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_staff_edit_mode_can_be_rendered(): void{
-        $dept = Department::factory()->create(['name' => 'CMPS']);
-        $user = User::factory()->create();
-        UserRole::factory()->create([
-            'user_id' => $user->id,
-            'department_id' => $dept->id,
-            'role' => 'dept_head',
-        ]);
-
-        $response = $this->actingAs($user)->get('/staff/edit');
-
-        $response->assertStatus(200);
-    }
-
     public function test_staff_pages_cannot_be_accessed_by_instructor(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
@@ -60,15 +45,18 @@ class StaffListTest extends TestCase
         $response = $this->actingAs($user)->get('/staff');
 
         $response->assertStatus(403);
-
-        $response2 = $this->actingAs($user)->get('/staff/edit');
-
-        $response2->assertStatus(403);
     }
 
     public function test_staff_page_shows_a_list_of_instructors(): void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+
         $user1 =  User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
@@ -104,6 +92,8 @@ class StaffListTest extends TestCase
         CourseSection::factory()->create();
         Teach::factory()->create();
 
+        $this->actingAs($user);
+
         $component = Livewire::test(StaffList::class);
 
         $component->assertSee($user1->firstname)
@@ -116,8 +106,15 @@ class StaffListTest extends TestCase
     public function test_user_can_add_target_hours():void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
-        $role = UserRole::factory()->create([
+        UserRole::factory()->create([
             'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+
+        $instructor = User::factory()->create();
+        $role = UserRole::factory()->create([
+            'user_id' =>  $instructor->id,
             'department_id' => $dept->id,
             'role' => 'instructor',
         ]);
@@ -129,7 +126,8 @@ class StaffListTest extends TestCase
         $this->actingAs($user);
 
         Livewire::test(StaffList::class)
-        ->set('staffCheckboxes', [$user->email])
+        ->set('selectedYear', date('Y'))
+        ->set('staffCheckboxes', [$instructor->email])
         ->set('hours', 200)
         ->call('submit');
         //->assertRedirect('/staff');
@@ -137,6 +135,7 @@ class StaffListTest extends TestCase
         $this->assertDatabaseHas('instructor_performance', [
             'instructor_id' => $role->id,
             'target_hours' => 200,
+            'year' => date('Y')
         ]);
 
     }
@@ -144,8 +143,14 @@ class StaffListTest extends TestCase
     public function test_user_can_edit_target_hours():void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $user = User::factory()->create();
-        $role = UserRole::factory()->create([
+        UserRole::factory()->create([
             'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+        $instructor = User::factory()->create();
+        $role = UserRole::factory()->create([
+            'user_id' => $instructor->id,
             'department_id' => $dept->id,
             'role' => 'instructor',
         ]);
@@ -157,27 +162,35 @@ class StaffListTest extends TestCase
 
         $this->actingAs($user);
 
-        Livewire::test(StaffListEditMode::class)
-        ->call('update', $user->email, 400)
+        Livewire::test(StaffList::class)
+        ->set('selectedYear', date('Y'))
+        ->call('update', $instructor->email, 400)
         ->call('save');
 
         $this->assertDatabaseHas('instructor_performance', [
             'instructor_id' => $role->id,
             'target_hours' => 400,
+            'year' => date('Y')
         ]);
 
     }
 
     public function test_can_search_for_user():void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
-        $user = User::factory()->create([
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+        $instructor = User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
             'email' => 'test@example.com',
             'password' => 'password'
         ]);
         $role = UserRole::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $instructor->id,
             'department_id' => $dept->id,
             'role' => 'instructor',
         ]);
@@ -191,14 +204,20 @@ class StaffListTest extends TestCase
         $component = Livewire::test(StaffList::class)
         ->set('searchTerm', 'Test');
 
-        $component->assertSee($user->firstname)
-                  ->assertSee($user->lastname);
+        $component->assertSee($instructor->firstname)
+                  ->assertSee($instructor->lastname);
     }
 
     public function test_can_filter_by_subarea():void{
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
         $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
         $user1 =  User::factory()->create([
             'firstname' => 'Test',
             'lastname' => 'User',
@@ -246,7 +265,7 @@ class StaffListTest extends TestCase
             'instructor_id' => $role2->id,
         ]);
 
-        $this->actingAs($user1);
+        $this->actingAs($user);
 
         $component = Livewire::test(StaffList::class)
         ->set('selectedAreas', ['Mathematics'])
@@ -262,142 +281,244 @@ class StaffListTest extends TestCase
         $dept = Department::factory()->create(['name' => 'CMPS']);
         $area1 = Area::factory()->create(['name' => 'Computer Science','dept_id' => $dept->id]);
         $area2 = Area::factory()->create(['name' => 'Mathematics','dept_id' => $dept->id]);
-
-        $user1 =  User::factory()->create([
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+    
+        $user1 = User::factory()->create([
             'firstname' => 'Adam',
             'lastname' => 'Smith',
             'email' => 'adam.smith@example.com',
             'password' => 'password'
         ]);
         $role1 = UserRole::factory()->create([
-                'user_id' => $user1->id,
-                'department_id' => $dept->id,
-                'role' => 'instructor',
-            ]);
+            'user_id' => $user1->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
         InstructorPerformance::factory()->create([
             'score' => 80,
             'total_hours' => json_encode([
-                'January' => 20,
-                'February' => 20,
-                'March' => 20,
-                'April' => 20,
-                'May' => 20,
-                'June' => 20,
-                'July' => 20,
-                'August' => 20,
-                'September' => 20,
-                'October' => 20,
-                'November' => 20,
-                'December' => 20,
+                'January' => 120,
+                'February' => 120,
+                'March' => 120,
+                'April' => 120,
+                'May' => 120,
+                'June' => 120,
+                'July' => 120,
+                'August' => 120,
+                'September' => 120,
+                'October' => 120,
+                'November' => 120,
+                'December' => 120,
             ]),
-            'target_hours' => 400,
+            'target_hours' => 1400,
             'year' => date('Y'),
             'instructor_id' => $role1->id,
         ]);
-
-        $user2 =  User::factory()->create([
+    
+        $user2 = User::factory()->create([
             'firstname' => 'John',
             'lastname' => 'Doe',
             'email' => 'johndoe@example.com',
             'password' => 'password'
         ]);
         $role2 = UserRole::factory()->create([
-                'user_id' => $user2->id,
-                'department_id' => $dept->id,
-                'role' => 'instructor',
-            ]);
+            'user_id' => $user2->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
         InstructorPerformance::factory()->create([
             'score' => 75,
             'total_hours' => json_encode([
-                'January' => 40,
-                'February' => 40,
-                'March' => 40,
-                'April' => 40,
-                'May' => 40,
-                'June' => 40,
-                'July' => 40,
-                'August' => 40,
-                'September' => 40,
-                'October' => 40,
-                'November' => 40,
-                'December' => 40,
+                'January' => 140,
+                'February' => 140,
+                'March' => 140,
+                'April' => 140,
+                'May' => 140,
+                'June' => 140,
+                'July' => 140,
+                'August' => 140,
+                'September' => 140,
+                'October' => 140,
+                'November' => 140,
+                'December' => 140,
             ]),
-            'target_hours' => 150,
+            'target_hours' => 1150,
             'year' => date('Y'),
             'instructor_id' => $role2->id,
         ]);
-
+    
         $course1 = CourseSection::factory()->create([
-            'area_id'=>$area1->id
+            'area_id' => $area1->id
         ]);
         $course2 = CourseSection::factory()->create([
-            'area_id'=>$area2->id
+            'area_id' => $area2->id
         ]);
         Teach::factory()->create([
-            'course_section_id'=> $course1->id,
+            'course_section_id' => $course1->id,
             'instructor_id' => $role1->id,
         ]);
         Teach::factory()->create([
-            'course_section_id'=> $course2->id,
+            'course_section_id' => $course2->id,
             'instructor_id' => $role2->id,
         ]);
+    
+        $this->actingAs($user);
+    
+        // Initialize Livewire test instance
+        $component = Livewire::test(StaffList::class);
+    
+        // Sorting by first name
+        $component->set('sortDirection', 'asc')
+            ->set('sortField', 'firstname')
+            ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+    
+        $component->set('sortDirection', 'desc')
+            ->set('sortField', 'firstname')
+            ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
+    
+        // Sorting by area
+        $component->set('sortDirection', 'asc')
+            ->set('sortField', 'area')
+            ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+    
+        $component->set('sortDirection', 'desc')
+            ->set('sortField', 'area')
+            ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
+    
+        // Sorting by completed hours
+        $component->set('sortDirection', 'asc')
+            ->set('sortField', 'total_hours')
+            ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+    
+        $component->set('sortDirection', 'desc')
+            ->set('sortField', 'total_hours')
+            ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
+    
+        // Sorting by target hours
+        $component->set('sortDirection', 'asc')
+            ->set('sortField', 'target_hours')
+            ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
+    
+        $component->set('sortDirection', 'desc')
+            ->set('sortField', 'target_hours')
+            ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+    
+        // Sorting by rating
+        $component->set('sortDirection', 'asc')
+            ->set('sortField', 'score')
+            ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
+    
+        $component->set('sortDirection', 'desc')
+            ->set('sortField', 'score')
+            ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+    }
+    
 
-        $this->actingAs($user1);
+    public function test_user_can_select_month(){
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
 
-        //sorting by first name
+        $instructor = User::factory()->create([
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+        $role = UserRole::factory()->create([
+            'user_id' => $instructor->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+
+        $totalHours = [
+            'January' => 120,
+            'February' => 200,
+            'March' => 230,
+            'April' => 340,
+            'May' => 150,
+            'June' => 160,
+            'July' => 170,
+            'August' => 180,
+            'September' => 190,
+            'October' => 105,
+            'November' => 110,
+            'December' => 115,
+        ];
+        $perf1 = InstructorPerformance::factory()->create([
+            'total_hours' => json_encode($totalHours),
+            'year' => date('Y'),
+            'instructor_id' => $role->id,
+        ]);
+
+        $this->actingAs($user);
+
+        $selectedMonth = date('F');
+        $selectedYear = date('Y');
+
+        $component = Livewire::test(StaffList::class)
+            ->set('selectedYear', $selectedYear)
+            ->set('selectedMonth', $selectedMonth)
+            ->assertSee($totalHours[$selectedMonth])
+            ->assertDontSee($totalHours['January']);
+
+        $selectedMonth = 'January';
+
+        $component->set('selectedMonth', $selectedMonth)
+            ->assertSee($totalHours[$selectedMonth])
+            ->assertDontSee($totalHours[date('F')]);
+    }
+
+    public function test_user_can_select_year(){
+        $dept = Department::factory()->create(['name' => 'CMPS']);
+        $user = User::factory()->create();
+        UserRole::factory()->create([
+            'user_id' => $user->id,
+            'department_id' => $dept->id,
+            'role' => 'dept_head',
+        ]);
+
+        $instructor = User::factory()->create([
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+        $role = UserRole::factory()->create([
+            'user_id' => $instructor->id,
+            'department_id' => $dept->id,
+            'role' => 'instructor',
+        ]);
+        $perf1 = InstructorPerformance::factory()->create([
+            'target_hours' => 1500,
+            'year' => date('Y'),
+            'instructor_id' => $role->id,
+        ]);
+        $perf2 = InstructorPerformance::factory()->create([
+            'target_hours' => 1200,
+            'year' => date('Y')-1,
+            'instructor_id' => $role->id,
+        ]);
+
+        $this->actingAs($user);
+
         Livewire::test(StaffList::class)
-        ->set('sortDirection', 'asc')
-        ->set('sortField', 'firstname')
-        ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
+        ->set('selectedYear', date('Y'))
+        ->assertSee($perf1->target_hours)
+        ->assertDontSee($perf2->target_hours);
 
         Livewire::test(StaffList::class)
-        ->set('sortDirection', 'desc')
-        ->set('sortField', 'firstname')
-        ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
-
-        //sorting by subarea
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'asc')
-        ->set('sortField', 'area')
-        ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
-
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'desc')
-        ->set('sortField', 'area')
-        ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
-
-        //sorting by completed hours
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'asc')
-        ->set('sortField', 'total_hours')
-        ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
-
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'desc')
-        ->set('sortField', 'total_hours')
-        ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
-
-        //sorting by target hours
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'asc')
-        ->set('sortField', 'target_hours')
-        ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
-
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'desc')
-        ->set('sortField', 'target_hours')
-        ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
-
-        //sorting by rating
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'asc')
-        ->set('sortField', 'score')
-        ->assertSeeInOrder([$user2->firstname, $user1->firstname]);
-
-        Livewire::test(StaffList::class)
-        ->set('sortDirection', 'desc')
-        ->set('sortField', 'score')
-        ->assertSeeInOrder([$user1->firstname, $user2->firstname]);
-
+        ->set('selectedYear', date('Y')-1)
+        ->assertSee($perf2->target_hours)
+        ->assertDontSee($perf1->target_hours);
     }
 }

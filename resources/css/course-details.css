@@ -1,0 +1,294 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* For the table headers and structure */
+.course-details th.editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+    cursor: pointer;
+}
+
+.course-details th.editable:focus {
+    border: 1px solid #3b4779;
+    background-color: #e9f7fe;
+}
+
+.course-details .editable {
+    background-color: #f0f0f0;
+    border: 1px dashed #ccc;
+    outline: none;
+}
+
+.course-details .editable:focus {
+    border: 1px solid #3b4779;
+    background-color: #e9f7fe;
+}
+
+.course-details .modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.course-details .modal-dialog-centered .modal-content {
+    margin: auto;
+}
+
+/* Fixing the headers of the table */
+.course-details .fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: pointer;
+    margin-bottom: 6px;
+}
+
+.course-details .fixed-header .header-title {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.course-details .fixed-header .header-search {
+    flex: 1;
+    display: flex;
+    padding: 1px;
+    border-radius: 4px;
+}
+
+.course-details .fixed-header .header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.course-details .sticky-header th {
+    position: sticky;
+    top: 0px;
+    z-index: 500;
+    background-color: rgb(59, 71, 121);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* Ensures the dropdown menu has a higher z-index than other elements */
+.course-details .dropdown-menu {
+    z-index: 1100;
+}
+
+/* Search bar */
+.course-details .search-bar,
+.course-details #searchInput {
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+    outline: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 50%;
+    max-width: 100%;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.course-details #searchInput:focus {
+    border-color: #3b4779;
+    box-shadow: 0 0 0 1px #3b4779;
+}
+
+.course-details #searchInput::placeholder {
+    color: #787878;
+}
+
+/* Custom blue color for the table */
+.custom-ubc-blue {
+    color: rgb(59, 71, 121);
+    border-color: rgb(59, 71, 121);
+    background-color: transparent;
+    font-weight: bold; 
+    border-width: 2px;
+    transition: color 0.25s;
+}
+
+.custom-ubc-blue:hover {
+    background-color: rgb(59, 71, 121);
+    color: white;
+}
+
+.custom-ubc-blue:focus {
+    border-color: rgb(59, 71, 121);
+    box-shadow: 0 0 0 1px rgb(59, 71, 121);
+}
+
+/* Highlighting the table in the edit mode */
+.course-details .editable-highlight {
+    border: 1px solid #3b4779;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: text;
+}
+
+ /* Custom green color for the buttons */
+.custom-green {
+    color: #3B784F;
+    border-color: #3B784F;
+    background-color: transparent;
+    font-weight: bold; 
+    border-width: 2px;
+    transition: color 0.25s;
+}
+
+.custom-green:hover {
+    background-color: #3B784F;
+    color: white;
+}
+
+.custom-green:focus {
+    border-color: #3B784F;
+    box-shadow: 0 0 0 1px #3B784F;
+}
+
+.custom-red {
+    color: #E3342F;
+    border-color: #E3342F;
+    background-color: transparent;
+    font-weight: bold; /* Make the text bold */
+    border-width: 2px; /* Make the border bolder */
+    transition: color 0.25s;
+}
+
+.custom-red:hover {
+    background-color: #E3342F;
+    color: white;
+}
+
+.custom-red:focus {
+    border-color: #E3342F;
+    box-shadow: 0 0 0 1px #E3342F;
+}
+
+/* For the error handling messages in the edit mode */
+.course-details .input-error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+/* Edit Mode Display for the table  */
+.course-details table {
+    border-collapse: separate;
+    border-spacing: 2px 12px;
+}
+
+.course-details tbody tr {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.course-details tbody td {
+    padding: 12px 15px;
+    background-color: #ffffff;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.1s, border-color 0.1s;
+}
+
+.course-details tbody td:first-child {
+    border-left: 1px solid rgb(255, 255, 255);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.course-details tbody td:last-child {
+    border-right: 1px solid rgb(255, 255, 255);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+/* For the Filter Icon */
+.course-details .form-select {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 2px solid #3b4779;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 50%;
+    max-width: 50%;
+    color: #3b4779;
+}
+
+.course-details .form-select:focus {
+    border-color: #3b4779;
+    box-shadow: 0 0 0 1px #3b4779;
+    outline: none;
+}
+
+.course-details .form-select::placeholder {
+    color: #f8f8f8;
+}
+
+.course-details .filter-instructor {
+    margin-top: 0rem;
+}
+
+.text-ubc-blue {
+    color: rgb(59, 71, 121);
+    font-size: large;
+}
+
+.border-tab-ubc-blue {
+    border-color: rgb(59, 71, 121);
+}
+
+.bg-custom-green {
+    background-color: #28a745; /* or your custom green color code */
+}
+
+.border-custom-green {
+    border-color: #28a745; /* or your custom green color code */
+}
+
+.pagination-btn {
+    padding: 8px 16px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    color: #3b4779;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pagination-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination-active {
+    background-color: #3b4779;
+    color: white;
+    font-weight: bold;
+    cursor: default;
+}
+
+.pagination-disabled {
+    color: #999;
+    cursor: not-allowed;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+
+
+

@@ -23,6 +23,7 @@ class ImportSeiForm extends Component
     public $isDuplicate = false;
     public $showModal = false;
     public $hasCourses = false;
+    public $rowAmount = 0;
 
     public function mount() {
         if(Session::has('seiFormData')) {
@@ -86,9 +87,8 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
-    public function checkDuplicate()
-    {
-        $this->resetValidation(); // Reset any previous validation errors
+    public function checkDuplicate() {
+        $this->resetValidation();
         $selectedCourses = [];
         $duplicateIndices = [];
 
@@ -111,13 +111,18 @@ class ImportSeiForm extends Component
 
         // dd($duplicateIndices, $selectedCourses);
 
-        // Save form data to session
         Session::put('seiFormData', $this->rows);
     }
 
     public function addRow() {
         $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
         Session::put('seiFormData', $this->rows);
+    }
+
+    public function addManyRows() {
+        for($i=0; $i<$this->rowAmount; $i++) {
+            $this->addRow();
+        }
     }
 
     public function deleteRow($row) {
@@ -128,10 +133,21 @@ class ImportSeiForm extends Component
         Session::put('seiFormData', $this->rows);
     }
 
+    public function deleteManyRows() {
+        for($i=0; $i<$this->rowAmount; $i++) {
+            $count = count($this->rows);
+            $this->deleteRow($count-1);
+        }
+    }
+
+    public function closeModal() {
+        $this->showModal = false;
+    }
+
     public function handleSubmit() {
 
         $this->checkDuplicate();
-        // dd($this->rows);
+        
         $this->validate();
     
         
@@ -164,8 +180,6 @@ class ImportSeiForm extends Component
 
         }
 
-       
-
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
         ];
@@ -179,12 +193,6 @@ class ImportSeiForm extends Component
         }
 
     }
-
-    
-    public function closeModal() {
-        $this->showModal = false;
-    }
-
 
     public function render()
     {

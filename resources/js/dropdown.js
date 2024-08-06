@@ -8,7 +8,9 @@ const Dropdown = (function () {
         multiple: false,
         external: null,
         regex: 'i',
-        debug: false
+        debug: false,
+        source: null,
+        value: null
     };
 
     class Dropdown extends HTMLElement {
@@ -46,13 +48,21 @@ const Dropdown = (function () {
                 this.addMultiSelectFunctionality();
             }
             if (this._options.external) {
-                this.loadExternalData(this._options.external);
+                this.loadExternalData(this._options.source);
+            }
+
+            if (this._options.value) {
+                this.setInitialItem();
             }
 
             this.setActiveItem();
             this.toggleDebugging(this._options.debug);
 
             this.initializeDropdownContent();
+        }
+
+        setInitialItem() {
+            this.setSelected(this._options.value);
         }
 
         disconnectedCallback() {
@@ -103,7 +113,8 @@ const Dropdown = (function () {
                 const dropdownButton = document.createElement('i');
                 dropdownButton.className = 'material-symbols-outlined dropdown-button noselect';
                 dropdownButton.textContent = 'arrow_drop_down';
-                this.appendChild(dropdownButton);
+                // this.appendChild(dropdownButton); after title
+                this.insertBefore(dropdownButton, this.firstChild.nextSibling.nextSibling);
             }
 
             let dropdownContent = this.querySelector('dropdown-content');
@@ -117,14 +128,16 @@ const Dropdown = (function () {
             const dropdownPreIcon = document.createElement('span');
             dropdownPreIcon.className = 'material-symbols-outlined dropdown-pre-icon icon noselect';
             dropdownPreIcon.textContent = this._options.preIcon;
-            this.appendChild(dropdownPreIcon);
+            // this.appendChild(dropdownPreIcon); make first child
+            this.insertBefore(dropdownPreIcon, this.firstChild);
         }
 
         renderTitle() {
             const dropdownTitle = document.createElement('span');
             dropdownTitle.className = 'dropdown-title noselect';
             dropdownTitle.textContent = this._options.title;
-            this.appendChild(dropdownTitle);
+            // this.appendChild(dropdownTitle); after preIcon
+            this.insertBefore(dropdownTitle, this.firstChild.nextSibling);
         }
 
         addSearchFunctionality() {
@@ -215,6 +228,7 @@ const Dropdown = (function () {
         handleMultiSelect(e) {
             if (e.key === 'Enter' && e.target.tagName.toLowerCase() === 'dropdown-item') {
                 const selectedValue = e.target.getAttribute('value');
+                console.log('selectedValue');
                 if (this._selectedItems.has(selectedValue)) {
                     this._selectedItems.delete(selectedValue);
                 } else {
@@ -405,18 +419,27 @@ const Dropdown = (function () {
         }
 
         selectItem(item) {
-            if (this._options.multiple) {
+            let val;
+            if (this._options.multiple === true) {
                 this.handleMultiSelect({ target: item, key: "Enter" }); // Simulate Enter key press
+                this.setSelected([...this._selectedItems]);
             } else {
-                this.value = item.getAttribute('value');
+                val = item.getAttribute('value');
+                this.value = val;
+                this.setSelected(val);
 
                 if (this.querySelector('dropdown-content.show')) {
                     this.toggleDropdown({ stopPropagation: () => { } }); // Close dropdown
                 }
             }
 
+            // send change event and input event
+            this.dispatchEvent(new Event('input'));
+            this.dispatchEvent(new Event('change'));
             this.dispatchEvent(new CustomEvent('dropdown-item-selected', {
-                detail: { value: item.getAttribute('value') },
+                detail: {
+                    value: this._options.multiple ? [...this._selectedItems] : val,
+                },
                 bubbles: true // Optional: Allow event to bubble up
             }));
         }
@@ -427,6 +450,7 @@ const Dropdown = (function () {
 
             dropdownContent.addEventListener('click', (e) => {
                 if (e.target.tagName.toLowerCase() === 'dropdown-item') {
+                    // console.log(e.target);
                     this.selectItem(e.target);
                 }
             });

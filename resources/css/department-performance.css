@@ -37,7 +37,7 @@
     flex: 1;
     padding: 10px;
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -85,6 +85,32 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex: 2;
+}
+
+.leaderboard-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-left: 7px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.leaderboard-table {
+    width: 100%;
+    font-size: 1.0rem;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    background-color: rgba(59, 71, 121, 1);
+    font-weight: bold;
+    color: #ffffff;
 }
 
 .course-performance {

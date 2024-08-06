@@ -16,7 +16,9 @@ class Toolbar extends Component {
     public $pageModes;
     public $filter;
     public $filterBy;
+    public $filterValue;
     public $searchCategory; // For categorized search
+    public $searchCategories;
     public $searchQuery;
     public $sort;
     public $sortBy;
@@ -73,6 +75,7 @@ class Toolbar extends Component {
             'infinite' => 'Infinite Scroll',
         ],
         $filterBy = [],
+        $filterValue = null,
         $sortBy = [],
         $sortOrder = [
             'asc' => 'Ascending',
@@ -97,6 +100,14 @@ class Toolbar extends Component {
         ],
         $data = [],
         $searchCategory = null,
+        $searchCategories = [
+            'all' => 'All',
+            'title' => 'Title',
+            'description' => 'Description',
+            'tags' => 'Tags',
+            'author' => 'Author',
+            'date' => 'Date',
+        ],
         $filter = null,
         $sort = null,
         $group = null
@@ -108,6 +119,7 @@ class Toolbar extends Component {
         $this->viewModes = ($viewModes);
         $this->pageModes = ($pageModes);
         $this->filterBy = ($filterBy);
+        $this->filterValue = ($filterValue);
         $this->sortBy = ($sortBy);
         $this->sortOrder = ($sortOrder);
         $this->groupBy = ($groupBy);
@@ -121,11 +133,12 @@ class Toolbar extends Component {
         $this->sort = $sort;
         $this->group = $group;
         $this->searchCategory = $searchCategory;
+        $this->searchCategories = $searchCategories;
     }
 
     public function handleDropdownSelect($event)
     {
-        dd($event);
+        // dd($event);
         Log::debug($event);
         $dropdownId = $event['target'];
         $selectedValue = $event['detail']['value'];
@@ -155,7 +168,7 @@ class Toolbar extends Component {
             // ... handle other dropdown IDs
         }
         // Optionally emit an event upward
-        $this->emitUp('toolbarUpdated', [
+        $this->dispatch('toolbarUpdated', [
             'dropdownId' => $dropdownId,
             'selectedValue' => $selectedValue,
         ]);
@@ -183,7 +196,7 @@ class Toolbar extends Component {
     public function applyActions()
     {
         // Emit an event with the selected actions
-        $this->emitUp('applyActions', $this->selectedActions);
+        $this->dispatch('applyActions', $this->selectedActions);
     }
 
     public function resetFilters()
@@ -193,7 +206,7 @@ class Toolbar extends Component {
         // ... Reset other filter properties ...
 
         // Emit an event to notify parent component
-        $this->emitUp('filtersReset');
+        $this->dispatch('filtersReset');
     }
 
     public function clearSearch()
@@ -201,7 +214,7 @@ class Toolbar extends Component {
         $this->searchQuery = '';
 
         // Optionally emit an event to the parent component
-        $this->emitUp('searchCleared');
+        $this->dispatch('searchCleared');
     }
 
     public function render()

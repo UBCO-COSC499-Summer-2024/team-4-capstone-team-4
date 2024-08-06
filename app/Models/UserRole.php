@@ -27,7 +27,7 @@ class UserRole extends Model {
      * @var array
      */
     protected $fillable = [
-        'user_id', 'area_id', 'role',
+        'user_id', 'area_id', 'role', 'department_id'
     ];
 
     /**
@@ -55,11 +55,7 @@ class UserRole extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|null
      */
     public function department() {
-        if ($this->role === 'dept_head' || $this->role === 'dept_staff' || $this->role === 'instructor') {
-            return $this->belongsTo(Department::class);
-        }
-        
-        return null; // Return null if the user is not an instructor or dept head or staff
+        return $this->belongsTo(Department::class);
     }
 
     /**
@@ -71,7 +67,7 @@ class UserRole extends Model {
         if ($this->role === 'dept_head' || $this->role === 'dept_staff') {
             return $this->hasMany(RoleAssignment::class, 'assigner_id');
         }
-        
+
         return null; // Return null if the user is not a dept head or staff
     }
 
@@ -84,7 +80,7 @@ class UserRole extends Model {
         if ($this->role === 'instructor') {
             return $this->hasMany(InstructorPerformance::class, 'instructor_id', 'id');
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -99,7 +95,7 @@ class UserRole extends Model {
                         ->withPivot('assigner_id')
                         ->withTimestamps();
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
@@ -128,9 +124,34 @@ class UserRole extends Model {
         if ($this->role === 'instructor') {
             return $this->hasMany(ExtraHour::class, 'instructor_id', 'id');
         }
-        
+
         return null; // Return null if the user is not an instructor
     }
 
-    
+    public function getName() {
+        return $this->user->getName();
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'user_roles',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
+    }
+
+    public static function instructors() {
+        return self::where('role', 'instructor')->get();
+    }
+
 }

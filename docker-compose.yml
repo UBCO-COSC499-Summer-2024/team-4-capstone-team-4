@@ -17,17 +17,26 @@ services:
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
+            BROWSERSHOT_REMOTE_URL: 'insight-chromium'
+            PUPPETEER_CACHE_DIR: '/home/sail/.cache/puppeteer'
+            PUPPETEER_EXECUTABLE_PATH: '/root/.cache/puppeteer/chrome/linux-126.0.6478.182/chrome-linux64/chrome'
         volumes:
+            - 'tmpfiles:/tmp'
             - '.:/var/www/html:cached'
         networks:
             - InsightNet
         depends_on:
             - insightdb
+            - insight-selenium
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
+        entrypoint: >
+            sh -c "npm install puppeteer@22.13.1 &&
+                   npx puppeteer browsers install chrome &&
+                   /usr/bin/supervisord -n"
     insightdb:
         # image: postgres:16-alpine
         build:
@@ -74,12 +83,26 @@ services:
             - insightdb
         networks:
             - InsightNet
+    insight-selenium:
+        image: 'selenium/standalone-chrome'
+        extra_hosts:
+        - 'host.docker.internal:host-gateway'
+        volumes:
+            - '/dev/shm:/dev/shm'
+        networks:
+            - InsightNet
 
 networks:
     InsightNet:
         driver: bridge
+        # ipam:
+        #     driver: default
+        #     config:
+        #         - subnet: "172.22.0.1/24"
 volumes:
     sail-pgsql:
         driver: local
     pgadmin:
+        driver: local
+    tmpfiles:
         driver: local

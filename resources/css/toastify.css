@@ -1,0 +1,18 @@
+.toastify-info {
+    background: #3498db;
+}
+
+.toastify-warn,
+.toastify-warning {
+    background: #f39c12;
+}
+
+.toastify-error,
+.toastify-danger,
+.toastify-err {
+    background: #e74c3c;
+}
+
+.toastify-success {
+    background: #2ecc71;
+}

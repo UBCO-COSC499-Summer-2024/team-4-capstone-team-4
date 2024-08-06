@@ -1,68 +1,84 @@
-<div>
-    <div class="italic">*IM = Interpolated Medium</div>
-    <form wire:submit="handleSubmit" class="import-form relative">
-        <div class="header flex justify-between p-2 bg-gray-200">
-            <div class="w-1/12 text-center">#</div>
-            <div class="w-6/12 text-center">Course</div>
-            <div class="w-3/12 text-center">Q1 (IM)</div>
-            <div class="w-3/12 text-center">Q2 (IM)</div>
-            <div class="w-3/12 text-center">Q3 (IM)</div>
-            <div class="w-3/12 text-center">Q4 (IM)</div>
-            <div class="w-3/12 text-center">Q5 (IM)</div>
-            <div class="w-3/12 text-center">Q6 (IM)</div>
-            <div class="w-3/12 text-center"></div>
+<div class="relative">
+    <div class="italic">*IM = Interpolated Median</div>
+    <form wire:submit="handleSubmit" class="relative">
+        <div class="relative overflow-x-auto shadow-sm rounded-md">
+            <div class="py-3 flex justify-between bg-[#3b4779] text-white">
+                <div class="w-1/12 text-center mx-2">#</div>
+                <div class="w-6/12 text-center mx-2">Course Section</div>
+                <div class="w-3/12 text-center mx-2">Q1 (IM)</div>
+                <div class="w-3/12 text-center mx-2">Q2 (IM)</div>
+                <div class="w-3/12 text-center mx-2">Q3 (IM)</div>
+                <div class="w-3/12 text-center mx-2">Q4 (IM)</div>
+                <div class="w-3/12 text-center mx-2">Q5 (IM)</div>
+                <div class="w-3/12 text-center mx-2">Q6 (IM)</div>
+                <div class="w-3/12 text-center mx-2"></div>
+            </div>
+
+            @if($hasCourses)
+            @foreach ($rows as $index => $row)
+            <div class="import-form-row">
+                <div class="w-1/12 text-center">{{ $index + 1 }}</div>
+                <div class="w-6/12">
+                    <select wire:model="rows.{{$index}}.cid" wire:change='checkDuplicate' class="import-form-select">
+                        <option value="">Select Course Section</option>
+                        @foreach ($courses as $course)
+                            <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
+                        @endforeach
+                    </select>
+                    @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
+
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q1" class="import-form-input">
+                    @error('rows.'.$index.'.q1')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q2" class="import-form-input">
+                    @error('rows.'.$index.'.q2')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q3" class="import-form-input">
+                    @error('rows.'.$index.'.q3')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q4" class="import-form-input">
+                    @error('rows.'.$index.'.q4')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q5" class="import-form-input">
+                    @error('rows.'.$index.'.q5')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+                <div class="w-3/12">
+                    <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q6" class="import-form-input">
+                    @error('rows.'.$index.'.q6')<span class="import-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="w-3/12 flex justify-center">
+                    <button type="button" wire:click.prevent="deleteRow({{ $index }})" class="import-form-delete-button">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+            </div>    
+            @endforeach
         </div>
-
-        @if($hasCourses)
-        @foreach ($rows as $index => $row)
-        <div class="import-form-row flex justify-between items-center p-2 border-b">
-            <div class="w-1/12 pl-2">{{ $index + 1 }}</div>
-            <div class="import-input w-6/12">
-                <select wire:model="rows.{{$index}}.cid" wire:change='checkDuplicate' class="p-1 w-full">
-                    <option value="">Select Course</option>
-                    @foreach ($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->prefix }} {{$course->number}} {{ $course->section }} - {{ $course->year }}{{ $course->session }}{{ $course->term }}</option>
-                    @endforeach
-                </select>
-                @error('rows.'.$index.'.cid')<span class="import-error">{{ $message }}</span>@enderror
-
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q1" class="p-1 w-full">
-                @error('rows.'.$index.'.q1')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q2" class="p-1 w-full">
-                @error('rows.'.$index.'.q2')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q3" class="p-1 w-full">
-                @error('rows.'.$index.'.q3')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q4" class="p-1 w-full">
-                @error('rows.'.$index.'.q4')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q5" class="p-1 w-full">
-                @error('rows.'.$index.'.q5')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-            <div class="import-input w-3/12">
-                <input type="number" step="0.1" min="1" max="5" placeholder="#" wire:model="rows.{{$index}}.q6" class="p-1 w-full">
-                @error('rows.'.$index.'.q6')<span class="import-error">{{ $message }}</span>@enderror
-            </div>
-
-            <div class="w-3/12 flex justify-center border-l border-gray-300">
-                <button type="button" wire:click.prevent="deleteRow({{ $index }})" class="flex items-center bg-red-500 text-black p-1 rounded hover:bg-red-600">
-                    <span class="material-symbols-outlined">delete</span>
-                </button>
-            </div>
-        </div>    
-        @endforeach
-        
         <div class="mt-4 flex justify-end space-x-2">
-            <button type="button" wire:click="addRow" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Row</button>
-            <button type="submit" @if($isDuplicate) disabled class="bg-gray-300 p-2 rounded" @endif class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Save</button>
+            <div>
+                <input type="number" step="1" min="0" max="999" placeholder="#" wire:model='rowAmount' class="text-black import-form-number-input">
+            </div>
+            <button type="button" wire:click='addManyRows' class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>   
+                Add Many Rows
+            </button>
+            {{-- <button type="button" wire:click='deleteManyRows' class="rounded-lg import-form-delete-button">Delete Many</button> --}}
+            <button type="button" wire:click="addRow" class="import-form-add-button">
+                <span class="material-symbols-outlined">add</span>
+                Add Row
+            </button>
+            <button type="submit" @if($isDuplicate) disabled class="import-form-save-button border-gray-300 text-gray-300 hover:bg-white hover:border-gray-300 hover:text-gray-300" @endif  class="import-form-save-button" >
+                <span class="material-symbols-outlined">save</span>
+                Save
+            </button>
+           
         </div>
     </form>
 
@@ -72,11 +88,11 @@
     @endif
 
     @if(!$hasCourses)
-        <div class="flex flex-col items-center justify-center mt-10">
-            <div class="text-center text-4xl">No courses created yet</div>
-            <div class="text-center text-xl">Navigate to the Add Course (Workday) tab</div>
-         
-        </div>
+    <div class="flex flex-col items-center justify-center py-10">
+        <div class="text-center text-4xl">No courses created yet</div>
+        <div class="text-center text-xl">Navigate to the "Add Course Section" tab</div>
+        
+    </div>
     @endif
 
     @if(session('success'))
