@@ -8,7 +8,6 @@ use Livewire\WithPagination;
 
 class ApprovalHistories extends Component {
     use WithPagination;
-    public $histories = [];
     public $search = '';
     public $selectedSort = 'id';
     public $selectedSortOrder = 'desc';
@@ -55,7 +54,7 @@ class ApprovalHistories extends Component {
         if ($this->search) {
             $query->where('id', 'like', '%'.$this->search.'%');
         }
-        $histories = $query->paginate($this->pgSize, ['*'], $this->pgTag);
+        $histories = $query->paginate($this->pgSize, ['*'], $this->pgTag)->appends(request()->all());
         return view('livewire.approval-histories', [
             'histories' => $histories
         ]);
