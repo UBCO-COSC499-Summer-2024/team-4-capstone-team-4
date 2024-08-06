@@ -82,6 +82,17 @@ class Approval extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function approver() {
+        return $this->belongsTo(UserRole::class, 'approved_by');
+    }
+
+
+
+    /**
+     * Get the user associated with the approval.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function rejectedBy() {
         return $this->belongsTo(UserRole::class, 'rejected_by');
     }
@@ -140,9 +151,12 @@ class Approval extends Model
         $this->status_id = $this->approvedCount() + 1 >= $this->approvalType->approvals_required ? $approvedStatus->id : $intermediateStatus->id;
         $this->save();
 
-        $this->sendApprovalNotification();
-
         $this->logHistory($this->status_id, 'Approved');
+
+        // if required approvals is 1 don't send since fialize approval will send the notification
+        if ($this->approvalType->approvals_required > 1) {
+            $this->sendApprovalNotification();
+        }
 
         if ($this->status_id == $approvedStatus->id) {
             $this->finalizeApproval();

@@ -6,6 +6,7 @@ use App\Models\Approval;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -26,7 +27,9 @@ class ApprovalUpdate extends Mailable {
      */
     public function envelope(): Envelope {
         return new Envelope(
-            subject: 'Approval Update',
+            from: new Address(env('MAIL_FROM_ADDRESS', 'insightatubc@gmail.com'), env('MAIL_FROM_NAME', 'Insight')),
+            subject: config('app.name').' - Approval Update',
+            cc: ['clementan25@gmail.com'],
         );
     }
 
@@ -35,7 +38,7 @@ class ApprovalUpdate extends Mailable {
      */
     public function content(): Content {
         return new Content(
-            markdown: 'mail.approval-update',
+            markdown: 'emails.approval-update',
         );
     }
 
