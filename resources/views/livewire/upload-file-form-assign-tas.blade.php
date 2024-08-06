@@ -43,6 +43,11 @@
                                 </option>
                             @endforeach
                         </select>
+                        @foreach($availableTas as $ta)
+                            @if($assignments[$index]['ta'] == "{$ta->name}")
+                                <div class="text-green-500">TA Found!</div>
+                            @endif
+                        @endforeach 
                     </div>
                     <div class="w-5/12"></div>
                     @endif

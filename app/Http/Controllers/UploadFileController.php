@@ -329,6 +329,21 @@ class UploadFileController extends Controller {
             }
         }
 
+        $seenCourses = [];
+        $filteredCSVs = [];
+        
+        foreach ($finalCSVs as $course) {
+            $courseIdentifier = $course['Prefix'] . '-' . $course['Number'] . '-' . $course['Section'] . '-' . $course['Session'] . '-' . $course['Term'] . '-' . $course['Year'];
+            // dd($courseIdentifier);
+            if (!in_array($courseIdentifier, $seenCourses)) {
+                $seenCourses[] = $courseIdentifier;
+                $filteredCSVs[] = $course;
+
+            }
+        }
+
+        $finalCSVs = $filteredCSVs;
+        
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.assign.courses');
 

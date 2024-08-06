@@ -206,7 +206,7 @@ class UploadFileFormAssignCourses extends Component
   
         foreach($this->finalCSVs as $finalCSV) {
             // dd($coursesFromCSV);
-            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term'];
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term', 'Instructor'];
 
              foreach ($requiredKeys as $key) {
                 if (!isset($finalCSV[$key])) {

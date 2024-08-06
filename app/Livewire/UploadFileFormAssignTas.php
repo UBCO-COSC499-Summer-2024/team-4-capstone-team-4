@@ -23,7 +23,7 @@ class UploadFileFormAssignTas extends Component
         // dd($this->finalCSVs);
 
         foreach ($this->finalCSVs as $finalCSV) {
-            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term'];
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term', 'TAs'];
 
              foreach ($requiredKeys as $key) {
                 if (!isset($finalCSV[$key])) {
@@ -96,8 +96,24 @@ class UploadFileFormAssignTas extends Component
     public function handleSubmit() {
         // dd($this->assignments);
 
+        $seenCourses = [];
+        $filteredCourses = [];
+        
+        foreach ($this->assignments as $course) {
+            $courseIdentifier = $course['prefix'] . '-' . $course['number'] . '-' . $course['section'] . '-' . $course['session'] . '-' . $course['term'] . '-' . $course['year']. '-' . $course['ta_id'];
+            // dd($courseIdentifier);
+            if (!in_array($courseIdentifier, $seenCourses)) {
+                $seenCourses[] = $courseIdentifier;
+                $filteredCourses[] = $course;
+
+            }
+        }
+
+        $this->assignments = $filteredCourses;
+        // dd($this->assignments);
+
         foreach($this->assignments as $assignment) {
-            if(isset($assignment['ta_id']) || $assignment['ta_id'] != null) {
+            if(isset($assignment['ta_id']) && $assignment['ta_id'] !== null && $assignment['ta_id'] !== "") {
                 Assist::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'ta_id' => (int) $assignment['ta_id'],
