@@ -1,4 +1,107 @@
-## Friday (7/26 - 7/31)
+## Wednesday (7/2 - 7/7)
+
+### Timesheet
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_02_2024-08_07_2024.pdf)
+
+### Current Tasks
+  * #3: Testing
+  * #4: Documentation
+  * #6: Individual Report
+  * #7: Small Cleanup / Housekeeping Tasks
+    
+### Progress Update (since 7/2/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>TA Assignment - UI & CSV Import / #480
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Course Assignment - CSV Import / #561
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+      <tr>
+        <!-- Task/Issue # -->
+        <td>Help Page - Import Dat
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Upload File - Testing / #468
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Complete Feature Testing / #518
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Documentation for Import Pages / #560
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Import Data - Add Audit / #563
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Complete Individual Report / #512
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Small Cleanup Tasks / #422
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+All of the main functionality for my pages and features are complete, I am just working on final testing. I also began to work on documenting my code and adding some small non-breaking, minor changes with the extra time I have. All these tasks are managable before the deadline.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle
+  * Testing
+  * Documentation
+  * Audit Log Stuff
+  * Final Report
+  * Cleanup
+
+## Friday (7/31 - 7/2)
 
 ### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_31_2024-08_02_2024.pdf)
@@ -10,7 +113,7 @@
   * #4: Documentation
   * #5: Help Pages
     
-### Progress Update (since 6/26/2024) 
+### Progress Update (since 7/31/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -97,7 +200,7 @@ File upload for workday and sei is complete. I am now working on, and will conti
   * #2: Upload File - Sei
   * #3: Testing
     
-### Progress Update (since 6/26/2024) 
+### Progress Update (since 7/26/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
