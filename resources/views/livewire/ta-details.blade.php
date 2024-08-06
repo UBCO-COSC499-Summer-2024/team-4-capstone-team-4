@@ -8,11 +8,19 @@
 
 <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex justify-between items-center mb-2">
-        <div>
-            <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+        @if($canEdit)
+        <div class="flex flex-col space-y-2">
+            <x-assign-ta-button id="assignTAButton" />
+            <x-create-ta-button id="createNewTAButton" />
+        </div>
+         @endif
+        <div class="flex items-center space-x-4">
+        </div>
+        <div class="flex-grow">
+            <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for TAs..." class="search-bar block p-2 text-sm text-gray-900 w-full rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
         </div>
         @if($canEdit)
-            <div class="flex justify-end items-center space-x-2">
+            <div class="flex items-center space-x-2">
                 <div class="filter-area">
                     <select wire:model.change="areaId" id="areaFilter" name="area_id" class="form-select">
                         <option value="">Filter By Area</option>
@@ -23,9 +31,6 @@
                         @endforeach
                     </select>
                 </div>
-
-                <x-create-ta-button id="createNewTAButton" />
-                <x-assign-ta-button id="assignTAButton"/>
             </div>
         @endif
     </div>
@@ -50,7 +55,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" class="py-4 text-center text-gray-500">No TAs found.</td>
+                                    <td colspan="5" class="py-4 text-center text-gray-500 no-tas-message">No TAs assigned yet.</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -75,5 +80,11 @@
         </form>
     </div>
     <x-create-ta-modal />
+    <style>
+        .no-tas-message {
+            font-size: 1.25rem; /* Increase the font size */
+            font-weight: bold; /* Make the text bold */
+        }
+    </style>
 </div>
 

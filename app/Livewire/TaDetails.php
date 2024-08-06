@@ -42,8 +42,8 @@ class TaDetails extends Component
 
         $tasQuery = TeachingAssistant::with(['courseSections.area', 'courseSections.teaches.instructor.user'])
         ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
-            $queryBuilder->whereHas('teaches', function ($query) use ($user) {
-                $query->where('instructor_id', $user->roles->where('role', 'instructor')->first()->id);
+            $queryBuilder->whereHas('courseSections.teaches', function ($query) use ($user) {
+                $query->where('instructor_id', $user->id);
             });
         })
         ->when($query, function ($queryBuilder) use ($query) {

@@ -32,10 +32,10 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
-        entrypoint: >
-            sh -c "npm install puppeteer@22.13.1 &&
-                   npx puppeteer browsers install chrome &&
-                   /usr/bin/supervisord -n"
+        # entrypoint: >
+        #     sh -c "npm install puppeteer@22.13.1 &&
+        #            npx puppeteer browsers install chrome &&
+        #            /usr/bin/supervisord -n"
     insightdb:
         # image: postgres:16-alpine
         build:

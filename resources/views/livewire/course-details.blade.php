@@ -4,6 +4,7 @@
     if($user->hasRoles(['admin', 'dept_head', 'dept_staff'])){
         $canEdit = true;
     }
+    $canExport = $user->hasRoles(['admin', 'dept_head', 'dept_staff', 'instructor']);
 @endphp
 
 <div class="relative overflow-x-auto sm:rounded-lg">
@@ -14,13 +15,25 @@
                     <x-assign-button id="assignButton" />
                     <x-create-new-button />
                     <x-edit-button id="editButton" />
+                    <x-save-button id="saveButton" style="display: none;" />
+                    <x-cancel-button id="cancelButton" style="display: none;" />
                 </div>
             @endif
         </div>
         @if($canEdit)
+        @php
+            $courseSectionsJson = json_encode($courseSections);
+        @endphp
             <div>
                 <x-coursedetails-deleteButton />
-                @livewire('export-table')
+            </div>
+        @endif
+        @if($canExport)
+        @php
+            $courseSectionsJson = json_encode($courseSections);
+        @endphp
+            <div>
+                @livewire('export-table', ['courseSections' => $courseSections->toJson()])
             </div>
         @endif
     </div>
