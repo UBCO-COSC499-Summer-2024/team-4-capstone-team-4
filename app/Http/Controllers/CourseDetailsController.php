@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\Teach;
 use Illuminate\Support\Facades\Log;
 use App\Models\Area;
-use Mpdf\Mpdf;
 
 
 class CourseDetailsController extends Controller
@@ -183,35 +182,6 @@ public function createTA(Request $request){
 
     return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
 }
-
-    public function exportPDF()
-    {
-        // Your PDF export logic here
-        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
-        $html = view('exports.pdf', compact('courseSections'))->render();
-
-        // Generate PDF
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML($html);
-        return response($mpdf->Output('courses.pdf', 'S'))->header('Content-Type', 'application/pdf');
-    }
-
-    public function exportCSV()
-    {
-        // Your CSV export logic here
-        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
-
-        // Convert data to CSV format
-        $csvData = "Course Name,Area,Instructor,Enrolled,Dropped,Capacity,SEI Data\n";
-        foreach ($courseSections as $section) {
-            $csvData .= "{$section->name},{$section->area->name},{$section->teaches->instructor->user->name},{$section->enrolled},{$section->dropped},{$section->capacity},{$section->averageRating}\n";
-        }
-
-        $csvFileName = 'courses.csv';
-        return response($csvData)
-            ->header('Content-Type', 'text/csv')
-            ->header('Content-Disposition', "attachment; filename={$csvFileName}");
-    }
 
 
 public function save(Request $request)

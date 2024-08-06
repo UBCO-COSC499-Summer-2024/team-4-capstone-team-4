@@ -8,28 +8,37 @@
 
 <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex justify-between items-center mb-2">
+        <div class="flex items-center space-x-4">
+            @if($canEdit)
+                <div class="flex items-center space-x-2">
+                    <x-assign-button id="assignButton" />
+                    <x-create-new-button />
+                    <x-edit-button id="editButton" />
+                </div>
+            @endif
+        </div>
+        @if($canEdit)
+            <div>
+                <x-coursedetails-deleteButton />
+                @livewire('export-table')
+            </div>
+        @endif
+    </div>
+
+    <div class="flex justify-between items-center mb-2">
         <div>
             <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
         </div>
         @if($canEdit)
-            <div class="flex justify-end items-center space-x-2">
-                <div class="filter-area">
-                    <select wire:model.change="areaId" id="areaFilter" name="area_id" class="form-select">
-                        <option value="">Filter By Area</option>
-                        @foreach($areas as $area)
-                            <option value="{{ $area->id }}" {{ $areaId == $area->id ? 'selected' : '' }}>
-                                {{ $area->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <x-create-new-button id="createNewButton" />
-                <x-assign-button id="assignButton" />
-                <x-edit-button id="editButton" />
-                <x-coursedetails-deleteButton />
-                <x-save-button id="saveButton" style="display: none;" />
-                <x-cancel-button id="cancelButton" style="display: none;" />
+            <div class="filter-area">
+                <select wire:model.change="areaId" id="areaFilter" name="area_id" class="form-select">
+                    <option value="">Filter By Area</option>
+                    @foreach($areas as $area)
+                        <option value="{{ $area->id }}" {{ $areaId == $area->id ? 'selected' : '' }}>
+                            {{ $area->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         @endif
     </div>
