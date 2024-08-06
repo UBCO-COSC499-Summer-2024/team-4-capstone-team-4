@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -15,6 +16,8 @@ use Laravel\Fortify\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Http\Responses\RegisterResponse;
+use App\Http\Responses\RegisterResponse as InsightRegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -38,7 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->input(Fortify::username()))->first();
-    
+
             // Check if the user exists and password is correct
             if ($user && Hash::check($request->input('password'), $user->password)) {
                 // Check if the user is disabled
@@ -47,10 +50,17 @@ class FortifyServiceProvider extends ServiceProvider
                         Fortify::username() => ['This account is disabled.'],
                     ]);
                 }
-    
+
+                // if user is not approved
+                if (!$user->approved) {
+                    throw ValidationException::withMessages([
+                        Fortify::email() => ['This account is not approved.'],
+                    ]);
+                }
+
                 return $user;
             }
-    
+
             // Return null if authentication fails
             return null;
         });
@@ -64,5 +74,10 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
+
+
+        $this->app->singleton(\Laravel\Fortify\Http\Controllers\RegisteredUserController::class, RegisteredUserController::class);
+
+        $this->app->singleton(RegisterResponse::class, InsightRegisterResponse::class);
     }
 }
