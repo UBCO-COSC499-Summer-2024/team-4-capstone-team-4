@@ -59,9 +59,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
+            // Check if capacity is greater than enrolled
+            const enrolledStudents = row.children[3]?.innerText.trim();
+            const courseCapacities = row.children[5]?.innerText.trim();
+            if (!isNaN(enrolledStudents) && !isNaN(courseCapacities) && enrolledStudents !== '' && courseCapacities !== '') {
+                if (parseInt(enrolledStudents) > parseInt(courseCapacities)) {
+                    row.children[5].classList.add('error-input');
+                    row.children[3].classList.add('error-input');
+                    isValid = false;
+                } else {
+                    row.children[5].classList.remove('error-input');
+                    row.children[3].classList.remove('error-input');
+                }
+            }
         });
         return isValid;
     }
+    
 
     function saveChanges() {
         if (!validateInput()) {

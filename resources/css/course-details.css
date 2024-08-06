@@ -301,22 +301,29 @@
     color: rgb(59, 71, 121); /* Custom UBC blue text */
 }
 
+/* Active tab styles */
 nav a.import-nav-link {
     padding: 0.5rem 1rem;
     border-bottom-width: 2px;
-    transition: color 0.3s ease, border-color 0.3s ease;
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
     color: #6b7280; /* Gray color for inactive tabs */
     border-bottom: 2px solid transparent; /* Default border color for inactive tabs */
+    background-color: transparent; /* Transparent background for inactive tabs */
 }
 
 nav a.import-nav-link:hover {
     color: #3b4779;
     border-bottom-color: #3b4779;
+    background-color: #e5e7eb; /* Light gray background on hover */
+    border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners for hover effect */
 }
 
 nav a.import-nav-link.active {
     color: #3b4779;
     border-bottom-color: #3b4779;
+    background-color: #e5e7eb; /* Light gray background for active tab */
+    border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners for active tab */
+    font-weight: bold; /* Bold text for active tab */
 }
 
 
@@ -346,4 +353,57 @@ nav a.import-nav-link.active {
     background-color: #ccc;
     cursor: not-allowed;
     border-color: #ccc;
+}
+
+.export-dropdown-container {
+    position: relative;
+    z-index: 1000; /* Ensure container is on top */
+}
+
+.export-button {
+    display: inline-block;
+    text-align: left;
+    position: relative;
+    z-index: 1001; /* Ensure button is on top */
+}
+
+.export-dropdown {
+    transform-origin: top right;
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 14rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    z-index: 1002; /* Ensure dropdown is on top */
+}
+
+.export-dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    color: #4a5568;
+    font-size: 0.875rem;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+}
+
+.export-dropdown-item:hover {
+    background-color: #f7fafc;
+    color: #2d3748;
+}
+
+.tooltip {
+    display: block;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#exportButton:hover .tooltip {
+    opacity: 1;
 }
