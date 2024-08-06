@@ -96,7 +96,13 @@ class CourseDetailsController extends Controller
                     return $course->prefix . ' ' . $course->number . ' ' . $course->section;
                 })->implode(', '),
                 'instructorName' => $ta->courseSections->map(function ($course) {
-                    return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+                    // return optional($course->teaches->instructor->user)->firstname . ' ' . optional($course->teaches->instructor->user)->lastname;
+                    if ($course->teaches && $course->teaches->instructor && $course->teaches->instructor->user) {
+                        $instructor = $course->teaches->instructor->user;
+                        return $instructor->firstname . ' ' . $instructor->lastname;
+                    } else {
+                        return 'N/A';
+                    }
                 })->implode(', ')
             ];
         });
