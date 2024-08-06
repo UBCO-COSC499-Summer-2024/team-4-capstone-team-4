@@ -2,9 +2,9 @@ name: Laravel
 
 on:
   push:
-    branches: [ "configure-github-actions" ]
+    branches: [ "master" , "development" ]
   pull_request:
-    branches: [ "configure-github-actions" ]
+    branches: [ "master" , "development" ]
 
 jobs:
   laravel-tests:
