@@ -54,7 +54,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function approvalType() {
-        return $this->belongsTo(ApprovalType::class);
+        return $this->belongsTo(ApprovalType::class, 'approval_type_id');
     }
 
     /**
@@ -63,7 +63,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function status() {
-        return $this->belongsTo(ApprovalStatus::class);
+        return $this->belongsTo(ApprovalStatus::class, 'status_id');
     }
 
     /**
