@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\Approval;
 use App\Models\ApprovalStatus;
 use App\Models\ApprovalType;
+use App\Models\AuthMethod;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\InstructorPerformance;
@@ -37,6 +38,13 @@ class CreateNewUser implements CreatesNewUsers
             'lastname' => $input['lastname'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'approved' => false,
+        ]);
+
+        AuthMethod::create([
+            'user_id' => $user->id,
+            'provider' => 'email-password',
+            'provider_id' => $user->email,
         ]);
 
         // create new Approval for Approval Type registration

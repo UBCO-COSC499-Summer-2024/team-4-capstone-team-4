@@ -177,38 +177,23 @@ class Approval extends Model
     }
 
     public function approvedCount() {
-        // Count the number of approved approvals
-        $approvedCount = count($this->approvals()
-            ->whereHas('status', function($query) {
-                $query->where('name', 'approved');
-            }));
+        $approvalTypeId = $this->approval_type_id;
 
-        // Check if the number of required approvals has been reached
+        $approvedCount = Approval::where('approval_type_id', $approvalTypeId)
+                                ->where('status_id', ApprovalStatus::where('name', 'approved')->first()->id)
+                                ->count();
+
         $requiredApprovals = $this->approvalType->approvals_required;
 
         if ($approvedCount < $requiredApprovals) {
-            // If not, include intermediate approvals as well
-            $intermediateCount = count($this->approvals()
-                ->whereHas('status', function($query) {
-                    $query->where('name', 'intermediate');
-                }));
+            $intermediateCount = Approval::where('approval_type_id', $approvalTypeId)
+                                        ->where('status_id', ApprovalStatus::where('name', 'intermediate')->first()->id)
+                                        ->count();
 
-            $result = [
-                'approved' => $approvedCount,
-                'intermediate' => $intermediateCount,
-                'total' => $approvedCount + $intermediateCount
-            ];
-
-            return $result['total'];
+            return $approvedCount + $intermediateCount;
         }
 
-        $result = [
-            'approved' => $approvedCount,
-            'intermediate' => 0,
-            'total' => $approvedCount
-        ];
-
-        return $result['total'];
+        return $approvedCount;
     }
 
     public static function getColumns() {
@@ -239,9 +224,14 @@ class Approval extends Model
     }
 
     public static function audit($action, $details, $description) {
-        $audit_user = User::findOrFail(auth()->user()->id)->getName();
+        $id = Auth::user()->id ?? null;
+        $audit_user = null;
+        if ($id) {
+            $audit_user = User::find($id);
+        }
+
         AuditLog::create([
-            'user_id' => auth()->user()->id ?? null,
+            'user_id' => $id ?? null,
             'user_alt' => $audit_user ?? 'System',
             'action' => $action,
             'description' => $description,

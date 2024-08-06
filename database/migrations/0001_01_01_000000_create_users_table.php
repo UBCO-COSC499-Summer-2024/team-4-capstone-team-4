@@ -224,7 +224,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('approval_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
