@@ -140,6 +140,8 @@ class Approval extends Model
         $this->status_id = $this->approvedCount() + 1 >= $this->approvalType->approvals_required ? $approvedStatus->id : $intermediateStatus->id;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Approved');
 
         if ($this->status_id == $approvedStatus->id) {
