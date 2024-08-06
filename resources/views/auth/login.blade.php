@@ -3,7 +3,11 @@
         <h1>Secure Login</h1>
         <form id="login-form" class="form" method="POST" action="{{ route('login') }}">
             @csrf
-
+            @if (session('status'))
+                <div class="alert alert-success text-[#2d3b6b]">
+                    {{ session('status') }}
+                </div>
+            @endif
             <x-form-item class="flex flex-col">
                 <div class="flex items-center">
                     <x-form-icon icon="Email" class="mr-2"/>

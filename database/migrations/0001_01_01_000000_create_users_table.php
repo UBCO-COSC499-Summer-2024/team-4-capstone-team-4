@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('approved')->default(false);
             $table->rememberToken();
             $table->boolean('active')->default(true);
             $table->foreignId('current_team_id')->nullable();
@@ -223,7 +224,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('approval_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -241,7 +241,7 @@ return new class extends Migration
 
         Schema::create('approvals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('approval_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('approval_type_id')->constrained('approval_types')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
             $table->text('details')->nullable();
