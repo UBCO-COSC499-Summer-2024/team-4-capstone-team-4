@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Mail\ApprovalUpdate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Event\Telemetry\System;
 
 class Approval extends Model
@@ -155,6 +157,8 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Rejected');
     }
 
@@ -162,6 +166,8 @@ class Approval extends Model
         $this->status_id = ApprovalStatus::where('name', 'cancelled')->first()->id;
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Cancelled');
     }
@@ -172,6 +178,8 @@ class Approval extends Model
         $this->approved_by = Auth::id();
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Finalized');
     }
@@ -244,5 +252,9 @@ class Approval extends Model
 
     public function log_audit($action, $details, $description) {
         self::audit($action, $details, $description);
+    }
+
+    public function sendApprovalNotification() {
+        Mail::to($this->user->email)->send(new ApprovalUpdate($this));
     }
 }
