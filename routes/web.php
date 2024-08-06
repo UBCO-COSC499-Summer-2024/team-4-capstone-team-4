@@ -82,6 +82,10 @@ Route::middleware([
     Route::post('/upload-file/workday', [UploadFileController::class, 'uploadWorkday'])->name('upload.file.workday');
     Route::get('/upload-file/sei-data', [UploadFileController::class, 'showUploadFileSei'])->name('upload.file.show.sei');
     Route::post('/upload-file/sei-data', [UploadFileController::class, 'uploadSei'])->name('upload.file.sei');
+    Route::get('/upload-file/assign-courses', [UploadFileController::class, 'showUploadFileAssignCourses'])->name('upload.file.show.assign.courses');
+    Route::post('/upload-file/assign-courses', [UploadFileController::class, 'uploadAssignCourses'])->name('upload.file.assign.courses');
+    Route::get('/upload-file/assign-tas', [UploadFileController::class, 'showUploadFileAssignTas'])->name('upload.file.show.assign.tas');
+    Route::post('/upload-file/assign-tas', [UploadFileController::class, 'uploadAssignTas'])->name('upload.file.assign.tas');
     Route::post('/upload/svcroles', [UploadFileController::class, 'uploadSvcRoles'])->name('upload.svcroles');
     Route::get('/requests', function () {
         return view('service-requests');

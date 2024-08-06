@@ -28,6 +28,16 @@ class UploadFileController extends Controller {
     {
         return view('upload-file-sei');
     }
+    
+    public function showUploadFileAssignCourses()
+    {
+        return view('upload-file-assign-courses');
+    }
+
+    public function showUploadFileAssignTas()
+    {
+        return view('upload-file-assign-tas');
+    }
 
     private function readWorkdayCSV($filePath) {
         $csvData = [];
@@ -274,6 +284,125 @@ class UploadFileController extends Controller {
         }
         $request->session()->put('finalCSVs', $finalCSVs);
         return redirect()->route('upload.file.show.sei');
+    }
+
+    public function uploadAssignCourses(Request $request) {
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
+            $csvData = $this->readCSV($filePath);
+
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $trimCSV = [];
+            $trimCSV['File'] = $uploadedFile['fileName'];     
+                   
+        foreach ($uploadedFile['csvData'] as $csvData) {
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Room':
+                        case 'Instructor':
+                            $trimCSV[$key] = $value;
+                            break;
+                    }
+                }
+                $finalCSVs[] = $trimCSV;
+               
+            }
+        }
+
+        $seenCourses = [];
+        $filteredCSVs = [];
+        
+        foreach ($finalCSVs as $course) {
+            $courseIdentifier = $course['Prefix'] . '-' . $course['Number'] . '-' . $course['Section'] . '-' . $course['Session'] . '-' . $course['Term'] . '-' . $course['Year'];
+            // dd($courseIdentifier);
+            if (!in_array($courseIdentifier, $seenCourses)) {
+                $seenCourses[] = $courseIdentifier;
+                $filteredCSVs[] = $course;
+
+            }
+        }
+
+        $finalCSVs = $filteredCSVs;
+        
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.assign.courses');
+
+    }
+
+    public function uploadAssignTas(Request $request) {
+        $finalCSVs = [];
+        $uploadedFiles = [];
+     
+        $request->validate([
+            'files.*' => 'required|file|mimes:csv|max:2048',
+        ]);
+
+        foreach ($request->file('files') as $file) {
+            $filePath = $file->getRealPath();
+
+            $csvData = $this->readCSV($filePath);
+
+            $uploadedFiles[] = [
+                'fileName' => $file->getClientOriginalName(),
+                'csvData' => $csvData,
+            ];
+        }
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            foreach ($uploadedFile['csvData'] as $csvData) {
+                $trimCSV = [];
+                $trimCSV['File'] = $uploadedFile['fileName'];
+                $trimCSV['TAs'] = [];
+    
+                foreach ($csvData as $key => $value) {
+                    switch ($key) {
+                        case 'Prefix':
+                        case 'Number':
+                        case 'Section':
+                        case 'Session':
+                        case 'Term':
+                        case 'Year':
+                        case 'Room':
+                            $trimCSV[$key] = $value;
+                            break;
+                        case 'TAs': // Single column with delimiters
+                            $trimCSV['TAs'] = explode(';', $value);
+                            break;
+                        default: // Separate columns for each TA
+                            if (strpos($key, 'TA') === 0 && !empty($value)) {
+                                $trimCSV['TAs'][] = $value;
+                            }
+                            break;
+                    }
+                }
+                $finalCSVs[] = $trimCSV;
+            }
+        }
+
+        // dd($finalCSVs);
+
+        $request->session()->put('finalCSVs', $finalCSVs);
+        return redirect()->route('upload.file.show.assign.tas');
     }
 
     public function uploadSvcRoles(Request $request) {

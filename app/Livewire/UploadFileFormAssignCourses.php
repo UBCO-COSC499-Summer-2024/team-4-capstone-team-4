@@ -7,34 +7,78 @@ use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\DepartmentPerformance;
 use App\Models\InstructorPerformance;
-use App\Models\SeiData;
 use App\Models\Teach;
 use App\Models\User;
-use App\Models\UserRole;
 use Livewire\Component;
 
-class ImportAssignCourse extends Component
+class UploadFileFormAssignCourses extends Component
 {
+    public $finalCSVs = [];
     public $assignments = [];
+    public $rows = [];
 
     public $showModal = false;
-    public $hasCourses = false;
 
     public $instructorSearch='';
     public $selectedInstructorId = '';
 
-    public function mount() {
+    public function mount($finalCSVs) {
+        $this->finalCSVs = $finalCSVs;
+
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
-                'course_section_id' => $course->id,
-                'instructor_id' => null,
-                'year' => $course->year,
+                'course_section_id' => $course->id ?? '',
+                'prefix' => $course->prefix ?? '',
+                'number' => $course->number ?? '',
+                'section' => $course->section ?? '',
+                'year' => $course->year ?? '',
+                'session' => $course->session ?? '',
+                'term' => $course->term ?? '',
+                'instructor_id' => '',
+                'instructor' => '',
+                'year' => $course->year ?? '',
             ];
         })->toArray();
+
+        // dd($this->assignments, $this->finalCSVs);
+        foreach($this->assignments as $index => $assignment) {
+            foreach($this->finalCSVs as $finalCSV) {
+                $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term', 'Instructor'];
+
+                foreach ($requiredKeys as $key) {
+                    if (!isset($finalCSV[$key])) {
+                        continue 2;
+                        }
+                }
+
+                    if( $finalCSV['Prefix'] == $assignment['prefix'] &&
+                        $finalCSV['Number'] == $assignment['number'] &&
+                        $finalCSV['Section'] == $assignment['section'] &&
+                        $finalCSV['Year'] == $assignment['year'] &&
+                        $finalCSV['Session'] == $assignment['session'] &&
+                        $finalCSV['Term'] == $assignment['term']
+                    ){
+                        $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
+                        // dd(User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id'));
+                        $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id');
+                        $instructors = $this->getAvailableInstructors();
+                        // dd($instructors);
+                        foreach($instructors as $instructor) {
+                            if("{$instructor->firstname} {$instructor->lastname}" == $finalCSV['Instructor']) {
+                                //get user id
+                                $this->assignments[$index]['instructor_id'] = $instructor->id;
+                            }
+                        }   
+                    }                
+                }
+
+            }
+        // dd($this->assignments);
+
     }
 
     public function handleSubmit() { 
-
+        // dd($this->assignments);
         foreach ($this->assignments as $assignment) {
             $instructor_id = (int) $assignment['instructor_id'];
             $year = $assignment['year'];
@@ -139,9 +183,9 @@ class ImportAssignCourse extends Component
             }
         }
 
-
-        // Reset the form
-        $this->mount();
+        $this->finalCSVs = [];
+        $this->assignments = [];
+        $this->mount($this->finalCSVs);
 
         session()->flash('success', 'Instructors assigned successfully!');
 
@@ -154,10 +198,39 @@ class ImportAssignCourse extends Component
         $this->showModal = false;
     }
 
+
     public function getAvailableCourses() {
+        $courses = collect();
         $assignedCourseIds = Teach::pluck('course_section_id');
 
-        return CourseSection::whereNotIn('id', $assignedCourseIds)->get();
+  
+        foreach($this->finalCSVs as $finalCSV) {
+            // dd($coursesFromCSV);
+            $requiredKeys = ['Prefix', 'Number', 'Section', 'Year', 'Session', 'Term', 'Instructor'];
+
+             foreach ($requiredKeys as $key) {
+                if (!isset($finalCSV[$key])) {
+                    continue 2;
+                    }
+            }
+
+            $course = CourseSection::whereNotIn('id', $assignedCourseIds)
+                ->where('prefix', $finalCSV['Prefix'])
+                ->where('number', $finalCSV['Number'])
+                ->where('section', $finalCSV['Section'])
+                ->where('year', $finalCSV['Year'])
+                ->where('session', $finalCSV['Session'])
+                ->where('term', $finalCSV['Term'])
+                ->get();
+
+                $courses = $courses->merge($course);
+        }
+
+        // dd($courses, CourseSection::whereNotIn('id', $assignedCourseIds)->get());
+
+        // return CourseSection::whereNotIn('id', $assignedCourseIds)->get();
+
+        return $courses;
     }
 
     public function getAvailableInstructors() {
@@ -165,38 +238,26 @@ class ImportAssignCourse extends Component
 
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->where('role', 'instructor')
+            // ->where(function ($query) {
+            //     $query->whereRaw('LOWER(users.firstname) LIKE ?', ["%{$this->instructorSearch}%"])
+            //         ->orWhereRaw('LOWER(users.lastname) LIKE ?', ["%{$this->instructorSearch}%"])
+            //         ->orWhereRaw('LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE ?', ["%{$this->instructorSearch}%"]);
+            // })
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();
-
-        // return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
-        // ->where('role', 'instructor')
-        // ->where(function ($query) {
-        //     $query->whereRaw('users.firstname ILIKE ?', ["%{$this->instructorSearch}%"])
-        //           ->orWhereRaw('users.lastname ILIKE ?', ["%{$this->instructorSearch}%"])
-        //           ->orWhereRaw('CONCAT(users.firstname, \' \', users.lastname) ILIKE ?', ["%{$this->instructorSearch}%"]);
-        // })
-        // ->orderByRaw('LOWER(users.lastname)')
-        // ->orderByRaw('LOWER(users.firstname)')
-        // ->get();
     }
 
     public function render()
     {
-        // InstructorPerformance::updatePerformance(8, 2000);
-            // AreaPerformance::updateAreaPerformance(1, 2023);
-            // DepartmentPerformance::updateDepartmentPerformance(1, 2023);
-         
-        if(!$this->getAvailableCourses()->isEmpty()) {
-            $this->hasCourses = true;
-        } else {
-            $this->hasCourses = false;
-        }
+        // dd($this->assignments, $this->finalCSVs);
+        // dd($this->getAvailableCourses());
+
         // dd($this->getAvailableInstructors());
 
-        return view('livewire.import-assign-course', [
-            'availableInstructors' => $this->getAvailableInstructors(),
+        return view('livewire.upload-file-form-assign-courses', [
             'availableCourses' => $this->getAvailableCourses(),
+            'availableInstructors' => $this->getAvailableInstructors(),
         ]);
     }
 }
