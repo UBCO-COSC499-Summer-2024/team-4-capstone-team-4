@@ -55,7 +55,7 @@
                 {{-- Check if approve option is set and true --}}
                 @if (isset($options['approve']) && $options['approve'] && !$approval->isApproved() && !$approval->isCancelled() && !$approval->isRejected())
                     <button class="svcr-list-item-action"
-                        @if ($approval->approvalType()->name !== 'registration')
+                        @if ($approval->approvalType->name !== 'registration')
                             wire:click="$call('approveApproval', {{ $approval->id }})"
                         @else
                             wire:click="$dispatch('trigger-modal', [{{ $approval->id }}])"
@@ -70,7 +70,7 @@
                 {{-- Check if reject option is set and true --}}
                 @if (isset($options['reject']) && $options['reject']  && !$approval->isRejected() && !$approval->isCancelled() && !$approval->isApproved())
                     <button class="svcr-list-item-action"
-                        @if ($approval->approvalType()->name !== 'registration')
+                        @if ($approval->approvalType->name !== 'registration')
                             wire:click="$call('rejectApproval', {{ $approval->id }})"
                         @else
                             wire:click="$dispatch('trigger-modal', [{{ $approval->id }}])"
@@ -86,7 +86,7 @@
                 {{-- Check if cancel option is set and true --}}
                 @if (isset($options['cancel']) && $options['cancel'] && !$approval->isCancelled() && !$approval->isRejected() && !$approval->isApproved())
                     <button class="svcr-list-item-action"
-                        @if ($approval->approvalType()->name !== 'registration')
+                        @if ($approval->approvalType->name !== 'registration')
                             wire:click="$call('cancelApproval', {{ $approval->id }})"
                         @else
                             wire:click="$dispatch('trigger-modal', [{{ $approval->id }}])"
