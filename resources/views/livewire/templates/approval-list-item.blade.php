@@ -8,21 +8,37 @@
     <td class="svcr-list-item-cell" data-column="select">
         <input type="checkbox" class="m-auto svcr-item-check" wire:model="selected" value="{{ $approval->id }}" />
     </td>
+    @php
+        $dateCols = ['created_at', 'updated_at', 'approved_at', 'rejected_at', 'cancelled_at', 'completed_at', 'started_at', 'ended_at', 'due_at', 'submitted_at', 'approved_at', 'rejected_at', 'cancelled_at', 'requested_at'];
+    @endphp
     @foreach ($headers as $index => $header)
         @php
             $column = $header['name'];
             $value = $approval[$column];
+            $isDate = in_array($column, $dateCols) || strpos($column, '_at') !== false;
+            $isRef = strpos($column, '_id') !== false;
+            // if column type is date or contains _at
+            if ($isDate) {
+                if ($value !== null) {
+                    if (is_string($value)) {
+                        $value = \Carbon\Carbon::parse($value);
+                    }
+                    $value = $value->format('M d, Y H:i:s');
+                }
+            }
         @endphp
         <td class="svcr-list-item-cell" data-column="{{ $column }}">
             <div class="svcr-list-td">
                 <span class="svcr-list-td-text"
                     @if ($column !== 'id')
-                        x-show="!isEditing"
+                        x-show="!isEditing || '{{$isDate}}' || '{{$isRef}}'"
                         x-cloak
                     @endif>{{ $value }}</span>
-                @if(in_array($type, ['status', 'history', 'type']) && $column !== 'id')
+                @if(in_array($type, ['status', 'history', 'type']) && $column !== 'id' && !$isDate && !$isRef)
                     <input type="text" class="svcr-list-td-input" x-show="isEditing" x-cloak
-                        wire:model="approval.{{ $column }}" value="{{ $value }}" x-text="'{{$value}}'" />
+                        name="approval.{{ $column }}"
+                        id="approval.{{ $column }}"
+                        wire:model.live="approval.{{ $column }}" value="{{ $value }}" />
                 @endif
             </div>
         </td>
