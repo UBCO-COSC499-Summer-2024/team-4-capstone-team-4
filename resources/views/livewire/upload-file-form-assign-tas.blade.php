@@ -67,7 +67,7 @@
                         {{-- <div>{{$assignment['ta_id']}}</div> --}}
                     </div>
                     <div class="w-6/12">
-                        <button type="button" wire:click="openTaModal({{$index}})" class="import-form-add-button">Select Ta</button>
+                        <button type="button" wire:click="openTaModal({{$index}})" class="import-form-add-button">Select TA</button>
                     </div>
                     <div class="w-3/12"></div>
                     @endif
