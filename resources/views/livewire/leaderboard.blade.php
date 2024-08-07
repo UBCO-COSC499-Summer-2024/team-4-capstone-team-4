@@ -8,14 +8,22 @@
                 <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:text-white hover:bg-[#3b4779] focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                     @php
                         $user = Auth::user();
-                        $dept_id = App\Models\UserRole::find($user->id)->department_id;
+                        $dept_id = App\Models\UserRole::where('user_id', $user->id)->whereIn('role', ['dept_head','dept_staff'] )->first()->department_id;
                         $dept = App\Models\Department::find($dept_id);
-                        $allPerformances = $dept->departmentPerformance->sortBy('year');
-                        $rank = 0;
+                        $allPerformances = null;
+                        $rank = null;
+                        if ($dept) {
+                            $allPerformances = $dept->departmentPerformance->sortBy('year');
+                            $rank = 0;
+                        }
                     @endphp
-                    @foreach ($allPerformances as $perf)
-                        <option value="{{ $perf->year }}" {{ $perf->year == $year ? 'selected' : '' }}>{{ $perf->year }}</option>
-                    @endforeach
+                    @if ($allPerformances)
+                        @foreach ($allPerformances as $perf)
+                            @if ($perf)
+                                <option value="{{ $perf->year }}" {{ $perf->year == $year ? 'selected' : '' }}>{{ $perf->year }}</option>
+                            @endif
+                        @endforeach
+                    @endif
                 </select>
             </div>
         </div>
