@@ -1,7 +1,7 @@
-## Wednesday (7/2 - 7/7)
+## Wednesday (8/2 - 8/7)
 
 ### Timesheet
-![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_02_2024-08_07_2024.pdf)
+![Clockify Report](./clockify/Clockify_Time_Report_Summary_08_02_2024-08_07_2024.pdf)
 
 ### Current Tasks
   * #3: Testing
@@ -9,7 +9,7 @@
   * #6: Individual Report
   * #7: Small Cleanup / Housekeeping Tasks
     
-### Progress Update (since 7/2/2024) 
+### Progress Update (since 8/2/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -101,7 +101,7 @@ All of the main functionality for my pages and features are complete, I am just 
   * Final Report
   * Cleanup
 
-## Friday (7/31 - 7/2)
+## Friday (7/31 - 8/2)
 
 ### Timesheet
 ![Clockify Report](./clockify/Clockify_Time_Report_Summary_07_31_2024-08_02_2024.pdf)
