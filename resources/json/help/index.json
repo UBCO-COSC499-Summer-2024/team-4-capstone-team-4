@@ -48,5 +48,10 @@
         "title": "Audits",
         "url": "audits",
         "icon": "browse_activity"
+    },
+    {
+        "title": "Approvals",
+        "url": "approvals",
+        "icon": "priority"
     }
 ]

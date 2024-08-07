@@ -411,19 +411,21 @@ h6 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    padding: 8px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin: 0.5rem auto;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #222;
     position: fixed;
     z-index: 100;
-    bottom: 8px;
+    bottom: 0.5rem;
     left: 0;
     right: 0;
     width: fit-content;
-    margin: auto;
+    max-width: 100%;
+    overflow-x: auto;
     /* background: rgba(59, 71, 121, 0.3); */
     background: var(--link-bar-bg);
     border: var(--link-bar-border);
@@ -440,7 +442,7 @@ h6 {
 
 .link-bar a {
     color: inherit;
-    padding: 8px;
+    padding: 0.5rem;
     border-radius: 50px;
     transition: all 0.3s ease-in-out;
 }
@@ -459,7 +461,7 @@ h6 {
     bottom: 0;
     right: 0;
     left: auto;
-    margin: auto;
+    margin: auto 0.5rem;
     background-color: var(--link-bar-vert-bg);
     color: var(--link-bar-vert-text);
     transition: all 0.3s ease-in-out;
@@ -618,6 +620,9 @@ h6 {
     .link-bar,
     .link-bar.vert {
         z-index: 400;
+        border-radius: 12px;
+        padding: 0.5rem;
+        /* margin: 0.5rem; */
     }
 
     .link-bar.vert.active {
