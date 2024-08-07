@@ -158,7 +158,13 @@ class StaffList extends Component
             ->leftJoin('departments as svc_dept', 'svc_areas.dept_id', '=', 'svc_dept.id');
 
         }else{
-            $dept_id = UserRole::find($user->id)->department_id;
+            $deptRole = UserRole::where('user_id', $user->id)
+                ->where(function($query) {
+                    $query->where('role', 'dept_head')
+                        ->orWhere('role', 'dept_staff');
+                })->first();
+
+            $dept_id = $deptRole ? $deptRole->department_id : null;
             $year = $this->selectedYear;
 
             $usersQuery->distinct()
