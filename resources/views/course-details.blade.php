@@ -52,7 +52,7 @@
 
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
-                <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">
+                <form id="editForm" class="w-full" method="POST" action="{{ route('courses.save') }}">
                     @csrf
                     <input type="hidden" id="activeTab" name="activeTab" value="{{ $activeTab }}">
                     <div class="overflow-auto max-h-[calc(100vh-200px)]">

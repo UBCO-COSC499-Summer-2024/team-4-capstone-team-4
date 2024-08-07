@@ -6,7 +6,8 @@
     }
     $canExport = $user->hasRoles(['admin', 'dept_head', 'dept_staff', 'instructor']);
 @endphp
-
+<form action="{{ route('courses.details.save') }}" method="POST">
+    @csrf
 <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex justify-between items-center mb-2">
         <div class="flex items-center space-x-4">
@@ -21,11 +22,13 @@
                 </div>
             @endif
         </div>
-        @if($canEdit)
-        @php
-            $courseSectionsJson = json_encode($courseSections);
-        @endphp
-        @endif
+        @if($canExport)
+        <div class="flex items-center space-x-2">
+            <div class="relative inline-block text-left">
+                @livewire('export-department-report')
+            </div>
+        </div>
+    @endif
         @if($canExport)
         @php
             $courseSectionsJson = json_encode($courseSections);
@@ -35,9 +38,6 @@
                 delete
             </span>
         </button>
-            <div>
-                @livewire('export-table', ['courseSections' => $courseSections->toJson()])
-            </div>
         @endif
     </div>
 
@@ -60,8 +60,6 @@
     </div>
 
     <div class="fixed-header">
-        <form>
-            @csrf
             <div class="overflow-auto max-h-[calc(100vh-200px)]">
                 <div id="tabContent">
                     <table class="min-w-full divide-y divide-gray-200 svcr-table" id="coursesTable">
@@ -106,6 +104,6 @@
                     </div>
                 </div>
             </div>
-        </form>
     </div>
 </div>
+</form>

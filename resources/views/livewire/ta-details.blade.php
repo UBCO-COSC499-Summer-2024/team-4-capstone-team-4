@@ -9,12 +9,12 @@
 <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex justify-between items-center mb-2">
         @if($canEdit)
-        <div class="flex flex-col space-y-2">
+        <div class="flex flex-row space-y-0">
             @livewire('assign-t-a-modal')
             @livewire('create-t-a-modal')
         </div>
          @endif
-        <div class="flex items-center space-x-4">
+        <div class="flex justify-between items-center mb-2">
         </div>
         <div class="flex-grow">
             <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for TAs..." class="search-bar block p-2 text-sm text-gray-900 w-full rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
