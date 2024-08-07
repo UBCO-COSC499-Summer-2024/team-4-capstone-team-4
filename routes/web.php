@@ -13,6 +13,7 @@ use App\Http\Middleware\ApplyUserSettings;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Middleware\CheckRole;
 use App\Models\ServiceRole;
+use App\Http\Middleware\CheckReportAccess;
 
 // Auth routes
 
@@ -81,11 +82,21 @@ Route::middleware([
     Route::post('/upload-file/workday', [UploadFileController::class, 'uploadWorkday'])->name('upload.file.workday');
     Route::get('/upload-file/sei-data', [UploadFileController::class, 'showUploadFileSei'])->name('upload.file.show.sei');
     Route::post('/upload-file/sei-data', [UploadFileController::class, 'uploadSei'])->name('upload.file.sei');
+    Route::get('/upload-file/assign-courses', [UploadFileController::class, 'showUploadFileAssignCourses'])->name('upload.file.show.assign.courses');
+    Route::post('/upload-file/assign-courses', [UploadFileController::class, 'uploadAssignCourses'])->name('upload.file.assign.courses');
+    Route::get('/upload-file/assign-tas', [UploadFileController::class, 'showUploadFileAssignTas'])->name('upload.file.show.assign.tas');
+    Route::post('/upload-file/assign-tas', [UploadFileController::class, 'uploadAssignTas'])->name('upload.file.assign.tas');
     Route::post('/upload/svcroles', [UploadFileController::class, 'uploadSvcRoles'])->name('upload.svcroles');
     Route::get('/requests', function () {
         return view('service-requests');
     })->name('service.requests');
     Route::get('/audits', [AuditLogController::class, 'index'])->name('audits');
+    // mail preview
+    Route::get('/mail-preview', function () {
+        // get latest approval
+        $approval = \App\Models\Approval::latest()->first();
+        return new \App\Mail\ApprovalUpdate($approval);
+    })->name('mail-preview');
 });
 
 // Svcroles routes
@@ -124,6 +135,7 @@ Route::middleware([
     'verified',
     ApplyUserSettings::class,
     CheckRole::class.':admin,dept_head,dept_staff,instructor',
+    CheckReportAccess::class
 ])->group(function () {
     Route::get('/instructor-report/{instructor_id}', function ($instructor_id) {
         return view('instructor-report', ['instructor_id' => $instructor_id]);

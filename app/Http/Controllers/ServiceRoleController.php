@@ -82,4 +82,8 @@ class ServiceRoleController extends Controller
 
         return response()->json($serviceRoles);
     }
+
+    public function goToDash() {
+        return redirect()->route('dasboard');
+    }
 }

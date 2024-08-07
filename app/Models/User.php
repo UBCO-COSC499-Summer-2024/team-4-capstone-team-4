@@ -109,6 +109,10 @@ class User extends Authenticatable {
         return $this->hasRoles([$role]) && $this->roles->count() === 1;
     }
 
+    public function hasEitherOnlyRoles($roles = []) {
+        return $this->roles->whereIn('role', $roles)->count() === count($roles);
+    }
+
     public function getName() {
         try {
             return $this->firstname . ' ' . $this->lastname;
@@ -171,5 +175,23 @@ class User extends Authenticatable {
     public static function getColumns() {
         $self = new Self;
         return $self->getConnection()->getSchemaBuilder()->getColumnListing($self->getTable());
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'users',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 }

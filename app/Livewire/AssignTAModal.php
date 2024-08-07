@@ -14,8 +14,15 @@ class AssignTAModal extends Component
     public $instructors = [];
     public $selectedCourses = [];
     public $selectedTAs = [];
+    public $activeInstructor;
+    public $activeTA;
     public $showModal = false;
     public $showConfirmationModal = false;
+
+    protected $listeners = [
+        'select-ta' => 'selectTA',
+        'select-instructor' => 'selectInstructor',
+    ];
 
     public function mount()
     {
@@ -29,6 +36,18 @@ class AssignTAModal extends Component
         $this->instructors = User::whereHas('roles', function ($query) {
             $query->where('role', 'instructor');
         })->get();
+    }
+
+    public function selectTA($taId)
+    {
+        dd($taId, 'ta');
+        $this->selectedTAs[] = ['ta_id' => $taId, 'instructor_id' => '', 'course_id' => ''];
+    }
+
+    public function selectInstructor($instructorId)
+    {
+        dd($instructorId, 'instructor');
+        $this->instructors[] = ['instructor_id' => $instructorId, 'course_id' => ''];
     }
 
     public function openModal()

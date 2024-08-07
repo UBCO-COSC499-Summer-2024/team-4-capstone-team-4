@@ -11,6 +11,9 @@
                 Description
             </th>
             <th class="svcr-list-header-item">
+                Room
+            </th>
+            <th class="svcr-list-header-item">
                 Area
             </th>
             <th class="svcr-list-header-item">
@@ -49,7 +52,7 @@
             <livewire:templates.service-role-table-item :svcrole="$svcrole" :key="$svcrole['id']" :id="$svcrole['id']" />
         @empty
             <tr class="svcr-list-item empty">
-                <td class="svcr-list-item-cell empty" colspan="9">
+                <td class="svcr-list-item-cell empty" colspan="100%">
                     Click the "Add Row" button to add a new service role.
                 </td>
             </tr>

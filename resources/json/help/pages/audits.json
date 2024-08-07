@@ -1,0 +1,50 @@
+[
+    {
+      "subtopic": "Audit Logs",
+      "subsections": [
+        {
+          "heading": "Introduction",
+          "content": "Audit logs provide a detailed record of actions performed within the Insight platform. They track user activities, data modifications, and system events, offering valuable insights into system usage and data integrity.",
+          "tags": [
+            "intro",
+            "Audit Logs"
+          ]
+        },
+        {
+          "heading": "Viewing Audit Logs",
+          "content": "The Audit Logs page displays a comprehensive list of audit records. You can view details such as:\n\n- **ID:** Unique identifier for each audit log entry.\n- **User:** The user who performed the action.\n- **Action:** The type of action performed (e.g., create, update, delete).\n- **Description:** A brief summary of the action.\n- **Schema:** The database table or model affected.\n- **Operation:** The specific database operation (e.g., insert, update, delete).\n- **Old Value:**  The previous value of the data (if applicable).\n- **New Value:**  The current value of the data (if applicable).\n- **Created:**  Timestamp indicating when the audit log entry was created.\n- **Updated:** Timestamp indicating when the audit log entry was last updated.",
+          "tags": [
+            "view",
+            "Audit Logs"
+          ]
+        },
+        {
+          "heading": "Filtering and Searching",
+          "content": "To refine your view of the audit logs, you can use the following tools:\n\n- **Search:** Enter keywords in the search bar to filter audit logs based on user names, actions, descriptions, or other relevant information.\n- **Filters:**  Click the 'Filters' button to access a panel where you can filter audit logs by specific users, actions, schemas, or operation types. Select the desired filters and click 'Apply' to update the list.",
+          "tags": [
+            "filter",
+            "search",
+            "Audit Logs"
+          ]
+        },
+        {
+          "heading": "Sorting",
+          "content": "You can sort the audit logs by any column. Click the column header to sort in descending order. Click again to sort in ascending order.",
+          "tags": [
+            "sort",
+            "Audit Logs"
+          ]
+        },
+        {
+          "heading": "Data Preview",
+          "content": "For audit log entries involving data modifications, you can preview the old and new values by clicking the 'File Present' icon. This will open a modal window displaying the data in a readable format.",
+          "tags": [
+            "preview",
+            "data",
+            "Audit Logs"
+          ]
+        }
+      ],
+      "subtopics": []
+    }
+  ]

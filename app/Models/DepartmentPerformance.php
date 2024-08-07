@@ -143,6 +143,7 @@ class DepartmentPerformance extends Model {
 
     public function addHours($month, $hour) {
         try {
+            $oldValue = $this->getAttributes();
             $totalHours = json_decode($this->total_hours, true);
             if (is_numeric($month)) {
                 $month = date('F', mktime(0, 0, 0, $month, 1));
@@ -150,25 +151,34 @@ class DepartmentPerformance extends Model {
             $totalHours[$month] += $hour;
             $this->total_hours = json_encode($totalHours);
             $this->save();
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => 'System',
-                'action' => 'update',
-                'table_name' => 'department_performance',
+            self::audit('update', [
                 'operation_type' => 'UPDATE',
+                'new_value' => json_encode($oldValue),
                 'old_value' => json_encode($this->getOriginal()),
-                'new_value' => json_encode($this->getAttributes()),
-                'description' => 'System added hours to department performance data',
-            ]);
+            ], 'Hours added to department performance data.');
         } catch (\Exception $e) {
-            AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
-                'user_alt' => 'System',
-                'action' => 'update',
+            self::audit('update error', [
                 'operation_type' => 'UPDATE',
-                'description' => 'Failed to add hours to department performance data.\n' . $e->getMessage(),
-            ]);
+            ], 'Failed to add hours to department performance data.\n' . $e->getMessage());
         }
+    }
+
+    public static function audit($action, $details = [], $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'department_performance',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 
 }

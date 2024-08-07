@@ -4,22 +4,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class GenerateHelpTemplates extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'generate:help-template {topic?} {--list} {--sections=} {--force} {--verbatim}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Generate template JSON files for help topics';
 
     public function __construct()
@@ -27,9 +15,6 @@ class GenerateHelpTemplates extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $indexFilePath = resource_path('json/help/index.json');
@@ -49,19 +34,21 @@ class GenerateHelpTemplates extends Command
             return;
         }
 
-        $topicArg = $this->argument('topic');
+        $topicArg = $this->sanitizeInput($this->argument('topic'));
         if (!$topicArg) {
             $this->error("Topic argument is required unless using --list option.");
             return;
         }
 
-        // Check if the topic exists
-        if ($this->topicExists($topics, $topicArg)) {
+        // Handle spaces in topic names
+        $formattedTopicArg = str_replace(' ', '_', $topicArg);
+
+        if ($this->topicExists($topics, $formattedTopicArg)) {
             $this->info("Topic already exists: $topicArg");
-            $topicFilePath = resource_path("json/help/pages/{$topicArg}.json");
+            $topicFilePath = resource_path("json/help/pages/{$formattedTopicArg}.json");
             if (!File::exists($topicFilePath)) {
                 $confirm = $this->ask("Help file does not exist for this topic. Do you want to generate one? (y/n)");
-                if (strtolower($confirm) !== 'y') {
+                if (strtolower(trim($this->sanitizeInput($confirm))) !== 'y') {
                     $this->info("Aborting operation.");
                     return;
                 }
@@ -75,8 +62,7 @@ class GenerateHelpTemplates extends Command
             return;
         }
 
-        // Find similar topics using normalized strings
-        $similarTopics = $this->findSimilarTopics($topics, $topicArg);
+        $similarTopics = $this->findSimilarTopics($topics, $formattedTopicArg);
         if (!empty($similarTopics)) {
             $this->line("Did you mean:");
             foreach ($similarTopics as $similarTopic) {
@@ -84,17 +70,17 @@ class GenerateHelpTemplates extends Command
             }
 
             $confirm = $this->ask("Do you want to proceed with the new topic? (y/n)");
-            if (strtolower($confirm) !== 'y') {
+            if (strtolower(trim($this->sanitizeInput($confirm))) !== 'y') {
                 $this->info("Aborting operation.");
                 return;
             }
         }
 
-        $this->addTopicToIndex($indexFilePath, $topics, $topicArg);
-        $topics = json_decode(File::get($indexFilePath), true); // Reload topics after update
+        $this->addTopicToIndex($indexFilePath, $topics, $formattedTopicArg);
+        $topics = json_decode(File::get($indexFilePath), true);
 
         foreach ($topics as $topic) {
-            if ($topic['url'] === $topicArg) {
+            if ($topic['url'] === $formattedTopicArg) {
                 $topicFilePath = resource_path("json/help/pages/{$topic['url']}.json");
                 if (File::exists($topicFilePath) && !$this->option('force')) {
                     $this->info("File already exists: $topicFilePath");
@@ -108,6 +94,12 @@ class GenerateHelpTemplates extends Command
                 return;
             }
         }
+    }
+
+    protected function sanitizeInput($input)
+    {
+        // Remove any surrounding quotes and trim whitespace
+        return trim(trim($input, '"'), "'");
     }
 
     protected function topicExists($topics, $topicArg)
@@ -125,7 +117,7 @@ class GenerateHelpTemplates extends Command
         $newTopic = [
             "title" => ucwords(str_replace(['-', '_'], ' ', $topicArg)),
             "url" => $topicArg,
-            "icon" => "help_outline" // Default icon, can be customized
+            "icon" => "help_outline"
         ];
 
         $topics[] = $newTopic;

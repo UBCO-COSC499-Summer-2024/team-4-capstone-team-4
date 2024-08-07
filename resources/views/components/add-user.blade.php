@@ -1,4 +1,4 @@
-@props(['showModal'])
+@props(['showModal', 'user_roles'])
 
 <div id="add-user-modal" tabindex="-1" aria-hidden="true" class="{{ $showModal ? '' : 'hidden' }} overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center">
     <div class="relative p-4 w-full max-w-lg">
@@ -66,23 +66,34 @@
                                     <label for="role_instructor" class="text-sm text-gray-900 dark:text-white">Instructor</label>
                                 </div>
                                 <div>
-                                    <x-checkbox wire:model="user_roles" name="user_roles[]" value="dept_head" id="role_dept_head" />
+                                    <x-checkbox wire:model.change="user_roles" name="user_roles[]" value="dept_head" id="role_dept_head" />
                                     <label for="role_dept_head" class="text-sm text-gray-900 dark:text-white">Department Head</label>
                                 </div>
                             </div>
                             <div class="flex flex-col space-y-2">
                                 <div>
-                                    <x-checkbox wire:model="user_roles" name="user_roles[]" value="dept_staff" id="role_dept_staff" />
+                                    <x-checkbox wire:model.change="user_roles" name="user_roles[]" value="dept_staff" id="role_dept_staff" />
                                     <label for="role_dept_staff" class="text-sm text-gray-900 dark:text-white">Department Staff</label>
                                 </div>
                                 <div>
-                                    <x-checkbox wire:model="user_roles" name="user_roles[]" value="admin" id="role_admin" />
+                                    <x-checkbox wire:model.change="user_roles" name="user_roles[]" value="admin" id="role_admin" />
                                     <label for="role_admin" class="text-sm text-gray-900 dark:text-white">Admin</label>
                                 </div>
                             </div>
                         </div>
                         <x-input-error for="user_roles" class="mt-2"/>
                     </div>
+
+                     <!-- Department(optional) -->
+                     @if(in_array('dept_staff', $user_roles) || in_array('dept_head', $user_roles) || in_array('admin', $user_roles))
+                        <label for="deptId">Select Department:</label>
+                        <select wire:model.live="deptId" id="deptId" name="deptId" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            <option value="">Select Department</option>
+                            @foreach (\App\Models\Department::all() as $dept)
+                            <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
             
                 <!-- Submit Button -->

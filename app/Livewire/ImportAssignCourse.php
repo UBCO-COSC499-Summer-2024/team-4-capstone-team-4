@@ -20,6 +20,9 @@ class ImportAssignCourse extends Component
     public $showModal = false;
     public $hasCourses = false;
 
+    public $instructorSearch='';
+    public $selectedInstructorId = '';
+
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
@@ -165,6 +168,17 @@ class ImportAssignCourse extends Component
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();
+
+        // return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        // ->where('role', 'instructor')
+        // ->where(function ($query) {
+        //     $query->whereRaw('users.firstname ILIKE ?', ["%{$this->instructorSearch}%"])
+        //           ->orWhereRaw('users.lastname ILIKE ?', ["%{$this->instructorSearch}%"])
+        //           ->orWhereRaw('CONCAT(users.firstname, \' \', users.lastname) ILIKE ?', ["%{$this->instructorSearch}%"]);
+        // })
+        // ->orderByRaw('LOWER(users.lastname)')
+        // ->orderByRaw('LOWER(users.firstname)')
+        // ->get();
     }
 
     public function render()
@@ -178,6 +192,7 @@ class ImportAssignCourse extends Component
         } else {
             $this->hasCourses = false;
         }
+        // dd($this->getAvailableInstructors());
 
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),

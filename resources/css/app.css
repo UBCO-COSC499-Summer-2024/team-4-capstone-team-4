@@ -7,6 +7,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
 }
 
 html {
@@ -62,7 +63,7 @@ header:not(:has(#header-misc)) {
     display: flex;
     flex-direction: row;
     gap: 12px;
-    padding: 10px;
+    padding: 5px;
     justify-content: start;
     align-items: center;
 }
@@ -70,6 +71,10 @@ header:not(:has(#header-misc)) {
 #header-brand h1 {
     /* color: rgb(59, 71, 121); */
     color: var(--primary-color);
+}
+
+#header-brand svg {
+    fill: var(--primary-color) !important;
 }
 
 #header-img {}
@@ -406,19 +411,21 @@ h6 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    padding: 8px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin: 0.5rem auto;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #222;
     position: fixed;
     z-index: 100;
-    bottom: 8px;
+    bottom: 0.5rem;
     left: 0;
     right: 0;
     width: fit-content;
-    margin: auto;
+    max-width: 100%;
+    overflow-x: auto;
     /* background: rgba(59, 71, 121, 0.3); */
     background: var(--link-bar-bg);
     border: var(--link-bar-border);
@@ -435,7 +442,7 @@ h6 {
 
 .link-bar a {
     color: inherit;
-    padding: 8px;
+    padding: 0.5rem;
     border-radius: 50px;
     transition: all 0.3s ease-in-out;
 }
@@ -454,7 +461,7 @@ h6 {
     bottom: 0;
     right: 0;
     left: auto;
-    margin: auto;
+    margin: auto 0.5rem;
     background-color: var(--link-bar-vert-bg);
     color: var(--link-bar-vert-text);
     transition: all 0.3s ease-in-out;
@@ -493,76 +500,111 @@ h6 {
 @media screen and (min-width: 1000px) {
     .sidebar-toggle,
     .toolbar-toggle {
-    display: none;
+        display: none;
     }
 }
 
 /* less than 1000 */
 @media screen and (max-width: 1000px) {
+
+    #header-brand {
+        width: fit-content;
+        /* let users know this is clickable */
+        cursor: pointer;
+        min-width: 150px;
+        padding: 5px;
+        border-bottom-right-radius: 12px;
+        background: rgba(59, 71, 121, 0.1);
+        border: 2px solid var(--border-color);
+    }
     /* main {
         grid-template-areas: "container";
     } */
+    .content {
+        grid-template-rows: auto;
+    }
+
     .action-section {
-    grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr !important;
+    }
+    .content-title {
+        height: fit-content;
+        /* width: 100%; */
+        display: inline-flex;
+        /* flex-direction: column; */
+        justify-content: space-between;
+    }
+    .content-title-text,
+    .content-title-btn-holder {
+        /* flex: 1 1 50%; */
+    }
+    .content-title-text {
+        text-align: start;
+        /* width: 100%; */
+    }
+    /* .content-title-text span[class*=title], */
+    .content-title-text button span[class*=title],
+    .content-title-text button div[class*=title] {
+        display: none;
     }
 }
 
 /* smaller screens */
 @media screen and (max-width: 768px) {
     main {
-    grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
 
     .dash-bottom {
-    grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
 
     .sidebar {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    z-index: 300;
-    margin: 8px;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: calc(100% - 16px);
+        height: calc(100% - 16px);
+        z-index: 300;
+        margin: 8px;
     }
 
     .sidebar.active {
-    display: flex;
+        display: flex;
     }
 
     .dash-profile-preview {
-    display: none;
+        display: none;
     }
 
     #header-misc {
-    grid-column: 2;
-    grid-row: 1;
+        grid-column: 2;
+        grid-row: 1;
     }
 
     #header-menu {
-    justify-content: center;
+        justify-content: center;
     }
 
     #global_search {
-    display: none;
+        display: none;
     }
 
     #header-user {
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 8px;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 8px;
     }
 
     #header-user img {
-    min-width: 32px !important;
+        min-width: 32px !important;
     }
 
     .header .material-symbols-outlined {
-    display: inline-flex;
-    cursor: pointer;
-    margin-left: 8px;
+        display: inline-flex;
+        cursor: pointer;
+        margin-left: 8px;
     }
 
     h1,
@@ -571,60 +613,64 @@ h6 {
     h4,
     h5,
     h6 {
-    font-size: 1.25rem;
-    padding: 5px 0;
+        font-size: 1.25rem;
+        padding: 5px 0;
     }
 
     .link-bar,
     .link-bar.vert {
-    z-index: 400;
+        z-index: 400;
+        border-radius: 12px;
+        padding: 0.5rem;
+        /* margin: 0.5rem; */
     }
 
     .link-bar.vert.active {
-    display: flex;
+        display: flex;
     }
 
     .link-bar a span[class*=title] {
-    display: none;
+        display: none;
     }
 
     /* hover for the icon */
     .link-bar a:hover::after {
-    content: attr(data-title);
-    position: absolute;
-    bottom: 110%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    background: rgba(50, 50, 50, 1);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50px;
-    padding: 8px;
-    font-size: 0.8rem;
-    width: fit-content;
-    }
-
-    .content>h1 button span[class*=title] {
-    display: none;
+        content: attr(data-title);
+        position: absolute;
+        bottom: 110%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background: rgba(50, 50, 50, 1);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+        padding: 8px;
+        font-size: 0.8rem;
+        width: fit-content;
     }
 
     .content-title {
-        flex-direction: column;
+        /* flex-direction: column; */
         gap: 0.5rem;
+    }
+
+    .content>h1 button span[class*=title],
+    .content>h1 button div[class*=title] {
+        display: none;
     }
 }
 
 /* 480px */
 @media screen and (max-width: 480px) {
     .sidebar {
-    display: none;
+        display: none;
     }
 
     .sidebar.active {
-    display: flex;
+        display: flex;
     }
 
     h1,

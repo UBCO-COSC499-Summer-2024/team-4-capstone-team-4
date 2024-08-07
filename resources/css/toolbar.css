@@ -9,7 +9,7 @@
     align-items: center;
     gap: 6px;
     /* background: rgba(50, 50, 50, 0.9); */
-    background: rgba(59, 71, 121, 1);
+    background: var(--svcr-list-header-bg);
     color: #999;
     flex-wrap: nowrap;
     position: sticky;
@@ -225,13 +225,26 @@ h1 button {
     font-weight: 600;
 }
 
+@media screen and (max-wiidth: 1000px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: start;
+        padding: 8px;
+        border-radius: 12px;
+        /* max-height: unset;
+        overflow: unset;
+        overflow-x: auto;
+        width: fit-content;
+        box-sizing: border-box;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1); */
+    }
+}
+
 @media (max-width: 768px) { /* Adjust max-width as needed */
     .toolbar {
         display: none;
-        /* flex-direction: column; */
         align-items: end;
-        padding: 8px;
-        border-radius: 50px;
+        margin-bottom: 0.5rem;
         max-height: unset;
         overflow: unset;
         /* overflow-x: auto; */
@@ -271,4 +284,42 @@ h1 button {
     .toolbar select {
         flex: 1;
     }
+}
+
+.assign-ins-dropdown {
+    flex: 1 0 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: #dfdfdf;
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.assign-ins-dropdown:last-child {
+    align-items: end;
+}
+
+.assign-ins-dropdown > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.assign-ins-dropdown > div > div > button {
+    padding: 6px;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100% !important;
+}
+
+/* hover */
+
+.assign-ins-dropdown > div > div > button:hover {
+    background: #3b4779;
+    color: #fff;
 }

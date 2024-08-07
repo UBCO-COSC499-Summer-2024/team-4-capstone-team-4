@@ -99,6 +99,9 @@
 
 .toolbar .filter-item {
     background: #eaeaea;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .toolbar .filter-item[data-checked="true"],
@@ -133,4 +136,11 @@
 
 .toolbar .filter-clear-btn .material-symbols-outlined {
     font-weight: 600;
+}
+
+.filter-item-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    position: relative;
 }

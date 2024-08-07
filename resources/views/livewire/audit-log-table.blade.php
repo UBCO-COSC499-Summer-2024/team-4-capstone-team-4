@@ -46,7 +46,7 @@
                         </div>
                     </th>
                 @endforeach
-                <th class="text-center w-fit svcr-table-header-item svcr-list-header-item" data-column="actions">Actions</th>
+                {{-- <th class="text-center w-fit svcr-table-header-item svcr-list-header-item" data-column="actions">Actions</th> --}}
             </tr>
         </thead>
         <tbody>
