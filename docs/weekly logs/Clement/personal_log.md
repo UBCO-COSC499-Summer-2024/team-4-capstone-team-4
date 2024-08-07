@@ -1,3 +1,94 @@
+## Cycle: August 2nd - August 6th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_08_02_2024-08_06_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implement Approval System for New User Registrations
+  * #2: Develop Approval Email Notifications
+  * #3: Implement Audit Logging for Approvals
+  * #4: Design and Populate Help Pages for:
+    * Service Roles
+    * Audit Logs
+    * Approvals
+  * #5:  Enhance HTML Helpers for Help Page Content
+  * #6:  Implement UI Improvements for Dark Mode
+  * #7:  Add Unit Tests for Service Role Features
+  * #8:  Begin Implementation of "Room" Feature
+  * #9:  Update Sidebar Functionality 
+  * #10:  Improve Archiving Functionality
+  * #11:  Miscellaneous Bug Fixes and Optimizations
+
+### Progress Update (since 08/02/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Implement Approval System for New User Registrations</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Develop Approval Email Notifications</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Audit Logging for Approvals</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Design and Populate Help Pages for Service Roles, Audit Logs, Approvals</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Enhance HTML Helpers for Help Page Content</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement UI Improvements for Dark Mode</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Add Unit Tests for Service Role Features</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Begin Implementation of "Room" Feature</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>Update Sidebar Functionality </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Improve Archiving Functionality</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Miscellaneous Bug Fixes and Optimizations</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This cycle saw significant progress on user management and application documentation. Key achievements include a functional approval system for new users, complete with email notifications and audit logging. 
+
+Comprehensive help pages were created for Service Roles, Audit Logs, and the Approvals system, utilizing enhanced HTML helpers for easier content management.  
+
+Additional improvements involved UI updates for dark mode, new unit tests for Service Role features, sidebar enhancements, and various bug fixes and optimizations. 
+
+The implementation of the "Room" feature has begun and will continue in the next cycle.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Continue implementation of "Room" feature
+  * Address any remaining bugs or issues discovered 
+  * Begin planning for final stages of development and testing
+  * Review and refine documentation and help pages 
+  * Prepare for user acceptance testing 
+
+---
+
 ## Cycle: July 31st - August 1st
 
 ### Timesheet
