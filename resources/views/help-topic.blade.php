@@ -58,14 +58,39 @@
     </div>
 
     <x-link-bar :links="$links" />
-    @push('scripts')
+    {{-- @push('scripts') --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const headings = document.querySelectorAll('a.topic-link'); // Select all headings with IDs starting with "subtopic-"
+            console.log(headings);
+            headings.forEach(heading => {
+                heading.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default jump behavior
+
+                    // const targetId = this.getAttribute('href'); // Get the href attribute (e.g., "#subtopic-my-heading")
+                    // const targetElement = document.getElementById(this.getAttribute('href').replace('#', '')); // Select the target element
+                    // const targetElement = document.querySelector(targetId); // Select the target element
+
+                    if (heading) {
+                        // add transition 1s ease-in-out
+                        heading.style.transition = 'all 1s ease-in-out';
+                        // smooth scroll to element
+                        heading.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    }
+                });
+            });
             // Function to display search results from localStorage
             function displaySearchResults() {
                 const searchResults = localStorage.getItem('searchResults');
                 const container = document.getElementById('search-results-container');
 
+                if (!container) {
+                    return;
+                }
                 if (searchResults) {
                     container.style.display = 'block';
                 } else {
@@ -77,5 +102,5 @@
             displaySearchResults();
         });
     </script>
-    @endpush
+    {{-- @endpush --}}
 </x-app-layout>
