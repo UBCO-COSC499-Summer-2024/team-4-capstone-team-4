@@ -35,19 +35,21 @@
 
         @forelse ($topics as $index => $topic)
             @php
-                $path = resource_path('/json/help/pages/'.$topic['url'].'.json');
+                $path = resource_path('/json/help/pages/'.strtolower($topic['url']).'.json');
                 if (!file_exists($path)) {
                     continue;
                 }
                 $data = json_decode(file_get_contents($path), true);
-                $componentName = 'help.' . $topic['url'];
+                $componentName = 'help.' . strtolower($topic['url']);
             @endphp
 
-            @if ($currentTopic === $topic['url'])
+            @if ($currentTopic === strtolower($topic['url']))
                 @if (LivewireHelpers::componentExists($componentName))
                     @livewire($componentName, ['topic' => $topic, 'data' => $data], key($index))
                 @else
-                    {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+                    <section class="help-page">
+                        {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+                    </section>
                 @endif
             @endif
         @empty
