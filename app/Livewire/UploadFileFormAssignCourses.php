@@ -15,12 +15,13 @@ class UploadFileFormAssignCourses extends Component
 {
     public $finalCSVs = [];
     public $assignments = [];
-    public $rows = [];
+    public $filteredInstructors;
 
     public $showModal = false;
+    public $showInstructorModal = true;
 
-    public $instructorSearch='';
-    public $selectedInstructorId = '';
+    public $selectedIndex = -1;
+    public $searchTerm = '';
 
     public function mount($finalCSVs) {
         $this->finalCSVs = $finalCSVs;
@@ -58,7 +59,7 @@ class UploadFileFormAssignCourses extends Component
                         $finalCSV['Session'] == $assignment['session'] &&
                         $finalCSV['Term'] == $assignment['term']
                     ){
-                        $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
+                        // $this->assignments[$index]['instructor'] = $finalCSV['Instructor'];
                         // dd(User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id'));
                         $instructor_id = User::whereRAW("CONCAT(firstname, ' ', lastname) = ?", $finalCSV['Instructor'])->value('id');
                         $instructors = $this->getAvailableInstructors();
@@ -66,7 +67,9 @@ class UploadFileFormAssignCourses extends Component
                         foreach($instructors as $instructor) {
                             if("{$instructor->firstname} {$instructor->lastname}" == $finalCSV['Instructor']) {
                                 //get user id
+                                $this->assignments[$index]['instructor'] = "$instructor->firstname" . " " . "$instructor->lastname";
                                 $this->assignments[$index]['instructor_id'] = $instructor->id;
+
                             }
                         }   
                     }                
@@ -194,8 +197,36 @@ class UploadFileFormAssignCourses extends Component
         }
     }
 
+    public function openInstructorModal($index) {
+        $this->selectedIndex = $index;
+        // dd($this->selectedIndex);
+        $this->showInstructorModal = true;
+    }
+
+    public function closeInstructorModal() {
+        $this->showInstructorModal = false;
+    }
+
     public function closeModal() {
         $this->showModal = false;
+    }
+
+    public function selectInstructor($id, $firstname, $lastname, $selectedIndex) {
+        $this->assignments[$selectedIndex]["instructor_id"] = $id;
+        $this->assignments[$selectedIndex]["instructor"] = $firstname . " " . $lastname;
+
+        $this->closeInstructorModal();
+  
+        // dd($this->assignments);
+    }
+
+    public function updateSearch() {
+        $availableInstructors = $this->getAvailableInstructors();
+
+        $this->filteredInstructors = $availableInstructors->filter(function ($instructor) {
+            $name = $instructor->firstname . ' ' . $instructor->lastname;
+            return stripos($name, $this->searchTerm) !== false;
+        });
     }
 
 
@@ -255,9 +286,15 @@ class UploadFileFormAssignCourses extends Component
 
         // dd($this->getAvailableInstructors());
 
+        $this->updateSearch();
+
+        // dd($this->filteredInstructors);
+
         return view('livewire.upload-file-form-assign-courses', [
             'availableCourses' => $this->getAvailableCourses(),
             'availableInstructors' => $this->getAvailableInstructors(),
+            'filteredInstructors' => $this->filteredInstructors,
+            'selectedIndex' => $this->selectedIndex,
         ]);
     }
 }

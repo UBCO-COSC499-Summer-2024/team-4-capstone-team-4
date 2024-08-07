@@ -34,7 +34,7 @@
                     @endphp
                     @if($course)
                     <div class="w-3/12"></div>
-                    <div class="w-10/12 text-center text-sm">
+                    <div class="w-10/12 text-center">
                         <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                     </div>
                     <div class="w-3/12 text-center">
@@ -79,23 +79,6 @@
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <x-custom-search-ta-modal :availableTas="$availableTas" :filteredTas="$filteredTas" :selectedIndex="$selectedIndex"/>
     </div>
-
-    {{-- within same component to fall back on --}}
-
-    {{-- <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="relative bg-white rounded-lg shadow-lg w-11/12 max-w-lg">
-            <button class="absolute text-black text-4xl font-bold right-3 top-1" wire:click="closeTaModal">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <input type="text" wire:model="searchTerm" wire:change="updateSearch" class="w-full p-2 border-b-2 border-gray-300" placeholder="Search for a TA...">
-            @foreach($filteredTas as $ta)
-                <div wire:click="selectTa({{ $ta->id }}, '{{ $ta->name }}', {{ $selectedIndex }})">
-                    {{ $ta->name }}
-                </div>
-            @endforeach
-        </div>
-    </div> --}}
-
     @endif
 
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
