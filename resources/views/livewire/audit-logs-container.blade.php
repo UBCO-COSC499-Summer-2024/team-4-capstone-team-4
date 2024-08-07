@@ -26,7 +26,8 @@
                         x-on:input="search = $event.target.value; @this.dispatch('change-search-query', [search])"
                         />
                     <span class="material-symbols-outlined icon toolbar-clear-search"
-                        x-on:click="search = ''; @this.call('changeSearchQuery', '');">
+                        x-on:click="search = ''; @this.dispatch('changeSearchQuery', [search]);"
+                        >
                         clear
                     </span>
                 </div>
@@ -118,7 +119,7 @@
 
             clearSearch.addEventListener('click', () => {
                 search.value = '';
-                @this.dispatch('change-search-query', '');
+                // @this.dispatch('change-search-query', { 'query':  });
             });
 
             filterBtn.addEventListener('click', () => {
