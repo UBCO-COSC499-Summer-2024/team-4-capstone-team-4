@@ -1,10 +1,10 @@
 # Angelina's Personal Log 
 
-## Friday (8/2 - 8/7)
+## Friday (8/2 - 8/6)
 
 ### Timesheet
 Clockify report
-![Clockify report](./clockifylogs/log82-87.png)
+![Clockify report](./clockifylogs/log82-86.png)
 
 ### Current Tasks 
  * #1: Distribute Issues from Test-O-Rama
