@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Area;
 use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Auth;
-
 class CourseDetails extends Component
 {
     use WithPagination;
@@ -24,7 +23,53 @@ class CourseDetails extends Component
 
     public $searchTerm = '';
     public $areaId = null;
-    public $pagination; 
+    public $pagination;
+    public $selectedCourses = []; // Add this line
+
+    public function mount()
+    {
+        $this->loadCourses();
+    }
+
+    public function showConfirmation()
+    {
+        $this->showConfirmationModal = true;
+    }
+
+    public function hideConfirmation()
+    {
+        $this->showConfirmationModal = false;
+    }
+
+    public function loadCourses()
+    {
+        $this->courses = CourseSection::where('archived', false)->get();
+    }
+
+    public function archiveCourses()
+    {
+        $archivedCourses = CourseSection::whereIn('id', $this->selectedCourses)->get(['prefix', 'number', 'section', 'year', 'session', 'term']);
+    
+        CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => true]);
+    
+        $this->archivedCourses = $archivedCourses->map(function($course) {
+            return sprintf('%s %s %s - %s%s %s',
+                $course->prefix,
+                $course->number,
+                $course->section,
+                $course->year,
+                $course->session,
+                $course->term
+            );
+        })->toArray();
+    
+        $this->loadCourses();
+        $this->selectedCourses = [];
+        $this->showDeleteButton = false;
+        $this->showConfirmationModal = false;
+    
+        $this->dispatch('show-archived-summary', ['courses' => $this->archivedCourses]);
+    }
 
     public function render()
     {
@@ -92,7 +137,6 @@ class CourseDetails extends Component
                 $instructorName = $section->teaches->instructor->user->getName();
             }
 
-
             $timings=sprintf('%s - %s', $section->time_start, $section->time_end);
 
             return (object)[
@@ -128,17 +172,6 @@ class CourseDetails extends Component
             return round($averageRating, 2);
         }
         return 0;
-    }
-
-    public function exportPDF(){
-        // Your PDF export logic here
-        $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])->get();
-        $html = view('exports.pdf', compact('courseSections'))->render();
-
-        // Generate PDF
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML($html);
-        return response($mpdf->Output('courses.pdf', 'S'))->header('Content-Type', 'application/pdf');
     }
 
     public function exportCSV(){

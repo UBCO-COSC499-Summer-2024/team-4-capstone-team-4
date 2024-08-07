@@ -89,33 +89,35 @@ class AssignTAModal extends Component
     }
 
     public function updateCourses($index)
-{
-    $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
-    if ($instructorId) {
-        $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
-            $query->where('instructor_id', $instructorId);
-        })->get();
+    {
+        $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
+        dd($index, $instructorId);
+        if ($instructorId) {
+            $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+                $query->where('instructor_id', $instructorId);
+            })->get();
 
-        $formattedCourses = $courses->map(function($course) {
-            return [
-                'id' => $course->id,
-                'formattedName' => sprintf('%s %s %s - %s%s %s',
-                    $course->prefix,
-                    $course->number,
-                    $course->section,
-                    $course->year,
-                    $course->session,
-                    $course->term
-                )
-            ];
-        })->toArray();
+            $formattedCourses = $courses->map(function($course) {
+                return [
+                    'id' => $course->id,
+                    'formattedName' => sprintf('%s %s %s - %s%s %s',
+                        $course->prefix,
+                        $course->number,
+                        $course->section,
+                        $course->year,
+                        $course->session,
+                        $course->term
+                    )
+                ];
+            })->toArray();
 
-        $this->selectedCourses[$index] = $formattedCourses;
-        Log::info('Fetched courses: ', $formattedCourses);
-    } else {
-        $this->selectedCourses[$index] = [];
+            $this->selectedCourses[$index] = $formattedCourses;
+            Log::info('Fetched courses: ', $formattedCourses);
+        } else {
+            $this->selectedCourses[$index] = [];
+        }
     }
-}
+
     public function render()
     {
         return view('livewire.assign-t-a-modal');

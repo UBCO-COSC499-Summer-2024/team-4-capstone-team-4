@@ -10,8 +10,8 @@
     <div class="flex justify-between items-center mb-2">
         @if($canEdit)
         <div class="flex flex-col space-y-2">
-            @livewire('assign-ta-modal')
-            @livewire('create-ta-modal')
+            @livewire('assign-t-a-modal')
+            @livewire('create-t-a-modal')
         </div>
          @endif
         <div class="flex items-center space-x-4">

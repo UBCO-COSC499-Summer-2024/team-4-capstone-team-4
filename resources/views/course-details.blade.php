@@ -38,7 +38,9 @@
                             @endforeach
                         </select>
                     </div>
-                    <x-coursedetails-deleteButton />
+                    @section('content')
+                    <livewire:archive-course-section />
+                @endsection
                 </div>
             @endif
         </div>

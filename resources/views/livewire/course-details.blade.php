@@ -17,6 +17,7 @@
                     <x-edit-button id="editButton" />
                     <x-save-button id="saveButton" style="display: none;" />
                     <x-cancel-button id="cancelButton" style="display: none;" />
+                    <x-coursedetails-archive-modal />
                 </div>
             @endif
         </div>
@@ -24,14 +25,16 @@
         @php
             $courseSectionsJson = json_encode($courseSections);
         @endphp
-            <div>
-                <x-coursedetails-deleteButton />
-            </div>
         @endif
         @if($canExport)
         @php
             $courseSectionsJson = json_encode($courseSections);
         @endphp
+         <button wire:click="archiveCourses" id="archiveButton" type="button" class="btn-red hover:text-white focus:ring-1 focus:outline-none font-bold rounded-lg text-sm px-5 py-2 text-center me-1 mb-2">
+            <span class="material-symbols-outlined">
+                delete
+            </span>
+        </button>
             <div>
                 @livewire('export-table', ['courseSections' => $courseSections->toJson()])
             </div>

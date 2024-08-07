@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableEditing() {
         document.querySelectorAll('#coursesTable tbody tr').forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([3, 4, 5].includes(index)) {
+                if ([4, 5, 6].includes(index)) {
                     cell.setAttribute('contenteditable', 'true');
                     cell.classList.add('edit-highlight');
                 }
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const rows = document.querySelectorAll('#coursesTable tbody tr');
         rows.forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([3, 4, 5].includes(index)) {
+                if ([4, 5, 6].includes(index)) {
                     const value = cell.innerText.trim();
                     if (isNaN(value) || value === '') {
                         cell.classList.add('error-input');
@@ -64,12 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const courseCapacities = row.children[5]?.innerText.trim();
             if (!isNaN(enrolledStudents) && !isNaN(courseCapacities) && enrolledStudents !== '' && courseCapacities !== '') {
                 if (parseInt(enrolledStudents) > parseInt(courseCapacities)) {
-                    row.children[5].classList.add('error-input');
-                    row.children[3].classList.add('error-input');
+                    row.children[6].classList.add('error-input');
+                    row.children[4].classList.add('error-input');
                     isValid = false;
                 } else {
-                    row.children[5].classList.remove('error-input');
-                    row.children[3].classList.remove('error-input');
+                    row.children[6].classList.remove('error-input');
+                    row.children[4].classList.remove('error-input');
                 }
             }
         });

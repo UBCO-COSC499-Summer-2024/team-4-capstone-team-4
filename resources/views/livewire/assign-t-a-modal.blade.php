@@ -31,7 +31,8 @@
                                             <select wire:model="selectedTAs.{{ $index }}.instructor_id" id="instructorSelect" name="instructor_id[]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option value="">Select an option</option>
                                                 @foreach ($instructors as $instructor)
-                                                    <option value="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
+                                                    <option value="{{ $instructor->id }}"
+                                                        wire:click="udpateCourses({{ $instructor->id }})">{{ $instructor->getName() }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -68,7 +69,7 @@
     @endif
 
     @if ($showConfirmationModal)
-        <div class="fixed z-50 inset-0 overflow-y-auto modal-centered" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed z-100 inset-0 overflow-y-auto modal-centered" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
