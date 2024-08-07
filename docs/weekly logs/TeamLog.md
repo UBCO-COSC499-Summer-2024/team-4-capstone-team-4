@@ -2,6 +2,77 @@
 
 ## Date Range:
 
+- August 2 - August 7
+
+## Features in the Project Plan Cycle:
+- Admin Staff Page 
+- Course Details Page
+- Import Page - File Upload
+- Approval Requests
+- Help pages
+- Testing
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_aug2_aug7.png)
+![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
+![image of tasks](./tasks/done_aug2_aug7.png)
+![image of tasks](./tasks/done2_aug2_aug7.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_aug2_aug7.png)
+![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_aug2_aug7.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_aug2_aug7.png)
+![image of clockify report](./clockify/individual_aug2_aug7.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_aug2_aug7.png)
+![image of tasks](./tasks/done2_aug2_aug7.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_aug2_aug7.png)
+![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_aug2_aug7.png)
+![image of test report](./testing/feature_test_aug2_aug7.png)
+
+## Overview:
+The test-o-rama event went well and we only discovered a few bugs compared to the last one. Everyone has completed fixing the bugs associated with their features and we are now working on polishing up our pages and making sure everyhting is tested. We have started working on our reports and documentation and will complete these by the end of day Friday. 
+
+## Goals for next cycle
+- Conducting Final Testing
+- Complete Help pages
+- Complete Admin pages
+- Complete course details page
+- Complete TA Assign Feature
+- Complete Documentation
+
+## What's left
+- Help pages
+- Course Details page
+- TA Assign page
+- Testing
+- CI
+- Individual Project Report
+- Documentation
+
+## Date Range:
+
 - July 31 - August 2
 
 ## Features in the Project Plan Cycle:
