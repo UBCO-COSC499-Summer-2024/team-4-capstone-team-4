@@ -35,7 +35,7 @@
     </tr>
       <tr>
         <!-- Task/Issue # -->
-        <td>Help Page - Import Dat
+        <td>Help Page - Import Data
         </td>
         <!-- Status -->
         <td>Complete
