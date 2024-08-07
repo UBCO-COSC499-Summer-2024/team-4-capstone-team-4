@@ -7,6 +7,7 @@ use App\Models\ApprovalStatus;
 use App\Models\ApprovalType;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Component;
 
@@ -177,6 +178,7 @@ class ApprovalList extends Component
 
     public function action($action) {
         try {
+            DB::beginTransaction();
             // dd($this->selectedId, $action);
             $approval = Approval::find($this->selectedId);
             if ($action === 'approve') {
@@ -214,8 +216,19 @@ class ApprovalList extends Component
                 $approval->cancel();
             }
             $this->closeApprovalModal();
+            DB::commit();
         } catch(\Exception $e) {
-            $this->dispatch('show-toast', ['message' => $e->getMessage(), 'type' => 'error']);
+            DB::rollBack();
+            // get the critical message
+            $message = $e->getMessage();
+            dd($message);
+            $message = strtok($message, '\n');
+
+            $this->dispatch('show-toast', ['message' => 'An error occurred', 'type' => 'error']);
+
+            Approval::audit($action.' error', [
+                'operation_type' => 'ERROR',
+            ], Auth::user()->getName() . ' encountered an error while trying to ' . $action . ' an approval. \n' . $message);
         }
     }
 }

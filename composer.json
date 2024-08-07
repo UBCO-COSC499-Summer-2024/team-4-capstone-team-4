@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.2",
-        "fx3costa/laravelchartjs": "^1.0",
         "icehouse-ventures/laravel-chartjs": "^1.2",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
@@ -15,6 +14,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.9",
+        "league/commonmark": "^2.5",
         "league/csv": "^9.16",
         "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",

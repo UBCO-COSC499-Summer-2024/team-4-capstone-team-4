@@ -35,7 +35,7 @@ class Leaderboard extends Component {
      * @return \Illuminate\Contracts\View\View
      */
     public function render() {
-        $deptId = UserRole::where('user_id', Auth::id())->firstWhere('role', 'dept_head')->department_id;
+        $deptId = UserRole::where('user_id', Auth::id())->firstWhere('role', ['dept_head', 'dept_staff'] )->department_id;
         $usersQuery = User::query();
         $areas = $this->selectedAreas;
 

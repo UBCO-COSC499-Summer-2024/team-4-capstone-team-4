@@ -27,16 +27,15 @@ services:
             - InsightNet
         depends_on:
             - insightdb
-            - insight-selenium
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
-        entrypoint: >
-            sh -c "npm install puppeteer@22.13.1 &&
-                   npx puppeteer browsers install chrome &&
-                   /usr/bin/supervisord -n"
+        # entrypoint: >
+        #     sh -c "npm install puppeteer@22.13.1 &&
+        #            npx puppeteer browsers install chrome &&
+        #            /usr/bin/supervisord -n"
     insightdb:
         # image: postgres:16-alpine
         build:
@@ -60,13 +59,6 @@ services:
             interval: 10s
             retries: 3
             timeout: 5s
-    InsightMailUI:
-        image: mailhog/mailhog
-        ports:
-            - "1025:1025"
-            - "8025:8025"
-        networks:
-            - InsightNet
     insight-pgadmin:
         build:
             context: ./dockerfiles
@@ -81,14 +73,6 @@ services:
             - '.:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
             - insightdb
-        networks:
-            - InsightNet
-    insight-selenium:
-        image: 'selenium/standalone-chrome'
-        extra_hosts:
-        - 'host.docker.internal:host-gateway'
-        volumes:
-            - '/dev/shm:/dev/shm'
         networks:
             - InsightNet
 
