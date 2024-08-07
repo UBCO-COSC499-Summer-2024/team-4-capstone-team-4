@@ -10,8 +10,8 @@
     <div class="flex justify-between items-center mb-2">
         @if($canEdit)
         <div class="flex flex-col space-y-2">
-            <x-assign-ta-button id="assignTAButton" />
-            <x-create-ta-button id="createNewTAButton" />
+            @livewire('assign-ta-modal')
+            @livewire('create-ta-modal')
         </div>
          @endif
         <div class="flex items-center space-x-4">
@@ -55,7 +55,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" class="py-4 text-center text-gray-500 no-tas-message">No TAs assigned yet.</td>
+                                    <td colspan="5" class="py-4 text-center text-gray-500 no-tas-message">No TAs yet.</td>
                                 </tr>
                             @endif
                         </tbody>

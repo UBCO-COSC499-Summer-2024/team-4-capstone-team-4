@@ -29,11 +29,21 @@
 .modal-centered {
     display: flex;
     align-items: center;
-    min-height: calc(100% - 1rem);
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    z-index: 1002;
+
 }
 
-.modal-centered .modal-content {
-    margin: auto;
+.bg-custom-green {
+    background-color: #3B784F; /* Custom UBC blue */
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3B784F;
 }
 
 /* Fixing the headers of the table */
