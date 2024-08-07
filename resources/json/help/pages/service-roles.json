@@ -4,36 +4,57 @@
         "subsections": [
             {
                 "heading": "Introduction",
-                "content": "This is an introduction to Service Roles.",
+                "content": "Service Roles represent specific job duties and responsibilities assigned to instructors within a department. They provide a structured way to manage and track the various roles instructors fulfill beyond traditional teaching.",
                 "tags": [
                     "intro",
                     "Service Roles"
                 ]
             },
             {
-                "heading": "Details",
-                "content": "These are the details of Service Roles.",
+                "heading": "Viewing Service Roles",
+                "content": "You can view service roles in two modes:\n\n- **Table View:** Displays service roles in a tabular format, with columns for ID, Role, Area, Year, Description, Room, and Instructors.\n- **Card View:** Presents each service role as a card with key information.\n\n You can switch between these views using the 'View Mode' button in the toolbar.",
                 "tags": [
-                    "details",
+                    "view",
                     "Service Roles"
+                ]
+            },
+            {
+              "heading": "Adding Service Roles",
+              "content": "You can add service roles in two ways:\n\n- **Manually:** Click the 'New/Import' button, then 'Add Row' to create a new service role record. Fill in the form fields for the role's details and click 'Save'.\n- **Importing:** Click the 'New/Import' button, then 'Import' to upload a file containing multiple service role records. The supported file formats are CSV, Excel, and JSON. Once uploaded, you can review and edit the imported data before saving it.",
+              "tags": [
+                "add",
+                "import",
+                "Service Roles"
+              ]
+            },
+            {
+                "heading": "Managing Service Roles",
+                "content": "The platform offers several tools for managing Service Roles:\n\n- **Editing Service Roles:** Click the 'Edit' button on a service role to modify its details, such as name, description, area, monthly hours, and assigned instructors.\n- **Archiving Service Roles:** Click the 'Archive' button to mark a service role as inactive. This removes it from the main list but retains its information.\n- **Deleting Service Roles:**  **[Admin Only]**  Click the 'Delete' button to permanently remove a service role and its associated data.",
+                "tags": [
+                    "manage",
+                    "Service Roles",
+                    "edit",
+                    "archive",
+                    "delete"
+                ]
+            },
+            {
+                "heading": "Assigning Instructors",
+                "content": "To assign an instructor to a Service Role:\n\n1. Navigate to the 'Manage Service Role' page.  For example: <a class=\"text-[#ea4040]\" href=\"/svcroles/manage/\">Manage Service Role ID 1</a>\n2. Click the 'Assign Instructor' button.\n3. Select an instructor from the dropdown list.\n4. Choose the appropriate role from the 'Role' dropdown.\n5. Click 'Save'.",
+                "tags": [
+                    "instructors",
+                    "assign"
+                ]
+            },
+            {
+                "heading": "Tracking Extra Hours",
+                "content": "You can log additional hours worked by instructors beyond their assigned monthly hours. These extra hours can be associated with a specific instructor, area, or the entire Service Role. To add extra hours:\n\n1. Go to the 'Manage Service Role' page. <br>\n2. Click the 'Add Extra Hours' button.\n3. Fill in the required details, such as date, hours, description, and any relevant associations (instructor or area).\n4. Click 'Save'.",
+                "tags": [
+                    "extra hours",
+                    "track"
                 ]
             }
         ],
-        "subtopics": [
-            {
-                "subtopic": "Service Roles Subtopic",
-                "subsections": [
-                    {
-                        "heading": "Subtopic Introduction",
-                        "content": "This is an introduction to Service Roles Subtopic.",
-                        "tags": [
-                            "intro",
-                            "Service Roles",
-                            "subtopic"
-                        ]
-                    }
-                ]
-            }
-        ]
+        "subtopics": []
     }
 ]

@@ -91,6 +91,12 @@ Route::middleware([
         return view('service-requests');
     })->name('service.requests');
     Route::get('/audits', [AuditLogController::class, 'index'])->name('audits');
+    // mail preview
+    Route::get('/mail-preview', function () {
+        // get latest approval
+        $approval = \App\Models\Approval::latest()->first();
+        return new \App\Mail\ApprovalUpdate($approval);
+    })->name('mail-preview');
 });
 
 // Svcroles routes

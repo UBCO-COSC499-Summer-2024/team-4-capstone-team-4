@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Mail\ApprovalUpdate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Event\Telemetry\System;
 
 class Approval extends Model
@@ -54,7 +56,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function approvalType() {
-        return $this->belongsTo(ApprovalType::class);
+        return $this->belongsTo(ApprovalType::class, 'approval_type_id');
     }
 
     /**
@@ -63,7 +65,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function status() {
-        return $this->belongsTo(ApprovalStatus::class);
+        return $this->belongsTo(ApprovalStatus::class, 'status_id');
     }
 
     /**
@@ -74,6 +76,17 @@ class Approval extends Model
     public function approvedBy() {
         return $this->belongsTo(UserRole::class, 'approved_by');
     }
+
+    /**
+     * Get the user associated with the approval.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function approver() {
+        return $this->belongsTo(UserRole::class, 'approved_by');
+    }
+
+
 
     /**
      * Get the user associated with the approval.
@@ -140,6 +153,11 @@ class Approval extends Model
 
         $this->logHistory($this->status_id, 'Approved');
 
+        // if required approvals is 1 don't send since fialize approval will send the notification
+        if ($this->approvalType->approvals_required > 1) {
+            $this->sendApprovalNotification();
+        }
+
         if ($this->status_id == $approvedStatus->id) {
             $this->finalizeApproval();
         }
@@ -155,6 +173,8 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Rejected');
     }
 
@@ -162,6 +182,8 @@ class Approval extends Model
         $this->status_id = ApprovalStatus::where('name', 'cancelled')->first()->id;
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Cancelled');
     }
@@ -172,6 +194,8 @@ class Approval extends Model
         $this->approved_by = Auth::id();
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Finalized');
     }
@@ -244,5 +268,9 @@ class Approval extends Model
 
     public function log_audit($action, $details, $description) {
         self::audit($action, $details, $description);
+    }
+
+    public function sendApprovalNotification() {
+        Mail::to($this->user->email)->send(new ApprovalUpdate($this));
     }
 }

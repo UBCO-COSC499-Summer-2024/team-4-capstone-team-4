@@ -35,19 +35,21 @@
 
         @forelse ($topics as $index => $topic)
             @php
-                $path = resource_path('/json/help/pages/'.$topic['url'].'.json');
+                $path = resource_path('/json/help/pages/'.strtolower($topic['url']).'.json');
                 if (!file_exists($path)) {
                     continue;
                 }
                 $data = json_decode(file_get_contents($path), true);
-                $componentName = 'help.' . $topic['url'];
+                $componentName = 'help.' . strtolower($topic['url']);
             @endphp
 
-            @if ($currentTopic === $topic['url'])
+            @if ($currentTopic === strtolower($topic['url']))
                 @if (LivewireHelpers::componentExists($componentName))
                     @livewire($componentName, ['topic' => $topic, 'data' => $data], key($index))
                 @else
-                    {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+                    <section class="help-page">
+                        {!! HtmlHelpers::convertToJsonToHtml($data, $topic['title'] ?? 'No Title') !!}
+                    </section>
                 @endif
             @endif
         @empty
@@ -58,14 +60,39 @@
     </div>
 
     <x-link-bar :links="$links" />
-    @push('scripts')
+    {{-- @push('scripts') --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const headings = document.querySelectorAll('a.topic-link'); // Select all headings with IDs starting with "subtopic-"
+            console.log(headings);
+            headings.forEach(heading => {
+                heading.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default jump behavior
+
+                    // const targetId = this.getAttribute('href'); // Get the href attribute (e.g., "#subtopic-my-heading")
+                    // const targetElement = document.getElementById(this.getAttribute('href').replace('#', '')); // Select the target element
+                    // const targetElement = document.querySelector(targetId); // Select the target element
+
+                    if (heading) {
+                        // add transition 1s ease-in-out
+                        heading.style.transition = 'all 1s ease-in-out';
+                        // smooth scroll to element
+                        heading.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    }
+                });
+            });
             // Function to display search results from localStorage
             function displaySearchResults() {
                 const searchResults = localStorage.getItem('searchResults');
                 const container = document.getElementById('search-results-container');
 
+                if (!container) {
+                    return;
+                }
                 if (searchResults) {
                     container.style.display = 'block';
                 } else {
@@ -77,5 +104,5 @@
             displaySearchResults();
         });
     </script>
-    @endpush
+    {{-- @endpush --}}
 </x-app-layout>
