@@ -22,7 +22,7 @@
             <div class="flex-1 mr-4">
                 <x-coursedetails-tabs />
                 @if(in_array($userRole, ['dept_head', 'dept_staff', 'admin']))
-                    <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                    <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="block p-2 text-sm text-gray-900 rounded-lg search-bar w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
                 @endif
             </div>
             <x-coursedetails-exportButton />
@@ -43,8 +43,9 @@
                         </select>
                     </div>
                     @section('content')
-                    <livewire:archive-course-section />
-                @endsection
+                        <livewire:archive-course-section />
+                    @endsection
+                @endif
                 </div>
             @endif
         </div>
