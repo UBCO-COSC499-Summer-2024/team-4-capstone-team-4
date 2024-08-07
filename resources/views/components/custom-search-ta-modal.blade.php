@@ -13,4 +13,9 @@
             {{ $ta->name }}
         </button>
     @endforeach
+    @if($filteredTas->isEmpty())
+    <div class="pb-4">
+        <div class="text-center text-2xl text-gray-400">No Courses To Search For</div>
+    </div>
+    @endif
 </div>

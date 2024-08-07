@@ -280,6 +280,7 @@ class UploadFileFormSei extends Component
         // }
         
         $this->updateSearch();
+        // dd($this->filteredCourses);
 
         return view('livewire.upload-file-form-sei', [
             'availableCourses' => $this->getAvailableCourses(),
