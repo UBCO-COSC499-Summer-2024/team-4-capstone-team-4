@@ -59,9 +59,11 @@
                                 Select TA
                             </button>
                         </div> --}}
-            
-                        <div>{{$assignment['ta']}}</div>
-    
+                        @if(empty($assignment['ta']))
+                        <div class="text-gray-400">No TA Selected</div>
+                        @else
+                        <div class="text-[#2e3c75]">{{$assignment['ta']}}</div>
+                        @endif    
                         {{-- <div>{{$assignment['ta_id']}}</div> --}}
                     </div>
                     <div class="w-6/12">

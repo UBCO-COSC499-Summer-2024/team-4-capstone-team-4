@@ -60,8 +60,11 @@
                                 <div class="text-green-500">Instructor Found!</div>
                             @endif
                         @endforeach  --}}
-                        
-                        <div>{{$assignment['instructor']}}</div>
+                        @if(empty($assignment['instructor']))
+                        <div class="text-gray-400">No Instructor Selected</div>
+                        @else
+                        <div class="text-[#2e3c75]">{{$assignment['instructor']}}</div>
+                        @endif
 
                     </div>
                     <div class="w-6/12">

@@ -18,7 +18,7 @@ class UploadFileFormAssignCourses extends Component
     public $filteredInstructors;
 
     public $showModal = false;
-    public $showInstructorModal = true;
+    public $showInstructorModal = false;
 
     public $selectedIndex = -1;
     public $searchTerm = '';
