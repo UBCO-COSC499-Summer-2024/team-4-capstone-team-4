@@ -86,7 +86,7 @@
                                                 x-bind:checked="isChecked"
                                                 disabled
                                             />
-                                            <span class="filter-item-text">{{ $item }}</span>
+                                            <span class="filter-item-text" data-text="{{$item}}">{{ $item }}</span>
                                         </div>
                                     @endforeach
                                 </div>

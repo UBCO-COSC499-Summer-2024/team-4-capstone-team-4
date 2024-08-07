@@ -27,7 +27,7 @@ class ServiceRole extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'year', 'monthly_hours', 'area_id',
+        'name', 'description', 'year', 'monthly_hours', 'area_id', 'room',
     ];
 
     /**
@@ -160,5 +160,25 @@ class ServiceRole extends Model {
 
     public function log_audit($action, $details = [], $description) {
         self::audit($action, $details, $description);
+    }
+
+    public function getRoom() {
+        $room = $this->room;
+        $building = null;
+        $room_number = null;
+        $suffix = null;
+        if ($room) {
+            // explode either by space or hyphen or underscore
+            $parts = preg_split('/[-\s_]/', $room);
+            $building = $parts[0] ?? null;
+            $room_number = $parts[1] ?? null;
+            $suffix = $parts[2] ?? null;
+        }
+        return [
+            'room' => $room,
+            'building' => $building,
+            'number' => $room_number,
+            'suffix' => $suffix,
+        ];
     }
 }

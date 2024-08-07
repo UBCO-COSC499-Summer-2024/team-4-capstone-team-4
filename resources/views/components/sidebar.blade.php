@@ -15,18 +15,19 @@ if (isset($items)) {
     $sidebarItems = array_merge($sidebarItems, $items);
 }
 
-if(!$user->hasOnlyRole('admin')) {
+//leaderboard shows for all roles except for instructor, if a user is only admin, it's not visible
+if($user->hasRoles(['dept_head', 'dept_staff'])) {
     $sidebarItems = array_merge($sidebarItems, [
-        ['icon' => 'leaderboard', 'href' => '/leaderboard', 'title' => 'Leaderboard'],
+        ['icon' => 'leaderboard', 'href' => route('leaderboard'), 'title' => 'Leaderboard'],
     ]);
 }
-if(!$user->hasOnlyRole('dept_staff')) {
+
+if($user->hasRoles(['dept_head', 'admin'])) {
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'browse_activity', 'href' => '/audits', 'title' => 'Audit Logs'],
     ]);
 }
-if($user->hasRoles(['dept_head']) || $user->hasRoles(['admin'])) {
-    // audit logs
+if($user->hasRoles(['dept_head', 'admin'])) {
     $sidebarItems = array_merge($sidebarItems, [
         ['icon' => 'priority', 'href' => '/requests', 'title' => 'Requests'],
         ['icon' => 'database', 'href' => 'http://localhost:5050', 'title' => 'Admin', 'target' => '_blank'],

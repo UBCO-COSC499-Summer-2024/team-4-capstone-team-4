@@ -63,13 +63,14 @@
                         </span>
                     </button>
                     @foreach ($filters as $category => $filter)
-                        <div class="filter-category">
+                        <div class="filter-category" wire:key="filter_{{ $category }}">
                             <span class="filter-category-title">
                                 {{ $category }}
                             </span>
                             <div class="filter-items">
                                 @foreach ($filter as $item)
                                     <div class="filter-item nos"
+                                        wire:Key="filter_{{ $category }}_{{ $item }}"
                                         x-data="{
                                             category: '{{ $category }}',
                                             item: '{{ $item }}',
@@ -85,7 +86,7 @@
                                             }
                                         }"
                                         x-on:click="toggleCheck()">
-                                        <span class="filter-item-text">
+                                        <span class="filter-item-text" data-text="{{$item}}">
                                             {{ $item }}
                                         </span>
                                         <span class="material-symbols-outlined icon filter-item-icon"
@@ -114,7 +115,7 @@
                             $column = $header['name'];
                             $label = $header['label'];
                         @endphp
-                        <th class="svcr-list-header-item" data-column="{{ $column }}">
+                        <th class="svcr-list-header-item" data-column="{{ $column }}" wire:key="approval_status_header_{{ $column }}">
                             <div class="svcr-list-th">
                                 <span class="svcr-list-th-text">{{ $label }}</span>
                                 <span class="audit-list-sort">

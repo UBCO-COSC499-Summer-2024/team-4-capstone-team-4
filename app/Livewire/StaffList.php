@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\InstructorPerformance;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
@@ -45,6 +46,8 @@ class StaffList extends Component
     public $password;
     public $password_confirmation;
     public $user_roles = [];
+    public $deptId = null;
+
     public $confirmDelete = false;
     public $confirmAction;
     public $editUserId = null;
@@ -107,23 +110,13 @@ class StaffList extends Component
 
     //For setting values on intial render
     public function mount(){
+        //$this->resetValidation();
+
         $this->selectedYear = date('Y');
         $this->selectedMonth = date('F');
         $this->pagination = 10;
 
-        $this->enabledUsers = $this->prevEnabledUsers = User::where('active', true)->pluck('id')->toArray();
-
-        $this->instructors = $this->prevInstructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
-        $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
-        $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
-        $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
-
-        $users = User::all();
-        foreach($users as $user){
-            $this->firstnames[$user->id] = $user->firstname;
-            $this->lastnames[$user->id] = $user->lastname;
-            $this->emails[$user->id] = $user->email;
-        }
+        $this->initializeUserData();
 
     }
 
@@ -136,6 +129,9 @@ class StaffList extends Component
      * @return \Illuminate\View\View The rendered view of the staff list.
      */
     public function render(){
+        $this->initializeUserData();
+        //$this->resetValidation();
+
         $query = $this->searchTerm;
         $areas = $this->selectedAreas;
         $depts = $this->selectedDepts;
@@ -357,7 +353,9 @@ class StaffList extends Component
             $instructor = $user->roles->where('role', 'instructor')->first();
             $performance = $instructor->instructorPerformances()->where('year', $this->selectedYear)->first();
             if ($performance) {
+                $oldTarget = $performance->target_hours;
                 $performance->update(['target_hours' => $hours]);
+                $performance->log_audit('Update target hours', ['operation_type' => 'UPDATE', 'old_value' => $oldTarget, 'new_value' => $hours], 'Target hours updated for instructor id '. $instructor->id);
             } else {
                 //Create performance if doesn't exist
                 InstructorPerformance::factory()->create([
@@ -383,6 +381,7 @@ class StaffList extends Component
                     'year' => $this->selectedYear,
                     'instructor_id' => $instructor->id,
                 ]); 
+                InstructorPerformance::audit('Added target hours', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id ' . $instructor->id);
             }
         }
 
@@ -441,7 +440,9 @@ class StaffList extends Component
                 $instructor = $user->roles->where('role', 'instructor')->first();
                 $performance = $instructor->instructorPerformances()->where('year', $this->selectedYear)->first();
                 if ($performance) {
+                    $oldTarget = $performance->target_hours;
                     $performance->update(['target_hours' => $hours]);
+                    $performance->log_audit('Update target hours', ['operation_type' => 'UPDATE', 'old_value' => $oldTarget, 'new_value' => $hours], 'Target hours updated for instructor id '. $instructor->id);
                 } else {
                     //Create performance if doesn't exist
                     InstructorPerformance::factory()->create([
@@ -466,7 +467,8 @@ class StaffList extends Component
                         'dropped_avg'=> 0,
                         'year' => $this->selectedYear,
                         'instructor_id' => $instructor->id,
-                    ]);           
+                    ]); 
+                    InstructorPerformance::udit('Added target hours', ['operation_type' => 'UPDATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id '. $instructor->id);          
                 }
             }
         }
@@ -485,6 +487,22 @@ class StaffList extends Component
         $this->editMode = false;
     }
 
+    public function initializeUserData(){
+    
+        $this->enabledUsers = $this->prevEnabledUsers = User::where('active', true)->pluck('id')->toArray();
+        $this->instructors = $this->prevInstructors = UserRole::where('role', 'instructor')->pluck('user_id')->toArray();
+        $this->deptHeads = $this->prevDeptHeads = UserRole::where('role', 'dept_head')->pluck('user_id')->toArray();
+        $this->deptStaffs = $this->prevDeptStaffs = UserRole::where('role', 'dept_staff')->pluck('user_id')->toArray();
+        $this->admins = $this->prevAdmins = UserRole::where('role', 'admin')->pluck('user_id')->toArray();
+    
+        $users = User::all();
+        foreach($users as $user){
+            $this->firstnames[$user->id] = $user->firstname;
+            $this->lastnames[$user->id] = $user->lastname;
+            $this->emails[$user->id] = $user->email;
+        }
+    }
+
     /**
      * Add a new user with the specified roles.
      *
@@ -492,6 +510,7 @@ class StaffList extends Component
      * creation of the user record and assignment of roles.
      */
     public function addUser(){
+        //$this->resetValidation();
         //Fetch inputted data
         $data = [
             'firstname' => $this->firstname,
@@ -500,6 +519,7 @@ class StaffList extends Component
             'password' => $this->password,
             'password_confirmation' => $this->password_confirmation, 
             'user_roles' => $this->user_roles,
+            'deptId' => $this->deptId
         ];
     
         //Validate inputted data
@@ -509,6 +529,7 @@ class StaffList extends Component
             'email' => ['required', 'string', 'email:rfc,strict', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'user_roles' => ['required', 'array', 'min:1'],
+            'deptId' => ['nullable','numeric']
         ])->validate();
 
         // Create a new user
@@ -518,30 +539,42 @@ class StaffList extends Component
             'email' => $this->email,
             'password' => Hash::make($this->password),
         ]);
+        $user->log_audit('Added new user', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => $user->id], 'New user '. $user->firstname . ' ' . $user->lastname . ' created successfully');
 
         // Assign the selected roles to the new user
         foreach($this->user_roles as $role){
-            UserRole::create([
-                'user_id' => $user->id,
-                'department_id' => null,
-                'role' => $role,
-            ]);
+            if($role == "dept_staff" || $role == "dept_head" || $role == "admin"){
+                $userrole = UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => $this->deptId,
+                    'role' => $role,
+                ]);
+            }else{
+                $userrole = UserRole::create([
+                    'user_id' => $user->id,
+                    'department_id' => null,
+                    'role' => $role,
+                ]);
+            }
+            $userrole->log_audit('Added new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New user role '. $user->firstname . ' ' . $user->lastname . ' created successfully');
         }
         // Clear form fields and close modal
+        $this->reset();
+        $this->resetValidation();
         $this->showModal = false; 
-        $this->firstname = '';
-        $this->lastname = '';
-        $this->email = '';
-        $this->password = '';
-        $this->password_confirmation = '';
-        $this->user_roles = [];
 
         //Send success toast
         $this->dispatch('show-toast', [
             'message' => 'New user ' .$this->firstname. ' ' .$this->lastname. ' created successfully',
             'type' => 'success'
         ]); 
+
+        $this->initializeUserData();
         
+    }
+
+    public function getAllUsers(){
+
     }
 
      /**
@@ -561,15 +594,21 @@ class StaffList extends Component
 
         foreach($this->changedFirstnames as $userid => $firstname){
             $user = User::find($userid);
+            $oldname = $user->firstname;
             $user->update(['firstname' => $firstname]);
+            $user->log_audit('Update user firstname', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldname), 'new_value' => json_encode($firstname)], 'User ' .$user->id. ' firstname changed successfully');
         }
         foreach($this->changedLastnames as $userid => $lastname){
             $user = User::find($userid);
+            $oldname = $user->lastname;
             $user->update(['lastname' => $lastname]);
+            $user->log_audit('Update user lastname', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldname), 'new_value' => json_encode($lastname)], 'User ' .$user->id. ' lastname changed successfully');
         }
         foreach($this->changedEmails as $userid => $email){
             $user = User::find($userid);
+            $oldemail = $user->email;
             $user->update(['email' => $email]);
+            $user->log_audit('Update user email', ['operation_type' => 'UPDATE', 'old_value' => json_encode($oldemail), 'new_value' => json_encode($email)], 'User ' .$user->id. ' email changed successfully');
         }
 
         $changedFirstnames = array_keys($this->changedFirstnames);
@@ -581,11 +620,13 @@ class StaffList extends Component
         foreach($addedUsers as $userid){
             $user = User::find($userid);
             $user->update(['active' => true]);
+            $user->log_audit('Activate account', ['operation_type' => 'UPDATE', 'old_value' => 'false', 'new_value' => 'true'], 'User ' .$user->id. ' account activated successfully');
             $enabledCount++;
         }
         foreach($removedUsers as $userid){
             $user = User::find($userid);
             $user->update(['active' => false]);
+            $user->log_audit('Deactivate account', ['operation_type' => 'UPDATE', 'old_value' => 'true', 'new_value' => 'false'], 'User ' .$user->id. ' account deactivated successfully');
             $disabledCount++;
         }
 
@@ -644,10 +685,14 @@ class StaffList extends Component
         $message = implode("\n", $messageParts);
 
         $this->editMode = false;
-        $this->dispatch('show-toast', [
-            'message' => $message,
-            'type' => 'success'
-        ]);
+        if($message !== ''){
+            $this->dispatch('show-toast', [
+                'message' => $message,
+                'type' => 'success'
+            ]);
+        }
+
+        $this->initializeUserData();
     }
 
     /**
@@ -677,6 +722,7 @@ class StaffList extends Component
                     'department_id' => null,
                     'role' => $role,
                 ]);
+                UserRole::audit('Add new user role', ['operation_type' => 'CREATE', 'old_value' => null, 'new_value' => json_encode($role)], 'New role added for user ' .$userid. ' ');
                 $addCount++;
             }
         }
@@ -686,6 +732,7 @@ class StaffList extends Component
             $user_roles = UserRole::where('user_id', $userid)->pluck('role');
             if ($user_roles->contains($role)) {
                 UserRole::where('user_id', $userid)->where('role', $role)->delete();
+                UserRole::audit('Remove user role', ['operation_type' => 'DELETE', 'old_value' => json_encode($role), 'new_value' => null], 'Role removed for user ' .$userid);
             }
             $removeCount++;
         }
@@ -713,6 +760,7 @@ class StaffList extends Component
      * @param int $userid The ID of the user to delete.
      */
     public function deleteStaff($userid){
+        //$this->resetValidation();
         //Retrieve user
         $user = User::find($userid);
         $fullname = $user->firstname . ' ' . $user->lastname;
@@ -720,11 +768,13 @@ class StaffList extends Component
         //Attempt to detelet user
         try{
             $user->delete();
+            $user->log_audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => null], 'User ' .$userid.' deleted successfully');
         }catch(Exception $e){
             $this->dispatch('show-toast', [
                 'message' => 'Failed to delete user(s):' . $e->getMessage(),
                 'type' => 'error'
             ]); 
+            User::audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => $userid], 'Failed to delete user ' .$userid);
         }
 
         //Reset and send toast message
@@ -757,19 +807,23 @@ class StaffList extends Component
      *
      */
     public function delete(){
+        //$this->resetValidation();
         //Retrieve users
         $staff_checkboxes = $this->staffCheckboxes;
 
         foreach($staff_checkboxes as $email){
             $user = User::where('email', $email)->first();
+            $userid = $user->id;
             //Attempt to delete the users
             try{
                 $user->delete();
+                $user->log_audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => null], 'User ' .$userid.' deleted successfully');
             }catch(Exception $e){
                 $this->dispatch('show-toast', [
                     'message' => 'Failed to delete user(s):' . $e->getMessage(),
                     'type' => 'error'
                 ]); 
+                User::audit('Delete user', ['operation_type' => 'DELETE', 'old_value' => $userid, 'new_value' => $userid], 'Failed to delete user ' .$userid);
             }
         }
 
@@ -777,6 +831,7 @@ class StaffList extends Component
         $this->confirmDelete = false;
         $this->editMode = false;
         $this->staffCheckboxes = [];
+        $this->selectAll = false;
 
         $this->dispatch('show-toast', [
             'message' => count($staff_checkboxes). ' user(s) deleted!',
@@ -825,5 +880,11 @@ class StaffList extends Component
 
     public function updateEmail($userid, $email){
         $this->changedEmails[$userid] = $email;
+    }
+
+    public function showAddModal(){
+        $this->reset();
+        $this->resetValidation();
+        $this->showModal = true;
     }
 }

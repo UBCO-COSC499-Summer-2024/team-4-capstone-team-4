@@ -10,10 +10,6 @@
     </button>
 </div>
 
-{{-- <div class="absolute right-0 top-0">
-    <div>Download</div>
-</div> --}}
-
 <livewire:drag-and-drop :action="'upload.file.sei'"/>
 
 @if (session('finalCSVs'))

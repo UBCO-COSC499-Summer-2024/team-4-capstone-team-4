@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('approved')->default(false);
             $table->rememberToken();
             $table->boolean('active')->default(true);
             $table->foreignId('current_team_id')->nullable();
@@ -56,6 +57,7 @@ return new class extends Migration
             $table->integer('hours');
             $table->year('year');
             $table->integer('month');
+            $table->string('room')->nullable();
             $table->foreignId('assigner_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('instructor_id')->constrained('user_roles')->cascadeOnDelete();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
@@ -69,6 +71,7 @@ return new class extends Migration
             $table->text('description')->nullable()->default('Default Description');
             $table->year('year')->default(date('Y'));
             $table->json('monthly_hours');
+            $table->string('room')->nullable();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
             $table->boolean('archived')->default(false);
@@ -221,7 +224,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('approval_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -239,7 +241,7 @@ return new class extends Migration
 
         Schema::create('approvals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('approval_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('approval_type_id')->constrained('approval_types')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('status_id')->constrained('approval_statuses')->cascadeOnDelete();
             $table->text('details')->nullable();

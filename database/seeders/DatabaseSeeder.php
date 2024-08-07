@@ -105,7 +105,8 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Dept',
             'lastname' => 'Head',
             'email' => 'head@example.com',
-            'password' => 'password'
+            'password' => 'password',
+            'approved' => true,
         ]);
         $headrole = UserRole::factory()->create([
             'user_id' => $head->id,
@@ -124,7 +125,8 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Dept',
             'lastname' => 'Staff',
             'email' => 'staff@example.com',
-            'password' => 'password'
+            'password' => 'password',
+            'approved' => true,
         ]);
         UserRole::factory()->create([
             'user_id' => $staff->id,
@@ -137,7 +139,8 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Dept',
             'lastname' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => 'password'
+            'password' => 'password',
+            'approved' => true,
         ]);
         UserRole::factory()->create([
             'user_id' => $admin->id,
@@ -150,7 +153,8 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Dr',
             'lastname' => 'Prof',
             'email' => 'instructor@example.com',
-            'password' => 'password'
+            'password' => 'password',
+            'approved' => true,
         ]);
         $instructorRole = UserRole::factory()->create([
             'user_id' => $instructor->id,
@@ -239,9 +243,12 @@ class DatabaseSeeder extends Seeder
             'year' => date('Y'),
         ]);
         foreach($courses as $course){
-            
+
             $user = User::factory()->create(
-                ['password' => 'password']
+                [
+                    'password' => 'password',
+                    'approved' => true,
+                ]
             );
 
             $role = UserRole::factory()->create([

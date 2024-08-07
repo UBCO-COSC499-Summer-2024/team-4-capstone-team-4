@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\ApprovalUpdate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use PHPUnit\Event\Telemetry\System;
 
 class Approval extends Model
 {
@@ -53,7 +56,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function approvalType() {
-        return $this->belongsTo(ApprovalType::class);
+        return $this->belongsTo(ApprovalType::class, 'approval_type_id');
     }
 
     /**
@@ -62,7 +65,7 @@ class Approval extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function status() {
-        return $this->belongsTo(ApprovalStatus::class);
+        return $this->belongsTo(ApprovalStatus::class, 'status_id');
     }
 
     /**
@@ -73,6 +76,17 @@ class Approval extends Model
     public function approvedBy() {
         return $this->belongsTo(UserRole::class, 'approved_by');
     }
+
+    /**
+     * Get the user associated with the approval.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function approver() {
+        return $this->belongsTo(UserRole::class, 'approved_by');
+    }
+
+
 
     /**
      * Get the user associated with the approval.
@@ -139,6 +153,11 @@ class Approval extends Model
 
         $this->logHistory($this->status_id, 'Approved');
 
+        // if required approvals is 1 don't send since fialize approval will send the notification
+        if ($this->approvalType->approvals_required > 1) {
+            $this->sendApprovalNotification();
+        }
+
         if ($this->status_id == $approvedStatus->id) {
             $this->finalizeApproval();
         }
@@ -154,6 +173,8 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Rejected');
     }
 
@@ -161,6 +182,8 @@ class Approval extends Model
         $this->status_id = ApprovalStatus::where('name', 'cancelled')->first()->id;
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Cancelled');
     }
@@ -172,42 +195,29 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Finalized');
     }
 
     public function approvedCount() {
-        // Count the number of approved approvals
-        $approvedCount = count($this->approvals()
-            ->whereHas('status', function($query) {
-                $query->where('name', 'approved');
-            }));
+        $approvalTypeId = $this->approval_type_id;
 
-        // Check if the number of required approvals has been reached
+        $approvedCount = Approval::where('approval_type_id', $approvalTypeId)
+                                ->where('status_id', ApprovalStatus::where('name', 'approved')->first()->id)
+                                ->count();
+
         $requiredApprovals = $this->approvalType->approvals_required;
 
         if ($approvedCount < $requiredApprovals) {
-            // If not, include intermediate approvals as well
-            $intermediateCount = count($this->approvals()
-                ->whereHas('status', function($query) {
-                    $query->where('name', 'intermediate');
-                }));
+            $intermediateCount = Approval::where('approval_type_id', $approvalTypeId)
+                                        ->where('status_id', ApprovalStatus::where('name', 'intermediate')->first()->id)
+                                        ->count();
 
-            $result = [
-                'approved' => $approvedCount,
-                'intermediate' => $intermediateCount,
-                'total' => $approvedCount + $intermediateCount
-            ];
-
-            return $result['total'];
+            return $approvedCount + $intermediateCount;
         }
 
-        $result = [
-            'approved' => $approvedCount,
-            'intermediate' => 0,
-            'total' => $approvedCount
-        ];
-
-        return $result['total'];
+        return $approvedCount;
     }
 
     public static function getColumns() {
@@ -235,5 +245,32 @@ class Approval extends Model
             'operation_type' => 'UPDATE',
             'table_name' => 'approvals'
         ]);
+    }
+
+    public static function audit($action, $details, $description) {
+        $id = Auth::user()->id ?? null;
+        $audit_user = null;
+        if ($id) {
+            $audit_user = User::find($id);
+        }
+
+        AuditLog::create([
+            'user_id' => $id ?? null,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'description' => $description,
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'table_name' => 'approvals'
+        ]);
+    }
+
+    public function log_audit($action, $details, $description) {
+        self::audit($action, $details, $description);
+    }
+
+    public function sendApprovalNotification() {
+        Mail::to($this->user->email)->send(new ApprovalUpdate($this));
     }
 }

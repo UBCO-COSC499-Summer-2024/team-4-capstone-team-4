@@ -40,25 +40,18 @@
     </td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="created">{{ $auditLog->created_at }}</td>
     <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="updated">{{ $auditLog->updated_at }}</td>
-    <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="id">
-        <div class="justify-center m-auto svcr-list-item-actions w-fit">
-            {{-- revert --}}
-            <button wire:click="revert({{ $auditLog->id }})">
+    {{-- <td class="svcr-list-item-cell audit-log-table-item-cell" data-column="id"> --}}
+        {{-- <div class="justify-center m-auto svcr-list-item-actions w-fit"> --}}
+            {{-- <button wire:click="revert({{ $auditLog->id }})">
                 <span class="material-symbols-outlined icon">
                     settings_backup_restore
                 </span>
-                {{-- <span class="btn-title">
-                    Revert
-                </span> --}}
-            </button>
-            <button wire:click="delete({{ $auditLog->id }})">
+            </button> --}}
+            {{-- <button wire:click="delete({{ $auditLog->id }})">
                 <span class="material-symbols-outlined icon">
                     Delete
                 </span>
-                {{-- <span class="btn-title">
-                    Delete
-                </span> --}}
-            </button>
-        </div>
-    </td>
+            </button> --}}
+        {{-- </div> --}}
+    {{-- </td> --}}
 </tr>
