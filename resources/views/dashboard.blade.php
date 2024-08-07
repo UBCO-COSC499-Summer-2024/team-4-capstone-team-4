@@ -1,8 +1,10 @@
 @vite(['resources/css/dashboard.css'])
-
+@php
+    $user = Auth::user();
+@endphp
 <x-app-layout>
     <div class="content">
-        @if (($isDeptHead || $isDeptStaff) && $isInstructor)
+        @if (($isDeptHead || $isDeptStaff) && $isInstructor && !$user->hasOnlyRole('admin'))
             <!-- Department View with Switch -->
             <h1 class="nos content-title">
                 @if ($area && $area['id'] != null)
@@ -77,7 +79,7 @@
                 </div>
             </h1>
             <section class="dash-top">
-                <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount" 
+                <x-department-performance :chart1="$chart1" :currentMonth="$currentMonth" :deptAssignmentCount="$deptAssignmentCount"
                 :deptPerformance="$deptPerformance" :leaderboard="$leaderboard" />
             </section>
             <section class="dash-bottom">
@@ -114,9 +116,9 @@
                 <section class="dash-top">
                     <x-instructor-target :chart1="$chart1" :chart4="$chart4" :currentMonth="$currentMonth" :ranking="$ranking" :performance="$performance" />
                 </section>
-            @else 
+            @else
                 <section class="dash-top">
-                    <x-instructor-performance :chart1="$chart1" :currentMonth="$currentMonth" :assignmentCount="$assignmentCount" 
+                    <x-instructor-performance :chart1="$chart1" :currentMonth="$currentMonth" :assignmentCount="$assignmentCount"
                     :ranking="$ranking" :performance="$performance" />
                 </section>
             @endif
@@ -128,11 +130,7 @@
         <h1 class="nos content-title">
             <span class="content-title-text">Administrative Dashboard</span>
         </h1>
-        <div class="content">
-            <h1 class="content-title">
-            </h1>
-            <livewire:admin-dashboard />
-    <   </div>
+        <livewire:admin-dashboard />
         @endif
     </div>
 </x-app-layout>
