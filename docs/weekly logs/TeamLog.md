@@ -16,12 +16,15 @@
 
 ![image of tasks](./tasks/todo_aug2_aug7.png)
 ![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
 ![image of tasks](./tasks/done_aug2_aug7.png)
+![image of tasks](./tasks/done2_aug2_aug7.png)
 
 ## Tasks for Next Cycle:
 
 ![image of tasks](./tasks/todo_aug2_aug7.png)
 ![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -34,13 +37,14 @@
 
 ## Completed Tasks
 
-![image of tasks](./tasks/inreview_aug2_aug7.png)
 ![image of tasks](./tasks/done_aug2_aug7.png)
+![image of tasks](./tasks/done2_aug2_aug7.png)
 
 ## In Progress Tasks / To do:
 
 ![image of tasks](./tasks/todo_aug2_aug7.png)
 ![image of tasks](./tasks/inprogress_aug2_aug7.png)
+![image of tasks](./tasks/inprogress2_aug2_aug7.png)
 
 ## Test Report / Testing Status:
 
