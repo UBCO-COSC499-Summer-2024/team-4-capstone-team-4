@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9a2ce4410923f82ced2bcacbcaac88f",
+    "content-hash": "e7bc69888f9957bd30b5551d9891d4e2",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1024,43 +1024,6 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
-        },
-        {
-            "name": "fx3costa/laravelchartjs",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fxcosta/laravel-chartjs.git",
-                "reference": "8ec9de9f3f27c918c25c138bdedd96d5c369863d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fxcosta/laravel-chartjs/zipball/8ec9de9f3f27c918c25c138bdedd96d5c369863d",
-                "reference": "8ec9de9f3f27c918c25c138bdedd96d5c369863d",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Fx3costa\\Laravelchartjs\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Felix",
-                    "email": "fx3costa@gmail.com"
-                }
-            ],
-            "description": "Simples package para facilitar e automatizar o uso de graficos no Laravel 5.x usando a lib Chartjs",
-            "support": {
-                "issues": "https://github.com/fxcosta/laravel-chartjs/issues",
-                "source": "https://github.com/fxcosta/laravel-chartjs/tree/1.0.0"
-            },
-            "time": "2015-07-13T05:25:25+00:00"
         },
         {
             "name": "graham-campbell/result-type",
