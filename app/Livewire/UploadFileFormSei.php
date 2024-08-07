@@ -156,10 +156,12 @@ class UploadFileFormSei extends Component
         $duplicateIndices = [];
 
         foreach ($this->rows as $index => $row) {
-            if ($row['cid'] !== "" && in_array($row['cid'], $selectedCourses)) {
-                $duplicateIndices[] = $index;
-            } else {
-                $selectedCourses[] = $row['cid'];
+            if(!empty($row['course'])) {
+                if ($row['cid'] !== "" && in_array($row['cid'], $selectedCourses)) {
+                    $duplicateIndices[] = $index;
+                } else {
+                    $selectedCourses[] = $row['cid'];
+                }
             }
         }
 
