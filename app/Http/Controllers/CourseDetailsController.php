@@ -43,7 +43,7 @@ class CourseDetailsController extends Controller
         })
         ->when($areaId, function ($queryBuilder) use ($areaId) {
             $queryBuilder->where('area_id', $areaId);
-        });
+        })->orderBy('updated_at', 'asc'); 
 
     $courseSections = $courseSectionsQuery->paginate(7); // Apply pagination
 
@@ -199,55 +199,49 @@ public function createTA(Request $request){
 
 
 public function save(Request $request)
-{
-    $taIds = $request->input('ta_id', []);
-    $instructorIds = $request->input('instructor_id', []);
-    $courseIds = $request->input('course_id', []);
+    {
+        $ids = $request->input('ids', []);
+        $courseNames = $request->input('courseNames', []);
+        $enrolledStudents = $request->input('enrolledStudents', []);
+        $droppedStudents = $request->input('droppedStudents', []);
+        $courseCapacities = $request->input('courseCapacities', []);
 
-    Log::info('Request Data:', [
-        'ta_ids' => $taIds,
-        'instructor_ids' => $instructorIds,
-        'course_ids' => $courseIds,
-    ]);
+        Log::info('Request Data:', [
+            'ids' => $ids,
+            'courseNames' => $courseNames,
+            'enrolledStudents' => $enrolledStudents,
+            'droppedStudents' => $droppedStudents,
+            'courseCapacities' => $courseCapacities,
+        ]);
 
-    $arrayLengths = [count($taIds), count($instructorIds), count($courseIds)];
-    if (count(array_unique($arrayLengths)) !== 1) {
-        return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
-    }
-
-    for ($i = 0; $i < count($taIds); $i++) {
-        if (!isset($taIds[$i]) || !isset($instructorIds[$i]) || !isset($courseIds[$i])) {
-            Log::error('Missing array index', [
-                'index' => $i,
-                'ta_ids' => $taIds,
-                'instructor_ids' => $instructorIds,
-                'course_ids' => $courseIds,
-            ]);
-            continue;
+        $arrayLengths = [count($ids), count($courseNames), count($enrolledStudents), count($droppedStudents), count($courseCapacities)];
+        if (count(array_unique($arrayLengths)) !== 1) {
+            return response()->json(['message' => 'Data arrays are not of the same length.'], 400);
         }
 
-        // Logic to save the TA assignment
-        $courseSection = CourseSection::find($courseIds[$i]);
-        $teachingAssistant = TeachingAssistant::find($taIds[$i]);
-        $instructor = User::find($instructorIds[$i]);
+        $updatedSections = [];
 
-        if ($courseSection && $teachingAssistant && $instructor) {
-            // Assuming you have a pivot table or a model relationship to save this data
-            // Example:
-            $courseSection->teachingAssistants()->attach($teachingAssistant->id, [
-                'instructor_id' => $instructor->id
-            ]);
-        } else {
-            Log::error('Invalid data for TA assignment', [
-                'course_section' => $courseSection,
-                'teaching_assistant' => $teachingAssistant,
-                'instructor' => $instructor,
-            ]);
+        for ($i = 0; $i < count($ids); $i++) {
+            $courseSection = CourseSection::find($ids[$i]);
+
+            if ($courseSection) {
+                $courseSection->enroll_end = $enrolledStudents[$i];
+                $courseSection->dropped = $droppedStudents[$i];
+                $courseSection->capacity = $courseCapacities[$i];
+                // Assuming you have a method to update the course name or other fields as needed
+                // $courseSection->name = $courseNames[$i]; // Uncomment if you want to update the course name
+                $courseSection->save();
+
+                $updatedSections[] = $courseSection;
+            } else {
+                Log::error('Invalid course section ID', [
+                    'course_section_id' => $ids[$i],
+                ]);
+            }
         }
-    }
 
-    return response()->json(['message' => 'TAs assigned successfully.']);
-}
+        return response()->json(['message' => 'Courses updated successfully.', 'updatedSections' => $updatedSections]);
+    }
 
 
     private function calculateAverageRating($questionsJson){

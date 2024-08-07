@@ -96,7 +96,7 @@ class CourseDetails extends Component
             })
             ->when($areaId, function ($queryBuilder) use ($areaId) {
                 $queryBuilder->where('area_id', $areaId);
-            });
+            })->orderBy('updated_at', 'desc');
 
         //pagination
         switch ($this->pagination) {

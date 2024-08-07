@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
-            // Check if capacity is greater than enrolled
             const enrolledStudents = row.children[3]?.innerText.trim();
             const courseCapacities = row.children[5]?.innerText.trim();
             if (!isNaN(enrolledStudents) && !isNaN(courseCapacities) && enrolledStudents !== '' && courseCapacities !== '') {
@@ -75,31 +74,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return isValid;
     }
-    
 
     function saveChanges() {
-        // Validate input
         if (!validateInput()) {
             alert('Please enter valid numeric values in the editable fields.');
             return;
         }
     
-        // Confirm save action
         const confirmSave = confirm('Do you really want to save the changes?');
         if (!confirmSave) return;
     
-        // Select the form element and ensure it's defined
-        const form = document.querySelector('form');
+        const form = document.getElementById('editForm');
         if (!form) {
             console.error('Form element not found.');
             return;
         }
     
-        // Get all rows from the courses table
         const rows = document.querySelectorAll('#coursesTable tbody tr');
-        const formData = new FormData();
+        const formData = new FormData(form);
     
-        // Collect data from each row
         rows.forEach(row => {
             formData.append('ids[]', row.getAttribute('data-id'));
             formData.append('courseNames[]', row.children[0]?.innerText.trim().split(' - ')[0] || '');
@@ -110,18 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
     
         console.log('Form Data:', Array.from(formData.entries()));
     
-        // Fetch the CSRF token
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        if (!csrfToken) {
-            console.error('CSRF token not found.');
-            return;
-        }
-    
-        // Perform the fetch request
         fetch(form.action, {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: formData
         })
@@ -141,16 +126,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                     if (row) {
                         row.children[0].innerText = `${updatedSection.prefix} ${updatedSection.number} ${updatedSection.section} - ${updatedSection.year}${updatedSection.session} ${updatedSection.term}`;
-                        row.children[4].innerText = updatedSection.enrolled;
+                        row.children[4].innerText = updatedSection.enroll_end;
                         row.children[5].innerText = updatedSection.dropped;
                         row.children[6].innerText = updatedSection.capacity;
                     }
                 });
     
-                // Hide save and cancel buttons, show edit button
-                document.getElementById('saveButton').style.display = 'none';
-                document.getElementById('cancelButton').style.display = 'none';
-                document.getElementById('editButton').style.display = 'block';
+                saveButton.style.display = 'none';
+                cancelButton.style.display = 'none';
+                editButton.style.display = 'block';
             } else {
                 console.error('Save failed.');
             }
@@ -209,6 +193,5 @@ document.addEventListener('DOMContentLoaded', function () {
         tasTab.addEventListener('click', checkTab);
     }
 
-    // Initial check on page load
     checkTab();
 });
