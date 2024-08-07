@@ -61,7 +61,7 @@
     {{-- @push('scripts') --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const headings = document.querySelectorAll('a[href*="subtopic-"]'); // Select all headings with IDs starting with "subtopic-"
+            const headings = document.querySelectorAll('a.topic-link'); // Select all headings with IDs starting with "subtopic-"
             console.log(headings);
             headings.forEach(heading => {
                 heading.addEventListener('click', function(event) {

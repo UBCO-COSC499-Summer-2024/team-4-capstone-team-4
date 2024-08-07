@@ -94,14 +94,21 @@ class HtmlHelpers {
             if (!self::userHasAccess($topic['access'] ?? null)) {
                 continue;
             }
+
+            $headingSlugST = self::slugify($subtopic['subtopic'] ?? 'no-subtopic'); // Create a slug from the heading
             $subtopicId = $prefix . '-' . $index;
             $html .= '<section id="' . $subtopicId . '" class="p-4 bg-white border rounded-lg">';
-            $html .= '<h3 class="mb-2 text-xl font-semibold">' . self::replacePlaceholders(htmlspecialchars($subtopic['subtopic'] ?? 'No Subtopic')) . '</h3>';
+
+            $html .= '<h3 class="mb-2 text-xl font-semibold"><a class="topic-link" href="#' . $headingSlugST . '" class="mb-1 text-lg font-medium no-underline hover:underline">'; // Wrap heading in <a> tag
+            $html .= self::processContent($subtopic['subtopic'] ?? 'No Subtopic');
+            $html .= '</a></h3>'; // Close the <a> tag
+            // $html .= '<h3 class="mb-2 text-xl font-semibold">' . self::replacePlaceholders(htmlspecialchars($subtopic['subtopic'] ?? 'No Subtopic')) . '</h3>';
+            // $html .= '<h3 class="mb-2 text-xl font-semibold">' . self::processContent($subtopic['subtopic'] ?? 'No Subtopic') . '</h3>';
 
             if (!empty($subtopic['subsections'])) {
                 $html .= '<div class="space-y-4">';
                 foreach ($subtopic['subsections'] as $subIndex => $subsection) {
-                    $html .= self::convertSubsectionsToHtml($subsection, $subtopicId . '-subsection-' . $subIndex);
+                    $html .= self::convertSubsectionsToHtml($subsection, $subtopicId);
                 }
                 $html .= '</div>'; // Close subsections div
             }
@@ -128,12 +135,12 @@ class HtmlHelpers {
     private static function convertSubsectionsToHtml($subsection, $prefix)
     {
         $subsectionId = $prefix;
-        $headingSlug = self::slugify($subsection['heading'] ?? 'no-heading'); // Create a slug from the heading
+        $headingSlug = self::slugify($prefix.'_'.$subsection['heading'] ?? $prefix.'_no-heading'); // Create a slug from the heading
 
         $html = '<div id="' . $subsectionId . '" class="p-2 border-l-4 bg-gray-50" style="border-color: var(--secondary-color)">';
 
         // Make the heading clickable
-        $html .= '<a href="#subtopic-' . $headingSlug . '" class="mb-1 text-lg font-medium no-underline hover:underline">'; // Wrap heading in <a> tag
+        $html .= '<a class="topic-link" href="#' . $headingSlug . '" class="mb-1 text-lg font-medium no-underline hover:underline">'; // Wrap heading in <a> tag
         $html .= self::processContent($subsection['heading'] ?? 'No Heading');
         $html .= '</a>'; // Close the <a> tag
 
@@ -150,7 +157,7 @@ class HtmlHelpers {
                 if (!self::userHasAccess($nestedSubsection['access'] ?? null)) {
                     continue;
                 }
-                $html .= self::convertSubsectionsToHtml($nestedSubsection, $subsectionId . '-subsection-' . $subIndex);
+                $html .= self::convertSubsectionsToHtml($nestedSubsection, $subsectionId);
             }
             $html .= '</div>'; // Close nested subsections div
         }
@@ -173,7 +180,7 @@ class HtmlHelpers {
             if (!self::userHasAccess($topic['access'] ?? null)) {
                 continue;
             }
-            $subtopicId = 'subtopic-' . $index;
+            $subtopicId = $index;
             $title = $mainTitle ?: ($topic['subtopic'] ?? 'No Subtopic');
             $html .= '<section id="' . $subtopicId . '" class="p-2 mx-1 mb-1 bg-white rounded-lg shadow-xs">';
             // $html .= '<h2 class="mb-4 text-2xl font-bold">' . self::replacePlaceholders(htmlspecialchars($title)) . '</h2>';
@@ -182,7 +189,7 @@ class HtmlHelpers {
             if (!empty($topic['subsections'])) {
                 $html .= '<div class="space-y-4">';
                 foreach ($topic['subsections'] as $subIndex => $subsection) {
-                    $html .= self::convertSubsectionsToHtml($subsection, $subtopicId . '-subsection-' . $subIndex);
+                    $html .= self::convertSubsectionsToHtml($subsection, '');
                 }
                 $html .= '</div>'; // Close subsections div
             }
