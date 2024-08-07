@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.2",
+        "brick/math": "^0.12.1",
         "icehouse-ventures/laravel-chartjs": "^1.2",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
