@@ -42,9 +42,9 @@
                             @endforeach
                         </select>
                     </div>
-                    @section('content')
+                    {{-- @section('content')
                         <livewire:archive-course-section />
-                    @endsection
+                    @endsection --}}
                 @endif
                 </div>
             @endif
@@ -52,27 +52,27 @@
 
         <div class="relative overflow-x-auto sm:rounded-lg">
             <div class="fixed-header">
-                <form id="editForm" class="w-full" method="POST" action="{{ route('courses.save') }}">
+                <form id="editForm" class="w-full" method="POST" action="{{ route('courses.details.save') }}">
                     @csrf
                     <input type="hidden" id="activeTab" name="activeTab" value="{{ $activeTab }}">
                     <div class="overflow-auto max-h-[calc(100vh-200px)]">
                         <div id="tabContent">
                             <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'coursesTable' ? '' : 'hidden' }}" id="coursesTable">
-                                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
+                                <livewire:coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
                                 <tbody id="courseTableBody">
                                     @if($courseSections->count())
                                         @foreach ($courseSections as $section)
                                             <x-coursedetails-table-row
-                                                :courseName="$section->name"
-                                                :departmentName="$section->departmentName"
-                                                :enrolledStudents="$section->enrolled"
-                                                :droppedStudents="$section->dropped"
-                                                :courseCapacity="$section->capacity"
-                                                :room="$section->room"
-                                                :timings="$section->timings"
-                                                :sectionId="$section->id"
-                                                :seiData="$section->averageRating"
-                                                :instructorName="$section->instructorName ?? ''"
+                                                :courseName="$section['formattedName']"
+                                                :departmentName="$section['departmentName']"
+                                                :enrolledStudents="$section['enrolled']"
+                                                :droppedStudents="$section['dropped']"
+                                                :courseCapacity="$section['capacity']"
+                                                :room="$section['room'] ?? 'Not Assigned'"
+                                                :timings="$section['timings']"
+                                                :sectionId="$section['id']"
+                                                :seiData="$section['averageRating']"
+                                                :instructorName="$section['instructorName'] ?? ''"
                                             />
                                         @endforeach
                                     @else
