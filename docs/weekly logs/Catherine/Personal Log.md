@@ -1,3 +1,35 @@
+## Wednesday (8/2 - 8/7)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_08_02_2024-08_07_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Help page for staff page
+  * #2: Documentation (comments)
+  * #3: Individual Report
+  * #4: Bug fixes for staff list
+  * #5: Bug fixes for reports
+
+
+### Progress Update (since 8/2/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Help page for staff page | Complete |
+| Documentation (comments) | In progress |
+| Individual Report | In progress |
+| Bug fixes for staff list | Complete |
+| Bug fixes for reports | Complete |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+The test-o-rama went well and I only had a few bug fixes for the staff list and reports, which have all been completed. I have commented my code for staff list but still need to add more comments for the reports code. I started working on the individual report and it's going well so far.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Complete Individual Report
+  * Complete documentation
+
 ## Friday (7/31 - 8/2)
 
 ### Timesheet
