@@ -13,8 +13,15 @@ class UploadFileFormAssignTas extends Component
 {
     public $finalCSVs = [];
     public $assignments = [];
+    public $filteredTas;
 
     public $showModal = false;
+    public $showTaModal = false;
+    
+    public $selectedIndex = -1;
+    public $searchTerm = '';
+
+    protected $listeners = ['updateAssignment'];
 
     public function mount($finalCSVs)
     {
@@ -41,7 +48,8 @@ class UploadFileFormAssignTas extends Component
 
             if ($course) {
                 foreach ($finalCSV['TAs'] as $ta) {
-                    $ta_id = TeachingAssistant::where("name", $ta)->value('id');
+                    $ta = TeachingAssistant::where("name", $ta)->first();
+                //    dd($ta);
                     $this->assignments[] = [
                         'course_section_id' => $course->id ?? '',
                         'prefix' => $course->prefix ?? '',
@@ -50,8 +58,8 @@ class UploadFileFormAssignTas extends Component
                         'year' => $course->year ?? '',
                         'session' => $course->session ?? '',
                         'term' => $course->term ?? '',
-                        'ta_id' => $ta_id ?? '',
-                        'ta' => $ta ?? '',
+                        'ta_id' => $ta ? $ta->id : '',
+                        'ta' => $ta ? $ta->name : '',
                     ];
                 }
             }
@@ -136,17 +144,57 @@ class UploadFileFormAssignTas extends Component
     public function closeModal() {
         $this->showModal = false;
     }
+    
+    public function openTaModal($index) {
+        $this->selectedIndex = $index;
+        // dd($this->selectedIndex);
+        $this->showTaModal = true;
+    }
+
+    public function closeTaModal() {
+        $this->showTaModal = false;
+    }
+
+    public function updateAssignment($index, $taId, $taName)
+    {
+        $this->assignments[$index]['ta_id'] = $taId;
+        $this->assignments[$index]['ta'] = $taName;
+    }
+
+    public function selectTa($id, $name, $selectedIndex) {
+        $this->assignments[$selectedIndex]["ta_id"] = $id;
+        $this->assignments[$selectedIndex]["ta"] = $name;
+
+        $this->closeTaModal();
+  
+        // dd($this->assignments);
+    }
+
+    public function updateSearch() {
+        $availableTas = $this->getAvailableTas();
+
+        $this->filteredTas = $availableTas->filter(function ($ta) {
+            return stripos($ta->name, $this->searchTerm) !== false;
+        });
+    }
 
     public function render()
     {
-        // dd($this->finalCSVs);
+        // dd($this->assignments);
 
         // dd($this->getAvailableTas());
 
+        // dd($this->selectedIndex);
+        $this->updateSearch();
+   
+
+        // dd($this->filteredTas);
 
         return view('livewire.upload-file-form-assign-tas', [
             'availableCourses' => $this->getAvailableCourses(),
             'availableTas' => $this->getAvailableTas(),
+            'selectedIndex' => $this->selectedIndex,
+            'filteredTas' => $this->filteredTas,
         ]);
     }
 }
