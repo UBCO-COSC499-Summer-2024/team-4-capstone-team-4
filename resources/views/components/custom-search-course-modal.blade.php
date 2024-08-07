@@ -6,7 +6,7 @@
         </button>
     </div>
 
-    <input type="text" wire:model="searchTerm" wire:change="updateSearch" class="block my-2 w-full px-2 py-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-[#3b4779] focus:border-blue-[#3b4779] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-[#3b4779] dark:focus:border-blue-[#3b4779]"  placeholder="Search for a Course">
+    <input type="text" wire:model.live="searchTerm" wire:change="updateSearch" class="block my-2 w-full px-2 py-4 ps-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-[#3b4779] focus:border-blue-[#3b4779] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-[#3b4779] dark:focus:border-blue-[#3b4779]"  placeholder="Search for a Course">
 
     <div class="max-h-96 overflow-y-auto text-black">
      @foreach($filteredCourses as $course)
