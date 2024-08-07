@@ -1,0 +1,50 @@
+[
+    {
+      "subtopic": "Service Requests & Approvals",
+      "subsections": [
+        {
+          "heading": "Introduction",
+          "content": "The Service Requests & Approvals system manages various requests and approvals within Insight, ensuring proper authorization and tracking for critical actions.",
+          "tags": [
+            "intro",
+            "Service Requests",
+            "Approvals"
+          ]
+        },
+        {
+          "heading": "Approval Types",
+          "content": "Insight handles several types of approvals:\n\n- **Service Role Approvals:** Requests for new service roles or changes to existing roles.\n- **Extra Hour Approvals:**  Requests for additional hours worked by instructors beyond their assigned monthly allocation.\n- **Registration Approvals:** New user registration requests require approval before accounts are activated.\n- **Service Request Approvals:** Generic requests for services or support can be created and require approval.",
+          "tags": [
+            "types",
+            "Approvals"
+          ]
+        },
+        {
+          "heading": "Approval Statuses",
+          "content": "Approvals go through various statuses during their lifecycle:\n\n- **Pending:** The initial state of a request awaiting approval.\n- **Intermediate:** The request is pending and requires approval from multiple approvers.\n- **Approved:** The request has been authorized.\n- **Rejected:**  The request has been denied.\n- **Cancelled:** The request has been withdrawn or revoked.",
+          "tags": [
+            "statuses",
+            "Approvals"
+          ]
+        },
+        {
+          "heading": "Managing Requests",
+          "content": "You can manage service requests from the 'Service Requests' page. The page offers the following features:\n\n- **View Requests:**  Browse a list of all requests, filtered by type or status.\n- **Search:**  Find specific requests using keywords in the search bar.\n- **Filter:** Narrow down the list of requests by using various filters (e.g., by user, status, or date).\n- **Approve/Reject:** Take action on pending requests by approving or rejecting them, providing comments if necessary.\n- **Cancel:** Withdraw or cancel requests that are no longer needed.",
+          "tags": [
+            "manage",
+            "requests",
+            "Service Requests"
+          ]
+        },
+        {
+          "heading": "Approval History",
+          "content": "Every approval request maintains a detailed history, recording:\n\n- **User:**  The user who interacted with the request.\n- **Status:** The status change made to the request.\n- **Remarks:** Any comments or notes added during the status change.\n- **Timestamp:** The date and time of the status change.",
+          "tags": [
+            "history",
+            "Approvals"
+          ]
+        }
+      ],
+      "subtopics": []
+    }
+  ]
