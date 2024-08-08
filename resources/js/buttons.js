@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableEditing() {
         document.querySelectorAll('#coursesTable tbody tr').forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([3, 4, 5].includes(index)) {
+                if ([4, 5, 6].includes(index)) {
                     cell.setAttribute('contenteditable', 'true');
-                    cell.classList.add('editable-highlight');
+                    cell.classList.add('edit-highlight');
                 }
             });
         });
@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
         coursesTable.querySelectorAll('tr').forEach(row => {
             row.querySelectorAll('td').forEach(cell => {
                 cell.setAttribute('contenteditable', 'false');
-                cell.classList.remove('editable-highlight');
-                cell.classList.remove('input-error');
+                cell.classList.remove('edit-highlight');
+                cell.classList.remove('error-input');
             });
         });
         toggleButtonVisibility(editButton, true);
@@ -49,16 +49,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const rows = document.querySelectorAll('#coursesTable tbody tr');
         rows.forEach(row => {
             row.querySelectorAll('td').forEach((cell, index) => {
-                if ([3, 4, 5].includes(index)) {
+                if ([4, 5, 6].includes(index)) {
                     const value = cell.innerText.trim();
                     if (isNaN(value) || value === '') {
-                        cell.classList.add('input-error');
+                        cell.classList.add('error-input');
                         isValid = false;
                     } else {
-                        cell.classList.remove('input-error');
+                        cell.classList.remove('error-input');
                     }
                 }
             });
+            const enrolledStudents = row.children[3]?.innerText.trim();
+            const courseCapacities = row.children[5]?.innerText.trim();
+            if (!isNaN(enrolledStudents) && !isNaN(courseCapacities) && enrolledStudents !== '' && courseCapacities !== '') {
+                if (parseInt(enrolledStudents) > parseInt(courseCapacities)) {
+                    row.children[6].classList.add('error-input');
+                    row.children[4].classList.add('error-input');
+                    isValid = false;
+                } else {
+                    row.children[6].classList.remove('error-input');
+                    row.children[4].classList.remove('error-input');
+                }
+            }
         });
         return isValid;
     }
@@ -68,23 +80,29 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Please enter valid numeric values in the editable fields.');
             return;
         }
-
+    
         const confirmSave = confirm('Do you really want to save the changes?');
         if (!confirmSave) return;
-
+    
+        const form = document.getElementById('editForm');
+        if (!form) {
+            console.error('Form element not found.');
+            return;
+        }
+    
         const rows = document.querySelectorAll('#coursesTable tbody tr');
-        const formData = new FormData();
-
+        const formData = new FormData(form);
+    
         rows.forEach(row => {
             formData.append('ids[]', row.getAttribute('data-id'));
             formData.append('courseNames[]', row.children[0]?.innerText.trim().split(' - ')[0] || '');
-            formData.append('enrolledStudents[]', row.children[2]?.innerText.trim() || '');
-            formData.append('droppedStudents[]', row.children[3]?.innerText.trim() || '');
-            formData.append('courseCapacities[]', row.children[4]?.innerText.trim() || '');
+            formData.append('enrolledStudents[]', row.children[4]?.innerText.trim() || '');
+            formData.append('droppedStudents[]', row.children[5]?.innerText.trim() || '');
+            formData.append('courseCapacities[]', row.children[6]?.innerText.trim() || '');
         });
-
+    
         console.log('Form Data:', Array.from(formData.entries()));
-
+    
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -103,17 +121,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.message === 'Courses updated successfully.') {
                 alert('Successfully Saved!');
                 disableEditing();
-
+    
                 result.updatedSections.forEach(updatedSection => {
                     const row = document.querySelector(`tr[data-id="${updatedSection.id}"]`);
                     if (row) {
                         row.children[0].innerText = `${updatedSection.prefix} ${updatedSection.number} ${updatedSection.section} - ${updatedSection.year}${updatedSection.session} ${updatedSection.term}`;
-                        row.children[2].innerText = updatedSection.enrolled;
-                        row.children[3].innerText = updatedSection.dropped;
-                        row.children[4].innerText = updatedSection.capacity;
+                        row.children[4].innerText = updatedSection.enroll_end;
+                        row.children[5].innerText = updatedSection.dropped;
+                        row.children[6].innerText = updatedSection.capacity;
                     }
                 });
-
+    
                 saveButton.style.display = 'none';
                 cancelButton.style.display = 'none';
                 editButton.style.display = 'block';
@@ -125,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error:', error);
         });
     }
+    
 
     function checkTab() {
         if (tasTab && tasTab.classList.contains('active')) {
@@ -174,6 +193,5 @@ document.addEventListener('DOMContentLoaded', function () {
         tasTab.addEventListener('click', checkTab);
     }
 
-    // Initial check on page load
     checkTab();
 });

@@ -9,7 +9,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
+            - '${APP_PORT:-8080}:80'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
@@ -19,7 +19,6 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
             BROWSERSHOT_REMOTE_URL: 'insight-chromium'
             PUPPETEER_CACHE_DIR: '/home/sail/.cache/puppeteer'
-            PUPPETEER_EXECUTABLE_PATH: '/root/.cache/puppeteer/chrome/linux-126.0.6478.182/chrome-linux64/chrome'
         volumes:
             - 'tmpfiles:/tmp'
             - '.:/var/www/html:cached'
@@ -27,28 +26,28 @@ services:
             - InsightNet
         depends_on:
             - insightdb
-            - insight-selenium
+            # - insight-selenium
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
-        entrypoint: >
-            sh -c "npm install puppeteer@22.13.1 &&
-                   npx puppeteer browsers install chrome &&
-                   /usr/bin/supervisord -n"
+        # # entrypoint: >
+        # #     sh -c "npm install puppeteer@22.13.1 &&
+        # #            npx puppeteer browsers install chrome &&
+        # #            /usr/bin/supervisord -n"
     insightdb:
         # image: postgres:16-alpine
         build:
             context: ./dockerfiles
             dockerfile: dockerfile.insightdb
         ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
+            - '${FORWARD_DB_PORT:-5433}:5432'
         environment:
-            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            PGPASSWORD: '${DB_PASSWORD}'
             POSTGRES_DB: '${DB_DATABASE}'
             POSTGRES_USER: '${DB_USERNAME}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
         volumes:
             - 'sail-pgsql:/var/lib/postgresql/data'
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
@@ -60,13 +59,6 @@ services:
             interval: 10s
             retries: 3
             timeout: 5s
-    InsightMailUI:
-        image: mailhog/mailhog
-        ports:
-            - "1025:1025"
-            - "8025:8025"
-        networks:
-            - InsightNet
     insight-pgadmin:
         build:
             context: ./dockerfiles
@@ -81,14 +73,6 @@ services:
             - '.:/var/lib/pgadmin/pgadmin4.conf'
         depends_on:
             - insightdb
-        networks:
-            - InsightNet
-    insight-selenium:
-        image: 'selenium/standalone-chrome'
-        extra_hosts:
-        - 'host.docker.internal:host-gateway'
-        volumes:
-            - '/dev/shm:/dev/shm'
         networks:
             - InsightNet
 

@@ -16,14 +16,20 @@ use Livewire\Component;
 class ImportAssignCourse extends Component
 {
     public $assignments = [];
+    public $filteredInstructors;
 
     public $showModal = false;
+    public $showInstructorModal = false;
     public $hasCourses = false;
+    
+    public $selectedIndex = -1;
+    public $searchTerm = '';
 
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
                 'course_section_id' => $course->id,
+                'instructor' => '',
                 'instructor_id' => null,
                 'year' => $course->year,
             ];
@@ -146,9 +152,37 @@ class ImportAssignCourse extends Component
             $this->showModal = true;
         }
     }
+    
+    public function openInstructorModal($index) {
+        $this->selectedIndex = $index;
+        // dd($this->selectedIndex);
+        $this->showInstructorModal = true;
+    }
+
+    public function closeInstructorModal() {
+        $this->showInstructorModal = false;
+    }
 
     public function closeModal() {
         $this->showModal = false;
+    }
+
+    public function selectInstructor($id, $firstname, $lastname, $selectedIndex) {
+        $this->assignments[$selectedIndex]["instructor_id"] = $id;
+        $this->assignments[$selectedIndex]["instructor"] = $firstname . " " . $lastname;
+
+        $this->closeInstructorModal();
+  
+        // dd($this->assignments);
+    }
+
+    public function updateSearch() {
+        $availableInstructors = $this->getAvailableInstructors();
+
+        $this->filteredInstructors = $availableInstructors->filter(function ($instructor) {
+            $name = $instructor->firstname . ' ' . $instructor->lastname;
+            return stripos($name, $this->searchTerm) !== false;
+        });
     }
 
     public function getAvailableCourses() {
@@ -165,6 +199,17 @@ class ImportAssignCourse extends Component
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();
+
+        // return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
+        // ->where('role', 'instructor')
+        // ->where(function ($query) {
+        //     $query->whereRaw('users.firstname ILIKE ?', ["%{$this->instructorSearch}%"])
+        //           ->orWhereRaw('users.lastname ILIKE ?', ["%{$this->instructorSearch}%"])
+        //           ->orWhereRaw('CONCAT(users.firstname, \' \', users.lastname) ILIKE ?', ["%{$this->instructorSearch}%"]);
+        // })
+        // ->orderByRaw('LOWER(users.lastname)')
+        // ->orderByRaw('LOWER(users.firstname)')
+        // ->get();
     }
 
     public function render()
@@ -172,16 +217,22 @@ class ImportAssignCourse extends Component
         // InstructorPerformance::updatePerformance(8, 2000);
             // AreaPerformance::updateAreaPerformance(1, 2023);
             // DepartmentPerformance::updateDepartmentPerformance(1, 2023);
-         
+
+        // dd($this->assignments);
+        $this->updateSearch();
+
         if(!$this->getAvailableCourses()->isEmpty()) {
             $this->hasCourses = true;
         } else {
             $this->hasCourses = false;
         }
+        // dd($this->getAvailableInstructors());
 
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
             'availableCourses' => $this->getAvailableCourses(),
+            'filteredInstructors' => $this->filteredInstructors,
+            'selectedIndex' => $this->selectedIndex,
         ]);
     }
 }

@@ -1,6 +1,7 @@
 <x-app-layout>
-    <div class="content coming-soon">
-        <h1>{{ __('Courses') }}</h1>
-        <p>{{ __('Coming Soon!') }}</p>
+    <div class="content mt-5">
+      <h1>{{ __('Courses') }}</h1>
+  
+      @livewire('course-tabs')
     </div>
-</x-app-layout>
+  </x-app-layout>

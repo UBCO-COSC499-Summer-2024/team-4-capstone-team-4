@@ -1,10 +1,29 @@
 <x-app-layout>
-    <div class="z-0 p-4 content course-details">
-        <h1 class="mb-4 text-5xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+    <div class="z-0 p-4 content">
+        <div class="flex items-center justify-between mb-4">
+            <h1 id="headerTitle" class="text-3xl font-bold header-title content-title nos">{{ __('COURSES') }}</h1>
+            @if($user->id < 4)
+                <div class="flex items-center space-x-2">
+                    <x-create-new-button id="createNewButton" />
+                    <x-assign-button id="assignButton" />
+                    @if(in_array($userRole, ['admin', 'dept_head', 'dept_staff']))
+                        <link rel="stylesheet" href="resources/css/course-details.css">
+                        <x-edit-button id="editButton" />
+                    @endif
+                    <x-save-button id="saveButton" style="display: none;" />
+                    <x-cancel-button id="cancelButton" style="display: none;" />
+                    <x-create-ta-button id="createNewTAButton" style="display: none;" />
+                    <x-assign-ta-button id="assignTAButton" style="display: none;" />
+                </div>
+            @endif
+        </div>
+
         <div class="flex items-center justify-between mb-4">
             <div class="flex-1 mr-4">
                 <x-coursedetails-tabs />
-                <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="block p-2 text-sm text-gray-900 rounded-lg search-bar w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                @if(in_array($userRole, ['dept_head', 'dept_staff', 'admin']))
+                    <input type="text" id="searchInput" data-route="{{ route('courses.details.id', ['user' => $user->id]) }}" placeholder="Search for courses..." class="block p-2 text-sm text-gray-900 rounded-lg search-bar w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
+                @endif
             </div>
             <x-coursedetails-exportButton />
             @if($user->id < 4)
@@ -23,15 +42,11 @@
                             @endforeach
                         </select>
                     </div>
+                    {{-- @section('content')
+                        <livewire:archive-course-section />
+                    @endsection --}}
                 @endif
-                <x-create-new-button id="createNewButton" />
-                <x-create-ta-button id="createNewTAButton" style="display: none;" />
-                <x-assign-ta-button id="assignTAButton" style="display: none;" />
-                <x-assign-button id="assignButton" />
-                <x-edit-button id="editButton" />
-                <x-save-button id="saveButton" style="display: none;" />
-                <x-cancel-button id="cancelButton" style="display: none;" />
-            </div>
+                </div>
             @endif
         </div>
 
@@ -43,19 +58,21 @@
                     <div class="overflow-auto max-h-[calc(100vh-200px)]">
                         <div id="tabContent">
                             <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'coursesTable' ? '' : 'hidden' }}" id="coursesTable">
-                                <x-coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
+                                <livewire:coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :userRole="$userRole" />
                                 <tbody id="courseTableBody">
-                                    @if(isset($courseSections) && $courseSections->count())
+                                    @if($courseSections->count())
                                         @foreach ($courseSections as $section)
                                             <x-coursedetails-table-row
-                                                :courseName="$section->name"
-                                                :departmentName="$section->departmentName"
-                                                :enrolledStudents="$section->enrolled"
-                                                :droppedStudents="$section->dropped"
-                                                :courseCapacity="$section->capacity"
-                                                :sectionId="$section->id"
-                                                :seiData="$section->averageRating"
-                                                :instructorName="$section->instructorName ?? ''"
+                                                :courseName="$section['formattedName']"
+                                                :departmentName="$section['departmentName']"
+                                                :enrolledStudents="$section['enrolled']"
+                                                :droppedStudents="$section['dropped']"
+                                                :courseCapacity="$section['capacity']"
+                                                :room="$section['room'] ?? 'Not Assigned'"
+                                                :timings="$section['timings']"
+                                                :sectionId="$section['id']"
+                                                :seiData="$section['averageRating']"
+                                                :instructorName="$section['instructorName'] ?? ''"
                                             />
                                         @endforeach
                                     @else
@@ -68,7 +85,7 @@
                             <table class="min-w-full divide-y divide-gray-200 svcr-table {{ $activeTab === 'taTable' ? '' : 'hidden' }}" id="taTable">
                                 <x-coursedetails-ta-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                                 <tbody>
-                                    @if(isset($tas) && $tas->count())
+                                    @if($tas->count())
                                         @foreach ($tas as $ta)
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $ta->name }}</td>
@@ -87,12 +104,6 @@
                             </table>
                         </div>
                     </div>
-                    <div id="coursesPagination" class="{{ $activeTab === 'coursesTable' ? '' : 'hidden' }}">
-                        {{ $courseSections->withQueryString()->links('components.coursedetails-pagination') }}
-                    </div>
-                    <div id="tasPagination" class="{{ $activeTab === 'taTable' ? '' : 'hidden' }}">
-                        {{ $tas->withQueryString()->links('components.coursedetails-pagination') }}
-                    </div>
                 </form>
             </div>
         </div>
@@ -101,4 +112,6 @@
     <x-save-details-message />
     <x-create-ta-modal />
     <x-assign-ta-modal />
+    <x-sei-edit-modal :courses="$courses" />
+    <x-error-modal />
 </x-app-layout>

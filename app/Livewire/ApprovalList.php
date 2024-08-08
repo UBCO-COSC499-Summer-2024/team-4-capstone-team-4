@@ -5,48 +5,45 @@ namespace App\Livewire;
 use App\Models\Approval;
 use App\Models\ApprovalStatus;
 use App\Models\ApprovalType;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Component;
 
 class ApprovalList extends Component
 {
-    public $approvals = [];
     public $type = 'all';
     public $headers = [];
     public $ignore_headers = [
         'created_at', 'updated_at', 'status_id', 'approved_at', 'rejected_at', 'approved_by', 'rejected_by'
     ];
     public $selectedFilter = [];
-    public $selectedSort;
+    public $selectedSort = 'id';
     public $filters = [];
     public $selectedSortOrder = 'desc';
-    public $query;
+    public $query = '';
     public $perPage = 10;
     public $page_var = 'page';
     public $selectAll = false;
+    public $selectedId = false; // for modal
+    public $role;
+    public $dept;
+    public $showApprovalModal = false;
     public $selectedItems = [];
 
     public $listeners = [
-        'refresh-list' => 'refresh',
         'sort-selected' => 'sortSelected',
         'change-filters' => 'updateFiltres',
         'clear-filters' => 'clearFilters',
+        'trigger-modal' => 'openModal',
     ];
 
     public function mount($type) {
         $this->type = $type;
         $this->page_var = $type.'_page';
-        $this->getApprovals();
         $this->getHeaders();
         $this->getFilters();
-    }
-
-    public function getApprovals() {
-        $this->approvals = Approval::all() ?? [];
-        if ($this->type !== 'all') {
-            $approvalType = ApprovalStatus::where('name', $this->type)->first();
-            $this->approvals = $approvalType->approvals ?? [];
-        }
     }
 
     public function getHeaders() {
@@ -99,10 +96,6 @@ class ApprovalList extends Component
         $this->query = $value;
     }
 
-    public function refresh() {
-        $this->getApprovals();
-    }
-
     public function clearFilters() {
         $this->selectedFilter = [];
         $this->getFilters();
@@ -126,6 +119,11 @@ class ApprovalList extends Component
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
+    public function openModal($id) {
+        $this->selectedId = $id;
+        $this->showApprovalModal = true;
+    }
+
     public function sortColumn($column) {
         if ($this->selectedSort === $column) {
             $this->selectedSortOrder = $this->selectedSortOrder === 'asc' ? 'desc' : 'asc';
@@ -138,7 +136,6 @@ class ApprovalList extends Component
 
     public function render() {
         $query = Approval::query();
-
 
         // 'user_id', 'approval_type_id', 'status_id', 'approved_at', 'rejected_at', 'details', 'approved_by', 'active', 'rejected_by'
         // with user, approval type, status, approved by -> user, rejected by -> user
@@ -158,14 +155,80 @@ class ApprovalList extends Component
             }
         }
 
-        if (count($this->approvals) > 0) {
-            $query->orderBy($this->selectedSort, $this->selectedSortOrder);
+        $query->orderBy($this->selectedSort, $this->selectedSortOrder);
+
+        if ($this->type !== 'all') {
+            $approvalType = ApprovalStatus::where('name', $this->type)->first();
+            $approvals = $query->where('status_id', $approvalType->id);
         }
 
         $approvals = $query->paginate($this->perPage);
+        // dd($approvals);
 
         return view('livewire.approval-list', [
             'approvals' => $approvals
         ]);
+    }
+
+    public function closeApprovalModal() {
+        $this->showApprovalModal = false;
+        $this->selectedId = null;
+        $this->role = null;
+    }
+
+    public function action($action) {
+        try {
+            DB::beginTransaction();
+            // dd($this->selectedId, $action);
+            $approval = Approval::find($this->selectedId);
+            if ($action === 'approve') {
+                if (!$this->role) {
+                    throw new \Exception('Please select a user role to assign to this user');
+                }
+                $existingUR = UserRole::where('user_id', $approval->user_id)->where('role', $this->role)->first();
+                if ($existingUR) {
+                    throw new \Exception('User already has this role');
+                }
+
+                if (($this->role === 'dept_head' || $this->role === 'dept_staff') && !$this->dept) {
+                    throw new \Exception('Please select a department to assign to this user');
+                }
+
+                $this->validate([
+                    'role' => 'required:string|in:dept_head,dept_staff,admin,instructor',
+                    'dept' => 'nullable:int'
+                ]);
+
+                $assignedRole = UserRole::create([
+                    'user_id' => $approval->user_id,
+                    'role' => $this->role,
+                    'department_id' => $this->dept
+                ]);
+
+                UserRole::audit('create', [
+                    'operation_type' => 'CREATE',
+                    'new_value' => json_encode($assignedRole->getAttributes()),
+                ], $approval->user->getName() . ' assigned to ' . $this->role . ' role by ' . Auth::user()->getName());
+                $approval->approve();
+            } else if ($action === 'reject') {
+                $approval->reject();
+            } else if ($action === 'cancel') {
+                $approval->cancel();
+            }
+            $this->closeApprovalModal();
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            // get the critical message
+            $message = $e->getMessage();
+            dd($message);
+            $message = strtok($message, '\n');
+
+            $this->dispatch('show-toast', ['message' => 'An error occurred', 'type' => 'error']);
+
+            Approval::audit($action.' error', [
+                'operation_type' => 'ERROR',
+            ], Auth::user()->getName() . ' encountered an error while trying to ' . $action . ' an approval. \n' . $message);
+        }
     }
 }

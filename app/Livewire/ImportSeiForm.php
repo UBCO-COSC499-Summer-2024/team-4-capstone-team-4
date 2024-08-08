@@ -19,20 +19,28 @@ use function PHPUnit\Framework\isEmpty;
 class ImportSeiForm extends Component
 {
     public $rows = [];
+    public $filteredCourses;
 
     public $isDuplicate = false;
     public $showModal = false;
+    public $showCourseModal = false;
     public $hasCourses = false;
+
     public $rowAmount = 0;
+
+    public $selectedIndex = -1;
+    public $searchTerm = '';
 
     public function mount() {
         if(Session::has('seiFormData')) {
             $this->rows = Session::get('seiFormData');
         } else {
             $this->rows = [
-                ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+                ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],
             ];
         }
+
+        // dd($this->rows);
     }
 
     public function rules() {
@@ -115,7 +123,7 @@ class ImportSeiForm extends Component
     }
 
     public function addRow() {
-        $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''];
+        $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''];
         Session::put('seiFormData', $this->rows);
     }
 
@@ -140,8 +148,52 @@ class ImportSeiForm extends Component
         }
     }
 
+    public function openCourseModal($index) {
+        $this->selectedIndex = $index;
+        // dd($this->selectedIndex);
+        $this->showCourseModal = true;
+    }
+
+    public function closeCourseModal() {
+        $this->showCourseModal = false;
+    }
+
+
     public function closeModal() {
         $this->showModal = false;
+    }
+
+    public function getAvailableCourses() {
+        return CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
+        ->whereNull('sei_data.course_section_id')
+        ->select('course_sections.*')
+        ->orderBy('course_sections.year')
+        ->orderBy('course_sections.session')
+        ->orderBy('course_sections.term')
+        ->orderBy('course_sections.prefix')
+        ->orderBy('course_sections.number')
+        ->orderBy('course_sections.section')
+        ->get();
+    }
+
+    public function selectCourse($id, $prefix, $number, $section, $year, $session, $term, $selectedIndex) {
+        // dd('clicked');
+        $this->rows[$selectedIndex]["cid"] = $id;
+        $this->rows[$selectedIndex]["course"] = $prefix . ' ' . $number . ' ' . $section . ' - ' . $year . $session . $term;
+
+        $this->closeCourseModal();
+        $this->checkDuplicate();
+  
+        // dd($this->rows);
+    }
+
+    public function updateSearch() {
+        $availableCourses = $this->getAvailableCourses();
+
+        $this->filteredCourses = $availableCourses->filter(function ($course) {
+            $course = $course->prefix . ' ' . $course->number . ' ' . $course->section . ' - ' . $course->year . $course->session . $course->term;
+            return stripos($course, $this->searchTerm) !== false;
+        });
     }
 
     public function handleSubmit() {
@@ -150,7 +202,6 @@ class ImportSeiForm extends Component
         
         $this->validate();
     
-        
         foreach ($this->rows as $row) {
     
             SeiData::create([
@@ -181,7 +232,7 @@ class ImportSeiForm extends Component
         }
 
         $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => ''],
+            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],
         ];
         
         Session::forget('seiFormData');
@@ -197,25 +248,27 @@ class ImportSeiForm extends Component
     public function render()
     {
 
-        $courses = CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
-        ->whereNull('sei_data.course_section_id')
-        ->select('course_sections.*')
-        ->orderBy('course_sections.year')
-        ->orderBy('course_sections.session')
-        ->orderBy('course_sections.term')
-        ->orderBy('course_sections.prefix')
-        ->orderBy('course_sections.number')
-        ->orderBy('course_sections.section')
-        ->get();
+  
+        $this->checkDuplicate();
 
-        if(!$courses->isEmpty()) {
+        $availableCourses = $this->getAvailableCourses();
+
+        if(!$availableCourses->isEmpty()) {
             $this->hasCourses = true;
         } else {
             $this->hasCourses = false;
         }
 
+        // dd($courses);
+        // dd($this->rows);
+
+        
+        $this->updateSearch();
+
         return view('livewire.import-sei-form', [
-            "courses" => $courses,
+            "availableCourses" => $availableCourses,
+            "filteredCourses" => $this->filteredCourses,
+            "selectedIndex" => $this->selectedIndex,
         ]);
     }
 }

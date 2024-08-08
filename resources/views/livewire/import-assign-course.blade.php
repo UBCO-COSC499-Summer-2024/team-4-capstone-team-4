@@ -3,17 +3,26 @@
 @endphp
 
 <div class="relative">
-    <form wire:submit.prevent="handleSubmit" class="relative">
-        <div class="relative overflow-x-auto shadow-sm rounded-md">
+    <button class="import-form-add-button" onclick="location.href='{{ route('upload.file.show.assign.courses') }}'">
+        <span class="material-symbols-outlined">upload</span>
+        Upload CSV File to Assign
+    </button>
+    <form wire:submit.prevent="handleSubmit">
+        <div class="overflow-x-auto shadow-sm rounded-md">
             @if($hasCourses)
-            <div class="mt-4 flex justify-end space-x-2">
-                <button type="submit" class="import-form-save-button">Save</button>
+            <div class="absolute top-0 right-0 space-x-2">
+            <button type="submit" class="import-form-save-button">
+                <span class="material-symbols-outlined">save</span>
+                Save
+            </button>
             </div>
             @endif
             <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">
-                <div class="w-10/12 text-left mx-2">Course Section</div>
-                <div class="w-8/12 text-left mx-2">Instructor</div>
-                <div class="w-5/12"></div>
+                <div class="w-3/12"></div>
+                <div class="w-10/12 text-center mx-2">Course Section</div>
+                <div class="w-3/12 text-center mx-2">Instructor</div>
+                <div class="w-6/12"></div>
+                <div class="w-3/12"></div>
             </div>
             @if($hasCourses)
                 @foreach($assignments as $index => $assignment)
@@ -21,23 +30,41 @@
                         @php
                             $course = $availableCourses->firstWhere('id', $assignment['course_section_id']);
                         @endphp
-                        <div class="w-10/12 text-left text-sm">
+                         <div class="w-3/12"></div>
+                        <div class="w-10/12 text-center">
                             <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                         </div>
-                        <div class="w-8/12 text-center">
-                            <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
+                        <div class="w-3/12 text-center">
+                            {{-- basic select to fall back on --}}
+
+                            {{-- <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
                                 <option value="">Select Instructor</option>
                                 @foreach($availableInstructors as $instructor)
                                     <option value="{{ $instructor->id }}">{{ $instructor->firstname }} {{ $instructor->lastname }}</option>
                                 @endforeach
-                            </select>   
+                            </select>    --}}
+
+                            @if(empty($assignment['instructor']))
+                            <div class="text-gray-400">No Instructor Selected</div>
+                            @else
+                            <div class="text-[#2e3c75]">{{$assignment['instructor']}}</div>
+                            @endif
                         </div>
-                        <div class="w-5/12"></div>
+                        <div class="w-6/12">
+                            <button type="button" wire:click="openInstructorModal({{$index}})" class="import-form-add-button">Select Instructor</button>
+                        </div>
+                        <div class="w-3/12"></div>
                     </div>
                 @endforeach
             @endif
         </div>
     </form>
+    
+    @if($showInstructorModal)
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <x-custom-search-instructor-modal :availableInstructors="$availableInstructors" :filteredInstructors="$filteredInstructors" :selectedIndex="$selectedIndex"/>
+    </div>
+    @endif
 
     <div wire:loading wire:target="handleSubmit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="text-white text-xl text-center m-80">Saving...</div>
