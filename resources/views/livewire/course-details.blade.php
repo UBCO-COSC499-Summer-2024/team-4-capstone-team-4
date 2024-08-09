@@ -36,7 +36,8 @@
             console.log(id);
         });
         this.doneEdit();
-    }
+    },
+    coursesSelected: @entangle('coursesSelected'),
 }">
     <div class="flex items-center justify-between mb-2">
         <div class="flex items-center space-x-4">

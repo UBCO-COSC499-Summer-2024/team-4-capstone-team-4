@@ -9,7 +9,11 @@
         this.selectedFilter[event.detail[0]] = event.detail[1];
     },
     clearFilters() {
-        this.selectedFilter = {};
+        for (const category in this.filters) {
+            this.selectedFilter[category] = [];
+        }
+        this.search = '';
+        @this.dispatch('clear-filters');
     },
     sortColumn(column) {
         if (this.selectedSort === column) {
@@ -63,14 +67,14 @@
                         </span>
                     </button>
                     @foreach ($filters as $category => $filter)
-                        <div class="filter-category" wire:key="filter_{{ $category }}">
+                        <div class="filter-category" wire:key="filter_status_{{ $category }}">
                             <span class="filter-category-title">
                                 {{ $category }}
                             </span>
                             <div class="filter-items">
                                 @foreach ($filter as $item)
                                     <div class="filter-item nos"
-                                        wire:Key="filter_{{ $category }}_{{ $item }}"
+                                        wire:Key="filter_status_{{ $category }}_{{ $item }}"
                                         x-data="{
                                             category: '{{ $category }}',
                                             item: '{{ $item }}',
