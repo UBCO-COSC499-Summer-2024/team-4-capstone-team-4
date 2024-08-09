@@ -26,11 +26,14 @@
         });
     },
     saveItems: function () {
-        const rows = document.querySelectorAll('tr');
+        const rows = document.querySelectorAll('.svcr-list-item');
         rows.forEach(row => {
             const id = row.getAttribute('data-id');
-            if (id) return;
+            if (!id) {
+            console.log(row);
+            }
             $wire.dispatch('saveItem', {id: id});
+            console.log(id);
         });
         this.doneEdit();
     }
@@ -98,7 +101,7 @@
                     <table class="min-w-full divide-y divide-gray-200 svcr-table" id="coursesTable">
                         <livewire:coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
                         <tbody id="courseTableBody">
-                            @if($courseSections->count())
+                            @if(count($courseSections) > 0)
                                 @foreach ($courseSections as $section)
                                     {{-- <x-coursedetails-table-row
                                         :courseName="$section->name"

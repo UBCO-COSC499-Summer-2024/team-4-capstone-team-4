@@ -79,38 +79,40 @@ class CoursedetailsTableRow extends Component {
     }
 
     public function saveItem($id) {
-        if ($this->id !== $id) return;
-        try {
-            $course = CourseSection::find($id);
-            $oldValue = $course->toArray();
-            $this->validate();
-            $course->area_id = $this->departmentId;
-            $course->enroll_end = $this->enrolledStudents;
-            $course->dropped = $this->droppedStudents;
-            $course->capacity = $this->courseCapacity;
-            $course->room = $this->room;
-            $course->save();
-            $this->dispatch('show-toast', [
-                'message' => 'Changes saved successfully',
-                'type' => 'success'
-            ]);
-            CourseSection::audit('update success', [
-                'operation_type' => 'UPDATE',
-                'old_value' => json_encode($oldValue),
-                'new_value' => json_encode($course),
-            ], $this->user->getName() . ' updated courses successfully');
+        $id = (int) $id;
+        if ($this->id === $id) {
+            try {
+                $course = CourseSection::find($id);
+                $oldValue = $course->toArray();
+                $this->validate();
+                $course->area_id = $this->departmentId;
+                $course->enroll_end = $this->enrolledStudents;
+                $course->dropped = $this->droppedStudents;
+                $course->capacity = $this->courseCapacity;
+                $course->room = $this->room;
+                $course->save();
+                $this->dispatch('show-toast', [
+                    'message' => 'Changes saved successfully',
+                    'type' => 'success'
+                ]);
+                CourseSection::audit('update success', [
+                    'operation_type' => 'UPDATE',
+                    'old_value' => json_encode($oldValue),
+                    'new_value' => json_encode($course),
+                ], $this->user->getName() . ' updated courses successfully');
 
-            $this->isEditing = false;
-        } catch(\Illuminate\Validation\ValidationException $e) {
-            throw $e;
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'An error occurred while saving the changes',
-                'type' => 'error'
-            ]);
-            CourseSection::audit('update error', [
-                'operation_type' => 'UPDATE',
-            ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
+                $this->isEditing = false;
+            } catch(\Illuminate\Validation\ValidationException $e) {
+                throw $e;
+            } catch(\Exception $e) {
+                $this->dispatch('show-toast', [
+                    'message' => 'An error occurred while saving the changes',
+                    'type' => 'error'
+                ]);
+                CourseSection::audit('update error', [
+                    'operation_type' => 'UPDATE',
+                ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
+            }
         }
     }
 

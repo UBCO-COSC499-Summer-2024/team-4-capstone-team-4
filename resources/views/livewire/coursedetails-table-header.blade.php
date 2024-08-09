@@ -24,10 +24,8 @@
     </style>
     <tr class="svcr-list-header">
         <!-- New column for selector -->
-        <th scope="col" class="p-4 text-lg font-bold tracking-wider text-left text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
-            <div class="flex items-center">
-                <input type="checkbox" class="form-checkbox" id="select-all">
-            </div>
+        <th scope="col" class="text-lg font-bold tracking-wider text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
+            <input type="checkbox" class="form-checkbox" id="select-all">
         </th>
 
         @foreach(['name' => 'Course Name', 'departmentName' => 'Area'] as $field => $label)

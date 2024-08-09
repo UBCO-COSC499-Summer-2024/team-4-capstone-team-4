@@ -1,7 +1,8 @@
-<tr class="svcr-list-item" data-id="{{ $course->id }}"
+<tr class="svcr-list-item" data-id="{{ $id }}"
 x-data="{
     isEditing: @entangle('isEditing'),
     selected: @entangle('selected'),
+    id: @entangle('id')
 }">
     {{-- <td class="px-6 py-4 whitespace-nowrap">
         <input type="checkbox" wire:model="selectedCourses" value="{{ $sectionId }}" class="form-checkbox">
@@ -16,8 +17,8 @@ x-data="{
     <td class="px-6 py-4 whitespace-nowrap">{{ $timings }}</td>
     <td class="px-6 py-4 whitespace-nowrap">{{ $seiData }}</td> --}}
     <td class="svcr-list-item-cell" data-column="select">
-        <input type="checkbox" wire:model="selected" value="{{ $course->id }}" class="form-checkbox" @change="selected = $event.target.checked">
-        {{-- <pre x-text="selected"></pre> --}}
+        <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = $event.target.checked">
+        <pre x-text="id"></pre>
     </td>
     <td class="svcr-list-item-cell" data-column="courseName">
         <div class="svcr-list-item-td">{{ $courseName }}
@@ -30,7 +31,7 @@ x-data="{
         <select x-show="isEditing" x-cloak wire:model="departmentId" class="form-select">
             @foreach ($areas as $department)
                 <option value="{{ $department->id }}"
-                    {{ $departmentId == $department->Id ? 'selected' : '' }}
+                    {{ $departmentId == $department->id ? 'selected' : '' }}
                     >{{ $department->name }}</option>
             @endforeach
         </select>
