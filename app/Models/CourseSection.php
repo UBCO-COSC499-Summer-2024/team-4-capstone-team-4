@@ -8,6 +8,7 @@ use App\Models\TeachingAssistant;
 use App\Models\SeiData;
 use App\Models\Teach;
 use App\Models\Area;
+use Illuminate\Support\Facades\Auth;
 
 class CourseSection extends Model {
     use HasFactory;
@@ -88,9 +89,9 @@ class CourseSection extends Model {
     }
 
     public static function audit($action, $details, $description) {
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         AuditLog::create([
-            'user_id' => (int) auth()->user()->id,
+            'user_id' => (int) Auth::id(),
             'user_alt' => $audit_user ?? 'System',
             'action' => $action,
             'table_name' => 'course_sections',

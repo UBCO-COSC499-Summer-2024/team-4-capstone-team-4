@@ -12,7 +12,7 @@
         appearance: none; /* Remove default checkbox styling */
             cursor: pointer; /* Pointer cursor on hover */
         }
-    
+
         .form-checkbox:checked {
             background-color: #007bff; /* Blue background when checked */
             border-color: #007bff; /* Blue border when checked */
@@ -24,7 +24,7 @@
     </style>
     <tr class="svcr-list-header">
         <!-- New column for selector -->
-        <th scope="col" class="p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
+        <th scope="col" class="p-4 text-lg font-bold tracking-wider text-left text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
             <div class="flex items-center">
                 <input type="checkbox" class="form-checkbox" id="select-all">
             </div>
@@ -61,6 +61,12 @@
                 </div>
             </th>
         @endforeach
+        {{-- actions column --}}
+        <th scope="col" class="p-4 text-lg font-bold tracking-wider text-left text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
+            <div class="flex items-center">
+                <span>Actions</span>
+            </div>
+        </th>
     </tr>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -73,7 +79,7 @@
                     checkbox.dispatchEvent(new Event('change'));
                 });
             });
-    
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     if (!checkbox.checked) {
@@ -84,11 +90,11 @@
                 });
             });
         });
-    
+
         document.addEventListener('DOMContentLoaded', function () {
             const archiveButton = document.getElementById('archiveButton');
             if (!archiveButton) return;
-            
+
             archiveButton.addEventListener('click', function () {
                 if (confirm('Are you sure you want to archive the selected courses?')) {
                     @this.archiveCourses();

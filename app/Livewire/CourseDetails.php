@@ -50,78 +50,22 @@ class CourseDetails extends Component
 
     public function saveChanges()
     {
-        // $response = Http::post(route('courses.details.save'), [
-
-        //     'courseNames' => $this->courseNames,
-        //     'enrolledStudents' => $this->enrolledStudents,
-        //     'droppedStudents' => $this->droppedStudents,
-        //     'courseCapacities' => $this->courseCapacities,
-        // ]);
-
-        // if ($response->successful()) {
-        //     $data = $response->json();
-
-        //     // Handle success
-        //     $this->dispatch('show-toast', [
-        //         'message' => 'Courses updated successfully.',
-        //         'type' => 'success'
-        //     ]);
-
-        //     // Optionally refresh data or handle other actions
-        // } else {
-        //     // Handle error
-        //     $this->dispatch('show-toast', [
-        //         'message' => 'Failed to update courses.',
-        //         'type' => 'error'
-        //     ]);
-        // }
         try {
-            $courseSections = CourseSection::whereIn('id', $this->ids)->get();
-            $oldValue = $courseSections->toArray();
-            $updatedSections = [];
-            $errors = [];
-            foreach ($courseSections as $courseSection) {
-                try {
-                    $courseSection->update([
-                        'enroll_end' => $this->enrolledStudents[$courseSection->id],
-                        'dropped' => $this->droppedStudents[$courseSection->id],
-                        'capacity' => $this->courseCapacities[$courseSection->id],
-                    ]);
-                    $updatedSections[] = $courseSection;
-                } catch (\Exception $e) {
-                    Log::error('Failed to update course section:', ['id' => $courseSection->id, 'error' => $e->getMessage()]);
-                    $errors[] = "Error updating course: {$courseSection->prefix} {$courseSection->number} {$courseSection->section} - Error: {$e->getMessage()}";
-                }
-            }
+            // $response = Http::post(route('courses.details.save'), [
 
-            if (!empty($errors)) {
-                $this->dispatch('show-toast', [
-                    'message' => 'Some courses were updated, but errors occurred for others. Please check the log for details.',
-                    'type' => 'warning'
-                ]);
-                CourseSection::audit('warning', [
-                    'operation_type' => 'UPDATE',
-                    'old_value' => json_encode($oldValue),
-                    'new_value' => json_encode($updatedSections),
-                    'errors' => $errors
-                ], $this->user->getName() . ' updated some courses, but encountered errors.');
-            } else {
-                $this->loadCourses();
-                $this->dispatch('show-toast', [
-                    'message' => 'Courses updated successfully.',
-                    'type' => 'success'
-                ]);
-                CourseSection::audit('success', [
-                    'operation_type' => 'UPDATE',
-                ], $this->user->getName() . ' updated courses successfully.');
-            }
+            //     'courseNames' => $this->courseNames,
+            //     'enrolledStudents' => $this->enrolledStudents,
+            //     'droppedStudents' => $this->droppedStudents,
+            //     'courseCapacities' => $this->courseCapacities,
+            // ]);
+            dd($this->courseNames, $this->enrolledStudents, $this->droppedStudents, $this->courseCapacities);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->dispatch('show-toast', [
                 'message' => 'Failed to update courses.',
                 'type' => 'error'
             ]);
-            CourseSection::audit('error', [
+            CourseSection::audit('update error', [
                 'operation_type' => 'UPDATE',
             ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
         }

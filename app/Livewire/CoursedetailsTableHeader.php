@@ -8,11 +8,9 @@ class CoursedetailsTableHeader extends Component
 {
     public $sortField;
     public $sortDirection;
-    public $userRole;
-    public function mount($sortField, $sortDirection, $userRole) {
+    public function mount($sortField, $sortDirection) {
         $this->sortField = $sortField;
         $this->sortDirection = $sortDirection;
-        $this->userRole = $userRole;
     }
     public function render()
     {
