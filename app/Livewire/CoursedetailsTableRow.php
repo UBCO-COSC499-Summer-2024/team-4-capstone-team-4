@@ -147,6 +147,8 @@ class CoursedetailsTableRow extends Component {
     }
 
     public function render() {
-        return view('livewire.coursedetails-table-row');
+        $user = Auth::user();
+        $canEdit = $user->hasRoles(['admin', 'dept_head', 'dept_staff']);
+        return view('livewire.coursedetails-table-row',['canEdit' => $canEdit],);
     }
 }

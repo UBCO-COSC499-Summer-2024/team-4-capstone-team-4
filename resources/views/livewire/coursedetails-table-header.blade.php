@@ -24,10 +24,11 @@
     </style>
     <tr class="svcr-list-header">
         <!-- New column for selector -->
+        @if($canEdit)
         <th scope="col" class="text-lg font-bold tracking-wider text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
             <input type="checkbox" class="form-checkbox" id="select-all">
         </th>
-
+        @endif
         @foreach(['name' => 'Course Name', 'departmentName' => 'Area'] as $field => $label)
             <th scope="col" class="sortable {{ $sortField === $field ? ($sortDirection === 'asc' ? 'th-sort-asc' : 'th-sort-desc') : '' }} p-4 text-left text-lg font-bold text-white uppercase tracking-wider svcr-list-header-item" style="padding: 0.5rem;">
                 <div class="flex items-center">
@@ -60,11 +61,14 @@
             </th>
         @endforeach
         {{-- actions column --}}
+        @if($canEdit)
         <th scope="col" class="p-4 text-lg font-bold tracking-wider text-left text-white uppercase svcr-list-header-item" style="padding: 0.5rem;">
             <div class="flex items-center">
                 <span>Actions</span>
             </div>
         </th>
+    @endif
+    
     </tr>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
