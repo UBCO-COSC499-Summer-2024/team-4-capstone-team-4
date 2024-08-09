@@ -13,6 +13,7 @@ use App\Models\ExtraHour;
 use App\Models\RoleAssignment;
 use App\Models\User;
 use App\Models\UserRole;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
@@ -89,13 +90,14 @@ class ManageServiceRole extends Component
         'roomB' => 'nullable|string|max:255',
         'roomN' => 'nullable|string|max:255',
         'roomS' => 'nullable|string|max:255',
+        'room' => 'nullable|string|max:255',
     ];
 
     public function mount($serviceRoleId, $links = []) {
         $this->fetchServiceRole($serviceRoleId);
         $this->links = $links;
-        $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id;
-        $this->audit_user = User::find((int) auth()->id())->getName();
+        $this->audit_user = User::find((int) Auth::id())->getName();
+        $this->assigner_id = UserRole::where('user_id', Auth::id())->first()->id;
     }
 
     public function fetchServiceRole($id) {
@@ -263,9 +265,9 @@ class ManageServiceRole extends Component
     }
 
     public function saveServiceRole() {
-        $this->concatRoom();
         try {
             // dd($this->name, $this->description, $this->year, $this->area_id, $this->monthly_hours);
+                $this->concatRoom();
             $this->serviceRole->name = $this->name;
             $this->serviceRole->description = $this->description;
             $this->serviceRole->year = $this->year;
@@ -381,7 +383,7 @@ class ManageServiceRole extends Component
     }
 
     public function saveInstructor() {
-        $audit_user = User::find((int) auth()->id())->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $role_assignment_rules = [
                 'instructor_id' => 'required|exists:user_roles,id',
@@ -457,7 +459,7 @@ class ManageServiceRole extends Component
     }
 
     public function removeInstructor($id) {
-        $audit_user = User::find((int) auth()->id())->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $roleAssignment = RoleAssignment::where('instructor_id', $id)->where('service_role_id', $this->serviceRole->id)->first();
             // dd($roleAssignment);
@@ -520,7 +522,7 @@ class ManageServiceRole extends Component
     }
 
     public function unarchiveServiceRole($id) {
-        $audit_user = User::find((int) auth()->id())->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $oldValue = $this->serviceRole->getOriginal();
             $serviceRole = ServiceRole::find($id);
