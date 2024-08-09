@@ -18,7 +18,6 @@ x-data="{
     <td class="px-6 py-4 whitespace-nowrap">{{ $seiData }}</td> --}}
     <td class="svcr-list-item-cell" data-column="select">
         <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = $event.target.checked">
-        <pre x-text="id"></pre>
     </td>
     <td class="svcr-list-item-cell" data-column="courseName">
         <div class="svcr-list-item-td">{{ $courseName }}
