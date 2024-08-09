@@ -97,7 +97,7 @@ class AuditLogTable extends Component
         $this->perpage = $perpage;
     }
 
-    public function changeSearchQuery($query) {
+    public function changeSearchQuery($query = null) {
         $this->searchQuery = $query;
     }
 

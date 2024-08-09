@@ -20,7 +20,7 @@
                 <!-- Firstname Input and Error -->
                 <div class="w-full md:w-1/2 pr-2">
                     <input type="text" 
-                           wire:model.lazy="firstnames.{{$userid}}" 
+                           wire:model.defer="firstnames.{{$userid}}" 
                            wire:change="updateFirstname('{{ $userid }}', $event.target.value)" 
                            class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
                            value="{{ $firstname }}" />
@@ -32,7 +32,7 @@
                 <!-- Lastname Input and Error -->
                 <div class="w-full md:w-1/2 pl-2">
                     <input type="text" 
-                           wire:model.lazy="lastnames.{{$userid}}" 
+                           wire:model.defer="lastnames.{{$userid}}" 
                            wire:change="updateLastname('{{ $userid }}', $event.target.value)" 
                            class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
                            value="{{ $lastname }}" />
@@ -44,7 +44,7 @@
             
             <div class="mb-4">
                 <input type="email" 
-                       wire:model.lazy="emails.{{$userid}}" 
+                       wire:model.defer="emails.{{$userid}}" 
                        wire:change="updateEmail('{{ $userid }}', $event.target.value)" 
                        class="border border-solid border-[#3b4779] bg-white rounded-lg w-full mb-1" 
                        value="{{ $email }}" />

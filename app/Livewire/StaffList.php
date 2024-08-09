@@ -129,7 +129,7 @@ class StaffList extends Component
      * @return \Illuminate\View\View The rendered view of the staff list.
      */
     public function render(){
-        $this->initializeUserData();
+        //$this->initializeUserData();
         //$this->resetValidation();
 
         $query = $this->searchTerm;
@@ -474,7 +474,7 @@ class StaffList extends Component
                         'year' => $this->selectedYear,
                         'instructor_id' => $instructor->id,
                     ]); 
-                    InstructorPerformance::udit('Added target hours', ['operation_type' => 'UPDATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id '. $instructor->id);          
+                    InstructorPerformance::audit('Added target hours', ['operation_type' => 'UPDATE', 'old_value' => null, 'new_value' => $hours], 'Target hours added for instructor id '. $instructor->id);          
                 }
             }
         }
@@ -579,10 +579,6 @@ class StaffList extends Component
         
     }
 
-    public function getAllUsers(){
-
-    }
-
      /**
      * Bulk edit
      *
@@ -620,7 +616,9 @@ class StaffList extends Component
         $changedFirstnames = array_keys($this->changedFirstnames);
         $changedLastnames = array_keys($this->changedLastnames);
         $changedEmails = array_keys($this->changedEmails);
+        //dd($changedFirstnames, $changedLastnames, $changedEmails);
         $editedCount = count(array_unique(array_merge($changedFirstnames, $changedLastnames, $changedEmails)));
+        //dd($editedCount);
 
         // Update status
         foreach($addedUsers as $userid){
@@ -706,7 +704,7 @@ class StaffList extends Component
      *
      * This method compares the current roles with the previous roles and updates the UserRole model accordingly.
      * It keeps track of how many roles were added and removed.
-     *
+     * 
      * @param string $role The role to update.
      * @param array $currentRoles An array of user IDs representing the current role assignments.
      * @param array $previousRoles An array of user IDs representing the previous role assignments.
@@ -892,5 +890,10 @@ class StaffList extends Component
         $this->reset();
         $this->resetValidation();
         $this->showModal = true;
+    }
+
+    public function closeAddModal(){
+        $this->showModal = false;
+        $this->initializeUserData();
     }
 }
