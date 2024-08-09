@@ -44,8 +44,8 @@ class CourseDetails extends Component
 
     public function saveChanges()
     {
-        $response = Http::post(route('courses.details.save'), [
-            
+        $response = Http::timeout(60) // Increase the timeout to 60 seconds
+        ->post(route('courses.details.save'), [
             'courseNames' => $this->courseNames,
             'enrolledStudents' => $this->enrolledStudents,
             'droppedStudents' => $this->droppedStudents,
@@ -53,21 +53,9 @@ class CourseDetails extends Component
         ]);
 
         if ($response->successful()) {
-            $data = $response->json();
-
-            // Handle success
-            $this->dispatch('show-toast', [
-                'message' => 'Courses updated successfully.',
-                'type' => 'success'
-            ]);
-
-            // Optionally refresh data or handle other actions
+            session()->flash('message', 'Courses updated successfully.');
         } else {
-            // Handle error
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to update courses.',
-                'type' => 'error'
-            ]);
+            session()->flash('error', 'Failed to update courses.');
         }
     }
 

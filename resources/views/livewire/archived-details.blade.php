@@ -4,7 +4,7 @@
     if($user->hasRoles(['admin', 'dept_head', 'dept_staff'])){
         $canEdit = true;
     }
-    $canExport = $user->hasRoles(['admin', 'dept_head', 'dept_staff', 'instructor']);
+    $canExport = $user->hasRoles(['admin', 'dept_head', 'dept_staff']);
 @endphp
 
 <div class="relative overflow-x-auto sm:rounded-lg">
@@ -15,7 +15,7 @@
                 @if($user->hasRoles(['dept_head','dept_staff','admin']))
                 <button type="button" class="ubc-blue hover:text-white focus:ring-1 
                     focus:outline-none font-bold rounded-lg text-sm px-5 py-2 text-center me-1 mb-2" 
-                    onclick="if (confirm('Are you sure you want to unarchive the selected courses?')) { @this.call('unarchiveCourses'); }">
+                    onclick="confirmUnarchive()">
                         Unarchive Selected Course
                     </button>
                 @endif
@@ -91,7 +91,7 @@
             </div>
         </form>
     </div>
-    <<script>
+    <script>
         function confirmUnarchive() {
             if (confirm("Are you sure you want to unarchive the selected courses?")) {
                 @this.call('unarchiveCourses');
