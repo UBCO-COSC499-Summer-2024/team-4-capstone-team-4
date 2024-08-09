@@ -36,16 +36,19 @@
                                             </select>
                                         </div>
                                         <div class="flex-1">
-                                            <label for="courseSelect" class="block text-sm font-medium text-gray-700">Select a Course</label>
-                                            <select wire:model="selectedTAs.{{ $index }}.course_id" id="courseSelect" name="course_id[]" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option value="">Select an option</option>
-                                                @if (isset($selectedCourses[$index]) && count($selectedCourses[$index]) > 0)
-                                                    @foreach ($selectedCourses[$index] as $course)
-                                                        <option value="{{ $course['id'] }}">{{ $course['formattedName'] }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <label class="block text-sm font-medium text-gray-700">Select a Course</label>
+                                            @if (isset($selectedCourses[$index]) && count($selectedCourses[$index]) > 0)
+                                                @foreach ($selectedCourses[$index] as $course)
+                                                    <div>
+                                                        <input type="radio" id="course_{{ $course['id'] }}" wire:model="selectedTAs.{{ $index }}.course_id" name="selected_course_{{ $index }}" value="{{ $course['id'] }}">
+                                                        <label for="course_{{ $course['id'] }}">{{ $course['formattedName'] }}</label>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <p class="text-red-500">No courses currently assigned to this TA or Instructor.</p>
+                                            @endif
                                         </div>
+                                                                                                              
                                     </div>
                                 @endforeach
                             </div>

@@ -47,6 +47,17 @@ class ArchivedDetails extends Component
         $this->courses = CourseSection::where('archived', true)->get(); // Load only archived courses
     }
 
+    public function unarchiveCourses()
+{
+    if (!empty($this->selectedCourses)) {
+        CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => false]);
+
+        // Reload courses after unarchiving
+        $this->loadCourses();
+        $this->selectedCourses = []; 
+    }
+}
+
     public function render()
     {
         $user = Auth::user();

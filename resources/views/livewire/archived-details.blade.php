@@ -6,22 +6,22 @@
     }
     $canExport = $user->hasRoles(['admin', 'dept_head', 'dept_staff', 'instructor']);
 @endphp
+
 <div class="relative overflow-x-auto sm:rounded-lg">
     <div class="flex justify-between items-center mb-2">
         <div class="flex items-center space-x-2 ml-auto">
             @if($canExport)
-                <div class="relative inline-block text-left">
-                    @if($user->hasRoles(['dept_head','dept_staff','admin']))
-                        {{-- @livewire('unarchive-button') --}}
-                    @endif
-                </div>
-            @endif
-        </div>
-        @if($canExport)
-        @php
-            $courseSectionsJson = json_encode($courseSections);
-        @endphp
+            <div class="relative inline-block text-left">
+                @if($user->hasRoles(['dept_head','dept_staff','admin']))
+                <button type="button" class="ubc-blue hover:text-white focus:ring-1 
+                    focus:outline-none font-bold rounded-lg text-sm px-5 py-2 text-center me-1 mb-2" 
+                    onclick="if (confirm('Are you sure you want to unarchive the selected courses?')) { @this.call('unarchiveCourses'); }">
+                        Unarchive Selected Course
+                    </button>
+                @endif
+            </div>
         @endif
+        </div>
     </div>
 
     <div class="flex justify-between items-center mb-2">
@@ -41,9 +41,9 @@
             </div>
         @endif
     </div>
+
     <div class="fixed-header">
-        {{-- <form id="editForm" action="{{ route('courses.details.save') }}" method="POST"> --}}
-            <form>
+        <form>
             @csrf
             <div class="overflow-auto max-h-[calc(100vh-200px)]">
                 <div id="tabContent">
@@ -91,5 +91,12 @@
             </div>
         </form>
     </div>
-    
+    <<script>
+        function confirmUnarchive() {
+            if (confirm("Are you sure you want to unarchive the selected courses?")) {
+                @this.call('unarchiveCourses');
+                alert("Course successfully unarchived!"); // Show success alert after unarchiving
+            }
+        }
+    </script>
 </div>
