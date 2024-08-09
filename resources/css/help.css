@@ -202,10 +202,6 @@
     text-decoration: underline;
 }
 
-.hero, .main-topics, .faq {
-    /* margin: 0 0.5rem; */
-}
-
 #help-search-results {
     /* background: #fafafa; */
     border-radius: 0.8rem;

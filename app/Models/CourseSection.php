@@ -87,4 +87,22 @@ class CourseSection extends Model {
         return $dropped;
     }
 
+    public static function audit($action, $details, $description) {
+        $audit_user = User::find((int) auth()->user()->id)->getName();
+        AuditLog::create([
+            'user_id' => (int) auth()->user()->id,
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'course_sections',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
+    }
+
 }
