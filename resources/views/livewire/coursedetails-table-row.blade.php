@@ -16,9 +16,11 @@ x-data="{
     <td class="px-6 py-4 whitespace-nowrap">{{ $room }}</td>
     <td class="px-6 py-4 whitespace-nowrap">{{ $timings }}</td>
     <td class="px-6 py-4 whitespace-nowrap">{{ $seiData }}</td> --}}
+    @if($canEdit)
     <td class="svcr-list-item-cell" data-column="select">
         <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = $event.target.checked">
     </td>
+    @endif
     <td class="svcr-list-item-cell" data-column="courseName">
         <div class="svcr-list-item-td">{{ $courseName }}
         </div>
@@ -73,6 +75,7 @@ x-data="{
             {{-- <input x-show="isEditing" type="text" wire:model="seiData" class="svcr-list-item-edit" /> --}}
         </div>
     </td>
+    @if($canEdit)
     <td class="svcr-list-item-cell" data-column="actions">
         <div class="flex items-center svcr-list-item-actions">
             <button x-show="!isEditing" x-cloak @click.prevent="isEditing = true" class="svcr-list-item-action">
@@ -86,4 +89,5 @@ x-data="{
             </button>
         </div>
     </td>
+    @endif
 </tr>

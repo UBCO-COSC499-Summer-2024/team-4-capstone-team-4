@@ -61,11 +61,13 @@
                         @livewire('export-instructor-report')
                     @endif --}}
                 </div>
+                @if($canEdit)
                 <button wire:click="archiveCourses" id="archiveButton" type="button" class="px-5 py-2 mb-2 text-sm font-bold text-center rounded-lg btn-red hover:text-white focus:ring-1 focus:outline-none me-1">
                     <span class="material-symbols-outlined">
                         delete
                     </span>
                 </button>
+                @endif
             @endif
         </div>
         @if($canExport)
@@ -99,7 +101,7 @@
             <div class="overflow-auto max-h-[calc(100vh-200px)]">
                 <div id="tabContent">
                     <table class="min-w-full divide-y divide-gray-200 svcr-table" id="coursesTable">
-                        <livewire:coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" />
+                        <livewire:coursedetails-table-header :sortField="$sortField" :sortDirection="$sortDirection" :canEdit="$canEdit"/>
                         <tbody id="courseTableBody">
                             @if(count($courseSections) > 0)
                                 @foreach ($courseSections as $section)
@@ -116,7 +118,7 @@
                                         :instructorName="$section->instructorName ?? ''"
                                         wire:key="course_details_row_{{$section->name}}"
                                     /> --}}
-                                    <livewire:coursedetails-table-row :course="$section" :key="'course_details_row_'.$section->name" />
+                                    <livewire:coursedetails-table-row :course="$section" :canEdit="$canEdit" :key="'course_details_row_'.$section->name" />
                                 @endforeach
                             @else
                                 <tr>
