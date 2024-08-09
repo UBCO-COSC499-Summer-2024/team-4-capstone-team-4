@@ -9,12 +9,11 @@
     dept: @entangle('dept'),
     selectedId: @entangle('selectedId'),
     clearFilters() {
-        this.selectedFilter = {};
         for (const category in this.filters) {
             this.selectedFilter[category] = [];
         }
         this.search = '';
-        @this.call('clear-filters');
+        @this.dispatch('clear-filters');
     },
     sortColumn(column) {
         if (this.selectedSort === column) {
@@ -85,7 +84,7 @@
                                         x-data="{
                                             category: '{{ $category }}',
                                             item: '{{ $item }}',
-                                            isChecked: false,
+                                            isChecked: selectedFilter['{{ $category }}'].includes('{{ $item }}'),
                                             toggleCheck() {
                                                 this.isChecked = !this.isChecked;
                                                 if (this.isChecked) {
@@ -95,11 +94,6 @@
                                                 }
                                                 @this.dispatch('change-filter', [this.category, this.item, this.isChecked]);
                                             }
-                                        }"
-                                        x-init="() => {
-                                            isChecked = selectedFilter && selectedFilter['{{ $category }}']
-                                                ? selectedFilter['{{ $category }}'].includes('{{ $item }}')
-                                                : false;
                                         }"
                                         x-on:click.stop="toggleCheck()"
                                         >

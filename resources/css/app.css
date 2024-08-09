@@ -754,3 +754,56 @@ a,
     top: 0;
     left: 0;
 }
+
+*[class*="-container"],
+.column.performance-column,
+.course-performance,
+.hours-column,
+.charts-column {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.dark .line-chart-container,
+.dark .department-preview,
+.dark .course-metric,
+.dark .hours-col,
+.dark .leader-board,
+.dark .instructor-preview,
+.dark .chart-container {
+    background: rgba(250, 250, 250, 0.8) !important;
+}
+
+.dark .department-container,
+.dark .instructor-container {
+    color: #555 !important;
+}
+
+.inst-head,
+.inst-item {
+    background: none !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    color: #555 !important;
+}
+
+.course-metric {
+    display: flex;
+    flex-direction: column;
+    justify-items: start;
+}
+
+.dark .department-container td {
+    background: var(--svcr-list-item-bg);
+}
+
+.metric-value {
+    flex: 1 1 100%;
+    /* height: 100%; */
+    margin: 0 !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 50px;
+}

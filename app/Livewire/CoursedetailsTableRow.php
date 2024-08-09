@@ -31,6 +31,7 @@ class CoursedetailsTableRow extends Component {
         'saveItem' => 'saveItem',
         'enableEdit' => 'enableEdit',
         'cancelEdit' => 'cancelEdit',
+        'archiveCourse' => 'archiveCourse',
     ];
 
     protected $rules = [
@@ -112,6 +113,35 @@ class CoursedetailsTableRow extends Component {
                 CourseSection::audit('update error', [
                     'operation_type' => 'UPDATE',
                 ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
+            }
+        }
+    }
+
+    public function archiveCourse($id) {
+        $id = (int) $id;
+        if ($this->id === $id) {
+            try {
+                $course = CourseSection::find($id);
+                $oldValue = $course->toArray();
+                $course->archived = true;
+                $course->save();
+                $this->dispatch('show-toast', [
+                    'message' => 'Course archived successfully',
+                    'type' => 'success'
+                ]);
+                CourseSection::audit('archive success', [
+                    'operation_type' => 'UPDATE',
+                    'old_value' => json_encode($oldValue),
+                    'new_value' => json_encode($course),
+                ], $this->user->getName() . ' archived course successfully');
+            } catch(\Exception $e) {
+                $this->dispatch('show-toast', [
+                    'message' => 'An error occurred while archiving the course',
+                    'type' => 'error'
+                ]);
+                CourseSection::audit('archive error', [
+                    'operation_type' => 'UPDATE',
+                ], $this->user->getName() . ' failed to archive course. Error: ' . $e->getMessage());
             }
         }
     }

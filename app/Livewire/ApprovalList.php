@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Approval;
 use App\Models\ApprovalStatus;
 use App\Models\ApprovalType;
+use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,7 @@ class ApprovalList extends Component
     public $dept;
     public $showApprovalModal = false;
     public $selectedItems = [];
+    public $user;
 
     public $listeners = [
         'sort-selected' => 'sortSelected',
@@ -40,6 +42,7 @@ class ApprovalList extends Component
     ];
 
     public function mount($type) {
+        $this->user = User::find(Auth::id());
         $this->type = $type;
         $this->page_var = $type.'_page';
         $this->getHeaders();
@@ -70,21 +73,20 @@ class ApprovalList extends Component
     }
 
     public function getFilters() {
-        $this->filters = $this->headers->map(function ($header) {
+        $this->filters = collect($this->headers)->map(function ($header) {
             $col = $this->getProperColumn($header['label']);
-            return [$header['label'] => Approval::select($col)->distinct()->get()->pluck($col)];
-        })
-        // ignore the timestamps
-        ->reject(function ($filter) {
-            $key = key($filter);
-            return in_array($this->getProperColumn($key), ['created_at', 'updated_at', 'id', 'status_id']);
+            return [
+                'label' => $header['label'],
+                'values' => Approval::select($col)->distinct()->get()->pluck($col)
+            ];
+        })->reject(function ($filter) {
+            return in_array($this->getProperColumn($filter['label']), ['created_at', 'updated_at', 'id', 'status_id']);
         });
-        // convert to key = value
-        $this->filters = $this->filters->mapWithKeys(function ($filter) {
-            return $filter;
+        $this->filters = collect($this->filters)->mapWithKeys(function ($filter) {
+            return [$filter['label'] => $filter['values']];
         });
-        foreach ($this->filters as $filter) {
-            $this->selectedFilter[key($filter)] = [];
+        foreach ($this->filters as $label => $values) {
+            $this->selectedFilter[$label] = [];
         }
     }
 
@@ -208,15 +210,15 @@ class ApprovalList extends Component
                 UserRole::audit('create', [
                     'operation_type' => 'CREATE',
                     'new_value' => json_encode($assignedRole->getAttributes()),
-                ], $approval->user->getName() . ' assigned to ' . $this->role . ' role by ' . Auth::user()->getName());
+                ], $approval->user->getName() . ' assigned to ' . $this->role . ' role by ' . $this->user->getName());
                 $approval->approve();
             } else if ($action === 'reject') {
                 $approval->reject();
             } else if ($action === 'cancel') {
                 $approval->cancel();
             }
-            $this->closeApprovalModal();
             DB::commit();
+            $this->closeApprovalModal();
         } catch(\Exception $e) {
             DB::rollBack();
             // get the critical message
@@ -228,7 +230,7 @@ class ApprovalList extends Component
 
             Approval::audit($action.' error', [
                 'operation_type' => 'ERROR',
-            ], Auth::user()->getName() . ' encountered an error while trying to ' . $action . ' an approval. \n' . $message);
+            ], $this->user->getName() . ' encountered an error while trying to ' . $action . ' an approval. \n' . $message);
         }
     }
 }

@@ -37,9 +37,11 @@ class CourseDetails extends Component
     public $areaId = null;
     public $pagination;
     public $selectedCourses = []; // Add this line
+    public $coursesSelected = [];
     public $showConfirmationModal = false;
     protected $listeners = [
         'save-changes' => 'saveChanges',
+        'selectCourse' => 'selectCourse',
     ];
 
     public function mount()
@@ -109,6 +111,18 @@ class CourseDetails extends Component
         $this->showConfirmationModal = false;
 
         $this->dispatch('show-archived-summary', ['courses' => $this->archivedCourses]);
+    }
+
+    public function selectCourse($id, $selected) {
+        $id = (int) $id;
+        if ($selected) {
+            $this->selectedCourses[] = $id;
+        } else {
+            $this->selectedCourses = array_diff($this->selectedCourses, [$id]);
+        }
+        // dd($this->coursesSelected);
+
+        // $this->showDeleteButton = count($this->selectedCourses) > 0;
     }
 
     public function render() {

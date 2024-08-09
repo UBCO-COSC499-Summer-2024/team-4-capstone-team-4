@@ -8,6 +8,7 @@ use App\Models\ApprovalStatus;
 use App\Models\ApprovalType;
 use App\Models\AuditLog;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Pluralizer;
 use Livewire\Component;
 
@@ -40,7 +41,7 @@ class ApprovalListItem extends Component {
         if (!$this->options['delete'] || !$this->approval->id === $id) {
             return;
         }
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $old_value = null;
             $item = null;
@@ -64,7 +65,7 @@ class ApprovalListItem extends Component {
                 $item->delete();
 
                 AuditLog::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => Auth::id(),
                     'user_alt' => $audit_user,
                     'action' => 'delete',
                     'description' => 'Deleted '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -86,7 +87,7 @@ class ApprovalListItem extends Component {
             ]);
 
             AuditLog::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::id(),
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'description' => 'Error deleting '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -100,7 +101,7 @@ class ApprovalListItem extends Component {
         if (!$this->options['approve'] || !$this->approval->id === $id) {
             return;
         }
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $old_value = null;
             $item = null;
@@ -125,7 +126,7 @@ class ApprovalListItem extends Component {
             ]);
 
             AuditLog::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::id(),
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'description' => 'Error approving '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -139,7 +140,7 @@ class ApprovalListItem extends Component {
         if (!$this->options['reject'] || !$this->approval->id === $id) {
             return;
         }
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $old_value = null;
             $item = null;
@@ -164,7 +165,7 @@ class ApprovalListItem extends Component {
             ]);
 
             AuditLog::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::id(),
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'description' => 'Error rejecting '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -178,7 +179,7 @@ class ApprovalListItem extends Component {
         if (!$this->options['cancel'] || !$this->approval->id === $id) {
             return;
         }
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $old_value = null;
             $item = null;
@@ -203,7 +204,7 @@ class ApprovalListItem extends Component {
             ]);
 
             AuditLog::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::id(),
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'description' => 'Error cancelling '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -231,7 +232,7 @@ class ApprovalListItem extends Component {
         if (!$this->isEditing || !$this->approval->id === $id) {
             return;
         }
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+        $audit_user = User::find((int) Auth::id())->getName();
         try {
             $old_value = null;
             $item = null;
@@ -257,7 +258,7 @@ class ApprovalListItem extends Component {
                 $this->selected = false;
 
                 AuditLog::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => Auth::id(),
                     'user_alt' => $audit_user,
                     'action' => 'update',
                     'description' => 'Updated '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,
@@ -279,7 +280,7 @@ class ApprovalListItem extends Component {
             ]);
 
             AuditLog::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::id(),
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'description' => 'Error saving '.($this->type === 'all') ? 'approval' : 'approval ' . $this->type.' with ID: '.$id,

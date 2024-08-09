@@ -2,23 +2,10 @@
 x-data="{
     isEditing: @entangle('isEditing'),
     selected: @entangle('selected'),
-    id: @entangle('id')
+    id: '{{ $id }}'
 }">
-    {{-- <td class="px-6 py-4 whitespace-nowrap">
-        <input type="checkbox" wire:model="selectedCourses" value="{{ $sectionId }}" class="form-checkbox">
-    </td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $courseName }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $departmentName }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $instructorName }}</td>
-    <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $enrolledStudents }}</td>
-    <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $droppedStudents }}</td>
-    <td class="px-6 py-4 whitespace-nowrap" contenteditable="false">{{ $courseCapacity }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $room }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $timings }}</td>
-    <td class="px-6 py-4 whitespace-nowrap">{{ $seiData }}</td> --}}
-    @if($canEdit)
     <td class="svcr-list-item-cell" data-column="select">
-        <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = $event.target.checked">
+        <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = !selected">
     </td>
     @endif
     <td class="svcr-list-item-cell" data-column="courseName">
@@ -87,6 +74,10 @@ x-data="{
             <button x-show="isEditing" x-cloak wire:click.prevent="$call('saveItem', {{$id}})" class="svcr-list-item-action">
                 <span class="material-symbols-outlined icon">save</span>
             </button>
+            {{-- archive --}}
+            {{-- <button x-show="!isEditing" x-cloak wire:click.prevent="$call('archiveCourse', {{ $id }})" class="svcr-list-item-action">
+                <span class="material-symbols-outlined icon">archive</span>
+            </button> --}}
         </div>
     </td>
     @endif

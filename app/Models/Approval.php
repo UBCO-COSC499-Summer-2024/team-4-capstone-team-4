@@ -234,9 +234,9 @@ class Approval extends Model
         $history->changed_at = now();
         $history->save();
 
-        $audit_user = User::findOrFail(auth()->user()->id)->getName();
+        $audit_user = User::findOrFail(Auth::id())->getName();
         AuditLog::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'user_alt' => $audit_user,
             'action' => strtolower($remarks) . ' approval',
             'description' => "$audit_user $remarks approval with ID: " . $this->id,
