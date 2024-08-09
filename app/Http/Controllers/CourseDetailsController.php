@@ -188,7 +188,7 @@ public function createTA(Request $request){
         'name' => 'required|string|max:255',
         'rating' => 'required|numeric|min:0|max:5',
     ]);
-
+    
     $ta = new TeachingAssistant();
     $ta->name = $validatedData['name'];
     $ta->rating = $validatedData['rating'];

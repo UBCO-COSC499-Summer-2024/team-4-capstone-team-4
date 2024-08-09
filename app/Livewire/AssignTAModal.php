@@ -14,20 +14,12 @@ class AssignTAModal extends Component
     public $instructors = [];
     public $selectedCourses = [];
     public $selectedTAs = [];
-    public $activeInstructor;
-    public $activeTA;
     public $showModal = false;
     public $showConfirmationModal = false;
-
-    protected $listeners = [
-        'select-ta' => 'selectTA',
-        'select-instructor' => 'selectInstructor',
-    ];
 
     public function mount()
     {
         $this->loadData();
-        $this->resetForm();
     }
 
     public function loadData()
@@ -36,18 +28,6 @@ class AssignTAModal extends Component
         $this->instructors = User::whereHas('roles', function ($query) {
             $query->where('role', 'instructor');
         })->get();
-    }
-
-    public function selectTA($taId)
-    {
-        dd($taId, 'ta');
-        $this->selectedTAs[] = ['ta_id' => $taId, 'instructor_id' => '', 'course_id' => ''];
-    }
-
-    public function selectInstructor($instructorId)
-    {
-        dd($instructorId, 'instructor');
-        $this->instructors[] = ['instructor_id' => $instructorId, 'course_id' => ''];
     }
 
     public function openModal()
@@ -80,7 +60,9 @@ class AssignTAModal extends Component
 
             if ($taId && $instructorId && $courseId) {
                 $courseSection = CourseSection::find($courseId);
-                $courseSection->teachingAssistants()->attach($taId);
+                if ($courseSection) {
+                    $courseSection->teachingAssistants()->attach($taId);
+                }
             }
         }
 
@@ -101,41 +83,48 @@ class AssignTAModal extends Component
 
     public function updatedSelectedTAs($value, $name)
     {
+        Log::info('updatedSelectedTAs triggered: ', ['value' => $value, 'name' => $name]);
         if (str_contains($name, 'instructor_id')) {
-            $index = explode('.', $name)[1];
-            $this->updateCourses($index);
+            $parts = explode('.', $name);
+            if (isset($parts[1])) {
+                $index = (int)$parts[1];
+                Log::info('Instructor changed, updating courses for index: ', ['index' => $index]);
+                $this->updateCourses($index);
+            }
         }
     }
-
     public function updateCourses($index)
-    {
-        $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
-        dd($index, $instructorId);
-        if ($instructorId) {
-            $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
-                $query->where('instructor_id', $instructorId);
-            })->get();
+{
+    $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
+    Log::info('Updating courses for instructor: ', ['index' => $index, 'instructor_id' => $instructorId]);
+    if ($instructorId) {
+        $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+            $query->where('instructor_id', $instructorId);
+        })->get();
+        Log::info('Fetched courses from DB: ', ['courses' => $courses]);
 
-            $formattedCourses = $courses->map(function($course) {
-                return [
-                    'id' => $course->id,
-                    'formattedName' => sprintf('%s %s %s - %s%s %s',
-                        $course->prefix,
-                        $course->number,
-                        $course->section,
-                        $course->year,
-                        $course->session,
-                        $course->term
-                    )
-                ];
-            })->toArray();
+        $formattedCourses = $courses->map(function($course) {
+            return [
+                'id' => $course->id,
+                'formattedName' => sprintf('%s %s %s - %s%s %s',
+                    $course->prefix,
+                    $course->number,
+                    $course->section,
+                    $course->year,
+                    $course->session,
+                    $course->term
+                )
+            ];
+        })->toArray();
 
-            $this->selectedCourses[$index] = $formattedCourses;
-            Log::info('Fetched courses: ', $formattedCourses);
-        } else {
-            $this->selectedCourses[$index] = [];
-        }
+        $this->selectedCourses[$index] = $formattedCourses;
+        Log::info('Formatted courses: ', ['index' => $index, 'courses' => $formattedCourses]);
+    } else {
+        $this->selectedCourses[$index] = [];
+        Log::info('No instructor selected, cleared courses for index: ', ['index' => $index]);
     }
+}
+
 
     public function render()
     {

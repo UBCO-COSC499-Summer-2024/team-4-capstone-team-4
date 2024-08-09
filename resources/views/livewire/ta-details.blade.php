@@ -16,16 +16,15 @@
          @endif
          <button id="AssignTAsButton" type="button" 
              class="ubc-blue hover:text-white focus:ring-1 focus:outline-none font-bold rounded-lg text-sm px-5 py-2 text-center me-1 mb-2" 
-             {{-- onclick="window.location.href='http://localhost/upload-file/assign-tas'" --}}
-             wire:click="{{route('upload.file.assign.tas')}}"
-             >
-             Assign TAs
+             onclick="window.location.href='http://localhost/upload-file/assign-tas'"
+             wire:click="{{route('upload.file.assign.tas')}}">
+             Assign TAs via CSV
          </button>
+        </div>
         <div class="flex justify-between items-center mb-2">
-        </div>
-        <div class="flex-grow">
-            <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for TAs..." class="search-bar block p-2 text-sm text-gray-900 w-full rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" />
-        </div>
+            <div class="flex-grow">
+                <input type="text" id="searchInput" wire:model.live="searchTerm" placeholder="Search for TAs..." class="search-bar block p-2 text-sm text-gray-900 w-80 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"/>
+            </div>
         @if($canEdit)
             <div class="flex items-center space-x-2">
                 <div class="filter-area">
