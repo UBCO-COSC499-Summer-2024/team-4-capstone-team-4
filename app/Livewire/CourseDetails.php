@@ -19,60 +19,116 @@ use Illuminate\Support\Facades\Http;
 class CourseDetails extends Component
 {
     public $ids = [];
+    public $courses = [];
     public $courseNames = [];
     public $enrolledStudents = [];
     public $droppedStudents = [];
+    public $archivedCourses = [];
     public $courseCapacities = [];
-    
+
     use WithPagination;
 
-    public $sortField = 'courseName'; // default 
+    public $sortField = 'courseName'; // default
     public $sortDirection = 'asc'; //default
+    public $showDeleteButton = false;
+    public $user;
 
     public $searchTerm = '';
     public $areaId = null;
     public $pagination;
     public $selectedCourses = []; // Add this line
+    public $showConfirmationModal = false;
     protected $listeners = [
         'save-changes' => 'saveChanges',
     ];
 
     public function mount()
     {
+        $this->user = User::find(Auth::id());
         $this->loadCourses();
     }
 
     public function saveChanges()
     {
-        $response = Http::post(route('courses.details.save'), [
-            
-            'courseNames' => $this->courseNames,
-            'enrolledStudents' => $this->enrolledStudents,
-            'droppedStudents' => $this->droppedStudents,
-            'courseCapacities' => $this->courseCapacities,
-        ]);
+        // $response = Http::post(route('courses.details.save'), [
 
-        if ($response->successful()) {
-            $data = $response->json();
+        //     'courseNames' => $this->courseNames,
+        //     'enrolledStudents' => $this->enrolledStudents,
+        //     'droppedStudents' => $this->droppedStudents,
+        //     'courseCapacities' => $this->courseCapacities,
+        // ]);
 
-            // Handle success
-            $this->dispatch('show-toast', [
-                'message' => 'Courses updated successfully.',
-                'type' => 'success'
-            ]);
+        // if ($response->successful()) {
+        //     $data = $response->json();
 
-            // Optionally refresh data or handle other actions
-        } else {
-            // Handle error
+        //     // Handle success
+        //     $this->dispatch('show-toast', [
+        //         'message' => 'Courses updated successfully.',
+        //         'type' => 'success'
+        //     ]);
+
+        //     // Optionally refresh data or handle other actions
+        // } else {
+        //     // Handle error
+        //     $this->dispatch('show-toast', [
+        //         'message' => 'Failed to update courses.',
+        //         'type' => 'error'
+        //     ]);
+        // }
+        try {
+            $courseSections = CourseSection::whereIn('id', $this->ids)->get();
+            $oldValue = $courseSections->toArray();
+            $updatedSections = [];
+            $errors = [];
+            foreach ($courseSections as $courseSection) {
+                try {
+                    $courseSection->update([
+                        'enroll_end' => $this->enrolledStudents[$courseSection->id],
+                        'dropped' => $this->droppedStudents[$courseSection->id],
+                        'capacity' => $this->courseCapacities[$courseSection->id],
+                    ]);
+                    $updatedSections[] = $courseSection;
+                } catch (\Exception $e) {
+                    Log::error('Failed to update course section:', ['id' => $courseSection->id, 'error' => $e->getMessage()]);
+                    $errors[] = "Error updating course: {$courseSection->prefix} {$courseSection->number} {$courseSection->section} - Error: {$e->getMessage()}";
+                }
+            }
+
+            if (!empty($errors)) {
+                $this->dispatch('show-toast', [
+                    'message' => 'Some courses were updated, but errors occurred for others. Please check the log for details.',
+                    'type' => 'warning'
+                ]);
+                CourseSection::audit('warning', [
+                    'operation_type' => 'UPDATE',
+                    'old_value' => json_encode($oldValue),
+                    'new_value' => json_encode($updatedSections),
+                    'errors' => $errors
+                ], $this->user->getName() . ' updated some courses, but encountered errors.');
+            } else {
+                $this->loadCourses();
+                $this->dispatch('show-toast', [
+                    'message' => 'Courses updated successfully.',
+                    'type' => 'success'
+                ]);
+                CourseSection::audit('success', [
+                    'operation_type' => 'UPDATE',
+                ], $this->user->getName() . ' updated courses successfully.');
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
             $this->dispatch('show-toast', [
                 'message' => 'Failed to update courses.',
                 'type' => 'error'
             ]);
+            CourseSection::audit('error', [
+                'operation_type' => 'UPDATE',
+            ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
         }
     }
 
     public function showConfirmation()
-    {  
+    {
         $this->showConfirmationModal = true;
     }
 
@@ -89,9 +145,9 @@ class CourseDetails extends Component
     public function archiveCourses()
     {
         $archivedCourses = CourseSection::whereIn('id', $this->selectedCourses)->get(['prefix', 'number', 'section', 'year', 'session', 'term']);
-    
+
         CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => true]);
-    
+
         $this->archivedCourses = $archivedCourses->map(function($course) {
             return sprintf('%s %s %s - %s%s %s',
                 $course->prefix,
@@ -102,18 +158,17 @@ class CourseDetails extends Component
                 $course->term
             );
         })->toArray();
-    
+
         $this->loadCourses();
         $this->selectedCourses = [];
         $this->showDeleteButton = false;
         $this->showConfirmationModal = false;
-    
+
         $this->dispatch('show-archived-summary', ['courses' => $this->archivedCourses]);
     }
 
-    public function render()
-    {
-        $user = Auth::user();
+    public function render() {
+        $user = User::find(Auth::id());
         if ($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])) {
             $userRole = 'instructor';
         } else {
