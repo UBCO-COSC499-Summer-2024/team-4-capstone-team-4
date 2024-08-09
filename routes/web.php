@@ -155,14 +155,14 @@ Route::middleware([
     Route::get('/dashboard/{switch}', [ChartController::class, 'showChart'])->name('switch-dashboard');
 });
 
- Route::middleware([
+Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->prefix('/courses')->group(function () {
     Route::get('/details/{user}', [CourseDetailsController::class, 'show'])->where('user', '[0-9]+')->name('courses.details.id');
     Route::post('/assign-course', [CourseDetailsController::class, 'assignCourse'])->name('assign-course');
-    Route::post('/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
+    Route::post('/details/save', [CourseDetailsController::class, 'save'])->name('courses.details.save');
     Route::post('/create-ta', [CourseDetailsController::class, 'createTA'])->name('createTA');
     Route::get('/export/pdf', [CourseDetailsController::class, 'exportPDF'])->name('export.pdf');
     Route::get('/export/csv', [CourseDetailsController::class, 'exportCSV'])->name('export.csv');

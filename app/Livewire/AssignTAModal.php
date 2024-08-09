@@ -14,20 +14,12 @@ class AssignTAModal extends Component
     public $instructors = [];
     public $selectedCourses = [];
     public $selectedTAs = [];
-    public $activeInstructor;
-    public $activeTA;
     public $showModal = false;
     public $showConfirmationModal = false;
-
-    protected $listeners = [
-        'select-ta' => 'selectTA',
-        'select-instructor' => 'selectInstructor',
-    ];
 
     public function mount()
     {
         $this->loadData();
-        $this->resetForm();
     }
 
     public function loadData()
@@ -36,18 +28,6 @@ class AssignTAModal extends Component
         $this->instructors = User::whereHas('roles', function ($query) {
             $query->where('role', 'instructor');
         })->get();
-    }
-
-    public function selectTA($taId)
-    {
-        dd($taId, 'ta');
-        $this->selectedTAs[] = ['ta_id' => $taId, 'instructor_id' => '', 'course_id' => ''];
-    }
-
-    public function selectInstructor($instructorId)
-    {
-        dd($instructorId, 'instructor');
-        $this->instructors[] = ['instructor_id' => $instructorId, 'course_id' => ''];
     }
 
     public function openModal()
@@ -80,12 +60,15 @@ class AssignTAModal extends Component
 
             if ($taId && $instructorId && $courseId) {
                 $courseSection = CourseSection::find($courseId);
-                $courseSection->teachingAssistants()->attach($taId);
+                if ($courseSection) {
+                    $courseSection->teachingAssistants()->attach($taId);
+                }
             }
         }
 
         $this->closeModal();
         $this->openConfirmationModal();
+        $this->emit('taAssigned');
     }
 
     public function addMore()
@@ -100,45 +83,57 @@ class AssignTAModal extends Component
     }
 
     public function updatedSelectedTAs($value, $name)
-    {
-        if (str_contains($name, 'instructor_id')) {
-            $index = explode('.', $name)[1];
-            $this->updateCourses($index);
-        }
+{
+    Log::info('updatedSelectedTAs triggered:', ['value' => $value, 'name' => $name]);
+
+    if (str_contains($name, 'instructor_id')) {
+        $id = (int) explode('.', $name)[1];  // Extracting the numeric index
+        Log::info('Instructor changed, updating courses for index:', ['index' => $id]);
+        $this->updateCourses($id);
     }
+}
+public function updateCourses($index)
+{
+    $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
+    $taId = $this->selectedTAs[$index]['ta_id'] ?? null;
 
-    public function updateCourses($index)
-    {
-        $instructorId = $this->selectedTAs[$index]['instructor_id'] ?? null;
-        dd($index, $instructorId);
-        if ($instructorId) {
-            $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
-                $query->where('instructor_id', $instructorId);
-            })->get();
+    if ($instructorId && $taId) {
+        // Fetch courses assigned to both the selected instructor and TA
+        $courses = CourseSection::whereHas('teaches', function ($query) use ($instructorId) {
+            $query->where('instructor_id', $instructorId);
+        })
+        ->whereHas('teachingAssistants', function ($query) use ($taId) {
+            $query->where('ta_id', $taId);
+        })
+        ->get();
 
-            $formattedCourses = $courses->map(function($course) {
-                return [
-                    'id' => $course->id,
-                    'formattedName' => sprintf('%s %s %s - %s%s %s',
-                        $course->prefix,
-                        $course->number,
-                        $course->section,
-                        $course->year,
-                        $course->session,
-                        $course->term
-                    )
-                ];
-            })->toArray();
+        $formattedCourses = $courses->map(function ($course) {
+            return [
+                'id' => $course->id,
+                'formattedName' => sprintf('%s %s %s - %s%s %s',
+                    $course->prefix,
+                    $course->number,
+                    $course->section,
+                    $course->year,
+                    $course->session,
+                    $course->term
+                ),
+            ];
+        })->toArray();
 
-            $this->selectedCourses[$index] = $formattedCourses;
-            Log::info('Fetched courses: ', $formattedCourses);
-        } else {
-            $this->selectedCourses[$index] = [];
-        }
+        $this->selectedCourses[$index] = $formattedCourses;
+        Log::info('Fetched courses for instructor ID ' . $instructorId . ' and TA ID ' . $taId, $formattedCourses);
+    } else {
+        $this->selectedCourses[$index] = [];
+        Log::info('No valid instructor or TA selected, cleared courses for index: ' . $index);
     }
+}
+
+
 
     public function render()
     {
         return view('livewire.assign-t-a-modal');
     }
+   
     }

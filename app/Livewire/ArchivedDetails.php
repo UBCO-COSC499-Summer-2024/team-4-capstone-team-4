@@ -14,61 +14,22 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Area;
 use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 
-class CourseDetails extends Component
+class ArchivedDetails extends Component
 {
-    public $ids = [];
-    public $courses = [];
-    public $courseNames = [];
-    public $enrolledStudents = [];
-    public $droppedStudents = [];
-    public $archivedCourses = [];
-    public $courseCapacities = [];
-
     use WithPagination;
 
-    public $sortField = 'courseName'; // default
+    public $sortField = 'courseName'; // default 
     public $sortDirection = 'asc'; //default
-    public $showDeleteButton = false;
-    public $user;
 
     public $searchTerm = '';
     public $areaId = null;
     public $pagination;
-    public $selectedCourses = []; // Add this line
-    public $showConfirmationModal = false;
-    protected $listeners = [
-        'save-changes' => 'saveChanges',
-    ];
+    public $selectedCourses = [];
 
     public function mount()
     {
-        $this->user = User::find(Auth::id());
         $this->loadCourses();
-    }
-
-    public function saveChanges()
-    {
-        try {
-            // $response = Http::post(route('courses.details.save'), [
-
-            //     'courseNames' => $this->courseNames,
-            //     'enrolledStudents' => $this->enrolledStudents,
-            //     'droppedStudents' => $this->droppedStudents,
-            //     'courseCapacities' => $this->courseCapacities,
-            // ]);
-            dd($this->courseNames, $this->enrolledStudents, $this->droppedStudents, $this->courseCapacities);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to update courses.',
-                'type' => 'error'
-            ]);
-            CourseSection::audit('update error', [
-                'operation_type' => 'UPDATE',
-            ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
-        }
     }
 
     public function showConfirmation()
@@ -83,36 +44,23 @@ class CourseDetails extends Component
 
     public function loadCourses()
     {
-        $this->courses = CourseSection::where('archived', false)->get(); // Load only unarchived courses
+        $this->courses = CourseSection::where('archived', true)->get(); // Load only archived courses
     }
 
-    public function archiveCourses()
-    {
-        $archivedCourses = CourseSection::whereIn('id', $this->selectedCourses)->get(['prefix', 'number', 'section', 'year', 'session', 'term']);
+    public function unarchiveCourses()
+{
+    if (!empty($this->selectedCourses)) {
+        CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => false]);
 
-        CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => true]);
-
-        $this->archivedCourses = $archivedCourses->map(function($course) {
-            return sprintf('%s %s %s - %s%s %s',
-                $course->prefix,
-                $course->number,
-                $course->section,
-                $course->year,
-                $course->session,
-                $course->term
-            );
-        })->toArray();
-
+        // Reload courses after unarchiving
         $this->loadCourses();
-        $this->selectedCourses = [];
-        $this->showDeleteButton = false;
-        $this->showConfirmationModal = false;
-
-        $this->dispatch('show-archived-summary', ['courses' => $this->archivedCourses]);
+        $this->selectedCourses = []; 
     }
+}
 
-    public function render() {
-        $user = User::find(Auth::id());
+    public function render()
+    {
+        $user = Auth::user();
         if ($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])) {
             $userRole = 'instructor';
         } else {
@@ -123,7 +71,7 @@ class CourseDetails extends Component
         $areaId = $this->areaId;
 
         $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user'])
-            ->where('archived', false) // Only show unarchived courses
+            ->where('archived', true) // Only show archived courses
             ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
                 $queryBuilder->whereHas('teaches', function ($query) use ($user) {
                     $query->where('instructor_id', $user->roles->where('role', 'instructor')->first()->id);
@@ -138,7 +86,7 @@ class CourseDetails extends Component
                 $queryBuilder->where('area_id', $areaId);
             })->orderBy('updated_at', 'desc');
 
-        //pagination
+        // Pagination
         switch ($this->pagination) {
             case 25:
                 $courseSections = $courseSectionsQuery->paginate(25);
@@ -170,12 +118,8 @@ class CourseDetails extends Component
                 $section->term
             );
 
-            // if no instructor is assigned, display 'No Instructors'
-            if (empty($section->teaches)) {
-                $instructorName = 'No Instructors';
-            } else {
-                $instructorName = $section->teaches->instructor->user->getName();
-            }
+            // If no instructor is assigned, display 'No Instructors'
+            $instructorName = empty($section->teaches) ? 'No Instructors' : $section->teaches->instructor->user->getName();
 
             $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
 
@@ -199,7 +143,7 @@ class CourseDetails extends Component
         $sortDirection = $this->sortDirection;
         $courses = CourseSection::all();
 
-        return view('livewire.course-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'courses'));
+        return view('livewire.archived-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'courses'));
     }
 
     private function calculateAverageRating($questionsJson)
@@ -219,7 +163,7 @@ class CourseDetails extends Component
     {
         // Your CSV export logic here
         $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])
-            ->where('archived', false) // Only export unarchived courses
+            ->where('archived', true) // Export only archived courses
             ->get();
 
         // Convert data to CSV format
@@ -239,10 +183,9 @@ class CourseDetails extends Component
             $csvData .= "{$formattedName},{$section->area->name},{$section->teaches->instructor->user->getName()},{$section->enroll_end},{$section->dropped},{$section->capacity},{$averageRating}\n";
         }
 
-        $csvFileName = 'unarchived_courses.csv';
+        $csvFileName = 'archived_courses.csv';
         return response($csvData)
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', "attachment; filename={$csvFileName}");
     }
-
 }

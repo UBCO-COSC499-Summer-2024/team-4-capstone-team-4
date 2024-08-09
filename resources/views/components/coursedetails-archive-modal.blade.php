@@ -27,10 +27,13 @@
         const confirmationModal = document.getElementById('confirmationModal');
         const confirmYesButton = document.getElementById('confirmYesButton');
         const confirmNoButton = document.getElementById('confirmNoButton');
+        const deleteButton = document.querySelector('#deleteButton');
 
-        document.querySelector('#deleteButton').addEventListener('click', function () {
-            confirmationModal.classList.remove('hidden');
-        });
+        if (deleteButton) {
+            deleteButton.addEventListener('click', function () {
+                confirmationModal.classList.remove('hidden');
+            });
+        }
 
         confirmYesButton.addEventListener('click', function () {
             Livewire.emit('confirmArchiveCourses'); // Use Livewire.emit to trigger the event

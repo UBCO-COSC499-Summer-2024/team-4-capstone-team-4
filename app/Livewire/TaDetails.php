@@ -19,16 +19,16 @@ class TaDetails extends Component
 {
     use WithPagination;
 
-    public $sortField = 'taName'; // default 
+    public $sortField = 'taName'; // default
     public $sortDirection = 'asc'; //default
 
     public $searchTerm = '';
     public $areaId = null;
-    public $pagination; 
+    public $pagination;
 
     public function render()
     {
-        $user = Auth::user();
+        $user = User::find(Auth::id());
         if($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])){
             $userRole = 'instructor';
         }else{
@@ -71,7 +71,7 @@ class TaDetails extends Component
             case 'all':
                 $tas = $tasQuery->get();
                 break;
-            default: 
+            default:
                 $tas = $tasQuery->paginate(10);
                 break;
         }
@@ -89,11 +89,11 @@ class TaDetails extends Component
                 })->implode(', ')
             ];
         });
-    
+
         $sortField = 'courseName';
         $sortDirection = 'asc';
         $courses = CourseSection::all();
-    
+
         return view('livewire.ta-details', compact('sortField', 'sortDirection', 'areaId', 'areas', 'tas', 'courses'));
     }
 
@@ -102,12 +102,12 @@ class TaDetails extends Component
             'name' => 'required|string|max:255',
             'rating' => 'required|numeric|min:0|max:5',
         ]);
-    
+
         $ta = new TeachingAssistant();
         $ta->name = $validatedData['name'];
         $ta->rating = $validatedData['rating'];
         $ta->save();
-    
+
         return response()->json(['message' => 'TA created successfully.', 'ta' => $ta]);
     }
 
@@ -115,13 +115,13 @@ class TaDetails extends Component
         $taId = $request->input('ta_id');
         $instructorId = $request->input('instructor_id');
         $courseId = $request->input('course_id');
-    
+
         // Logic to assign the TA to the course
         $courseSection = CourseSection::find($courseId);
         if ($courseSection) {
             $courseSection->teachingAssistants()->attach($taId);
         }
-    
+
         // Fetch updated TA data
         $tas = TeachingAssistant::with(['courseSections.teaches.instructor.user'])
             ->get()
@@ -137,7 +137,7 @@ class TaDetails extends Component
                     })->implode(', ')
                 ];
             });
-    
+
         return response()->json($tas);
     }
 }

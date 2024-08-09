@@ -20,43 +20,47 @@ class ExportDepartmentReport extends Component
     }
 
     public function fetchCourseSections()
-    {
-        $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user', 'seiData'])->get();
+{
+    $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user', 'seiData'])
+        ->where('archived', false) // Only include unarchived courses
+        ->get();
 
-        $this->courseSections = $courseSectionsQuery->map(function ($section) {
-            $seiData = $section->seiData->first() ?? null;
-            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+    $this->courseSections = $courseSectionsQuery->map(function ($section) {
+        $seiData = $section->seiData ?? null;
+        $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
 
-            $formattedName = sprintf('%s %s %s - %s%s %s',
-                $section->prefix,
-                $section->number,
-                $section->section,
-                $section->year,
-                $section->session,
-                $section->term
-            );
+        $formattedName = sprintf('%s %s %s - %s%s %s',
+            $section->prefix,
+            $section->number,
+            $section->section,
+            $section->year,
+            $section->session,
+            $section->term
+        );
 
-            $instructorName = 'No Instructors';
-            if ($section->teaches && $section->teaches->instructor && $section->teaches->instructor->user) {
-                $instructorName = $section->teaches->instructor->user->getName();
-            }
+        $instructorName = 'No Instructors';
+        if ($section->teaches && $section->teaches->instructor && $section->teaches->instructor->user) {
+            $instructorName = $section->teaches->instructor->user->getName();
+        }
 
-            $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
+        $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
 
-            return [
-                'id' => $section->id,
-                'formattedName' => $formattedName,
-                'departmentName' => $section->area->name ?? 'Unknown',
-                'instructorName' => $instructorName,
-                'enrolled' => $section->enroll_end,
-                'dropped' => $section->dropped,
-                'room' => $section->room,
-                'timings' => $timings,
-                'capacity' => $section->capacity,
-                'averageRating' => $averageRating,
-            ];
-        })->toArray();
-    }
+        return [
+            'id' => $section->id,
+            'formattedName' => $formattedName,
+            'departmentName' => $section->area->name ?? 'Unknown',
+            'instructorName' => $instructorName,
+            'enrolled' => $section->enroll_end,
+            'dropped' => $section->dropped,
+            'room' => $section->room,
+            'timings' => $timings,
+            'capacity' => $section->capacity,
+            'averageRating' => $averageRating,
+        ];
+    })->toArray();
+}
+
+
 
     public function exportCSV()
     {
