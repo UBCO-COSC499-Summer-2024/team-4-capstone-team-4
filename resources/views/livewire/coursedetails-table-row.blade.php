@@ -7,7 +7,6 @@ x-data="{
     <td class="svcr-list-item-cell" data-column="select">
         <input type="checkbox" wire:model="selected" value="{{ $id }}" class="form-checkbox" @change="selected = !selected">
     </td>
-    @endif
     <td class="svcr-list-item-cell" data-column="courseName">
         <div class="svcr-list-item-td">{{ $courseName }}
         </div>
