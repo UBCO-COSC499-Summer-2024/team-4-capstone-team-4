@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Mail\ApprovalUpdate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Event\Telemetry\System;
 
 class Approval extends Model
@@ -80,6 +82,17 @@ class Approval extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function approver() {
+        return $this->belongsTo(UserRole::class, 'approved_by');
+    }
+
+
+
+    /**
+     * Get the user associated with the approval.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function rejectedBy() {
         return $this->belongsTo(UserRole::class, 'rejected_by');
     }
@@ -140,6 +153,11 @@ class Approval extends Model
 
         $this->logHistory($this->status_id, 'Approved');
 
+        // if required approvals is 1 don't send since fialize approval will send the notification
+        if ($this->approvalType->approvals_required > 1) {
+            $this->sendApprovalNotification();
+        }
+
         if ($this->status_id == $approvedStatus->id) {
             $this->finalizeApproval();
         }
@@ -155,6 +173,8 @@ class Approval extends Model
         $this->active = false;
         $this->save();
 
+        $this->sendApprovalNotification();
+
         $this->logHistory($this->status_id, 'Rejected');
     }
 
@@ -162,6 +182,8 @@ class Approval extends Model
         $this->status_id = ApprovalStatus::where('name', 'cancelled')->first()->id;
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Cancelled');
     }
@@ -172,6 +194,8 @@ class Approval extends Model
         $this->approved_by = Auth::id();
         $this->active = false;
         $this->save();
+
+        $this->sendApprovalNotification();
 
         $this->logHistory($this->status_id, 'Finalized');
     }
@@ -210,9 +234,9 @@ class Approval extends Model
         $history->changed_at = now();
         $history->save();
 
-        $audit_user = User::findOrFail(auth()->user()->id)->getName();
+        $audit_user = User::findOrFail(Auth::id())->getName();
         AuditLog::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::id(),
             'user_alt' => $audit_user,
             'action' => strtolower($remarks) . ' approval',
             'description' => "$audit_user $remarks approval with ID: " . $this->id,
@@ -244,5 +268,9 @@ class Approval extends Model
 
     public function log_audit($action, $details, $description) {
         self::audit($action, $details, $description);
+    }
+
+    public function sendApprovalNotification() {
+        Mail::to($this->user->email)->send(new ApprovalUpdate($this));
     }
 }

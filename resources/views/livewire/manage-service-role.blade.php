@@ -161,7 +161,8 @@
                                     placeholder="ex. LIB 123 B"
                                     x-show="!isEditing"
                                     x-cloak
-                                    x-bind:disabled="true" value="{{ trim($roomB . ' ' . $roomN . ' ' . $roomS) ?? 'Not Assgined' }}">
+                                    x-bind:disabled="true"
+                                    value="{{ trim($room) ?? 'Not Assgined' }}">
                                 <div x-show="isEditing" x-cloak class="flex items-center justify-start gap-2">
                                     <input type="text" class="form-input !min-w-8 !max-w-16"
                                         id="roomB"

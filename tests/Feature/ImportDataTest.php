@@ -74,6 +74,8 @@ class ImportDataTest extends TestCase
             ->assertSee('Session')
             ->assertSee('Term')
             ->assertSee('Year')
+            ->assertSee('Room')
+            ->assertSee('Time')
             ->assertSee('Enrolled (Start)')
             ->assertSee('Enrolled (End)')
             ->assertSee('Capacity');
@@ -107,7 +109,8 @@ class ImportDataTest extends TestCase
             ->set('rows.0.term', '1')
             ->set('rows.0.year', 2024)
             ->set('rows.0.room', 'FIB200')
-            ->set('rows.0.time', '12:00')
+            ->set('rows.0.time_start', '12:00')
+            ->set('rows.0.time_end', '15:00')
             ->set('rows.0.enroll_start', 30)
             ->set('rows.0.enroll_end', 25)
             ->set('rows.0.capacity', 40)
@@ -126,7 +129,8 @@ class ImportDataTest extends TestCase
             'term' => '1',
             'year' => 2024,
             'room' => 'FIB200',
-            'time' => '12:00',
+            'time_start' => '12:00',
+            'time_end' => '15:00',
             'enroll_start' => 30,
             'enroll_end' => 25,
             'capacity' => 40,
@@ -149,7 +153,8 @@ class ImportDataTest extends TestCase
             ->set('rows.0.term', '')
             ->set('rows.0.year', '')
             ->set('rows.0.room', '')
-            ->set('rows.0.time', '')
+            ->set('rows.0.time_start', '')
+            ->set('rows.0.time_start', '')
             ->set('rows.0.enroll_start', '')
             ->set('rows.0.enroll_end', '')
             ->set('rows.0.capacity', '')
@@ -162,7 +167,8 @@ class ImportDataTest extends TestCase
                 'rows.0.term' => 'required',
                 'rows.0.year' => 'required',
                 'rows.0.room' => 'required',
-                'rows.0.time' => 'required',
+                'rows.0.time_start' => 'required',
+                'rows.0.time_start' => 'required',
                 'rows.0.enroll_start' => 'required',
                 'rows.0.enroll_end' => 'required',
                 'rows.0.capacity' => 'required',
@@ -193,7 +199,8 @@ class ImportDataTest extends TestCase
             'area_id' => $area->id,
             'year' => 2010,
             'room' => 'FIB200',
-            'time' => '12:00',
+            'time_start' => '12:00',
+            'time_end' => '15:00',
             'enroll_start' => 50,
             'enroll_end' => 25,
             'dropped' => 5,
@@ -242,7 +249,8 @@ class ImportDataTest extends TestCase
             'area_id' => $area->id,
             'year' => 2010,
             'room' => 'FIB200',
-            'time' => '12:00',
+            'time_start' => '12:00',
+            'time_end' => '15:00',
             'enroll_start' => 50,
             'enroll_end' => 25,
             'dropped' => 5,

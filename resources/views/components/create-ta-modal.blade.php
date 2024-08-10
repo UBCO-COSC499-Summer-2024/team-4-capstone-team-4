@@ -1,4 +1,4 @@
-<div id="createTAModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+{{-- <div id="createTAModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -7,16 +7,23 @@
                 <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">Create New TA</h3>
             </div>
             <div class="bg-white p-6">
-                <form id="createTAForm" method="POST" action="{{ route('createTA') }}">
+                <form id="createTAForm">
                     @csrf
-                    <div class="mb-4">
-                        <label for="taName" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" id="taName" name="name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <div id="taFieldsContainer">
+                        <div class="taFieldsBlock flex space-x-4 mb-4">
+                            <div class="flex-1">
+                                <label for="taName" class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" id="taName" name="name[]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm input-bordered" required>
+                            </div>
+                            <div class="flex-1">
+                                <label for="taRating" class="block text-sm font-medium text-gray-700">Rating</label>
+                                <input type="number" id="taRating" name="rating[]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm input-bordered" min="0" max="5" step="0.1" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="taRating" class="block text-sm font-medium text-gray-700">Rating</label>
-                        <input type="number" id="taRating" name="rating" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" min="0" max="5" step="0.1" required>
-                    </div>
+                    <button type="button" id="addMoreTAFields" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                        Add More
+                    </button>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-custom-green text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Save
@@ -91,11 +98,11 @@
     const taAddedConfirmationModal = document.getElementById('taAddedConfirmationModal');
     const confirmYesButton = document.getElementById('confirmYesButton');
     const confirmNoButton = document.getElementById('confirmNoButton');
-    const okButton = document.getElementById('okButton');
-    const assignMoreButton = document.getElementById('assignMoreButton');
     const assignTABtn = document.getElementById('assignTABtn');
     const addAnotherTABtn = document.getElementById('addAnotherTABtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
+    const addMoreTAFields = document.getElementById('addMoreTAFields');
+    const taFieldsContainer = document.getElementById('taFieldsContainer');
 
     function openCreateTAModal() {
         console.log("Opening create TA modal");
@@ -105,6 +112,7 @@
     function closeCreateTAModal() {
         console.log("Closing create TA modal");
         createTAModal.classList.add('hidden');
+        resetForm();
     }
 
     function openInitialConfirmationModal() {
@@ -125,6 +133,12 @@
     function closeTAAddedConfirmationModal() {
         console.log("Closing TA added confirmation modal");
         taAddedConfirmationModal.classList.add('hidden');
+    }
+
+    function resetForm() {
+        const firstBlock = document.querySelector('.taFieldsBlock').cloneNode(true);
+        taFieldsContainer.innerHTML = '';
+        taFieldsContainer.appendChild(firstBlock);
     }
 
     if (createNewTAButton) {
@@ -166,15 +180,6 @@
         closeInitialConfirmationModal();
     });
 
-    okButton.addEventListener('click', function() {
-        location.reload();
-    });
-
-    assignMoreButton.addEventListener('click', function() {
-        closeTAAddedConfirmationModal();
-        openCreateTAModal();
-    });
-
     assignTABtn.addEventListener('click', function() {
         closeTAAddedConfirmationModal();
         document.getElementById('assignTAButton').click();
@@ -188,6 +193,12 @@
     closeModalBtn.addEventListener('click', function() {
         closeTAAddedConfirmationModal();
     });
+
+    // Add more TA fields
+    addMoreTAFields.addEventListener('click', function() {
+        const newBlock = document.querySelector('.taFieldsBlock').cloneNode(true);
+        taFieldsContainer.appendChild(newBlock);
+    });
 });
 
-</script>
+</script> --}}

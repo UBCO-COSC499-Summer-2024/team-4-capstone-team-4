@@ -5,6 +5,7 @@
         activeTab: @entangle('activeTab'),
         setActiveTab(tab) {
             this.activeTab = tab;
+            $dispatch('tab-changed', { tab: tab });
         }
     }">
     <nav class="flex flex-wrap w-full list-none border-b border-gray-200 mb-px-2">
@@ -24,17 +25,12 @@
     <div class="w-full mt-5">
         @foreach ($tabs as $tab => $tabItem)
             @if ($activeTab === $tab)
+                {{-- @php
+                    dd($tabs, $tab, $tabItem, $activeTab);
+                @endphp --}}
                 @if (LivewireHelpers::componentExists($tabItem['component']))
-                    @php
-                        $hasOptions = $tabItem['options'] !== [] || count($tabItem['options']) > 0 || !empty($tabItem['options']);
-                    @endphp
-                    @if($hasOptions)
-                        @livewire($tabItem['component'], $tabItem['options'], key('panel_'.$tabItem['component']))
-                    @else
-                        @livewire($tabItem['component'], key('panel_'.$tabItem['component']))
-                    @endif
+                    @livewire($tabItem['component'], $tabItem['options'], key('panel_'.$tabItem['component']))
                 @else
-                    {{-- throw 404. We couldn't find what you were looking --}}
                     <div class="text-center text-gray-500" wire:key="tab_panel-{{$tab}}">
                         <span class="text-6xl material-symbols-outlined icon">sentiment_very_dissatisfied</span>
                         <p class="text-lg">We couldn't find what you were looking for.</p>

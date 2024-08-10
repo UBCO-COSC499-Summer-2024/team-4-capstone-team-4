@@ -3,7 +3,7 @@
         <span class="content-title-text">{{ $instructor->user->firstname }} {{ $instructor->user->lastname }}'s Report</span>
     </h1>
     <div>
-        <div class="flex justify-end items-center">
+        <div class="flex items-center justify-end">
             <div class="mr-2">
                 <label for="year">Select Year:</label>
                 <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
@@ -21,7 +21,7 @@
             <h2 class="font-bold">Courses Performance</h2>
             @if ($courses->isNotEmpty())
                 <table id="courseTable" class="report-table">
-                    <thead>    
+                    <thead>
                         <tr class="text-white bg-[#3b4779]">
                             <th class="report-head-cell">Course Section</th>
                             <th class="report-head-cell">Term</th>
@@ -62,8 +62,8 @@
                 </table>
             @else
                 <p>No courses found for this instructor.</p>
-            @endif  
-            
+            @endif
+
             <br>
 
             <h2 class="font-bold">Service Roles & Extra Hours Performance</h2>
@@ -122,11 +122,11 @@
                                     <td class="report-cell">{{ $value }}</td>
                                 @endforeach
                                 <td class="report-cell">{{ array_sum($subtotalHours) }}</td>
-                            </tr> 
-                        @endif 
+                            </tr>
+                        @endif
 
                         @php $rowcount = 0; @endphp
-                        
+
                         @if ($extraHours->isNotEmpty())
                             @foreach ($extraHours as $hours)
                                 @php
@@ -154,13 +154,13 @@
                             </tr>
                         @endif
 
-                        <tr class="report-row border-b border-white total-row">
+                        <tr class="border-b border-white report-row total-row">
                             <td class="report-cell" colspan="3">Total</td>
                             @foreach ($subtotalHours as $month => $value)
                                 <td class="report-cell">{{ $value + $extraHoursSubtotal[$month] }}</td>
                             @endforeach
                             <td class="report-cell">{{ array_sum($subtotalHours) + array_sum($extraHoursSubtotal) }}</td>
-                        </tr> 
+                        </tr>
                         <tr class="report-row total-row">
                             @if ($performance)
                                 <td class="report-cell" colspan="3">Target Hours</td>
