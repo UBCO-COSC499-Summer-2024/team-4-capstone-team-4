@@ -25,7 +25,13 @@ class ExportDeptReport extends Component
 
         $user = Auth::user();
 
-        $dept_id = UserRole::find($user->id)->department_id;
+        $deptRole = UserRole::where('user_id', $user->id)
+        ->where(function($query) {
+            $query->where('role', 'dept_head')
+                ->orWhere('role', 'dept_staff');
+        })->first();
+        $dept_id = $deptRole ? $deptRole->department_id : null;
+
         $dept = Department::find($dept_id);
 
         $areas = $dept->areas;
@@ -33,7 +39,7 @@ class ExportDeptReport extends Component
         $deptPerformance = DepartmentPerformance::where('dept_id', $dept->id)->where('year', $year)->first();
 
         return view('livewire.export-dept-report', compact('dept', 'areas', 'year', 'deptPerformance'));
-        
+
     }
 
     public function exportAsExcel(){
@@ -43,7 +49,7 @@ class ExportDeptReport extends Component
         $dept = Department::find($dept_id);
 
         $name = $dept->name . " Department Report - " . $this->year;
-        
+
         $file = Excel::download(new DeptReportExport($this->year), $name.'.xlsx');
         if($file){
             $this->dispatch('show-toast', [
@@ -64,7 +70,7 @@ class ExportDeptReport extends Component
         $this->dispatch('show-toast', [
             'message' => 'PDF ' . $fileName . ' has been saved successfully!',
             'type' => 'success'
-        ]); 
+        ]);
         return;
     }
 }
