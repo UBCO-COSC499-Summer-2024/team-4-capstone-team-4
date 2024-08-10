@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\AuthMethod;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 
@@ -20,6 +21,7 @@ class Preferences extends Component
     public $auth_method;
     public $auth_method_id;
     public $custom;
+    public $user;
 
     protected $rules = [
         'settings.theme' => 'required',
@@ -30,9 +32,9 @@ class Preferences extends Component
         // 'settings.custom' => 'json',
     ];
 
-    public function mount()
-    {
-        $this->settings = auth()->user()->settings;
+    public function mount() {
+        $this->user = User::find(Auth::id());
+        $this->settings = $this->user->settings;
         $this->timezone = $this->settings['timezone'];
         $this->locale = $this->settings['locale'];
         $this->theme = $this->settings['theme'];
@@ -46,14 +48,12 @@ class Preferences extends Component
         }
     }
 
-    public function render()
-    {
+    public function render() {
         return view('livewire.profile.preferences');
     }
 
-    public function savePreferences()
-    {
-        $audit_user = User::find((int) auth()->user()->id)->getName();
+    public function savePreferences() {
+        $audit_user = $this->user->getName();
         try {
             $this->validate();
             $oldValue = $this->settings->getOriginal();
@@ -77,7 +77,7 @@ class Preferences extends Component
             App::setLocale($this->locale);
             Config::set('app.theme', $this->theme);
             AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
+                'user_id' => $this->user->id,
                 'user_alt' => $audit_user,
                 'action' => 'update',
                 'table_name' => 'settings',
@@ -92,7 +92,7 @@ class Preferences extends Component
                 'type' => 'error'
             ]);
             AuditLog::create([
-                'user_id' => (int) auth()->user()->id,
+                'user_id' => $this->user->id,
                 'user_alt' => $audit_user,
                 'action' => 'error',
                 'table_name' => 'settings',
@@ -106,23 +106,19 @@ class Preferences extends Component
         }
     }
 
-    public function setTimezone($timezone)
-    {
+    public function setTimezone($timezone) {
         $this->timezone = $timezone;
     }
 
-    public function setLocale($locale)
-    {
+    public function setLocale($locale) {
         $this->locale = $locale;
     }
 
-    public function setLanguage($language)
-    {
+    public function setLanguage($language) {
         $this->language = $language;
     }
 
-    public function setTheme($theme)
-    {
+    public function setTheme($theme) {
         $this->theme = $theme;
     }
 
@@ -131,8 +127,7 @@ class Preferences extends Component
     //     $this->settings['auth_method'] = $auth_method;
     // }
 
-    public function updated($field)
-    {
+    public function updated($field) {
         $this->validateOnly($field);
     }
 }
