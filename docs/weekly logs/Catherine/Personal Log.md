@@ -1,3 +1,29 @@
+## Friday (8/7 - 8/9)
+
+### Timesheet
+Clockify report
+[Report](./reports/Clockify_Time_Report_Summary_08_07_2024-08_09_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+
+  * #1: Documentation (comments)
+  * #2: Individual Report
+  * #3: Final Presentation
+
+
+
+### Progress Update (since 8/2/2024) 
+|TASK/ISSUE |STATUS|
+| --------| -------|
+| Documentation (comments) | Complete |
+| Individual Report | Complete |
+| Final Presentation | Complete |
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I mainly worked on the indiviudal reported which is now completed. I also worked on finsishnin documentation for the features  I worked on and preparing for the final presentation.
+
+
 ## Wednesday (8/2 - 8/7)
 
 ### Timesheet
