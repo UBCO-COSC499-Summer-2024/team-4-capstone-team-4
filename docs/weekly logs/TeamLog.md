@@ -2,6 +2,59 @@
 
 ## Date Range:
 
+- August 7 - August 9
+
+## Features in the Project Plan Cycle:
+- Documentation
+- Individual Report
+- Final Presentation
+- Bug fixes
+
+## Associated Tasks from Project Board:
+
+![image of tasks](./tasks/todo_aug7_aug9.png)
+![image of tasks](./tasks/inprogress_aug7_aug9.png)
+![image of tasks](./tasks/inprogress2_aug7_aug9.png)
+![image of tasks](./tasks/done_aug7_aug9.png)
+![image of tasks](./tasks/done2_aug7_aug9.png)
+
+## Tasks for Next Cycle:
+
+![image of tasks](./tasks/todo_aug7_aug9.png)
+![image of tasks](./tasks/inprogress_aug7_aug9.png)
+![image of tasks](./tasks/inprogress2_aug7_aug9.png)
+
+## Burn-up Chart (Velocity):
+
+![image of burnup chart](./burnup/burnup_aug7_aug9.png)
+
+## Times for Team/Individual
+
+![image of clockify report](./clockify/team_aug7_aug9.png)
+![image of clockify report](./clockify/individual_aug7_aug9.png)
+
+## Completed Tasks
+
+![image of tasks](./tasks/done_aug7_aug9.png)
+![image of tasks](./tasks/done2_aug7_aug9.png)
+
+## In Progress Tasks / To do:
+
+![image of tasks](./tasks/todo_aug7_aug9.png)
+![image of tasks](./tasks/inprogress_aug7_aug9.png)
+![image of tasks](./tasks/inprogress2_aug7_aug9.png)
+
+## Test Report / Testing Status:
+
+![image of test report](./testing/unit_test_aug7_aug9.png)
+![image of test report](./testing/feature_test_aug7_aug9.png)
+
+## Overview:
+We have come to an end of the project. For this cycle, our main focus was documentation, indvidual reports and making sure to push our final product to master. We also prepared for the final presentation whcih wen well. We did final touches to our codes, making sure to fix any known bugs. 
+
+
+## Date Range:
+
 - August 2 - August 7
 
 ## Features in the Project Plan Cycle:
