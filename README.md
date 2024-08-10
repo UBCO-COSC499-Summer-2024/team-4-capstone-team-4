@@ -1,22 +1,44 @@
-# Project-Starter
+# Team Members
+- Angelina Dubrule
+- Catherine Magoke
+- Clement Abel-Nwachukwu
+- Sumer Mann
+- Kate Naychuk
 
-Please use the provided folder structure for your docs (project plan, design documenation, communications log, weekly logs and final documentation), source code, tesing, etc.    You are free to organize any additional internal folder structure as required by the project.  The team **MUST** use a branching workflow and once an item is ready, do remember to issue a PR, review and merge in into the master brach.
-```
-.
-├── docs                    # Documentation files (alternatively `doc`)
-│   ├── TOC.md              # Table of contents
-│   ├── plan                # Scope and Charter
-│   ├── design              # Getting started guide
-│   ├── final               # Getting started guide
-│   ├── logs                # Team Logs
-│   └── ...
-├── build                   # Compiled files (alternatively `dist`))    
-├── app                     # Source files (alternatively `lib` or `src`)
-├── test                    # Automated tests (alternatively `spec` or `tests`)
-├── tools                   # Tools and utilities
-├── LICENSE                 # The license for this project 
-└── README.md
-```
-You can find additional information on folder structure convetions [here](https://github.com/kriasoft/Folder-Structure-Conventions). 
+# Project Information
+### Project 1 - Department Management System
 
-Also, update your README.md file with the team and client/project information.  You can find details on writing GitHub Markdown [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) as well as a [handy cheatsheet](https://enterprise.github.com/downloads/en/markdown-cheatsheet.pdf).   
+**Client**: CMPS Department at UBCO
+
+**Overview**: Insight is a Department Management System (DMS) that aims to create a responsive web application to enhance the management of the CMPS department. The system will improve the visibility and efficiency of instructor activities, contributing to a higher quality of student experiences.
+
+# Branch Workflow
+
+- To view features in production: [master Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/master)
+- To view features in development: [development Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/development)
+- To view documentation (Plan, Design, etc.): [documentation Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/documentation/docs)
+- To view logs (Personal, Weekly, Commuincation, Dashboard): [logs Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/logs/docs)
+
+# User Guide
+[Click here for user guide](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/pre-dev-integration/docs/final/UserGuide.md)
+
+# Installation Steps
+
+1. Install IDE of choice
+2. Install Composer
+3. Install Node and NPM 
+4. Install PHP 8.3
+5. Download Docker Desktop
+6. Clone the repository to your device: `git clone [repo URL]`.
+7. Open the cloned folder in your IDE (Visual Studio Code is recommended).
+8. Create a .env file (similar to .env.example) and fill it with the necessary environment data.
+9. Open the terminal and navigate to the cloned folder.
+10. Run `composer install` in the terminal to install the vendor dependencies.
+11. Run `npm install` in the terminal to install the node_modules.
+12. Launch Docker.
+13. Run `./vendor/bin/sail build` in the terminal to build the Docker containers.
+14. Run `./vendor/bin/sail up -d` in the terminal to start the containers.
+15. Run `./vendor/bin/sail artisan migrate` in the terminal to set up the database.
+16. Run `npx vite` to start the Vite server.
+17. Open your browser and navigate to  `localhost` to view the website.
+

@@ -1,0 +1,105 @@
+[
+    {
+        "subtopic": "ImportData",
+        "subsections": [
+            {
+                "heading": "Introduction",
+                "content": "The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system.",
+                "tags": [
+                    "import data",
+                    "intro"
+                ]
+            },
+            {
+                "heading": "Attempting to Update or Overwrite an Existing Course Section",
+                "content": "If a user attempts to create a course section that already exists in the system, a warning will be displayed to prevent accidental overwriting. The warning modal will list all existing courses and will appear each time a save attempt is made, until the \"I Understand\" button is clicked. If \"Cancel\" is chosen, the modal will continue to appear for subsequent save attempts.",
+                "tags": [
+                    "import data",
+                    "warning",
+                    "validation"
+                ]
+            },
+            {
+                "heading": "Accounting for a Student That Joined a Course After the Last Day to Enroll",
+                "content": "To ensure that the dropped value is accurately calculated when this occurs, add the number of students to account for to both the Enrolled Start and Enrolled End values. This adjustment will ensure that the dropped value, which is calculated by the difference in enrolled values, is not skewed",
+                "tags": [
+                    "import data",
+                    "edge case"
+                ]
+            }
+        ],
+        "subtopics": [
+            {
+                "subtopic": "Manual Input - Functionality / Navigation",
+                "subsections": [
+                    {
+                        "heading": "Add Course Sections (Workday)",
+                        "content": "Clicking on \"Add Row\" will create a new entry to fill out. To add multiple rows at once, enter the number of rows you want in the input next to the buttons below the table and click \"Add Many Rows\" To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "manual input",
+                            "workday"
+                        ]
+                    },
+                    {
+                        "heading": "Add SEI Data",
+                        "content": "Clicking on \"Add Row\" will create a new entry to fill out. To add multiple rows at once, enter the number of rows you want in the input next to the buttons below the table and click \"Add Many Rows\" To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "manual input",
+                            "sei"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "File Upload - Functionality / Navigation",
+                "subsections": [
+                    {
+                        "heading": "Upload Workday File",
+                        "content": "After uploading a file, a populated table will appear with the contents found in the file. This is to ensure that all the data will be correctly inserted. If the table appears empty or is missing information, refer to the sample csv and ensure all headings are formatted correctly. At this stage, all the fields may be edited in case the data was pulled incorrectly. To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "file upload",
+                            "workday"
+                        ]
+                    },
+                    {
+                        "heading": "Upload SEI Data",
+                        "content": "After uploading a file, a populated table will appear with the contents found in the file. This is to ensure that all the data will be correctly inserted. If the table appears empty or is missing information, refer to the sample csv and ensure all headings are formatted correctly. At this stage, all the fields may be edited in case the data was pulled incorrectly. To delete a row, click the trash icon on the row you wish to remove. Once all the desired fields are filled, click \"Save\".",
+                        "tags": [
+                            "import data",
+                            "file upload",
+                            "sei"
+                        ]
+                    }
+                ]
+            },
+            {
+                "subtopic": "Validation / Input Field Requirements",
+                "subsections": [
+                    {
+                        "heading": "Course Sections / Workday Data",
+                        "content": "The following applies to both the manual and file upload tables. The headers are listed from left to right. Area: Select one of the areas from the dropdown. Number: Three numbers representing the course number. Section: Three numbers representing the course section. Session: Select one of the options from the dropdown. Term: Select one of the options from the dropdown. Year: 4 numbers representing the year. Room: Three capital letters representing the abbreviated name of the building followed by three numbers representing the room number. Time: Both fields, representing the start and end time, must be a number in military time notation. Enrolled (Start): A number from 1-999. This must be lower than the capacity. Enrolled (End): A number from 0-999. This must be lower than the capacity. Capacity: A number from 1-999. This must be higher than Enrolled (Start) and Enrolled End).",
+                        "tags": [
+                            "import data",
+                            "manual input",
+                            "file upload",
+                            "workday"
+                        ]
+                    },
+                    {
+                        "heading": "SEI Data",
+                        "content": "The following applies to both the manual and file upload tables. The headers are listed from left to right. Course Section: Select an existing course from the dropdown. The only course sections listed are those that do not have associated sei data. To edit these values, navigate to the Course Section Page. Q1(IM)-Q6(IM): A number from 1-5 representing the interpolated median for the corresponding question",
+                        "tags": [
+                            "import data",
+                            "manual input",
+                            "file upload",
+                            "sei"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
