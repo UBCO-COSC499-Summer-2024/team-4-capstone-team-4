@@ -109,6 +109,7 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
+    //Form functionality for bulk import  
     public function addRow() {
         $this->resetValidation();
 
@@ -191,6 +192,8 @@ class ImportWorkdayForm extends Component
         foreach ($this->rows as $index => $row) {
             $prefix = '';
             // dd($row);
+
+            //manually set prefix based on area_id. Will have to refactor if other areas or departments are added
             
             switch ($row['area_id']) {
                 case 1:
@@ -231,6 +234,7 @@ class ImportWorkdayForm extends Component
             $this->userConfirms = true;
         }
 
+        //duplicate course but user has clicked "I Understand"
         if($this->userConfirms) {
             foreach($this->rows as $index => $row) {
                 $dropped = 0;
@@ -324,8 +328,7 @@ class ImportWorkdayForm extends Component
                 $dept_id = $userRole->department_id;
             } else {
                 // Handle the case where there is no UserRole for the user
-                // For example, you might want to log this or set a default value
-                $dept_id = null; // or any other appropriate action
+                $dept_id = null; 
             }
         }
 

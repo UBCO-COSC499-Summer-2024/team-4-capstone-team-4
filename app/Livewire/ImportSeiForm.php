@@ -95,6 +95,7 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
+    // Ensure that two courses have not both been selected on the current page
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -163,6 +164,7 @@ class ImportSeiForm extends Component
         $this->showModal = false;
     }
 
+    // Only returns courses that have not yet been assigned SEI data
     public function getAvailableCourses() {
         return CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')
@@ -218,7 +220,8 @@ class ImportSeiForm extends Component
 
             $course = CourseSection::where('id', $row['cid'])->first();
             $teach = Teach::where('course_section_id', $row['cid'])->first();
-            
+
+            // If the course is already being taught, update the performances with SEI data
             if($teach){
                 $instructor_id = $teach->instructor_id;   
                 $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');

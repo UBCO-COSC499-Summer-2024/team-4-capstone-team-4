@@ -150,6 +150,7 @@ class UploadFileFormSei extends Component
         $this->rows = [];
     }
 
+    // Ensure that two courses have not both been selected on the current page
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -251,6 +252,7 @@ class UploadFileFormSei extends Component
             $course = CourseSection::where('id', $row['cid'])->first();
             $teach = Teach::where('course_section_id', $row['cid'])->first();
             
+           // If the course is already being taught, update the performances with SEI data
             if($teach){
                 $instructor_id = $teach->instructor_id;   
                 $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');

@@ -67,6 +67,7 @@ class UploadFileFormWorkday extends Component
         return $rules;
     }
 
+    //Custom validation messages 
     public function messages() {
         $messages = [];
 
@@ -114,6 +115,7 @@ class UploadFileFormWorkday extends Component
         $this->rows = array_values($this->rows);
     }
 
+    // Ensure that no two rows are the same on the current screen (different to already existing in db)
     protected function validateUniqueRows() {
         $uniqueCombinations = [];
 
@@ -173,6 +175,9 @@ class UploadFileFormWorkday extends Component
 
         foreach($this->rows as $index => $row) {
             $prefix = '';
+
+            //manually set prefix based on area_id. Will have to refactor if other areas or departments are added
+
             
             switch ($row['area_id']) {
                 case 1:
@@ -216,6 +221,9 @@ class UploadFileFormWorkday extends Component
             foreach($this->rows as $index => $row) {
                 $dropped = 0;
                 $prefix = '';
+
+                //manually set prefix based on area_id. Will have to refactor if other areas or departments are added
+
 
                 switch ($row['area_id']) {
                     case 1:
