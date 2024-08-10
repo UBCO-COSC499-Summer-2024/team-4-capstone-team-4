@@ -204,7 +204,7 @@ class ImportSeiForm extends Component
     
         foreach ($this->rows as $row) {
     
-            SeiData::create([
+            $sei = SeiData::create([
                 'course_section_id' => $row['cid'],
                 'questions' => json_encode([
                     'q1' => $row['q1'],
@@ -216,6 +216,7 @@ class ImportSeiForm extends Component
                 ]),
             ]);
 
+            $course = CourseSection::where('id', $row['cid'])->first();
             $teach = Teach::where('course_section_id', $row['cid'])->first();
             
             if($teach){
@@ -230,6 +231,9 @@ class ImportSeiForm extends Component
             }
 
         }
+
+        $sei->log_audit('Add SEI Data', ['operation_type' => 'CREATE', 'new_value' => json_encode($sei->getAttributes())], 'Add SEI Data to  ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+      
 
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],

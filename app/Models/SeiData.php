@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CourseSection;
+use Illuminate\Support\Facades\Auth;
 
 class SeiData extends Model {
     use HasFactory;
@@ -64,6 +65,24 @@ class SeiData extends Model {
         }
         
         return null;
+    }
+
+    public static function audit($action, $details, $description) {
+        $audit_user = User::find((int) Auth::id())->getName();
+        AuditLog::create([
+            'user_id' => (int) Auth::id(),
+            'user_alt' => $audit_user ?? 'System',
+            'action' => $action,
+            'table_name' => 'course_sections',
+            'operation_type' => $details['operation_type'] ?? 'UPDATE',
+            'old_value' => $details['old_value'] ?? null,
+            'new_value' => $details['new_value'] ?? null,
+            'description' => $description,
+        ]);
+    }
+
+    public function log_audit($action, $details = [], $description) {
+        self::audit($action, $details, $description);
     }
 
 }
