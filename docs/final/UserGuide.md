@@ -54,15 +54,11 @@ To add a new user account, you will need to click on the 'Add' button. A popup w
 
 #### Edit Multiple Accounts
 
-To edit multiple accounts, you will need to click on the 'Edit' button. Then the roles and status field will become editable where you can toggle the enabled status and check or remove checks from the user's roles. When done, click 'Save'.
+To edit multiple accounts, you will need to click on the 'Edit' button. Then the names, emails, roles and status field will become editable where you can change the name or email, toggle the enabled status and check or remove checks from the user's roles. When done, click 'Save'.
 
 #### Delete Multiple Accounts
 
-To delete multiple accounts, first select all the user accounts you would like to delete. Then click on the delete button which will bring up a popup asking you to confirm. Once confirmed, the selected accounts will be deleted. 
-
-#### Edit Individual Account
-
-To edit an individual account, you can click on the edit icon on the user account you would like to edit. Then the roles and status field for that user will become editable. Once done, you can click on the save icon to save. 
+To delete multiple accounts, first select all the user accounts you would like to delete. Then click on the delete button which will bring up a popup asking you to confirm. Once confirmed, the selected accounts will be deleted.  
 
 #### Delete Individual Account
 
@@ -70,7 +66,7 @@ To delete an individual account, you can click on the delete icon on the user ac
 
 #### Send Reset Link 
 
-To send a reset link to a user account, click on the send reset link icon... 
+To send a reset link to a user account, click on the send reset link icon to send the reset email to the user.
 
 # Service Roles 
 
