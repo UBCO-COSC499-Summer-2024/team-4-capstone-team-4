@@ -1,0 +1,7 @@
+.service-requests-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 2px;
+    width: 100%;
+}

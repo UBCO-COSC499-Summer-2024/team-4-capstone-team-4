@@ -1,0 +1,79 @@
+.calendar {
+    background: white;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 20px;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header button {
+    background: #3b4779;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.calendar-header span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.month {
+    background: rgb(249, 249, 249, 0.9);
+    /* border: 1px solid #ddd; */
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    min-height: 110px;
+    margin: auto;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.month input::-webkit-outer-spin-button,
+.month input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.month input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.month input {
+    padding: 12px;
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50px;
+    text-align: center;
+}
