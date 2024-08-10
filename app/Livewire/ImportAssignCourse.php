@@ -44,11 +44,13 @@ class ImportAssignCourse extends Component
             //dd($assignment);
 
             if ($instructor_id != null) {
-                Teach::create([
+                $assign = Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => $instructor_id,
                 ]);
 
+                $course = CourseSection::where('id', $assignment['course_section_id'])->first();
+                $assign->log_audit('Assign Instructor', ['operation_type' => 'CREATE', 'new_value' => json_encode($assign->getAttributes())], 'Assign ' . $assignment['instructor'] . ' to ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
              
                 $area_id = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
                 $dept_id = Area::where('id', $area_id)->value('dept_id');
