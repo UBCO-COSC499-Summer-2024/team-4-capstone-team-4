@@ -28,6 +28,7 @@
 <div class="content" x-data="{
     showExtraHourForm: @entangle('showExtraHourForm'),
     showAssignInstructorModal: @entangle('showAssignInstructorModal'),
+    pageSize: @entangle('pageSize'),
 }">
     <h1 class="nos content-title">
         <span class="content-title-text">Service Roles</span>
@@ -150,6 +151,29 @@
                         @endforeach
                     </select>
                 @endif
+
+                {{-- page size --}}
+                <div class="toolbar-item">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="toolbar-dropdown-trigger">
+                                <span>{{ $pageSize }}</span>
+                                <span class="material-symbols-outlined icon">expand_more</span>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            @foreach ([10, 25, 50, 100] as $size)
+                                <x-dropdown-link
+                                    wire:click="@this.changePageSize({{ $size }})"
+                                    class="{{
+                                        $pageSize == $size ? 'active' : ''
+                                    }}">
+                                    {{ $size }}
+                                </x-dropdown-link>
+                            @endforeach
+                        </x-slot>
+                    </x-dropdown>
+                </div>
 
                 <button class="toolbar-button"
                     x-on:click="window.location.href = window.location.href;">

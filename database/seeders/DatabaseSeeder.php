@@ -211,6 +211,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $teachingAssistants = TeachingAssistant::factory(10)->create();
+        $ta = TeachingAssistant::factory()->create([
+            'name' => 'Mr TA',
+            'rating' => 5,
+        ]);
 
     // Assign TAs to courses
         $courseSections = CourseSection::all();

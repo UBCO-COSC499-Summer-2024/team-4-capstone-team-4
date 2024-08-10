@@ -10,12 +10,20 @@
                         $user = Auth::user();
                         $dept_id = App\Models\UserRole::find($user->id)->department_id;
                         $dept = App\Models\Department::find($dept_id);
-                        $allPerformances = $dept->departmentPerformance->sortBy('year');
-                        $rank = 0;
+                        $allPerformances = null;
+                        $rank = null;
+                        if ($dept) {
+                            $allPerformances = $dept->departmentPerformance->sortBy('year');
+                            $rank = 0;
+                        }
                     @endphp
-                    @foreach ($allPerformances as $perf)
-                        <option value="{{ $perf->year }}" {{ $perf->year == $year ? 'selected' : '' }}>{{ $perf->year }}</option>
-                    @endforeach
+                    @if ($allPerformances)
+                        @foreach ($allPerformances as $perf)
+                            @if ($perf)
+                                <option value="{{ $perf->year }}" {{ $perf->year == $year ? 'selected' : '' }}>{{ $perf->year }}</option>
+                            @endif
+                        @endforeach
+                    @endif
                 </select>
             </div>
         </div>

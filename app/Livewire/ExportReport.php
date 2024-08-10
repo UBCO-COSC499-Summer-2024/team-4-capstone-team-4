@@ -11,7 +11,7 @@ class ExportReport extends Component
 {
     public $instructor_id;
     public $year;
-    
+
     protected $listeners = ['pdfSaved' => 'handlePdfSaved'];
 
     public function mount($instructor_id)
@@ -42,15 +42,15 @@ class ExportReport extends Component
         $courses = $instructor->teaches()->whereHas('courseSection', function($query) {
             $query->where('year', $this->year);
         })->get();
-    
+
         $performance = $instructor->instructorPerformances()->where('year', $this->year)->first();
 
         $svcroles = $instructor->serviceRoles()->where('year', $this->year)->get();
 
         $extraHours = $instructor->extraHours()->where('year', $this->year)->get();
-        
+
         return view('livewire.export-report', compact('instructor', 'courses', 'performance', 'svcroles', 'extraHours', 'year'));
-    } 
+    }
 
     public function exportAsExcel(){
         $instructor = UserRole::findOrFail($this->instructor_id);
@@ -75,7 +75,7 @@ class ExportReport extends Component
         $this->dispatch('show-toast', [
             'message' => 'PDF ' . $fileName . ' has been saved successfully!',
             'type' => 'success'
-        ]); 
+        ]);
         return;
     }
 }

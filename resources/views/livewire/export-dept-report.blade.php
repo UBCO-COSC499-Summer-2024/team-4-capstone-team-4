@@ -3,7 +3,7 @@
         <span class="content-title-text">{{$dept->name}} Department Report</span>
     </h1>
     <div>
-        <div class="flex justify-end items-center">
+        <div class="flex items-center justify-end">
             <div class="mr-2">
                 <label for="year">Select Year:</label>
                 <select wire:model.live="year" id="year" name="year" class="w-auto min-w-[75px] text-gray-500 bg-white report-cell focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
@@ -22,7 +22,7 @@
                 <h2 class="font-bold">Courses Performance</h2>
                 <h3>Summary</h3>
                 <table id="courseTable" class="report-table">
-                    <thead>    
+                    <thead>
                         <tr class="text-white bg-[#3b4779]">
                             <th class="report-head-cell">Sub area</th>
                             <th class="report-head-cell">No. of Instructors</th>
@@ -42,7 +42,7 @@
                                 $areaPerformance = $area->areaPerformance->where('year', $year)->first();
                                 $courses = \App\Models\Area::getCourseSections($area->id, $year);
                                 $instructors = \App\Models\Area::getInstructors($area->id, $year);
-                          
+
                                 $numInstructors = $instructors ? count($instructors) : 0;
                                 $numCourses = $courses ? count($courses) : 0;
                                 $totalInstructors += $numInstructors;
@@ -166,7 +166,7 @@
                                 }else{
                                     $areaHours = [];
                                 }
-                              
+
                                 $numSvcroles = $svcroles ? count($svcroles) : 0;
                                 $numExtraHours = $extraHours ? count($extraHours) : 0;
                                 $totalSvcroles += $numSvcroles;
@@ -202,7 +202,7 @@
                                 @endfor
                             @endif
                             <td class="report-cell">{{ array_sum($deptHours) }}</td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
 
@@ -213,7 +213,7 @@
                         $svcroles = \App\Models\Area::getServiceRoles($area->id, $year);
                         $extraHours = \App\Models\Area::getExtraHours($area->id, $year);
                     @endphp
-                    @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())   
+                    @if ($svcroles->isNotEmpty() || $extraHours->isNotEmpty())
                         <h3>{{ $area->name }}</h3>
                     <table class="areaPerfTable report-table">
                         @if ($svcroles->isNotEmpty())
@@ -239,7 +239,7 @@
                                             @if ($instructors)
                                                 {{ $instructors->pluck('firstname', 'lastname')->map(function($lastname, $firstname) {
                                                     return $firstname . ' ' . $lastname;
-                                                })->implode(', ') }}                                            
+                                                })->implode(', ') }}
                                             @else
                                                 -
                                             @endif

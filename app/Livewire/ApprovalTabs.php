@@ -30,9 +30,19 @@ class ApprovalTabs extends Component
         ]
     ];
     public $activeTab = 'approvals';
-    public function mount() {
-        $this->activeTab = Request::get('tab', 'approvals');
+    protected $listeners = [
+        'tab-changed' => 'changeTab'
+    ];
+    public function mount($activeTab = 'approvals') {
+        $this->activeTab = $activeTab;
+        // $this->activeTab = Request::get('tab');
     }
+
+    public function changeTab($tab) {
+        // dd($this->activeTab, $tab);
+        $this->activeTab = $tab;
+    }
+
     public function render() {
         return view('livewire.approval-tabs');
     }

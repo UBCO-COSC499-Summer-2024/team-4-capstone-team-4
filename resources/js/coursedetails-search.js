@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('courseTableBody');
-    const areaFilter = document.getElementById('areaFilter'); // Correct ID for the area filter element
+    const areaFilter = document.getElementById('areaFilter');
+    const paginationContainer = document.getElementById('pagination');
 
     if (!searchInput || !tableBody) {
         // console.error('Required elements are missing: searchInput or tableBody');
@@ -10,9 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const courseDetailsRoute = searchInput.getAttribute('data-route');
 
-    function fetchCourses(query, areaId) {
+    function fetchCourses(query, areaId, page = 1) {
         const url = new URL(courseDetailsRoute);
         url.searchParams.append('search', query);
+        url.searchParams.append('page', page);
         if (areaId) {
             url.searchParams.append('area_id', areaId);
         }
@@ -29,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             tableBody.innerHTML = '';
-            if (data.length > 0) {
-                data.forEach(section => {
+            if (data.data.length > 0) {
+                data.data.forEach(section => {
                     const row = document.createElement('tr');
                     row.setAttribute('data-id', section.id);
                     row.innerHTML = `
@@ -40,10 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td class="px-6 py-4 whitespace-nowrap">${section.enrolled}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.dropped}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.capacity}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.room}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${section.timings}</td>
                         <td class="px-6 py-4 whitespace-nowrap">${section.averageRating}</td>
                     `;
                     tableBody.appendChild(row);
                 });
+                if (paginationContainer) {
+                    updatePaginationLinks(data);
+                }
             } else {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td colspan="7" class="text-center text-gray-500 py-4">No course sections found.</td>`;
@@ -53,13 +60,33 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error fetching search results:', error));
     }
 
+    function updatePaginationLinks(data) {
+        paginationContainer.innerHTML = '';
+        if (data.links.length > 0) {
+            data.links.forEach(link => {
+                const pageLink = document.createElement('a');
+                pageLink.href = link.url;
+                pageLink.innerText = link.label;
+                pageLink.className = link.active ? 'active' : '';
+                pageLink.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const query = searchInput.value.trim();
+                    const areaId = areaFilter ? areaFilter.value : null;
+                    const page = new URL(link.url).searchParams.get('page');
+                    fetchCourses(query, areaId, page);
+                });
+                paginationContainer.appendChild(pageLink);
+            });
+        }
+    }
+
     searchInput.addEventListener('input', function () {
         const query = searchInput.value.trim();
-        const areaId = areaFilter ? areaFilter.value : null; // Check if areaFilter exists
+        const areaId = areaFilter ? areaFilter.value : null;
         fetchCourses(query, areaId);
     });
 
-    if (areaFilter) { // Check if areaFilter exists before adding event listener
+    if (areaFilter) {
         areaFilter.addEventListener('change', function () {
             const query = searchInput.value.trim();
             const areaId = areaFilter.value;

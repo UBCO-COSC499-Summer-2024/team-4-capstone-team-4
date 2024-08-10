@@ -4,7 +4,7 @@ $user = auth()->user();
 $sidebarItems = [
     ['icon' => 'dashboard', 'href' => route('dashboard'), 'title' => 'Dashboard'],
     // ['icon' => 'bar_chart', 'href' => '/performance', 'title' => 'Performance'],
-    ['icon' => 'list', 'href' => route('courses.details.id', ['user' => $user->id]), 'title' => 'Courses & TAs'],
+    ['icon' => 'list', 'href' => route('courses'), 'title' => 'Courses & TAs'],
     ['icon' => 'work_history', 'href' => '/svcroles', 'title' => 'Service Roles'],
     //['icon' => 'leaderboard', 'href' => 'leaderboard', 'title' => 'Leaderboard'],
     //['icon' => 'groups', 'href' => '/staff', 'title' => 'Staff'],

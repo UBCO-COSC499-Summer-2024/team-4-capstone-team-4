@@ -1,3 +1,5 @@
+@props(['sortField', 'sortDirection', 'userRole'])
+
 <thead class="sticky-header">
     <tr class="svcr-list-header">
         @foreach(['name' => 'TA Name', 'rating' => 'Rating', 'taCourses' => 'Assigned Courses', 'instructorName' => 'Instructor Name'] as $field => $label)
