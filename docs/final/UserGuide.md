@@ -193,7 +193,7 @@ Keep Climbing! Greatness awaits! This badge is awarded to those who are working 
 
 ## Introduction 
 
-The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system. 
+The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system. [Click here for sample file]()
 
 ## Attempting to Update or Overwrite an Existing Course Section
 
