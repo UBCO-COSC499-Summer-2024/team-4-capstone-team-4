@@ -20,7 +20,7 @@
                                         <input type="text" id="taName{{ $index }}" wire:model.defer="tas.{{ $index }}.name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm input-bordered" required>
                                     </div>
                                     <div class="flex-1">
-                                        <label for="taRating{{ $index }}" class="block text-sm font-medium text-gray-700">Rating</label>
+                                        <label for="taRating{{ $index }}" class="block text-sm font-medium text-gray-700">Rating(less than equal to  5)</label>
                                         <input type="number" id="taRating{{ $index }}" wire:model.defer="tas.{{ $index }}.rating" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm input-bordered" min="0" max="5" step="0.1" required>
                                     </div>
                                 </div>
