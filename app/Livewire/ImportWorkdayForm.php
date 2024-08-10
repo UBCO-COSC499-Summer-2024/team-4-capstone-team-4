@@ -298,7 +298,6 @@ class ImportWorkdayForm extends Component
                     $course->log_audit('Update Course Section', ['operation_type' => 'UPDATE', 'old_value' => json_encode($courseExists->getAttributes()) ,'new_value' => json_encode($course->getAttributes())], 'Update Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
                 } else if (!$courseExists) {
                     $course->log_audit('Add Course Section', ['operation_type' => 'CREATE', 'new_value' => json_encode($course->getAttributes())], 'Created Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
-
                 }
                 
                 Session::forget('workdayFormData');
