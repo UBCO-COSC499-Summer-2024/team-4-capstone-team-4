@@ -12,17 +12,9 @@
 
 ## Associated Tasks from Project Board:
 
-![image of tasks](./tasks/todo_aug7_aug9.png)
-![image of tasks](./tasks/inprogress_aug7_aug9.png)
-![image of tasks](./tasks/inprogress2_aug7_aug9.png)
 ![image of tasks](./tasks/done_aug7_aug9.png)
 ![image of tasks](./tasks/done2_aug7_aug9.png)
-
-## Tasks for Next Cycle:
-
-![image of tasks](./tasks/todo_aug7_aug9.png)
-![image of tasks](./tasks/inprogress_aug7_aug9.png)
-![image of tasks](./tasks/inprogress2_aug7_aug9.png)
+![image of tasks](./tasks/done3_aug7_aug9.png)
 
 ## Burn-up Chart (Velocity):
 
@@ -37,12 +29,8 @@
 
 ![image of tasks](./tasks/done_aug7_aug9.png)
 ![image of tasks](./tasks/done2_aug7_aug9.png)
+![image of tasks](./tasks/done3_aug7_aug9.png)
 
-## In Progress Tasks / To do:
-
-![image of tasks](./tasks/todo_aug7_aug9.png)
-![image of tasks](./tasks/inprogress_aug7_aug9.png)
-![image of tasks](./tasks/inprogress2_aug7_aug9.png)
 
 ## Test Report / Testing Status:
 
