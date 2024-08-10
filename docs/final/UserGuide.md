@@ -1,31 +1,5 @@
 ## Insight: User Guide to GitHub Markdown
 
-This document explains how to structure content for the Insight platform using GitHub Markdown. It's based on your provided data structure. 
-
-**Important:** This guide assumes basic familiarity with Markdown syntax.
-
----
-
-### 1. Organizing Content
-
-Content is organized hierarchically using a combination of headings, subtopics, and subsections.
-
-* **Headings (H1-H6):** Use `#` to denote heading levels, with `#` being the highest (H1) and `######` being the lowest (H6). Example:
-    ```markdown
-    # Staff
-    ## Target Hours
-    ### Add Target Hours
-    ```
-
-* **Subtopics:** Subtopics are sections within a main topic. To indicate a subtopic, use `###` followed by the subtopic name.
-
-* **Subsections:** Subsections provide detailed information within a subtopic. Use `####` followed by the subsection heading.
-
-### 2. Content Structure Example
-
-Here's how you would structure a markdown file based on your example:
-
-```markdown
 # Staff 
 
 ## Introduction 
@@ -492,4 +466,3 @@ Every approval request maintains a detailed history, recording:
 - **Timestamp:** The date and time of the status change.
 
 
-Remember to consistently use this structure and formatting to maintain uniformity across all documentation. 
