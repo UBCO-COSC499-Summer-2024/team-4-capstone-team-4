@@ -35,7 +35,6 @@ COntinued completing the final report and submitted before the deadline. Prepare
 
 ### Timesheet
 Clockify report
-
 ![Clockify report](./clockifylogs/log82-86.png)
 
 ### Current Tasks 
