@@ -1,3 +1,82 @@
+## Cycle: August 7th - August 9th
+
+### Timesheet
+[Clockify Report](./Reports/Clockify_Time_Report_Summary_08_07_2024-08_09_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Complete Bulk Edit functionality for Course Details
+  * #2: Fix Approval Tabs display
+  * #3: Resolve Department Report breaking when logged in as Staff
+  * #4: Add Page Size dropdown to Service Role page
+  * #5: Fix room not displaying after save in Manage Service Room
+  * #6: Implement Dark Mode changes and Filter updates
+  * #7: Complete User Guide
+  * #8: Prepare for final presentation 
+  * #9: Complete individual report
+
+### Progress Update (since 08/07/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>Complete Bulk Edit functionality for Course Details</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fix Approval Tabs display</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Resolve Department Report breaking when logged in as Staff</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Add Page Size dropdown to Service Role page</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Fix room not displaying after save in Manage Service Room</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Implement Dark Mode changes and Filter updates</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Complete User Guide</td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Prepare for final presentation </td>
+        <td>Complete</td>
+    </tr>
+    <tr>
+        <td>Complete individual report</td>
+        <td>Complete</td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle marked the final push before the project deadline. All outstanding tasks were successfully completed, including the bulk edit functionality for course details, fixing display issues with approval tabs, and resolving a bug in the department report. 
+
+Significant effort was dedicated to refining the user experience by adding a page size dropdown to the service role page, fixing display issues in the Manage Service Room, implementing dark mode changes, and updating filters for better navigation.
+
+The User Guide was finalized to provide comprehensive guidance on system functionalities.
+
+The team successfully prepared for the final presentation and completed individual reports, marking the completion of all project requirements.
+
+The decision was made to scrap the PDF export feature due to persistent technical challenges and time constraints.
+
+Overall, the project progressed smoothly with efficient collaboration and consistent effort from the team.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+N/A - This is the final cycle. 
+
+---
+
 ## Cycle: August 2nd - August 6th
 
 ### Timesheet
