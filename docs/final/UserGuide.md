@@ -193,7 +193,7 @@ Keep Climbing! Greatness awaits! This badge is awarded to those who are working 
 
 ## Introduction 
 
-The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system. [Click here for sample file]()
+The import pages enable users to manually enter data or upload CSV files for inserting course sections (Workday) and SEI data into the system. [Click here for sample file](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/pre-dev-integration/docs/final/SampleCourseCSV%20(4).csv)
 
 ## Attempting to Update or Overwrite an Existing Course Section
 
