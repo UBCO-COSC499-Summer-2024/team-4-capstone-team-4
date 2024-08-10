@@ -205,11 +205,6 @@ class DatabaseSeeder extends Seeder
         }
 
         // Creating Teaching Assistants
-        $ta = TeachingAssistant::factory()->create([
-            'name' => 'Mr TA',
-            'rating' => 5,
-        ]);
-
         $teachingAssistants = TeachingAssistant::factory(10)->create();
         $ta = TeachingAssistant::factory()->create([
             'name' => 'Mr TA',

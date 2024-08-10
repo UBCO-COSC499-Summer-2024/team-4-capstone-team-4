@@ -6,6 +6,7 @@ use App\Models\Area;
 use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\Department;
+use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Rule;
@@ -177,6 +178,7 @@ class ImportWorkdayForm extends Component
     }
 
     public function handleSubmit() {
+        $user = User::find((int) Auth::id())->getName();
         $this->courseExists = false;
 
         // dd($this->rows);
@@ -251,7 +253,17 @@ class ImportWorkdayForm extends Component
                 
                 $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
 
-                CourseSection::updateOrCreate([
+                $courseExists = CourseSection::where('prefix', $prefix)
+                ->where('number', $row['number'])
+                ->where('area_id', $row['area_id'])
+                ->where('year', $row['year'])
+                ->where('term', $row['term'])
+                ->where('session', $row['session'])
+                ->where('section' , $row['section'])
+                ->where('room', $row['room'])
+                ->first();
+
+                $course = CourseSection::updateOrCreate([
                     'number' => $row['number'],
                     'section' => $row['section'],
                     'area_id' => $row['area_id'],
@@ -282,6 +294,13 @@ class ImportWorkdayForm extends Component
                     ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''],
                 ];
 
+                if($courseExists) {
+                    $course->log_audit('Update Course Section', ['operation_type' => 'UPDATE', 'old_value' => json_encode($courseExists->getAttributes()) ,'new_value' => json_encode($course->getAttributes())], 'Update Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+                } else if (!$courseExists) {
+                    $course->log_audit('Add Course Section', ['operation_type' => 'CREATE', 'new_value' => json_encode($course->getAttributes())], 'Created Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+
+                }
+                
                 Session::forget('workdayFormData');
 
                 $this->showModal = true;
