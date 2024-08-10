@@ -9,36 +9,42 @@ use Livewire\WithPagination;
 class ApprovalStatuses extends Component {
     use WithPagination;
 
-    public $search = '';
-    public $selectedSort = 'id';
-    public $selectedSortOrder = 'desc';
-    public $selectAll = false;
-    public $selectedItems = [];
-    public $selectedFilter = [];
+    public $search = '';  // Search term for filtering results
+    public $selectedSort = 'id';  // Column to sort by
+    public $selectedSortOrder = 'desc';  // Order of sorting (ascending or descending)
+    public $selectAll = false;  // Flag for selecting all items
+    public $selectedItems = [];  // Array of selected items
+    public $selectedFilter = [];  // Array of selected filters
     public $ignore_headers = [
         'created_at', 'updated_at', 'status_id', 'approved_at', 'rejected_at', 'approved_by', 'rejected_by'
-    ];
-    public $filters = [];
-    public $headers = [];
-    public $pgSize = 10;
-    public $pgTag = 'aps_page';
+    ];  // Headers to ignore in filters
+    public $filters = [];  // Array of filters
+    public $headers = [];  // Array of table headers
+    public $pgSize = 10;  // Number of items per page
+    public $pgTag = 'aps_page';  // Pagination tag
     public $itemOptions = [
-        'edit' => true,
-        'delete' => true,
+        'edit' => true,  // Option to edit items
+        'delete' => true,  // Option to delete items
     ];
 
     public $listeners = [
-        'refresh-list' => 'refresh',
-        'sort-selected' => 'sortSelected',
-        'change-filters' => 'updateFilters',
-        'clear-filters' => 'clearFilters',
+        'refresh-list' => 'refresh',  // Listener to refresh the list
+        'sort-selected' => 'sortSelected',  // Listener to handle sorting
+        'change-filters' => 'updateFilters',  // Listener to handle filter changes
+        'clear-filters' => 'clearFilters',  // Listener to clear filters
     ];
 
+    /**
+     * Initialize component with headers and filters.
+     */
     public function mount() {
         $this->getHeaders();
         $this->getFilters();
     }
 
+    /**
+     * Get and format table headers.
+     */
     public function getHeaders() {
         $this->headers = ApprovalStatus::getColumns();
         $this->headers = collect($this->headers)->map(function ($header) {
@@ -54,10 +60,19 @@ class ApprovalStatuses extends Component {
         });
     }
 
+    /**
+     * Convert header label to proper column name format.
+     *
+     * @param string $column Header label
+     * @return string Column name
+     */
     public function getProperColumn($column) {
         return $column === 'ID' ? 'id' : strtolower(str_replace(' ', '_', $column));
     }
 
+    /**
+     * Get distinct filter values for each column.
+     */
     public function getFilters() {
         $this->filters = collect($this->headers)->map(function ($header) {
             $col = $this->getProperColumn($header['label']);
@@ -76,14 +91,27 @@ class ApprovalStatuses extends Component {
         }
     }
 
+    /**
+     * Handle column sorting.
+     *
+     * @param string $column Column name to sort by
+     */
     public function sortSelected($column) {
         $this->sortColumn($column);
     }
 
+    /**
+     * Update the search term.
+     *
+     * @param string $value New search term
+     */
     public function updateSearch($value) {
         $this->search = $value;
     }
 
+    /**
+     * Clear all selected filters and reset filters.
+     */
     public function clearFilters() {
         $this->selectedFilter = [];
         $this->getFilters();
@@ -92,7 +120,14 @@ class ApprovalStatuses extends Component {
         }
     }
 
-    public function updateFiltres($category, $item, $isChecked) {
+    /**
+     * Update selected filters based on user interaction.
+     *
+     * @param string $category Filter category
+     * @param mixed $item Filter item
+     * @param bool $isChecked Whether the item is checked
+     */
+    public function updateFilters($category, $item, $isChecked) {
         if ($this->selectedFilter[$category] === null) {
             $this->selectedFilter[$category] = [];
         }
@@ -107,6 +142,11 @@ class ApprovalStatuses extends Component {
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
+    /**
+     * Render the component view with paginated approval statuses.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render() {
         $query = ApprovalStatus::query();
         $query->orderBy($this->selectedSort, $this->selectedSortOrder);
@@ -122,6 +162,11 @@ class ApprovalStatuses extends Component {
         ]);
     }
 
+    /**
+     * Toggle sorting direction or change sorting column.
+     *
+     * @param string $column Column name to sort by
+     */
     public function sortColumn($column) {
         if ($this->selectedSort === $column) {
             $this->selectedSortOrder = $this->selectedSortOrder === 'asc' ? 'desc' : 'asc';
@@ -132,3 +177,4 @@ class ApprovalStatuses extends Component {
         $this->dispatch('sort-selected', [$this->selectedSort, $this->selectedSortOrder]);
     }
 }
+

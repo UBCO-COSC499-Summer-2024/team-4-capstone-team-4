@@ -3,8 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-//use LivewireUI\Modal\ModalComponent;
-//use Livewire\ModalComponent;
 use App\Models\ExtraHour;
 use App\Models\Area;
 use App\Models\AreaPerformance;
@@ -30,10 +28,10 @@ class ExtraHourForm extends Component
     public $roomB;
     public $roomN;
     public $roomS;
-    // public $serviceRoleId;
     public $showExtraHourForm;
     public $audit_user;
     public $show;
+
     protected $listeners = [
         'showExtraHourForm' => 'showForm'
     ];
@@ -49,32 +47,38 @@ class ExtraHourForm extends Component
         'area_id' => 'required|exists:areas,id',
     ];
 
+    /**
+     * Initialize component properties and set default values.
+     *
+     * @param bool $showExtraHourForm
+     * @return void
+     */
     public function mount($showExtraHourForm = true) {
-        // $this->serviceRoleId = $serviceRoleId;
         $this->year = date('Y');
         $this->month = date('n');
         $this->user_roles = UserRole::where('role', 'instructor')->get();
-        // ServiceRole::find($this->serviceRoleId)->where('area_id', $this->area_id)
-        // ->where('year', $this->year)
-        // ->first();
-        // if ($this->serviceRoleId) {
-        //     $this->user_roles = ServiceRole::find($this->serviceRoleId)->userRoles->where('role', 'instructor');
-        // } else {
-        // }
-        $this->user_roles = UserRole::where('role', 'instructor')->get();
         $this->areas = Area::all();
         $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id ?? null;
-        // $this->area_id = $serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
         $this->area_id = null;
         $this->showExtraHourForm = $showExtraHourForm;
         $this->audit_user = User::find(auth()->id())->getName();
     }
 
+    /**
+     * Concatenate room-related properties into a single room string.
+     *
+     * @return void
+     */
     public function concatRoom() {
         $this->room = $this->roomB . ($this->roomN ? ' ' . $this->roomN : '') . ($this->roomS ? ' ' . $this->roomS : '');
         $this->room = trim($this->room);
     }
 
+    /**
+     * Save the extra hour data and update related records.
+     *
+     * @return void
+     */
     public function save() {
         try {
             $this->concatRoom();
@@ -82,11 +86,8 @@ class ExtraHourForm extends Component
             $clear = false;
             $this->validate();
 
-            // $serviceRole = ServiceRole::find($this->serviceRoleId)->where('area_id', $this->area_id)
-            // ->where('year', $this->year)
-            // ->first();
             $instructors = UserRole::instructors();
-            // dd($instructors);
+
             if ($this->instructor_id == null) {
                 $this->instructor_id = (int) $this->instructor_id;
                 foreach ($instructors as $instructor) {
@@ -177,7 +178,7 @@ class ExtraHourForm extends Component
                 }
             }
 
-            // if no instructor assigned to the service role
+            // Check if no instructors are assigned to the service role
             if (count($instructors) == 0) {
                 $this->dispatch('show-toast', [
                     'message' => 'No instructor assigned to this service role.',
@@ -234,14 +235,29 @@ class ExtraHourForm extends Component
         }
     }
 
+    /**
+     * Close the modal form without saving.
+     *
+     * @return void
+     */
     public function cancel() {
         $this->dispatch('closeModal');
     }
 
+    /**
+     * Show the extra hour form.
+     *
+     * @return void
+     */
     public function showForm() {
         $this->showExtraHourForm = true;
     }
 
+    /**
+     * Reset the form fields to their default values.
+     *
+     * @return void
+     */
     public function resetForm() {
         $this->name = '';
         $this->description = '';
@@ -254,10 +270,14 @@ class ExtraHourForm extends Component
         $this->roomS = '';
         $this->assigner_id = UserRole::where('user_id', auth()->id())->first()->id ?? null;
         $this->instructor_id = null;
-        // $this->area_id = $this->serviceRoleId ? ServiceRole::find($this->serviceRoleId)->area_id : 1;
         $this->area_id = null;
     }
 
+    /**
+     * Render the view for the extra hour form component.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render() {
         return view('livewire.extra-hour-form');
     }

@@ -19,53 +19,70 @@ class ArchivedDetails extends Component
 {
     use WithPagination;
 
-    public $sortField = 'courseName'; // default 
-    public $sortDirection = 'asc'; //default
+    public $sortField = 'courseName'; // Default sort field for courses
+    public $sortDirection = 'asc'; // Default sort direction
 
-    public $searchTerm = '';
-    public $areaId = null;
-    public $pagination;
-    public $selectedCourses = [];
+    public $searchTerm = ''; // Search term for filtering courses
+    public $areaId = null; // Area ID for filtering courses
+    public $pagination; // Number of items per page
+    public $selectedCourses = []; // List of selected courses for batch operations
 
+    /**
+     * Initialize the component and load courses.
+     */
     public function mount()
     {
         $this->loadCourses();
     }
 
+    /**
+     * Show the confirmation modal.
+     */
     public function showConfirmation()
     {
         $this->showConfirmationModal = true;
     }
 
+    /**
+     * Hide the confirmation modal.
+     */
     public function hideConfirmation()
     {
         $this->showConfirmationModal = false;
     }
 
+    /**
+     * Load archived courses from the database.
+     */
     public function loadCourses()
     {
         $this->courses = CourseSection::where('archived', true)->get(); // Load only archived courses
     }
 
+    /**
+     * Unarchive selected courses and reload the course list.
+     */
     public function unarchiveCourses()
-{
-    if (!empty($this->selectedCourses)) {
-        CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => false]);
+    {
+        if (!empty($this->selectedCourses)) {
+            // Update the archived status of selected courses
+            CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => false]);
 
-        // Reload courses after unarchiving
-        $this->loadCourses();
-        $this->selectedCourses = []; 
+            // Reload courses after unarchiving
+            $this->loadCourses();
+            $this->selectedCourses = []; // Clear the selected courses list
+        }
     }
-}
 
+    /**
+     * Render the view with the filtered and sorted course sections.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         $user = Auth::user();
-        if ($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])) {
-            $userRole = 'instructor';
-        } else {
-            $userRole = 'other';
-        }
+        $userRole = ($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])) ? 'instructor' : 'other';
 
         $query = $this->searchTerm;
         $areaId = $this->areaId;
@@ -86,7 +103,7 @@ class ArchivedDetails extends Component
                 $queryBuilder->where('area_id', $areaId);
             })->orderBy('updated_at', 'desc');
 
-        // Pagination
+        // Apply pagination based on the selected option
         switch ($this->pagination) {
             case 25:
                 $courseSections = $courseSectionsQuery->paginate(25);
@@ -105,6 +122,7 @@ class ArchivedDetails extends Component
                 break;
         }
 
+        // Transform course sections for display
         $courseSections->transform(function ($section) {
             $seiData = $section->seiData()->first() ?? null;
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
@@ -146,6 +164,12 @@ class ArchivedDetails extends Component
         return view('livewire.archived-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'courses'));
     }
 
+    /**
+     * Calculate the average rating from SEI data.
+     *
+     * @param string $questionsJson JSON-encoded SEI questions data
+     * @return float Average rating
+     */
     private function calculateAverageRating($questionsJson)
     {
         $questions = json_decode($questionsJson, true);
@@ -159,9 +183,14 @@ class ArchivedDetails extends Component
         return 0;
     }
 
+    /**
+     * Export archived courses data to a CSV file.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function exportCSV()
     {
-        // Your CSV export logic here
+        // Fetch archived courses for export
         $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])
             ->where('archived', true) // Export only archived courses
             ->get();
@@ -189,3 +218,4 @@ class ArchivedDetails extends Component
             ->header('Content-Disposition', "attachment; filename={$csvFileName}");
     }
 }
+

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class CoursedetailsTableRow extends Component {
+    // State variables
     public $isEditing = false;
     public $selected = false;
     public $id;
@@ -26,6 +27,7 @@ class CoursedetailsTableRow extends Component {
     public $areas;
     public $seiData;
 
+    // Event listeners
     protected $listeners = [
         'toggleEdit' => 'toggleEdit',
         'saveItem' => 'saveItem',
@@ -34,6 +36,7 @@ class CoursedetailsTableRow extends Component {
         'archiveCourse' => 'archiveCourse',
     ];
 
+    // Validation rules
     protected $rules = [
         'departmentId' => 'required|exists:areas,id',
         'enrolledStudents' => 'required|numeric',
@@ -42,6 +45,12 @@ class CoursedetailsTableRow extends Component {
         'room' => 'required|string',
     ];
 
+    /**
+     * Initialize component with course data.
+     *
+     * @param  \App\Models\CourseSection  $course
+     * @return void
+     */
     public function mount($course) {
         $this->course = $course;
         $this->areas = Area::all();
@@ -61,24 +70,48 @@ class CoursedetailsTableRow extends Component {
         $this->instructorName = $course->instructorName;
     }
 
+    /**
+     * Toggle the editing state for the course.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function toggleEdit($id) {
         if ($this->id == $id) {
             $this->isEditing = !$this->isEditing;
         }
     }
 
+    /**
+     * Enable editing mode for the course.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function enableEdit($id) {
         if ($this->id == $id) {
             $this->isEditing = true;
         }
     }
 
+    /**
+     * Cancel editing mode for the course.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function cancelEdit($id) {
         if ($this->id == $id) {
             $this->isEditing = false;
         }
     }
 
+    /**
+     * Save the updated course details.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function saveItem($id) {
         $id = (int) $id;
         if ($this->id === $id) {
@@ -92,10 +125,14 @@ class CoursedetailsTableRow extends Component {
                 $course->capacity = $this->courseCapacity;
                 $course->room = $this->room;
                 $course->save();
+
+                // Notify user of successful save
                 $this->dispatch('show-toast', [
                     'message' => 'Changes saved successfully',
                     'type' => 'success'
                 ]);
+
+                // Log audit information
                 CourseSection::audit('update success', [
                     'operation_type' => 'UPDATE',
                     'old_value' => json_encode($oldValue),
@@ -104,12 +141,16 @@ class CoursedetailsTableRow extends Component {
 
                 $this->isEditing = false;
             } catch(\Illuminate\Validation\ValidationException $e) {
+                // Handle validation exceptions
                 throw $e;
             } catch(\Exception $e) {
+                // Notify user of an error
                 $this->dispatch('show-toast', [
                     'message' => 'An error occurred while saving the changes',
                     'type' => 'error'
                 ]);
+
+                // Log audit information for errors
                 CourseSection::audit('update error', [
                     'operation_type' => 'UPDATE',
                 ], $this->user->getName() . ' failed to update courses. Error: ' . $e->getMessage());
@@ -117,6 +158,12 @@ class CoursedetailsTableRow extends Component {
         }
     }
 
+    /**
+     * Archive the course.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function archiveCourse($id) {
         $id = (int) $id;
         if ($this->id === $id) {
@@ -125,20 +172,27 @@ class CoursedetailsTableRow extends Component {
                 $oldValue = $course->toArray();
                 $course->archived = true;
                 $course->save();
+
+                // Notify user of successful archive
                 $this->dispatch('show-toast', [
                     'message' => 'Course archived successfully',
                     'type' => 'success'
                 ]);
+
+                // Log audit information
                 CourseSection::audit('archive success', [
                     'operation_type' => 'UPDATE',
                     'old_value' => json_encode($oldValue),
                     'new_value' => json_encode($course),
                 ], $this->user->getName() . ' archived course successfully');
             } catch(\Exception $e) {
+                // Notify user of an error
                 $this->dispatch('show-toast', [
                     'message' => 'An error occurred while archiving the course',
                     'type' => 'error'
                 ]);
+
+                // Log audit information for errors
                 CourseSection::audit('archive error', [
                     'operation_type' => 'UPDATE',
                 ], $this->user->getName() . ' failed to archive course. Error: ' . $e->getMessage());
@@ -146,9 +200,15 @@ class CoursedetailsTableRow extends Component {
         }
     }
 
+    /**
+     * Render the component view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render() {
         $user = Auth::user();
         $canEdit = $user->hasRoles(['admin', 'dept_head', 'dept_staff']);
-        return view('livewire.coursedetails-table-row',['canEdit' => $canEdit],);
+        return view('livewire.coursedetails-table-row', ['canEdit' => $canEdit]);
     }
 }
+

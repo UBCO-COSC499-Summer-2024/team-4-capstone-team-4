@@ -7,7 +7,6 @@ use App\Models\AreaPerformance;
 use App\Models\CourseSection;
 use App\Models\DepartmentPerformance;
 use App\Models\InstructorPerformance;
-use App\Models\SeiData;
 use App\Models\Teach;
 use App\Models\User;
 use App\Models\UserRole;
@@ -25,6 +24,9 @@ class ImportAssignCourse extends Component
     public $selectedIndex = -1;
     public $searchTerm = '';
 
+    /**
+     * Initialize the component by setting up the available courses.
+     */
     public function mount() {
         $this->assignments = $this->getAvailableCourses()->map(function($course) {
             return [
@@ -36,75 +38,56 @@ class ImportAssignCourse extends Component
         })->toArray();
     }
 
+    /**
+     * Handle the submission of course assignments.
+     * This method creates or updates performance records for instructors, areas, and departments.
+     */
     public function handleSubmit() { 
-
         foreach ($this->assignments as $assignment) {
             $instructor_id = (int) $assignment['instructor_id'];
             $year = $assignment['year'];
-            //dd($assignment);
 
-            if ($instructor_id != null) {
+            if ($instructor_id !== null) {
+                // Assign course to instructor
                 Teach::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'instructor_id' => $instructor_id,
                 ]);
 
-             
+                // Retrieve related IDs
                 $area_id = CourseSection::where('id', $assignment['course_section_id'])->value('area_id');
                 $dept_id = Area::where('id', $area_id)->value('dept_id');
 
+                // Update or create instructor performance
                 $instructorPerformance = InstructorPerformance::where('instructor_id', $instructor_id )->where('year', $year )->first();
-                $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', $year)->first();
-                $departmentPerformance  = DepartmentPerformance::where('dept_id', $dept_id)->where('year', $year)->first();
-
-                if($instructorPerformance != null){
+                if ($instructorPerformance !== null) {
                     InstructorPerformance::updatePerformance($instructor_id, $year);
-                }else{
+                } else {
                     InstructorPerformance::create([
                         'instructor_id'=> $instructor_id,
                         'score' => 0,
-                        'total_hours' => json_encode([
-                            'January' => 0,
-                            'February' => 0,
-                            'March' => 0,
-                            'April' => 0,
-                            'May' => 0,
-                            'June' => 0,
-                            'July' => 0,
-                            'August' => 0,
-                            'September' => 0,
-                            'October' => 0,
-                            'November' => 0,
-                            'December' => 0,
-                        ]),
+                        'total_hours' => json_encode(array_fill_keys([
+                            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                        ], 0)),
                         'target_hours' => null,
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
                         'year' => $year,
                     ]);
-                   InstructorPerformance::updatePerformance($instructor_id, $year);
+                    InstructorPerformance::updatePerformance($instructor_id, $year);
                 }
 
-                if ($areaPerformance != null) {
+                // Update or create area performance
+                $areaPerformance = AreaPerformance::where('area_id', $area_id)->where('year', $year)->first();
+                if ($areaPerformance !== null) {
                     AreaPerformance::updateAreaPerformance($area_id, $year);
                 } else {
                     AreaPerformance::create([
                         'area_id'=> $area_id,
-                        'total_hours' => json_encode([
-                            'January' => 0,
-                            'February' => 0,
-                            'March' => 0,
-                            'April' => 0,
-                            'May' => 0,
-                            'June' => 0,
-                            'July' => 0,
-                            'August' => 0,
-                            'September' => 0,
-                            'October' => 0,
-                            'November' => 0,
-                            'December' => 0,
-                        ]),
+                        'total_hours' => json_encode(array_fill_keys([
+                            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                        ], 0)),
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
@@ -113,25 +96,16 @@ class ImportAssignCourse extends Component
                     AreaPerformance::updateAreaPerformance($area_id, $year);
                 }
 
-                if ($departmentPerformance != null) {
+                // Update or create department performance
+                $departmentPerformance = DepartmentPerformance::where('dept_id', $dept_id)->where('year', $year)->first();
+                if ($departmentPerformance !== null) {
                     DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
                 } else {
                     DepartmentPerformance::create([
                         'dept_id'=> $dept_id,
-                        'total_hours' => json_encode([
-                            'January' => 0,
-                            'February' => 0,
-                            'March' => 0,
-                            'April' => 0,
-                            'May' => 0,
-                            'June' => 0,
-                            'July' => 0,
-                            'August' => 0,
-                            'September' => 0,
-                            'October' => 0,
-                            'November' => 0,
-                            'December' => 0,
-                        ]),
+                        'total_hours' => json_encode(array_fill_keys([
+                            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                        ], 0)),
                         'sei_avg' => 0,
                         'enrolled_avg'=> 0,
                         'dropped_avg'=> 0,
@@ -142,40 +116,59 @@ class ImportAssignCourse extends Component
             }
         }
 
-
         // Reset the form
         $this->mount();
 
+        // Display success message
         session()->flash('success', 'Instructors assigned successfully!');
 
-        if(session()->has('success')) {
+        if (session()->has('success')) {
             $this->showModal = true;
         }
     }
     
+    /**
+     * Open the instructor selection modal.
+     *
+     * @param int $index The index of the assignment being edited.
+     */
     public function openInstructorModal($index) {
         $this->selectedIndex = $index;
-        // dd($this->selectedIndex);
         $this->showInstructorModal = true;
     }
 
+    /**
+     * Close the instructor selection modal.
+     */
     public function closeInstructorModal() {
         $this->showInstructorModal = false;
     }
 
+    /**
+     * Close the success message modal.
+     */
     public function closeModal() {
         $this->showModal = false;
     }
 
+    /**
+     * Select an instructor and assign them to the selected course.
+     *
+     * @param int $id The ID of the selected instructor.
+     * @param string $firstname The first name of the selected instructor.
+     * @param string $lastname The last name of the selected instructor.
+     * @param int $selectedIndex The index of the assignment being edited.
+     */
     public function selectInstructor($id, $firstname, $lastname, $selectedIndex) {
         $this->assignments[$selectedIndex]["instructor_id"] = $id;
         $this->assignments[$selectedIndex]["instructor"] = $firstname . " " . $lastname;
 
         $this->closeInstructorModal();
-  
-        // dd($this->assignments);
     }
 
+    /**
+     * Update the filtered list of instructors based on the search term.
+     */
     public function updateSearch() {
         $availableInstructors = $this->getAvailableInstructors();
 
@@ -185,48 +178,40 @@ class ImportAssignCourse extends Component
         });
     }
 
+    /**
+     * Retrieve a list of available courses that are not yet assigned.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAvailableCourses() {
         $assignedCourseIds = Teach::pluck('course_section_id');
 
         return CourseSection::whereNotIn('id', $assignedCourseIds)->get();
     }
 
+    /**
+     * Retrieve a list of available instructors.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAvailableInstructors() {
-        // $instructorRoleIds = UserRole::where('role', 'instructor')->pluck('user_id');
-
         return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
             ->where('role', 'instructor')
             ->orderByRaw('LOWER(users.lastname)')
             ->orderByRaw('LOWER(users.firstname)')
             ->get();
-
-        // return User::join('user_roles', 'users.id', '=', 'user_roles.user_id')
-        // ->where('role', 'instructor')
-        // ->where(function ($query) {
-        //     $query->whereRaw('users.firstname ILIKE ?', ["%{$this->instructorSearch}%"])
-        //           ->orWhereRaw('users.lastname ILIKE ?', ["%{$this->instructorSearch}%"])
-        //           ->orWhereRaw('CONCAT(users.firstname, \' \', users.lastname) ILIKE ?', ["%{$this->instructorSearch}%"]);
-        // })
-        // ->orderByRaw('LOWER(users.lastname)')
-        // ->orderByRaw('LOWER(users.firstname)')
-        // ->get();
     }
 
+    /**
+     * Render the component view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
-        // InstructorPerformance::updatePerformance(8, 2000);
-            // AreaPerformance::updateAreaPerformance(1, 2023);
-            // DepartmentPerformance::updateDepartmentPerformance(1, 2023);
-
-        // dd($this->assignments);
         $this->updateSearch();
 
-        if(!$this->getAvailableCourses()->isEmpty()) {
-            $this->hasCourses = true;
-        } else {
-            $this->hasCourses = false;
-        }
-        // dd($this->getAvailableInstructors());
+        $this->hasCourses = !$this->getAvailableCourses()->isEmpty();
 
         return view('livewire.import-assign-course', [
             'availableInstructors' => $this->getAvailableInstructors(),
@@ -236,3 +221,4 @@ class ImportAssignCourse extends Component
         ]);
     }
 }
+

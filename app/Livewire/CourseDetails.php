@@ -18,50 +18,59 @@ use Illuminate\Support\Facades\Http;
 
 class CourseDetails extends Component
 {
-    public $ids = [];
-    public $courses = [];
-    public $courseNames = [];
-    public $enrolledStudents = [];
-    public $droppedStudents = [];
-    public $archivedCourses = [];
-    public $courseCapacities = [];
+    public $ids = []; // Array to store IDs of course sections
+    public $courses = []; // Array to store course sections
+    public $courseNames = []; // Array to store names of courses
+    public $enrolledStudents = []; // Array to store number of enrolled students
+    public $droppedStudents = []; // Array to store number of dropped students
+    public $archivedCourses = []; // Array to store archived courses
+    public $courseCapacities = []; // Array to store capacities of courses
 
-    use WithPagination;
+    use WithPagination; // Include pagination functionality
 
-    public $sortField = 'courseName'; // default
-    public $sortDirection = 'asc'; //default
-    public $showDeleteButton = false;
-    public $user;
+    public $sortField = 'courseName'; // Default sorting field
+    public $sortDirection = 'asc'; // Default sorting direction
+    public $showDeleteButton = false; // Flag to show/hide delete button
+    public $user; // Current user
 
-    public $searchTerm = '';
-    public $areaId = null;
-    public $pagination;
-    public $selectedCourses = []; // Add this line
-    public $coursesSelected = [];
-    public $showConfirmationModal = false;
+    public $searchTerm = ''; // Term for searching courses
+    public $areaId = null; // Selected area ID for filtering courses
+    public $pagination; // Number of items per page for pagination
+    public $selectedCourses = []; // Array to store selected course IDs
+    public $coursesSelected = []; // Array to store selected courses
+    public $showConfirmationModal = false; // Flag to show/hide confirmation modal
     protected $listeners = [
-        'save-changes' => 'saveChanges',
-        'selectCourse' => 'selectCourse',
+        'save-changes' => 'saveChanges', // Listener for saving changes
+        'selectCourse' => 'selectCourse', // Listener for selecting a course
     ];
 
+    /**
+     * Initialize the component.
+     */
     public function mount()
     {
-        $this->user = User::find(Auth::id());
-        $this->loadCourses();
+        $this->user = User::find(Auth::id()); // Get the current authenticated user
+        $this->loadCourses(); // Load course sections
     }
 
+    /**
+     * Save changes made to courses.
+     */
     public function saveChanges()
     {
         try {
+            // Save course changes via HTTP request (commented out)
             // $response = Http::post(route('courses.details.save'), [
-
             //     'courseNames' => $this->courseNames,
             //     'enrolledStudents' => $this->enrolledStudents,
             //     'droppedStudents' => $this->droppedStudents,
             //     'courseCapacities' => $this->courseCapacities,
             // ]);
+
+            // Debug output for course data
             dd($this->courseNames, $this->enrolledStudents, $this->droppedStudents, $this->courseCapacities);
         } catch (\Exception $e) {
+            // Log error and dispatch a toast notification on failure
             Log::error($e->getMessage());
             $this->dispatch('show-toast', [
                 'message' => 'Failed to update courses.',
@@ -73,27 +82,40 @@ class CourseDetails extends Component
         }
     }
 
+    /**
+     * Show the confirmation modal.
+     */
     public function showConfirmation()
     {
         $this->showConfirmationModal = true;
     }
 
+    /**
+     * Hide the confirmation modal.
+     */
     public function hideConfirmation()
     {
         $this->showConfirmationModal = false;
     }
 
+    /**
+     * Load the list of unarchived course sections.
+     */
     public function loadCourses()
     {
         $this->courses = CourseSection::where('archived', false)->get(); // Load only unarchived courses
     }
 
+    /**
+     * Archive selected courses and update UI.
+     */
     public function archiveCourses()
     {
         $archivedCourses = CourseSection::whereIn('id', $this->selectedCourses)->get(['prefix', 'number', 'section', 'year', 'session', 'term']);
 
         CourseSection::whereIn('id', $this->selectedCourses)->update(['archived' => true]);
 
+        // Format archived courses for display
         $this->archivedCourses = $archivedCourses->map(function($course) {
             return sprintf('%s %s %s - %s%s %s',
                 $course->prefix,
@@ -105,14 +127,21 @@ class CourseDetails extends Component
             );
         })->toArray();
 
-        $this->loadCourses();
-        $this->selectedCourses = [];
-        $this->showDeleteButton = false;
-        $this->showConfirmationModal = false;
+        $this->loadCourses(); // Reload courses
+        $this->selectedCourses = []; // Clear selected courses
+        $this->showDeleteButton = false; // Hide delete button
+        $this->showConfirmationModal = false; // Hide confirmation modal
 
+        // Dispatch a summary of archived courses
         $this->dispatch('show-archived-summary', ['courses' => $this->archivedCourses]);
     }
 
+    /**
+     * Select or deselect a course.
+     *
+     * @param int $id The ID of the course
+     * @param bool $selected Whether the course is selected or not
+     */
     public function selectCourse($id, $selected) {
         $id = (int) $id;
         if ($selected) {
@@ -120,11 +149,15 @@ class CourseDetails extends Component
         } else {
             $this->selectedCourses = array_diff($this->selectedCourses, [$id]);
         }
-        // dd($this->coursesSelected);
-
+        // Update the visibility of the delete button based on selection
         // $this->showDeleteButton = count($this->selectedCourses) > 0;
     }
 
+    /**
+     * Render the component view.
+     *
+     * @return \Illuminate\View\View The view to be rendered
+     */
     public function render() {
         $user = User::find(Auth::id());
         if ($user->hasRole('instructor') && !$user->hasRoles(['dept_head', 'dept_staff', 'admin'])) {
@@ -136,6 +169,7 @@ class CourseDetails extends Component
         $query = $this->searchTerm;
         $areaId = $this->areaId;
 
+        // Query to retrieve course sections based on filters and user role
         $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user'])
             ->where('archived', false) // Only show unarchived courses
             ->when($userRole === 'instructor', function ($queryBuilder) use ($user) {
@@ -152,7 +186,7 @@ class CourseDetails extends Component
                 $queryBuilder->where('area_id', $areaId);
             })->orderBy('updated_at', 'desc');
 
-        //pagination
+        // Apply pagination
         switch ($this->pagination) {
             case 25:
                 $courseSections = $courseSectionsQuery->paginate(25);
@@ -171,6 +205,7 @@ class CourseDetails extends Component
                 break;
         }
 
+        // Transform course sections for display
         $courseSections->transform(function ($section) {
             $seiData = $section->seiData()->first() ?? null;
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
@@ -184,7 +219,7 @@ class CourseDetails extends Component
                 $section->term
             );
 
-            // if no instructor is assigned, display 'No Instructors'
+            // If no instructor is assigned, display 'No Instructors'
             if (empty($section->teaches)) {
                 $instructorName = 'No Instructors';
             } else {
@@ -207,6 +242,7 @@ class CourseDetails extends Component
             ];
         });
 
+        // Get all areas for filtering
         $areas = Area::all();
 
         $sortField = $this->sortField;
@@ -216,6 +252,12 @@ class CourseDetails extends Component
         return view('livewire.course-details', compact('courseSections', 'sortField', 'sortDirection', 'areaId', 'areas', 'courses'));
     }
 
+    /**
+     * Calculate the average rating from SEI data.
+     *
+     * @param string $questionsJson JSON string of SEI questions
+     * @return float The average rating
+     */
     private function calculateAverageRating($questionsJson)
     {
         $questions = json_decode($questionsJson, true);
@@ -229,9 +271,14 @@ class CourseDetails extends Component
         return 0;
     }
 
+    /**
+     * Export course data to a CSV file.
+     *
+     * @return \Illuminate\Http\Response The CSV file response
+     */
     public function exportCSV()
     {
-        // Your CSV export logic here
+        // Retrieve unarchived course sections
         $courseSections = CourseSection::with(['area', 'teaches.instructor.user'])
             ->where('archived', false) // Only export unarchived courses
             ->get();

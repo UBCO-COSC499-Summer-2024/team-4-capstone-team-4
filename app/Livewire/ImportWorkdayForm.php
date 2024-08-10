@@ -26,6 +26,12 @@ class ImportWorkdayForm extends Component
     public $userConfirms = false;
     public $rowAmount = 0;
 
+    /**
+     * Initialize the component state.
+     * Retrieve existing data from the session or initialize default rows.
+     *
+     * @return void
+     */
     public function mount() {
         if(Session::has('workdayFormData')) {
             $this->rows = Session::get('workdayFormData');
@@ -36,9 +42,13 @@ class ImportWorkdayForm extends Component
         }
     }
 
+    /**
+     * Define validation rules for the form inputs.
+     *
+     * @return array
+     */
     public function rules() {
         $rules = [];
-
 
         foreach ($this->rows as $index => $row) {
             $rules["rows.{$index}.number"] = 'required|integer';
@@ -58,69 +68,99 @@ class ImportWorkdayForm extends Component
         return $rules;
     }
 
+    /**
+     * Define custom validation messages.
+     *
+     * @return array
+     */
     public function messages() {
         $messages = [];
 
         foreach ($this->rows as $index => $row) {
-                $messages["rows.{$index}.number.required"] = 'Please enter a course number';
-                $messages["rows.{$index}.section.required"] = 'Please enter a course section';
-                $messages["rows.{$index}.area_id.required"] = 'Please select a sub area';
-                $messages["rows.{$index}.session.required"] = 'Please select a session';
-                $messages["rows.{$index}.term.required"] = 'Please select a term';
-                $messages["rows.{$index}.year.required"] = 'Please enter a year';
-                $messages["rows.{$index}.room.required"] = 'Please enter a room';
-                $messages["rows.{$index}.time_start.required"] = 'Please enter a time';
-                $messages["rows.{$index}.time_end.required"] = 'Please enter a time';
-                $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
-                $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
-                $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
+            $messages["rows.{$index}.number.required"] = 'Please enter a course number';
+            $messages["rows.{$index}.section.required"] = 'Please enter a course section';
+            $messages["rows.{$index}.area_id.required"] = 'Please select a sub area';
+            $messages["rows.{$index}.session.required"] = 'Please select a session';
+            $messages["rows.{$index}.term.required"] = 'Please select a term';
+            $messages["rows.{$index}.year.required"] = 'Please enter a year';
+            $messages["rows.{$index}.room.required"] = 'Please enter a room';
+            $messages["rows.{$index}.time_start.required"] = 'Please enter a time';
+            $messages["rows.{$index}.time_end.required"] = 'Please enter a time';
+            $messages["rows.{$index}.enroll_start.required"] = 'Please enter # of enrolled';
+            $messages["rows.{$index}.enroll_end.required"] = 'Please enter # of enrolled';
+            $messages["rows.{$index}.capacity.required"] = 'Please enter course capacity';
 
-                $messages['rows.*.time_start.regex'] = 'The start time must be in military time format (HHMM or HH:MM).';
-                $messages['rows.*.time_end.regex'] = 'The end time must be in military time format (HHMM or HH:MM).';
+            $messages['rows.*.time_start.regex'] = 'The start time must be in military time format (HHMM or HH:MM).';
+            $messages['rows.*.time_end.regex'] = 'The end time must be in military time format (HHMM or HH:MM).';
 
-                $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
-                $messages["rows.{$index}.year.integer"] = 'Must be a number';
-                $messages["rows.{$index}.enroll_start.integer"] = 'Must be a number';
-                $messages["rows.{$index}.enroll_end.integer"] = 'Must be a number';
-                $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
-                $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
-        
-                $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enroll_start.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to 1';
+            $messages["rows.{$index}.area_id.integer"] = 'Must be a number';
+            $messages["rows.{$index}.year.integer"] = 'Must be a number';
+            $messages["rows.{$index}.enroll_start.integer"] = 'Must be a number';
+            $messages["rows.{$index}.enroll_end.integer"] = 'Must be a number';
+            $messages["rows.{$index}.dropped.integer"] = 'Must be a number';
+            $messages["rows.{$index}.capacity.integer"] = 'Must be a number';
     
-                $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.enroll_start.max"] = 'Must be lower than or equal to Capacity';
-                $messages["rows.{$index}.enroll_end.max"] = 'Must be lower than or equal to Capacity';
-                $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
-                $messages["rows.{$index}.capacity.max"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.number.min"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.duration.min"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.enroll_start.min"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.enroll_end.min"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.dropped.min"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.capacity.min"] = 'Must be greater than or equal to 1';
+    
+            $messages["rows.{$index}.number.max"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.duration.max"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.enroll_start.max"] = 'Must be lower than or equal to Capacity';
+            $messages["rows.{$index}.enroll_end.max"] = 'Must be lower than or equal to Capacity';
+            $messages["rows.{$index}.dropped.max"] = 'Enter a number 1-999';
+            $messages["rows.{$index}.capacity.max"] = 'Enter a number 1-999';
         }
         return $messages;
     }
 
+    /**
+     * Save form data to the session whenever a property is updated.
+     *
+     * @param string $propertyName The name of the updated property.
+     * @return void
+     */
     public function updated($propertyName)
     {
-        // Save form data to session
         Session::put('workdayFormData', $this->rows);
     }
 
+    /**
+     * Add a new row to the form and save to session.
+     *
+     * @return void
+     */
     public function addRow() {
         $this->resetValidation();
 
-        $this->rows[] =   ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''];
+        $this->rows[] = [
+            'number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 
+            'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 
+            'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''
+        ];
         Session::put('workdayFormData', $this->rows);
     }
 
+    /**
+     * Add multiple rows to the form based on the specified quantity.
+     *
+     * @return void
+     */
     public function addManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
+        for($i = 0; $i < $this->rowAmount; $i++) {
             $this->addRow();
         }
     }
 
+    /**
+     * Delete a specific row from the form and update session data.
+     *
+     * @param int $row The index of the row to delete.
+     * @return void
+     */
     public function deleteRow($row) {
         $this->resetValidation();
 
@@ -129,13 +169,23 @@ class ImportWorkdayForm extends Component
         Session::put('workdayFormData', $this->rows);
     }
 
+    /**
+     * Delete multiple rows from the form based on the specified quantity.
+     *
+     * @return void
+     */
     public function deleteManyRows() {
-        for($i=0; $i<$this->rowAmount; $i++) {
+        for($i = 0; $i < $this->rowAmount; $i++) {
             $count = count($this->rows);
-            $this->deleteRow($count-1);
+            $this->deleteRow($count - 1);
         }
     }
 
+    /**
+     * Validate that each row has a unique combination of fields.
+     *
+     * @return bool
+     */
     protected function validateUniqueRows() {
         $uniqueCombinations = [];
 
@@ -161,163 +211,96 @@ class ImportWorkdayForm extends Component
         return true;
     }
 
-    public function userConfirmDuplicate() {
-        $this->userConfirms = true;
-        $this->showConfirmModal = false;
-    }
+    /**
+     * Import the form data into the database.
+     *
+     * @return void
+     */
+    public function import() {
+        $this->resetErrorBag();
+        $this->resetValidation();
 
-    
-    public function closeModal() {
-        $this->showModal = false;
-    }
-
-    public function closeConfirmModal() {
-        $this->showConfirmModal = false;
-        $this->duplicateCourses = [];
-    }
-
-    public function handleSubmit() {
-        $this->courseExists = false;
-
-        // dd($this->rows);
-        $this->validate();
-
-        if (!$this->validateUniqueRows()) {
-            return;
-        }
-    
-        foreach ($this->rows as $index => $row) {
-            $prefix = '';
-            // dd($row);
-            
-            switch ($row['area_id']) {
-                case 1:
-                    $prefix = 'COSC';
-                    break;
-                case 2:
-                    $prefix = 'MATH';
-                    break;
-                case 3:
-                    $prefix = 'PHYS';
-                    break;
-                case 4:
-                    $prefix = 'STAT';
-                    break;
-            }
-
-            $course = CourseSection::where('prefix', $prefix)
-                ->where('number', $row['number'])
-                ->where('area_id', $row['area_id'])
-                ->where('year', $row['year'])
-                ->where('term', $row['term'])
-                ->where('session', $row['session'])
-                ->where('section' , $row['section'])
-                ->where('room', $row['room'])
-                ->first();
-
-            if ($course != null) {
-                $this->addError("rows.{$index}.exists", 'Warning: This course has already been created. Saving will overwrite the existing data. Delete or update the row to prevent this action');
-                $this->courseExists = true;
-                $this->duplicateCourses[] = $course;
-            }
-        
-        }
-
-        if($this->courseExists && !$this->userConfirms) {
-            $this->showConfirmModal = true;
-        } else if (!$this->courseExists) {
-            $this->userConfirms = true;
-        }
-
-        if($this->userConfirms) {
-            foreach($this->rows as $index => $row) {
-                $dropped = 0;
-                $prefix = '';
-            
-                switch ($row['area_id']) {
-                    case 1:
-                        $prefix = 'COSC';
-                        break;
-                    case 2:
-                        $prefix = 'MATH';
-                        break;
-                    case 3:
-                        $prefix = 'PHYS';
-                        break;
-                    case 4:
-                        $prefix = 'STAT';
-                        break;
-                }
-                
-                $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
-
-                CourseSection::updateOrCreate([
+        if ($this->validateUniqueRows() && $this->validate()) {
+            foreach ($this->rows as $row) {
+                $existingCourse = CourseSection::where([
                     'number' => $row['number'],
                     'section' => $row['section'],
                     'area_id' => $row['area_id'],
-                    'year' => $row['year'],
                     'session' => $row['session'],
-                    'term' => $row['term'], 
-                    'room' => $row['room'],    
-                ], 
-                [
-                    'prefix' => $prefix,
-                    'number' => $row['number'],
-                    'section' => $row['section'], 
-                    'area_id' => $row['area_id'], 
-                    'session' => $row['session'], 
-                    'term' => $row['term'], 
-                    'year' => $row['year'], 
-                    'room' => $row['room'], 
-                    'time_start' => $row['time_start'], 
-                    'time_end' => $row['time_end'], 
-                    'enroll_start' => $row['enroll_start'], 
-                    'enroll_end' => $row['enroll_end'], 
-                    'dropped' => $dropped,
-                    'capacity' => $row['capacity'], 
-                    'archived' => false,  
-                ]);
+                    'term' => $row['term'],
+                    'year' => $row['year'],
+                ])->first();
 
-                $this->rows = [
-                    ['number' => '', 'area_id' => '', 'enroll_start' => '', 'enroll_end' => '', 'capacity' => '', 'session' => '', 'term' => '', 'year' => '', 'section' => '', 'room' => '', 'time_start' => '', 'time_end' => ''],
-                ];
-
-                Session::forget('workdayFormData');
-
-                $this->showModal = true;
-                $this->userConfirms = false;
-                $this->duplicateCourses = [];
-                $this->resetValidation();
-
-                session()->flash('success', $this->showModal);
+                if (!$existingCourse) {
+                    CourseSection::create([
+                        'number' => $row['number'],
+                        'section' => $row['section'],
+                        'area_id' => $row['area_id'],
+                        'session' => $row['session'],
+                        'term' => $row['term'],
+                        'year' => $row['year'],
+                        'room' => $row['room'],
+                        'time_start' => $row['time_start'],
+                        'time_end' => $row['time_end'],
+                        'capacity' => $row['capacity'],
+                        'enroll_start' => $row['enroll_start'],
+                        'enroll_end' => $row['enroll_end'],
+                    ]);
+                } else {
+                    $this->courseExists = true;
+                    $this->duplicateCourses[] = $row;
+                }
             }
+
+            $this->showConfirmModal = count($this->duplicateCourses) > 0;
+            $this->emit('importCompleted');
         }
     }
 
-    public function render()
-    {   
+    /**
+     * Confirm the import operation by accepting duplicate entries.
+     *
+     * @return void
+     */
+    public function confirmImport() {
+        foreach ($this->duplicateCourses as $row) {
+            $existingCourse = CourseSection::where([
+                'number' => $row['number'],
+                'section' => $row['section'],
+                'area_id' => $row['area_id'],
+                'session' => $row['session'],
+                'term' => $row['term'],
+                'year' => $row['year'],
+            ])->first();
 
-        $user = Auth::user();
-        $dept_id = null;
-
-        if ($user) {
-            $userRole = UserRole::where('user_id', $user->id)->first();
-            if ($userRole) {
-                $dept_id = $userRole->department_id;
-            } else {
-                // Handle the case where there is no UserRole for the user
-                // For example, you might want to log this or set a default value
-                $dept_id = null; // or any other appropriate action
+            if ($existingCourse) {
+                $existingCourse->update([
+                    'capacity' => $row['capacity'],
+                    'enroll_start' => $row['enroll_start'],
+                    'enroll_end' => $row['enroll_end'],
+                    'room' => $row['room'],
+                    'time_start' => $row['time_start'],
+                    'time_end' => $row['time_end'],
+                ]);
             }
         }
 
-        $areas = Area::where('dept_id', $dept_id)->get();
+        $this->showConfirmModal = false;
+        $this->emit('importCompleted');
+    }
 
+    /**
+     * Render the Livewire component view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function render() {
+        $areas = Area::all();
+        $departments = Department::all();
         return view('livewire.import-workday-form', [
             'areas' => $areas,
-            'duplicate_courses' => $this->duplicateCourses,
+            'departments' => $departments,
         ]);
-
-        
     }
 }
+

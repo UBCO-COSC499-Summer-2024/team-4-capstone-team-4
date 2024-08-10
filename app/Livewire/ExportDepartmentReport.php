@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Models\CourseSection;
@@ -12,6 +13,11 @@ class ExportDepartmentReport extends Component
     public $courseSections = [];
     public $user;
 
+    /**
+     * Initialize the component and fetch course sections.
+     *
+     * @return void
+     */
     public function mount()
     {
         $this->user = Auth::user();
@@ -19,49 +25,57 @@ class ExportDepartmentReport extends Component
         Log::info('ExportDepartmentHead::mount - courseSections:', ['courseSections' => $this->courseSections]);
     }
 
+    /**
+     * Fetch course sections from the database and format them.
+     *
+     * @return void
+     */
     public function fetchCourseSections()
-{
-    $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user', 'seiData'])
-        ->where('archived', false) // Only include unarchived courses
-        ->get();
+    {
+        $courseSectionsQuery = CourseSection::with(['area', 'teaches.instructor.user', 'seiData'])
+            ->where('archived', false) // Only include unarchived courses
+            ->get();
 
-    $this->courseSections = $courseSectionsQuery->map(function ($section) {
-        $seiData = $section->seiData ?? null;
-        $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
+        $this->courseSections = $courseSectionsQuery->map(function ($section) {
+            $seiData = $section->seiData ?? null;
+            $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
 
-        $formattedName = sprintf('%s %s %s - %s%s %s',
-            $section->prefix,
-            $section->number,
-            $section->section,
-            $section->year,
-            $section->session,
-            $section->term
-        );
+            $formattedName = sprintf('%s %s %s - %s%s %s',
+                $section->prefix,
+                $section->number,
+                $section->section,
+                $section->year,
+                $section->session,
+                $section->term
+            );
 
-        $instructorName = 'No Instructors';
-        if ($section->teaches && $section->teaches->instructor && $section->teaches->instructor->user) {
-            $instructorName = $section->teaches->instructor->user->getName();
-        }
+            $instructorName = 'No Instructors';
+            if ($section->teaches && $section->teaches->instructor && $section->teaches->instructor->user) {
+                $instructorName = $section->teaches->instructor->user->getName();
+            }
 
-        $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
+            $timings = sprintf('%s - %s', $section->time_start, $section->time_end);
 
-        return [
-            'id' => $section->id,
-            'formattedName' => $formattedName,
-            'departmentName' => $section->area->name ?? 'Unknown',
-            'instructorName' => $instructorName,
-            'enrolled' => $section->enroll_end,
-            'dropped' => $section->dropped,
-            'room' => $section->room,
-            'timings' => $timings,
-            'capacity' => $section->capacity,
-            'averageRating' => $averageRating,
-        ];
-    })->toArray();
-}
+            return [
+                'id' => $section->id,
+                'formattedName' => $formattedName,
+                'departmentName' => $section->area->name ?? 'Unknown',
+                'instructorName' => $instructorName,
+                'enrolled' => $section->enroll_end,
+                'dropped' => $section->dropped,
+                'room' => $section->room,
+                'timings' => $timings,
+                'capacity' => $section->capacity,
+                'averageRating' => $averageRating,
+            ];
+        })->toArray();
+    }
 
-
-
+    /**
+     * Export the course sections as a CSV file.
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
     public function exportCSV()
     {
         Log::info('ExportDepartmentHead::exportCSV - courseSections:', ['courseSections' => $this->courseSections]);
@@ -95,6 +109,12 @@ class ExportDepartmentReport extends Component
         return $response;
     }
 
+    /**
+     * Calculate the average rating from SEI data.
+     *
+     * @param string $questionsJson
+     * @return float
+     */
     private function calculateAverageRating($questionsJson)
     {
         $questions = json_decode($questionsJson, true);
@@ -108,8 +128,14 @@ class ExportDepartmentReport extends Component
         return 0;
     }
 
+    /**
+     * Render the Livewire component view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('livewire.export-department-report');
     }
 }
+

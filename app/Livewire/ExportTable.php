@@ -16,6 +16,12 @@ class ExportTable extends Component
     public $courseSections = [];
     public $user;
 
+    /**
+     * Mount the component and initialize user and course sections.
+     *
+     * @param array $courseSections
+     * @return void
+     */
     public function mount($courseSections)
     {
         $this->user = Auth::user();
@@ -23,11 +29,16 @@ class ExportTable extends Component
         Log::info('ExportTable::mount - courseSections:', ['courseSections' => $this->courseSections]);
     }
     
+    /**
+     * Fetch and prepare course sections data for export.
+     *
+     * @return void
+     */
     public function fetchCourseSections()
     {
         $query = CourseSection::with(['area', 'teaches.instructor.user', 'seiData']);
         
-        // Check if the user is an instructor and filter courses accordingly
+        // Filter courses if the user is an instructor
         if ($this->user->hasRole('instructor')) {
             $query->whereHas('teaches', function ($q) {
                 $q->where('instructor_id', $this->user->id);
@@ -36,6 +47,7 @@ class ExportTable extends Component
         
         $courseSectionsQuery = $query->get();
 
+        // Map the course sections data
         $this->courseSections = $courseSectionsQuery->map(function ($section) {
             $seiData = $section->seiData->first() ?? null;
             $averageRating = $seiData ? $this->calculateAverageRating($seiData->questions) : 0;
@@ -49,7 +61,7 @@ class ExportTable extends Component
                 $section->term
             );
 
-            // If no instructor is assigned, display 'No Instructors'
+            // Determine instructor name or default to 'No Instructors'
             $instructorName = 'No Instructors';
             if ($section->teaches && $section->teaches->instructor && $section->teaches->instructor->user) {
                 $instructorName = $section->teaches->instructor->user->getName();
@@ -78,6 +90,11 @@ class ExportTable extends Component
         })->toArray();
     }
 
+    /**
+     * Export course sections data as a CSV file.
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
     public function exportCSV()
     {
         Log::info('ExportTable::exportCSV - courseSections:', ['courseSections' => $this->courseSections]);
@@ -85,10 +102,10 @@ class ExportTable extends Component
         $response = new StreamedResponse(function () {
             $handle = fopen('php://output', 'w');
 
-            // Add the header of the CSV file
+            // Add the CSV header
             fputcsv($handle, ['ID', 'Course Name', 'Enrolled Students', 'Dropped Students', 'Course Capacity', 'Room', 'Timings', 'SEI Data']);
 
-            // Add the data of the CSV file
+            // Add the CSV data
             foreach ($this->courseSections as $section) {
                 Log::info('ExportTable::exportCSV - section:', ['section' => $section]);
 
@@ -113,6 +130,12 @@ class ExportTable extends Component
         return $response;
     }
 
+    /**
+     * Format the course name for CSV export.
+     *
+     * @param array $section
+     * @return string
+     */
     private function formatCourseName($section)
     {
         $prefix = $section['prefix'] ?? 'N/A';
@@ -127,6 +150,12 @@ class ExportTable extends Component
         return sprintf('%s %s %s - %s%s %s', $prefix, $number, $sectionNumber, $year, $session, $term);
     }
 
+    /**
+     * Calculate the average rating from SEI data.
+     *
+     * @param string $questionsJson
+     * @return float
+     */
     private function calculateAverageRating($questionsJson)
     {
         $questions = json_decode($questionsJson, true);
@@ -140,8 +169,14 @@ class ExportTable extends Component
         return 0;
     }
 
+    /**
+     * Render the Livewire component view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('livewire.export-table');
     }
 }
+

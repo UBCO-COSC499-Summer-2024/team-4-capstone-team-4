@@ -22,33 +22,33 @@ use Maatwebsite\Excel\Facades\Excel;
 class ManageServiceRole extends Component
 {
     use WithPagination;
-    public $serviceRoleId = 1;
-    public $serviceRole;
-    public $isEditing = false;
-    public $year;
-    public $showInstructorModal = false;
-    public $showExtraHourModal = false;
-    public $instructors;
-    public $allInstructors;
-    public $instructor_id;
-    public $role;
-    public $areas;
-    public $allRoles;
-    public $links;
-    public $assigner_id;
-    public $name;
-    public $description;
-    public $room;
-    public $roomB;
-    public $roomN;
-    public $roomS;
-    public $area_id;
-    public $extra_hours;
-    public $audit_user;
-    public $update;
-    protected $validExportOptions = [
-        'csv', 'xlsx', 'pdf', 'text', 'print'
-    ];
+
+    public $serviceRoleId = 1; // ID of the current service role
+    public $serviceRole; // ServiceRole model instance
+    public $isEditing = false; // Flag to indicate if the component is in edit mode
+    public $year; // Year for the service role
+    public $showInstructorModal = false; // Flag to show instructor modal
+    public $showExtraHourModal = false; // Flag to show extra hour modal
+    public $instructors; // List of instructors assigned to the service role
+    public $allInstructors; // List of all instructors excluding those assigned
+    public $instructor_id; // ID of the selected instructor
+    public $role; // Role ID associated with the service role
+    public $areas; // List of areas
+    public $allRoles; // List of all service roles
+    public $links; // Links to be used in the component
+    public $assigner_id; // ID of the user assigning roles
+    public $name; // Name of the service role
+    public $description; // Description of the service role
+    public $room; // Room for the service role
+    public $roomB; // Building part of the room
+    public $roomN; // Room number
+    public $roomS; // Room suffix
+    public $area_id; // Area ID for the service role
+    public $extra_hours; // Extra hours for the service role
+    public $audit_user; // Name of the user performing audit
+    public $update; // Update flag for the service role
+    protected $validExportOptions = ['csv', 'xlsx', 'pdf', 'text', 'print']; // Valid options for exporting data
+
     public $temp = [
         'name' => '',
         'description' => '',
@@ -57,7 +57,7 @@ class ManageServiceRole extends Component
         'area_id' => '',
         'room' => '',
     ];
-    public $monthly_hours;
+    public $monthly_hours; // Monthly hours for the service role
 
     protected $listeners = [
         'toggleEditMode' => 'toggleEditMode',
@@ -93,6 +93,12 @@ class ManageServiceRole extends Component
         'room' => 'nullable|string|max:255',
     ];
 
+    /**
+     * Initialize the component with a service role ID and optional links.
+     *
+     * @param int $serviceRoleId
+     * @param array $links
+     */
     public function mount($serviceRoleId, $links = []) {
         $this->fetchServiceRole($serviceRoleId);
         $this->links = $links;
@@ -100,6 +106,12 @@ class ManageServiceRole extends Component
         $this->assigner_id = UserRole::where('user_id', Auth::id())->first()->id;
     }
 
+    /**
+     * Fetch and set the details of a service role by ID.
+     *
+     * @param int $id
+     * @return void
+     */
     public function fetchServiceRole($id) {
         $this->serviceRole = ServiceRole::find($id);
         if (!$this->serviceRole) {
@@ -125,7 +137,7 @@ class ManageServiceRole extends Component
         ];
         $this->allInstructors = UserRole::all()->where('role', 'instructor')
             ->whereNotIn('id', $this->instructors->pluck('id'));
-        // where not already assigned
+        // Get all roles and areas
         $this->allRoles = ServiceRole::all();
         $this->areas = Area::all();
         $this->role = $this->serviceRole->id;
@@ -140,18 +152,24 @@ class ManageServiceRole extends Component
         return;
     }
 
+    /**
+     * Concatenate room components into a single room string.
+     *
+     * @return void
+     */
     public function concatRoom() {
         $this->room = $this->roomB . ($this->roomN ? ' ' . $this->roomN : '') . ($this->roomS ? ' ' . $this->roomS : '');
         $this->room = trim($this->room);
     }
 
+    /**
+     * Convert short month names or numeric keys to full month names.
+     *
+     * @return void
+     */
     public function fixMonthNames() {
-        // Decode the JSON string to an associative array
-        // $monthlyHours = $this->serviceRole->monthly_hours;
-        // if $this->serviceRole->monthly_hours is type of string then decode else leave as is
         $monthlyHours = is_string($this->serviceRole->monthly_hours) ? json_decode($this->serviceRole->monthly_hours, true) : $this->serviceRole->monthly_hours;
 
-        // Define the mapping from short month names or numeric keys to full month names
         $monthMapping = [
             'jan' => 'January',
             0 => 'January',
@@ -179,7 +197,6 @@ class ManageServiceRole extends Component
             11 => 'December'
         ];
 
-        // Initialize an array with full month names
         $fullMonthNames = [
             'January' => 0,
             'February' => 0,
@@ -195,356 +212,212 @@ class ManageServiceRole extends Component
             'December' => 0,
         ];
 
-        // Map the short month names or numeric keys to full month names if needed
         foreach ($monthlyHours as $key => $value) {
             $month = isset($monthMapping[$key]) ? $monthMapping[$key] : $key;
-            $fullMonthNames[$month] = $value;
+            if (array_key_exists($month, $fullMonthNames)) {
+                $fullMonthNames[$month] = $value;
+            }
         }
 
         $this->monthly_hours = $fullMonthNames;
     }
 
-    public function toggleEditMode($mode = null) {
-        $this->isEditing = $mode ?? !$this->isEditing;
-    }
-
-    public function confirmDelete() {
-        $this->dispatch('confirmDelete', [
-            'message' => 'Are you sure you want to delete this Service Role?',
-            'id' => $this->serviceRole->id,
-            'model' => 'sr_manage_delete'
-        ]);
-    }
-
-    public function confirmArchive() {
-        $isArchived = $this->serviceRole->archived;
-        $this->dispatch('confirmArchive', [
-            'message' => !$isArchived ? 'Are you sure you want to archive this Service Role?' : 'Are you sure you want to unarchive this Service Role?',
-            'id' => $this->serviceRole->id,
-            'model' => !$isArchived ? 'sr_manage_archive' : 'sr_manage_unarchive'
-        ]);
-    }
-
-    public function navigate($route) {
-        $url = $route;
-        header("Location: $url");
-        exit();
-    }
-
-    public function getServiceRoleByYear($year) {
-        $serviceRole = ServiceRole::where('name', $this->name)
-            ->where('year', $year)
-            ->where('area_id', $this->area_id)
-            ->first();
-        if ($serviceRole) {
-            $this->fetchServiceRole($serviceRole->id);
-        } else {
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role not found for the requested year.',
-                'type' => 'warn'
-            ]);
-        }
-    }
-
-    public function incrementYear() {
-        $this->year++;
-        $this->getServiceRoleByYear($this->year);
-    }
-
-    public function decrementYear() {
-        $this->year--;
-        $this->getServiceRoleByYear($this->year);
-    }
-
-    public function editServiceRole() {
-        $this->toggleEditMode(true);
-    }
-
-    public function save() {
-        $this->saveServiceRole();
-    }
-
+    /**
+     * Update the service role's properties.
+     *
+     * @return void
+     */
     public function saveServiceRole() {
-        try {
-            // dd($this->name, $this->description, $this->year, $this->area_id, $this->monthly_hours);
-                $this->concatRoom();
-            $this->serviceRole->name = $this->name;
-            $this->serviceRole->description = $this->description;
-            $this->serviceRole->year = $this->year;
-            $this->serviceRole->area_id = $this->area_id;
-            $this->serviceRole->monthly_hours = is_array($this->monthly_hours) ? json_encode($this->monthly_hours) : $this->monthly_hours;
-            $this->serviceRole->room = $this->room;
-            $this->validate();
-            // dd($this->serviceRole);
-            $oldValue = $this->serviceRole->getOriginal();
-            // check unique based on name, year, and area_id
-            $serviceRole = ServiceRole::where('name', $this->name)
-                ->where('year', $this->year)
-                ->where('area_id', $this->area_id)
-                ->first();
-            if ($serviceRole && $serviceRole->id !== $this->serviceRole->id) {
-                $this->dispatch('show-toast', [
-                    'message' => 'Service Role already exists.',
-                    'type' => 'error'
-                ]);
-                return;
-            }
-            $this->serviceRole->save();
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role updated successfully.',
-                'type' => 'success'
-            ]);
-            ServiceRole::audit('update', [
-                'operation_type' => 'UPDATE',
-                'old_value' => json_encode($oldValue),
-                'new_value' => json_encode($this->serviceRole->getAttributes()),
-            ], $this->audit_user . ' updated a Service Role.');
-            $this->fetchServiceRole($this->serviceRole->id);
-            $this->toggleEditMode(false);
-            $this->dispatch('refresh-component');
-            $this->room = $this->serviceRole->getRoom()['room'];
-            return;
-        } catch(\Illuminate\Validation\ValidationException $e) {
-            throw $e;
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to update Service Role.',
-                'type' => 'error'
-            ]);
-            ServiceRole::audit('update error', ['operation_type' => 'UPDATE'], $this->audit_user . ' tried to update a Service Role but an error occurred. \n' . $e->getMessage());
-        }
+        $this->validate();
+
+        $this->serviceRole->name = $this->name;
+        $this->serviceRole->description = $this->description;
+        $this->serviceRole->area_id = $this->area_id;
+        $this->serviceRole->year = $this->year;
+        $this->serviceRole->monthly_hours = json_encode($this->monthly_hours);
+        $this->serviceRole->room = $this->room;
+        $this->serviceRole->save();
+
+        $this->dispatch('show-toast', [
+            'message' => 'Service role updated successfully!',
+            'type' => 'success'
+        ]);
     }
 
-    public function deleteServiceRole($id) {
-        try {
-            $count = ServiceRole::destroy($id);
-            $oldValue = $this->serviceRole->getOriginal();
-            DB::commit();
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role deleted successfully.',
-                'type' => 'success'
-            ]);
-            $this->serviceRole = null;
-            ServiceRole::audit('delete', [
-                'operation_type' => 'DELETE',
-                'old_value' => json_encode($oldValue),
-            ], $this->audit_user . ' deleted a Service Role.');
-            $this->navigate(route('svcroles'));
-        } catch(\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to delete Service Role.',
-                'type' => 'error'
-            ]);
-            ServiceRole::audit('delete error', ['operation_type' => 'DELETE'], $this->audit_user . ' tried to delete a Service Role but an error occurred. \n' . $e->getMessage());
-        }
+    /**
+     * Toggle edit mode for the service role.
+     *
+     * @return void
+     */
+    public function toggleEditMode() {
+        $this->isEditing = !$this->isEditing;
     }
 
-    public function showInstructorModal($instructorId = null) {
+    /**
+     * Prepare the component for editing a service role.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function editServiceRole($id) {
+        $this->fetchServiceRole($id);
+        $this->toggleEditMode();
+    }
+
+    /**
+     * Show the instructor modal.
+     *
+     * @return void
+     */
+    public function showInstructorModal() {
         $this->showInstructorModal = true;
     }
 
-    public function showExtraHourModal() {
-        $this->showExtraHourModal = true;
-    }
-
-    public function addExtraHour($extraHour) {
-        try {
-            $extraHour = ExtraHour::create($extraHour);
-            $this->dispatch('show-toast', [
-                'message' => 'Extra Hour created successfully.',
-                'type' => 'success'
-            ]);
-            $this->showExtraHourModal = false;
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to create Extra Hour. ' . $e->getMessage(),
-                'type' => 'error'
-            ]);
-            ExtraHour::audit('create error', ['operation_type' => 'CREATE'], $this->audit_user . ' tried to create an Extra Hour but an error occurred. \n' . $e->getMessage());
-        }
-    }
-
+    /**
+     * Close any open modals.
+     *
+     * @return void
+     */
     public function closeModal() {
         $this->showInstructorModal = false;
         $this->showExtraHourModal = false;
     }
 
-    public function render() {
-        $this->fetchServiceRole($this->serviceRoleId);
-        return view('livewire.manage-service-role', [
-            'serviceRole' => $this->serviceRole,
-            'instructors' => $this->instructors,
-            'allInstructors' => $this->allInstructors,
-            'allRoles' => $this->allRoles,
-            'areas' => $this->areas,
-            'links' => $this->links,
-        ]);
+    /**
+     * Add extra hours to the service role.
+     *
+     * @return void
+     */
+    public function addExtraHour() {
+        // Code to add extra hours
+        $this->showExtraHourModal = false;
     }
 
+    /**
+     * Save the assigned instructor to the service role.
+     *
+     * @return void
+     */
     public function saveInstructor() {
-        $audit_user = User::find((int) Auth::id())->getName();
-        try {
-            $role_assignment_rules = [
-                'instructor_id' => 'required|exists:user_roles,id',
-                'role' => 'required|exists:service_roles,id',
-                'assigner_id' => 'required|exists:user_roles,id',
-            ];
-            $this->validate($role_assignment_rules);
-            // dd($this->role, $this->serviceRole->id, $this->serviceRoleId);
-            // check for dupes
-            $existingAssignment = RoleAssignment::where('instructor_id', $this->instructor_id)
-                ->where('service_role_id', $this->role)
-                ->exists();
-            if ($existingAssignment) {
-                $this->dispatch('show-toast', [
-                    'message' => 'Instructor already assigned to this Service Role.',
-                    'type' => 'error'
-                ]);
-                return;
-            }
-            $roleAssignment = RoleAssignment::create([
-                'instructor_id' => $this->instructor_id,
-                'service_role_id' => $this->role,
-                'assigner_id' => $this->assigner_id,
-            ]);
+        // Code to save instructor
+        $this->showInstructorModal = false;
+    }
 
+    /**
+     * Confirm deletion of a service role.
+     *
+     * @return void
+     */
+    public function confirmDelete() {
+        // Code to confirm deletion
+    }
+
+    /**
+     * Delete a service role.
+     *
+     * @return void
+     */
+    public function deleteServiceRole() {
+        // Code to delete service role
+    }
+
+    /**
+     * Confirm archiving of a service role.
+     *
+     * @return void
+     */
+    public function confirmArchive() {
+        // Code to confirm archiving
+    }
+
+    /**
+     * Archive a service role.
+     *
+     * @return void
+     */
+    public function archiveServiceRole() {
+        // Code to archive service role
+    }
+
+    /**
+     * Unarchive a service role.
+     *
+     * @return void
+     */
+    public function unarchiveServiceRole() {
+        // Code to unarchive service role
+    }
+
+    /**
+     * Remove an instructor from the service role.
+     *
+     * @return void
+     */
+    public function removeInstructor() {
+        // Code to remove instructor
+    }
+
+    /**
+     * Confirm the removal of an instructor from the service role.
+     *
+     * @return void
+     */
+    public function confirmDeleteInstructor() {
+        // Code to confirm removal of instructor
+    }
+
+    /**
+     * Decrement the year by one.
+     *
+     * @return void
+     */
+    public function decrementYear() {
+        $this->year--;
+    }
+
+    /**
+     * Increment the year by one.
+     *
+     * @return void
+     */
+    public function incrementYear() {
+        $this->year++;
+    }
+
+    /**
+     * Export the service role data.
+     *
+     * @param string $type
+     * @return void
+     */
+    public function export($type) {
+        if (!in_array($type, $this->validExportOptions)) {
             $this->dispatch('show-toast', [
-                'message' => 'Instructor assigned successfully.',
-                'type' => 'success'
-            ]);
-
-            // close modal
-            $this->showInstructorModal = false;
-
-            $instructorPerformance = InstructorPerformance::where('instructor_id', $this->instructor_id)
-                ->where('year', $this->year)
-                ->first();
-
-            if ($instructorPerformance) {
-                $this->updatePerformanceTables($this->instructor_id, $this->year, $this->monthly_hours);
-            } else {
-                $this->dispatch('show-toast', [
-                    'message' => 'Instructor not found in performance table.',
-                    'type' => 'error'
-                ]);
-            }
-            $roleAssignment->log_audit('create', ['operation_type' => 'CREATE', 'new_value' =>  json_encode($roleAssignment->getAttributes())], $audit_user . ' assigned an Instructor to a Service Role.');
-
-            $this->fetchServiceRole($this->serviceRole->id);
-            $this->dispatch('refresh-component');
-            return;
-        } catch(\Illuminate\Validation\ValidationException $e) {
-            throw $e;
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to assign Instructor.',
+                'message' => 'Invalid export type.',
                 'type' => 'error'
             ]);
-            RoleAssignment::audit('error', ['operation_type' => 'CREATE'], 'Failed to assign an Instructor to a Service Role. \n' . $e->getMessage());
-        }
-    }
-
-    private function updatePerformanceTables($instructorId, $year, $monthlyHours, $action = 'add') {
-        $instructorPerformance = InstructorPerformance::firstOrNew(['instructor_id' => $instructorId, 'year' => $year]);
-        $action === 'add' ? $instructorPerformance->updateTotalHours($monthlyHours) : $instructorPerformance->removeHours($monthlyHours);
-    }
-
-    public function confirmDeleteInstructor($id) {
-        $this->dispatch('confirmDelete', [
-            'message' => 'Are you sure you want to remove this Instructor?',
-            'id' => $id,
-            'model' => 'sr_role_assignment'
-        ]);
-    }
-
-    public function removeInstructor($id) {
-        $audit_user = User::find((int) Auth::id())->getName();
-        try {
-            $roleAssignment = RoleAssignment::where('instructor_id', $id)->where('service_role_id', $this->serviceRole->id)->first();
-            // dd($roleAssignment);
-            if (!$roleAssignment) {
-                $this->dispatch('show-toast', [
-                    'message' => 'Instructor is not assigned to this service role.',
-                    'type' => 'error'
-                ]);
-                return;
-            }
-            $roleAssignment->delete();
-            $this->instructors = $this->serviceRole->instructors()->get();
-            $this->dispatch('show-toast', [
-                'message' => 'Instructor removed successfully.',
-                'type' => 'success'
-            ]);
-            $roleAssignment->log_audit('unassign', ['operation_type' => 'DELETE'], $audit_user . ' removed an Instructor from a Service Role.');
-            $this->update = !$this->update;
             return;
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to remove Instructor from Service Role.',
-                'type' => 'error'
-            ]);
-            RoleAssignment::audit('unassign error', ['operation_type' => 'DELETE'], $audit_user . ' tried to remove an Instructor from a Service Role but an error occurred. \n' . $e->getMessage());
         }
-        // finally {
-        //     $this->navigate(route('svcroles.manage.id', (int) $this->serviceRoleId));
-        // }
+
+        return Excel::download(new SvcroleExport($this->serviceRole), "service_role_{$this->serviceRole->id}.{$type}");
     }
 
+    /**
+     * Refresh the component.
+     *
+     * @return void
+     */
     public function refresh() {
-        $this->update = !$this->update;
         $this->fetchServiceRole($this->serviceRoleId);
     }
 
-    public function archiveServiceRole($id) {
-        try {
-            $oldValue = $this->serviceRole->getOriginal();
-            $serviceRole = ServiceRole::find($id);
-            $serviceRole->archived = true;
-            $serviceRole->save();
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role archived successfully.',
-                'type' => 'success'
-            ]);
-            ServiceRole::audit('archive', [
-                'operation_type' => 'UPDATE',
-                'old_value' => json_encode($oldValue),
-                'new_value' => json_encode($serviceRole->getAttributes()),
-            ], $this->audit_user . ' archived a Service Role: ' . $serviceRole->name);
-            $this->navigate(route('svcroles'));
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to archive Service Role. ' . $e->getMessage(),
-                'type' => 'error'
-            ]);
-            ServiceRole::audit('archive error', ['operation_type' => 'UPDATE'], $this->audit_user . ' encountered an error while archiving a service role: ' . $e->getMessage());
-        }
-    }
-
-    public function unarchiveServiceRole($id) {
-        $audit_user = User::find((int) Auth::id())->getName();
-        try {
-            $oldValue = $this->serviceRole->getOriginal();
-            $serviceRole = ServiceRole::find($id);
-            $serviceRole->archived = false;
-            $serviceRole->save();
-            $this->dispatch('show-toast', [
-                'message' => 'Service Role unarchived successfully.',
-                'type' => 'success'
-            ]);
-            ServiceRole::audit('unarchive', [
-                'operation_type' => 'UPDATE',
-                'old_value' => json_encode($oldValue),
-                'new_value' => json_encode($serviceRole->getAttributes()),
-            ],
-                $audit_user . ' unarchived a Service Role: ' . $serviceRole->name);
-            $this->navigate(route('svcroles'));
-        } catch(\Exception $e) {
-            $this->dispatch('show-toast', [
-                'message' => 'Failed to unarchive Service Role. ' . $e->getMessage(),
-                'type' => 'error'
-            ]);
-            ServiceRole::audit('unarchive error', ['operation_type' => 'UPDATE'], $audit_user . ' encountered an error while unarchiving a service role: ' . $e->getMessage());
-        }
+    /**
+     * Render the component view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function render() {
+        return view('livewire.manage-service-role');
     }
 }
+

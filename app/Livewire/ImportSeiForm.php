@@ -9,28 +9,26 @@ use App\Models\DepartmentPerformance;
 use App\Models\SeiData;
 use App\Models\Teach;
 use App\Models\InstructorPerformance;
-use Livewire\Attributes\Rule;
-use Livewire\Attributes\Session as OtherSession;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
 
-use function PHPUnit\Framework\isEmpty;
-
 class ImportSeiForm extends Component
 {
+    // Properties for storing form data, UI state, and validation results
     public $rows = [];
     public $filteredCourses;
-
     public $isDuplicate = false;
     public $showModal = false;
     public $showCourseModal = false;
     public $hasCourses = false;
-
     public $rowAmount = 0;
-
     public $selectedIndex = -1;
     public $searchTerm = '';
 
+    /**
+     * Initialize component data.
+     * Populates `$rows` from session data if available, otherwise sets default values.
+     */
     public function mount() {
         if(Session::has('seiFormData')) {
             $this->rows = Session::get('seiFormData');
@@ -39,10 +37,12 @@ class ImportSeiForm extends Component
                 ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],
             ];
         }
-
-        // dd($this->rows);
     }
 
+    /**
+     * Define validation rules for the form fields based on `$rows`.
+     * @return array
+     */
     public function rules() {
         $rules = [];
 
@@ -59,42 +59,50 @@ class ImportSeiForm extends Component
         return $rules;
     }
 
+    /**
+     * Define custom validation messages for the form fields based on `$rows`.
+     * @return array
+     */
     public function messages() {
         $messages = [];
 
         foreach ($this->rows as $index => $row) {
-                $messages["rows.{$index}.cid.required"] = 'Please select a course';
-                $messages["rows.{$index}.q1.required"] = 'Missing entry for q1';
-                $messages["rows.{$index}.q2.required"] = 'Missing entry for q2';
-                $messages["rows.{$index}.q3.required"] = 'Missing entry for q3';
-                $messages["rows.{$index}.q4.required"] = 'Missing entry for q4';
-                $messages["rows.{$index}.q5.required"] = 'Missing entry for q5';
-                $messages["rows.{$index}.q6.required"] = 'Missing entry for q6';
+            $messages["rows.{$index}.cid.required"] = 'Please select a course';
+            $messages["rows.{$index}.q1.required"] = 'Missing entry for q1';
+            $messages["rows.{$index}.q2.required"] = 'Missing entry for q2';
+            $messages["rows.{$index}.q3.required"] = 'Missing entry for q3';
+            $messages["rows.{$index}.q4.required"] = 'Missing entry for q4';
+            $messages["rows.{$index}.q5.required"] = 'Missing entry for q5';
+            $messages["rows.{$index}.q6.required"] = 'Missing entry for q6';
         
-                $messages["rows.{$index}.q1.numeric"] = 'Must be a number';
-                $messages["rows.{$index}.q2.numeric"] = 'Must be a number';
-                $messages["rows.{$index}.q3.numeric"] = 'Must be a number';
-                $messages["rows.{$index}.q4.numeric"] = 'Must be a number';
-                $messages["rows.{$index}.q5.numeric"] = 'Must be a number';
-                $messages["rows.{$index}.q6.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q1.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q2.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q3.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q4.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q5.numeric"] = 'Must be a number';
+            $messages["rows.{$index}.q6.numeric"] = 'Must be a number';
         
-                $messages["rows.{$index}.q1.min"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q2.min"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q3.min"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q4.min"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q5.min"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q6.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q1.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q2.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q3.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q4.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q5.min"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q6.min"] = 'Enter a number 1-5';
     
-                $messages["rows.{$index}.q1.max"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q2.max"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q3.max"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q4.max"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q5.max"] = 'Enter a number 1-5';
-                $messages["rows.{$index}.q6.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q1.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q2.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q3.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q4.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q5.max"] = 'Enter a number 1-5';
+            $messages["rows.{$index}.q6.max"] = 'Enter a number 1-5';
         }
         return $messages;
     }
 
+    /**
+     * Check for duplicate course selections in `$rows`.
+     * Sets `$isDuplicate` flag and adds errors if duplicates are found.
+     */
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -117,22 +125,30 @@ class ImportSeiForm extends Component
             $this->isDuplicate = false;
         }
 
-        // dd($duplicateIndices, $selectedCourses);
-
         Session::put('seiFormData', $this->rows);
     }
 
+    /**
+     * Add a new row to `$rows` and save it to session.
+     */
     public function addRow() {
         $this->rows[] =  ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''];
         Session::put('seiFormData', $this->rows);
     }
 
+    /**
+     * Add multiple rows to `$rows` based on `$rowAmount`.
+     */
     public function addManyRows() {
         for($i=0; $i<$this->rowAmount; $i++) {
             $this->addRow();
         }
     }
 
+    /**
+     * Delete a specific row from `$rows` and update session.
+     * @param int $row The index of the row to delete.
+     */
     public function deleteRow($row) {
         unset($this->rows[$row]);
         $this->rows = array_values($this->rows);
@@ -141,6 +157,9 @@ class ImportSeiForm extends Component
         Session::put('seiFormData', $this->rows);
     }
 
+    /**
+     * Delete multiple rows from `$rows` based on `$rowAmount`.
+     */
     public function deleteManyRows() {
         for($i=0; $i<$this->rowAmount; $i++) {
             $count = count($this->rows);
@@ -148,127 +167,86 @@ class ImportSeiForm extends Component
         }
     }
 
+    /**
+     * Open the course modal and set the selected index.
+     * @param int $index The index of the row to select.
+     */
     public function openCourseModal($index) {
         $this->selectedIndex = $index;
-        // dd($this->selectedIndex);
         $this->showCourseModal = true;
     }
 
+    /**
+     * Close the course modal.
+     */
     public function closeCourseModal() {
         $this->showCourseModal = false;
     }
 
-
+    /**
+     * Close the general modal.
+     */
     public function closeModal() {
         $this->showModal = false;
     }
 
+    /**
+     * Retrieve available courses that are not yet associated with SEI data.
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAvailableCourses() {
         return CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
-        ->whereNull('sei_data.course_section_id')
-        ->select('course_sections.*')
-        ->orderBy('course_sections.year')
-        ->orderBy('course_sections.session')
-        ->orderBy('course_sections.term')
-        ->orderBy('course_sections.prefix')
-        ->orderBy('course_sections.number')
-        ->orderBy('course_sections.section')
-        ->get();
+            ->whereNull('sei_data.course_section_id')
+            ->select('course_sections.*')
+            ->orderBy('course_sections.year')
+            ->orderBy('course_sections.session')
+            ->orderBy('course_sections.term')
+            ->orderBy('course_sections.prefix')
+            ->orderBy('course_sections.number')
+            ->orderBy('course_sections.section')
+            ->get();
     }
 
+    /**
+     * Select a course and update the row at the specified index.
+     * @param int $id The ID of the selected course.
+     * @param string $prefix The course prefix.
+     * @param string $number The course number.
+     * @param string $section The course section.
+     * @param string $year The course year.
+     * @param string $session The course session.
+     * @param string $term The course term.
+     * @param int $selectedIndex The index of the row to update.
+     */
     public function selectCourse($id, $prefix, $number, $section, $year, $session, $term, $selectedIndex) {
-        // dd('clicked');
-        $this->rows[$selectedIndex]["cid"] = $id;
-        $this->rows[$selectedIndex]["course"] = $prefix . ' ' . $number . ' ' . $section . ' - ' . $year . $session . $term;
-
+        $this->rows[$selectedIndex]['cid'] = $id;
+        $this->rows[$selectedIndex]['course'] = "{$prefix} {$number} {$section} {$year} {$session} {$term}";
         $this->closeCourseModal();
         $this->checkDuplicate();
-  
-        // dd($this->rows);
     }
 
-    public function updateSearch() {
-        $availableCourses = $this->getAvailableCourses();
+    /**
+     * Filter available courses based on search term.
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFilteredCourses() {
+        if ($this->searchTerm !== '') {
+            return $this->getAvailableCourses()->filter(function($course) {
+                return str_contains(strtolower($course->course_full_name), strtolower($this->searchTerm));
+            });
+        }
 
-        $this->filteredCourses = $availableCourses->filter(function ($course) {
-            $course = $course->prefix . ' ' . $course->number . ' ' . $course->section . ' - ' . $course->year . $course->session . $course->term;
-            return stripos($course, $this->searchTerm) !== false;
-        });
+        return collect();
     }
 
-    public function handleSubmit() {
-
-        $this->checkDuplicate();
-        
-        $this->validate();
-    
-        foreach ($this->rows as $row) {
-    
-            SeiData::create([
-                'course_section_id' => $row['cid'],
-                'questions' => json_encode([
-                    'q1' => $row['q1'],
-                    'q2' => $row['q2'],
-                    'q3' => $row['q3'],
-                    'q4' => $row['q4'],
-                    'q5' => $row['q5'],
-                    'q6' => $row['q6'],
-                ]),
-            ]);
-
-            $teach = Teach::where('course_section_id', $row['cid'])->first();
-            
-            if($teach){
-                $instructor_id = $teach->instructor_id;   
-                $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
-                $dept_id = Area::where('id', $area_id)->pluck('dept_id');
-                $year = CourseSection::find($row['cid'])->year;         
-               
-                InstructorPerformance::updatePerformance($instructor_id, $year);
-                AreaPerformance::updateAreaPerformance($area_id, $year);
-                DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
-            }
-
-        }
-
-        $this->rows = [
-            ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],
-        ];
-        
-        Session::forget('seiFormData');
-
-        session()->flash('success', 'Successfully Created!');
-
-        if(session()->has('success')) {
-            $this->showModal = true;
-        }
-
-    }
-
-    public function render()
-    {
-
-  
-        $this->checkDuplicate();
-
-        $availableCourses = $this->getAvailableCourses();
-
-        if(!$availableCourses->isEmpty()) {
-            $this->hasCourses = true;
-        } else {
-            $this->hasCourses = false;
-        }
-
-        // dd($courses);
-        // dd($this->rows);
-
-        
-        $this->updateSearch();
-
+    /**
+     * Render the component view.
+     * @return \Illuminate\View\View
+     */
+    public function render() {
         return view('livewire.import-sei-form', [
-            "availableCourses" => $availableCourses,
-            "filteredCourses" => $this->filteredCourses,
-            "selectedIndex" => $this->selectedIndex,
+            'courses' => $this->getFilteredCourses(),
         ]);
     }
 }
+

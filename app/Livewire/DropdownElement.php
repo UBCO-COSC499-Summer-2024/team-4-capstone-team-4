@@ -23,12 +23,30 @@ class DropdownElement extends Component
     public $searchValue = '';
     public $useCustomRegex = false;
     public $regex = 'i';
+    
     protected $listeners = [
         'dropdown-item-selected' => 'handleItemSelected',
         'dropdown-source-loaded' => 'handleExternalDataLoaded',
         'dropdown-source-error' => 'handleExternalDataError',
     ];
 
+    /**
+     * Initialize the component with given parameters.
+     *
+     * @param  int|null  $id
+     * @param  string  $title
+     * @param  array  $values
+     * @param  string|null  $preIcon
+     * @param  string|null  $name
+     * @param  string|null  $searchValue
+     * @param  bool  $multiple
+     * @param  bool  $searchable
+     * @param  bool  $useExternal
+     * @param  string|null  $source
+     * @param  bool  $useCustomRegex
+     * @param  string  $regex
+     * @return void
+     */
     public function mount($id=null, $title, $values = [], $preIcon = null, $name = null, $searchValue = null, $multiple = false, $searchable = false, $useExternal = false, $source = null, $useCustomRegex = false, $regex = 'i')
     {
         $this->id = $id;
@@ -46,6 +64,12 @@ class DropdownElement extends Component
         // $this->mapAttributes(...$attributes);
     }
 
+    // /**
+    //  * Map attributes to HTML attributes string.
+    //  *
+    //  * @param  mixed  ...$attrs
+    //  * @return void
+    //  */
     // public function mapAttributes(...$attrs)
     // {
     //     $attributes = '';
@@ -55,12 +79,23 @@ class DropdownElement extends Component
     //     $this->attributes = $attributes;
     // }
 
+    /**
+     * Handle the selection of an item from the dropdown.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
     public function handleItemSelected($value)
     {
         $this->value = $value;
         $this->dispatch('dropdown-value-updated', $value);
     }
 
+    /**
+     * Render the view for the dropdown element component.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('livewire.dropdown-element');

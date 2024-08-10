@@ -10,18 +10,33 @@ class AuditLogTable extends Component
 {
     use WithPagination;
 
+    // View mode: table or other
     public $viewMode = 'table';
+
+    // Number of items per page
     public $perpage = 20;
+
+    // State of the 'select all' checkbox
     public $selectAll = false;
+
+    // Array to keep track of selected items
     public $selectedItems = [];
+
+    // Array to hold selected filters
     public $selectedFilter = [
         "Users" => [],
         "Actions" => [],
         "Schemas" => [],
         "Operations" => []
     ];
+
+    // Currently selected sort column
     public $selectedSort = 'id';
+
+    // Order of sorting: ascending or descending
     public $selectedSortOrder = 'desc';
+
+    // Available sort options
     public $sort = [
         "ID" => "id",
         "User" => "user",
@@ -32,12 +47,17 @@ class AuditLogTable extends Component
         "Created" => "created_at",
         "Updated" => "updated_at"
     ];
+
+    // Available sort orders
     public $sortOrder = [
         "Ascending" => "asc",
         "Descending" => "desc"
     ];
+
+    // Search query for filtering results
     public $searchQuery = "";
 
+    // Listeners for Livewire events
     protected $listeners = [
         'change-filter' => 'updateFilter',
         'change-sort' => 'changeSort',
@@ -48,13 +68,24 @@ class AuditLogTable extends Component
         'preview-data' => 'previewData'
     ];
 
+    // State for showing data preview modal
     public $showDataPreviewModal = false;
+
+    // ID for the item being previewed
     public $showDataPreviewModalForId = null;
+
+    // Data to display in the preview modal
     public $dataToPreview = null;
 
+    /**
+     * Initialize component properties.
+     */
     public function mount() {
     }
 
+    /**
+     * Clear all selected filters.
+     */
     public function clearFilters() {
         $this->selectedFilter = [
             "Users" => [],
@@ -64,6 +95,12 @@ class AuditLogTable extends Component
         ];
     }
 
+    /**
+     * Show a preview of the data for a specific audit log item.
+     *
+     * @param int $id
+     * @param array $data
+     */
     public function previewData($id, $data) {
         $auditLog = AuditLog::find($id);
         if ($auditLog) {
@@ -73,6 +110,13 @@ class AuditLogTable extends Component
         }
     }
 
+    /**
+     * Update selected filters based on the category, item, and check state.
+     *
+     * @param string $category
+     * @param mixed $item
+     * @param bool $isChecked
+     */
     public function updateFilter($category, $item, $isChecked) {
         if ($isChecked) {
             $this->selectedFilter[$category][] = $item;
@@ -85,22 +129,47 @@ class AuditLogTable extends Component
         $this->selectedFilter[$category] = array_values($this->selectedFilter[$category]);
     }
 
+    /**
+     * Change the sorting column.
+     *
+     * @param string $sort
+     */
     public function changeSort($sort) {
         $this->selectedSort = $sort;
     }
 
+    /**
+     * Change the view mode (e.g., table, card).
+     *
+     * @param string $mode
+     */
     public function changeViewMode($mode) {
         $this->viewMode = $mode;
     }
 
+    /**
+     * Change the number of items per page.
+     *
+     * @param int $perpage
+     */
     public function changePerpage($perpage) {
         $this->perpage = $perpage;
     }
 
+    /**
+     * Change the search query for filtering results.
+     *
+     * @param string|null $query
+     */
     public function changeSearchQuery($query = null) {
         $this->searchQuery = $query;
     }
 
+    /**
+     * Toggle the sorting order for a given column.
+     *
+     * @param string $column
+     */
     public function sortColumn($column) {
         if ($this->selectedSort == $column) {
             $this->selectedSortOrder = $this->selectedSortOrder == 'asc' ? 'desc' : 'asc';
@@ -110,9 +179,15 @@ class AuditLogTable extends Component
         }
     }
 
+    /**
+     * Render the component view with paginated audit logs based on filters and sorting.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render() {
         $query = AuditLog::query();
 
+        // Apply search query filters
         if ($this->searchQuery) {
             $query->where(function ($q) {
                 $q->where('user_id', 'like', '%' . $this->searchQuery . '%')
@@ -128,6 +203,7 @@ class AuditLogTable extends Component
             });
         }
 
+        // Apply selected filters
         foreach ($this->selectedFilter as $category => $items) {
             if (!empty($items)) {
                 if ($category == 'Users') {
@@ -145,7 +221,8 @@ class AuditLogTable extends Component
                 }
             }
         }
-        // if selected sort has old_ or new_ convert to old_value or new_value
+
+        // Adjust sorting column if necessary
         if (strpos($this->selectedSort, 'old_') !== false) {
             $this->selectedSort = 'old_value';
         } elseif (strpos($this->selectedSort, 'new_') !== false) {
@@ -153,6 +230,7 @@ class AuditLogTable extends Component
         }
         $query->orderBy($this->selectedSort, $this->selectedSortOrder);
 
+        // Paginate results
         $auditLogs = $query->paginate($this->perpage);
 
         return view('livewire.audit-log-table', [
@@ -160,10 +238,16 @@ class AuditLogTable extends Component
         ]);
     }
 
+    /**
+     * Get the filter column based on the filter category.
+     *
+     * @param string $category
+     * @return mixed
+     */
     private function getFilterColumn($category) {
         switch ($category) {
             case 'Users':
-                // user_id and user_alt
+                // Return columns for user filter
                 return ['user_id', 'user_alt'];
             case 'Actions':
                 return 'action';
@@ -176,3 +260,4 @@ class AuditLogTable extends Component
         }
     }
 }
+
