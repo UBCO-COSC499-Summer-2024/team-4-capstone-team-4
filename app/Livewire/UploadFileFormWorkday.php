@@ -67,6 +67,7 @@ class UploadFileFormWorkday extends Component
         return $rules;
     }
 
+    //Custom validation messages 
     public function messages() {
         $messages = [];
 
@@ -114,6 +115,7 @@ class UploadFileFormWorkday extends Component
         $this->rows = array_values($this->rows);
     }
 
+    // Ensure that no two rows are the same on the current screen (different to already existing in db)
     protected function validateUniqueRows() {
         $uniqueCombinations = [];
 
@@ -173,6 +175,9 @@ class UploadFileFormWorkday extends Component
 
         foreach($this->rows as $index => $row) {
             $prefix = '';
+
+            //manually set prefix based on area_id. Will have to refactor if other areas or departments are added
+
             
             switch ($row['area_id']) {
                 case 1:
@@ -217,6 +222,9 @@ class UploadFileFormWorkday extends Component
                 $dropped = 0;
                 $prefix = '';
 
+                //manually set prefix based on area_id. Will have to refactor if other areas or departments are added
+
+
                 switch ($row['area_id']) {
                     case 1:
                         $prefix = 'COSC';
@@ -234,7 +242,17 @@ class UploadFileFormWorkday extends Component
 
                 $dropped = CourseSection::calculateDropped($row['enroll_start'], $row['enroll_end']);
 
-                CourseSection::updateOrCreate([
+                $courseExists = CourseSection::where('prefix', $prefix)
+                ->where('number', $row['number'])
+                ->where('area_id', $row['area_id'])
+                ->where('year', $row['year'])
+                ->where('term', $row['term'])
+                ->where('session', $row['session'])
+                ->where('section' , $row['section'])
+                ->where('room', $row['room'])
+                ->first();
+
+                $course = CourseSection::updateOrCreate([
                     'number' => $row['number'],
                     'section' => $row['section'],
                     'area_id' => $row['area_id'],
@@ -260,6 +278,12 @@ class UploadFileFormWorkday extends Component
                     'capacity' => $row['capacity'], 
                     'archived' => false,  
                 ]);
+
+                if($courseExists) {
+                    $course->log_audit('Update Course Section', ['operation_type' => 'UPDATE', 'old_value' => json_encode($courseExists->getAttributes()) ,'new_value' => json_encode($course->getAttributes())], 'Update Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+                } else if (!$courseExists) {
+                    $course->log_audit('Add Course Section', ['operation_type' => 'CREATE', 'new_value' => json_encode($course->getAttributes())], 'Created Course Section ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+                }
 
                 $this->showModal = true;
                 $this->userConfirms = false;

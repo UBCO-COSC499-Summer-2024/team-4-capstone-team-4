@@ -150,6 +150,7 @@ class UploadFileFormSei extends Component
         $this->rows = [];
     }
 
+    // Ensure that two courses have not both been selected on the current page
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -235,7 +236,7 @@ class UploadFileFormSei extends Component
         foreach ($this->rows as $row) {
             if(!empty($row['course'])) {
                 // dd('not empty', $row);
-                SeiData::create([
+                $sei = SeiData::create([
                     'course_section_id' => $row['cid'],
                     'questions' => json_encode([
                         'q1' => $row['q1'],
@@ -248,18 +249,22 @@ class UploadFileFormSei extends Component
                 ]);
             }
 
-            // $teach = Teach::where('course_section_id', $row['cid'])->first();
+            $course = CourseSection::where('id', $row['cid'])->first();
+            $teach = Teach::where('course_section_id', $row['cid'])->first();
             
-            // if($teach){
-            //     $instructor_id = $teach->instructor_id;   
-            //     $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
-            //     $dept_id = Area::where('id', $area_id)->pluck('dept_id');
-            //     $year = CourseSection::find($row['cid'])->year;         
+           // If the course is already being taught, update the performances with SEI data
+            if($teach){
+                $instructor_id = $teach->instructor_id;   
+                $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
+                $dept_id = Area::where('id', $area_id)->pluck('dept_id');
+                $year = CourseSection::find($row['cid'])->year;         
                
-            //     InstructorPerformance::updatePerformance($instructor_id, $year);
-            //     AreaPerformance::updateAreaPerformance($area_id, $year);
-            //     DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
-            // }
+                InstructorPerformance::updatePerformance($instructor_id, $year);
+                AreaPerformance::updateAreaPerformance($area_id, $year);
+                DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
+            }
+
+            $sei->log_audit('Add SEI Data', ['operation_type' => 'CREATE', 'new_value' => json_encode($sei->getAttributes())], 'Add SEI Data to  ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
 
         }
 

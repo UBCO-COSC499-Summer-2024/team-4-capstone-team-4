@@ -95,6 +95,7 @@ class ImportSeiForm extends Component
         return $messages;
     }
 
+    // Ensure that two courses have not both been selected on the current page
     public function checkDuplicate() {
         $this->resetValidation();
         $selectedCourses = [];
@@ -163,6 +164,7 @@ class ImportSeiForm extends Component
         $this->showModal = false;
     }
 
+    // Only returns courses that have not yet been assigned SEI data
     public function getAvailableCourses() {
         return CourseSection::leftJoin('sei_data', 'course_sections.id', '=', 'sei_data.course_section_id')
         ->whereNull('sei_data.course_section_id')
@@ -204,7 +206,7 @@ class ImportSeiForm extends Component
     
         foreach ($this->rows as $row) {
     
-            SeiData::create([
+            $sei = SeiData::create([
                 'course_section_id' => $row['cid'],
                 'questions' => json_encode([
                     'q1' => $row['q1'],
@@ -216,8 +218,10 @@ class ImportSeiForm extends Component
                 ]),
             ]);
 
+            $course = CourseSection::where('id', $row['cid'])->first();
             $teach = Teach::where('course_section_id', $row['cid'])->first();
-            
+
+            // If the course is already being taught, update the performances with SEI data
             if($teach){
                 $instructor_id = $teach->instructor_id;   
                 $area_id = CourseSection::where('id', $row['cid'])->pluck('area_id');
@@ -229,7 +233,9 @@ class ImportSeiForm extends Component
                 DepartmentPerformance::updateDepartmentPerformance($dept_id, $year);
             }
 
-        }
+            $sei->log_audit('Add SEI Data', ['operation_type' => 'CREATE', 'new_value' => json_encode($sei->getAttributes())], 'Add SEI Data to  ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
+
+        }      
 
         $this->rows = [
             ['cid' => '', 'q1' => '', 'q2' => '', 'q3' => '', 'q4' => '', 'q5' => '', 'q6' => '', 'course' => ''],

@@ -20,7 +20,7 @@
             <div class="py-3 flex justify-between bg-[#3b4779] text-white rounded-t-md">
                 <div class="w-3/12"></div>
                 <div class="w-10/12 text-center mx-2">Course Section</div>
-                <div class="w-3/12 text-center mx-2">Instructor</div>
+                <div class="w-6/12 text-center mx-2">Instructor</div>
                 <div class="w-6/12"></div>
                 <div class="w-3/12"></div>
             </div>
@@ -34,7 +34,7 @@
                         <div class="w-10/12 text-center">
                             <div>{{ $course->prefix }} {{ $course->number }} {{ $course->section }} - {{ $course->year }}{{ $course->session }} Term {{ $course->term }}</div>
                         </div>
-                        <div class="w-3/12 text-center">
+                        <div class="w-6/12 text-center">
                             {{-- basic select to fall back on --}}
 
                             {{-- <select wire:model="assignments.{{ $index }}.instructor_id" class="import-form-select">
