@@ -19,3 +19,5 @@
 - To view documentation (Plan, Design, etc.): [documentation Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/documentation/docs)
 - To view logs (Personal, Weekly, Commuincation, Dashboard): [logs Branch](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/tree/logs/docs)
 
+# User Guide
+[Click here for user guide](https://github.com/UBCO-COSC499-Summer-2024/team-4-capstone-team-4/blob/pre-dev-integration/docs/final/UserGuide.md)
