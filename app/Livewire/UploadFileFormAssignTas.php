@@ -122,11 +122,14 @@ class UploadFileFormAssignTas extends Component
 
         foreach($this->assignments as $assignment) {
             if(isset($assignment['ta_id']) && $assignment['ta_id'] !== null && $assignment['ta_id'] !== "") {
-                Assist::create([
+                $assign = Assist::create([
                     'course_section_id' => $assignment['course_section_id'],
                     'ta_id' => (int) $assignment['ta_id'],
                     'rating' => 0
                 ]);
+
+                $course = CourseSection::where('id', $assignment['course_section_id'])->first();
+                $assign->log_audit('Assign TA', ['operation_type' => 'CREATE', 'new_value' => json_encode($assign->getAttributes())], 'Assign TA' . $assignment['ta'] . ' to ' . $course->prefix . ' ' . $course->number . ' ' . $course->section . '-' . $course->year . $course->session . $course->term);
             }
         }
 
