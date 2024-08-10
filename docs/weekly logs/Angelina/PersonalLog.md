@@ -1,5 +1,36 @@
 # Angelina's Personal Log 
 
+## Wednesday (8/8 - 8/9)
+
+### Timesheet
+Clockify report
+![Clockify report](./clockifylogs/log88-89.png)
+
+### Current Tasks 
+ * #1: Prepare for Final Presentation
+ * #2: Final Presentation
+ * #3: Individual Report
+ * #4: Review/Close Final Issues
+ * #4: Push to Master
+
+### Progress Update 
+| **TASK/ISSUE #**          | **STATUS**  |
+|---------------------------|-------------|
+| Prepare for Presentation  | Completed   |
+| Final Presentation        | Completed   |
+| Individual Report         | Completed   |
+| Review/Close Final Issues | Completed   |
+| Push to Master            | Completed   |
+
+
+### Cycle Goal Review 
+COntinued completing the final report and submitted before the deadline. Prepared for the presentation including practicing a demo. Completed the final presentaion for the course. Reviewed outstanding issues and closed issue which had been completed. Assessed outstanding issues to determine if they should be prioritized, and closed issues that could not be finished as such. Pushed the final product to Master.
+
+### Next Cycle Goals
+ * Review Reports
+
+---
+
 ## Friday (8/2 - 8/7)
 
 ### Timesheet
