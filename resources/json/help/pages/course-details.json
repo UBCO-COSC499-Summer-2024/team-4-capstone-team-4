@@ -1,10 +1,10 @@
 [
     {
-        "subtopic": "Course Details",
+        "subtopic": "Course Section Details",
         "subsections": [
             {
                 "heading": "Introduction",
-                "content": "This section provides an overview of the course details page. Here, you can find comprehensive information about the courses you are managing, including their structure, assigned teaching assistants, and evaluation data.",
+                "content": "This section provides an overview of the course details page. Here, you can find comprehensive information about the courses you are managing, including their structure, enrolled students, and evaluation data.",
                 "tags": [
                     "intro",
                     "Course Details"
@@ -12,7 +12,7 @@
             },
             {
                 "heading": "Navigating the Course Details",
-                "content": "The course details page is divided into multiple sections: \n\n1. **Course Information**: Displays basic details like course name, department, and capacity. \n\n2. **Instructor Details**: Lists the instructor's information, including their name and contact details. \n\n3. **Enrolled Students**: Shows the number of students enrolled in the course. \n\n4. **Teaching Assistants**: Lists the TAs assigned to the course and their roles. \n\nUse the tabs at the top to switch between these sections for a more detailed view.",
+                "content": "The course details page is divided into multiple sections:\n\n1. **Course Information**: Displays basic details like course name, department, capacity, and enrolled students.\n\n2. **Instructor Details**: Lists the instructor's information, including their name.\n\n3. **Enrolled Students**: Shows the number of students enrolled in the course.\n\nUse the tabs at the top to switch between these sections for a more detailed view.",
                 "tags": [
                     "navigation",
                     "Course Details"
@@ -20,28 +20,119 @@
             },
             {
                 "heading": "Editing Course Information",
-                "content": "To edit course information: \n\n1. Click the 'Edit' button at the top. \n\n2. Fields such as course name, department, capacity, and others will become editable. \n\n3. Make the necessary changes and click 'Save' to update the course details. \n\nRemember to verify the information before saving to ensure accuracy.",
+                "content": "To edit course information:\n\n1. Click the 'Edit' button at the top. The fields such as course name, area, enrolled, dropped, capacity, and room will become editable.\n\n2. Make the necessary changes and click 'Save' for each row or use the 'Bulk Edit' to edit multiple rows at once.\n\n3. A success toast will appear confirming that the changes have been saved.\n\nBelow are screenshots showing the edit mode and the toast notification after saving.",
                 "tags": [
                     "editing",
+                    "Course Section Details"
+                ],
+                "images": [
+                    {
+                        "title": "Course Details Page",
+                        "url": "/mnt/data/image-wbKrQbBZ356jlcBs9BOTWgBR.png"
+                    },
+                    {
+                        "title": "Edit Mode",
+                        "url": "/mnt/data/image-3Vdt1lfE0dCAH5ZrRQUsj6jQ.png"
+                    },
+                    {
+                        "title": "Save Confirmation",
+                        "url": "/mnt/data/image-F7E6g77nMpp32tMm4tf02c8o.png"
+                    }
+                ]
+            },
+            {
+                "heading": "Exporting Reports",
+                "content": "To export a report of course details:\n\n1. Click the 'Department Report' button.\n\n2. Choose the format (e.g., CSV) you want to export the data in.\n\n3. Confirm your selection to download the report.\n\nExporting reports helps in maintaining records and sharing course details with others.",
+                "tags": [
+                    "export",
+                    "report",
                     "Course Details"
                 ]
             },
             {
-                "heading": "Assigning TAs",
-                "content": "To assign teaching assistants to a course: \n\n1. Click the 'Assign TA' button. \n\n2. A modal will appear where you can select the TA, instructor, and course. \n\n3. Confirm the assignment to save the changes. \n\nThe assigned TAs will now appear in the course details under the Teaching Assistants section.",
+                "heading": "Bulk Editing",
+                "content": "To bulk edit multiple course details:\n\n1. Select the courses you want to edit by checking the checkboxes next to them.\n\n2. Click the 'Bulk Edit' button.\n\n3. Edit the necessary fields in the provided form.\n\n4. Click 'Save' to apply changes to all selected courses.\n\nBulk editing saves time by allowing you to update multiple courses at once.",
+                "tags": [
+                    "bulk",
+                    "edit",
+                    "Course Details"
+                ]
+            },
+            {
+                "heading": "Search and Filter Courses",
+                "content": "You can search for courses dynamically by course section, name, year, term, number, etc., using the search bar. Additionally, you can filter courses by area using the 'Filter By Area' dropdown.",
+                "tags": [
+                    "search",
+                    "filter",
+                    "Course Details"
+                ],
+                "images": [
+                    {
+                        "title": "Search and Filter",
+                        "url": "/mnt/data/image-83WV390sdQQmXB3LfbMju4ty.png"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "subtopic": "TA Management",
+        "subsections": [
+            {
+                "heading": "TA Overview",
+                "content": "The TA Management page provides a list of all Teaching Assistants (TAs) along with their ratings, assigned courses, and the instructor's name.",
+                "tags": [
+                    "overview",
+                    "TA Management"
+                ],
+                "images": [
+                    {
+                        "title": "TA Management Page",
+                        "url": "/mnt/data/image-Ks6zWKUzny7594ft2ML6rtMc.png"
+                    }
+                ]
+            },
+            {
+                "heading": "Search and Filter TAs",
+                "content": "You can search for TAs dynamically by name using the search bar. Additionally, you can filter TAs by area using the 'Filter By Area' dropdown.",
+                "tags": [
+                    "search",
+                    "filter",
+                    "TA Management"
+                ],
+                "images": [
+                    {
+                        "title": "TA Search and Filter",
+                        "url": "/mnt/data/image-Ks6zWKUzny7594ft2ML6rtMc.png"
+                    }
+                ]
+            },
+            {
+                "heading": "Creating a Teaching Assistant",
+                "content": "To create a new Teaching Assistant (TA):\n\n1. Click the 'Create New TA' button.\n\n2. Fill in the TA's details, including name and rating.\n\n3. Click 'Save' to add the new TA to the system.\n\nThe new TA will now appear in the list, and a confirmation modal will be displayed.",
+                "tags": [
+                    "create",
+                    "TA",
+                    "TA Management"
+                ],
+                "images": [
+                    {
+                        "title": "Create New TA",
+                        "url": "/mnt/data/image-dKFMApjnNbSFT7ySQWDcyJhC.png"
+                    },
+                    {
+                        "title": "TA Added Confirmation",
+                        "url": "/mnt/data/image-dKFMApjnNbSFT7ySQWDcyJhC.png"
+                    }
+                ]
+            },
+            {
+                "heading": "Assigning TAs via CSV",
+                "content": "To assign TAs via a CSV file:\n\n1. Click the 'Assign TAs via CSV' button.\n\n2. You will be redirected to the upload page where you can drop the CSV file and save.",
                 "tags": [
                     "assign",
-                    "TA",
-                    "Course Details"
-                ]
-            },
-            {
-                "heading": "SEI Data",
-                "content": "The SEI (Student Evaluation of Instruction) data section provides insights into student feedback for the course. \n\nTo edit SEI data: \n\n1. Click the 'Edit SEI' button. \n\n2. Update the relevant fields with the new data. \n\n3. Click 'Save' to apply the changes. \n\nThis data helps in evaluating the course performance and identifying areas for improvement.",
-                "tags": [
-                    "sei",
-                    "data",
-                    "Course Details"
+                    "CSV",
+                    "TA Management"
                 ]
             }
         ]

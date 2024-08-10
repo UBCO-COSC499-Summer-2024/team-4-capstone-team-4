@@ -111,7 +111,7 @@
                     },
                     {
                         "heading": "Edit multiple accounts",
-                        "content": "To edit multiple accounts, you will need to click on the 'Edit' button. Then the roles and status fiel will become editable where you can toggle the neabled status and check or remove checks from the user's roles. When done, click 'Save'.",
+                        "content": "To edit multiple accounts, you will need to click on the 'Edit' button. Then the names, emails, roles and status field will become editable where you can change the name or email, toggle the enabled status and check or remove checks from the user's roles. When done, click 'Save'.",
                         "tags": [
                             "intro",
                             "staff",
@@ -123,17 +123,6 @@
                     {
                         "heading": "Delete multiple accounts",
                         "content": "To delete multiple, first select all the user accounts you would like to delete. Then click on the delete button which will bring a popup asking you to confirm. Once confirmed, the selected accounts will be deleted.",
-                        "tags": [
-                            "intro",
-                            "staff",
-                            "subtopic",
-                            "admin",
-                            "user account"
-                        ]
-                    },
-                    {
-                        "heading": "Edit individual account",
-                        "content": "To edit an individual account, you can click on the edit icon on the user account you would like to edit. Then the roles and status field for that user will become editable. Once done, you can click on save icon to save.",
                         "tags": [
                             "intro",
                             "staff",

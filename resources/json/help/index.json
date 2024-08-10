@@ -1,23 +1,13 @@
 [
     {
-        "title": "Authentication",
-        "url": "authentication",
-        "icon": "shield"
-    },
-    {
         "title": "Dashboard",
         "url": "dashboard",
         "icon": "dashboard"
     },
     {
-        "title": "Profile",
-        "url": "profile",
-        "icon": "person"
-    },
-    {
         "title": "Staff",
         "url": "staff",
-        "icon": "group"
+        "icon": "groups"
     },
     {
         "title": "Courses",
@@ -28,11 +18,6 @@
         "title": "Service Roles",
         "url": "service-roles",
         "icon": "work_history"
-    },
-    {
-        "title": "Test",
-        "url": "test",
-        "icon": "help_outline"
     },
     {
         "title": "Leaderboard",
@@ -53,5 +38,10 @@
         "title": "Approvals",
         "url": "approvals",
         "icon": "priority"
+    },
+    {
+        "title": "Test",
+        "url": "test",
+        "icon": "help_outline"
     }
 ]

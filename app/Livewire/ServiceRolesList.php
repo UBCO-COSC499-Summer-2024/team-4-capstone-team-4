@@ -93,7 +93,7 @@ class ServiceRolesList extends Component {
 
     public function mount($links = []) {
         $this->links = $links;
-        $this->user = User::find(auth()->user()->id);
+        $this->user = User::find(Auth::id());
     }
 
     public function handleToolbarUpdate($data) {
